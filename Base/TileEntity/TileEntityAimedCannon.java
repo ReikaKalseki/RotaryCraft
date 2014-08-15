@@ -9,6 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,15 +31,6 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -269,7 +270,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 			return true;
 		if (ep.capabilities.isCreativeMode)
 			return true;
-		String name = ep.getEntityName();
+		String name = ep.getCommandSenderName();
 		if (name == null)
 			return true;
 		if (name.equals("Reika_Kalseki")) //If you try...
@@ -277,8 +278,8 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		if (this.getPlacer() == null)
 			return safePlayers.contains(name);
 		if (safePlayers == null)
-			return name.equals(this.getPlacer().getEntityName());
-		return safePlayers.contains(name) || name.equals(this.getPlacer().getEntityName());
+			return name.equals(this.getPlacer().getCommandSenderName());
+		return safePlayers.contains(name) || name.equals(this.getPlacer().getCommandSenderName());
 	}
 
 	public List<String> getCopyOfSafePlayerList() {

@@ -9,19 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
-import net.minecraft.block.Block;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Icon;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -40,14 +41,14 @@ public class RenderLiquidBlock extends Render
 		GL11.glColor3f(1, 1, 1);
 		Tessellator v5 = Tessellator.instance;
 		RenderHelper.disableStandardItemLighting();
-		Icon ico;
+		IIcon ico;
 		Fluid f = e.getFluid();
 		if (f != null) {
 			ico = e.getFluid().getIcon();
 			ReikaLiquidRenderer.bindFluidTexture(f);
 		}
 		else {
-			ico = Block.grass.getIcon(0, 0);
+			ico = Blocks.grass.getIcon(0, 0);
 			ReikaTextureHelper.bindTerrainTexture();
 		}
 		float u = ico.getMinU();

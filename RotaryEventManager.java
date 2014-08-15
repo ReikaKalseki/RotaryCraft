@@ -9,26 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Random;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.world.World;
-import net.minecraftforge.event.Event;
-import net.minecraftforge.event.Event.Result;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
-import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
@@ -38,9 +18,32 @@ import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
+import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class RotaryEventManager {
 
@@ -50,40 +53,40 @@ public class RotaryEventManager {
 
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void bonemealEvent (BonemealEvent event)
 	{
 		if (!event.world.isRemote)  {
-			if (event.ID == RotaryCraft.canola.blockID) {
+			if (event.block == BlockRegistry.CANOLA.getBlockInstance()) {
 				World world = event.world;
-				int x = event.X;
-				int y = event.Y;
-				int z = event.Z;
+				int x = event.x;
+				int y = event.y;
+				int z = event.z;
 				event.setResult(Event.Result.DENY);
 			}
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void fallEvent (LivingFallEvent event)
 	{
 		EntityLivingBase e = event.entityLiving;
-		ItemStack is = e.getCurrentItemOrArmor(1);
+		ItemStack is = e.getEquipmentInSlot(1);
 
 		if (is != null) {
 			if (is.getItem() instanceof ItemSpringBoots) {
-				if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID() || is.getItemDamage() > 0) {
+				if (is.getItem() == ItemRegistry.BEDJUMP.getItemInstance() || is.getItemDamage() > 0) {
 					//ReikaJavaLibrary.pConsole(event.distance);
 					event.distance *= 0.6F;
 					//ReikaJavaLibrary.pConsole(event.distance);
-					if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID())
+					if (is.getItem() == ItemRegistry.BEDJUMP.getItemInstance())
 						event.distance = Math.min(event.distance, 25);
 				}
 			}
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void bedrockSave(LivingHurtEvent evt) {
 		EntityLivingBase e = evt.entityLiving;
 		if (evt.ammount < 1000) {
@@ -94,7 +97,7 @@ public class RotaryEventManager {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void enforceHarvesterLooting(LivingDropsEvent ev) {
 		if (ev.source instanceof HarvesterDamage) {
 			HarvesterDamage dmg = (HarvesterDamage)ev.source;
@@ -119,7 +122,7 @@ public class RotaryEventManager {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void meatGrinding(LivingDropsEvent ev) {
 		if (ev.source instanceof GrinderDamage) {
 			ItemStack food = ReikaEntityHelper.getFoodItem(ev.entityLiving);
@@ -135,7 +138,7 @@ public class RotaryEventManager {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void disallowDespawn(AllowDespawn ad) {
 		EntityLivingBase e = ad.entityLiving;
 		PotionEffect pe = e.getActivePotionEffect(RotaryCraft.freeze);
@@ -144,7 +147,7 @@ public class RotaryEventManager {
 		ad.setResult(Result.DENY);
 	}
 
-	@ForgeSubscribe(priority = EventPriority.LOWEST, receiveCanceled = true)
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
 	public void preventDisallowOfCrucialBlocks(BlockEvent ev) {
 		Class c = ev.getClass();
 		boolean place = c.getSimpleName().contains("BlockPlaceEvent");
@@ -154,7 +157,7 @@ public class RotaryEventManager {
 		int z = ev.z;
 		if (ev.block == null)
 			return;
-		int id = ev.block.blockID;
+		Block id = ev.block;
 		int meta = ev.blockMetadata;
 		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
 		if (place) { //Bukkit Block Place Event
@@ -188,7 +191,7 @@ public class RotaryEventManager {
 			if (m != null) {
 				EntityPlayer ep = (EntityPlayer)ReikaWorldHelper.getClosestLivingEntityOfClass(EntityPlayer.class, world, x+0.5, y+0.5, z+0.5, 6);
 				String s = place ? "placed" : "removed";
-				String name = ep != null ? ep.getEntityName() : "<No Player>";
+				String name = ep != null ? ep.getCommandSenderName() : "<No Player>";
 				RotaryCraft.logger.log("A "+m.getName()+" was "+s+" by "+name+" at "+x+", "+y+", "+z+" in world dimension "+world.provider.dimensionId);
 			}
 		}

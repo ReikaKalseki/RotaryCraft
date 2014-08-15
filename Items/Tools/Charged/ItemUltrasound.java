@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -20,10 +16,16 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 public class ItemUltrasound extends ItemChargedTool {
 
-	public ItemUltrasound(int ID, int tex) {
-		super(ID, tex);
+	public ItemUltrasound(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -41,23 +43,23 @@ public class ItemUltrasound extends ItemChargedTool {
 		boolean caveready = false;
 		for (float i = 0; i <= 5; i += 0.2) {
 			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
-			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+			Block id = world.getBlock(xyz[0], xyz[1], xyz[2]);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 			if (ReikaBlockHelper.isOre(id, meta) && !ores) {
 				ores = true;
 				ReikaChatHelper.write("Ore Detected!");
 			}
-			if (id == Block.silverfish.blockID && !silver) {
+			if (id == Blocks.monster_egg && !silver) {
 				silver = true;
 				ReikaChatHelper.write("Silverfish Detected!");
 			}
-			if (id != 0 && !ReikaWorldHelper.softBlocks(id))
+			if (id != Blocks.air && !ReikaWorldHelper.softBlocks(id))
 				caveready = true;
-			if ((id == Block.waterStill.blockID || id == Block.waterMoving.blockID) && !liq) {
+			if ((id == Blocks.water || id == Blocks.flowing_water) && !liq) {
 				liq = true;
 				ReikaChatHelper.write("Water Detected!");
 			}
-			if ((id == Block.lavaStill.blockID || id == Block.lavaMoving.blockID) && !liq) {
+			if ((id == Blocks.lava || id == Blocks.flowing_lava) && !liq) {
 				liq = true;
 				ReikaChatHelper.write("Lava Detected!");
 			}
@@ -70,6 +72,6 @@ public class ItemUltrasound extends ItemChargedTool {
 					ReikaChatHelper.clearChat(); //clr
 			}
 		}
-		return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);
+		return new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1);
 	}
 }

@@ -9,12 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -27,6 +23,13 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityMicroturbine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityWindEngine;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public enum EngineType {
 	DC(256, 4, TileEntityDCEngine.class),
@@ -195,19 +198,20 @@ public enum EngineType {
 
 	public boolean isValidFuel(ItemStack is) {
 		if (this == STEAM)
-			return is.itemID == Item.bucketWater.itemID;
+			return is.getItem() == Items.water_bucket;
 		if (this == GAS)
-			return is.itemID == ItemRegistry.ETHANOL.getShiftedID();
+			return is.getItem() == ItemRegistry.ETHANOL.getItemInstance();
 		if (this == SPORT)
-			return is.itemID == ItemRegistry.ETHANOL.getShiftedID() || this.isAdditive(is);
+			return is.getItem() == ItemRegistry.ETHANOL.getItemInstance() || this.isAdditive(is);
 		if (this == AC)
-			return is.itemID == ItemStacks.shaftcore.itemID && is.getItemDamage() == ItemStacks.shaftcore.getItemDamage();
+			return ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore);
 		return false;
 	}
 
 	public boolean isAdditive(ItemStack is) {
+		Item i = is.getItem();
 		if (this == SPORT)
-			return is.itemID == Item.redstone.itemID || is.itemID == Item.gunpowder.itemID || is.itemID == Item.blazePowder.itemID;
+			return i == Items.redstone || i == Items.gunpowder || i == Items.blaze_powder;
 		return false;
 	}
 

@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -25,6 +17,14 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Items;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderBreeder extends RotaryTERenderer
 {
@@ -52,7 +52,7 @@ public class RenderBreeder extends RotaryTERenderer
 		//ModelAutoBreederV var15;
 		//var14 = this.AutoBreederModelV;
 		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/emptybreedertex.png");
-		if (ReikaInventoryHelper.checkForItem(Item.wheat.itemID, te))
+		if (ReikaInventoryHelper.checkForItem(Items.wheat, te))
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/breedertex.png");
 		GL11.glPushMatrix();
 
@@ -89,17 +89,17 @@ public class RenderBreeder extends RotaryTERenderer
 	private Object[] getConditions(TileEntityAutoBreeder te) {
 		Object[] vals = new Object[5];
 		vals[0] = true;
-		vals[1] = ReikaInventoryHelper.checkForItem(Item.carrot.itemID, te);
-		vals[2] = ReikaInventoryHelper.checkForItem(Item.porkRaw.itemID, te);
-		vals[3] = ReikaInventoryHelper.checkForItem(Item.fishRaw.itemID, te);
-		vals[4] = ReikaInventoryHelper.checkForItem(Item.seeds.itemID, te);
+		vals[1] = ReikaInventoryHelper.checkForItem(Items.carrot, te);
+		vals[2] = ReikaInventoryHelper.checkForItem(Items.porkchop, te);
+		vals[3] = ReikaInventoryHelper.checkForItem(Items.fish, te);
+		vals[4] = ReikaInventoryHelper.checkForItem(Items.wheat_seeds, te);
 		return vals;
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		TileEntityAutoBreeder tb = (TileEntityAutoBreeder)te;
-		if (ReikaInventoryHelper.checkForItem(Item.wheat.itemID, tb))
+		if (ReikaInventoryHelper.checkForItem(Items.wheat, tb))
 			return "breedertex.png";
 		return "emptybreedertex.png";
 	}

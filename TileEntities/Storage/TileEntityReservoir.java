@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Storage;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -36,6 +22,21 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine {
 
@@ -99,11 +100,11 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				}
 			}
 			if (temp > 2500) {
-				world.setBlock(x, y, z, Block.lavaMoving.blockID);
-				world.setBlock(x+1, y, z, Block.lavaMoving.blockID);
-				world.setBlock(x-1, y, z, Block.lavaMoving.blockID);
-				world.setBlock(x, y, z+1, Block.lavaMoving.blockID);
-				world.setBlock(x, y, z-1, Block.lavaMoving.blockID);
+				world.setBlock(x, y, z, Blocks.flowing_lava);
+				world.setBlock(x+1, y, z, Blocks.flowing_lava);
+				world.setBlock(x-1, y, z, Blocks.flowing_lava);
+				world.setBlock(x, y, z+1, Blocks.flowing_lava);
+				world.setBlock(x, y, z-1, Blocks.flowing_lava);
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 0.4F, 1F);
 			}
 
@@ -116,7 +117,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
 				if (flammable) {
-					world.setBlock(x, y, z, 0);
+					world.setBlockToAir(x, y, z);
 					world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
 				}
 			}
@@ -135,7 +136,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			int dz = z+dir.offsetZ;
 			if (tank.getLevel() < CAPACITY) {
 				if (this.matchMachine(world, dx, dy, dz)) {
-					TileEntityReservoir tile = (TileEntityReservoir)world.getBlockTileEntity(dx, dy, dz);
+					TileEntityReservoir tile = (TileEntityReservoir)world.getTileEntity(dx, dy, dz);
 					if (this.canMixWith(tile)) {
 						int diff = tile.getLevel()-this.getLevel();
 						if (diff > 1) {
@@ -219,7 +220,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public AxisAlignedBB getHitbox() {
 		if (isCovered || this.isEdgePiece(worldObj, xCoord, yCoord, zCoord))
 			return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord);
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+0.0625, zCoord+1);
+		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+0.0625, zCoord+1);
 	}
 
 	private boolean isEdgePiece(World world, int x, int y, int z) {
@@ -308,7 +309,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		int dy = yCoord+dir.offsetY;
 		int dz = zCoord+dir.offsetZ;
 		if (this.matchMachine(worldObj, dx, dy, dz)) {
-			TileEntityReservoir te = (TileEntityReservoir)worldObj.getBlockTileEntity(dx, dy, dz);
+			TileEntityReservoir te = (TileEntityReservoir)worldObj.getTileEntity(dx, dy, dz);
 			return te.isEmpty() || this.isEmpty() || te.getFluid().equals(this.getFluid());
 		}
 		return false;

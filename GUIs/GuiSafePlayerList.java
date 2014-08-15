@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
-import java.util.List;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -24,6 +16,14 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
+
+import java.util.List;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiSafePlayerList extends GuiScreen {
 
@@ -110,7 +110,7 @@ public class GuiSafePlayerList extends GuiScreen {
 			buttontime = System.nanoTime();
 			buttontimer = 0;
 		}
-		String title = te.placer+"'s "+te.getName()+" Whitelist";
+		String title = te.getPlacerName()+"'s "+te.getName()+" Whitelist";
 
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/safeplayergui.png";
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -121,7 +121,7 @@ public class GuiSafePlayerList extends GuiScreen {
 
 		this.drawTexturedModalRect(posX, posY, 0, 0, xSize, ySize);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, title, posX+xSize/2, posY+6, 4210752);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, title, posX+xSize/2, posY+6, 4210752);
 		super.drawScreen(x, y, f);
 	}
 

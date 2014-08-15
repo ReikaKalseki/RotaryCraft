@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
 
 public class GuiCalculator extends GuiScreen {
 
@@ -60,7 +59,7 @@ public class GuiCalculator extends GuiScreen {
 		int lastx = mx;
 		int lasty = my;
 		mc.thePlayer.closeScreen();
-		ModLoader.openGUI(ep, new GuiCalculator(ep, worldObj));
+		//ModLoader.openGUI(ep, new GuiCalculator(ep, worldObj));
 		Mouse.setCursorPosition(lastx, lasty);
 	}
 

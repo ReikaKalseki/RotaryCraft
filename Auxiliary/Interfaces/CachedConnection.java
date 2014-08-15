@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public interface CachedConnection {
 

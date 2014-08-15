@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -33,6 +24,16 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
@@ -64,7 +65,7 @@ TemperatureTE {
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 		if (m == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
+			TileEntityEngineController te = (TileEntityEngineController)world.getTileEntity(x, y-1, z);
 			return te.canProducePower();
 		}
 		return !lubetank.isEmpty();
@@ -92,7 +93,7 @@ TemperatureTE {
 	private int getFuelDuration(World world, int x, int y, int z) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 		if (m == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
+			TileEntityEngineController te = (TileEntityEngineController)world.getTileEntity(x, y-1, z);
 			return 36*te.getFuelMultiplier();
 		}
 		return 36;
@@ -116,7 +117,7 @@ TemperatureTE {
 			torque = GEN_TORQUE;
 			MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 			if (m == MachineRegistry.ECU) {
-				TileEntityEngineController te = (TileEntityEngineController)world.getBlockTileEntity(x, y-1, z);
+				TileEntityEngineController te = (TileEntityEngineController)world.getTileEntity(x, y-1, z);
 				genomega *= te.getSpeedMultiplier();
 			}
 		}
@@ -387,7 +388,7 @@ TemperatureTE {
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
 		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 8, true, true);
 	}

@@ -9,16 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class ShaftPowerBus {
 
@@ -57,7 +58,7 @@ public class ShaftPowerBus {
 			int dz = z+dir.offsetZ;
 			MachineRegistry m = MachineRegistry.getMachine(hub.worldObj, dx, dy, dz);
 			if (m == MachineRegistry.POWERBUS) {
-				b.recursiveAddWithMetadata(hub.worldObj, dx, dy, dz, m.getBlockID(), m.getMachineMetadata());
+				b.recursiveAddWithMetadata(hub.worldObj, dx, dy, dz, m.getBlock(), m.getMachineMetadata());
 			}
 		}
 		Iterator<TileEntityPowerBus> it = blocks.iterator();

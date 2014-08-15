@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.MultisheetItem;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -20,13 +16,20 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
 import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemModOre extends ItemBasic implements MultisheetItem {
 
-	public ItemModOre(int ID) {
-		super(ID, 0);
+	public ItemModOre() {
+		super(0);
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		maxStackSize = 64;
@@ -39,10 +42,10 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int ID, CreativeTabs tab, List list) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item ID, CreativeTabs tab, List list) //Adds the metadata blocks to the creative inventory
 	{
 		int num = ModOreList.oreList.length;
-		if (ID == RotaryCraft.modextracts.itemID)
+		if (ID == ItemRegistry.MODEXTRACTS.getItemInstance())
 			num *= 4;
 		for (int i = 0; i < num; i++) {
 			ItemStack item = new ItemStack(ID, 1, i);
@@ -65,7 +68,7 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
 		int step = ExtractorModOres.getSpritesheet(this.getModOre(item));
-		if (item.itemID == RotaryCraft.modingots.itemID)
+		if (ItemRegistry.MODINGOTS.matchItem(item))
 			return item.getItemDamage()*4+ExtractorModOres.getIndexOffsetForIngot(item)-step/256;
 		return item.getItemDamage()-step/256;
 	}
@@ -73,10 +76,10 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 	@Override
 	public String getSpritesheet(ItemStack is) {
 		String base = "";
-		if (is.itemID == RotaryCraft.modextracts.itemID) {
+		if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
 			base = "Textures/Items/modextracts.png";
 		}
-		else if (is.itemID == RotaryCraft.modingots.itemID) {
+		else if (ItemRegistry.MODINGOTS.matchItem(is)) {
 			base = "Textures/Items/modingots.png";
 		}
 		int step = ExtractorModOres.getSpritesheet(this.getModOre(is));
@@ -89,19 +92,19 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 	}
 
 	private ModOreList getModOre(ItemStack is) {
-		if (is.itemID == RotaryCraft.modextracts.itemID)
+		if (ItemRegistry.MODEXTRACTS.matchItem(is))
 			return ModOreList.oreList[is.getItemDamage()/4];
 		else
 			return ModOreList.oreList[is.getItemDamage()];
 	}
 
 	@Override
-	public String getItemDisplayName(ItemStack is)
+	public String getItemStackDisplayName(ItemStack is)
 	{
 		ModOreList ore = this.getModOre(is);
 		if (ore == null)
 			return "Null Ore Item";
-		if (is.itemID == RotaryCraft.modextracts.itemID) {
+		if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
 			ExtractorStage s = ExtractorModOres.getStageFromMetadata(is);
 			return s != null ? ore.displayName+" "+ReikaStringParser.capFirstChar(s.name()) : "null";
 		}

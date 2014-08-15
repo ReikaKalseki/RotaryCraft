@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
@@ -21,11 +16,17 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
-import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityAirCompressor extends TileEntityPowerReceiver implements IPowerEmitter, PressureTE {
 
@@ -76,8 +77,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	private void playSound(World world, int x, int y, int z) {
 		int p = (int)(ReikaMathLibrary.logbase(omega, 2)/8);
 		float v = 0.5F*this.getSoundVolume(world, x, y, z);
-		FMLClientHandler.instance().getClient().sndManager.playSound(SoundRegistry.AIRCOMP.getPlayableReference(), x, y, z, v, p);
-		//SoundRegistry.AIRCOMP.playSoundAtBlock(world, x, y, z, 0.5F*this.getSoundVolume(world, x, y, z), p);
+		SoundRegistry.AIRCOMP.playSoundAtBlock(world, x, y, z, v, p);
 	}
 
 	private float getSoundVolume(World world, int x, int y, int z) {
@@ -91,8 +91,8 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 				int dx = x+side.offsetX;
 				int dy = y+side.offsetY;
 				int dz = z+side.offsetZ;
-				int id = world.getBlockId(dx, dy, dz);
-				if (id != Block.cloth.blockID)
+				Block id = world.getBlock(dx, dy, dz);
+				if (id != Blocks.wool)
 					return 1;
 			}
 		}

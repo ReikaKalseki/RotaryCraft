@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.ModReflectionException;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -34,7 +28,15 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class OreForcer {
@@ -148,8 +150,8 @@ public final class OreForcer {
 	}
 
 	private void intercraftSilicon() {
-		int id = GalacticCraftHandler.getInstance().basicItemID;
-		if (id == -1)
+		Item id = GalacticCraftHandler.getInstance().basicItemID;
+		if (id == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.FORESTRY, "Null Item for Silicon");
 		ItemStack silicon = new ItemStack(id, 1, GalacticCraftHandler.siliconMeta);
 		GameRegistry.addShapelessRecipe(silicon, ItemStacks.getModOreIngot(ModOreList.SILICON));
@@ -172,7 +174,7 @@ public final class OreForcer {
 		ArrayList<ItemStack> gems = OreDictionary.getOres(oredict);
 		for (int i = 0; i < gems.size(); i++) {
 			ItemStack is = gems.get(i);
-			if (is.itemID != RotaryCraft.modingots.itemID) {
+			if (!ItemRegistry.MODINGOTS.matchItem(is)) {
 				return is;
 			}
 		}
@@ -215,7 +217,7 @@ public final class OreForcer {
 		ItemStack u = IC2Handler.getInstance().getPurifiedCrushedUranium();
 		if (u == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.IC2, "Null ItemStack for Uranium");
-		if (IC2Handler.getInstance().iridiumID == -1)
+		if (IC2Handler.getInstance().iridiumID == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.IC2, "Null Item for Iridium");
 		ItemStack ir = new ItemStack(IC2Handler.getInstance().iridiumID, 1, 0);
 		GameRegistry.addShapelessRecipe(ir, ItemStacks.getModOreIngot(ModOreList.IRIDIUM));
@@ -278,7 +280,7 @@ public final class OreForcer {
 	}
 
 	private void registerOsmium() {
-		if (MekanismHandler.getInstance().oreID == -1)
+		if (MekanismHandler.getInstance().oreID == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.MEKANISM, "Null Item for Osmium");
 		OreDictionary.registerOre("oreOsmium", new ItemStack(MekanismHandler.getInstance().oreID, 1, MekanismHandler.osmiumMeta));
 	}
@@ -361,8 +363,8 @@ public final class OreForcer {
 	}
 
 	private void intercraftApatite() {
-		int id = ForestryHandler.getInstance().apatiteID;
-		if (id == -1)
+		Item id = ForestryHandler.getInstance().apatiteID;
+		if (id == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.FORESTRY, "Null Item for Apatite");
 		ItemStack apatite = new ItemStack(id, 1, 0);
 		GameRegistry.addShapelessRecipe(apatite, ItemStacks.getModOreIngot(ModOreList.APATITE));

@@ -9,16 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import java.util.HashMap;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.HashMap;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class TileEntityScreen extends InventoriedPowerReceiver {
 
@@ -59,7 +60,7 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 		int[] cameraPos = this.getCameraFromColors(worldObj);
 		if (!this.isValidCamera(cameraPos))
 			return;
-		RemoteControlMachine te = (RemoteControlMachine)worldObj.getBlockTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]);
+		RemoteControlMachine te = (RemoteControlMachine)worldObj.getTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]);
 		//te.moveCameraToLook(ep);
 		te.activate(worldObj, ep, cameraPos[0], cameraPos[1], cameraPos[2]);
 	}
@@ -67,7 +68,7 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 	private boolean isValidCamera(int[] cameraPos) {
 		if (cameraPos[0] == xCoord && cameraPos[1] == yCoord && cameraPos[2] == zCoord)
 			return false;
-		return (worldObj.getBlockTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]) instanceof RemoteControlMachine);
+		return (worldObj.getTileEntity(cameraPos[0], cameraPos[1], cameraPos[2]) instanceof RemoteControlMachine);
 	}
 
 	private boolean canRun() {
@@ -77,8 +78,7 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 			return false;
 		if (inv[0] == null || inv[1] == null || inv[2] == null)
 			return false;
-		int dye = Item.dyePowder.itemID;
-		if (inv[0].itemID != dye || inv[1].itemID != dye || inv[2].itemID != dye)
+		if (inv[0].getItem() != Items.dye || inv[1].getItem() != Items.dye || inv[2].getItem() != Items.dye)
 			return false;
 		return true;
 	}
@@ -98,7 +98,7 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
 				for (int k = -range; k <= range; k++) {
-					TileEntity te = world.getBlockTileEntity(xCoord+i, yCoord+j, zCoord+k);
+					TileEntity te = world.getTileEntity(xCoord+i, yCoord+j, zCoord+k);
 					if (te != null) {
 						if (te instanceof RemoteControlMachine) {
 							RemoteControlMachine cc = (RemoteControlMachine)te;
@@ -122,7 +122,7 @@ public class TileEntityScreen extends InventoriedPowerReceiver {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.itemID == Item.dyePowder.itemID;
+		return is.getItem() == Items.dye;
 	}
 
 	@Override

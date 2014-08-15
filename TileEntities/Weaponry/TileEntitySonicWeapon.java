@@ -9,23 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -34,6 +17,24 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
@@ -120,19 +121,19 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 			int bx = x-range+rand.nextInt(range+1);
 			int by = y-range+rand.nextInt(range+1);
 			int bz = z-range+rand.nextInt(range+1);
-			//ReikaJavaLibrary.pConsole("Block "+world.getBlockId(bx, by, bz)+" @ "+bx+", "+by+", "+bz);
-			if (world.getBlockId(bx, by, bz) == Block.silverfish.blockID) {
+			//ReikaJavaLibrary.pConsole("Block "+world.getBlock(bx, by, bz)+" @ "+bx+", "+by+", "+bz);
+			if (world.getBlock(bx, by, bz) == Blocks.monster_egg) {
 				//ReikaJavaLibrary.pConsole("Killed at "+bx+", "+by+", "+bz);
 				int metadata = world.getBlockMetadata(bx, by, bz);
 				switch(metadata) {
 				case 0:
-					world.setBlock(bx, by, bz, Block.stone.blockID);
+					world.setBlock(bx, by, bz, Blocks.stone);
 					break;
 				case 1:
-					world.setBlock(bx, by, bz, Block.cobblestone.blockID);
+					world.setBlock(bx, by, bz, Blocks.cobblestone);
 					break;
 				case 2:
-					world.setBlock(bx, by, bz, Block.stoneBrick.blockID);
+					world.setBlock(bx, by, bz, Blocks.stonebrick);
 					break;
 				}
 				world.playSoundEffect(bx+0.5, by+0.5, bz+0.5, "mob.silverfish.kill", 1, 1);
@@ -236,7 +237,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		boolean vuln = true;
 				EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 				if (vuln && ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getVolume()) >= LETHALVOLUME)
-					ReikaJavaLibrary.pConsole(ent.getEntityName()+" @ "+ent.posX+", "+ent.posZ+" ("+i+"/"+inbox.size()+") @ Range "+Math.sqrt(this.getVolume()/LETHALVOLUME));
+					ReikaJavaLibrary.pConsole(ent.getCommandSenderName()+" @ "+ent.posX+", "+ent.posZ+" ("+i+"/"+inbox.size()+") @ Range "+Math.sqrt(this.getVolume()/LETHALVOLUME));
 			}
 		}*/
 		for (int i = 0; i < inbox.size(); i++) {
@@ -289,7 +290,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		if (ep.capabilities.isCreativeMode)
 			return false;
 		if (ep.inventory.armorInventory[3] != null) {
-			//if (ep.inventory.armorInventory[0].itemID == RotaryCraft.earmuff.itemID)
+			//if (ep.inventory.armorInventory[0].getItem == RotaryCraft.earmuff.itemID)
 			return false;
 		}
 		return true;

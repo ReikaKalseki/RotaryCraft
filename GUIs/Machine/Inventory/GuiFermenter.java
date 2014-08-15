@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -22,6 +17,11 @@ import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiFermenter extends GuiMachine
 {
@@ -44,23 +44,23 @@ public class GuiFermenter extends GuiMachine
 		int sx = 154;
 		int sy = 6;
 		if (red) {
-			api.drawItemStack(itemRenderer, fontRenderer, ItemStacks.sludge, sx, sy);
+			api.drawItemStack(itemRender, fontRendererObj, ItemStacks.sludge, sx, sy);
 		}
 		else {
-			api.drawItemStack(itemRenderer, fontRenderer, ItemRegistry.YEAST.getStackOf(), sx, sy);
+			api.drawItemStack(itemRender, fontRendererObj, ItemRegistry.YEAST.getStackOf(), sx, sy);
 		}
-		fontRenderer.drawString("Target", 119, 10, 0);
+		fontRendererObj.drawString("Target", 119, 10, 0);
 
 		if (api.isMouseInBox(sx+j, sx+16+j, sy+k, sy+16+k)) {
 			int dy = 13;
-			api.drawTooltipAt(fontRenderer, "This controls automation.", api.getMouseRealX()-j, api.getMouseRealY()-k);
+			api.drawTooltipAt(fontRendererObj, "This controls automation.", api.getMouseRealX()-j, api.getMouseRealY()-k);
 		}
 
 		sx = 55;
 		sy = 35;
 		if (api.isMouseInBox(sx+j-1, sx+16+j+1, sy+k-1, sy+16+k+1)) {
 			int dy = 13;
-			api.drawTooltipAt(fontRenderer, String.format("Water: %.1f/%d", ferm.getLevel()/1000F, ferm.CAPACITY/1000), api.getMouseRealX()-j, api.getMouseRealY()-k);
+			api.drawTooltipAt(fontRendererObj, String.format("Water: %.1f/%d", ferm.getLevel()/1000F, ferm.CAPACITY/1000), api.getMouseRealX()-j, api.getMouseRealY()-k);
 		}
 
 		GL11.glColor4f(1, 1, 1, 1);
@@ -115,10 +115,10 @@ public class GuiFermenter extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", ferm.power, ferm.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Speed:", xSize+var5+20, var6+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Torque:", xSize+var5+20, var6+129, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRendererObj, String.format("%d/%d", ferm.power, ferm.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

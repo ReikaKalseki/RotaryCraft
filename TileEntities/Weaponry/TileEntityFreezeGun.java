@@ -9,23 +9,25 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoriedCannon;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class TileEntityFreezeGun extends TileEntityInventoriedCannon {
 
@@ -54,10 +56,10 @@ public class TileEntityFreezeGun extends TileEntityInventoriedCannon {
 	}
 
 	private void convertSnow() {
-		int slot = ReikaInventoryHelper.locateInInventory(Block.blockSnow.blockID, inv);
-		if (slot != -1 && ReikaInventoryHelper.canAcceptMoreOf(Item.snowball.itemID, 0, inv)) {
+		int slot = ReikaInventoryHelper.locateInInventory(Blocks.snow, inv);
+		if (slot != -1 && ReikaInventoryHelper.canAcceptMoreOf(Items.snowball, 0, inv)) {
 			ReikaInventoryHelper.decrStack(slot, inv);
-			ReikaInventoryHelper.addToIInv(new ItemStack(Item.snowball.itemID, 4, 0), this);
+			ReikaInventoryHelper.addToIInv(new ItemStack(Items.snowball, 4, 0), this);
 		}
 	}
 
@@ -88,14 +90,14 @@ public class TileEntityFreezeGun extends TileEntityInventoriedCannon {
 
 	@Override
 	public boolean hasAmmo() {
-		return ReikaInventoryHelper.checkForItem(Block.ice.blockID, inv) || ReikaInventoryHelper.checkForItem(Item.snowball.itemID, inv);
+		return ReikaInventoryHelper.checkForItem(Blocks.ice, inv) || ReikaInventoryHelper.checkForItem(Items.snowball, inv);
 	}
 
 	@Override
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
 		int r = this.getRange();
-		AxisAlignedBB range = AxisAlignedBB.getAABBPool().getAABB(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
+		AxisAlignedBB range = AxisAlignedBB.getBoundingBox(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
 		List inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, range);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;
@@ -131,7 +133,7 @@ public class TileEntityFreezeGun extends TileEntityInventoriedCannon {
 	@Override
 	public void fire(World world, double[] xyz) {
 		double speed = 1;
-		int slot = ReikaInventoryHelper.locateInInventory(Item.snowball.itemID, -1, inv);
+		int slot = ReikaInventoryHelper.locateInInventory(Items.snowball, inv);
 		ReikaInventoryHelper.decrStack(slot, inv);
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
@@ -156,7 +158,7 @@ public class TileEntityFreezeGun extends TileEntityInventoriedCannon {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.itemID == Block.ice.blockID || is.itemID == Block.blockSnow.blockID || is.itemID == Item.snowball.itemID;
+		return ReikaItemHelper.matchStackWithBlock(is, Blocks.ice) || ReikaItemHelper.matchStackWithBlock(is, Blocks.snow) || is.getItem() == Items.snowball;
 	}
 
 	@Override

@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
-import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -23,6 +19,12 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 
 public class TileEntityPerformanceEngine extends TileEntityEngine {
 
@@ -41,20 +43,20 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	@Override
 	protected void internalizeFuel() {
 		if (inv[0] != null && fuel.getLevel()+FluidContainerRegistry.BUCKET_VOLUME < FUELCAP) {
-			if (inv[0].itemID == ItemRegistry.ETHANOL.getShiftedID()) {
+			if (inv[0].getItem() == ItemRegistry.ETHANOL.getItemInstance()) {
 				ReikaInventoryHelper.decrStack(0, inv);
 				fuel.addLiquid(1000, RotaryCraft.ethanolFluid);
 			}
 		}
 		if (inv [1] != null && additives < FUELCAP/FluidContainerRegistry.BUCKET_VOLUME) { //additives
-			int id = inv[1].itemID;
-			if (id == Item.blazePowder.itemID || id == Item.redstone.itemID || id == Item.gunpowder.itemID) {
+			Item id = inv[1].getItem();
+			if (id == Items.blaze_powder || id == Items.redstone || id == Items.gunpowder) {
 				ReikaInventoryHelper.decrStack(1, inv);
-				if (id == Item.redstone.itemID)
+				if (id == Items.redstone)
 					additives += 1;
-				if (id == Item.gunpowder.itemID)
+				if (id == Items.gunpowder)
 					additives += 2;
-				if (id == Item.blazePowder.itemID)
+				if (id == Items.blaze_powder)
 					additives += 4;
 			}
 		}
@@ -128,7 +130,7 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	@Override
 	public void overheat(World world, int x, int y, int z) {
 		temperature = MAXTEMP;
-		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 27, true, 1.5F, true, ConfigRegistry.BLOCKDAMAGE.getState(), 6F);
+		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 27, true, 1.5F, true, ConfigRegistry.BLOCKDAMAGE.getState(), 6F);
 		world.setBlockToAir(x, y, z);
 	}
 

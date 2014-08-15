@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -28,7 +28,7 @@ public abstract class RemoteControlMachine extends TileEntitySpringPowered {
 		for (int i = 0; i < 3; i++) {
 			if (inv[i+1] == null)
 				colors[i] = -1;
-			else if (inv[i+1].itemID != Item.dyePowder.itemID)
+			else if (inv[i+1].getItem() != Items.dye)
 				colors[i] = -1;
 			else
 				colors[i] = inv[i+1].getItemDamage();
@@ -55,7 +55,7 @@ public abstract class RemoteControlMachine extends TileEntitySpringPowered {
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		if (i == 0)
 			return super.isItemValidForSlot(i, is);
-		return is.itemID == Item.dyePowder.itemID;
+		return is.getItem() == Items.dye;
 	}
 
 	@Override

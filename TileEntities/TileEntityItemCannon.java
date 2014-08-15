@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -21,6 +16,12 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation {
 
@@ -104,7 +105,7 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 	}
 
 	private TileEntityItemCannon getTargetTE() {
-		TileEntity te = worldObj.getBlockTileEntity(target[0], target[1], target[2]);
+		TileEntity te = worldObj.getTileEntity(target[0], target[1], target[2]);
 		if (!(te instanceof TileEntityItemCannon))
 			return null;
 		return (TileEntityItemCannon)te;

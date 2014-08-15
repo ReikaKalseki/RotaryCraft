@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import java.util.List;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -23,6 +16,16 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedEffect, DiscreteFunction {
 
@@ -36,7 +39,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		if (power < MINPOWER || torque < MINTORQUE)
 			return;
 
-		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Item.arrow.itemID, inv));
+		//ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Items.arrow.itemID, inv));
 
 		if (tickcount >= this.getOperationTime()&& !world.isRemote) {
 			AxisAlignedBB box = this.drawAABB(x, y, z, meta);
@@ -97,8 +100,8 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 			int x2 = (int)Math.floor(e.posX);
 			int z2 = (int)Math.floor(e.posZ);
 			int y2 = (int)e.posY-1;
-			int id = world.getBlockId(x2, y2, z2);
-			if (!e.getEntityName().equals(placer) && !e.getEntityName().equals("Reika_Kalseki") && id != 0) {
+			Block b = world.getBlock(x2, y2, z2);
+			if (!e.getCommandSenderName().equals(placer) && !e.getCommandSenderName().equals("Reika_Kalseki") && b != Blocks.air) {
 				e.motionX = vx;
 				e.motionZ = vz;
 				e.motionY = 0.5;
@@ -112,7 +115,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 
 	private AxisAlignedBB drawAABB(int x, int y, int z, int meta) {
 		double d = 0.1;
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).contract(d, d, d);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).contract(d, d, d);
 		switch(meta) {
 		case 1:
 			box.offset(1, 0, 0);

@@ -9,23 +9,31 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.Icon;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.client.event.RenderWorldEvent;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
@@ -35,6 +43,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
 	public PipeBodyRenderer(int ID) {
 		renderID = ID;
+		//MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Override
@@ -47,12 +56,12 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		ReikaTextureHelper.bindTerrainTexture();
 		v5.startDrawingQuads();
 
-		Icon ico = block.getIcon(0, metadata);
-		Icon gico = block.getIcon(1, metadata);
+		IIcon ico = block.getIcon(0, metadata);
+		IIcon gico = block.getIcon(1, metadata);
 		if (ico == null)
-			ico = RotaryCraft.lightblock.getIcon(0, 0);
+			ico = BlockRegistry.LIGHT.getBlockInstance().getIcon(0, 0);
 		if (gico == null)
-			gico = RotaryCraft.lightblock.getIcon(0, 0);
+			gico = BlockRegistry.LIGHT.getBlockInstance().getIcon(0, 0);
 
 		float dx = -0.5F;
 		float dy = -0.5F;
@@ -73,23 +82,76 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		RenderableDuct tile = (RenderableDuct)world.getBlockTileEntity(x, y, z);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		RenderableDuct tile = (RenderableDuct)world.getTileEntity(x, y, z);
 		for (int i = 0; i < 6; i++) {
-			if (renderPass == 0)
+			switch(renderPass) {
+			case 0:
 				this.renderFace(tile, world, x, y, z, dirs[i]);
-			else {
-				//Icon ico = tile.getOverlayIcon();
-				//if (ico != null)
-				//this.renderOverlay(tile, world, x, y, z, dirs[i], ico);
-				if (tile.isFluidPipe())
+				break;
+			case 1:
+				if (tile.isFluidPipe()) {
 					this.renderLiquid(tile, x, y, z, dirs[i]);
+				}
+				break;
 			}
 		}
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
 		return true;
 	}
 
+	/** Rendering outside the main render block. */
+	@SubscribeEvent
+	public void finalRender(RenderWorldEvent.Post evt) {
+		int i = evt.renderer.posX;
+		int j = evt.renderer.posY;
+		int k = evt.renderer.posZ;
+		ChunkCache cache = evt.chunkCache;
+		for (int y = j; y < j+16; y++) {
+			for (int z = k; z < k+16; z++) {
+				for (int x = i; x < i+16; x++) {
+					Block block = cache.getBlock(x, y, z);
+					int meta = cache.getBlockMetadata(x, y, z);
+					if (block.hasTileEntity(meta)) {
+						TileEntity te = cache.getTileEntity(x, y, z);
+						if (te instanceof RenderableDuct) {
+							RenderableDuct tile = (RenderableDuct)te;
+							Tessellator.instance.startDrawing(GL11.GL_LINE_LOOP);
+							for (int f = 0; f < 6; f++) {
+								switch(evt.pass) {
+								case 0:
+									;//this.renderFace(tile, cache, x, y, z, dirs[f]);
+									break;
+								case 1:
+									if (tile.isFluidPipe()) {
+										//this.renderLiquid(tile, x, y, z, dirs[f]);
+										Tessellator.instance.addVertex(-2*x+3, -2*y+3, -2*z+3);
+										Tessellator.instance.addVertex(-x, -y, -z);
+										Tessellator.instance.addVertex(0, 0, 0);
+										Tessellator.instance.addVertex(x, y, z);
+										Tessellator.instance.addVertex(x+3, y+3, z+3);
+										Tessellator.instance.addVertex(2*x+3, 2*y+3, 2*z+3);
+										ReikaJavaLibrary.pConsole(Tessellator.instance.isDrawing);
+									}
+									break;
+								}
+							}
+							Tessellator.instance.draw();
+						}
+					}
+				}
+			}
+		}
+	}
+
 	@Override
-	public boolean shouldRender3DInInventory() {
+	public boolean shouldRender3DInInventory(int model) {
 		return true;
 	}
 
@@ -98,7 +160,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		return renderID;
 	}
 
-	private void renderOverlay(RenderableDuct tile, IBlockAccess world, int x, int y, int z, ForgeDirection dir, Icon ico) {
+	private void renderOverlay(RenderableDuct tile, IBlockAccess world, int x, int y, int z, ForgeDirection dir, IIcon ico) {
 		if (tile.isConnectionValidForSide(dir))
 			return;
 		Tessellator v5 = Tessellator.instance;
@@ -157,8 +219,9 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		if (f == null)
 			return;
 		Tessellator v5 = Tessellator.instance;
+		//TesselatorVertexState st = ReikaRenderHelper.getTessellatorState();
+		Entity e = Minecraft.getMinecraft().renderViewEntity;
 		v5.draw();
-
 		float size = 0.75F/2F;
 		float window = 0.5F/2F;
 		float dl = size-window;
@@ -167,7 +230,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		double in2 = 0.5-size+0.01;
 		double dd2 = in-in2;
 
-		Icon ico = f.getIcon();
+		IIcon ico = f.getIcon();
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float u2 = ico.getMaxU();
@@ -437,6 +500,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		v5.draw();
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		v5.startDrawingQuads();
+		//v5.setVertexState(st);
 
 		//GL11.glEnable(GL11.GL_BLEND);
 		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -459,13 +523,14 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		if (tile == null)
 			return;
 		Tessellator v5 = Tessellator.instance;
+
 		v5.addTranslation(x, y, z);
 		int br = tile.getPipeBlockType().getMixedBrightnessForBlock(world, x, y, z);
 		v5.setBrightness(br);
 
 		this.doRenderFace(tile, world, dir);
-
 		v5.addTranslation(-x, -y, -z);
+
 	}
 
 	private void doRenderFace(RenderableDuct tile, IBlockAccess world, ForgeDirection dir) {
@@ -476,9 +541,9 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		float dl = size-window;
 		float dd = 0.5F-size;
 
-		Icon ico = tile.getBlockIcon();
+		IIcon ico = tile.getBlockIcon();
 		if (ico == null)
-			ico = RotaryCraft.lightblock.getIcon(0, 0);
+			ico = BlockRegistry.LIGHT.getBlockInstance().getIcon(0, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float u2 = ico.getMaxU();
@@ -504,9 +569,9 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		float mx = 1-dd-dl;
 		float my = 1-dd-dl;
 
-		Icon gico = tile.getGlassIcon();
+		IIcon gico = tile.getGlassIcon();
 		if (gico == null)
-			gico = RotaryCraft.lightblock.getIcon(0, 0);
+			gico = BlockRegistry.LIGHT.getBlockInstance().getIcon(0, 0);
 		float gu = gico.getMinU();
 		float gv = gico.getMinV();
 		float gu2 = gico.getMaxU();
@@ -1324,7 +1389,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		v5.setColorOpaque_F(f, f, f);
 	}
 
-	private void renderInventoryFace(Icon ico, Icon gico, ForgeDirection dir) {
+	private void renderInventoryFace(IIcon ico, IIcon gico, ForgeDirection dir) {
 		Tessellator v5 = Tessellator.instance;
 
 		float size = 0.75F/2F;

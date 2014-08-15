@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -18,8 +21,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

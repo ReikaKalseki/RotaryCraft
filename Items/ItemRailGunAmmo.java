@@ -9,19 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemBasic;
+
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemRailGunAmmo extends ItemBasic {
 
-	public ItemRailGunAmmo(int ID, int tex) {
-		super(ID, tex);
+	public ItemRailGunAmmo(int tex) {
+		super(tex);
 		maxStackSize = 16;
 		hasSubtypes = true;
 		this.setMaxDamage(0);
@@ -34,7 +36,7 @@ public class ItemRailGunAmmo extends ItemBasic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		for (int i = 0; i < 16; i++)
 			par3List.add(new ItemStack(par1, 1, i));

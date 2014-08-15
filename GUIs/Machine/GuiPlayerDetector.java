@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -22,6 +17,11 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Mouse;
 
 public class GuiPlayerDetector extends GuiNonPoweredMachine
 {
@@ -48,7 +48,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
-		input = new GuiTextField(fontRenderer, j+xSize/2-6, k+33, 26, 16);
+		input = new GuiTextField(fontRendererObj, j+xSize/2-6, k+33, 26, 16);
 		input.setFocused(false);
 		input.setMaxStringLength(3);
 	}
@@ -92,9 +92,9 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRenderer.drawString("Detection Range:", xSize/2-82, 25, 4210752);
+		fontRendererObj.drawString("Detection Range:", xSize/2-82, 25, 4210752);
 		if (!input.isFocused()) {
-			fontRenderer.drawString(String.format("%d", playerdetector.selectedrange), xSize/2+6, 25, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", playerdetector.selectedrange), xSize/2+6, 25, 0xffffffff);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		int color = 4210752;
 		if (range > playerdetector.getMaxRange())
 			color = 0xff0000;
-		ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", playerdetector.getRange()), j+xSize/2+58, k+25, color);
+		ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", playerdetector.getRange()), j+xSize/2+58, k+25, color);
 	}
 
 	@Override

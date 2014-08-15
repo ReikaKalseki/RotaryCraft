@@ -9,12 +9,28 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Base.ItemBlockPlacer;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
@@ -22,29 +38,18 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Base.ItemBlockPlacer;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.MaterialRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemShaftPlacer extends ItemBlockPlacer {
 
-	public ItemShaftPlacer(int id) {
-		super(id);
+	public ItemShaftPlacer() {
+		super();
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
-		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava) {
+		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava) {
 			if (side == 0)
 				--y;
 			if (side == 1)
@@ -58,12 +63,12 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			if (side == 5)
 				++x;
 			this.clearBlocks(world, x, y, z);
-			int id = world.getBlockId(x, y, z);
+			Block b = world.getBlock(x, y, z);
 			if (ReikaBlockHelper.isPortalBlock(world, x, y, z)) {
 				TileEntityShaft sha = new TileEntityShaft();
 				sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
 				sha.getIOSides(world, x, y, z, sha.getBlockMetadata());
-				sha.worldObj = world;
+				sha.setWorldObj(world);
 				sha.xCoord = x;
 				sha.yCoord = y;
 				sha.zCoord = z;
@@ -72,18 +77,18 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				int dz = z+sha.getReadDirection().offsetZ;
 				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 				if (m == MachineRegistry.SHAFT) {
-					TileEntityShaft te = (TileEntityShaft)world.getBlockTileEntity(dx, dy, dz);
+					TileEntityShaft te = (TileEntityShaft)world.getTileEntity(dx, dy, dz);
 					if (te.isWritingToCoordinate(x, y, z)) {
-						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlockID(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
+						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlock(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
 						TileEntityPortalShaft ps = new TileEntityPortalShaft();
-						world.setBlockTileEntity(dx, dy, dz, ps);
+						world.setTileEntity(dx, dy, dz, ps);
 						ps.setBlockMetadata(te.getBlockMetadata());
 						ps.setPortalType(world, x, y, z);
 						ps.material = te.getShaftType();
 					}
 				}
 			}
-			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
+			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava)
 				return false;
 		}
 		this.clearBlocks(world, x, y, z);
@@ -97,24 +102,24 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlockID(), is.getItemDamage(), 3);
-			if (is.getItemDamage() == RotaryNames.getNumberShaftTypes()-1) {
-				TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlock(), is.getItemDamage(), 3);
+			if (is.getItemDamage() == ItemStacks.shaftcross.getItemDamage()) {
+				TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 				if (sha != null) {
 					//sha.type = MaterialRegistry.STEEL;
 					sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 				}
 				return true;
 			}
-			TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+			TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 			if (sha != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 				//sha.type = MaterialRegistry.setType(is.getItemDamage());
 			}
 		}
-		TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+		TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 		sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
-		sha.placer = ep.getEntityName();
+		sha.setPlacer(ep);
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 			sha.isFlipped = true;
 		}
@@ -123,7 +128,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs tab, List list) {
+	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.SHAFT.isAvailableInCreativeInventory()) {
 			for (int i = 0; i < RotaryNames.getNumberShaftTypes(); i++) {
 				ItemStack item = new ItemStack(id, 1, i);
@@ -154,5 +159,10 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				li.add(sb.toString());
 			}
 		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
 	}
 }

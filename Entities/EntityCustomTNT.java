@@ -9,13 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.world.World;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityCustomTNT extends EntityTNTPrimed implements IEntityAdditionalSpawnData {
@@ -33,12 +30,12 @@ public class EntityCustomTNT extends EntityTNTPrimed implements IEntityAdditiona
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeInt(fuse);
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		fuse = data.readInt();
 	}
 

@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 /** To declare a machine output-only, return 0 for addFluid for all cases.
  * To declare a machine input-only, return 0 for removeFluid for all cases. */

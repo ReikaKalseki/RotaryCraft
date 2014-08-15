@@ -9,24 +9,26 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumToolMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemBedrockHoe(int par1, int tex) {
-		super(par1, EnumToolMaterial.EMERALD);
+	public ItemBedrockHoe(int tex) {
+		super(ToolMaterial.EMERALD);
 		this.setIndex(tex);
 		maxStackSize = 1;
 		this.setMaxDamage(0);
@@ -77,22 +79,21 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 					flag = flag2 || flag;
 					if (flag2) {
 						//world.setBlockMetadataWithNotify(dx, y, dz, 2, 3);
-						//ReikaItemHelper.dropItem(world, dx+0.5, y+1.2, dz+0.5, new ItemStack(Item.seeds));
+						//ReikaItemHelper.dropItem(world, dx+0.5, y+1.2, dz+0.5, new ItemStack(Items.wheat_seeds));
 					}
 					//ReikaJavaLibrary.pConsole((dx)+", "+y+", "+(dz);
 				}
 				else {
-					int slot = ReikaInventoryHelper.locateIDInInventory(Item.seeds.itemID, ep.inventory);
+					int slot = ReikaInventoryHelper.locateIDInInventory(Items.wheat_seeds, ep.inventory);
 					if (slot != -1 || ep.capabilities.isCreativeMode) {
-						int id = world.getBlockId(dx, y, dz);
-						int id2 = world.getBlockId(dx, y+1, dz);
-						Block b = Block.blocksList[id];
-						boolean top = id2 == 0 || Block.opaqueCubeLookup[id2] == false;
+						Block id = world.getBlock(dx, y, dz);
+						Block id2 = world.getBlock(dx, y+1, dz);
+						boolean top = id2 == Blocks.air || id2.isOpaqueCube() == false;
 						if (top) {
-							if (b != null) {
-								if (id == Block.dirt.blockID || id == Block.tilledField.blockID || b.isFertile(world, dx, y, dz)) {
+							if (id != Blocks.air) {
+								if (id == Blocks.dirt || id == Blocks.farmland || id.isFertile(world, dx, y, dz)) {
 									flag = true;
-									world.setBlock(dx, y, dz, Block.grass.blockID);
+									world.setBlock(dx, y, dz, Blocks.grass);
 									if (slot != -1 && !ep.capabilities.isCreativeMode) {
 										ItemStack seed = ep.inventory.getStackInSlot(slot);
 										seed.stackSize--;
@@ -101,7 +102,7 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 											return flag;
 										}
 									}
-									ReikaSoundHelper.playStepSound(world, dx, y, dz, Block.grass, 0.4F, 1);
+									ReikaSoundHelper.playStepSound(world, dx, y, dz, Blocks.grass, 0.4F, 1);
 								}
 							}
 						}
@@ -110,6 +111,11 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 			}
 		}
 		return flag;
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getBasicName();
 	}
 
 }

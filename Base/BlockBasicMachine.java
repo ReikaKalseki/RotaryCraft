@@ -8,36 +8,12 @@
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
-import java.util.List;
-import java.util.Random;
-
-import mcp.mobius.waila.api.IWailaBlock;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DartItemHandler;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -62,21 +38,47 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
+import java.util.List;
+import java.util.Random;
+
+import mcp.mobius.waila.api.IWailaBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+
 
 public abstract class BlockBasicMachine extends BlockTEBase implements SidedTextureIndex, IWailaBlock {
 
 	protected Random par5Random = new Random();
 
 	/** Icons by metadata 0-15 and side 0-6. Nonmetadata blocks can just set the first index to 0 at all times. */
-	public Icon[][] icons = new Icon[16][6];
+	public IIcon[][] icons = new IIcon[16][6];
 
-	public BlockBasicMachine(int ID, Material par3Material) {
-		super(ID, par3Material);
+	public BlockBasicMachine(Material par3Material) {
+		super(par3Material);
 		this.setHardness(4F);
 		this.setResistance(15F);
-		this.setLightValue(0F);
+		this.setLightLevel(0F);
 		if (par3Material == Material.iron)
-			this.setStepSound(soundMetalFootstep);
+			this.setStepSound(soundTypeMetal);
 	}
 
 	@Override
@@ -85,10 +87,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 	}
 
 	@Override
-	public abstract Icon getIcon(int s, int meta);
+	public abstract IIcon getIcon(int s, int meta);
 	/** Sides: 0 bottom, 1 top, 2 back, 3 front, 4 right, 5 left */
 	@Override
-	public abstract void registerIcons(IconRegister par1IconRegister);
+	public abstract void registerBlockIcons(IIconRegister par1IconRegister);
 
 	@Override
 	public int getRenderType() {
@@ -108,9 +110,9 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 	}
 
 	@Override
-	public final int idDropped(int par1, Random par2Random, int par3)
+	public final Item getItemDropped(int par1, Random par2Random, int par3)
 	{
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -132,7 +134,7 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 		super.onBlockActivated(world, x, y, z, ep, side, par7, par8, par9);
 		if (RotaryCraft.instance.isLocked())
 			return false;
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 
 		ItemStack is = ep.getCurrentEquippedItem();
 
@@ -155,13 +157,13 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
 					tile.addLubricant(1000);
 					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
+						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 					return true;
 				}
 			}
 		}
 		else if (te instanceof TileEntityEngine) {
-			if (is != null && is.itemID == ItemRegistry.FUEL.getShiftedID())
+			if (is != null && is.getItem() == ItemRegistry.FUEL.getItemInstance())
 				return false;
 			TileEntityEngine tile = (TileEntityEngine)te;
 			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
@@ -181,11 +183,11 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				}
 			}
 			if (is != null && is.stackSize == 1) {
-				if (is.itemID == Item.bucketEmpty.itemID) {
+				if (is.getItem() == Items.bucket) {
 					if (tile.getEngineType().isEthanolFueled()) {
-						if (tile.getFuelLevel() >= RotaryConfig.MILLIBUCKET) {
+						if (tile.getFuelLevel() >= 1000) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
-							tile.subtractFuel(RotaryConfig.MILLIBUCKET);
+							tile.subtractFuel(1000);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -194,9 +196,9 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 						return true;
 					}
 					if (tile.getEngineType().isJetFueled()) {
-						if (tile.getFuelLevel() >= RotaryConfig.MILLIBUCKET) {
+						if (tile.getFuelLevel() >= 1000) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket.copy());
-							tile.subtractFuel(RotaryConfig.MILLIBUCKET);
+							tile.subtractFuel(1000);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -205,9 +207,9 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 						return true;
 					}
 					if (tile.getEngineType().requiresLubricant()) {
-						if (tile.getLube() >= RotaryConfig.MILLIBUCKET) {
+						if (tile.getLube() >= 1000) {
 							ep.setCurrentItemOrArmor(0, ItemStacks.lubebucket.copy());
-							tile.removeLubricant(RotaryConfig.MILLIBUCKET);
+							tile.removeLubricant(1000);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -218,10 +220,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				}
 				if (tile.getEngineType().isJetFueled()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
-						if (tile.getFuelLevel() <= tile.FUELCAP-RotaryConfig.MILLIBUCKET) {
+						if (tile.getFuelLevel() <= tile.FUELCAP-1000) {
 							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addFuel(RotaryConfig.MILLIBUCKET);
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addFuel(1000);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -232,10 +234,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				}
 				if (tile.getEngineType().isEthanolFueled()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.ethanolbucket)) {
-						if (tile.getFuelLevel() <= tile.FUELCAP-RotaryConfig.MILLIBUCKET) {
+						if (tile.getFuelLevel() <= tile.FUELCAP-1000) {
 							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addFuel(RotaryConfig.MILLIBUCKET);
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addFuel(1000);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -246,10 +248,10 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				}
 				if (tile.getEngineType().requiresLubricant()) {
 					if (ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
-						if (tile.getLube() <= tile.LUBECAP-RotaryConfig.MILLIBUCKET) {
+						if (tile.getLube() <= tile.LUBECAP-1000) {
 							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addLubricant(RotaryConfig.MILLIBUCKET);
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addLubricant(1000);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -259,11 +261,11 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 					}
 				}
 				if (tile.getEngineType().needsWater()) {
-					if (is != null && is.itemID == Item.bucketWater.itemID) {
-						if (tile.getWater() <= tile.CAPACITY-RotaryConfig.MILLIBUCKET) {
+					if (is != null && is.getItem() == Items.water_bucket) {
+						if (tile.getWater() <= tile.CAPACITY-1000) {
 							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Item.bucketEmpty));
-							tile.addWater(RotaryConfig.MILLIBUCKET);
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addWater(1000);
 						}
 						else {
 							ReikaChatHelper.clearChat();
@@ -283,23 +285,20 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		int id = this.idPicked(world, x, y, z);
 		int meta = world.getBlockMetadata(target.blockX, target.blockY, target.blockZ);
-		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
+		MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(this, meta);
 		if (m == null)
 			return null;
-		if (id == 0)
-			return null;
 		if (m == MachineRegistry.ENGINE) {
-			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+			TileEntityEngine eng = (TileEntityEngine)world.getTileEntity(x, y, z);
 			if (eng == null)
 				return null;
 			if (eng.getEngineType() == null)
 				return null;
-			return new ItemStack(RotaryCraft.engineitems.itemID, 1, eng.getEngineType().ordinal());
+			return eng.getEngineType().getCraftedProduct();
 		}
 		if (m == MachineRegistry.GEARBOX) {
-			TileEntityGearbox gbx = (TileEntityGearbox)world.getBlockTileEntity(x, y, z);
+			TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 			meta = gbx.getBlockMetadata();
 			if (gbx.getGearboxType() == null)
 				return null;
@@ -315,26 +314,26 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 				dmg += 15;
 				break;
 			}
-			return new ItemStack(RotaryCraft.gbxitems.itemID, 1, dmg);
+			return new ItemStack(ItemRegistry.GEARBOX.getItemInstance(), 1, dmg);
 		}
 		if (m == MachineRegistry.SHAFT) {
-			TileEntityShaft sha = (TileEntityShaft)world.getBlockTileEntity(x, y, z);
+			TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 			meta = sha.getBlockMetadata();
 			if (meta >= 6)
-				return new ItemStack(RotaryCraft.shaftitems.itemID, 1, RotaryNames.getNumberShaftTypes()-1);
+				return new ItemStack(ItemRegistry.SHAFT.getItemInstance(), 1, RotaryNames.getNumberShaftTypes()-1);
 			if (sha.getShaftType() == null)
 				return null;
-			return new ItemStack(RotaryCraft.shaftitems.itemID, 1, sha.getShaftType().ordinal());
+			return new ItemStack(ItemRegistry.SHAFT.getItemInstance(), 1, sha.getShaftType().ordinal());
 		}
 		if (m == MachineRegistry.FLYWHEEL) {
-			TileEntityFlywheel fly = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
+			TileEntityFlywheel fly = (TileEntityFlywheel)world.getTileEntity(x, y, z);
 			meta = fly.getBlockMetadata();
-			return new ItemStack(RotaryCraft.flywheelitems.itemID, 1, meta/4);
+			return new ItemStack(ItemRegistry.FLYWHEEL.getItemInstance(), 1, meta/4);
 		}
 		if (m == MachineRegistry.ADVANCEDGEARS) {
-			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
+			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);
 			meta = adv.getBlockMetadata();
-			ItemStack is = new ItemStack(RotaryCraft.advgearitems.itemID, 1, meta/4);
+			ItemStack is = new ItemStack(ItemRegistry.ADVGEAR.getItemInstance(), 1, meta/4);
 			if (adv.isBedrockCoil()) {
 				is.stackTagCompound = new NBTTagCompound();
 				is.stackTagCompound.setBoolean("bedrock", true);
@@ -342,13 +341,13 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 			return is;
 		}
 		if (m.isPipe()) {
-			return ((TileEntityPiping)world.getBlockTileEntity(x, y, z)).getMachine().getCraftedProduct();
+			return ((TileEntityPiping)world.getTileEntity(x, y, z)).getMachine().getCraftedProduct();
 		}
 		return m.getCraftedProduct();
 	}
 
 	@Override
-	public final boolean canBeReplacedByLeaves(World world, int x, int y, int z)
+	public final boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
 	{
 		return false;
 	}
@@ -360,7 +359,7 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face)
+	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face)
 	{
 		return 0;
 	}
@@ -372,9 +371,9 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
+	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
 	{
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IInventory)
 			ReikaItemHelper.dropInventory(world, x, y, z);
 		super.breakBlock(world, x, y, z, par5, par6);
@@ -385,7 +384,7 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 	}
 
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		return MachineRegistry.getMachineFromIDandMetadata(blockID, accessor.getMetadata()).getCraftedProduct();
+		return MachineRegistry.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
 	}
 
 	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {

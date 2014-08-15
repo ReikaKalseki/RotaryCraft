@@ -9,22 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.item.EntityFallingSand;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -34,9 +19,9 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -47,6 +32,24 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSand;
+import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction,
 ConditionalOperation, DamagingContact {
@@ -88,8 +91,8 @@ ConditionalOperation, DamagingContact {
 
 		if (tree.isEmpty() && this.hasWood()) {
 			tree.reset();
-			ModWoodList wood = ModWoodList.getModWood(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
-			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlockId(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			ModWoodList wood = ModWoodList.getModWood(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
@@ -148,12 +151,11 @@ ConditionalOperation, DamagingContact {
 			treeCopy = tree.copy();
 		}
 
-		int id = world.getBlockId(x, y+1, z);
-		if (id != 0) {
-			Block b = Block.blocksList[id];
-			if (b.blockMaterial == Material.wood || b.blockMaterial == Material.leaves) {
-				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, b.getBlockDropped(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), this.getEnchantment(Enchantment.fortune)));
-				world.setBlock(x, y+1, z, 0);
+		Block b = world.getBlock(x, y+1, z);
+		if (b != Blocks.air) {
+			if (b.getMaterial() == Material.wood || b.getMaterial() == Material.leaves) {
+				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, b.getDrops(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), this.getEnchantment(Enchantment.fortune)));
+				world.setBlockToAir(x, y+1, z);
 			}
 		}
 
@@ -172,59 +174,59 @@ ConditionalOperation, DamagingContact {
 		}
 
 		int[] xyz = tree.getNextAndMoveOn();
-		int drop = world.getBlockId(xyz[0], xyz[1], xyz[2]);
+		Block drop = world.getBlock(xyz[0], xyz[1], xyz[2]);
 		int dropmeta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
 
-		if (drop != 0) {
-			Material mat = world.getBlockMaterial(xyz[0], xyz[1], xyz[2]);
+		if (drop != Blocks.air) {
+			Material mat = ReikaWorldHelper.getMaterial(world, xyz[0], xyz[1], xyz[2]);
 			if (ConfigRegistry.INSTACUT.getState()) {
-				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
-				world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+				world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
 				if (mat == Material.leaves)
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
 				else
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
 
 				if (xyz[1] == edity) {
-					int idbelow = world.getBlockId(xyz[0], xyz[1]-1, xyz[2]);
-					int root = TwilightForestHandler.getInstance().rootID;
+					Block idbelow = world.getBlock(xyz[0], xyz[1]-1, xyz[2]);
+					Block root = TwilightForestHandler.getInstance().rootID;
 					if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
 						ItemStack plant = this.getPlantedSapling();
 						if (plant != null) {
 							if (inv[0] != null)
 								ReikaInventoryHelper.decrStack(0, inv);
-							world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+							ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
 						}
 					}
-					else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == 0)) {
+					else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
 						ItemStack plant = this.getPlantedSapling();
 						if (plant != null) {
 							if (inv[0] != null)
 								ReikaInventoryHelper.decrStack(0, inv);
-							world.setBlock(xyz[0], xyz[1]-1, xyz[2], Block.dirt.blockID);
-							world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+							world.setBlock(xyz[0], xyz[1]-1, xyz[2], Blocks.dirt);
+							ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
 						}
 					}
 				}
 			}
 			else {
-				boolean fall = BlockSand.canFallBelow(world, xyz[0], xyz[1]-1, xyz[2]);
+				boolean fall = BlockSand.func_149831_e(world, xyz[0], xyz[1]-1, xyz[2]);
 				if (fall) {
-					EntityFallingSand e = new EntityFallingSand(world, xyz[0]+0.5, xyz[1]+0.65, xyz[2]+0.5, drop, dropmeta);
-					e.fallTime = -2000;
-					e.shouldDropItem = false;
+					EntityFallingBlock e = new EntityFallingBlock(world, xyz[0]+0.5, xyz[1]+0.65, xyz[2]+0.5, drop, dropmeta);
+					e.field_145812_b = -2000;
+					e.field_145813_c = false;
 					if (!world.isRemote) {
 						world.spawnEntityInWorld(e);
 					}
-					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
+					world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
 				}
 				else {
 
-					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlock.getBlockDropped(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
+					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
 					this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
-					world.setBlock(xyz[0], xyz[1], xyz[2], 0);
-					ReikaSoundHelper.playBreakSound(world, xyz[0], xyz[1], xyz[2], Block.wood);
+					world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
+					ReikaSoundHelper.playBreakSound(world, xyz[0], xyz[1], xyz[2], Blocks.log);
 
 					if (mat == Material.leaves)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
@@ -232,23 +234,23 @@ ConditionalOperation, DamagingContact {
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
 
 					if (xyz[1] == edity) {
-						int idbelow = world.getBlockId(xyz[0], xyz[1]-1, xyz[2]);
-						int root = TwilightForestHandler.getInstance().rootID;
+						Block idbelow = world.getBlock(xyz[0], xyz[1]-1, xyz[2]);
+						Block root = TwilightForestHandler.getInstance().rootID;
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
 								if (inv[0] != null)
 									ReikaInventoryHelper.decrStack(0, inv);
-								world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+								ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
 							}
 						}
-						else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == 0)) {
+						else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
 								if (inv[0] != null)
 									ReikaInventoryHelper.decrStack(0, inv);
-								world.setBlock(xyz[0], xyz[1]-1, xyz[2], Block.dirt.blockID);
-								world.setBlock(xyz[0], xyz[1], xyz[2], plant.itemID, plant.getItemDamage(), 3);
+								world.setBlock(xyz[0], xyz[1]-1, xyz[2], Blocks.dirt);
+								ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
 							}
 						}
 					}
@@ -274,24 +276,23 @@ ConditionalOperation, DamagingContact {
 	}
 
 	private void dropBlocks(World world, int x, int y, int z) {
-		int drop = world.getBlockId(x, y, z);
-		if (drop == 0)
+		Block drop = world.getBlock(x, y, z);
+		if (drop == Blocks.air)
 			return;
 		int dropmeta = world.getBlockMetadata(x, y, z);
-		Block dropBlock = Block.blocksList[drop];
 		ItemStack sapling = null;
-		int logID = -1;
+		Block logID = null;
 		if (tree.isVanillaTree()) {
 			sapling = tree.getVanillaTree().getSapling();
-			logID = tree.getVanillaTree().getLog().itemID;
+			logID = Block.getBlockFromItem(tree.getVanillaTree().getLog().getItem());
 		}
 		else if (tree.isModTree()) {
 			sapling = tree.getModTree().getCorrespondingSapling();
-			logID = tree.getModTree().getItem().itemID;
+			logID = Block.getBlockFromItem(tree.getModTree().getItem().getItem());
 		}
 
-		List<ItemStack> drops = dropBlock.getBlockDropped(world, x, y, z, dropmeta, this.getEnchantment(Enchantment.fortune));
-		if (drop == logID) {
+		List<ItemStack> drops = drop.getDrops(world, x, y, z, dropmeta, this.getEnchantment(Enchantment.fortune));
+		if (drop == logID && logID != null) {
 			if (rand.nextInt(3) == 0) {
 				drops.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust.copy(), 1+rand.nextInt(4)));
 			}
@@ -311,7 +312,7 @@ ConditionalOperation, DamagingContact {
 	}
 
 	private boolean chestCheck(ItemStack is) {
-		TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord);
+		TileEntity te = worldObj.getTileEntity(xCoord, yCoord-1, zCoord);
 		if (te instanceof IInventory) {
 			IInventory ii = (IInventory)te;
 			if (ReikaInventoryHelper.addToIInv(is, ii))
@@ -345,7 +346,7 @@ ConditionalOperation, DamagingContact {
 		if (this.hasEnchantment(Enchantment.infinity))
 			return true;
 		if (treeCopy.isDyeTree()) {
-			return inv[0] != null && inv[0].stackSize > 0 && inv[0].itemID == TreeGetter.getSaplingID();
+			return inv[0] != null && inv[0].stackSize > 0 && Block.getBlockFromItem(inv[0].getItem()) == TreeGetter.getSaplingID();
 		}
 		else if (treeCopy.isVanillaTree()) {
 			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getVanillaTree().getSapling());
@@ -441,9 +442,9 @@ ConditionalOperation, DamagingContact {
 	private boolean hasWood() {
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				int id = worldObj.getBlockId(editx+i, edity, editz+j);
+				Block id = worldObj.getBlock(editx+i, edity, editz+j);
 				int meta = worldObj.getBlockMetadata(editx+i, edity, editz+j);
-				if (id == Block.wood.blockID)
+				if (id == Blocks.log || id == Blocks.log2)
 					return true;
 				ModWoodList wood = ModWoodList.getModWood(id, meta);
 				RotaryCraft.logger.debug("Retrieved wood "+wood+" from "+id+":"+meta);

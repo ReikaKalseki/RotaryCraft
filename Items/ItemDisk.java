@@ -9,17 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemDisk extends ItemRotaryTool {
 
-	public ItemDisk(int ID, int tex) {
-		super(ID, tex);
+	public ItemDisk(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class ItemDisk extends ItemRotaryTool {
 		li.add("Contains stored music:");
 		for (int i = 0; i < 16; i++) {
 			if (is.stackTagCompound.hasKey("ch"+i)) {
-				NBTTagList track = is.stackTagCompound.getTagList("ch"+i);
+				NBTTagList track = is.stackTagCompound.getTagList("ch"+i, is.stackTagCompound.getId());
 				if (track.tagCount() > 0)
 					li.add("Track "+i+": "+track.tagCount()+" entries");
 			}

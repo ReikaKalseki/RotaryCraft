@@ -9,18 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Turret.ModelFreezeGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityFreezeGun;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderFreezeGun extends RotaryTERenderer {
 
@@ -96,7 +96,7 @@ public class RenderFreezeGun extends RotaryTERenderer {
 		int[] rgb = {255,255,255};
 		for (int i = 0; i < tile.frozen.size(); i++) {
 			EntityLivingBase e = tile.frozen.get(i);
-			ReikaJavaLibrary.pConsole(e.getEntityName());
+			ReikaJavaLibrary.pConsole(e.getCommandSenderName());
 			double dx = e.posX-tile.xCoord;
 			double dy = e.posY-tile.yCoord;
 			double dz = e.posZ-tile.zCoord;

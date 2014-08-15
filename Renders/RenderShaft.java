@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -23,6 +18,11 @@ import Reika.RotaryCraft.Models.Animated.ShaftOnly.ModelCross;
 import Reika.RotaryCraft.Models.Animated.ShaftOnly.ModelShaft;
 import Reika.RotaryCraft.Models.Animated.ShaftOnly.ModelShaftV;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
 
 public class RenderShaft extends RotaryTERenderer
 {

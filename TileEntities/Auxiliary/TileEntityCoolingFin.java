@@ -9,14 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class TileEntityCoolingFin extends RotaryCraftTileEntity implements TemperatureTE {
 
@@ -74,7 +75,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 			return;
 		tickcount = 0;
 		this.updateTemperature(world, x, y, z, meta);
-		TileEntity te = world.getBlockTileEntity(targetx, targety, targetz);
+		TileEntity te = world.getTileEntity(targetx, targety, targetz);
 		if (te instanceof TemperatureTE) {
 			TemperatureTE tr = (TemperatureTE)te;
 			int temp = tr.getTemperature();

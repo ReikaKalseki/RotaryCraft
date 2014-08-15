@@ -9,22 +9,24 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.TensionStorage;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCoil extends ItemBasic implements TensionStorage
 {
-	public ItemCoil(int ID, int tex) {
-		super(ID, tex);
+	public ItemCoil(int tex) {
+		super(tex);
 		maxStackSize = 1;
 		hasSubtypes = true;
 		this.setMaxDamage(0);
@@ -37,7 +39,7 @@ public class ItemCoil extends ItemBasic implements TensionStorage
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		for (int i = 0; i <= 32000; i++)
 			if (ReikaMathLibrary.isPowerOf(i, 2) || i == 0 || i == 30000)
@@ -75,6 +77,6 @@ public class ItemCoil extends ItemBasic implements TensionStorage
 
 	@Override
 	public boolean isBreakable(ItemStack is) {
-		return is.itemID == ItemRegistry.SPRING.getShiftedID();
+		return is.getItem() == ItemRegistry.SPRING.getItemInstance();
 	}
 }

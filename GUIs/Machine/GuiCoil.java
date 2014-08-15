@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -23,6 +18,11 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Mouse;
 
 public class GuiCoil extends GuiNonPoweredMachine
 {
@@ -52,10 +52,10 @@ public class GuiCoil extends GuiNonPoweredMachine
 		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
-		input = new GuiTextField(fontRenderer, j+xSize/2-15, k+30, 56, 16);
+		input = new GuiTextField(fontRendererObj, j+xSize/2-15, k+30, 56, 16);
 		input.setFocused(false);
 		input.setMaxStringLength(8);
-		input2 = new GuiTextField(fontRenderer, j+xSize/2-15, k+60, 56, 16);
+		input2 = new GuiTextField(fontRendererObj, j+xSize/2-15, k+60, 56, 16);
 		input2.setFocused(false);
 		input2.setMaxStringLength(8);
 	}
@@ -146,18 +146,18 @@ public class GuiCoil extends GuiNonPoweredMachine
 
 		ReikaTextureHelper.bindFontTexture();
 
-		fontRenderer.drawString("Output Speed", xSize/2-82, 22, 4210752);
+		fontRendererObj.drawString("Output Speed", xSize/2-82, 22, 4210752);
 		if (!coil.isCreative())
-			fontRenderer.drawString(String.format("(Max %d)", coil.getMaximumEmission()), xSize/2-82, 37, 4210752);
-		fontRenderer.drawString("Output Torque", xSize/2-82, 52, 4210752);
+			fontRendererObj.drawString(String.format("(Max %d)", coil.getMaximumEmission()), xSize/2-82, 37, 4210752);
+		fontRendererObj.drawString("Output Torque", xSize/2-82, 52, 4210752);
 
-		fontRenderer.drawString("rad/s", xSize/2+53, 22, 4210752);
-		fontRenderer.drawString("Nm", xSize/2+53, 52, 4210752);
+		fontRendererObj.drawString("rad/s", xSize/2+53, 22, 4210752);
+		fontRendererObj.drawString("Nm", xSize/2+53, 52, 4210752);
 
 		if (!input.isFocused())
-			fontRenderer.drawString(String.format("%d", coil.getReleaseOmega()), xSize/2-3, 22, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", coil.getReleaseOmega()), xSize/2-3, 22, 0xffffffff);
 		if (!input2.isFocused())
-			fontRenderer.drawString(String.format("%d", coil.getReleaseTorque()), xSize/2-3, 52, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", coil.getReleaseTorque()), xSize/2-3, 52, 0xffffffff);
 
 		super.drawGuiContainerForegroundLayer(a, b);
 	}

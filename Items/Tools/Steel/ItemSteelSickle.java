@@ -13,8 +13,8 @@ import Reika.RotaryCraft.Base.ItemSickleBase;
 
 public class ItemSteelSickle extends ItemSickleBase {
 
-	public ItemSteelSickle(int ID, int index) {
-		super(ID, index);
+	public ItemSteelSickle(int index) {
+		super(index);
 	}
 
 	@Override

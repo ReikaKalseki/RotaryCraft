@@ -9,29 +9,23 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet250CustomPayload;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 public class GuiBorer extends GuiMachine
 {
@@ -139,7 +133,6 @@ public class GuiBorer extends GuiMachine
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			outputStream.writeInt(a);
 			if (a == PacketRegistry.BORER.getMinValue()+1) {
 				if (drops)
@@ -174,22 +167,7 @@ public class GuiBorer extends GuiMachine
 			ex.printStackTrace();
 		}
 
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "RotaryCraftData";
-		packet.data = bos.toByteArray();
-		packet.length = bos.size();
-
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		if (side == Side.SERVER) {
-			// We are on the server side.
-			EntityPlayerMP player2 = (EntityPlayerMP) ep;
-		} else if (side == Side.CLIENT) {
-			// We are on the client side.
-			EntityClientPlayerMP player2 = (EntityClientPlayerMP) ep;
-			PacketDispatcher.sendPacketToServer(packet);
-		} else {
-			// We are on the Bukkit server.
-		}
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, bos);
 		this.updateScreen();
 	}
 
@@ -223,10 +201,10 @@ public class GuiBorer extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-26, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+12, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+71, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+130, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", borer.power, borer.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+var5+20, var6+12, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Speed:", xSize+var5+20, var6+71, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Torque:", xSize+var5+20, var6+130, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRendererObj, String.format("%d/%d", borer.power, borer.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

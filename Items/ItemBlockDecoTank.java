@@ -9,27 +9,30 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.RotaryCraft.API.Fillable;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
+
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.Fillable;
-import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 
 public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 
 	public static final int FILL = 25;
 
-	public ItemBlockDecoTank(int par1) {
-		super(par1);
+	public ItemBlockDecoTank(Block b) {
+		super(b);
 	}
 
 	@Override
@@ -67,7 +70,7 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 	}
 
 	@Override
-	public void getSubItems(int id, CreativeTabs tab, List li) {
+	public void getSubItems(Item id, CreativeTabs tab, List li) {
 		li.add(new ItemStack(id, 1, 0));
 		li.add(new ItemStack(id, 1, 1));
 	}
@@ -82,9 +85,9 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 	{
 		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 		if (flag) {
-			int id = world.getBlockId(x, y, z);
-			if (id == RotaryCraft.decoTank.blockID) {
-				TileEntity te = world.getBlockTileEntity(x, y, z);
+			Block b = world.getBlock(x, y, z);
+			if (b == BlockRegistry.DECOTANK.getBlockInstance()) {
+				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof TileEntityDecoTank) {
 					((TileEntityDecoTank)te).setLiquid(stack);
 				}
@@ -112,6 +115,11 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 	@Override
 	public Fluid getCurrentFluid(ItemStack is) {
 		return is.stackTagCompound != null ? ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound) : null;
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return BlockRegistry.DECOTANK.getMultiValuedName(is.getItemDamage());
 	}
 
 }

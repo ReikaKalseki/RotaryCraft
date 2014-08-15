@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.awt.Color;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -27,6 +18,16 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+
+import java.awt.Color;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
@@ -76,7 +77,7 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 	private void getSteam(World world, int dx, int dy, int dz) {
 		int drain = 25;
 		if (storedEnergy <= this.getMaxStorage()-drain) {
-			TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+			TileEntity te = world.getTileEntity(dx, dy, dz);
 			if (te instanceof IFluidHandler) {
 				IFluidHandler ic = (IFluidHandler)te;
 				FluidStack liq = ic.drain(this.getFacing().getOpposite(), drain, true);

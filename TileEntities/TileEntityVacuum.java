@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.util.List;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -33,6 +19,22 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect/*, IFluidHandler*/ {
 
@@ -185,7 +187,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	private int checkForStack(ItemStack is) {
 		int target = -1;
-		int id = is.itemID;
+		Item id = is.getItem();
 		int meta = is.getItemDamage();
 		int size = is.stackSize;
 		int firstempty = -1;
@@ -224,8 +226,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 			return true;
 		if ((is.stackTagCompound == null || is2.stackTagCompound == null))
 			return false;
-		if (is.stackTagCompound.getName() == null || is.stackTagCompound.getName().isEmpty())
-			is.stackTagCompound.setName("tag"); //is done by the TE's NBT functions anyways
+		//if (is.stackTagCompound.getName() == null || is.stackTagCompound.getName().isEmpty())
+		//	is.stackTagCompound.setName("tag"); //is done by the TE's NBT functions anyways
 		if (ItemStack.areItemStackTagsEqual(is, is2))
 			return true;
 		return false;

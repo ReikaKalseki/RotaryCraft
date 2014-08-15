@@ -9,23 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
@@ -33,13 +16,32 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConnectedTextureGlass;
 import Reika.RotaryCraft.Items.ItemBlockDecoTank;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+
 public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
 	private final ArrayList<Integer> allDirs = new ArrayList();
-	private final Icon[] icons = new Icon[10];
+	private final IIcon[] icons = new IIcon[10];
 
-	public BlockDecoTank(int par1) {
-		super(par1, Material.glass);
+	public BlockDecoTank() {
+		super(Material.glass);
 		this.setResistance(6000);
 		this.setHardness(0.35F);
 		this.setLightOpacity(0);
@@ -53,19 +55,19 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		super.onBlockAdded(world, x, y, z);
-		world.markBlockForRenderUpdate(x, y, z);
+		world.func_147479_m(x, y, z);
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int id, int meta) {
+	public void breakBlock(World world, int x, int y, int z, Block id, int meta) {
 		super.breakBlock(world, x, y, z, id, meta);
-		world.markBlockForRenderUpdate(x, y, z);
+		world.func_147479_m(x, y, z);
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune) {
-		ArrayList<ItemStack> li = super.getBlockDropped(world, x, y, z, meta, fortune);
-		TileEntityDecoTank te = (TileEntityDecoTank)world.getBlockTileEntity(x, y, z);
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> li = super.getDrops(world, x, y, z, meta, fortune);
+		TileEntityDecoTank te = (TileEntityDecoTank)world.getTileEntity(x, y, z);
 		if (te != null) {
 			Fluid f = te.getFluid();
 			if (f != null) {
@@ -81,11 +83,11 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean harv)
 	{
 		if (!player.capabilities.isCreativeMode)
 			this.harvestBlock(world, player, x, y, z, world.getBlockMetadata(x, y, z));
-		return world.setBlock(x, y, z, 0);
+		return world.setBlockToAir(x, y, z);
 	}
 
 	@Override
@@ -131,81 +133,81 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
 		if (face.offsetX != 0) { //test YZ
 			//sides; removed if have adjacent on side
-			if (world.getBlockId(x, y, z+1) == blockID)
+			if (world.getBlock(x, y, z+1) == this)
 				li.remove(new Integer(2));
-			if (world.getBlockId(x, y, z-1) == blockID)
+			if (world.getBlock(x, y, z-1) == this)
 				li.remove(new Integer(8));
-			if (world.getBlockId(x, y+1, z) == blockID)
+			if (world.getBlock(x, y+1, z) == this)
 				li.remove(new Integer(4));
-			if (world.getBlockId(x, y-1, z) == blockID)
+			if (world.getBlock(x, y-1, z) == this)
 				li.remove(new Integer(6));
 
 			//Corners; only removed if have adjacent on side AND corner
-			if (world.getBlockId(x, y+1, z+1) == blockID && !li.contains(4) && !li.contains(2))
+			if (world.getBlock(x, y+1, z+1) == this && !li.contains(4) && !li.contains(2))
 				li.remove(new Integer(1));
-			if (world.getBlockId(x, y-1, z-1) == blockID && !li.contains(6) && !li.contains(8))
+			if (world.getBlock(x, y-1, z-1) == this && !li.contains(6) && !li.contains(8))
 				li.remove(new Integer(9));
-			if (world.getBlockId(x, y+1, z-1) == blockID && !li.contains(4) && !li.contains(8))
+			if (world.getBlock(x, y+1, z-1) == this && !li.contains(4) && !li.contains(8))
 				li.remove(new Integer(7));
-			if (world.getBlockId(x, y-1, z+1) == blockID && !li.contains(2) && !li.contains(6))
+			if (world.getBlock(x, y-1, z+1) == this && !li.contains(2) && !li.contains(6))
 				li.remove(new Integer(3));
 		}
 		if (face.offsetY != 0) { //test XZ
 			//sides; removed if have adjacent on side
-			if (world.getBlockId(x, y, z+1) == blockID)
+			if (world.getBlock(x, y, z+1) == this)
 				li.remove(new Integer(2));
-			if (world.getBlockId(x, y, z-1) == blockID)
+			if (world.getBlock(x, y, z-1) == this)
 				li.remove(new Integer(8));
-			if (world.getBlockId(x+1, y, z) == blockID)
+			if (world.getBlock(x+1, y, z) == this)
 				li.remove(new Integer(4));
-			if (world.getBlockId(x-1, y, z) == blockID)
+			if (world.getBlock(x-1, y, z) == this)
 				li.remove(new Integer(6));
 
 			//Corners; only removed if have adjacent on side AND corner
-			if (world.getBlockId(x+1, y, z+1) == blockID && !li.contains(4) && !li.contains(2))
+			if (world.getBlock(x+1, y, z+1) == this && !li.contains(4) && !li.contains(2))
 				li.remove(new Integer(1));
-			if (world.getBlockId(x-1, y, z-1) == blockID && !li.contains(6) && !li.contains(8))
+			if (world.getBlock(x-1, y, z-1) == this && !li.contains(6) && !li.contains(8))
 				li.remove(new Integer(9));
-			if (world.getBlockId(x+1, y, z-1) == blockID && !li.contains(4) && !li.contains(8))
+			if (world.getBlock(x+1, y, z-1) == this && !li.contains(4) && !li.contains(8))
 				li.remove(new Integer(7));
-			if (world.getBlockId(x-1, y, z+1) == blockID && !li.contains(2) && !li.contains(6))
+			if (world.getBlock(x-1, y, z+1) == this && !li.contains(2) && !li.contains(6))
 				li.remove(new Integer(3));
 		}
 		if (face.offsetZ != 0) { //test XY
 			//sides; removed if have adjacent on side
-			if (world.getBlockId(x, y+1, z) == blockID)
+			if (world.getBlock(x, y+1, z) == this)
 				li.remove(new Integer(4));
-			if (world.getBlockId(x, y-1, z) == blockID)
+			if (world.getBlock(x, y-1, z) == this)
 				li.remove(new Integer(6));
-			if (world.getBlockId(x+1, y, z) == blockID)
+			if (world.getBlock(x+1, y, z) == this)
 				li.remove(new Integer(2));
-			if (world.getBlockId(x-1, y, z) == blockID)
+			if (world.getBlock(x-1, y, z) == this)
 				li.remove(new Integer(8));
 
 			//Corners; only removed if have adjacent on side AND corner
-			if (world.getBlockId(x+1, y+1, z) == blockID && !li.contains(2) && !li.contains(4))
+			if (world.getBlock(x+1, y+1, z) == this && !li.contains(2) && !li.contains(4))
 				li.remove(new Integer(1));
-			if (world.getBlockId(x-1, y-1, z) == blockID && !li.contains(8) && !li.contains(6))
+			if (world.getBlock(x-1, y-1, z) == this && !li.contains(8) && !li.contains(6))
 				li.remove(new Integer(9));
-			if (world.getBlockId(x+1, y-1, z) == blockID && !li.contains(2) && !li.contains(6))
+			if (world.getBlock(x+1, y-1, z) == this && !li.contains(2) && !li.contains(6))
 				li.remove(new Integer(3));
-			if (world.getBlockId(x-1, y+1, z) == blockID && !li.contains(4) && !li.contains(8))
+			if (world.getBlock(x-1, y+1, z) == this && !li.contains(4) && !li.contains(8))
 				li.remove(new Integer(7));
 		}
 		return li;
 	}
 
-	public Icon getIconForEdge(int edge) {
+	public IIcon getIconForEdge(int edge) {
 		return icons[edge];
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
-		return RotaryCraft.decoblock.getIcon(0, 0);
+	public IIcon getIcon(int s, int meta) {
+		return icons[meta];
 	}
 
 	@Override
-	public void registerIcons(IconRegister ico) {
+	public void registerBlockIcons(IIconRegister ico) {
 		if (RotaryCraft.instance.isLocked())
 			return;
 		for (int i = 0; i < 10; i++) {
@@ -216,7 +218,7 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess iba, int x, int y, int z, int side) {
 		ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[side];
-		return iba.getBlockId(x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ) != blockID;
+		return iba.getBlock(x+dir.offsetX, y+dir.offsetY, z+dir.offsetZ) != this;
 	}
 
 	@Override
@@ -230,9 +232,9 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 	}
 
 	public Fluid getFluid(IBlockAccess world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		if (id == blockID) {
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+		Block id = world.getBlock(x, y, z);
+		if (id == this) {
+			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof TileEntityDecoTank) {
 				return ((TileEntityDecoTank) te).getFluid();
 			}
@@ -248,8 +250,8 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		TileEntityDecoTank te = (TileEntityDecoTank)world.getBlockTileEntity(x, y, z);
-		ItemStack is = new ItemStack(blockID, 1, world.getBlockMetadata(x, y, z));
+		TileEntityDecoTank te = (TileEntityDecoTank)world.getTileEntity(x, y, z);
+		ItemStack is = new ItemStack(this, 1, world.getBlockMetadata(x, y, z));
 		if (te != null) {
 			Fluid f = te.getFluid();
 			if (f != null) {
@@ -267,7 +269,7 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 	}
 
 	@Override
-	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(new ItemStack(par1, 1, 0));
 		par3List.add(new ItemStack(par1, 1, 1));

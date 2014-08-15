@@ -9,11 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Storage;
 
+import Reika.DragonAPI.Interfaces.MultiPageInventory;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Containers.ContainerScaleChest;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -21,13 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Interfaces.MultiPageInventory;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Containers.ContainerScaleChest;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
+import net.minecraftforge.common.util.ForgeDirection;
 
 
 public class TileEntityScaleableChest extends InventoriedPowerReceiver implements MultiPageInventory {
@@ -130,7 +130,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 		numchanges = powerchanges.size();
 		lastpower = pw;
 		if (numchanges > 10 && !worldObj.isRemote) {
-			Block.blocksList[this.getTileEntityBlockID()].dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getMachineIndex(), 0);
+			this.getTileEntityBlockID().dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getMachineIndex(), 0);
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 4F, ConfigRegistry.BLOCKDAMAGE.getState());
 		}
@@ -181,7 +181,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 		if (!worldObj.isRemote && numUsingPlayers != 0) {
 			numUsingPlayers = 0;
 			f = 5.0F;
-			List list = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord - f, yCoord - f, zCoord - f, xCoord + 1 + f, yCoord + 1 + f, zCoord + 1 + f));
+			List list = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord - f, yCoord - f, zCoord - f, xCoord + 1 + f, yCoord + 1 + f, zCoord + 1 + f));
 			Iterator iterator = list.iterator();
 			while (iterator.hasNext()) {
 				EntityPlayer entityplayer = (EntityPlayer)iterator.next();
@@ -248,7 +248,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 	}
 
 	@Override
-	public void openChest()
+	public void openInventory()
 	{
 		if (power < MINPOWER)
 			return;
@@ -261,7 +261,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 	}
 
 	@Override
-	public void closeChest()
+	public void closeInventory()
 	{
 		--numUsingPlayers;
 		worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getTileEntityBlockID(), 1, numUsingPlayers);
@@ -316,12 +316,12 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 
 	public void readInventoryFromItem(ItemStack is) {
 		if (is.stackTagCompound != null) {
-			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items");
+			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", is.stackTagCompound.getId());
 			inv = new ItemStack[this.getSizeInventory()];
 
 			for (int i = 0; i < nbttaglist.tagCount(); i++)
 			{
-				NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+				NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 				short byte0 = nbttagcompound.getShort("Slot");
 
 				if (byte0 >= 0 && byte0 < inv.length) {

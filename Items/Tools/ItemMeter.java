@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -71,10 +60,22 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+
 public class ItemMeter extends ItemRotaryTool
 {
-	public ItemMeter(int ID, int tex) {
-		super(ID, tex);
+	public ItemMeter(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -90,8 +91,8 @@ public class ItemMeter extends ItemRotaryTool
 		double power;
 		int damage = -1;
 		int lube = -453;
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		Block b = Block.blocksList[world.getBlockId(x, y, z)];
+		TileEntity tile = world.getTileEntity(x, y, z);
+		Block b = world.getBlock(x, y, z);
 		String name;
 		if (tile instanceof RotaryCraftTileEntity)
 			name = ((RotaryCraftTileEntity)tile).getMultiValuedName();
@@ -273,8 +274,8 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			if (m == MachineRegistry.SOLARTOWER) {
 				TileEntitySolar clicked = (TileEntitySolar)tile;
-				TileEntitySolar top = (TileEntitySolar)world.getBlockTileEntity(x, clicked.getTopOfTower(), z);
-				TileEntitySolar bottom = (TileEntitySolar)world.getBlockTileEntity(x, clicked.getBottomOfTower(), z);
+				TileEntitySolar top = (TileEntitySolar)world.getTileEntity(x, clicked.getTopOfTower(), z);
+				TileEntitySolar bottom = (TileEntitySolar)world.getTileEntity(x, clicked.getBottomOfTower(), z);
 				ReikaChatHelper.writeString(String.format("Solar plant contains %d mirrors and %d active tower pieces.", top.getArraySize(), bottom.getTowerHeight()));
 				ReikaChatHelper.writeString(String.format("Outputting %.3fkW at %d rad/s. Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
 				return true;

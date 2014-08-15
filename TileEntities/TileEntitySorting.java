@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.MachineRegistry;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySorting extends TileEntityPowerReceiver {
 
@@ -64,7 +65,7 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 		for (int i = 0; i < li.size(); i++) {
 			EntityItem ei = li.get(i);
 			ItemStack eis = ei.getEntityItem();
-			ItemStack is = new ItemStack(eis.itemID, 1, eis.getItemDamage());
+			ItemStack is = eis.copy();
 			if (eis.stackSize <= 1)
 				ei.setDead();
 			else {
@@ -97,7 +98,7 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 						return this.getDirection(k);
 				}
 				else {
-					if (is.itemID == map.itemID)
+					if (is.getItem() == map.getItem())
 						return this.getDirection(k);
 				}
 			}
@@ -129,7 +130,7 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	}
 
 	private AxisAlignedBB getBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord+1, zCoord, xCoord+1, yCoord+1.25, zCoord+1);
+		return AxisAlignedBB.getBoundingBox(xCoord, yCoord+1, zCoord, xCoord+1, yCoord+1.25, zCoord+1);
 	}
 
 	@Override
@@ -161,9 +162,9 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 			if (this.isValidForSlot(index, item)) {
 				Item i = item.getItem();
 				if (i.getHasSubtypes())
-					mappings[index] = new ItemStack(item.itemID, 1, item.getItemDamage());
+					mappings[index] = new ItemStack(item.getItem(), 1, item.getItemDamage());
 				else
-					mappings[index] = new ItemStack(item.itemID, 1, 0);
+					mappings[index] = new ItemStack(item.getItem(), 1, 0);
 				return true;
 			}
 			else
@@ -192,12 +193,12 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	{
 		super.readSyncTag(NBT);
 
-		NBTTagList nbttaglist = NBT.getTagList("Items");
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
 		mappings = new ItemStack[LENGTH*3];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
 			if (byte0 >= 0 && byte0 < mappings.length)

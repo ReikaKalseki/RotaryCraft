@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -38,6 +27,19 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
 
@@ -85,33 +87,33 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			for (int i = 1; i <= range; i++) {
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 				editx = -1*a+x+i*xstep; edity = y+i*ystep; editz = -1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 				editx = -1*a+x+i*xstep; edity = 1+y+i*ystep; editz = -1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 
 				editx = -1*a+x+i*xstep; edity = 2+y+i*ystep; editz = -1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 				editx = x+i*xstep; edity = 1+y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 
 				editx = x+i*xstep; edity = 2+y+i*ystep; editz = z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 				editx = 1*a+x+i*xstep; edity = y+i*ystep; editz = 1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 				editx = 1*a+x+i*xstep; edity = 2+y+i*ystep; editz = 1*b+z+i*zstep;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Block.fire.blockID);
+					world.setBlock(editx, edity, editz, Blocks.fire);
 			}
 		}
 	}
@@ -127,16 +129,12 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	private boolean isStoppedBy(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		if (id == 0)
+		Block b = world.getBlock(x, y, z);
+		if (b == Blocks.air)
 			return false;
-		if (Block.opaqueCubeLookup[id]) {
-			return true;
-		}
-		Block b = Block.blocksList[id];
 		if (b.isOpaqueCube() || b.renderAsNormalBlock())
 			return true;
-		if (b.blockMaterial.isSolid())
+		if (b.getMaterial().isSolid())
 			return true;
 		return false;
 	}
@@ -241,9 +239,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	private void enhanceFinPower(World world, int x, int y, int z) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == MachineRegistry.COOLINGFIN) {
-			TileEntityCoolingFin te = (TileEntityCoolingFin)world.getBlockTileEntity(x, y, z);
+			TileEntityCoolingFin te = (TileEntityCoolingFin)world.getTileEntity(x, y, z);
 			int[] tg = te.getTarget();
-			TileEntity te2 = world.getBlockTileEntity(tg[0], tg[1], tg[2]);
+			TileEntity te2 = world.getTileEntity(tg[0], tg[1], tg[2]);
 			if (te2 instanceof TemperatureTE && world.getTotalWorldTime()%20 == 0) {
 				int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 				if (((TemperatureTE) te2).getTemperature() > Tamb)
@@ -253,30 +251,29 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	public void rip2(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
+		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		Block b = Block.blocksList[id];
-		if (b instanceof BlowableCrop && omega >= HARVESTSPEED) {
-			float sp = ((BlowableCrop)b).getHarvestingSpeed();
+		if (id instanceof BlowableCrop && omega >= HARVESTSPEED) {
+			float sp = ((BlowableCrop)id).getHarvestingSpeed();
 			if (ReikaRandomHelper.doWithChance(0.015*sp))
-				this.harvest(world, x, y, z, (BlowableCrop)b);
+				this.harvest(world, x, y, z, (BlowableCrop)id);
 			return;
 		}
 		boolean crop = ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta);
-		if (id != Block.snow.blockID && id != Block.web.blockID && id != Block.leaves.blockID && id != Block.tallGrass.blockID &&
-				id != Block.fire.blockID && !crop)
+		if (id != Blocks.snow && id != Blocks.web && id != Blocks.leaves && id != Blocks.leaves2 && id != Blocks.tallgrass &&
+				id != Blocks.fire && !crop)
 			return;
-		if ((rand.nextInt(600) > 0 && id != Block.tallGrass.blockID) || (rand.nextInt(200) > 0 && id == Block.tallGrass.blockID))
+		if ((rand.nextInt(600) > 0 && id != Blocks.tallgrass) || (rand.nextInt(200) > 0 && id == Blocks.tallgrass))
 			return;
-		if (id == Block.web.blockID && omega < WEBSPEED)
+		if (id == Blocks.web && omega < WEBSPEED)
 			return;
-		if (id == Block.leaves.blockID && omega < LEAFSPEED)
+		if ((id == Blocks.leaves || id == Blocks.leaves2) && omega < LEAFSPEED)
 			return;
-		if (id == Block.tallGrass.blockID && omega < GRASSSPEED)
+		if (id == Blocks.tallgrass && omega < GRASSSPEED)
 			return;
-		if (id == Block.fire.blockID && omega < FIRESPEED)
+		if (id == Blocks.fire && omega < FIRESPEED)
 			return;
-		if (id == Block.snow.blockID && omega < FIRESPEED)
+		if (id == Blocks.snow && omega < FIRESPEED)
 			return;
 		if (crop && omega < HARVESTSPEED)
 			return;
@@ -285,7 +282,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			return;
 		}
 		this.dropBlocks(world, x, y, z, id, meta);
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 	}
 
 	private void harvest(World world, int x, int y, int z, BlowableCrop b) {
@@ -297,17 +294,16 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 		}
 	}
-
-	private void harvest(World world, int x, int y, int z, int meta, int id) {
+	//Meta is block meta, not fan meta
+	private void harvest(World world, int x, int y, int z, int meta, Block id) {
 		ModCropList mod = ModCropList.getModCrop(id, meta);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		int metato = 0;
 		if (mod != null && mod.isRipe(world, x, y, z)) {
 			if (mod.destroyOnHarvest()) {
-				Block b = Block.blocksList[id];
-				ArrayList<ItemStack> li = b.getBlockDropped(world, x, y, z, meta, 0);
+				ArrayList<ItemStack> li = id.getDrops(world, x, y, z, meta, 0);
 				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 			}
 			else {
 				ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
@@ -328,10 +324,10 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 	}
 
-	public void dropBlocks(World world, int x, int y, int z, int id, int meta) {
-		if (id != 0)
-			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, Block.blocksList[id].getBlockDropped(world, x, y, z, meta, 0));
-		world.setBlock(x, y, z, 0);
+	public void dropBlocks(World world, int x, int y, int z, Block id, int meta) {
+		if (id != Blocks.air)
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, id.getDrops(world, x, y, z, meta, 0));
+		world.setBlockToAir(x, y, z);
 	}
 
 	public AxisAlignedBB getBlowZone(int meta, int step) {

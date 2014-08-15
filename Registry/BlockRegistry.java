@@ -9,238 +9,262 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemBlock;
-import Reika.DragonAPI.Interfaces.RegistryEnum;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Base.BlockTEBase;
+import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Instantiable.Data.PluralMap;
+import Reika.DragonAPI.Interfaces.BlockEnum;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Base.BlockBasicMachine;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
+import Reika.RotaryCraft.Blocks.BlockBeam;
+import Reika.RotaryCraft.Blocks.BlockBedrockSlice;
+import Reika.RotaryCraft.Blocks.BlockBlastGlass;
+import Reika.RotaryCraft.Blocks.BlockBlastPane;
+import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Blocks.BlockDMIMachine;
 import Reika.RotaryCraft.Blocks.BlockDMMachine;
 import Reika.RotaryCraft.Blocks.BlockDMachine;
+import Reika.RotaryCraft.Blocks.BlockDeco;
+import Reika.RotaryCraft.Blocks.BlockDecoTank;
 import Reika.RotaryCraft.Blocks.BlockEngine;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
 import Reika.RotaryCraft.Blocks.BlockIMachine;
+import Reika.RotaryCraft.Blocks.BlockLightBridge;
+import Reika.RotaryCraft.Blocks.BlockLightblock;
 import Reika.RotaryCraft.Blocks.BlockMIMachine;
 import Reika.RotaryCraft.Blocks.BlockMMachine;
 import Reika.RotaryCraft.Blocks.BlockMachine;
+import Reika.RotaryCraft.Blocks.BlockMiningPipe;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
+import Reika.RotaryCraft.Items.ItemBlockDeco;
+import Reika.RotaryCraft.Items.ItemBlockDecoTank;
 
-public enum BlockRegistry implements RegistryEnum {
+import java.util.HashMap;
 
-	ADVANCEDGEAR(BlockAdvGear.class, Material.iron),
-	DIR(BlockDMachine.class, Material.iron),
-	DIRMODELINV(BlockDMIMachine.class, Material.iron),
-	DIRMODEL(BlockDMMachine.class, Material.iron),
-	ENGINE(BlockEngine.class, Material.iron),
-	GPR(BlockGPR.class, Material.iron),
-	FLYWHEEL(BlockFlywheel.class, Material.iron),
-	GEARBOX(BlockGearbox.class, Material.iron),
-	INV(BlockIMachine.class, Material.iron),
-	BASIC(BlockMachine.class, Material.iron),
-	MODELINV(BlockMIMachine.class, Material.iron),
-	MODEL(BlockMMachine.class, Material.iron),
-	PIPING(BlockPiping.class, Material.iron),
-	SHAFT(BlockShaft.class, Material.iron),
-	TRANS(BlockTrans.class, Material.iron),
-	MODELINV2(BlockMIMachine.class, Material.iron),
-	SOLAR(BlockSolar.class, Material.iron),
-	BCENGINE(BlockModEngine.class, Material.iron),
-	MODEL2(BlockMMachine.class, Material.iron),
-	DIRMODEL2(BlockDMMachine.class, Material.iron);
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
-	private Class block;
-	private Material mat;
-	public final int indexOffset;
+public enum BlockRegistry implements BlockEnum {
+
+	ADVANCEDGEAR(BlockAdvGear.class, 0),
+	DIR(BlockDMachine.class, 0),
+	DIRMODELINV(BlockDMIMachine.class, 0),
+	DIRMODEL(BlockDMMachine.class, 0),
+	ENGINE(BlockEngine.class, 0),
+	GPR(BlockGPR.class, 0),
+	FLYWHEEL(BlockFlywheel.class, 0),
+	GEARBOX(BlockGearbox.class, 0),
+	INV(BlockIMachine.class, 0),
+	BASIC(BlockMachine.class, 0),
+	MODELINV(BlockMIMachine.class, 0),
+	MODEL(BlockMMachine.class, 0),
+	PIPING(BlockPiping.class, 0),
+	SHAFT(BlockShaft.class, 0),
+	TRANS(BlockTrans.class, 0),
+	MODELINV2(BlockMIMachine.class, 1),
+	SOLAR(BlockSolar.class, 0),
+	BCENGINE(BlockModEngine.class, 0),
+	MODEL2(BlockMMachine.class, 1),
+	DIRMODEL2(BlockDMMachine.class, 1),
+	DECO(BlockDeco.class, 					"block.deco",			ItemBlockDeco.class),
+	CANOLA(BlockCanola.class, 				"block.canola"),
+	LIGHT(BlockLightblock.class, 			"block.light"),
+	BEAM(BlockBeam.class, 					"block.beam"),
+	BRIDGE(BlockLightBridge.class, 			"block.bridge"),
+	MININGPIPE(BlockMiningPipe.class, 		"block.miningpipe"),
+	BLASTGLASS(BlockBlastGlass.class, 		"block.blastglass"),
+	BLASTPANE(BlockBlastPane.class, 		"block.blastpane"),
+	BEDROCKSLICE(BlockBedrockSlice.class, 	"block.bedrockslice"),
+	DECOTANK(BlockDecoTank.class, 			"block.decotank",		ItemBlockDecoTank.class);
+
+	private final Class block;
+	private final Class itemBlock;
+	private final int offset;
+	private final String name;
+
 	public static final BlockRegistry[] blockList = values();
 
-	private static final HashMap<Integer, BlockRegistry> IDMap = new HashMap();
-	private static final HashMap<Class, ArrayList<BlockRegistry>> classMap = new HashMap();
+	private static final HashMap<Block, BlockRegistry> IDMap = new HashMap();
+	private static final PluralMap<BlockRegistry> classMap = new PluralMap(2);
 
-	private static final String[] blockNames = {"Advanced Gears", "D-Type Machines", "DMI-Type Machines", "DM-Type Machines", "Engines",
-		"GPR", "Flywheels", "Gearboxes", "I-Type Machines", "Basic Machines", "MI-Type Machines", "M-Type Machines", "Piping", "Shaft",
-		"Transmission", "MI-Machines 2", "Solar Receiver", "Mod Interface", "M-Machines 2", "DM-Type Machines 2"
-	};
+	private BlockRegistry(Class cl, String name) {
+		this(cl, null, -1, name);
+	}
 
-	private BlockRegistry(Class cl, Material m) {
+	private BlockRegistry(Class cl, String name, Class <? extends ItemBlock> item) {
+		this(cl, item, -1, name);
+	}
+
+	private BlockRegistry(Class cl, int offset) {
+		this(cl, null, offset, "");
+	}
+
+	private BlockRegistry (Class cl, Class<? extends ItemBlock> item, int offset) {
+		this(cl, item, offset, "");
+	}
+
+	private BlockRegistry(Class cl, int offset, String name) {
+		this(cl, null, offset, name);
+	}
+
+	private BlockRegistry (Class cl, Class<? extends ItemBlock> item, int offset, String name) {
 		block = cl;
-		mat = m;
-		indexOffset = this.getOffsetFromName();
+		itemBlock = item;
+		this.offset = offset;
+		this.name = name;
 	}
 
-	private int getOffsetFromName() {
-		String s = this.name().toLowerCase();
-		String last = s.substring(s.length()-1);
-		int off = ReikaJavaLibrary.safeIntParse(last);
-		return off > 0 ? off-1 : 0;
+	public static BlockRegistry getBlock(Block b) {
+		return IDMap.get(b);
 	}
 
-	public boolean isNthBlock(int n) {
-		return indexOffset == n-1;
+	public static boolean isMachineBlock(Block id) {
+		BlockRegistry br = getBlock(id);
+		return br != null && br.isMachine();
 	}
 
-	public static boolean isMachineBlock(int id) {
-		return getMachineBlock(id) != null;
+	public static boolean isTechnicalBlock(Block id) {
+		BlockRegistry br = getBlock(id);
+		return br != null && br.isTechnical();
 	}
 
-	public static BlockRegistry getMachineBlock(int id) {
-		BlockRegistry block = IDMap.get(id);
-		if (block == null) {
-			for (int i = 0; i < blockList.length; i++) {
-				if (blockList[i].getBlockID() == id) {
-					IDMap.put(id, blockList[i]);
-					return blockList[i];
-				}
-			}
-		}
-		else
-			return block;
-		return null;
-	}
-
-	public static int getBlockVariableIndexFromClassAndMetadata(Class cl, int metadata) {
-		ArrayList<BlockRegistry> blocks = classMap.get(cl);
-		int offset = 1+metadata/16;
-		for (int i = 0; i < blocks.size(); i++) {
-			if (blocks.get(i).isNthBlock(offset))
-				return blocks.get(i).ordinal();
-		}
-		throw new RuntimeException("Unregistered block class "+cl+" with metadata "+metadata);
-	}
-
-	public static int getOffsetFromBlockID(int id) {
-		BlockRegistry b = getMachineBlock(id);
-		if (b != null)
-			return b.indexOffset;
-		//throw new RuntimeException("Unregistered block ID "+id);
-		RotaryCraft.logger.logError("Unregistered block ID "+id);
-		Thread.dumpStack();
-		return 0;
-	}
-
-	public Block getBlockVariable() {
-		return RotaryCraft.machineBlocks[this.ordinal()];
-	}
-
-	public String getUnlocalizedName() {
-		return ReikaStringParser.stripSpaces(this.getObjectClass().toString());
-	}
-
-	public String getBlockVariableName() {
-		return blockNames[this.ordinal()];
-	}
-
-	public Material getBlockMaterial() {
-		return mat;
+	static BlockRegistry getBlockFromClassAndOffset(Class<? extends Block> c, int i) {
+		return classMap.get(c, i);
 	}
 
 	public Class getObjectClass() {
 		return block;
 	}
 
-	public int getBlockID() {
-		return RotaryCraft.config.getBlockID(this.ordinal());
+	public Block getBlockInstance() {
+		return RotaryCraft.blocks[this.ordinal()];
+	}
+
+	public String getUnlocalizedName() {
+		return name;
+	}
+
+	private String getLocalizedName() {
+		return StatCollector.translateToLocal(this.getUnlocalizedName());
 	}
 
 	public String getBasicName() {
-		return "[TECHNICAL BLOCK] "+this.getBlockVariableName();
+		return this.isMachine() ? "(TECHNICAL BLOCK) "+block.getSimpleName()+":"+this.ordinal() : this.getLocalizedName();
+	}
+
+	public boolean isFundamentalType() {
+		return BlockBasicMachine.class.isAssignableFrom(block);
+	}
+
+	public boolean isTechnical() {
+		switch(this) {
+		case DECO:
+		case BLASTGLASS:
+		case BLASTPANE:
+		case DECOTANK:
+			return false;
+		default:
+			return true;
+		}
+	}
+
+	public boolean isMachine() {
+		return BlockTEBase.class.isAssignableFrom(block);
 	}
 
 	@Override
 	public Class[] getConstructorParamTypes() {
-		return new Class[]{int.class, Material.class};
+		return this.isMachine() ? new Class[]{Material.class} : new Class[0];
 	}
 
 	@Override
 	public Object[] getConstructorParams() {
-		return new Object[]{this.getBlockID(), this.getBlockMaterial()};
+		return this.isMachine() ? new Object[]{Material.iron} : new Object[0];
 	}
 
 	@Override
 	public String getMultiValuedName(int meta) {
-		return null;
+		if (!this.hasMultiValuedName())
+			return this.getBasicName();
+		switch(this) {
+		case DECO:
+			return StatCollector.translateToLocal(RotaryNames.blockNames[meta]);
+		case DECOTANK:
+			return StatCollector.translateToLocal("block.decotank."+meta);
+		default:
+			throw new RegistrationException(RotaryCraft.instance, "No multiname for "+this+"!");
+		}
 	}
 
 	@Override
 	public boolean hasMultiValuedName() {
-		return false;
+		return this.getNumberMetadatas() > 1;
 	}
 
 	@Override
 	public int getNumberMetadatas() {
-		return 1;
+		switch(this) {
+		case DECO:
+			return RotaryNames.blockNames.length;
+			//case MININGPIPE:
+			//	return 4;
+		case DECOTANK:
+			return 2;
+		default:
+			return 1;
+		}
 	}
 
 	@Override
 	public Class<? extends ItemBlock> getItemBlock() {
-		return null;
+		return itemBlock;
 	}
 
 	@Override
 	public boolean hasItemBlock() {
-		return false;
-	}
-
-	@Override
-	public String getConfigName() {
-		return this.getBlockVariableName();
-	}
-
-	@Override
-	public int getDefaultID() {
-		return 490+this.ordinal();
-	}
-
-	@Override
-	public boolean isBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean isItem() {
-		return false;
-	}
-
-	@Override
-	public String getCategory() {
-		return "Machine Blocks";
+		return itemBlock != null;
 	}
 
 	public boolean isDummiedOut() {
 		return block == null;
 	}
 
-	public int getID() {
-		return this.getBlockID();
+	public Item getItem() {
+		return Item.getItemFromBlock(this.getBlockInstance());
 	}
 
-	@Override
-	public boolean overwritingItem() {
-		return false;
+	public ItemStack getStackOf() {
+		return this.getStackOfMetadata(0);
 	}
 
-	static {
+	public ItemStack getStackOfMetadata(int meta) {
+		return new ItemStack(this.getBlockInstance(), 1, meta);
+	}
+
+	public ItemStack getCraftedProduct(int amt) {
+		return this.getCraftedMetadataProduct(amt, 0);
+	}
+
+	public ItemStack getCraftedMetadataProduct(int amt, int meta) {
+		return new ItemStack(this.getBlockInstance(), amt, meta);
+	}
+
+	public static void loadMappings() {
 		for (int i = 0; i < blockList.length; i++) {
 			BlockRegistry block = blockList[i];
-			Class c = block.block;
-			ArrayList<BlockRegistry> li = classMap.get(c);
-			if (li == null) {
-				li = new ArrayList();
-				classMap.put(c, li);
-			}
-			if (!li.contains(block));
-			li.add(block);
+			IDMap.put(block.getBlockInstance(), block);
+			classMap.put(block, block.block, block.offset);
 		}
 	}
 }

@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DMI;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -23,6 +18,11 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelFridge;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
 
 public class RenderFridge extends RotaryTERenderer
 {

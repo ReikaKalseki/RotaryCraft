@@ -9,7 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCentrifuge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +23,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCentrifuge;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -87,7 +87,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 1, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 1, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		FluidStack fs = RecipesCentrifuge.recipes().getFluidResult(in);
 		if (fs != null) {
 			Fluid f = fs.getFluid();
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

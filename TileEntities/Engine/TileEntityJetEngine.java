@@ -9,26 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityPainting;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -48,6 +28,28 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -129,21 +131,21 @@ public class TileEntityJetEngine extends TileEntityEngine {
 			pos[1] += -1;
 			break;
 		}
-		int id = world.getBlockId(pos[0], y, pos[1]);
+		Block b = world.getBlock(pos[0], y, pos[1]);
 		int dmg = world.getBlockMetadata(pos[0], y, pos[1]);
-		if (id == 0)
+		if (b == Blocks.air)
 			return 1;
-		if (Block.blocksList[id].getCollisionBoundingBoxFromPool(world, pos[0], y, pos[1]) == null)
+		if (b.getCollisionBoundingBoxFromPool(world, pos[0], y, pos[1]) == null)
 			return 1;
-		if (id == Block.fence.blockID || id == Block.netherFence.blockID)
+		if (b == Blocks.fence || b == Blocks.nether_brick_fence)
 			return 0.75F;
-		if (id == Block.fenceIron.blockID)
+		if (b == Blocks.iron_bars)
 			return 1F;
-		if (id == Block.cobblestoneWall.blockID)
+		if (b == Blocks.cobblestone_wall)
 			return 0.25F;
-		if (id == Block.thinGlass.blockID)
+		if (b == Blocks.glass_pane)
 			return 0.5F;
-		Block b = Block.blocksList[id];
+		;
 		if (b.getBlockBoundsMaxX() > 0.875 && b.getBlockBoundsMaxY() > 0.875 && b.getBlockBoundsMaxZ() > 0.875)
 			if (b.getBlockBoundsMinX() < 0.125 && b.getBlockBoundsMinY() < 0.125 && b.getBlockBoundsMinZ() < 0.125)
 				return 0;
@@ -182,7 +184,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 		int x2 = write.offsetX != 0 ? write.offsetX > 0 ? x+5 : x+1 : x+1;
 		int z1 = write.offsetZ != 0 ? write.offsetZ > 0 ? z : z-4 : z;
 		int z2 = write.offsetZ != 0 ? write.offsetZ > 0 ? z+5 : z+1 : z+1;
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x1, y, z1, x2, y+1, z2);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x1, y, z1, x2, y+1, z2);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < li.size(); i++) {
 			EntityLivingBase e = li.get(i);
@@ -209,9 +211,9 @@ public class TileEntityJetEngine extends TileEntityEngine {
 						immune = true;
 					ItemStack is = caughtpl.getCurrentArmor(0);
 					if (is != null) {
-						if (is.itemID == ItemRegistry.BEDBOOTS.getShiftedID())
+						if (is.getItem() == ItemRegistry.BEDBOOTS.getItemInstance())
 							mult = 0.1F;
-						if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID())
+						if (is.getItem() == ItemRegistry.BEDJUMP.getItemInstance())
 							mult = 0.1F;
 					}
 				}
@@ -231,7 +233,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 							ItemStack is = ((EntityItem) caught).getEntityItem();
 							caught.setDead();
 							int trycount = 0;
-							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlockId(dumpx, y, dumpz))) {
+							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
 								if (dumpvx == 1)
 									dumpx++;
 								if (dumpvx == -1)
@@ -250,7 +252,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 							item.motionZ = dumpvz*1.5D;
 							if (!world.isRemote)
 								caught.velocityChanged = true;
-							if (is.itemID == ItemRegistry.SCREWDRIVER.getShiftedID()) {
+							if (is.getItem() == ItemRegistry.SCREWDRIVER.getItemInstance()) {
 								caught.setDead();
 								FOD = 2;
 								isJetFailing = true;
@@ -262,7 +264,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 							int xp = ((EntityXPOrb)caught).getXpValue();
 							caught.setDead();
 							int trycount = 0;
-							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlockId(dumpx, y, dumpz))) {
+							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
 								if (dumpvx == 1)
 									dumpx++;
 								if (dumpvx == -1)
@@ -323,7 +325,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 			return false;
 		if (caught instanceof EntityXPOrb)
 			return false;
-		String name = caught.getEntityName().toLowerCase();
+		String name = caught.getCommandSenderName().toLowerCase();
 		if (name.contains("bird"))
 			return false;
 		if (name.contains("firefly"))
@@ -487,20 +489,20 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	private AxisAlignedBB getFlameZone(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 		case 0: //-x
-			return AxisAlignedBB.getAABBPool().getAABB(x-6, y, z, x+1, y+1, z+1);
+			return AxisAlignedBB.getBoundingBox(x-6, y, z, x+1, y+1, z+1);
 		case 1: //+x
-			return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+7, y+1, z+1);
+			return AxisAlignedBB.getBoundingBox(x, y, z, x+7, y+1, z+1);
 		case 2: //-z
-			return AxisAlignedBB.getAABBPool().getAABB(x, y, z-6, x+1, y+1, z+1);
+			return AxisAlignedBB.getBoundingBox(x, y, z-6, x+1, y+1, z+1);
 		case 3: //+z
-			return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+7);
+			return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+7);
 		default:
 			return null;
 		}
 	}
 
 	private void launchEntities(World world, int x, int y, int z) {
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
 		List<Entity> inbox = world.getEntitiesWithinAABB(Entity.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
 			Entity e = inbox.get(i);

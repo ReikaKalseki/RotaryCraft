@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.SpaceRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.WorldLocation;
@@ -39,6 +27,19 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler {
 
@@ -272,7 +273,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		int dy = y+read.offsetY;
 		int dz = z+read.offsetZ;
 		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
-		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 		if (this.isProvider(te)) {
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
@@ -360,25 +361,25 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		ItemStack item = null;
 		switch(type) {
 		case WOOD:
-			item = new ItemStack(ItemStacks.sawdust.itemID, 1, ItemStacks.sawdust.getItemDamage());
+			item = ItemStacks.sawdust.copy();
 			break;
 		case STONE:
-			item = new ItemStack(Block.gravel, 1, 0);
+			item = new ItemStack(Blocks.gravel, 1, 0);
 			break;
 		case STEEL:
-			item = new ItemStack(ItemStacks.scrap.itemID, 1, ItemStacks.scrap.getItemDamage());
+			item = ItemStacks.scrap.copy();
 			break;
 		case DIAMOND:
-			item = new ItemStack(Item.diamond, 1, 0);
+			item = new ItemStack(Items.diamond, 1, 0);
 			break;
 		case BEDROCK:
-			item = new ItemStack(ItemStacks.bedrockdust.itemID, 1, ItemStacks.bedrockdust.getItemDamage());
+			item = ItemStacks.bedrockdust.copy();
 			break;
 		}
 		for (int i = 0; i < this.getRatio(); i++) {
 			ReikaItemHelper.dropItem(world, x+0.5, y+1.25, z+0.5, item);
 		}
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 	}
 
 	public void repair(int dmg) {

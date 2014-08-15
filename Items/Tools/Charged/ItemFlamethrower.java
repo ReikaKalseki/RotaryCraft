@@ -9,17 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
+import Reika.RotaryCraft.Base.ItemChargedTool;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemFlamethrower extends ItemChargedTool {
 
-	public ItemFlamethrower(int ID, int index) {
-		super(ID, index);
+	public ItemFlamethrower(int index) {
+		super(index);
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class ItemFlamethrower extends ItemChargedTool {
 	}
 
 	@Override
-	public void onUsingItemTick(ItemStack is, EntityPlayer ep, int count) {
+	public void onUsingTick(ItemStack is, EntityPlayer ep, int count) {
 		Vec3 vec = ep.getLookVec();
 		ep.worldObj.spawnParticle("flame", ep.posX, ep.posY, ep.posZ, vec.xCoord/4, vec.yCoord/4, vec.zCoord/4);
 	}

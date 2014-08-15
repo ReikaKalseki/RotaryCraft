@@ -9,13 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.RotaryCraft;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
-import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryCraft;
 
 public class SlotExtractor1 extends Slot {
 

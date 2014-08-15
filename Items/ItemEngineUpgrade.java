@@ -9,23 +9,25 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemEngineUpgrade extends ItemRotaryTool {
 
-	public ItemEngineUpgrade(int ID, int index) {
-		super(ID, index);
+	public ItemEngineUpgrade(int index) {
+		super(index);
 		hasSubtypes = true;
 		maxStackSize = 16;
 	}
@@ -42,7 +44,7 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof UpgradeableMachine) {
 			UpgradeableMachine u = (UpgradeableMachine)te;
 			if (u.canUpgradeWith(is)) {
@@ -57,7 +59,7 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < Upgrades.values().length; i++) {
 			ItemStack is = new ItemStack(par1, 1, i);
 			if (i == 2) {
@@ -87,6 +89,11 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 			}
 		}
 	}
+	/*
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return Upgrades.values()[is.getItemDamage()].desc;
+	}*/
 
 	public static enum Upgrades {
 

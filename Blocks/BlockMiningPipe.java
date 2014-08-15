@@ -9,30 +9,38 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 public class BlockMiningPipe extends BlockBasic {
 
-	public BlockMiningPipe(int ID) {
-		super(ID, Material.iron);
+	public BlockMiningPipe() {
+		super(Material.iron);
 		this.setHardness(0F);
 		this.setResistance(0F);
-		this.setLightValue(0F);
-		this.setStepSound(soundMetalFootstep);
+		this.setLightLevel(0F);
+		this.setStepSound(soundTypeMetal);
 		//this.blockIndexInTexture = 60;
+	}
+
+	@Override
+	protected boolean isAvailableInCreativeMode() {
+		return false;
 	}
 
 	@Override
@@ -52,9 +60,9 @@ public class BlockMiningPipe extends BlockBasic {
 	}
 
 	@Override
-	public int idDropped(int par1, Random par2Random, int par3)
+	public Item getItemDropped(int par1, Random par2Random, int par3)
 	{
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -81,7 +89,7 @@ public class BlockMiningPipe extends BlockBasic {
 	}
 
 	@Override
-	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		return ret;
@@ -99,10 +107,10 @@ public class BlockMiningPipe extends BlockBasic {
 					int dx = x+left.offsetX*i+dir.offsetX*k;
 					int dy = y+j;
 					int dz = z+left.offsetZ*i+dir.offsetZ*k;
-					int id = world.getBlockId(dx, dy, dz);
-					if (id == blockID) {
+					Block id = world.getBlock(dx, dy, dz);
+					if (id == this) {
 						ReikaSoundHelper.playBreakSound(world, dx, dy, dz, this);
-						world.setBlock(dx, dy, dz, 0);
+						world.setBlockToAir(dx, dy, dz);
 						world.markBlockForUpdate(dx, dy, dz);
 					}
 				}
@@ -162,12 +170,12 @@ public class BlockMiningPipe extends BlockBasic {
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		return icons[meta][s];
 	}
 
 	@Override
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
 		if (RotaryCraft.instance.isLocked())
 			return;
 		for (int i = 0; i < 6; i++)

@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
@@ -16,8 +19,6 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class MachineAspectMapper {
 
@@ -364,7 +365,7 @@ public class MachineAspectMapper {
 
 	private AspectList getAspects(MachineRegistry m, int offset) {
 		ItemStack is = this.getItem(m, offset);
-		AspectList al = ThaumcraftApiHelper.generateTags(is.itemID, is.getItemDamage());
+		AspectList al = ThaumcraftApiHelper.generateTags(is.getItem(), is.getItemDamage());
 		if (al == null)
 			al = new AspectList();
 		al.merge(Aspect.MOTION, 4);
@@ -411,14 +412,14 @@ public class MachineAspectMapper {
 				int n = m.getNumberSubtypes();
 				for (int k = 0; k < n; k++) {
 					ItemStack is = m.getCraftedMetadataProduct(i);
-					ThaumcraftApi.registerObjectTag(is.itemID, is.getItemDamage(), this.getAspects(m, k));
-					ThaumcraftApi.registerObjectTag(m.getBlockID(), k, this.getAspects(m, k));
+					ThaumcraftApi.registerObjectTag(is.getItem(), is.getItemDamage(), this.getAspects(m, k));
+					ThaumcraftApi.registerObjectTag(m.getBlock(), k, this.getAspects(m, k));
 				}
 			}
 			else {
 				ItemStack is = m.getCraftedProduct();
-				ThaumcraftApi.registerObjectTag(is.itemID, is.getItemDamage(), this.getAspects(m, 0));
-				ThaumcraftApi.registerObjectTag(m.getBlockID(), m.getMachineMetadata(), this.getAspects(m, 0));
+				ThaumcraftApi.registerObjectTag(is.getItem(), is.getItemDamage(), this.getAspects(m, 0));
+				ThaumcraftApi.registerObjectTag(m.getBlock(), m.getMachineMetadata(), this.getAspects(m, 0));
 			}
 		}
 	}

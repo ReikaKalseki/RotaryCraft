@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -27,6 +21,13 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+
 public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements DiscreteFunction, ConditionalOperation {
 
 	public int mixTime;
@@ -38,9 +39,9 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	public boolean idle = false;
 
 	private static final ItemStack[] ingredients =
-		{new ItemStack(Item.blazePowder), new ItemStack(Item.coal),
+		{new ItemStack(Items.blaze_powder), new ItemStack(Items.coal),
 		ItemStacks.netherrackdust, ItemStacks.tar,
-		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Item.magmaCream)};
+		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Items.magma_cream)};
 
 	public static boolean isJetFuelIngredient(ItemStack is) {
 		for (int i = 0; i < ingredients.length; i++) {
@@ -87,7 +88,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		this.getPowerBelow();
 		power = (long)omega * (long)torque;
 		if (inv[ingredients.length+1] != null && tank.getLevel() >= 1000) {
-			if (inv[ingredients.length+1].itemID == Item.bucketEmpty.itemID && inv[ingredients.length+1].stackSize == 1) {
+			if (inv[ingredients.length+1].getItem() == Items.bucket && inv[ingredients.length+1].stackSize == 1) {
 				inv[ingredients.length+1] = ItemStacks.fuelbucket.copy();
 				tank.removeLiquid(1000);
 			}
@@ -121,14 +122,14 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 	public boolean process() {
-		//ReikaJavaLibrary.pConsole(tank.getLevel()+":"+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()*RotaryConfig.MILLIBUCKET)+":"+CAPACITY);
+		//ReikaJavaLibrary.pConsole(tank.getLevel()+":"+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()*1000)+":"+CAPACITY);
 		if (tank.getLevel()+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()) >= CAPACITY)
 			return false;
 		boolean allitems = this.getAllIngredients();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(allitems));
 		if (inv[ingredients.length] == null)
 			return false;
-		if (inv[ingredients.length].itemID != Item.ghastTear.itemID) //need a ghast tear as fuel solvent
+		if (inv[ingredients.length].getItem() != Items.ghast_tear) //need a ghast tear as fuel solvent
 			return false;
 		return allitems;
 	}
@@ -138,9 +139,9 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 			if (inv[k] == null)
 				return false;
 		for (int i = 0; i < ingredients.length; i++) {
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ingredients[i].itemID, ingredients[i].getItemDamage()));
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", i)+String.valueOf(this.haveIngredient(ingredients[i].itemID, ingredients[i].getItemDamage())));
-			if (!ReikaInventoryHelper.checkForItemStack(ingredients[i].itemID, ingredients[i].getItemDamage(), inv))
+			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ingredients[i.getItem, ingredients[i].getItemDamage()));
+			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", i)+String.valueOf(this.haveIngredient(ingredients[i.getItem, ingredients[i].getItemDamage())));
+			if (!ReikaInventoryHelper.checkForItemStack(ingredients[i].getItem(), ingredients[i].getItemDamage(), inv))
 				return false;
 		}
 		return true;
@@ -187,9 +188,9 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot == ingredients.length+1)
-			return is.itemID == Item.bucketEmpty.itemID;
+			return is.getItem() == Items.bucket;
 		if (slot == ingredients.length)
-			return is.itemID == Item.ghastTear.itemID;
+			return is.getItem() == Items.ghast_tear;
 		return ReikaItemHelper.matchStacks(is, ingredients[slot]);
 	}
 

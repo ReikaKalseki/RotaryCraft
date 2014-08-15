@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.ForgeDirection;
-
-import org.lwjgl.input.Mouse;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -23,6 +17,12 @@ import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.input.Mouse;
 
 public class GuiBevel extends GuiNonPoweredMachine
 {
@@ -338,19 +338,19 @@ public class GuiBevel extends GuiNonPoweredMachine
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRenderer.drawString("Input Side", 24, 32, 4210752);
-		fontRenderer.drawString("Output Side", 99, 32, 4210752);
+		fontRendererObj.drawString("Input Side", 24, 32, 4210752);
+		fontRendererObj.drawString("Output Side", 99, 32, 4210752);
 
 		int j = (width - xSize) / 2-2;
 		int k = (height - ySize) / 2 - 12;
 
 		if (ConfigRegistry.COLORBLIND.getState()) {
 			for (int i = 0; i < 6; i++) {
-				fontRenderer.drawString(String.valueOf(i), 30, 49+i*22, 0);
+				fontRendererObj.drawString(String.valueOf(i), 30, 49+i*22, 0);
 			}
 
 			for (int i = 0; i < 6; i++) {
-				fontRenderer.drawString(String.valueOf(i), xSize-68, 49+i*22, 0);
+				fontRendererObj.drawString(String.valueOf(i), xSize-68, 49+i*22, 0);
 			}
 		}
 	}

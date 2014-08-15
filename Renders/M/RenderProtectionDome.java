@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import java.awt.Color;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -25,6 +17,14 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Models.ModelDomeEmitter;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+
+import java.awt.Color;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderProtectionDome extends RotaryTERenderer
 {

@@ -9,26 +9,28 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityACEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -36,8 +38,8 @@ public class ItemMulti extends ItemBasic {
 
 	private int type;
 
-	public ItemMulti(int ID, int par2type) {
-		super(ID, 0); //Returns super constructor: par1 is ID
+	public ItemMulti(int par2type) {
+		super(0);
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		type = par2type;
@@ -45,8 +47,8 @@ public class ItemMulti extends ItemBasic {
 		//this.setIconCoord(0, 0);
 	}
 
-	public ItemMulti(int ID, int par2type, int max) {
-		super(ID, 0); //Returns super constructor: par1 is ID
+	public ItemMulti(int par2type, int max) {
+		super(0); //Returns super constructor: par1 is ID
 		this.setHasSubtypes(true); //Marks item as having metadata
 		this.setMaxDamage(0);
 		type = par2type;
@@ -58,7 +60,7 @@ public class ItemMulti extends ItemBasic {
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (this.isProperBelt(m, is)) {
-			TileEntityBeltHub te = (TileEntityBeltHub)world.getBlockTileEntity(x, y, z);
+			TileEntityBeltHub te = (TileEntityBeltHub)world.getTileEntity(x, y, z);
 			if (is.stackTagCompound == null) {
 				is.stackTagCompound = new NBTTagCompound();
 				is.stackTagCompound.setInteger("ex", Integer.MIN_VALUE);
@@ -91,8 +93,8 @@ public class ItemMulti extends ItemBasic {
 			if (is.stackSize >= dl || ep.capabilities.isCreativeMode) {
 				if (rx != Integer.MIN_VALUE && ry != Integer.MIN_VALUE && rz != Integer.MIN_VALUE) {
 					if (ex != Integer.MIN_VALUE && ey != Integer.MIN_VALUE && ez != Integer.MIN_VALUE) {
-						TileEntityBeltHub em = (TileEntityBeltHub)world.getBlockTileEntity(ex, ey, ez);
-						TileEntityBeltHub rec = (TileEntityBeltHub)world.getBlockTileEntity(rx, ry, rz);
+						TileEntityBeltHub em = (TileEntityBeltHub)world.getTileEntity(ex, ey, ez);
+						TileEntityBeltHub rec = (TileEntityBeltHub)world.getTileEntity(rx, ry, rz);
 
 						//ReikaJavaLibrary.pConsole(rec+"\n"+em);
 						if (em == null) {
@@ -147,8 +149,8 @@ public class ItemMulti extends ItemBasic {
 					for (int i = -6; i <= 6; i++) {
 						for (int j = -6; j <= 6; j++) {
 							for (int k = -6; k <= 6; k++) {
-								if (world.getBlockTileEntity(x+i, y+j, z+k) instanceof TileEntityACEngine) {
-									TileEntityACEngine te = (TileEntityACEngine)world.getBlockTileEntity(x+i, y+j, z+k);
+								if (world.getTileEntity(x+i, y+j, z+k) instanceof TileEntityACEngine) {
+									TileEntityACEngine te = (TileEntityACEngine)world.getTileEntity(x+i, y+j, z+k);
 									double dx = x-te.xCoord-0.5;
 									double dy = y-te.yCoord-0.5;
 									double dz = z-te.zCoord-0.5;
@@ -182,7 +184,7 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		int j;
 		switch (type) {
@@ -228,12 +230,12 @@ public class ItemMulti extends ItemBasic {
 		}
 		for (int i = 0; i < j; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
-			if (item.itemID == RotaryCraft.gbxitems.itemID) {
+			if (ItemRegistry.GEARBOX.matchItem(item)) {
 				if (item.stackTagCompound == null)
 					item.stackTagCompound = new NBTTagCompound();
 				item.stackTagCompound.setInteger("damage", 0);
 			}
-			if (item.itemID == RotaryCraft.compacts.itemID) {
+			if (ItemRegistry.COMPACTS.matchItem(item)) {
 				par3List.add(item);
 			}
 			else {
@@ -319,7 +321,7 @@ public class ItemMulti extends ItemBasic {
 		int row = type+item.getItemDamage()/16;
 		while (row >= 16)
 			row -= 16;
-		if (item.itemID == RotaryCraft.extracts.itemID && item.getItemDamage() > 31)
+		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)
 			return 16*9+item.getItemDamage()-32;
 		return 16*row+item.getItemDamage()%16;
 	}

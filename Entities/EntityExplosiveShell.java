@@ -9,19 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
-import java.util.List;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 public class EntityExplosiveShell extends EntityTurretShot {
 
@@ -82,11 +85,11 @@ public class EntityExplosiveShell extends EntityTurretShot {
 	public void onUpdate() {
 		ticksExisted++;
 		boolean hit = false;
-		int id = worldObj.getBlockId((int)posX, (int)posY, (int)posZ);
+		Block id = worldObj.getBlock((int)posX, (int)posY, (int)posZ);
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, posX, posY, posZ);
 		List mobs = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().expand(1, 1, 1));
 		//ReikaJavaLibrary.pConsole("ID: "+id+" and "+mobs.size()+" mobs");
-		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != 0 && !ReikaWorldHelper.softBlocks(id)));
+		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != Blocks.air && !ReikaWorldHelper.softBlocks(id)));
 		//ReikaJavaLibrary.pConsole(hit+"   by "+id+"  or mobs "+mobs.size());
 		if (hit) {
 			//ReikaChatHelper.write("HIT  @  "+ticksExisted+"  by "+(mobs.size() > 0));
@@ -101,13 +104,13 @@ public class EntityExplosiveShell extends EntityTurretShot {
 			if (ticksExisted > 80 && !worldObj.isRemote)
 				this.onImpact(null);
 			this.onEntityUpdate();
-			Vec3 var15 = worldObj.getWorldVec3Pool().getVecFromPool(posX, posY, posZ);
-			Vec3 var2 = worldObj.getWorldVec3Pool().getVecFromPool(posX + motionX, posY + motionY, posZ + motionZ);
-			MovingObjectPosition var3 = worldObj.clip(var15, var2);
-			var15 = worldObj.getWorldVec3Pool().getVecFromPool(posX, posY, posZ);
-			var2 = worldObj.getWorldVec3Pool().getVecFromPool(posX + motionX, posY + motionY, posZ + motionZ);
+			Vec3 var15 = Vec3.createVectorHelper(posX, posY, posZ);
+			Vec3 var2 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
+			MovingObjectPosition var3 = worldObj.rayTraceBlocks(var15, var2);
+			var15 = Vec3.createVectorHelper(posX, posY, posZ);
+			var2 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
 			if (var3 != null)
-				var2 = worldObj.getWorldVec3Pool().getVecFromPool(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
+				var2 = Vec3.createVectorHelper(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
 			Entity var4 = null;
 			List var5 = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand(1.0D, 1.0D, 1.0D));
 			double var6 = 0.0D;

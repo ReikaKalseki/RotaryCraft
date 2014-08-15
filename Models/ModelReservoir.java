@@ -15,12 +15,13 @@
 
 package Reika.RotaryCraft.Models;
 
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
+import Reika.RotaryCraft.Base.RotaryModelBase;
+
 import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
-import Reika.RotaryCraft.Base.RotaryModelBase;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class ModelReservoir extends RotaryModelBase
 {

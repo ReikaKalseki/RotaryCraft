@@ -9,18 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Icon;
-import net.minecraftforge.fluids.Fluid;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiCrystallizer extends GuiMachine
 {
@@ -52,20 +52,20 @@ public class GuiCrystallizer extends GuiMachine
 			int y = 78-i2+1;
 			GL11.glColor4f(1, 1, 1, 1);
 			Fluid f = te.getContainedFluid();
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			this.drawTexturedModelRectFromIcon(x, y, ico, 16, i2);
 
 			String s = String.format("%d C", te.getFreezingPoint());
-			api.drawCenteredStringNoShadow(fontRenderer, s, xSize/2, 56, 0);
+			api.drawCenteredStringNoShadow(fontRendererObj, s, xSize/2, 56, 0);
 		}
 		if (api.isMouseInBox(j+7, j+24, k+6, k+79)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRenderer, String.format("%d/%d", te.getLevel(), te.getCapacity()), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", te.getLevel(), te.getCapacity()), mx-j, my-k);
 		}
 		String s = String.format("%d C", te.getTemperature());
-		api.drawCenteredStringNoShadow(fontRenderer, s, 50, 30, 0);
+		api.drawCenteredStringNoShadow(fontRendererObj, s, 50, 30, 0);
 	}
 
 	/**
@@ -109,9 +109,9 @@ public class GuiCrystallizer extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+j+5, ySize+k-24, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+j+20, k+9, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+j+20, k+69, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+j+20, k+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", te.power, te.MINPOWER), xSize+j+16, k+16, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+j+20, k+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Speed:", xSize+j+20, k+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Torque:", xSize+j+20, k+129, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRendererObj, String.format("%d/%d", te.power, te.MINPOWER), xSize+j+16, k+16, 0xff000000);
 	}
 }

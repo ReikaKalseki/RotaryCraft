@@ -9,11 +9,23 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,17 +43,6 @@ import net.minecraft.world.World;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeType;
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffect {
 
@@ -70,9 +71,9 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		addEntry("buildcraft.factory.TileTank", ModList.BCFACTORY);
 		addEntry("buildcraft.transport.PipeTransport", ModList.BCTRANSPORT);
 
-		addEntry("thermalexpansion.block.conduit.TileConduitRoot", ModList.THERMALEXPANSION);
+		addEntry("thermalexpansion.Blocks.conduit.TileConduitRoot", ModList.THERMALEXPANSION);
 
-		addEntry("ic2.core.block.wiring.TileEntityCable", ModList.IC2);
+		addEntry("ic2.core.Blocks.wiring.TileEntityCable", ModList.IC2);
 
 		addEntry("codechicken.enderstorage.common.TileFrequencyOwner", ModList.ENDERSTORAGE);
 
@@ -223,7 +224,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			int x = b[0];
 			int z = b[2];
 			for (int y = 0; y < world.provider.getHeight(); y++) {
-				TileEntity te = world.getBlockTileEntity(x, y, z);
+				TileEntity te = world.getTileEntity(x, y, z);
 				if (te != null) {
 					blocks.add(te);
 				}
@@ -245,16 +246,16 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			else
 				this.shutdownTE(te);
 		}
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		if (ReikaRandomHelper.doWithChance(50)) {
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, this.getMachine().getCraftedProduct());
 		}
 		else if (ReikaRandomHelper.doWithChance(50)) {
 			ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-			items.add(new ItemStack(Item.netherStar));
-			items.add(new ItemStack(Item.diamond, 9, 0));
-			items.add(new ItemStack(Item.ingotGold, 32, 0));
+			items.add(new ItemStack(Items.nether_star));
+			items.add(new ItemStack(Items.diamond, 9, 0));
+			items.add(new ItemStack(Items.gold_ingot, 32, 0));
 			items.add(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, rand.nextInt(16)));
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, items);
 		}
@@ -320,11 +321,11 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		int x = te.xCoord;
 		int y = te.yCoord;
 		int z = te.zCoord;
-		int id = worldObj.getBlockId(x, y, z);
+		Block id = worldObj.getBlock(x, y, z);
 		int meta = worldObj.getBlockMetadata(x, y, z);
 		this.dropMachine(worldObj, x, y, z);
 		/*
-		Block b = Block.blocksList[id];
+		;
 		ItemStack[] inv;
 		if (te instanceof IInventory) {
 			IInventory ii = (IInventory)te;
@@ -336,8 +337,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		else {
 			inv = new ItemStack[0];
 		}
-		worldObj.setBlock(x, y, z, BlockRegistry.DEADMACHINE.getBlockID());
-		TileEntityDeadMachine dead = (TileEntityDeadMachine)worldObj.getBlockTileEntity(x, y, z);
+		worldObj.setBlock(x, y, z, BlockRegistry.DEADMACHINE.getBlock());
+		TileEntityDeadMachine dead = (TileEntityDeadMachine)worldObj.getTileEntity(x, y, z);
 		dead.setBlock(b, id, meta);
 		dead.setInvSize(inv.length);
 		for (int i = 0; i < inv.length; i++) {
@@ -346,14 +347,14 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
+		Block b = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		Block b = Block.blocksList[id];
+		;
 		if (b != null) {
-			//ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, b.getBlockDropped(world, x, y, z, meta, 0));
+			//ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, b.getDrops(world, x, y, z, meta, 0));
 			b.dropBlockAsItem(world, x, y, z, meta, 0);
 		}
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 	}
 
 	@Override

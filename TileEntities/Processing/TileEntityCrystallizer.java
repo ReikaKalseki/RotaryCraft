@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -32,6 +24,15 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation {
 
@@ -185,7 +186,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-		if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.blockSnow.blockID) != null)
+		if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow) != null)
 			Tamb -= 5;
 		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water) != null)
 			Tamb -= 15;

@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import java.util.List;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -29,6 +18,17 @@ import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerTerraformer;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
+
+import java.util.List;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiTerraformer extends GuiPowerOnlyMachine {
 
@@ -85,9 +85,9 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 			if (liq != null) {
 				GL11.glColor4f(1, 1, 1, 1);
 				ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
-				Icon ico = liq.getFluid().getIcon();
+				IIcon ico = liq.getFluid().getIcon();
 				this.drawTexturedModelRectFromIcon(48, 17+i*39, ico, 16, 16);
-				api.drawCenteredStringNoShadow(fontRenderer, String.format("%d", liq.amount), 56, 21+i*39, 0);
+				api.drawCenteredStringNoShadow(fontRendererObj, String.format("%d", liq.amount), 56, 21+i*39, 0);
 			}
 			else {
 				api.drawLine(48, 17+i*39, 16+48, 16+17+i*39, 0);
@@ -97,7 +97,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 			if (items != null && !items.isEmpty()) {
 				int step = (int)((System.nanoTime()/500000000)%items.size());
 				ItemStack is = items.get(step);
-				api.drawItemStack(itemRenderer, fontRenderer, is, 48, 19+16+i*39);
+				api.drawItemStack(itemRender, fontRendererObj, is, 48, 19+16+i*39);
 			}
 			else {
 				api.drawLine(48, 18+17+i*39, 16+48, 18+16+17+i*39, 0);

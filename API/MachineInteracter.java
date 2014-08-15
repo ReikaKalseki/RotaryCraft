@@ -22,7 +22,7 @@ public final class MachineInteracter {
 	static {
 		try {
 			core = Class.forName("Reika.RotaryCraft.RotaryCraft", false, MachineInteracter.class.getClassLoader());
-			blockList = (Block[])core.getField("machineBlocks").get(null);
+			blockList = (Block[])core.getField("blocks").get(null);
 		}
 		catch (ClassNotFoundException e) {
 			System.out.println("RotaryCraft class not found!");
@@ -44,16 +44,6 @@ public final class MachineInteracter {
 			System.out.println("RotaryCraft class not read!");
 			e.printStackTrace();
 		}
-	}
-
-	/** A simple check to test if the block ID is one of RC's machine blocks. */
-	public static boolean isRCMachine(Block b) {
-		for (int i = 0; i < blockList.length; i++) {
-			int id = blockList[i].blockID;
-			if (b.blockID == id)
-				return true;
-		}
-		return false;
 	}
 
 }

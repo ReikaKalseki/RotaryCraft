@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -32,6 +24,16 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.world.World;
 
 public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements TemperatureTE, ConditionalOperation {
 	//give ability to heat blast furnace
@@ -68,13 +70,12 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	public boolean hasHeatableMachine(World world) {
-		int id = world.getBlockId(fx, fy, fz);
+		Block id = world.getBlock(fx, fy, fz);
 		int meta = world.getBlockMetadata(fx, fy, fz);
-		if (id == 0)
+		if (id == Blocks.air)
 			return false;
-		if (id == Block.furnaceIdle.blockID || id == Block.furnaceBurning.blockID)
+		if (id == Blocks.furnace || id == Blocks.lit_furnace)
 			return true;
-		Block b = Block.blocksList[id];
 		MachineRegistry m = MachineRegistry.getMachine(world, fx, fy, fz);
 		if (m != null && m.canBeFrictionHeated())
 			return true;
@@ -232,8 +233,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private void setFurnaceBlock(World world, boolean isOn) {
-		int id = world.getBlockId(fx, fy, fz);
-		Block b = Block.blocksList[id];
+		Block b = world.getBlock(fx, fy, fz);
+		;
 		BlockFurnace furn = (BlockFurnace)b;
 		//furn.updateFurnaceBlockState(isOn, world, fx, fy, fz);
 	}
@@ -264,13 +265,13 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private void meltFurnace(World world) {
-		int id = world.getBlockId(fx, fy, fz);
-		if (id != Block.furnaceIdle.blockID && id != Block.furnaceBurning.blockID)
+		Block id = world.getBlock(fx, fy, fz);
+		if (id != Blocks.furnace && id != Blocks.lit_furnace)
 			return;
 		world.createExplosion(null, fx+0.5, fy+0.5, fz+0.5, 1F, false);
-		//world.setBlock(fx, fy, fz, Block.lavaMoving.blockID);
-		world.setBlock(fx, fy, fz, 0);
-		//ItemStack cobb = new ItemStack(Block.cobblestone);
+		//world.setBlock(fx, fy, fz, Blocks.flowing_lava.blockID);
+		world.setBlockToAir(fx, fy, fz);
+		//ItemStack cobb = new ItemStack(Blocks.cobblestone);
 		//for (int i = 0; i < 8; i++)
 		//	ReikaItemHelper.dropItem(world, fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), cobb);
 	}

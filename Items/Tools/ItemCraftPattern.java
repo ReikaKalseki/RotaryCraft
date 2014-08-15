@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -17,12 +19,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemCraftPattern extends ItemRotaryTool {
 
-	public ItemCraftPattern(int ID, int index) {
-		super(ID, index);
+	public ItemCraftPattern(int index) {
+		super(index);
 	}
 
 	//right click to open programming gui
@@ -35,9 +36,9 @@ public class ItemCraftPattern extends ItemRotaryTool {
 		}
 		else {
 			ItemStack[] items = new ItemStack[10];
-			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items");
+			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", is.stackTagCompound.getId());
 			for (int k = 0; k < nbttaglist.tagCount(); k++)				{
-				NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(k);
+				NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(k);
 				short byte0 = nbttagcompound.getShort("Slot");
 				items[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}

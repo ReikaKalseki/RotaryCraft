@@ -9,20 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Base.ItemChargedTool;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Base.ItemChargedTool;
 import forestry.api.arboriculture.IToolGrafter;
 
 public class ItemChargedGrafter extends ItemChargedTool implements IToolGrafter {
 
-	public ItemChargedGrafter(int ID, int index) {
-		super(ID, index);
+	public ItemChargedGrafter(int index) {
+		super(index);
 	}
 
 	@Override
@@ -31,12 +32,12 @@ public class ItemChargedGrafter extends ItemChargedTool implements IToolGrafter 
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack is, World world, int blockID, int x, int y, int z, EntityLivingBase e)
+	public boolean onBlockDestroyed(ItemStack is, World world, Block blockID, int x, int y, int z, EntityLivingBase e)
 	{
 		if (is.getItemDamage() > 0 && e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
-			Block b = Block.blocksList[blockID];
-			if (b.blockMaterial == Material.leaves) {
+			Block b = blockID;
+			if (b.getMaterial() == Material.leaves) {
 				is.setItemDamage(is.getItemDamage()-1);
 				int r = 3;
 				for (int i = -r; i <= r; i++) {
@@ -45,10 +46,10 @@ public class ItemChargedGrafter extends ItemChargedTool implements IToolGrafter 
 							int dx = x+i;
 							int dy = y+j;
 							int dz = z+k;
-							Block b2 = Block.blocksList[world.getBlockId(dx, dy, dz)];
-							if (b2 != null && b2.blockMaterial == Material.leaves) {
+							Block b2 = world.getBlock(dx, dy, dz);
+							if (b2 != null && b2.getMaterial() == Material.leaves) {
 								b2.dropBlockAsItem(world, dx, dy, dz, world.getBlockMetadata(dx, dy, dz), 0);
-								b2.removeBlockByPlayer(world, ep, dx, dy, dz);
+								b2.removedByPlayer(world, ep, dx, dy, dz);
 								is.setItemDamage(is.getItemDamage()-1);
 							}
 						}

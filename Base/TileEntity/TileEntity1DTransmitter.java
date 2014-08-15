@@ -9,12 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMachine implements SimpleProvider {
 

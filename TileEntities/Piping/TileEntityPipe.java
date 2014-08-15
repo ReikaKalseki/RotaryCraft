@@ -9,24 +9,26 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Piping;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, PumpablePipe {
 
@@ -69,13 +71,13 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 					int dz = z+dir.offsetZ;
 					MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 					if (m == MachineRegistry.PIPE) {
-						TileEntityPipe p = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+						TileEntityPipe p = (TileEntityPipe)world.getTileEntity(dx, dy, dz);
 						p.setFluid(liquid);
 						p.addFluid(5);
 						//ReikaParticleHelper.SMOKE.spawnAroundBlock(world, dx, dy, dz, 8);
 					}
 				}
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 8);
 			}
 		}
@@ -103,14 +105,14 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	private void overpressure(World world, int x, int y, int z) {
 		if (!world.isRemote) {
 			if (liquid.canBePlacedInWorld()) {
-				world.setBlock(x, y, z, liquid.getBlockID());
+				world.setBlock(x, y, z, liquid.getBlock());
 			}
 			else {
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 			}
 		}
 		world.markBlockForUpdate(x, y, z);
-		world.notifyBlockOfNeighborChange(x, y, z, liquid.getBlockID());
+		world.notifyBlockOfNeighborChange(x, y, z, liquid.getBlock());
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
 		ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
 	}
@@ -131,8 +133,8 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	}
 
 	@Override
-	public Icon getBlockIcon() {
-		return RotaryCraft.decoblock.getIcon(0, 0);
+	public IIcon getBlockIcon() {
+		return BlockRegistry.DECO.getBlockInstance().getIcon(0, 0);
 	}
 
 	@Override
@@ -200,7 +202,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 
 	@Override
 	public Block getPipeBlockType() {
-		return RotaryCraft.decoblock;
+		return BlockRegistry.DECO.getBlockInstance();
 	}
 
 	@Override
@@ -235,13 +237,13 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	public void overheat(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
 		MachineRegistry m = this.getMachine();
-		blocks.recursiveAddWithMetadata(world, x, y, z, m.getBlockID(), m.getMachineMetadata());
+		blocks.recursiveAddWithMetadata(world, x, y, z, m.getBlock(), m.getMachineMetadata());
 
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
 			ReikaParticleHelper.LAVA.spawnAroundBlock(world, xyz[0], xyz[1], xyz[2], 36);
-			world.setBlock(xyz[0], xyz[1], xyz[2], Block.lavaMoving.blockID);
+			world.setBlock(xyz[0], xyz[1], xyz[2], Blocks.flowing_lava);
 		}
 	}
 

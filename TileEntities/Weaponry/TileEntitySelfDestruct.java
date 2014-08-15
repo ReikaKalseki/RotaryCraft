@@ -9,12 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 
@@ -62,7 +64,7 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 			int irx = MathHelper.floor_double(rx);
 			int iry = MathHelper.floor_double(ry);
 			int irz = MathHelper.floor_double(rz);
-			if (ReikaPlayerAPI.playerCanBreakAt(worldObj, irx, iry, irz, placer))
+			if (ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, irx, iry, irz, this.getPlacer()))
 				world.createExplosion(null, rx, ry, rz, 3F, true);
 			for (int i = 0; i < 32; i++)
 				world.spawnParticle("lava", rx+rand.nextInt(7)-3, ry+rand.nextInt(7)-3, rz+rand.nextInt(7)-3, 0, 0, 0);
@@ -79,8 +81,8 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 			MachineRegistry m = this.getMachine();
 			MachineRegistry m2 = MachineRegistry.getMachine(world, x, y, z);
 			if (m != m2 && tickcount <= count) {
-				world.setBlock(x, y, z, m.getBlockID(), m.getMachineMetadata(), 3);
-				TileEntitySelfDestruct te = (TileEntitySelfDestruct)world.getBlockTileEntity(x, y, z);
+				world.setBlock(x, y, z, m.getBlock(), m.getMachineMetadata(), 3);
+				TileEntitySelfDestruct te = (TileEntitySelfDestruct)world.getTileEntity(x, y, z);
 				te.lastHasPower = true;
 				te.tickcount = tickcount;
 			}

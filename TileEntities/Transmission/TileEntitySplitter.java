@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.ChromatiCraft.API.SpaceRift;
 import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Interfaces.GuiController;
@@ -24,6 +20,11 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySplitter extends TileEntityTransmissionMachine implements GuiController, ShaftMerger {
 
@@ -252,9 +253,9 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			int dy2 = y+read2.offsetY;
 			int dz2 = z+read2.offsetZ;
 			MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
-			TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+			TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 			MachineRegistry m2 = isCentered ? this.getMachine(read2) : MachineRegistry.getMachine(world, dx2, dy2, dz2);
-			TileEntity te2 = isCentered ? this.getAdjacentTileEntity(read2) : world.getBlockTileEntity(dx2, dy2, dz2);
+			TileEntity te2 = isCentered ? this.getAdjacentTileEntity(read2) : world.getTileEntity(dx2, dy2, dz2);
 			if (check1) {
 				if (this.isProvider(te)) {
 					if (m == MachineRegistry.SHAFT) {
@@ -413,7 +414,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			int dy = y+read.offsetY;
 			int dz = z+read.offsetZ;
 			MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
-			TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+			TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 			if (this.isProvider(te)) {
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft devicein = (TileEntityShaft)te;

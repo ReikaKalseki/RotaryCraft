@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ColorButton;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
@@ -34,6 +22,18 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Instrument;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.NoteLength;
+
+import java.awt.Color;
+import java.util.ArrayList;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiMusic extends GuiNonPoweredMachine
 {
@@ -91,12 +91,12 @@ public class GuiMusic extends GuiNonPoweredMachine
 		}
 
 		ItemStack[] items = {
-				new ItemStack(Block.grass),
-				new ItemStack(Block.planks),
-				new ItemStack(Block.portal),
-				new ItemStack(Block.stone),
-				new ItemStack(Block.sand),
-				new ItemStack(Block.glass)
+				new ItemStack(Blocks.grass),
+				new ItemStack(Blocks.planks),
+				new ItemStack(Blocks.portal),
+				new ItemStack(Blocks.stone),
+				new ItemStack(Blocks.sand),
+				new ItemStack(Blocks.glass)
 		};
 		for (int i = 0; i < 6; i++)
 			buttonList.add(new ItemIconButton(400+i, j+152+16*i, k+53, 0, items[i]));
@@ -187,9 +187,9 @@ public class GuiMusic extends GuiNonPoweredMachine
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Note Length", 51, 42, 0);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Instrument", 200, 42, 0);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Channel Select", xSize/2, 85, 0);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, "Note Length", 51, 42, 0);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, "Instrument", 200, 42, 0);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, "Channel Select", xSize/2, 85, 0);
 
 		int dx = (activeVoice.ordinal()-1)*16;
 		int color = TileEntityMusicBox.getColorForChannel(activeChannel).getRGB();

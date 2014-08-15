@@ -9,22 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -37,10 +21,27 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+
 public class ItemGravelGun extends ItemChargedTool {
 
-	public ItemGravelGun(int ID, int tex) {
-		super(ID, tex);
+	public ItemGravelGun(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -50,7 +51,7 @@ public class ItemGravelGun extends ItemChargedTool {
 			return is;
 		}
 		this.warnCharge(is);
-		if (!ReikaPlayerAPI.playerHasOrIsCreative(ep, Block.gravel.blockID, -1)) {
+		if (!ReikaPlayerAPI.playerHasOrIsCreative(ep, Blocks.gravel, -1)) {
 			if (!world.isRemote)
 				world.playAuxSFX(1001, (int)ep.posX, (int)ep.posY, (int)ep.posZ, 1);
 			return is;
@@ -77,7 +78,7 @@ public class ItemGravelGun extends ItemChargedTool {
 					double dy = ent.posY-ep.posY;
 					double dz = ent.posZ-ep.posZ;
 					if (!world.isRemote) {
-						ItemStack fl = new ItemStack(Item.flint);
+						ItemStack fl = new ItemStack(Items.flint);
 						EntityItem ei = new EntityItem(world, look.xCoord/look.lengthVector()+ep.posX, look.yCoord/look.lengthVector()+ep.posY, look.zCoord/look.lengthVector()+ep.posZ, fl);
 						ei.delayBeforeCanPickup = 100;
 						ei.motionX = dx;
@@ -101,7 +102,7 @@ public class ItemGravelGun extends ItemChargedTool {
 							int dmg = this.getAttackDamage(is.getItemDamage());
 							if (ent instanceof EntityPlayer) {
 								for (int n = 1; n < 5; n++) {
-									ItemRegistry ir = ItemRegistry.getEntry(ent.getCurrentItemOrArmor(n));
+									ItemRegistry ir = ItemRegistry.getEntry(ent.getEquipmentInSlot(n));
 									if (ir != null) {
 										if (ir.isBedrockArmor())
 											dmg *= 0.75;
@@ -125,19 +126,19 @@ public class ItemGravelGun extends ItemChargedTool {
 			}
 			if (infov.size() > 0) {
 				if (!ep.capabilities.isCreativeMode)
-					ReikaInventoryHelper.findAndDecrStack(Block.gravel.blockID, -1, ep.inventory.mainInventory);
-				return new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1);
+					ReikaInventoryHelper.findAndDecrStack(Blocks.gravel, -1, ep.inventory.mainInventory);
+				return new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1);
 			}
 		}
 		return is;
 	}
 
 	private boolean isFiringPlayer(EntityLivingBase e, EntityPlayer ep) {
-		return e instanceof EntityPlayer && (e.getEntityName().equals(ep.getEntityName()));
+		return e instanceof EntityPlayer && (e.getCommandSenderName().equals(ep.getCommandSenderName()));
 	}
 
 	private boolean isEntityAttackable(EntityLivingBase ent) {
-		if ("Reika_Kalseki".equals(ent.getEntityName()))
+		if ("Reika_Kalseki".equals(ent.getCommandSenderName()))
 			return false;
 		return ConfigRegistry.GRAVELPLAYER.getState() || !(ent instanceof EntityPlayer);
 	}
@@ -146,7 +147,7 @@ public class ItemGravelGun extends ItemChargedTool {
 		Vec3 look = ep.getLookVec();
 		double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, 2);
 		if (!(ent instanceof EntityPlayer) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
-			ItemStack fl = new ItemStack(Item.flint.itemID, 0, 0);
+			ItemStack fl = new ItemStack(Items.flint, 0, 0);
 			EntityItem ei = new EntityItem(world, looks[0]/look.lengthVector(), looks[1]/look.lengthVector(), looks[2]/look.lengthVector(), fl);
 			ei.delayBeforeCanPickup = 100;
 			ei.motionX = look.xCoord/look.lengthVector();

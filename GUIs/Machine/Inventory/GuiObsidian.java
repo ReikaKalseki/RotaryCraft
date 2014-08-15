@@ -9,15 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerObsidian;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
+
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiObsidian extends GuiMachine
 {
@@ -41,12 +41,12 @@ public class GuiObsidian extends GuiMachine
 		if (api.isMouseInBox(j+47, j+55, k+16, k+71)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRenderer, String.format("Water: %d", obs.getWater()/1000), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("Water: %d", obs.getWater()/1000), mx-j, my-k);
 		}
 		if (api.isMouseInBox(j+119, j+127, k+16, k+71)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRenderer, String.format("Lava: %d", obs.getLava()/1000), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("Lava: %d", obs.getLava()/1000), mx-j, my-k);
 		}
 	}
 
@@ -89,10 +89,10 @@ public class GuiObsidian extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", obs.power, obs.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Speed:", xSize+var5+20, var6+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Torque:", xSize+var5+20, var6+129, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRendererObj, String.format("%d/%d", obs.power, obs.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

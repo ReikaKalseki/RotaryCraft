@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -25,6 +17,15 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
 
@@ -141,9 +142,9 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (tank.isEmpty())
 			return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
-			this.transferToEngine((TileEntityEngine)world.getBlockTileEntity(x, y+1, z));
+			this.transferToEngine((TileEntityEngine)world.getTileEntity(x, y+1, z));
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.FUELENGINE)
-			this.transferToFuelEngine((TileEntityFuelEngine)world.getBlockTileEntity(x, y+1, z));
+			this.transferToFuelEngine((TileEntityFuelEngine)world.getTileEntity(x, y+1, z));
 	}
 
 	private void transferToFuelEngine(TileEntityFuelEngine te) {

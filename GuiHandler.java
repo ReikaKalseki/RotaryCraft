@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
@@ -180,6 +175,12 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
@@ -188,7 +189,7 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		if (id >= 24000) {
-			return new ContainerScaleChest(player, (TileEntityScaleableChest)world.getBlockTileEntity(x, y, z), id-24000);
+			return new ContainerScaleChest(player, (TileEntityScaleableChest)world.getTileEntity(x, y, z), id-24000);
 		}
 		GuiRegistry gr = GuiRegistry.getEntry(id);
 		ItemStack is = player.getCurrentEquippedItem();
@@ -198,7 +199,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerHandCraft(player, world);
 		if (gr == GuiRegistry.WORLDEDIT)
 			return new ContainerWorldEdit(player, world);
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(x, y, z);
 		if (!(tile instanceof RotaryCraftTileEntity))
 			return null;
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)tile;
@@ -348,10 +349,10 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		if (id >= 24000) {
-			return new GuiScaleChest(player, (TileEntityScaleableChest)world.getBlockTileEntity(x, y, z), id-24000);
+			return new GuiScaleChest(player, (TileEntityScaleableChest)world.getTileEntity(x, y, z), id-24000);
 		}
 		GuiRegistry gr = GuiRegistry.getEntry(id);
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 
 		if (gr == GuiRegistry.HANDCRAFT)
 			return new GuiHandCraft(player, world);

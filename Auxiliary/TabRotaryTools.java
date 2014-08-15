@@ -9,9 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,5 +34,11 @@ public class TabRotaryTools extends CreativeTabs {
 	public String getTranslatedTabLabel()
 	{
 		return "RotaryCraft Tools"; //The name of the tab ingame
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Item getTabIconItem() {
+		return null;
 	}
 }

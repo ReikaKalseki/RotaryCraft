@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -19,6 +16,10 @@ import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerBlower;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class GuiBlower extends GuiPowerOnlyMachine {
 
@@ -81,21 +82,21 @@ public class GuiBlower extends GuiPowerOnlyMachine {
 		for (int i = 0; i < tile.matchingItems.length; i++) {
 			ItemStack is = tile.matchingItems[i];
 			if (is != null) {
-				api.drawItemStack(itemRenderer, fontRenderer, is, x+i%9*18, y+i/9*dy);
+				api.drawItemStack(itemRender, fontRendererObj, is, x+i%9*18, y+i/9*dy);
 			}
 		}
 
 		if (api.isMouseInBox(j+25, j+43, k+64, k+82)) {
-			api.drawTooltipAt(fontRenderer, controls[0] ? "Whitelist" : "Blacklist", api.getMouseRealX()-j+50, api.getMouseRealY()-k);
+			api.drawTooltipAt(fontRendererObj, controls[0] ? "Whitelist" : "Blacklist", api.getMouseRealX()-j+50, api.getMouseRealY()-k);
 		}
 		if (api.isMouseInBox(j+25+36, j+43+36, k+64, k+82)) {
-			api.drawTooltipAt(fontRenderer, controls[1] ? "Use Metadata" : "Ignore Metadata", api.getMouseRealX()-j+80, api.getMouseRealY()-k);
+			api.drawTooltipAt(fontRendererObj, controls[1] ? "Use Metadata" : "Ignore Metadata", api.getMouseRealX()-j+80, api.getMouseRealY()-k);
 		}
 		if (api.isMouseInBox(j+25+36*2, j+43+36*2, k+64, k+82)) {
-			api.drawTooltipAt(fontRenderer, controls[2] ? "Use NBT" : "Ignore NBT", api.getMouseRealX()-j, api.getMouseRealY()-k);
+			api.drawTooltipAt(fontRendererObj, controls[2] ? "Use NBT" : "Ignore NBT", api.getMouseRealX()-j, api.getMouseRealY()-k);
 		}
 		if (api.isMouseInBox(j+25+36*3, j+43+36*3, k+64, k+82)) {
-			api.drawTooltipAt(fontRenderer, controls[3] ? "Match Exact" : "Use Ore Dictionary", api.getMouseRealX()-j, api.getMouseRealY()-k);
+			api.drawTooltipAt(fontRendererObj, controls[3] ? "Match Exact" : "Use Ore Dictionary", api.getMouseRealX()-j, api.getMouseRealY()-k);
 		}
 	}
 

@@ -9,20 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+
 public class BlockDMachine extends BlockBasicMultiTE {
 
-	public BlockDMachine(int id, Material mat) {
-		super(id, mat);
+	public BlockDMachine(Material mat) {
+		super(mat);
 	}
 
 	@Override
-	public void registerIcons(IconRegister ico) {
+	public void registerBlockIcons(IIconRegister ico) {
 		if (RotaryCraft.instance.isLocked())
 			return;
 		//-------------Borer------------------------

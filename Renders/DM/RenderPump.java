@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fluids.Fluid;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -27,6 +18,15 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fluids.Fluid;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderPump extends RotaryTERenderer
 {
@@ -108,7 +108,7 @@ public class RenderPump extends RotaryTERenderer
 		if (tr.getLevel() > 0 && tr.isInWorld()) {
 			Fluid f = tr.getLiquid();
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

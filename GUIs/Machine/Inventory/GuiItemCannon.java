@@ -9,26 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet250CustomPayload;
-
-import org.lwjgl.input.Mouse;
-
-import Reika.DragonAPI.Auxiliary.PacketTypes;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerItemCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Mouse;
 
 public class GuiItemCannon extends GuiPowerOnlyMachine
 {
@@ -58,13 +53,13 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		//this.buttonList.add(new GuiButton(0, j+xSize/2-48, -1+k+32, 80, 20, "Trajectory"));
-		input = new GuiTextField(fontRenderer, j+xSize/2, k+26, 46, 16);
+		input = new GuiTextField(fontRendererObj, j+xSize/2, k+26, 46, 16);
 		input.setFocused(false);
 		input.setMaxStringLength(6);
-		input2 = new GuiTextField(fontRenderer, j+xSize/2, k+42, 46, 16);
+		input2 = new GuiTextField(fontRendererObj, j+xSize/2, k+42, 46, 16);
 		input2.setFocused(false);
 		input2.setMaxStringLength(6);
-		input3 = new GuiTextField(fontRenderer, j+xSize/2, k+58, 46, 16);
+		input3 = new GuiTextField(fontRendererObj, j+xSize/2, k+58, 46, 16);
 		input3.setFocused(false);
 		input3.setMaxStringLength(6);
 	}
@@ -90,7 +85,6 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			outputStream.writeInt(a);
 			if (a == PacketRegistry.ITEMCANNON.getMinValue())
 				outputStream.writeInt(target[0]);
@@ -107,22 +101,7 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 			ex.printStackTrace();
 		}
 
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "RotaryCraftData";
-		packet.data = bos.toByteArray();
-		packet.length = bos.size();
-
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		if (side == Side.SERVER) {
-			// We are on the server side.
-			EntityPlayerMP player2 = (EntityPlayerMP) ep;
-		} else if (side == Side.CLIENT) {
-			// We are on the client side.
-			EntityClientPlayerMP player2 = (EntityClientPlayerMP) ep;
-			PacketDispatcher.sendPacketToServer(packet);
-		} else {
-			// We are on the Bukkit server.
-		}
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, bos);
 	}
 
 	@Override
@@ -193,16 +172,16 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRenderer.drawString("Target X", xSize/3-20, 18, 4210752);
-		fontRenderer.drawString("Target Y", xSize/3-20, 34, 4210752);
-		fontRenderer.drawString("Target Z", xSize/3-20, 51, 4210752);
+		fontRendererObj.drawString("Target X", xSize/3-20, 18, 4210752);
+		fontRendererObj.drawString("Target Y", xSize/3-20, 34, 4210752);
+		fontRendererObj.drawString("Target Z", xSize/3-20, 51, 4210752);
 
 		if (!input.isFocused())
-			fontRenderer.drawString(String.format("%d", target[0]), 100, 18, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", target[0]), 100, 18, 0xffffffff);
 		if (!input2.isFocused())
-			fontRenderer.drawString(String.format("%d", target[1]), 100, 34, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", target[1]), 100, 34, 0xffffffff);
 		if (!input3.isFocused())
-			fontRenderer.drawString(String.format("%d", target[2]), 100, 50, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", target[2]), 100, 50, 0xffffffff);
 	}
 
 	/**

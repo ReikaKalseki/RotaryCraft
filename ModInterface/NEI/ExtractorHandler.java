@@ -9,19 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -31,7 +20,20 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiExtractor;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -40,7 +42,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 	public class ExtractorRecipe extends CachedRecipe {
 
 		private List<ItemStack> oreBlock;
-		private int extractID;
+		private Item extractID;
 		public ModOreList modore;
 		public ReikaOreHelper ore;
 
@@ -51,13 +53,13 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 				else
 					oreBlock = modore.getAllOreBlocks();
 				if (oreBlock.isEmpty()) {
-					oreBlock.add(new ItemStack(Block.fire));
+					oreBlock.add(new ItemStack(Blocks.fire));
 				}
-				extractID = RotaryCraft.modextracts.itemID;
+				extractID = ItemRegistry.EXTRACTS.getItemInstance();
 			}
 			else {
 				oreBlock = ReikaJavaLibrary.makeListFrom(ore.getOreBlock());
-				extractID = RotaryCraft.extracts.itemID;
+				extractID = ItemRegistry.EXTRACTS.getItemInstance();
 			}
 			this.ore = ore;
 			this.modore = modore;
@@ -71,25 +73,25 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 		private ItemStack getDust() {
 			if (modore != null)
 				return ExtractorModOres.getDustProduct(modore);
-			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal());
+			return ItemRegistry.EXTRACTS.getStackOfMetadata(ore.ordinal());
 		}
 
 		private ItemStack getSlurry() {
 			if (modore != null)
 				return ExtractorModOres.getSlurryProduct(modore);
-			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal()+8);
+			return ItemRegistry.EXTRACTS.getStackOfMetadata(ore.ordinal()+8);
 		}
 
 		private ItemStack getSolution() {
 			if (modore != null)
 				return ExtractorModOres.getSolutionProduct(modore);
-			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal()+16);
+			return ItemRegistry.EXTRACTS.getStackOfMetadata(ore.ordinal()+16);
 		}
 
 		private ItemStack getFlakes() {
 			if (modore != null)
 				return ExtractorModOres.getFlakeProduct(modore);
-			return new ItemStack(RotaryCraft.extracts.itemID, 1, ore.ordinal()+24);
+			return ItemRegistry.EXTRACTS.getStackOfMetadata(ore.ordinal()+24);
 		}
 
 		@Override
@@ -130,7 +132,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			case 6:
 				return this.getSolution();
 			default:
-				return new ItemStack(Block.fire);
+				return new ItemStack(Blocks.fire);
 			}
 		}
 
@@ -154,7 +156,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -168,8 +170,8 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (result.itemID == RotaryCraft.extracts.itemID || result.itemID == RotaryCraft.modextracts.itemID) {
-			if (result.itemID == RotaryCraft.extracts.itemID && !RecipesExtractor.isFlakes(result))
+		if (ItemRegistry.EXTRACTS.matchItem(result) || ItemRegistry.MODEXTRACTS.matchItem(result)) {
+			if (ItemRegistry.EXTRACTS.matchItem(result) && !RecipesExtractor.isFlakes(result))
 				return;
 			ModOreList ore = ExtractorModOres.getOreFromExtract(result);
 			if (ore != null && !ore.existsInGame())
@@ -181,9 +183,9 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (ReikaBlockHelper.isOre(ingredient) || (ingredient.itemID == RotaryCraft.extracts.itemID && ingredient.getItemDamage() < 24) || (ingredient.itemID == RotaryCraft.modextracts.itemID && ingredient.getItemDamage()%4 != 3)) {
+		if (ReikaBlockHelper.isOre(ingredient) || (ItemRegistry.EXTRACTS.matchItem(ingredient) && ingredient.getItemDamage() < 24) || (ItemRegistry.MODEXTRACTS.matchItem(ingredient) && ingredient.getItemDamage()%4 != 3)) {
 			ModOreList ore = ModOreList.getModOreFromOre(ingredient);
-			if (ingredient.itemID == RotaryCraft.modextracts.itemID)
+			if (ItemRegistry.MODEXTRACTS.matchItem(ingredient))
 				ore = ExtractorModOres.getOreFromExtract(ingredient);
 			if (ore != null && !ore.existsInGame())
 				return;

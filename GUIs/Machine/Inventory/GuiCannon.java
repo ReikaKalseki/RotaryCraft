@@ -9,16 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
-
-import org.lwjgl.input.Mouse;
-
-import Reika.DragonAPI.Auxiliary.PacketTypes;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -28,7 +19,14 @@ import Reika.RotaryCraft.Containers.ContainerCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
-import cpw.mods.fml.common.network.PacketDispatcher;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Mouse;
 
 public class GuiCannon extends GuiPowerOnlyMachine
 {
@@ -84,32 +82,32 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		int k = (height - ySize) / 2 - 12;
 		//this.buttonList.add(new GuiButton(0, j+xSize/2-48, -1+k+32, 80, 20, "Trajectory"));
 		if (targetMode) {
-			input = new GuiTextField(fontRenderer, j+xSize/2, k+26, 46, 16);
+			input = new GuiTextField(fontRendererObj, j+xSize/2, k+26, 46, 16);
 			input.setFocused(false);
 			input.setMaxStringLength(6);
-			input2 = new GuiTextField(fontRenderer, j+xSize/2, k+42, 46, 16);
+			input2 = new GuiTextField(fontRendererObj, j+xSize/2, k+42, 46, 16);
 			input2.setFocused(false);
 			input2.setMaxStringLength(6);
-			input3 = new GuiTextField(fontRenderer, j+xSize/2, k+58, 46, 16);
+			input3 = new GuiTextField(fontRendererObj, j+xSize/2, k+58, 46, 16);
 			input3.setFocused(false);
 			input3.setMaxStringLength(6);
 
 			//offscreen
-			input4 = new GuiTextField(fontRenderer, -100, -100, 0, 0);
+			input4 = new GuiTextField(fontRendererObj, -100, -100, 0, 0);
 			input4.setFocused(false);
 			input4.setMaxStringLength(0);
 		}
 		else {
-			input = new GuiTextField(fontRenderer, j+xSize/2+22+18, k+104, 26, 16);
+			input = new GuiTextField(fontRendererObj, j+xSize/2+22+18, k+104, 26, 16);
 			input.setFocused(false);
 			input.setMaxStringLength(3);
-			input2 = new GuiTextField(fontRenderer, j+xSize/2-65-18, k+104, 26, 16);
+			input2 = new GuiTextField(fontRendererObj, j+xSize/2-65-18, k+104, 26, 16);
 			input2.setFocused(false);
 			input2.setMaxStringLength(3);
-			input3 = new GuiTextField(fontRenderer, j+xSize/2+22+18, k+124, 26, 16);
+			input3 = new GuiTextField(fontRendererObj, j+xSize/2+22+18, k+124, 26, 16);
 			input3.setFocused(false);
 			input3.setMaxStringLength(3);
-			input4 = new GuiTextField(fontRenderer, j+xSize/2-49, k+124, 26, 16);
+			input4 = new GuiTextField(fontRendererObj, j+xSize/2-49, k+124, 26, 16);
 			input4.setFocused(false);
 			input4.setMaxStringLength(3);
 		}
@@ -137,7 +135,6 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-			outputStream.writeInt(PacketTypes.DATA.ordinal());
 			int b = 0;
 			if (tile instanceof TileEntityLaunchCannon)
 				b = a+PacketRegistry.CANNON.getMinValue();
@@ -176,12 +173,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			ex.printStackTrace();
 		}
 
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = RotaryCraft.packetChannel;
-		packet.data = bos.toByteArray();
-		packet.length = bos.size();
-
-		PacketDispatcher.sendPacketToServer(packet);
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, bos);
 	}
 
 	@Override
@@ -318,36 +310,36 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 
 		if (targetMode) {
-			fontRenderer.drawString("Target X", xSize/3-20, 18, 4210752);
-			fontRenderer.drawString("Target Y", xSize/3-20, 34, 4210752);
-			fontRenderer.drawString("Target Z", xSize/3-20, 51, 4210752);
+			fontRendererObj.drawString("Target X", xSize/3-20, 18, 4210752);
+			fontRendererObj.drawString("Target Y", xSize/3-20, 34, 4210752);
+			fontRendererObj.drawString("Target Z", xSize/3-20, 51, 4210752);
 		}
 		else {
-			fontRenderer.drawString("Launch Angle", xSize/3-46-12, 80, 4210752);
-			fontRenderer.drawString("Compass Angle", xSize/3+36+24, 80, 4210752);
-			fontRenderer.drawString("Velocity", xSize/3-26+24+44, 116, 4210752);
+			fontRendererObj.drawString("Launch Angle", xSize/3-46-12, 80, 4210752);
+			fontRendererObj.drawString("Compass Angle", xSize/3+36+24, 80, 4210752);
+			fontRendererObj.drawString("Velocity", xSize/3-26+24+44, 116, 4210752);
 			if (tnt instanceof TileEntityTNTCannon)
-				fontRenderer.drawString("Fuse Time", xSize/3-26-32, 116, 4210752);
+				fontRendererObj.drawString("Fuse Time", xSize/3-26-32, 116, 4210752);
 		}
 
 		if (targetMode) {
 			if (!input.isFocused())
-				fontRenderer.drawString(String.format("%d", target[0]), 100, 18, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", target[0]), 100, 18, 0xffffffff);
 			if (!input2.isFocused())
-				fontRenderer.drawString(String.format("%d", target[1]), 100, 34, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", target[1]), 100, 34, 0xffffffff);
 			if (!input3.isFocused())
-				fontRenderer.drawString(String.format("%d", target[2]), 100, 50, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", target[2]), 100, 50, 0xffffffff);
 		}
 		else {
 			if (!input.isFocused())
-				fontRenderer.drawString(String.format("%d", tnt.phi), 122+36, 96, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", tnt.phi), 122+36, 96, 0xffffffff);
 			if (!input2.isFocused())
-				fontRenderer.drawString(String.format("%d", tnt.theta), 35, 96, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", tnt.theta), 35, 96, 0xffffffff);
 			if (!input3.isFocused())
-				fontRenderer.drawString(String.format("%d", tnt.velocity), 122+36, 116, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", tnt.velocity), 122+36, 116, 0xffffffff);
 			if (tnt instanceof TileEntityTNTCannon)
 				if (!input4.isFocused())
-					fontRenderer.drawString(String.format("%d", fuse), 122-54, 116, 0xffffffff);
+					fontRendererObj.drawString(String.format("%d", fuse), 122-54, 116, 0xffffffff);
 		}
 	}
 

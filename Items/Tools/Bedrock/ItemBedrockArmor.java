@@ -9,6 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryArmor;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,33 +25,28 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemRotaryArmor;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockArmor extends ItemRotaryArmor {
 
-	public ItemBedrockArmor(int ID, int tex, int render, int type) {
-		super(ID, RotaryCraft.BEDROCK, render, type, tex);
+	public ItemBedrockArmor(int tex, int render, int type) {
+		super(RotaryCraft.BEDROCK, render, type, tex);
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
+	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {
 
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
 		ReikaEnchantmentHelper.applyEnchantments(is, this.getDefaultEnchantments());
@@ -53,7 +55,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 
 	public HashMap<Enchantment, Integer> getDefaultEnchantments() {
 		HashMap<Enchantment, Integer> map = new HashMap();
-		if (ItemRegistry.getEntryByID(itemID).isBedrockArmor()) {
+		if (ItemRegistry.getEntryByID(this).isBedrockArmor()) {
 			switch(armorType) {
 			case 0:
 				map.put(Enchantment.projectileProtection, 4);
@@ -130,12 +132,12 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	@Override
 	public int getItemEnchantability()
 	{
-		return ConfigRegistry.PREENCHANT.getState() ? 0 : Item.pickaxeIron.getItemEnchantability();
+		return ConfigRegistry.PREENCHANT.getState() ? 0 : Items.iron_pickaxe.getItemEnchantability();
 	}
 
 	public static boolean isWearingFullSuitOf(EntityLivingBase e) {
 		for (int i = 1; i < 5; i++) {
-			ItemStack is = e.getCurrentItemOrArmor(i);
+			ItemStack is = e.getEquipmentInSlot(i);
 			if (is == null)
 				return false;
 			ItemRegistry ir = ItemRegistry.getEntry(is);

@@ -9,16 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Items.Tools.ItemJetPack;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.ForgeSubscribe;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Items.Tools.ItemJetPack;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 
 public class JetpackFuelOverlay {
@@ -29,7 +30,7 @@ public class JetpackFuelOverlay {
 
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void eventHandler(RenderGameOverlayEvent event) {
 		//if (event.type == ElementType.HEALTH) {
 		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;

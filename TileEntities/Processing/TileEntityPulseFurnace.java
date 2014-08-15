@@ -9,21 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -37,6 +27,18 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
 
@@ -195,7 +197,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public int getReqTemps(ItemStack is) {
 		if (is == null)
 			return -1;
-		if (is.itemID == Item.ingotIron.itemID)
+		if (is.getItem() == Items.iron_ingot)
 			return 900; //steelmaking
 		if (ItemMaterialController.instance.getMaterial(is) == ItemMaterial.OBSIDIAN)
 			return ItemMaterialController.instance.getMeltingPoint(is);
@@ -268,7 +270,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 				pulseFurnaceCookTime = 0;
 		}
 		if (flag1)
-			this.onInventoryChanged();
+			this.markDirty();
 	}
 
 	/** Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc. */
@@ -307,7 +309,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
 		if (inv[2] == null)
 			inv[2] = itemstack.copy();
-		else if (inv[2].itemID == itemstack.itemID)
+		else if (ReikaItemHelper.matchStacks(inv[2], itemstack))
 			inv[2].stackSize += itemstack.stackSize;
 
 		inv[0].stackSize--;
@@ -317,7 +319,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	private void smeltScrap() {
 		int size = 1;
-		if (inv[0].itemID == ItemStacks.scrap.itemID && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage())
+		if (inv[0].getItem == ItemStacks.scrap.itemID && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage())
 			size = 9;
 		inv[0].stackSize -= size;
 		ItemStack i = this.getCraftedScrapIngot();
@@ -328,10 +330,10 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}*/
 
 	private ItemStack getCraftedScrapIngot() {
-		if (inv[0].itemID == ItemStacks.scrap.itemID && inv[0].getItemDamage() == ItemStacks.scrap.getItemDamage())
+		if (ReikaItemHelper.matchStacks(inv[0], ItemStacks.scrap))
 			return ItemStacks.steelingot;
-		if (inv[0].itemID == ItemStacks.ironscrap.itemID && inv[0].getItemDamage() == ItemStacks.ironscrap.getItemDamage())
-			return new ItemStack(Item.ingotIron);
+		if (ReikaItemHelper.matchStacks(inv[0], ItemStacks.ironscrap))
+			return new ItemStack(Items.iron_ingot);
 		return null;
 	}
 
@@ -390,7 +392,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}
 
 	public void overheat(World world, int x, int y, int z) {
-		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1.5F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 12F);
+		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 17, true, 1.5F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 12F);
 	}
 
 	public int getAccelerant() {

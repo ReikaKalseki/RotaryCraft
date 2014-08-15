@@ -9,6 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.GeoStrata.Registry.RockShapes;
+import Reika.GeoStrata.Registry.RockTypes;
+import Reika.RotaryCraft.API.Event.PileDriverImpactEvent;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +33,13 @@ import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -31,20 +48,9 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.GeoStrata.Registry.GeoBlocks;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.Event.PileDriverImpactEvent;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -145,8 +151,8 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
 				for (int k = -range; k <= range; k++) {
-					int id = world.getBlockId(x+i, y+j, z+k);
-					this.breakGlass_do(world, x+i, y+j, z+k, id);
+					Block b = world.getBlock(x+i, y+j, z+k);
+					this.breakGlass_do(world, x+i, y+j, z+k, b);
 				}
 			}
 		}
@@ -165,154 +171,150 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 	}
 
-	public void breakGlass_do(World world, int x, int y, int z, int id) {
-		int dropid = -1;
-		int dropmeta = world.getBlockMetadata(x, y, z);
-		if (id == Block.glass.blockID || id == Block.thinGlass.blockID || id == Block.glowStone.blockID) {
-			Block.blocksList[id].dropBlockAsItem(world, x, y, z, dropmeta, 0);
-			world.setBlock(x, y, z, 0);
+	public void breakGlass_do(World world, int x, int y, int z, Block id) {
+		ItemStack drop = null;
+		int meta = world.getBlockMetadata(x, y, z);
+		if (id == Blocks.glass || id == Blocks.glass_pane || id == Blocks.glowstone) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
 		}
-		if (id == Block.cactus.blockID || id == Block.reed.blockID || id == Block.vine.blockID ||
-				id == Block.waterlily.blockID || id == Block.tallGrass.blockID || id == Block.sapling.blockID ||
-				id == Block.flowerPot.blockID || id == Block.skull.blockID) {
-			Block.blocksList[id].dropBlockAsItem(world, x, y, z, dropmeta, 0);
-			world.setBlock(x, y, z, 0);
+		if (id == Blocks.cactus || id == Blocks.reeds || id == Blocks.vine ||
+				id == Blocks.waterlily || id == Blocks.tallgrass || id == Blocks.sapling ||
+				id == Blocks.flower_pot || id == Blocks.skull) {
+			id.dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
 		}
-		if (id == Block.ice.blockID) {
-			world.setBlock(x, y, z, Block.waterMoving.blockID);
+		if (id == Blocks.ice) {
+			world.setBlock(x, y, z, Blocks.flowing_water);
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
-			dropid = Block.ice.blockID;
+			drop = new ItemStack(Blocks.ice);
 		}
-		if (id == Block.web.blockID) {
-			world.setBlock(x, y, z, 0);
-			dropid = Item.silk.itemID;
+		if (id == Blocks.web) {
+			world.setBlockToAir(x, y, z);
+			drop = new ItemStack(Items.string);
 		}/*
-    	if (id == Block.tnt.blockID) {
-    		world.setBlock(x, y, z, 0);
+    	if (id == Blocks.tnt) {
+    		world.setBlockToAir(x, y, z);
             EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+0.5D, y+0.5D, z+0.5D);
             world.spawnEntityInWorld(var6);
             world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
     	}*/
-		if (id == Block.sand.blockID || id == Block.gravel.blockID)
+		if (id == Blocks.sand || id == Blocks.gravel)
 			this.makeFall(world, x, y, z, id);
 		/*if (id == RotaryCraft.miningpipe.blockID && dropmeta != 4)
-			world.setBlock(x, y, z, 0);*/
-		if (dropid == -1)
+			world.setBlockToAir(x, y, z);*/
+		if (drop == null)
 			return;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			return;
-		ItemStack is = new ItemStack(dropid, 1, 0);
-		EntityItem ent = new EntityItem(world, x, y, z, is);
+		EntityItem ent = new EntityItem(world, x, y, z, drop);
 		world.spawnEntityInWorld(ent);
 	}
 
-	public void makeFall(World world, int x, int y, int z, int id) {
-		BlockSand tofall = (BlockSand)Block.blocksList[id];
-		if (tofall.canFallBelow(world, x, y-1, z)) {
+	public void makeFall(World world, int x, int y, int z, Block id) {
+		BlockSand tofall = (BlockSand)id;
+		if (tofall.func_149831_e(world, x, y-1, z)) {
 			byte var8 = 32;
 			if (!tofall.fallInstantly && world.checkChunksExist(x - var8, y - var8, z - var8, x + var8, y + var8, z + var8)) {
 				if (!world.isRemote) {
-					EntityFallingSand var9 = new EntityFallingSand(world, x + 0.5F, y + 0.5F, z + 0.5F, tofall.blockID, world.getBlockMetadata(x, y, z));
+					EntityFallingBlock var9 = new EntityFallingBlock(world, x + 0.5F, y + 0.5F, z + 0.5F, tofall, world.getBlockMetadata(x, y, z));
 					//tofall.onStartFalling(var9);
 					world.spawnEntityInWorld(var9);
 				}
 			}
 			else {
-				world.setBlock(x, y, z, 0);
-				while (tofall.canFallBelow(world, x, y-1, z) && y > 0)
+				world.setBlockToAir(x, y, z);
+				while (tofall.func_149831_e(world, x, y-1, z) && y > 0)
 					--y;
 				if (y > 0)
-					world.setBlock(x, y, z, tofall.blockID);
+					world.setBlock(x, y, z, tofall);
 			}
 		}
 	}
 
 	private ArrayList<ItemStack> getDrops(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		Block b = Block.blocksList[id];/*
+		Block b = world.getBlock(x, y, z);
+		;/*
 		if (TileEntityBorer.isMineableBedrock(world, x, y, z))
 			return ReikaJavaLibrary.makeListFrom(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust.copy(), DifficultyEffects.BEDROCKDUST.getInt()));
 		else*/
-		return b != null ? b.getBlockDropped(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
+		return b != null ? b.getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
 	}
 
-	public int[] getBlockProduct(World world, int x, int y, int z, int id, int meta) {
-		int[] to = {0,0};
-		if (id == Block.bedrock.blockID/* && !TileEntityBorer.isMineableBedrock(world, x, y, z)*/) //does not break bedrock unless TF
-			to[0] = id;
-		if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage()) {
-			to[0] = id;
-			to[1] = meta;
+	public ItemStack getBlockProduct(World world, int x, int y, int z, Block id, int meta) {
+		ItemStack to = new ItemStack(Blocks.air);
+		if (id == Blocks.bedrock/* && !TileEntityBorer.isMineableBedrock(world, x, y, z)*/) //does not break bedrock unless TF
+			to = new ItemStack(id);
+		if (id == BlockRegistry.DECO.getBlockInstance() && meta == ItemStacks.shieldblock.getItemDamage()) {
+			to = new ItemStack(id);
+			to.setItemDamage(meta);
 		}
-		if (id == Block.stone.blockID)
-			to[0] = Block.cobblestone.blockID;
+		if (id == Blocks.stone)
+			to = new ItemStack(Blocks.cobblestone);
 		if (ModList.GEOSTRATA.isLoaded()) {
-			if (id == GeoBlocks.SMOOTH.getBlockID()) {
-				to[0] = GeoBlocks.COBBLE.getBlockID();
-				to[1] = meta;
-			}
-			if (id == GeoBlocks.SMOOTH2.getBlockID()) {
-				to[0] = GeoBlocks.COBBLE2.getBlockID();
-				to[1] = meta;
+			RockShapes s = RockShapes.getShape(id, meta);
+			RockTypes r = RockTypes.getTypeFromID(id);
+			if (s == RockShapes.SMOOTH) {
+				to = r.getItem(RockShapes.COBBLE);
 			}
 		}
-		if (id == Block.stoneBrick.blockID && meta == 0) {
-			to[0] = id;
-			to[1] = 2;
+		if (id == Blocks.stonebrick && meta == 0) {
+			to = new ItemStack(id);
+			to.setItemDamage(2);
 		}
-		if (id == Block.obsidian.blockID) {
+		if (id == Blocks.obsidian) {
 			if (meta < 4) {
-				to[0] = id;
-				to[1] = meta+1;
+				to = new ItemStack(id);
+				to.setItemDamage(meta+1);
 			}
 			else {
 
 			}
 		}
-		if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID ||
-				id == Block.lavaMoving.blockID || id == Block.lavaStill.blockID) {
-			to[0] = id;
-			to[1] = meta;
+		if (id == Blocks.flowing_water || id == Blocks.water ||
+				id == Blocks.flowing_lava || id == Blocks.lava) {
+			to = new ItemStack(id);
+			to.setItemDamage(meta);
 		}
-		if (id == RotaryCraft.miningpipe.blockID && meta == 3) {
-			to[0] = id;
-			to[1] = meta;
+		if (id == BlockRegistry.MININGPIPE.getBlockInstance() && meta == 3) {
+			to = new ItemStack(id);
+			to.setItemDamage(meta);
 		}
 		return to;
 	}
 
 	public boolean drawPile3(World world, int x, int y, int z, int speed) {
 		if (climbing && tickcount > speed) {
-			if (world.getBlockId(x, y-step2-2, z) == RotaryCraft.miningpipe.blockID)
-				world.setBlock(x, y-step2-2, z, 0);
+			if (world.getBlock(x, y-step2-2, z) == BlockRegistry.MININGPIPE.getBlockInstance())
+				world.setBlockToAir(x, y-step2-2, z);
 			step2--;
-			if (world.getBlockId(x, y-step2, z) == this.getBlockType().blockID) {
+			if (world.getBlock(x, y-step2, z) == this.getBlockType()) {
 				climbing = false;
 				//step2++;
 				smashed = false;
 			}
 			else
-				world.setBlock(x, y-step2-1, z, 0);
+				world.setBlockToAir(x, y-step2-1, z);
 			tickcount = 0;
 		}
 		if (climbing && tickcount <= speed) {
-			//if (world.getBlockId(x, y-step2-2, z) == RotaryCraft.miningpipe.blockID)
+			//if (world.getBlock(x, y-step2-2, z) == RotaryCraft.miningpipe.blockID)
 			//world.setBlock(x, y-step2-2, z, 0);
 			if (step2 >= step)
 				step2--;
-			if (world.getBlockId(x, y-step2, z) == this.getBlockType().blockID) {
+			if (world.getBlock(x, y-step2, z) == this.getBlockType()) {
 				climbing = false;
 				//step2++;
 				smashed = false;
 			}
 			else
-				world.setBlock(x, y-step2-1, z, 0);
+				world.setBlockToAir(x, y-step2-1, z);
 			//this.tickcount = 0;
 		}
 		world.markBlockForUpdate(x, y-step2-1, z);
 		if (!climbing){
-			if (world.getBlockMaterial(x, y-step2-1, z) == Material.water) {
+			if (ReikaWorldHelper.getMaterial(world, x, y-step2-1, z) == Material.water) {
 				world.spawnParticle("splash", x, y-step2+1, z, -0.2, 0.4, -0.2);
 				world.spawnParticle("splash", x+0.5, y-step2+1, z, 0, 0.4, -0.2);
 				world.spawnParticle("splash", x+1, y-step2+1, z, 0.2, 0.4, -0.2);
@@ -342,7 +344,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 				world.playSoundEffect(x+0.5, y-step2, z+0.5, "random.splash", 1F, 1F);
 			}
-			if (world.getBlockMaterial(x, y-step2-1, z) == Material.lava) {
+			if (ReikaWorldHelper.getMaterial(world, x, y-step2-1, z) == Material.lava) {
 				world.spawnParticle("lava", x, y-step2+1, z, -0.2, 0.4, -0.2);
 				world.spawnParticle("lava", x+0.5, y-step2+1, z, 0, 0.4, -0.2);
 				world.spawnParticle("lava", x+1, y-step2+1, z, 0.2, 0.4, -0.2);
@@ -372,15 +374,15 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 				world.playSoundEffect(x+0.5, y-step2, z+0.5, "random.fizz", 1F, 1F);
 			}
-			world.setBlock(x, y-step2-1, z, RotaryCraft.miningpipe.blockID, BITMETA, 3);
+			world.setBlock(x, y-step2-1, z, BlockRegistry.MININGPIPE.getBlockInstance(), BITMETA, 3);
 			step2++;
 		}/*
 		if (step2 == step) {
-			if (world.getBlockId(x, y-step2-2, z) == 0)
+			if (world.getBlock(x, y-step2-2, z) == 0)
 				world.setBlock(x, y-step2-2, z, RotaryCraft.miningpipe.blockID, BITMETA);
 		}*/
-		if (world.getBlockId(x, y-step2-1, z) == 0) {
-			while(world.getBlockId(x, y-step2-2, z) == 0 && y-step2-2 > 0 && step == step2) {
+		if (world.getBlock(x, y-step2-1, z) == Blocks.air) {
+			while(world.getBlock(x, y-step2-2, z) == Blocks.air && y-step2-2 > 0 && step == step2) {
 				step++;
 				step2 = step;
 			}
@@ -395,34 +397,34 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		smashed = true;
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
-				int id = world.getBlockId(x+i, y, z+j);
+				Block id = world.getBlock(x+i, y, z+j);
 				int meta = world.getBlockMetadata(x+i, y, z+j);
-				if (ReikaPlayerAPI.playerCanBreakAt(world, x+i, y, z+j, id, meta, placer)) {
-					if (id != 0 && i*j != 4 && i*j != -4) {
-						if (id == Block.mobSpawner.blockID) {
-							TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getBlockTileEntity(x+i, y, z+j);
+				if (!world.isRemote && ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x+i, y, z+j, id, meta, this.getPlacer())) {
+					if (id != Blocks.air && i*j != 4 && i*j != -4) {
+						if (id == Blocks.mob_spawner) {
+							TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getTileEntity(x+i, y, z+j);
 							if (spw != null) {
 								this.spawnSpawner(world, x+i, y, z+j, spw);
 							}
 						}
-						if (world.getBlockId(x+i, y-1, z+j) == Block.netherrack.blockID) {
-							Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-1, z+j, 0, 0);
-							world.setBlock(x+i, y-1, z+j, 0);
+						if (world.getBlock(x+i, y-1, z+j) == Blocks.netherrack) {
+							Blocks.netherrack.dropBlockAsItem(world, x+i, y-1, z+j, 0, 0);
+							world.setBlockToAir(x+i, y-1, z+j);
 							world.markBlockForUpdate(x+i, y-1, z+j);
 							//this.step++;
 						}
-						if (world.getBlockId(x+i, y-2, z+j) == Block.netherrack.blockID) {
-							Block.blocksList[Block.netherrack.blockID].dropBlockAsItem(world, x+i, y-2, z+j, 0, 0);
-							world.setBlock(x+i, y-2, z+j, 0);
+						if (world.getBlock(x+i, y-2, z+j) == Blocks.netherrack) {
+							Blocks.netherrack.dropBlockAsItem(world, x+i, y-2, z+j, 0, 0);
+							world.setBlockToAir(x+i, y-2, z+j);
 							world.markBlockForUpdate(x+i, y-2, z+j);
 							//this.step++;
 						}
-						int[] blockTo = this.getBlockProduct(world, x+i, y, z+j, id, meta);
+						ItemStack blockTo = this.getBlockProduct(world, x+i, y, z+j, id, meta);
 						ArrayList<ItemStack> li = this.getDrops(world, x+i, y, z+j);
 						if (!world.isRemote)
-							world.setBlock(x+i, y, z+j, blockTo[0], blockTo[1], 3);
-						if (blockTo[0] == 0) {
-							//Block.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
+							ReikaWorldHelper.setBlock(world, x+i, y, z+j, blockTo);
+						if (ReikaItemHelper.isAirItem(blockTo)) {
+							//Blocks.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
 							ReikaItemHelper.dropItems(world, x+i, y, z+j, li);
 						}
 						world.markBlockForUpdate(x+i, y, z+j);
@@ -434,7 +436,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		SoundRegistry.PILEDRIVER.playSoundAtBlock(world, x, y, z, 1, 1);
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
-				if (i*j != 4 && i*j != -4 && world.getBlockId(x+i, y, z+j) != 0 && world.getBlockMaterial(x+i, y, z+j) != Material.water && world.getBlockMaterial(x+i, y, z+j) != Material.lava) {
+				if (i*j != 4 && i*j != -4 && world.getBlock(x+i, y, z+j) != Blocks.air && ReikaWorldHelper.getMaterial(world, x+i, y, z+j) != Material.water && ReikaWorldHelper.getMaterial(world, x+i, y, z+j) != Material.lava) {
 					cleared = false;
 					//world.setBlock(x, y, z, RotaryCraft.miningpipe.blockID, BITMETA);
 				}
@@ -447,7 +449,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	public void spawnSpawner(World world, int x, int y, int z, TileEntityMobSpawner spw) {
 		if (world.isRemote)
 			return;
-		ItemStack is = new ItemStack(RotaryCraft.spawner);
+		ItemStack is = ItemRegistry.SPAWNER.getStackOf();
 		ReikaSpawnerHelper.addMobNBTToItem(is, spw);
 		EntityItem ent = new EntityItem(world, x, y, z, is);
 		world.spawnEntityInWorld(ent);
@@ -508,4 +510,3 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	}
 
 }
-

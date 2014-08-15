@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import li.cil.oc.api.network.Visibility;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
@@ -27,9 +19,20 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+
+import li.cil.oc.api.network.Visibility;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -95,8 +98,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	//public abstract int getMachineIndex();
 
 	@Override
-	public final int getTileEntityBlockID() {
-		return this.getMachine().getBlockID();
+	public final Block getTileEntityBlockID() {
+		return this.getMachine().getBlock();
 	}
 
 	public final MachineRegistry getMachine(ForgeDirection dir) {
@@ -161,7 +164,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	public boolean isSelfBlock() {
-		if (worldObj.getBlockId(xCoord, yCoord, zCoord) != this.getTileEntityBlockID())
+		if (worldObj.getBlock(xCoord, yCoord, zCoord) != this.getTileEntityBlockID())
 			return false;
 		int meta = this.getMachine().getMachineMetadata();
 		return meta == worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
@@ -169,7 +172,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public boolean isPlayerAccessible(EntityPlayer var1) {
-		if (ConfigRegistry.LOCKMACHINES.getState() && !var1.getEntityName().equals(placer)) {
+		if (ConfigRegistry.LOCKMACHINES.getState() && !var1.getCommandSenderName().equals(placer)) {
 			ReikaChatHelper.write("This "+this.getName()+" is locked and can only be used by "+placer+"!");
 			return false;
 		}
@@ -216,8 +219,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return 0;
 	}
 
-	public Icon getIconForSide(ForgeDirection dir) {
-		return RotaryCraft.decoblock.getIcon(0, 0);
+	public IIcon getIconForSide(ForgeDirection dir) {
+		return BlockRegistry.DECO.getBlockInstance().getIcon(0, 0);
 	}
 
 	public boolean hasIconOverride() {
@@ -225,9 +228,9 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	public boolean matchMachine(IBlockAccess world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
+		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		int id2 = this.getTileEntityBlockID();
+		Block id2 = this.getTileEntityBlockID();
 		int meta2 = this.getMachine().getMachineMetadata();
 		return id2 == id && meta2 == meta;
 	}

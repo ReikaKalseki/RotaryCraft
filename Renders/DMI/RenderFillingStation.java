@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DMI;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
@@ -34,6 +20,20 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelFillingStation;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderFillingStation extends RotaryTERenderer
 {
@@ -132,7 +132,7 @@ public class RenderFillingStation extends RotaryTERenderer
 				GL11.glEnable(GL11.GL_BLEND);
 			}
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
@@ -225,7 +225,7 @@ public class RenderFillingStation extends RotaryTERenderer
 				ReikaTextureHelper.bindTerrainTexture();
 			else
 				ReikaTextureHelper.bindItemTexture();
-			Icon ico = item.getIcon(is, MinecraftForgeClient.getRenderPass());
+			IIcon ico = item.getIcon(is, MinecraftForgeClient.getRenderPass());
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

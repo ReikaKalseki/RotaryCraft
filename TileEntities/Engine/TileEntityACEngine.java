@@ -9,14 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class TileEntityACEngine extends TileEntityEngine {
 
@@ -38,7 +40,7 @@ public class TileEntityACEngine extends TileEntityEngine {
 		ItemStack is = inv[0];
 		if (is == null)
 			return false;
-		if (is.itemID != ItemStacks.shaftcore.itemID || is.getItemDamage() != ItemStacks.shaftcore.getItemDamage())
+		if (!ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore))
 			return false;
 		if (is.stackTagCompound == null)
 			return false;

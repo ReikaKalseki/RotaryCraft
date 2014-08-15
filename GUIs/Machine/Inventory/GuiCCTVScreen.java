@@ -9,15 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerScreen;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
+
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiCCTVScreen extends GuiMachine {
 
@@ -32,7 +32,7 @@ public class GuiCCTVScreen extends GuiMachine {
 	protected void drawGuiContainerForegroundLayer(int a, int b) {
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Camera Select", xSize/2, 54, 4210752);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Camera Select", xSize/2, 54, 4210752);
 	}
 
 	@Override
@@ -58,9 +58,9 @@ public class GuiCCTVScreen extends GuiMachine {
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-31+a, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+4+a, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+63+a, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+122+a, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+var5+20, var6+4+a, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Speed:", xSize+var5+20, var6+63+a, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Torque:", xSize+var5+20, var6+122+a, 0xff000000);
 	}
 
 	@Override

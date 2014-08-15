@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.util.ArrayList;
-
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
@@ -20,10 +17,14 @@ import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import java.util.ArrayList;
+
+import net.minecraftforge.fluids.FluidContainerRegistry;
+
 public class RotaryConfig extends ControlledConfig {
 
-	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] blocks, IDRegistry[] items, IDRegistry[] id, int cfg) {
-		super(mod, option, blocks, items, id, cfg);
+	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
+		super(mod, option, id, cfg);
 	}
 
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(RotaryAchievements.class);

@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
-import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -29,6 +18,19 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController, DiscreteFunction, ConditionalOperation {
 	public static final int BASEDELAY = 800; //40s default max spawner delay
@@ -81,7 +83,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return;
-		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
+		MobSpawnerBaseLogic lgc = tile.func_145881_a();
 		lgc.field_98287_c = 0;
 		lgc.field_98284_d = 0;
 		lgc.spawnDelay = 5;
@@ -100,7 +102,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return;
-		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
+		MobSpawnerBaseLogic lgc = tile.func_145881_a();
 		lgc.spawnDelay = 5; //Disable "real" spawner
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", lgc.spawnDelay));
 		if (disable || world.isBlockIndirectlyGettingPowered(x, y-1, z)) {
@@ -124,7 +126,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return false;
-		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
+		MobSpawnerBaseLogic lgc = tile.func_145881_a();
 		Class ent = this.getEntityClass(lgc);
 		int num = this.getNumberSpawns(world, x, y, z, ent);
 		return num < this.getSpawnLimit();
@@ -143,12 +145,12 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		TileEntityMobSpawner tile = (TileEntityMobSpawner)this.getAdjacentTileEntity(ForgeDirection.DOWN);
 		if (tile == null)
 			return -1;
-		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
+		MobSpawnerBaseLogic lgc = tile.func_145881_a();
 		return lgc.spawnDelay;
 	}
 
 	private void setSpawnDelayLimit(World world, int x, int y, int z, int time) {
-		/*		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getBlockTileEntity(x, y-1, z);
+		/*		TileEntityMobSpawner tile = (TileEntityMobSpawner)world.getTileEntity(x, y-1, z);
 		if (tile == null)
 			return;*/
 		if (hijackdelay > time)
@@ -157,13 +159,13 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	public boolean isValidLocation(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y-1, z);
-		return id == Block.mobSpawner.blockID;
+		Block b = world.getBlock(x, y-1, z);
+		return b == Blocks.mob_spawner;
 	}
 
 	private void hijackSpawn(World world, int x, int y, int z, TileEntityMobSpawner tile) //y = y-1, since spawner below
 	{
-		MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
+		MobSpawnerBaseLogic lgc = tile.func_145881_a();
 		double var5;
 
 		if (world.isRemote)

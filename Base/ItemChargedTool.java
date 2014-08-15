@@ -9,21 +9,23 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class ItemChargedTool extends ItemRotaryTool {
 
-	public ItemChargedTool(int ID, int index) {
-		super(ID, index);
+	public ItemChargedTool(int index) {
+		super(index);
 		hasSubtypes = true;
 		//this.setMaxDamage(0);
 	}
@@ -38,7 +40,7 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public final void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		par3List.add(new ItemStack(par1, 1, 32000));
 	}
@@ -67,8 +69,8 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	}
 
 	@Override
-	public String getItemDisplayName(ItemStack is) {
-		return super.getItemDisplayName(is)+" ("+is.getItemDamage()+" kJ)";
+	public String getItemStackDisplayName(ItemStack is) {
+		return super.getItemStackDisplayName(is)+" ("+is.getItemDamage()+" kJ)";
 	}
 
 }

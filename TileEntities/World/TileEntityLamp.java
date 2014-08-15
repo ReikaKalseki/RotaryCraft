@@ -9,16 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Interfaces.InertIInv;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv, RangedEffect, OneSlotMachine {
 
@@ -114,23 +116,23 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 		//int[] xyz = light.getNextAndMoveOn();
 		for (int n = 0; n < light.getSize(); n++) {
 			int[] xyz = light.getNthBlock(n);
-			if (world.getBlockId(xyz[0], xyz[1], xyz[2]) == 0)
-				world.setBlock(xyz[0], xyz[1], xyz[2], RotaryCraft.lightblock.blockID, 15, 3);
-			worldObj.updateAllLightTypes(xyz[0], xyz[1], xyz[2]);
+			if (world.getBlock(xyz[0], xyz[1], xyz[2]) == Blocks.air)
+				world.setBlock(xyz[0], xyz[1], xyz[2], BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
+			worldObj.func_147451_t(xyz[0], xyz[1], xyz[2]);
 		}
 	}
 
 	public boolean canEditAt(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		return id == 0 || Block.blocksList[id].isAirBlock(world, x, y, z);
+		Block id = world.getBlock(x, y, z);
+		return id == Blocks.air || id.isAir(world, x, y, z);
 	}
 
 	private void goDark() {
 		for (int n = 0; n < light.getSize(); n++) {
 			int[] xyz = light.getNthBlock(n);
-			if (worldObj.getBlockId(xyz[0], xyz[1], xyz[2]) == RotaryCraft.lightblock.blockID)
-				worldObj.setBlock(xyz[0], xyz[1], xyz[2], 0);
-			worldObj.updateAllLightTypes(xyz[0], xyz[1], xyz[2]);
+			if (worldObj.getBlock(xyz[0], xyz[1], xyz[2]) == BlockRegistry.LIGHT.getBlockInstance())
+				worldObj.setBlockToAir(xyz[0], xyz[1], xyz[2]);
+			worldObj.func_147451_t(xyz[0], xyz[1], xyz[2]);
 		}
 	}
 
@@ -161,7 +163,7 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 	public void clearAll() {
 		for (int k = 0; k < light.getSize(); k++) {
 			int[] ijk = light.getNthBlock(k);
-			worldObj.setBlock(ijk[0], ijk[1], ijk[2], 0);
+			worldObj.setBlockToAir(ijk[0], ijk[1], ijk[2]);
 		}
 	}
 

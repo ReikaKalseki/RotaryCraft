@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
-import java.util.ArrayList;
-
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.WorldInfo;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -28,6 +18,17 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.ArrayList;
+
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class TileEntityWeatherController extends InventoriedPowerReceiver implements ConditionalOperation {
 
@@ -113,7 +114,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 	private void fire(ItemStack is, ItemStack is2) {
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.explode", 1F, 1F);
 		if (is != null) {
-			EntityItem ei = new EntityItem(worldObj, xCoord+0.5, yCoord+1.0625, zCoord+0.5, new ItemStack(is.itemID, 1, is.getItemDamage()));
+			EntityItem ei = new EntityItem(worldObj, xCoord+0.5, yCoord+1.0625, zCoord+0.5, new ItemStack(is.getItem(), 1, is.getItemDamage()));
 			ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
 			ei.delayBeforeCanPickup = 5000;
 			ei.age = 5900;
@@ -122,7 +123,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 				worldObj.spawnEntityInWorld(ei);
 		}
 		if (is2 != null) {
-			EntityItem ei = new EntityItem(worldObj, xCoord+0.5, yCoord+1.0625, zCoord+0.5, new ItemStack(is2.itemID, 1, is2.getItemDamage()));
+			EntityItem ei = new EntityItem(worldObj, xCoord+0.5, yCoord+1.0625, zCoord+0.5, ReikaItemHelper.getSizedItemStack(is2, 1));
 			ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
 			ei.delayBeforeCanPickup = 5000;
 			ei.age = 5900;
@@ -133,7 +134,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 	}
 
 	private boolean hasSawdust() {
-		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inv);
+		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust, inv, false);
 		if (sawdust)
 			return true;
 		ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
@@ -152,9 +153,9 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		ItemStack is = null;
 		ItemStack is2 = null;
 		boolean sawdust = this.hasSawdust();
-		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
-		boolean redstone = ReikaInventoryHelper.checkForItem(Item.redstone.itemID, inv);
-		boolean glowdust = ReikaInventoryHelper.checkForItem(Item.glowstone.itemID, inv);
+		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide, inv, false);
+		boolean redstone = ReikaInventoryHelper.checkForItem(Items.redstone, inv);
+		boolean glowdust = ReikaInventoryHelper.checkForItem(Items.glowstone_dust, inv);
 		if (sawdust) {
 			rainmode = RainMode.SUN;
 			is = ItemStacks.sawdust;
@@ -164,11 +165,11 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 			is = ItemStacks.silveriodide;
 			if (redstone) {
 				rainmode = RainMode.THUNDER;
-				is2 = new ItemStack(Item.redstone.itemID, 1, 0);
+				is2 = new ItemStack(Items.redstone, 1, 0);
 			}
 			else if (glowdust) {
 				rainmode = RainMode.SUPERSTORM;
-				is2 = new ItemStack(Item.glowstone.itemID, 1, 0);
+				is2 = new ItemStack(Items.glowstone_dust, 1, 0);
 			}
 		}
 		else
@@ -184,23 +185,23 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		case NONE:
 			break;
 		case SUN:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust.itemID, ItemStacks.sawdust.getItemDamage(), inv);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust, inv, false);
 			ReikaInventoryHelper.decrStack(slot, inv);
 			break;
 		case RAIN:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
 			ReikaInventoryHelper.decrStack(slot, inv);
 			break;
 		case THUNDER:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
 			ReikaInventoryHelper.decrStack(slot, inv);
-			slot = ReikaInventoryHelper.locateInInventory(Item.redstone.itemID, inv);
+			slot = ReikaInventoryHelper.locateInInventory(Items.redstone, inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
 			break;
 		case SUPERSTORM:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide.itemID, ItemStacks.silveriodide.getItemDamage(), inv);
+			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
 			ReikaInventoryHelper.decrStack(slot, inv);
-			slot = ReikaInventoryHelper.locateInInventory(Item.glowstone.itemID, inv);
+			slot = ReikaInventoryHelper.locateInInventory(Items.glowstone_dust, inv);
 			ReikaInventoryHelper.decrStack(slot, inv);
 			break;
 		}
@@ -208,13 +209,13 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 	}
 
 	private boolean isValidWeatherItem(ItemStack is) {
-		if (is.itemID == ItemStacks.sawdust.itemID && is.getItemDamage() == ItemStacks.sawdust.getItemDamage())
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.sawdust))
 			return true;
-		if (is.itemID == ItemStacks.silveriodide.itemID && is.getItemDamage() == ItemStacks.silveriodide.getItemDamage())
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.silveriodide))
 			return true;
-		if (is.itemID == Item.redstone.itemID)
+		if (is.getItem() == Items.redstone)
 			return true;
-		if (is.itemID == Item.glowstone.itemID)
+		if (is.getItem() == Items.glowstone_dust)
 			return true;
 		ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
 		if (ReikaItemHelper.listContainsItemStack(li, is))

@@ -9,28 +9,29 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeDictionary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
+
 public class BlockGPR extends BlockBasicMachine {
 
-	public BlockGPR(int ID, Material mat) {
-		super(ID, mat);
+	public BlockGPR(Material mat) {
+		super(mat);
 		//this.blockIndexInTexture = 81;
 	}
 
@@ -59,7 +60,7 @@ public class BlockGPR extends BlockBasicMachine {
 			i += 4;
 		getBiomeDesign(world, x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		TileEntityGPR tile = (TileEntityGPR)world.getBlockTileEntity(x, y, z);
+		TileEntityGPR tile = (TileEntityGPR)world.getTileEntity(x, y, z);
 		if (tile == null)
 			return;
 		switch (i) {
@@ -109,9 +110,9 @@ public class BlockGPR extends BlockBasicMachine {
 					return 9;
 				if (types[i] == BiomeDictionary.Type.MUSHROOM)
 					return 1;
-				if (types[i] == BiomeDictionary.Type.FROZEN)
+				if (types[i] == BiomeDictionary.Type.SNOWY)
 					return 6;
-				if (types[i] == BiomeDictionary.Type.DESERT)
+				if (types[i] == BiomeDictionary.Type.SANDY)
 					return 5;
 				if (types[i] == BiomeDictionary.Type.BEACH)
 					return 5;
@@ -131,12 +132,12 @@ public class BlockGPR extends BlockBasicMachine {
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		return icons[meta][s];
 	}
 
 	@Override
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
 		if (RotaryCraft.instance.isLocked())
 			return;
 		for (int i = 0; i < 6; i++)
@@ -185,11 +186,11 @@ public class BlockGPR extends BlockBasicMachine {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean harv)
 	{
 		if (this.canHarvest(world, player, x, y, z))
 			;//this.harvestBlock(world, player, x, y, z, 0);
-		return world.setBlock(x, y, z, 0);
+		return world.setBlockToAir(x, y, z);
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {

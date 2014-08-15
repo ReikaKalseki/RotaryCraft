@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import java.util.HashMap;
 
 import net.minecraft.enchantment.Enchantment;
@@ -19,12 +21,11 @@ import thaumcraft.api.IGoggles;
 import thaumcraft.api.IVisDiscountGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.IRevealer;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemBedReveal extends ItemBedrockArmor implements IRevealer, IGoggles, IVisDiscountGear {
 
-	public ItemBedReveal(int ID, int tex, int render) {
-		super(ID, tex, render, 0);
+	public ItemBedReveal(int tex, int render) {
+		super(tex, render, 0);
 	}
 
 	@Override

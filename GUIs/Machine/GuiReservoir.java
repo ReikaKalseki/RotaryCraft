@@ -9,12 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Icon;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
 
 public class GuiReservoir extends GuiNonPoweredMachine
 {
@@ -45,14 +46,14 @@ public class GuiReservoir extends GuiNonPoweredMachine
 		if (api.isMouseInBox(j+83, j+92, k+25, k+70)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRenderer, String.format("%d/%d", Reservoir.getLevel(), Reservoir.CAPACITY), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", Reservoir.getLevel(), Reservoir.CAPACITY), mx-j, my-k);
 		}
 
 		if (!Reservoir.isEmpty()) {
 			int i2 = Reservoir.getLiquidScaled(44);
 			int x = xSize/2-4;
 			int y = ySize/2-13-i2+35;
-			Icon ico = Reservoir.getFluid().getStillIcon();
+			IIcon ico = Reservoir.getFluid().getStillIcon();
 			ReikaLiquidRenderer.bindFluidTexture(Reservoir.getFluid());
 			this.drawTexturedModelRectFromIcon(x, y, ico, 8, i2);
 		}

@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
+import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 
 public class ContainerScaleChest extends CoreContainer
 {
@@ -28,7 +29,7 @@ public class ContainerScaleChest extends CoreContainer
 		lowerScaleChestInventory = te;
 		chest = te;
 		size = te.getNumberSlots();
-		te.openChest();
+		te.openInventory();
 		this.page = page;
 		this.setSlots(player, te, page);
 	}
@@ -88,7 +89,7 @@ public class ContainerScaleChest extends CoreContainer
 			return true;
 		boolean b = chest.isUseableByPlayer(player);
 		if (!b) {
-			chest.closeChest();
+			chest.closeInventory();
 			chest.lidAngle = 1;
 		}
 		return b;
@@ -101,7 +102,7 @@ public class ContainerScaleChest extends CoreContainer
 	public void onContainerClosed(EntityPlayer par1EntityPlayer)
 	{
 		super.onContainerClosed(par1EntityPlayer);
-		lowerScaleChestInventory.closeChest();
+		lowerScaleChestInventory.closeInventory();
 	}
 
 	public IInventory getLowerScaleChestInventory()

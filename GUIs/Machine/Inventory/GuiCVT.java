@@ -9,19 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -31,6 +18,19 @@ import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerCVT;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 public class GuiCVT extends GuiNonPoweredMachine
 {
@@ -77,7 +77,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 				buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Speed"));
 			else
 				buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Torque"));
-			input = new GuiTextField(fontRenderer, j+xSize/2+24, k+39, 26, 16);
+			input = new GuiTextField(fontRendererObj, j+xSize/2+24, k+39, 26, 16);
 			input.setFocused(false);
 			input.setMaxStringLength(3);
 		}
@@ -176,11 +176,11 @@ public class GuiCVT extends GuiNonPoweredMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 		int dy = redstone ? 17 : 0;
 		int dx = redstone ? -14 : 0;
-		fontRenderer.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
+		fontRendererObj.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
 
 		if (cvt.hasLubricant()) {
 			Fluid f = FluidRegistry.getFluid("lubricant");
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			GL11.glColor4f(1, 1, 1, 1);
 			this.drawTexturedModelRectFromIcon(186, 89, ico, 16, 48);
@@ -188,26 +188,26 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 		if (api.isMouseInBox(j+185, j+202, k+88, k+149)) {
 			String s = "Lubricant";
-			api.drawTooltipAt(fontRenderer, s, api.getMouseRealX()-45-fontRenderer.getStringWidth(s), api.getMouseRealY());
+			api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-45-fontRendererObj.getStringWidth(s), api.getMouseRealY());
 		}
 
-		api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Item.redstone), xSize/2+94, 7);
+		api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Items.redstone), xSize/2+94, 7);
 
 		if (api.isMouseInBox(j+xSize/2+92, j+xSize/2+112, -1+k+7, -1+k+27)) {
 			String s = "Redstone Control";
-			api.drawTooltipAt(fontRenderer, s, api.getMouseRealX()-5-fontRenderer.getStringWidth(s), api.getMouseRealY());
+			api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-5-fontRendererObj.getStringWidth(s), api.getMouseRealY());
 		}
 
 		if (redstone) {
-			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneActive), 129, 31);
-			api.drawItemStack(itemRenderer, fontRenderer, new ItemStack(Block.torchRedstoneIdle), 129, 54);
+			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.redstone_torch), 129, 31);
+			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.unlit_redstone_torch), 129, 54);
 
-			this.drawCenteredString(fontRenderer, cvt.getCVTString(true), 188, 37, 0xffffff);
-			this.drawCenteredString(fontRenderer, cvt.getCVTString(false), 188, 60, 0xffffff);
+			this.drawCenteredString(fontRendererObj, cvt.getCVTString(true), 188, 37, 0xffffff);
+			this.drawCenteredString(fontRendererObj, cvt.getCVTString(false), 188, 60, 0xffffff);
 		}
 		else {
 			if (!input.isFocused()) {
-				fontRenderer.drawString(String.format("%d", Math.abs(cvt.getRatio())), xSize/2+36, 31, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", Math.abs(cvt.getRatio())), xSize/2+36, 31, 0xffffffff);
 			}
 		}
 	}
@@ -229,11 +229,11 @@ public class GuiCVT extends GuiNonPoweredMachine
 		else {
 			input.drawTextBox();
 			if (ratio > cvt.getMaxRatio())
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
 			else if (ratio == 0)
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, "(1)", j+xSize/2+88, k+31, 0xff0000);
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, "(1)", j+xSize/2+88, k+31, 0xff0000);
 			else
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", Math.abs(cvt.getRatio())), j+xSize/2+88, k+31, 4210752);
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", Math.abs(cvt.getRatio())), j+xSize/2+88, k+31, 4210752);
 		}
 	}
 

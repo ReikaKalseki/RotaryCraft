@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -23,6 +17,13 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public abstract class SprinklerBlock extends RotaryCraftTileEntity implements PipeConnector, RangedEffect {
 
@@ -37,7 +38,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 		int dy = y+dir.offsetY;
 		int dz = z+dir.offsetZ;
 		if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
-			TileEntityPipe tile = (TileEntityPipe)world.getBlockTileEntity(dx, dy, dz);
+			TileEntityPipe tile = (TileEntityPipe)world.getTileEntity(dx, dy, dz);
 			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getFluidLevel() > 0) {
 				if (liquid < this.getCapacity()) {
 					oldLevel = tile.getFluidLevel();

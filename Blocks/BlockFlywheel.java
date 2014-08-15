@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,29 +23,25 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFlywheel extends BlockModelledMachine {
 
-	public BlockFlywheel(int ID, Material mat) {
-		super(ID, mat);
+	public BlockFlywheel(Material mat) {
+		super(mat);
 		//this.blockIndexInTexture = 23;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		for (int var4 = 0; var4 < 16; ++var4)
 			if (var4%4 == 0)
@@ -53,11 +55,11 @@ public class BlockFlywheel extends BlockModelledMachine {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean harv)
 	{
 		if (this.canHarvest(world, player, x, y, z))
 			this.harvestBlock(world, player, x, y, z, 0);
-		return world.setBlock(x, y, z, 0);
+		return world.setBlockToAir(x, y, z);
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
@@ -68,10 +70,10 @@ public class BlockFlywheel extends BlockModelledMachine {
 	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {
 		if (!this.canHarvest(world, ep, x, y, z))
 			return;
-		TileEntityFlywheel fly = (TileEntityFlywheel)world.getBlockTileEntity(x, y, z);
+		TileEntityFlywheel fly = (TileEntityFlywheel)world.getTileEntity(x, y, z);
 		if (fly != null) {
 			if (fly.failed) {
-				ItemStack todrop = new ItemStack(ItemStacks.mount.itemID, 1, ItemStacks.mount.getItemDamage());	//drop mount
+				ItemStack todrop = ItemStacks.mount.copy();	//drop mount
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote)
@@ -79,7 +81,7 @@ public class BlockFlywheel extends BlockModelledMachine {
 			}
 			else {
 				int metadata = fly.getBlockMetadata();
-				ItemStack todrop = new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata/4); //drop flywheel
+				ItemStack todrop = ItemRegistry.FLYWHEEL.getStackOfMetadata(metadata/4); //drop flywheel
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote)
@@ -131,10 +133,10 @@ public class BlockFlywheel extends BlockModelledMachine {
 	}
 
 	@Override
-	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(new ItemStack(RotaryCraft.flywheelitems.itemID, 1, metadata/4));
+		ret.add(ItemRegistry.FLYWHEEL.getStackOfMetadata(metadata/4));
 		return ret;
 	}
 }

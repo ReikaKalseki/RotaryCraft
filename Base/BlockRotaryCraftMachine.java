@@ -9,26 +9,26 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import Reika.DragonAPI.Base.BlockTEBase;
+
 import java.util.Random;
 
 import mcp.mobius.waila.api.IWailaBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import Reika.DragonAPI.Base.BlockTEBase;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWailaBlock {
 
 	protected Random par5Random = new Random();
 
-	public BlockRotaryCraftMachine(int ID, Material mat) {
-		super(ID, mat);
+	public BlockRotaryCraftMachine(Material mat) {
+		super(mat);
 		this.setHardness(4F);
 		this.setResistance(15F);
-		this.setLightValue(0F);
+		this.setLightLevel(0F);
 		if (mat == Material.iron)
-			this.setStepSound(soundMetalFootstep);
+			this.setStepSound(soundTypeMetal);
 	}
 
 	@Override
@@ -42,13 +42,13 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWa
 	}
 
 	@Override
-	public final boolean canBeReplacedByLeaves(World world, int x, int y, int z)
+	public final boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
 	{
 		return false;
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face)
+	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face)
 	{
 		return 0;
 	}

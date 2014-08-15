@@ -9,11 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import java.util.Random;
-
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+
+import java.util.Random;
 
 public enum DifficultyEffects {
 

@@ -9,38 +9,38 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-import java.util.ArrayList;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class BlockColorInterface {
 
-	private static final HashMap<List<Integer>, Integer> map = new HashMap(2);
+	private static final HashMap<ItemStack, Integer> map = new HashMap(2);
 
-	public static void addGPRBlockColor(int blockID, int metadata, int color) {
-		map.put(toList(blockID, metadata), color);
+	public static void addGPRBlockColor(Block blockID, int color) {
+		for (int i = 0; i < 16; i++) {
+			addGPRBlockColor(blockID, i, color);
+		}
 	}
 
-	public static void addGPRBlockColor(int blockID, int metadata, int red, int green, int blue) {
+	public static void addGPRBlockColor(Block blockID, int metadata, int color) {
+		map.put(new ItemStack(blockID, metadata), color);
+	}
+
+	public static void addGPRBlockColor(Block blockID, int metadata, int red, int green, int blue) {
 		addGPRBlockColor(blockID, metadata, ReikaColorAPI.RGBtoHex(red, green, blue));
 	}
 
-	public static Set<List<Integer>> getMappedBlocks() {
+	public static Set<ItemStack> getMappedBlocks() {
 		return map.keySet();
 	}
 
-	public static int getColor(int ID, int meta) {
-		return map.get(toList(ID, meta));
-	}
-
-	private static List<Integer> toList(int ID, int meta) {
-		List li = new ArrayList();
-		li.add(ID);
-		li.add(meta);
-		return li;
+	public static int getColor(Block ID, int meta) {
+		return map.get(new ItemStack(ID, meta));
 	}
 
 }

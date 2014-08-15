@@ -9,19 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityProjector extends InventoriedPowerReceiver implements RangedEffect {
 
@@ -71,15 +73,15 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 			channel = 0;
 			return;
 		}
-		if (inv[0].itemID == Item.eyeOfEnder.itemID) {
+		if (inv[0].getItem() == Items.ender_eye) {
 			emptySlide = false;
 			channel = -1;
 		}
-		if (inv[0].itemID == Item.pocketSundial.itemID) {
+		if (inv[0].getItem() == Items.clock) {
 			emptySlide = false;
 			channel = -3;
 		}
-		if (inv[0].itemID != ItemRegistry.SLIDE.getShiftedID()) {
+		if (inv[0].getItem() != ItemRegistry.SLIDE.getItemInstance()) {
 			emptySlide = true;
 			return;
 		}
@@ -145,22 +147,22 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 		switch(this.getBlockMetadata()) {
 		case 0:
 			x = xCoord-1;
-			while (x >= xCoord-12 && worldObj.getBlockId(x, yCoord, zCoord) == 0)
+			while (x >= xCoord-12 && worldObj.getBlock(x, yCoord, zCoord) == Blocks.air)
 				x--;
 			return x-xCoord+1;
 		case 1:
 			x = xCoord+1;
-			while (x <= xCoord+12+1 && (worldObj.getBlockId(x, yCoord, zCoord) == 0 || Block.blocksList[worldObj.getBlockId(x, yCoord, zCoord)].isAirBlock(worldObj, x, yCoord, zCoord)))
+			while (x <= xCoord+12+1 && (worldObj.getBlock(x, yCoord, zCoord) == Blocks.air ||worldObj.getBlock(x, yCoord, zCoord).isAir(worldObj, x, yCoord, zCoord)))
 				x++;
 			return -(x-xCoord);
 		case 2:
 			z = zCoord+1;
-			while (z <= zCoord+1+12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
+			while (z <= zCoord+1+12 && worldObj.getBlock(xCoord, yCoord, z) == Blocks.air)
 				z++;
 			return -(z-zCoord);
 		case 3:
 			z = zCoord-1;
-			while (z >= zCoord-12 && worldObj.getBlockId(xCoord, yCoord, z) == 0)
+			while (z >= zCoord-12 && worldObj.getBlock(xCoord, yCoord, z) == Blocks.air)
 				z--;
 			return z-zCoord+1;
 		default:
@@ -210,8 +212,8 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 		World world = worldObj;
 		for (int k = 0; k <= 4; k++) {
 			for (int i = -3; i <= 3; i++) {
-				int id = world.getBlockId(x+b*i, y+k, z+a*i);
-				if (id == 0 || !Block.blocksList[id].isOpaqueCube()) {
+				Block id = world.getBlock(x+b*i, y+k, z+a*i);
+				if (id == Blocks.air || !id.isOpaqueCube()) {
 					return false;
 				}
 				if (!this.canProject(x+b*i, y+k, z+a*i))
@@ -220,8 +222,8 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 		}
 		for (int k = 0; k <= 4; k++) {
 			for (int i = -3; i <= 3; i++) {
-				int id = world.getBlockId(x2+b*i, y+k, z2+a*i);
-				if (id != 0) {
+				Block id = world.getBlock(x2+b*i, y+k, z2+a*i);
+				if (id != Blocks.air) {
 					return false;
 				}
 			}
@@ -241,7 +243,7 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.itemID == ItemRegistry.SLIDE.getShiftedID();
+		return is.getItem() == ItemRegistry.SLIDE.getItemInstance();
 	}
 
 	@Override

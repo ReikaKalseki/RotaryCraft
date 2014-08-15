@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiAerosolizer extends GuiPowerOnlyMachine
 {
@@ -41,7 +42,7 @@ public class GuiAerosolizer extends GuiPowerOnlyMachine
 				int amount = aero.potionLevel[3*i+j]/4;
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d %d %d %d %d %d %d", aero.potionLevel[0], aero.potionLevel[1], aero.potionLevel[2], aero.potionLevel[3], aero.potionLevel[4], aero.potionLevel[5], aero.potionLevel[6], aero.potionLevel[7], aero.potionLevel[8]));
 				api.fillBar(var5+62+18*j, var6+17+18*i, 16, var6+17+18*i+16, aero.slotColor[3*i+j]+0xff000000, amount, 16, true);
-				api.drawCenteredStringNoShadow(fontRenderer, String.format("%d", aero.potionLevel[3*i+j]), var5+70+18*j, var6+22+18*i, 0xff000000);
+				api.drawCenteredStringNoShadow(fontRendererObj, String.format("%d", aero.potionLevel[3*i+j]), var5+70+18*j, var6+22+18*i, 0xff000000);
 			}
 		}
 	}

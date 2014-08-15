@@ -9,7 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 import java.util.ArrayList;
 
@@ -18,10 +22,6 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -32,7 +32,7 @@ public class ToolChargingHandler extends TemplateRecipeHandler {
 		private final ItemStack chargedTool;
 
 		public ChargingRecipe(ItemStack tool, int charge) {
-			chargedTool = new ItemStack(tool.itemID, 1, charge);
+			chargedTool = new ItemStack(tool.getItem(), 1, charge);
 		}
 
 		@Override
@@ -46,7 +46,7 @@ public class ToolChargingHandler extends TemplateRecipeHandler {
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			int dx = 21;
 			int dy = 6;
-			PositionedStack pos = new PositionedStack(new ItemStack(chargedTool.itemID, 1, 0), dx, dy);
+			PositionedStack pos = new PositionedStack(new ItemStack(chargedTool.getItem(), 1, 0), dx, dy);
 			dx += 18;
 			PositionedStack pos2 = new PositionedStack(ItemRegistry.SPRING.getStackOfMetadata(chargedTool.getItemDamage()), dx, dy);
 			stacks.add(pos);
@@ -71,7 +71,7 @@ public class ToolChargingHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (ingredient != null && ingredient.itemID == ItemRegistry.SPRING.getShiftedID()) {
+		if (ingredient != null && ingredient.getItem() == ItemRegistry.SPRING.getItemInstance()) {
 			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 				ItemRegistry ir = ItemRegistry.itemList[i];
 				if (ir.isCharged() && !ir.isDummiedOut()) {
@@ -101,7 +101,7 @@ public class ToolChargingHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override

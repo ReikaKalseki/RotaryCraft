@@ -9,16 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import java.util.HashMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesCrystallizer
 {
@@ -38,13 +39,13 @@ public class RecipesCrystallizer
 
 	private RecipesCrystallizer()
 	{
-		this.addRecipe("ender", 250, new ItemStack(Item.enderPearl));
-		this.addRecipe("redstone", 100, new ItemStack(Item.redstone));
-		this.addRecipe("glowstone", 250, new ItemStack(Item.glowstone));
-		this.addRecipe("coal", 100, new ItemStack(Item.coal));
+		this.addRecipe("ender", 250, new ItemStack(Items.ender_pearl));
+		this.addRecipe("redstone", 100, new ItemStack(Items.redstone));
+		this.addRecipe("glowstone", 250, new ItemStack(Items.glowstone_dust));
+		this.addRecipe("coal", 100, new ItemStack(Items.coal));
 
-		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Block.ice));
-		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Block.stone));
+		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice));
+		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone));
 
 		this.addRecipe("rc ethanol", 100, ItemRegistry.ETHANOL.getStackOf());
 	}

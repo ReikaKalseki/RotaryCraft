@@ -9,16 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Steel;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.item.EnumToolMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,8 +27,8 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemSteelPick(int ID, int tex) {
-		super(ID, EnumToolMaterial.IRON);
+	public ItemSteelPick(int tex) {
+		super(ToolMaterial.IRON);
 		damageVsEntity += 1;
 		this.setMaxDamage(600);
 		this.setIndex(tex);
@@ -35,18 +36,23 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block)
+	public float func_150893_a(ItemStack par1ItemStack, Block par2Block)
 	{
-		float amt = super.getStrVsBlock(par1ItemStack, par2Block);
+		float amt = super.func_150893_a(par1ItemStack, par2Block);
 		return amt > 1 ? amt*1.2F : 1;
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, Block block, int meta)
+	public boolean canHarvestBlock(Block b, ItemStack is) {
+		return Items.iron_pickaxe.canHarvestBlock(b, is);
+	}
+
+	@Override
+	public float getDigSpeed(ItemStack stack, Block block, int meta)
 	{
-		if (block.blockMaterial == Material.glass)
+		if (block.getMaterial() == Material.glass)
 			return 8F;
-		float amt = super.getStrVsBlock(stack, block, meta);
+		float amt = super.getDigSpeed(stack, block, meta);
 		return amt > 1 ? amt*1.2F : 1;
 	}
 
@@ -64,11 +70,11 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final void registerIcons(IconRegister ico) {}
+	public final void registerIcons(IIconRegister ico) {}
 
 	@Override
-	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
-		return Item.pickaxeStone.getIconFromDamage(0);
+	public final IIcon getIconFromDamage(int dmg) { //To get around a bug in backtools
+		return Items.stone_pickaxe.getIconFromDamage(0);
 	}
 
 	public Class getTextureReferenceClass() {
@@ -78,6 +84,11 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 	@Override
 	public String getTexture(ItemStack is) {
 		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getBasicName();
 	}
 
 }

@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,15 +27,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.Instantiable.WorldLocation;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityBlower extends TileEntityPowerReceiver {
@@ -261,12 +262,12 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 		checkNBT = NBT.getBoolean("cnbt");
 		useOreDict = NBT.getBoolean("ore");
 
-		NBTTagList nbttaglist = NBT.getTagList("Items");
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
 		matchingItems = new ItemStack[18];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
 			if (byte0 >= 0 && byte0 < matchingItems.length)
@@ -304,7 +305,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 			if (oreID > -1 && oreID == OreDictionary.getOreID(is1))
 				return true;
 		}
-		return is.itemID == is1.itemID;
+		return is.getItem() == is1.getItem();
 	}
 
 	@Override

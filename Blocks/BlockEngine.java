@@ -9,6 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
+
 import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
@@ -19,19 +28,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Registry.EngineType;
-import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 
 public class BlockEngine extends BlockModelledMachine {
 
-	public BlockEngine (int ID, Material mat) {
-		super(ID, mat);
+	public BlockEngine(Material mat) {
+		super(mat);
 		//this.blockIndexInTexture = 14;
 	}
 
@@ -46,7 +47,7 @@ public class BlockEngine extends BlockModelledMachine {
 		float minz = (float)minZ;
 		float maxz = (float)maxZ;
 
-		TileEntityEngine tile = (TileEntityEngine)par1IBlockAccess.getBlockTileEntity(x, y, z);
+		TileEntityEngine tile = (TileEntityEngine)par1IBlockAccess.getTileEntity(x, y, z);
 		if (tile == null)
 			return;
 
@@ -112,11 +113,11 @@ public class BlockEngine extends BlockModelledMachine {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean harv)
 	{
 		if (this.canHarvest(world, player, x, y, z))
 			this.harvestBlock(world, player, x, y, z, 0);
-		return world.setBlock(x, y, z, 0);
+		return world.setBlockToAir(x, y, z);
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
@@ -127,23 +128,22 @@ public class BlockEngine extends BlockModelledMachine {
 	public void harvestBlock(World world, EntityPlayer ep, int x, int y, int z, int meta) {
 		if (!this.canHarvest(world, ep, x, y, z))
 			return;
-		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+		TileEntityEngine eng = (TileEntityEngine)world.getTileEntity(x, y, z);
 		if (eng != null) {
 			if (eng.getEngineType() == EngineType.JET && ((TileEntityJetEngine)eng).FOD >= 8) {
-				ItemStack todrop = new ItemStack(ItemStacks.steelgear.itemID, 1+par5Random.nextInt(5), ItemStacks.steelgear.getItemDamage());	//drop gears
+				ItemStack todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.steelgear, 1+par5Random.nextInt(5));	//drop gears
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote)
 					world.spawnEntityInWorld(item);
-				todrop = new ItemStack(ItemStacks.scrap.itemID, 16+par5Random.nextInt(17), ItemStacks.scrap.getItemDamage());	//drop scrap
+				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 16+par5Random.nextInt(17));	//drop scrap
 				item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
 					world.spawnEntityInWorld(item);
 			}
 			else {
-				int metat = eng.getEngineType().ordinal();
-				ItemStack todrop = new ItemStack(RotaryCraft.engineitems.itemID, 1, metat); //drop engine item
+				ItemStack todrop = eng.getEngineType().getCraftedProduct(); //drop engine item
 				if (eng.getEngineType() == EngineType.JET) {
 					TileEntityJetEngine tj = (TileEntityJetEngine)eng;
 					if (tj.FOD > 0) {
@@ -176,20 +176,20 @@ public class BlockEngine extends BlockModelledMachine {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+		TileEntityEngine te = (TileEntityEngine)world.getTileEntity(x, y, z);
 		if (te != null) {
 			te.temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		}
 	}
 
 	@Override
-	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		TileEntityEngine tile = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+		TileEntityEngine tile = (TileEntityEngine)world.getTileEntity(x, y, z);
 		if (tile == null)
 			return ret;
-		ItemStack is = new ItemStack(RotaryCraft.engineitems.itemID, 1, tile.getEngineType().ordinal());
+		ItemStack is = tile.getEngineType().getCraftedProduct();
 		ret.add(is);
 		if (tile.getEngineType() == EngineType.JET) {
 			TileEntityJetEngine tj = (TileEntityJetEngine)tile;

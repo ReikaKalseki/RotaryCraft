@@ -9,18 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Icon;
-import net.minecraftforge.fluids.Fluid;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiCentrifuge extends GuiMachine
 {
@@ -57,10 +57,10 @@ public class GuiCentrifuge extends GuiMachine
 			int level = cent.getLevel();
 			if (level > 0) {
 				String name = cent.getFluid().getLocalizedName();
-				api.drawTooltipAt(fontRenderer, String.format("%s: %d/%d", name, cent.getLevel(), cent.CAPACITY), mx-j, my-k);
+				api.drawTooltipAt(fontRendererObj, String.format("%s: %d/%d", name, cent.getLevel(), cent.CAPACITY), mx-j, my-k);
 			}
 			else {
-				api.drawTooltipAt(fontRenderer, String.format("0/%d mB", cent.CAPACITY), mx-j, my-k);
+				api.drawTooltipAt(fontRendererObj, String.format("0/%d mB", cent.CAPACITY), mx-j, my-k);
 			}
 		}
 		if (cent.getLevel() > 0) {
@@ -69,7 +69,7 @@ public class GuiCentrifuge extends GuiMachine
 			int y = 77-i2+1;
 			GL11.glColor4f(1, 1, 1, 1);
 			Fluid f = cent.getFluid();
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			this.drawTexturedModelRectFromIcon(x, y, ico, 16, i2);
 		}
@@ -111,10 +111,10 @@ public class GuiCentrifuge extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", fct.power, fct.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Speed:", xSize+var5+20, var6+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Torque:", xSize+var5+20, var6+129, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRendererObj, String.format("%d/%d", fct.power, fct.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

@@ -9,22 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFillingStation;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -67,7 +67,7 @@ public class FillingStationHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class FillingStationHandler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		drawTexturedModalRect(134, 7, 177, 45, 6, 50);
+		ReikaGuiAPI.instance.drawTexturedModalRect(134, 7, 177, 45, 6, 50);
 		this.drawFluids(recipe);
 	}
 
@@ -129,7 +129,7 @@ public class FillingStationHandler extends TemplateRecipeHandler {
 		FillingStationRecipe r = (FillingStationRecipe)arecipes.get(recipe);
 		Fluid f = r.fluid;
 		if (f != null) {
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

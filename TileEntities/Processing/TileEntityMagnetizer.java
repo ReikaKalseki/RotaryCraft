@@ -9,11 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -22,6 +20,10 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction, ConditionalOperation {
 
@@ -76,7 +78,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 	}
 
 	private boolean hasUpgrade() {
-		return inv[0] != null && inv[0].itemID == ItemRegistry.UPGRADE.getShiftedID() && inv[0].getItemDamage() == 2;
+		return inv[0] != null && inv[0].getItem() == ItemRegistry.UPGRADE.getItemInstance() && inv[0].getItemDamage() == 2;
 	}
 
 	private boolean hasCore() {
@@ -86,7 +88,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		if (inv[0].stackSize > 1) {
 			return false;
 		}
-		if (inv[0].itemID != ItemStacks.shaftcore.itemID || inv[0].getItemDamage() != ItemStacks.shaftcore.getItemDamage()) {
+		if (ReikaItemHelper.matchStacks(inv[0], ItemStacks.shaftcore)) {
 			return false;
 		}
 		return true;
@@ -120,7 +122,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return (is.itemID == ItemStacks.shaftcore.itemID && is.getItemDamage() == ItemStacks.shaftcore.getItemDamage() && inv[0] == null);
+		return ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) && inv[0] == null;
 	}
 
 	@Override

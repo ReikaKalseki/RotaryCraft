@@ -15,12 +15,13 @@
 
 package Reika.RotaryCraft.Models;
 
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
+import Reika.RotaryCraft.Base.RotaryModelBase;
+
 import java.util.ArrayList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
-import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelFullBlock extends RotaryModelBase
 {

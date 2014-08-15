@@ -9,15 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
+
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
 
 public class EntityLiquidBlock extends Entity {
 
@@ -102,11 +104,11 @@ public class EntityLiquidBlock extends Entity {
 		return false;
 	}
 
-	public int getBlockID(ForgeDirection side) {
+	public Block getBlock(ForgeDirection side) {
 		int dx = this.getIntegerX()+side.offsetX;
 		int dy = this.getIntegerY()+side.offsetY;
 		int dz = this.getIntegerZ()+side.offsetZ;
-		return worldObj.getBlockId(dx, dy, dz);
+		return worldObj.getBlock(dx, dy, dz);
 	}
 
 	@Override

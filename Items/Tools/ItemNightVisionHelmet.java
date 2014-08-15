@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryArmor;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,21 +20,18 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
 public class ItemNightVisionHelmet extends ItemRotaryArmor {
 
-	public ItemNightVisionHelmet(int ID, int tex, int render) {
-		super(ID, RotaryCraft.NVHM, render, 0, tex);
+	public ItemNightVisionHelmet(int tex, int render) {
+		super(RotaryCraft.NVHM, render, 0, tex);
 		//this.setNoRepair();
-		//this.damageReduceAmount = EnumArmorMaterial.DIAMOND.getDamageReductionAmount(0);
-		//this.setMaxDamage((int)(1.2*EnumArmorMaterial.DIAMOND.getDurability(0)));
+		//this.damageReduceAmount = ArmorMaterial.DIAMOND.getDamageReductionAmount(0);
+		//this.setMaxDamage((int)(1.2*ArmorMaterial.DIAMOND.getDurability(0)));
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
+	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {
 		ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
 		ReikaEntityHelper.setNoPotionParticles(ep);
 	}

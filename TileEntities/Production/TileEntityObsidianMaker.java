@@ -9,19 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
@@ -34,6 +25,17 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
 
@@ -49,7 +51,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 	public boolean idle = false;
 
-	public static final int CAPACITY = 320*RotaryConfig.MILLIBUCKET;
+	public static final int CAPACITY = 320*1000;
 	public static final int MAXTEMP = 1000;
 
 	private HybridTank lava = new HybridTank("lavamix", CAPACITY);
@@ -121,16 +123,16 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 	public void overheat(World world, int x, int y, int z) {
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5,"random.fizz", 3F, 1F);
-		world.setBlock(x, y, z, Block.lavaMoving.blockID);
+		world.setBlock(x, y, z, Blocks.flowing_lava);
 	}
 
 	public void mix() {
 		int slot = this.getNonFullStack();
 		if (slot == -1)
 			return;
-		lava.removeLiquid(RotaryConfig.MILLIBUCKET);
-		water.removeLiquid(RotaryConfig.MILLIBUCKET);
-		ReikaInventoryHelper.addOrSetStack(Block.obsidian.blockID, 1, 0, inv, slot);
+		lava.removeLiquid(1000);
+		water.removeLiquid(1000);
+		ReikaInventoryHelper.addOrSetStack(Blocks.obsidian, 1, 0, inv, slot);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*rand.nextFloat(), 0.7F+0.3F*rand.nextFloat());
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.25, 0, 0, 0);
 		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.5, 0, 0, 0);
@@ -148,7 +150,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		for (int k = 0; k < inv.length && slot == -1; k++) {
 			if (inv[k] == null)
 				slot = k;
-			else if (inv[k].itemID == Block.obsidian.blockID && inv[k].stackSize < this.getInventoryStackLimit())
+			else if (ReikaItemHelper.matchStackWithBlock(inv[k], Blocks.obsidian) && inv[k].stackSize < this.getInventoryStackLimit())
 				slot = k;
 		}
 		return slot;

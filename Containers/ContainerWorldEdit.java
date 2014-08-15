@@ -9,7 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
@@ -18,8 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
 
 public class ContainerWorldEdit extends Container
 {
@@ -50,20 +52,20 @@ public class ContainerWorldEdit extends Container
 		if (var3 != null) {
 			if (!ReikaInventoryHelper.addToIInv(var3, par1EntityPlayer.inventory)) {
 				if (!worldObj.isRemote)
-					par1EntityPlayer.dropPlayerItem(var3);
+					par1EntityPlayer.dropPlayerItemWithRandomChoice(var3, true);
 			}
 			if (FluidContainerRegistry.isFilledContainer(var3)) {
 				Fluid liq = FluidContainerRegistry.getFluidForFilledItem(var3).getFluid();
 				if (liq.canBePlacedInWorld())
-					WorldEditHelper.addCommand(par1EntityPlayer, liq.getBlockID(), 0);
+					WorldEditHelper.addCommand(par1EntityPlayer, liq.getBlock(), 0);
 				return;
 			}
 			if (!(var3.getItem() instanceof ItemBlock))
 				return;
-			WorldEditHelper.addCommand(par1EntityPlayer, var3.itemID, var3.getItemDamage());
+			WorldEditHelper.addCommand(par1EntityPlayer, var3.getItem(), var3.getItemDamage());
 		}
 		else {
-			WorldEditHelper.addCommand(par1EntityPlayer, 0, 0);
+			WorldEditHelper.addCommand(par1EntityPlayer, Blocks.air, 0);
 		}
 	}
 

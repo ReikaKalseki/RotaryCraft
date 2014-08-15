@@ -11,9 +11,9 @@ package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 import java.util.ArrayList;
 
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public interface ConnectedTextureGlass {
 
@@ -21,7 +21,7 @@ public interface ConnectedTextureGlass {
 	 * numbering convention as is found on a calculator or computer number pad. */
 	public ArrayList<Integer> getEdgesForFace(IBlockAccess world, int x, int y, int z, ForgeDirection face);
 
-	public Icon getIconForEdge(int edge);
+	public IIcon getIconForEdge(int edge);
 
 	public boolean renderCentralTextureForItem(int meta);
 

@@ -9,13 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Piping;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 
 public class TileEntityValve extends TileEntityPiping {
 
@@ -28,8 +30,8 @@ public class TileEntityValve extends TileEntityPiping {
 	}
 
 	@Override
-	public Icon getBlockIcon() {
-		return Block.blockRedstone.getIcon(0, 0);
+	public IIcon getBlockIcon() {
+		return Blocks.redstone_block.getIcon(0, 0);
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class TileEntityValve extends TileEntityPiping {
 
 	@Override
 	public Block getPipeBlockType() {
-		return Block.blockRedstone;
+		return Blocks.redstone_block;
 	}
 
 	@Override

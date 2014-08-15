@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -20,6 +16,11 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class TileEntitySteamEngine extends TileEntityEngine {
 
@@ -75,17 +76,17 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 
 		if (biome == BiomeGenBase.hell)
 			Tamb = 101;	//boils water, so 101C
-		if (world.getBlockId(x, y-1, z) == Block.fire.blockID)
+		if (world.getBlock(x, y-1, z) == Blocks.fire)
 			temperature++;
-		if (world.getBlockId(x, y-1, z) == Block.fire.blockID && biome == BiomeGenBase.hell)
+		if (world.getBlock(x, y-1, z) == Blocks.fire && biome == BiomeGenBase.hell)
 			temperature++; //Nether has 50% hotter fire
-		if (world.getBlockMaterial(x, y-1, z) == Material.lava)
+		if (ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.lava)
 			temperature += 2;
-		if (Tamb < 0 && world.getBlockId(x, y-1, z) == Block.fire.blockID)
+		if (Tamb < 0 && world.getBlock(x, y-1, z) == Blocks.fire)
 			Tamb += 30;
 		if (temperature < Tamb)
 			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
-		if (world.getBlockId(x, y-1, z) != Block.fire.blockID && world.getBlockMaterial(x, y-1, z) != Material.lava && temperature > Tamb)
+		if (world.getBlock(x, y-1, z) != Blocks.fire && ReikaWorldHelper.getMaterial(world, x, y-1, z) != Material.lava && temperature > Tamb)
 			temperature--;
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/96;
@@ -97,7 +98,7 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	@Override
 	public void overheat(World world, int x, int y, int z) {
 		temperature = MAXTEMP;
-		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, false, 1F, false, true, 2F);
+		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 17, false, 1F, false, true, 2F);
 		RotaryAchievements.OVERPRESSURE.triggerAchievement(this.getPlacer());
 		world.setBlockToAir(x, y, z);
 	}

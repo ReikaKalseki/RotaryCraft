@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
@@ -28,6 +17,19 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection {
 
@@ -101,9 +103,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		int dx = x+side.offsetX;
 		int dy = y+side.offsetY;
 		int dz = z+side.offsetZ;
-		int id = world.getBlockId(dx, dy, dz);
+		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		if (id == 0)
+		if (id == Blocks.air)
 			return false;
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m != null && m.isPipe())
@@ -147,7 +149,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				TileEntity te = world.getTileEntity(dx, dy, dz);
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
 					if (this.canConnectToPipe(tp.getMachine()) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
@@ -211,7 +213,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
-				TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+				TileEntity te = world.getTileEntity(dx, dy, dz);
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
 					if (this.canConnectToPipe(tp.getMachine()) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
@@ -290,7 +292,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	@Override
 	public final void onEMP() {}
 
-	public abstract Icon getBlockIcon();
+	public abstract IIcon getBlockIcon();
 
 	public abstract boolean hasLiquid();
 
@@ -299,9 +301,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	public void recomputeConnections(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			connections[i] = this.shouldTryToConnect(dirs[i]);
-			world.markBlockForRenderUpdate(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
+			world.func_147479_m(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
-		world.markBlockForRenderUpdate(x, y, z);
+		world.func_147479_m(x, y, z);
 	}
 
 	public void deleteFromAdjacentConnections(World world, int x, int y, int z) {
@@ -312,9 +314,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			int dz = x+dir.offsetZ;
 			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 			if (m == this.getMachine()) {
-				TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityPiping te = (TileEntityPiping)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = false;
-				world.markBlockForRenderUpdate(dx, dy, dz);
+				world.func_147479_m(dx, dy, dz);
 			}
 		}
 	}
@@ -327,9 +329,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			int dz = x+dir.offsetZ;
 			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 			if (m == this.getMachine()) {
-				TileEntityPiping te = (TileEntityPiping)world.getBlockTileEntity(dx, dy, dz);
+				TileEntityPiping te = (TileEntityPiping)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = true;
-				world.markBlockForRenderUpdate(dx, dy, dz);
+				world.func_147479_m(dx, dy, dz);
 			}
 		}
 	}
@@ -342,7 +344,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		MachineRegistry m2 = MachineRegistry.getMachine(worldObj, x, y, z);
 		if (m != null && !m.isPipe() && m == m2)
 			return true;
-		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+		TileEntity tile = worldObj.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityPiping)
 			return ((TileEntityPiping) tile).canConnectToPipe(m);
 		else if (tile instanceof PipeConnector) {
@@ -389,9 +391,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		int dy = yCoord+dir.offsetY;
 		int dz = zCoord+dir.offsetZ;
 		World world = worldObj;
-		int id = world.getBlockId(dx, dy, dz);
+		Block b = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		return id != this.getMachine().getBlockID() || meta != this.getMachine().getMachineMetadata();
+		return b != this.getMachine().getBlock() || meta != this.getMachine().getMachineMetadata();
 	}
 
 	@Override
@@ -400,8 +402,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	@Override
-	public Icon getGlassIcon() {
-		return Block.glass.getIcon(0, 0);
+	public IIcon getGlassIcon() {
+		return Blocks.glass.getIcon(0, 0);
 	}
 
 	@Override
@@ -410,7 +412,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	@Override
-	public Icon getOverlayIcon() {
+	public IIcon getOverlayIcon() {
 		return null;
 	}
 

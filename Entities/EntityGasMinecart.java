@@ -9,10 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -22,9 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.Registry.EngineType;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class EntityGasMinecart extends EntityMinecart {
 
@@ -91,9 +93,9 @@ public class EntityGasMinecart extends EntityMinecart {
 	}
 
 	@Override
-	protected void updateOnTrack(int par1, int par2, int par3, double par4, double par6, int par8, int par9)
+	protected void func_145821_a(int par1, int par2, int par3, double par4, double par6, Block par8, int par9)
 	{
-		super.updateOnTrack(par1, par2, par3, par4, par6, par8, par9);
+		super.func_145821_a(par1, par2, par3, par4, par6, par8, par9);
 
 		double d2 = pushX * pushX + pushZ * pushZ;
 
@@ -141,16 +143,16 @@ public class EntityGasMinecart extends EntityMinecart {
 	}
 
 	private boolean headingToCurve(int futurex, int y, int futurez) {
-		int id = worldObj.getBlockId(futurex, y, futurez);
-		int id2 = worldObj.getBlockId((int)posX, y, (int)posZ);
-		if (id != Block.rail.blockID && id2 != Block.rail.blockID)
+		Block id = worldObj.getBlock(futurex, y, futurez);
+		Block id2 = worldObj.getBlock((int)posX, y, (int)posZ);
+		if (id != Blocks.rail && id2 != Blocks.rail)
 			return false;
-		if (id == Block.rail.blockID) {
+		if (id == Blocks.rail) {
 			int meta = worldObj.getBlockMetadata(futurex, y, futurez);
 			if (meta == 6 || meta == 7 || meta == 8 || meta == 9)
 				return true;
 		}
-		if (id2 == Block.rail.blockID) {
+		if (id2 == Blocks.rail) {
 			int meta = worldObj.getBlockMetadata(futurex, y, futurez);
 			if (meta == 6 || meta == 7 || meta == 8 || meta == 9)
 				return true;
@@ -195,7 +197,7 @@ public class EntityGasMinecart extends EntityMinecart {
 		}
 		ItemStack itemstack = par1EntityPlayer.inventory.getCurrentItem();
 
-		if (itemstack != null && itemstack.itemID == ItemRegistry.ETHANOL.getShiftedID())
+		if (itemstack != null && itemstack.getItem() == ItemRegistry.ETHANOL.getItemInstance())
 		{
 			if (--itemstack.stackSize == 0)
 			{
@@ -283,8 +285,8 @@ public class EntityGasMinecart extends EntityMinecart {
 			{
 				double d4 = par1Entity.posX - posX;
 				double d5 = par1Entity.posZ - posZ;
-				Vec3 vec3 = worldObj.getWorldVec3Pool().getVecFromPool(d4, 0.0D, d5).normalize();
-				Vec3 vec31 = worldObj.getWorldVec3Pool().getVecFromPool(MathHelper.cos(rotationYaw * (float)Math.PI / 180.0F), 0.0D, MathHelper.sin(rotationYaw * (float)Math.PI / 180.0F)).normalize();
+				Vec3 vec3 = Vec3.createVectorHelper(d4, 0.0D, d5).normalize();
+				Vec3 vec31 = Vec3.createVectorHelper(MathHelper.cos(rotationYaw * (float)Math.PI / 180.0F), 0.0D, MathHelper.sin(rotationYaw * (float)Math.PI / 180.0F)).normalize();
 				double d6 = Math.abs(vec3.dotProduct(vec31));
 
 				if (d6 < 0.800000011920929D)

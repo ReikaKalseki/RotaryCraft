@@ -9,19 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class RecipesFrictionHeater {
 
 	private static final RecipesFrictionHeater instance = new RecipesFrictionHeater();
 
-	private final HashMap<List<Integer>, FrictionRecipe> recipes = new HashMap();
-	private final HashMap<List<Integer>, FrictionRecipe> outputs = new HashMap();
+	private final ItemHashMap<FrictionRecipe> recipes = new ItemHashMap();
+	private final ItemHashMap<FrictionRecipe> outputs = new ItemHashMap();
 
 	public static RecipesFrictionHeater getRecipes() {
 		return instance;
@@ -33,23 +31,23 @@ public class RecipesFrictionHeater {
 
 	private void addRecipe(ItemStack in, ItemStack out, int temp) {
 		FrictionRecipe rec = new FrictionRecipe(in, out, temp);
-		recipes.put(Arrays.asList(in.itemID, in.getItemDamage()), rec);
-		outputs.put(Arrays.asList(out.itemID, out.getItemDamage()), rec);
+		recipes.put(in, rec);
+		outputs.put(out, rec);
 	}
 
 	public ItemStack getSmelting(ItemStack in, int temperature) {
-		FrictionRecipe rec = recipes.get(Arrays.asList(in.itemID, in.getItemDamage()));
+		FrictionRecipe rec = recipes.get(in);
 		if (rec == null)
 			return null;
 		return temperature >= rec.requiredTemperature ? rec.getOutput() : null;
 	}
 
 	public FrictionRecipe getRecipeByOutput(ItemStack out) {
-		return outputs.get(Arrays.asList(out.itemID, out.getItemDamage()));
+		return outputs.get(out);
 	}
 
 	public FrictionRecipe getRecipeByInput(ItemStack in) {
-		return recipes.get(Arrays.asList(in.itemID, in.getItemDamage()));
+		return recipes.get(in);
 	}
 
 	public static class FrictionRecipe {

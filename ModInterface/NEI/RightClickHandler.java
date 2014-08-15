@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -32,6 +20,20 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -81,7 +83,7 @@ public class RightClickHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		//ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		//drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		//ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -122,7 +124,7 @@ public class RightClickHandler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		drawTexturedModalRect(134, 7, 177, 45, 6, 50);
+		ReikaGuiAPI.instance.drawTexturedModalRect(134, 7, 177, 45, 6, 50);
 		this.renderMachine((RightClickRecipe)arecipes.get(recipe));
 		this.drawText((RightClickRecipe)arecipes.get(recipe));
 	}
@@ -153,7 +155,7 @@ public class RightClickHandler extends TemplateRecipeHandler {
 			GL11.glScaled(sc, -sc, sc);
 			GL11.glRotatef(renderq, 1, 0, 0);
 			GL11.glRotatef(r, 0, 1, 0);
-			TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, 0, -0.5, variable);
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(te, -0.5, 0, -0.5, variable);
 			GL11.glRotatef(-r, 0, 1, 0);
 			GL11.glRotatef(-renderq, 1, 0, 0);
 			GL11.glTranslated(-dx, -dy, -dz);
@@ -168,7 +170,7 @@ public class RightClickHandler extends TemplateRecipeHandler {
 			GL11.glRotatef(renderq, 1, 0, 0);
 			GL11.glRotatef(r, 0, 1, 0);
 			ReikaTextureHelper.bindTerrainTexture();
-			rb.renderBlockAsItem(m.getBlockVariable(), m.getMachineMetadata(), 1);
+			rb.renderBlockAsItem(m.getBlock(), m.getMachineMetadata(), 1);
 			GL11.glRotatef(-r, 0, 1, 0);
 			GL11.glRotatef(-renderq, 1, 0, 0);
 			GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
@@ -178,11 +180,11 @@ public class RightClickHandler extends TemplateRecipeHandler {
 	}
 
 	private static enum Actions {
-		RESERVOIR(MachineRegistry.RESERVOIR, Block.thinGlass, "Covers Reservoir"),
+		RESERVOIR(MachineRegistry.RESERVOIR, Blocks.glass_pane, "Covers Reservoir"),
 		ADDCOIL(MachineRegistry.ELECTRICMOTOR, ItemStacks.goldcoil, "Adds Coils"),
-		DISPLAYCOLOR(MachineRegistry.DISPLAY, Item.dyePowder, "Changes Color"),
-		DISPLAYGLOW(MachineRegistry.DISPLAY, Item.glowstone, "Makes Display Glow"),
-		DISPLAYSET(MachineRegistry.DISPLAY, Item.writtenBook, "Sets Text"),
+		DISPLAYCOLOR(MachineRegistry.DISPLAY, Items.dye, "Changes Color"),
+		DISPLAYGLOW(MachineRegistry.DISPLAY, Items.glowstone_dust, "Makes Display Glow"),
+		DISPLAYSET(MachineRegistry.DISPLAY, Items.written_book, "Sets Text"),
 		REPAIRMIRROR(MachineRegistry.MIRROR, ItemStacks.mirror, "Repairs Mirror"),
 		REPAIRSHAFT(MachineRegistry.SHAFT, MaterialRegistry.STEEL.getShaftItem(), ItemStacks.shaftitem, "Repairs Shaft"),
 		REPAIRGEAR(MachineRegistry.GEARBOX, MaterialRegistry.STEEL.getGearItem(4), ItemStacks.gearunit, "Repairs Gearbox"),

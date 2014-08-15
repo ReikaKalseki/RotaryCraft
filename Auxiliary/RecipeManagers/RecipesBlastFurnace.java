@@ -9,19 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
 import Reika.DragonAPI.Instantiable.RecipePattern;
 import Reika.DragonAPI.Instantiable.Data.ImmutableList;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
 
 public class RecipesBlastFurnace
 {
@@ -255,10 +258,10 @@ public class RecipesBlastFurnace
 
 	private RecipesBlastFurnace()
 	{
-		BlastInput in1 = new BlastInput(Item.coal, 100, 1);
-		BlastInput in2 = new BlastInput(Item.gunpowder, 3.6F, 1);
-		BlastInput in3 = new BlastInput(Block.sand, 0.2F, 1);
-		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Item.ingotIron, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		BlastInput in1 = new BlastInput(Items.coal, 100, 1);
+		BlastInput in2 = new BlastInput(Items.gunpowder, 3.6F, 1);
+		BlastInput in3 = new BlastInput(Blocks.sand, 0.2F, 1);
+		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		recipeList.add(hsla);
 
 		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
@@ -274,15 +277,15 @@ public class RecipesBlastFurnace
 		recipeList.add(scrap);
 
 		in1 = new BlastInput(ItemStacks.coke, 100, 1);
-		in2 = new BlastInput(Item.gunpowder, 1.8F, 1);
-		in3 = new BlastInput(Block.sand, 0.1F, 1);
-		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Item.ingotIron, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
+		in3 = new BlastInput(Blocks.sand, 0.1F, 1);
+		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		recipeList.add(hsla2);
 
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Item.coal, ItemStacks.coke, false, 0, 400);
+		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Items.coal, ItemStacks.coke, false, 0, 400);
 		recipeList.add(coke);
 	}
 

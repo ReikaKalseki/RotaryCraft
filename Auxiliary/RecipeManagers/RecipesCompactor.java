@@ -9,28 +9,29 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class RecipesCompactor
 {
 	private static final RecipesCompactor CompactorBase = new RecipesCompactor();
 
-	private Map metaCompactingList = new HashMap();
-	private Map pressureMap = new HashMap();
-	private Map temperatureMap = new HashMap();
+	private ItemHashMap<ItemStack> compactingList = new ItemHashMap();
+	private ItemHashMap<Integer> pressureMap = new ItemHashMap();
+	private ItemHashMap<Integer> temperatureMap = new ItemHashMap();
 	private List<ItemStack> compactables = new ArrayList();
 
 	public static final RecipesCompactor getRecipes()
@@ -42,12 +43,12 @@ public class RecipesCompactor
 	{
 		int rp = TileEntityCompactor.REQPRESS;
 		int rt = TileEntityCompactor.REQTEMP;
-		this.addCompacting(Item.coal, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 0), 0.2F, rp, rt); //No charcoal
-		this.addCompacting(ItemStacks.anthracite, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 1), 0.2F, rp, rt);
-		this.addCompacting(ItemStacks.prismane, new ItemStack(RotaryCraft.compacts.itemID, this.getNumberPerStep(), 2), 0.2F, rp, rt);
-		this.addCompacting(ItemStacks.lonsda, new ItemStack(Item.diamond.itemID, this.getNumberPerStep(), 0), 0.2F, rp, rt);
+		this.addCompacting(Items.coal, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 0), 0.2F, rp, rt); //No charcoal
+		this.addCompacting(ItemStacks.anthracite, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 1), 0.2F, rp, rt);
+		this.addCompacting(ItemStacks.prismane, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 2), 0.2F, rp, rt);
+		this.addCompacting(ItemStacks.lonsda, new ItemStack(Items.diamond, this.getNumberPerStep(), 0), 0.2F, rp, rt);
 
-		this.addCompacting(Item.blazePowder, new ItemStack(Block.glowStone.blockID, 1, 0), 0.2F, 2000, 600);
+		this.addCompacting(Items.blaze_powder, new ItemStack(Blocks.glowstone, 1, 0), 0.2F, 2000, 600);
 	}
 
 	public final int getNumberPerStep() {
@@ -62,11 +63,11 @@ public class RecipesCompactor
 	 */
 	public void addCompacting(ItemStack in, ItemStack itemstack, float xp, int pressure, int temperature)
 	{
-		metaCompactingList.put(Arrays.asList(in.itemID, in.getItemDamage()), itemstack);
-		//this.ExtractorExperience.put(Integer.valueOf(itemStack.itemID), Float.valueOf(xp));
+		compactingList.put(in, itemstack);
+		//this.ExtractorExperience.put(Integer.valueOf(itemstack.getItem), Float.valueOf(xp));
 		compactables.add(in.copy());
-		pressureMap.put(Arrays.asList(in.itemID, in.getItemDamage()), pressure);
-		temperatureMap.put(Arrays.asList(in.itemID, in.getItemDamage()), temperature);
+		pressureMap.put(in, pressure);
+		temperatureMap.put(in, temperature);
 	}
 
 	public void addCompacting(Item in, ItemStack itemstack, float xp, int pressure, int temperature)
@@ -88,8 +89,8 @@ public class RecipesCompactor
 	{
 		if (item == null)
 			return null;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", item.itemID, item.getItemDamage()));
-		ItemStack ret = (ItemStack)metaCompactingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", Items.itemID, item.getItemDamage()));
+		ItemStack ret = compactingList.get(item);
 		return ret;
 	}
 
@@ -98,7 +99,7 @@ public class RecipesCompactor
 	}
 
 	public int getReqPressure(ItemStack item) {
-		Integer ret = (Integer)pressureMap.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		Integer ret = pressureMap.get(item);
 		return ret != null ? ret.intValue() : 0;
 	}
 
@@ -117,7 +118,7 @@ public class RecipesCompactor
 	}
 
 	public int getReqTemperature(ItemStack item) {
-		Integer ret = (Integer)temperatureMap.get(Arrays.asList(item.itemID, item.getItemDamage()));
+		Integer ret = temperatureMap.get(item);
 		return ret != null ? ret.intValue() : 0;
 	}
 }

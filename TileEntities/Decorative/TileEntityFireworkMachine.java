@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
@@ -32,6 +20,20 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.item.EntityFireworkRocket;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityFireworkMachine extends InventoriedPowerReceiver implements EnchantableMachine, DiscreteFunction, ConditionalOperation {
 
@@ -60,7 +62,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		}
 		idle = false;
 		ItemStack rocket = null;
-		boolean hasStar = ReikaInventoryHelper.checkForItem(Item.fireworkCharge.itemID, inv);
+		boolean hasStar = ReikaInventoryHelper.checkForItem(Items.firework_charge, inv);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(hasStar));
 		if (!hasStar) {
 			ItemStack star = this.randomRecipe();
@@ -72,14 +74,14 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			if (this.canMakeRocketFromStar()) {
 				ItemStack star = null;/*
 				if (this.consumeChance())
-					star = ReikaInventoryHelper.findAndDecrStack2(Item.fireworkCharge.itemID, -1, this.inv);
+					star = ReikaInventoryHelper.findAndDecrStack2(Items.firework_charge, -1, this.inv);
 				else {
-					int slot = ReikaInventoryHelper.locateInInventory(Item.fireworkCharge.itemID, this.inv);
+					int slot = ReikaInventoryHelper.locateInInventory(Items.firework_charge, this.inv);
 					if (slot != -1)
 						star = this.getStackInSlot(slot);
 				}*/
 				int slot = rand.nextInt(inv.length);
-				while (inv[slot] == null || inv[slot].itemID != Item.fireworkCharge.itemID) {
+				while (inv[slot] == null || inv[slot].getItem() != Items.firework_charge) {
 					slot = rand.nextInt(inv.length);
 				}
 				star = this.getStackInSlot(slot);
@@ -126,14 +128,14 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		boolean havePaper = false;
 		boolean haveStar = false;
 		boolean have1Gunpowder = false;
-		have1Gunpowder = ReikaInventoryHelper.checkForItem(Item.gunpowder.itemID, inv);
-		haveStar = ReikaInventoryHelper.checkForItem(Item.fireworkCharge.itemID, inv);
-		haveDye = ReikaInventoryHelper.checkForItem(Item.dyePowder.itemID, inv);
-		havePaper = ReikaInventoryHelper.checkForItem(Item.paper.itemID, inv);
+		have1Gunpowder = ReikaInventoryHelper.checkForItem(Items.gunpowder, inv);
+		haveStar = ReikaInventoryHelper.checkForItem(Items.firework_charge, inv);
+		haveDye = ReikaInventoryHelper.checkForItem(Items.dye, inv);
+		havePaper = ReikaInventoryHelper.checkForItem(Items.paper, inv);
 		int numgunpowder = 0;
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
-				if (inv[i].itemID == Item.gunpowder.itemID) {
+				if (inv[i].getItem() == Items.gunpowder) {
 					numgunpowder += inv[i].stackSize;
 					if (numgunpowder >= 2) {
 						have2Gunpowder = true;
@@ -146,26 +148,26 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	}
 
 	private boolean canMakeRocketFromStar() {
-		boolean hasPaper = ReikaInventoryHelper.checkForItem(Item.paper.itemID, inv);
-		boolean hasGunpowder = ReikaInventoryHelper.checkForItem(Item.gunpowder.itemID, inv);
-		boolean hasStar = ReikaInventoryHelper.checkForItem(Item.fireworkCharge.itemID, inv);
+		boolean hasPaper = ReikaInventoryHelper.checkForItem(Items.paper, inv);
+		boolean hasGunpowder = ReikaInventoryHelper.checkForItem(Items.gunpowder, inv);
+		boolean hasStar = ReikaInventoryHelper.checkForItem(Items.firework_charge, inv);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(hasPaper)+" "+String.valueOf(hasGunpowder)+" "+String.valueOf(hasStar));
 		return (hasPaper && hasGunpowder && hasStar);
 	}
 
 	private ItemStack starToRocket(ItemStack star) {
 		ItemStack product = null;
-		ItemStack gunpowder = new ItemStack(Item.gunpowder.itemID, 1, 0);
+		ItemStack gunpowder = new ItemStack(Items.gunpowder, 1, 0);
 		int numgunpowder = rand.nextInt(3)+1; // 1-3
-		ItemStack paper = new ItemStack(Item.paper.itemID, 1, 0);
+		ItemStack paper = new ItemStack(Items.paper, 1, 0);
 		ItemStack[] ingredients = new ItemStack[5];
-		if (this.getIngredient(Item.gunpowder.itemID, this.canMakeRocketFromStar() && this.consumeChance()))
+		if (this.getIngredient(Items.gunpowder, this.canMakeRocketFromStar() && this.consumeChance()))
 			ingredients[1] = gunpowder;
-		if (numgunpowder >= 2 && this.getIngredient(Item.gunpowder.itemID, this.consumeChance()))
+		if (numgunpowder >= 2 && this.getIngredient(Items.gunpowder, this.consumeChance()))
 			ingredients[2] = gunpowder;
-		if (numgunpowder >= 3 && this.getIngredient(Item.gunpowder.itemID, this.consumeChance()))
+		if (numgunpowder >= 3 && this.getIngredient(Items.gunpowder, this.consumeChance()))
 			ingredients[3] = gunpowder;
-		if (this.getIngredient(Item.paper.itemID, this.consumeChance()))
+		if (this.getIngredient(Items.paper, this.consumeChance()))
 			ingredients[4] = paper;
 		ingredients[0] = star;
 		product = this.setNBT(ingredients);
@@ -204,10 +206,10 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		return null;
 	}
 
-	private boolean getIngredient(int id, boolean decr) {
+	private boolean getIngredient(Item id, boolean decr) {
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
-				if (inv[i].itemID == id) {
+				if (inv[i].getItem() == id) {
 					if (decr) {
 						ReikaInventoryHelper.decrStack(i, inv);
 					}
@@ -221,16 +223,16 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	private int getShape() {
 		boolean[] hasShape = new boolean[4];
 		int shape = rand.nextInt(4);
-		if (ReikaInventoryHelper.checkForItem(Item.fireballCharge.itemID, inv)) {
+		if (ReikaInventoryHelper.checkForItem(Items.fire_charge, inv)) {
 			hasShape[0] = true;
 		}
-		if (ReikaInventoryHelper.checkForItem(Item.goldNugget.itemID, inv)) {
+		if (ReikaInventoryHelper.checkForItem(Items.gold_nugget, inv)) {
 			hasShape[1] = true;
 		}
-		if (ReikaInventoryHelper.checkForItem(Item.feather.itemID, inv)) {
+		if (ReikaInventoryHelper.checkForItem(Items.feather, inv)) {
 			hasShape[2] = true;
 		}
-		if (ReikaInventoryHelper.checkForItem(Item.skull.itemID, inv)) {
+		if (ReikaInventoryHelper.checkForItem(Items.skull, inv)) {
 			hasShape[3] = true;
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(hasShape[0]));
@@ -248,22 +250,22 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			shape = rand.nextInt(4);
 		}
 		int slot = -1;
-		int id = -1;
+		Item id = null;
 		switch (shape) {
 		case 0:
-			id = Item.fireballCharge.itemID;
+			id = Items.fire_charge;
 			break;
 		case 1:
-			id = Item.goldNugget.itemID;
+			id = Items.gold_nugget;
 			break;
 		case 2:
-			id = Item.feather.itemID;
+			id = Items.feather;
 			break;
 		case 3:
-			id = Item.skull.itemID;
+			id = Items.skull;
 			break;
 		}
-		if (id != -1 && this.consumeChance())
+		if (id != null && this.consumeChance())
 			ReikaInventoryHelper.findAndDecrStack(id, -1, inv);
 		//else
 		//return 0;
@@ -272,31 +274,31 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	}
 
 	private ItemStack randomRecipe() {
-		ReikaDyeHelper dyeColor = this.pickRandomColor(this.consumeChance() && ReikaInventoryHelper.checkForItem(Item.gunpowder.itemID, inv)); //Dye metadata to craft with - 0-15
+		ReikaDyeHelper dyeColor = this.pickRandomColor(this.consumeChance() && ReikaInventoryHelper.checkForItem(Items.gunpowder, inv)); //Dye metadata to craft with - 0-15
 		boolean hasDiamond = false;
 		boolean hasGlowstone = false;
 		int shape = this.getShape(); //Shape modifiers - Fire charge, gold nugget, feather, head, or nothing
-		ItemStack gunpowder = new ItemStack(Item.gunpowder.itemID, 1, 64);
-		ItemStack diamond = new ItemStack(Item.diamond.itemID, 1, 0);
-		ItemStack glowstone = new ItemStack(Item.glowstone.itemID, 1, 0);
+		ItemStack gunpowder = new ItemStack(Items.gunpowder, 1, 64);
+		ItemStack diamond = new ItemStack(Items.diamond, 1, 0);
+		ItemStack glowstone = new ItemStack(Items.glowstone_dust, 1, 0);
 
 		ItemStack[] inputitems = new ItemStack[5];
 		if (dyeColor != null)
-			inputitems[1] = new ItemStack(Item.dyePowder.itemID, 1, dyeColor.ordinal());
+			inputitems[1] = new ItemStack(Items.dye, 1, dyeColor.ordinal());
 		else
 			inputitems[1] = null;
 		if (inputitems[1] == null) // If missing dye
 			return null;
-		if (this.getIngredient(Item.gunpowder.itemID, this.consumeChance()))
+		if (this.getIngredient(Items.gunpowder, this.consumeChance()))
 			inputitems[0] = gunpowder;
 		if (inputitems[0] == null) // If missing gunpowder
 			return null;
 		if (rand.nextInt(2) == 0) {
-			if (this.getIngredient(Item.diamond.itemID, this.consumeChance()))
+			if (this.getIngredient(Items.diamond, this.consumeChance()))
 				hasDiamond = true;
 		}
 		if (rand.nextInt(2) == 0) {
-			if (this.getIngredient(Item.glowstone.itemID, this.consumeChance()))
+			if (this.getIngredient(Items.glowstone_dust, this.consumeChance()))
 				hasGlowstone = true;
 		}
 		if (hasDiamond)
@@ -306,16 +308,16 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(shape));
 		switch(shape) {
 		case 1:
-			inputitems[4] = new ItemStack(Item.fireballCharge.itemID, 1, 0);
+			inputitems[4] = new ItemStack(Items.fire_charge, 1, 0);
 			break;
 		case 2:
-			inputitems[4] = new ItemStack(Item.goldNugget.itemID, 1, 0);
+			inputitems[4] = new ItemStack(Items.gold_nugget, 1, 0);
 			break;
 		case 3:
-			inputitems[4] = new ItemStack(Item.feather.itemID, 1, 0);
+			inputitems[4] = new ItemStack(Items.feather, 1, 0);
 			break;
 		case 4:
-			inputitems[4] = new ItemStack(Item.skull.itemID, 1, 0);
+			inputitems[4] = new ItemStack(Items.skull, 1, 0);
 			break;
 		default:
 			inputitems[4] = null;
@@ -330,7 +332,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			ReikaDyeHelper dyeColor2 = this.pickRandomColor(this.consumeChance());
 			if (dyeColor2 == null)
 				return output; //Bypass
-			ItemStack newcolor = new ItemStack(Item.dyePowder.itemID, 1, dyeColor2.ordinal());
+			ItemStack newcolor = new ItemStack(Items.dye, 1, dyeColor2.ordinal());
 			output = this.colorBlend(output, newcolor);
 		}
 		return output;
@@ -358,45 +360,45 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 
 			if (var10 != null)
 			{
-				if (var10.itemID == Item.gunpowder.itemID)
+				if (var10.getItem() == Items.gunpowder)
 				{
 					++var4;
 				}
-				else if (var10.itemID == Item.fireworkCharge.itemID)
+				else if (var10.getItem() == Items.firework_charge)
 				{
 					++var6;
 				}
-				else if (var10.itemID == Item.dyePowder.itemID)
+				else if (var10.getItem() == Items.dye)
 				{
 					++var5;
 				}
-				else if (var10.itemID == Item.paper.itemID)
+				else if (var10.getItem() == Items.paper)
 				{
 					++var3;
 				}
-				else if (var10.itemID == Item.glowstone.itemID)
+				else if (var10.getItem() == Items.glowstone_dust)
 				{
 					++var7;
 				}
-				else if (var10.itemID == Item.diamond.itemID)
+				else if (var10.getItem() == Items.diamond)
 				{
 					++var7;
 				}
-				else if (var10.itemID == Item.fireballCharge.itemID)
+				else if (var10.getItem() == Items.fire_charge)
 				{
 					++var8;
 				}
-				else if (var10.itemID == Item.feather.itemID)
+				else if (var10.getItem() == Items.feather)
 				{
 					++var8;
 				}
-				else if (var10.itemID == Item.goldNugget.itemID)
+				else if (var10.getItem() == Items.gold_nugget)
 				{
 					++var8;
 				}
 				else
 				{
-					if (var10.itemID != Item.skull.itemID)
+					if (var10.getItem() != Items.skull)
 					{
 						return field_92102_a;
 					}
@@ -415,19 +417,19 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 
 			if (var4 >= 1 && var3 == 1 && var7 == 0)
 			{
-				field_92102_a = new ItemStack(Item.firework);
+				field_92102_a = new ItemStack(Items.fireworks);
 
 				var15 = new NBTTagCompound();
 				if (var6 > 0)
 				{
-					var18 = new NBTTagCompound("Fireworks");
-					NBTTagList var25 = new NBTTagList("Explosions");
+					var18 = new NBTTagCompound();
+					NBTTagList var25 = new NBTTagList();
 
 					for (int var22 = 0; var22 < inputitems.length; ++var22)
 					{
 						ItemStack var26 = inputitems[var22];
 
-						if (var26 != null && var26.itemID == Item.fireworkCharge.itemID && var26.hasTagCompound() && var26.getTagCompound().hasKey("Explosion"))
+						if (var26 != null && var26.getItem() == Items.firework_charge && var26.hasTagCompound() && var26.getTagCompound().hasKey("Explosion"))
 						{
 							var25.appendTag(var26.getTagCompound().getCompoundTag("Explosion"));
 						}
@@ -443,9 +445,9 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			}
 			else if (var4 == 1 && var3 == 0 && var6 == 0 && var5 > 0 && var8 <= 1)
 			{
-				field_92102_a = new ItemStack(Item.fireworkCharge);
+				field_92102_a = new ItemStack(Items.firework_charge);
 				var15 = new NBTTagCompound();
-				var18 = new NBTTagCompound("Explosion");
+				var18 = new NBTTagCompound();
 				byte var21 = 0;
 				ArrayList var12 = new ArrayList();
 
@@ -455,31 +457,31 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 
 					if (var14 != null)
 					{
-						if (var14.itemID == Item.dyePowder.itemID)
+						if (var14.getItem() == Items.dye)
 						{
-							var12.add(Integer.valueOf(ItemDye.dyeColors[var14.getItemDamage()]));
+							var12.add(Integer.valueOf(ItemDye.field_150922_c[var14.getItemDamage()]));
 						}
-						else if (var14.itemID == Item.glowstone.itemID)
+						else if (var14.getItem() == Items.glowstone_dust)
 						{
 							var18.setBoolean("Flicker", true);
 						}
-						else if (var14.itemID == Item.diamond.itemID)
+						else if (var14.getItem() == Items.diamond)
 						{
 							var18.setBoolean("Trail", true);
 						}
-						else if (var14.itemID == Item.fireballCharge.itemID)
+						else if (var14.getItem() == Items.fire_charge)
 						{
 							var21 = 1;
 						}
-						else if (var14.itemID == Item.feather.itemID)
+						else if (var14.getItem() == Items.feather)
 						{
 							var21 = 4;
 						}
-						else if (var14.itemID == Item.goldNugget.itemID)
+						else if (var14.getItem() == Items.gold_nugget)
 						{
 							var21 = 2;
 						}
-						else if (var14.itemID == Item.skull.itemID)
+						else if (var14.getItem() == Items.skull)
 						{
 							var21 = 3;
 						}
@@ -509,11 +511,11 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 
 					if (var11 != null)
 					{
-						if (var11.itemID == Item.dyePowder.itemID)
+						if (var11.getItem() == Items.dye)
 						{
-							var16.add(Integer.valueOf(ItemDye.dyeColors[var11.getItemDamage()]));
+							var16.add(Integer.valueOf(ItemDye.field_150922_c[var11.getItemDamage()]));
 						}
-						else if (var11.itemID == Item.fireworkCharge.itemID)
+						else if (var11.getItem() == Items.firework_charge)
 						{
 							field_92102_a = var11.copy();
 							field_92102_a.stackSize = 1;
@@ -618,7 +620,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return ReikaItemHelper.isFireworkIngredient(is.itemID);
+		return ReikaItemHelper.isFireworkIngredient(is.getItem());
 	}
 
 	@Override

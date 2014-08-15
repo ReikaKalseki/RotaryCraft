@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.ChromatiCraft.API.SpaceRift;
 import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -33,6 +28,12 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityFlywheel extends TileEntityTransmissionMachine implements SimpleProvider, PowerGenerator, ShaftMerger {
 
@@ -246,7 +247,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		int dy = y+read.offsetY;
 		int dz = z+read.offsetZ;
 		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
-		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 		if (this.isProvider(te)) {
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;

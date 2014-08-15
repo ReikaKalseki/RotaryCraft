@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
+import Reika.DragonAPI.Base.CoreContainer;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.tileentity.TileEntity;
-import Reika.DragonAPI.Base.CoreContainer;
 
 public class ContainerHeater extends CoreContainer {
 
@@ -23,7 +24,7 @@ public class ContainerHeater extends CoreContainer {
 		super(player, te);
 		lowerInv = (IInventory)te;
 		int numRows = lowerInv.getSizeInventory() / 9;
-		lowerInv.openChest();
+		lowerInv.openInventory();
 		int var3 = (numRows - 4) * 18;
 		int var4;
 		int var5;
@@ -52,16 +53,16 @@ public class ContainerHeater extends CoreContainer {
 	/**
 	 * Callback for when the crafting gui is closed.
 	 */
-	 @Override
-	 public final void onContainerClosed(EntityPlayer par1EntityPlayer)
+	@Override
+	public final void onContainerClosed(EntityPlayer par1EntityPlayer)
 	{
-		 super.onContainerClosed(par1EntityPlayer);
-		 lowerInv.closeChest();
+		super.onContainerClosed(par1EntityPlayer);
+		lowerInv.closeInventory();
 	}
 
-	 public final IInventory getLowerInventory()
-	 {
-		 return lowerInv;
-	 }
+	public final IInventory getLowerInventory()
+	{
+		return lowerInv;
+	}
 
 }

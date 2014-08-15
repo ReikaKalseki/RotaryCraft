@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -33,7 +23,20 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, ThermalMachine,
 DiscreteFunction,ConditionalOperation
@@ -69,10 +72,10 @@ DiscreteFunction,ConditionalOperation
 				invalid = true;
 		}
 		if (!invalid) {
-			int id = inv[0].itemID;
+			Item id = inv[0].getItem();
 			int dmg = inv[0].getItemDamage();
 			for (int i = 1; i < 4; i++) {
-				if (inv[i].itemID != id || inv[i].getItemDamage() != dmg)
+				if (inv[i].getItem() != id || inv[i].getItemDamage() != dmg)
 					invalid = true;
 			}
 		}
@@ -91,27 +94,19 @@ DiscreteFunction,ConditionalOperation
 		idle = (!ingred || full);
 	}
 
-	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
-		int id = 0;
+	public boolean getIOSides(World world, int x, int y, int z, int metadata) {
 		switch (metadata) {
 		case 0:
-			id = world.getBlockId(x+1, y, z);
 			read = ForgeDirection.EAST;
 			break;
 		case 1:
-			id = world.getBlockId(x-1, y, z);
 			read = ForgeDirection.WEST;
 			break;
 		case 2:
-			id = world.getBlockId(x, y, z+1);
 			read = ForgeDirection.SOUTH;
 			break;
 		case 3:
-			id = world.getBlockId(x, y, z-1);
 			read = ForgeDirection.NORTH;
-			break;
-		default:
-			id = 0;
 			break;
 		}
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, powinx, y, powinz, 4);
@@ -119,7 +114,7 @@ DiscreteFunction,ConditionalOperation
 	}
 
 	public void readPower() {
-		if (!this.getReceptor(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
+		if (!this.getIOSides(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
 			return;
 		super.getPower(false);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
@@ -194,12 +189,12 @@ DiscreteFunction,ConditionalOperation
     	if (!is1.equals(is4))
     		return -1;*/
 
-		int item = is1.itemID;
+		Item item = is1.getItem();
 		int meta = is1.getItemDamage();
-		if (item != RotaryCraft.compacts.itemID && item != Item.coal.itemID)
+		if (item != ItemRegistry.COMPACTS.getItemInstance() && item != Items.coal)
 			return -1;
 
-		if (item == Item.coal.itemID)
+		if (item == Items.coal)
 			return 80;
 		switch(meta) {
 		case 0:
@@ -270,19 +265,19 @@ DiscreteFunction,ConditionalOperation
 		if (a != null && temperature > 600) {
 			temperature--;
 			if (rand.nextInt(4000) == 0)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, 0, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, a, Blocks.air, 0);
 		}
-		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 		if (iceside != null && temperature > 0) {
 			temperature -= 2;
 			if (rand.nextInt(200) == 0)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
-		ForgeDirection snowside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.blockSnow.blockID);
+		ForgeDirection snowside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
 		if (snowside != null && temperature > -5) {
 			temperature -= 2;
 			if (rand.nextInt(100) == 0)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Block.waterMoving.blockID, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
 		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
 
@@ -298,8 +293,8 @@ DiscreteFunction,ConditionalOperation
 
 	public void overheat(World world, int x, int y, int z) {
 		temperature = MAXTEMP;
-		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.itemID, ItemStacks.scrap.getItemDamage(), 0, 17, true, 1F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 2F);
-		world.setBlock(x, y, z, 0);
+		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap, 0, 17, true, 1F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 2F);
+		world.setBlockToAir(x, y, z);
 	}
 
 	public int getStage() {
@@ -307,7 +302,7 @@ DiscreteFunction,ConditionalOperation
 			return 1;
 		if (!RecipesCompactor.getRecipes().isCompactable(inv[0]))
 			return 1;
-		if (inv[0].itemID == Item.coal.itemID)
+		if (inv[0].getItem() == Items.coal)
 			return 1;
 		if (ReikaItemHelper.matchStacks(ItemStacks.anthracite, inv[0]))
 			return 2;
@@ -321,7 +316,7 @@ DiscreteFunction,ConditionalOperation
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getReceptor(world, x, y, z, meta);
+		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		if (envirotick >= 20) {
 			this.updatePressure(world, x, y, z, meta);
@@ -350,7 +345,7 @@ DiscreteFunction,ConditionalOperation
 				compactorCookTime = 0;
 		}
 		if (flag1)
-			this.onInventoryChanged();
+			this.markDirty();
 	}
 
 	/**
@@ -367,11 +362,11 @@ DiscreteFunction,ConditionalOperation
 			if (inv[i] == null)
 				return false;
 
-		if (inv[0].itemID != inv[1].itemID)
+		if (inv[0].getItem() != inv[1].getItem())
 			return false;
-		if (inv[0].itemID != inv[2].itemID)
+		if (inv[0].getItem() != inv[2].getItem())
 			return false;
-		if (inv[0].itemID != inv[3].itemID)
+		if (inv[0].getItem() != inv[3].getItem())
 			return false;
 		if (inv[0].getItemDamage() != inv[1].getItemDamage())
 			return false;
@@ -409,7 +404,7 @@ DiscreteFunction,ConditionalOperation
 		ItemStack itemstack = RecipesCompactor.getRecipes().getCompactingResult(inv[0]);
 		if (inv[4] == null)
 			inv[4] = itemstack.copy();
-		else if (inv[4].itemID == itemstack.itemID)
+		else if (inv[4].getItem() == itemstack.getItem())
 			inv[4].stackSize += itemstack.stackSize;
 
 		for (int i = 0; i < 4; i++) {
@@ -462,7 +457,7 @@ DiscreteFunction,ConditionalOperation
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot == 4)
 			return false;
-		if (is.itemID == Item.coal.itemID || is.itemID == RotaryCraft.compacts.itemID)
+		if (is.getItem() == Items.coal || (ItemRegistry.COMPACTS.matchItem(is) && is.getItemDamage() <= ItemStacks.lonsda.getItemDamage()))
 			return true;
 		return RecipesCompactor.getRecipes().isCompactable(is);
 	}

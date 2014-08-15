@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import java.awt.Color;
-import java.util.HashMap;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -26,6 +17,15 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelCave;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
+
+import java.awt.Color;
+import java.util.HashMap;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderCaveFinder extends RotaryTERenderer {
 

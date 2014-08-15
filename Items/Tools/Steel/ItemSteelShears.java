@@ -9,17 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Steel;
 
-import net.minecraft.item.ItemShears;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import net.minecraft.item.ItemShears;
+import net.minecraft.item.ItemStack;
 
 public class ItemSteelShears extends ItemShears implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemSteelShears(int par1, int tex) {
-		super(par1);
+	public ItemSteelShears(int tex) {
+		super();
 		this.setIndex(tex);
 		maxStackSize = 1;
 		this.setMaxDamage(600);
@@ -43,6 +45,11 @@ public class ItemSteelShears extends ItemShears implements IndexedItemSprites {
 	@Override
 	public Class getTextureReferenceClass() {
 		return RotaryCraft.class;
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getBasicName();
 	}
 
 }

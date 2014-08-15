@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -39,10 +32,18 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.world.World;
+
 public class ItemDebug extends ItemRotaryTool {
 
-	public ItemDebug(int ID, int tex) {
-		super(ID, tex);
+	public ItemDebug(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -50,12 +51,12 @@ public class ItemDebug extends ItemRotaryTool {
 		ReikaChatHelper.clearChat();
 		if (!player.isSneaking()) {
 			ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof RotaryCraftTileEntity)
 				ReikaChatHelper.write("Tile Entity Direction Data: "+(((RotaryCraftTileEntity)te).getBlockMetadata()+1)+" of "+((RotaryCraftTileEntity)te).getMachine().getNumberDirections());
 			ReikaChatHelper.write("Additional Data (Meaning differs per machine):");
 		}
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (player.isSneaking() && te instanceof TileEntitySpringPowered) {
 			TileEntitySpringPowered sp = (TileEntitySpringPowered)te;
 			sp.isCreativeMode = !sp.isCreativeMode;
@@ -89,10 +90,10 @@ public class ItemDebug extends ItemRotaryTool {
 				ReikaChatHelper.write(String.format("%d", tile.getFluidLevel()));
 			}
 		}
-		if (world.getBlockId(x, y, z) == Block.mobSpawner.blockID) {
+		if (world.getBlock(x, y, z) == Blocks.mob_spawner) {
 			TileEntityMobSpawner tile = (TileEntityMobSpawner)te;
 			if (tile != null) {
-				MobSpawnerBaseLogic lgc = tile.getSpawnerLogic();
+				MobSpawnerBaseLogic lgc = tile.func_145881_a();
 				lgc.spawnDelay = 0;
 			}
 		}

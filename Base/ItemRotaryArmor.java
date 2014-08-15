@@ -9,24 +9,24 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ISpecialArmor;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -34,8 +34,8 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 
 	private int index;
 
-	public ItemRotaryArmor(int par1, EnumArmorMaterial par2, int par3, int par4, int ind) {
-		super(par1, par2, par3, par4);
+	public ItemRotaryArmor(ArmorMaterial par2, int par3, int par4, int ind) {
+		super(par2, par3, par4);
 		maxStackSize = 1;
 		this.setIndex(ind);
 		if (!RotaryCraft.instance.isLocked())
@@ -59,7 +59,7 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	}
 
 	@Override
-	public abstract void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is);
+	public abstract void onArmorTick(World world, EntityPlayer ep, ItemStack is);
 
 	public int getItemSpriteIndex(ItemStack item) {
 		return index;
@@ -71,12 +71,12 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final void registerIcons(IconRegister ico) {}
+	public final void registerIcons(IIconRegister ico) {}
 
 
 	@Override
-	public final Icon getIconFromDamage(int dmg) {
-		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.plateIron.getIconFromDamage(0);
+	public final IIcon getIconFromDamage(int dmg) {
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Items.iron_chestplate.getIconFromDamage(0);
 	}
 
 	@Override
@@ -127,6 +127,12 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	@Override
 	public String getTexture(ItemStack is) {
 		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		ItemRegistry ir = ItemRegistry.getEntry(is);
+		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
 	}
 
 }

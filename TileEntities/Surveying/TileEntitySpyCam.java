@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Surveying;
 
-import java.util.List;
-
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -25,6 +17,17 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffect {
 
@@ -78,7 +81,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;
 			if (EntityList.getEntityID(ent) > 0 && Math.abs(ex) < range+1 && Math.abs(ez) < range+1 && ent.posY >= ReikaWorldHelper.findTopBlockBelowY(world, (int)ent.posX, (int)ent.posZ, y)) {
-				//ReikaJavaLibrary.pConsole(ent.getEntityName()+" @ "+ex+", "+ez);
+				//ReikaJavaLibrary.pConsole(ent.getCommandSenderName()+" @ "+ex+", "+ez);
 				mobs[(ez+range)][ex+range] = EntityList.getEntityID(ent);
 				//ReikaJavaLibrary.pConsole(mobs[ex+range][ez+range]+String.format("@ %d,  %d  from  %d", ex+range, ez+range, EntityList.getEntityID(ent)));
 			}
@@ -93,11 +96,11 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 			for (int j = -range; j <= range; j++) {
 				int topy = ReikaWorldHelper.findTopBlockBelowY(world, x+i, z+j, y);
 				topY[i+range][j+range] = topy;
-				int id = world.getBlockId(x+i, topy, z+j);
+				Block b = world.getBlock(x+i, topy, z+j);
 				int meta = world.getBlockMetadata(x+i, topy, z+j);
 				if (world.isRemote)
-					topBlocks[(i+range)][j+range] = BlockColorMapper.instance.getColorForBlock(id, meta);
-				if (world.getBlockId(x+i, y, z+j) != 0) {
+					topBlocks[(i+range)][j+range] = BlockColorMapper.instance.getColorForBlock(b, meta);
+				if (world.getBlock(x+i, y, z+j) != Blocks.air) {
 					//topBlocks[(i+range)][j+range] = 0;
 				}
 			}

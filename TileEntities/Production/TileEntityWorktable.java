@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -30,6 +23,15 @@ import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityWorktable extends InventoriedRCTileEntity {
 
@@ -75,15 +77,15 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			is.onCrafting(worldObj, ep, is.stackSize);
 			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
 			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
-			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep.getEntityName(), true, is));
+			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep.getCommandSenderName(), true, is));
 			return true;
 		}
 		return false;
 	}
 
 	private void makeBedjump() {
-		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getShiftedID(), inv);
-		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getShiftedID(), inv);
+		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getItemInstance(), inv);
+		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getItemInstance(), inv);
 		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
 			inv[jumpslot] = null;
 			inv[armorslot] = null;
@@ -187,13 +189,13 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	}
 
 	private void chargeTools() {
-		int coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SPRING.getShiftedID(), inv);
+		int coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SPRING.getItemInstance(), inv);
 		if (coilslot == -1)
-			coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STRONGCOIL.getShiftedID(), inv);
-		int toolid = this.getTool();
+			coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STRONGCOIL.getItemInstance(), inv);
+		Item toolid = this.getTool();
 		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inv);
 		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
-			int coilid = inv[coilslot].itemID;
+			Item coilid = inv[coilslot].getItem();
 			int toolmeta = inv[toolslot].getItemDamage();
 			int coilmeta = inv[coilslot].getItemDamage();
 			ItemStack newtool = new ItemStack(toolid, 1, coilmeta);
@@ -205,20 +207,20 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		}
 	}
 
-	private int getTool() {
+	private Item getTool() {
 		for (int i = 0; i < 9; i++) {
 			ItemStack is = inv[i];
 			if (is != null) {
 				if (is.getItem() instanceof ItemChargedTool || is.getItem() instanceof ItemChargedArmor || is.getItem() instanceof ChargeableTool)
-					return inv[i].itemID;
+					return inv[i].getItem();
 			}
 		}
-		return -1;
+		return null;
 	}
 
 	private void makeJetplate() {
-		int plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDCHEST.getShiftedID(), inv);
-		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getShiftedID(), inv);
+		int plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDCHEST.getItemInstance(), inv);
+		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
 		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
 			ItemStack jet = inv[jetslot];
 			int original = jet.stackTagCompound != null ? jet.stackTagCompound.getInteger("fuel") : 0;

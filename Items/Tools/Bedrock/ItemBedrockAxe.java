@@ -9,23 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumToolMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.TreeReader;
@@ -38,6 +21,25 @@ import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -45,8 +47,8 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemBedrockAxe(int ID, int tex) {
-		super(ID, EnumToolMaterial.GOLD);
+	public ItemBedrockAxe(int tex) {
+		super(ToolMaterial.GOLD);
 		this.setIndex(tex);
 		maxStackSize = 1;
 		this.setMaxDamage(0);
@@ -76,28 +78,26 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	}
 
 	@Override
-	public boolean canHarvestBlock(Block b) {
-		return b.blockMaterial == Material.wood || b.blockMaterial == Material.pumpkin || b.blockMaterial.isToolNotRequired();
+	public boolean canHarvestBlock(Block b, ItemStack is) {
+		return b.getMaterial() == Material.wood || b.getMaterial() == Material.gourd || b.getMaterial().isToolNotRequired();
 	}
 
 	@Override
 	public int getItemEnchantability()
 	{
-		return Item.axeIron.getItemEnchantability();
+		return Items.iron_axe.getItemEnchantability();
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack is, Block b) {
+	public float getDigSpeed(ItemStack is, Block b, int meta) {
 		if (b == null)
 			return 0;
 		if (TwilightForestHandler.getInstance().isTowerWood(b))
 			return 30F;
-		if (b.blockMaterial == Material.wood)
+		if (b.getMaterial() == Material.wood)
 			return 20F;
-		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
-			if (blocksEffectiveAgainst[i] == b)
-				return 20F;
-		}
+		if (field_150914_c.contains(b))
+			return 20F;
 		return 1F;
 	}
 
@@ -107,7 +107,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		if (ep.isSneaking())
 			return false;
 		World world = ep.worldObj;
-		int id = world.getBlockId(x, y, z);
+		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ModWoodList wood = ModWoodList.getModWood(id, meta);
 		ReikaTreeHelper tree2 = ReikaTreeHelper.getTree(id, meta);
@@ -121,34 +121,33 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			tree.checkAndAddDyeTree(world, x, y, z);
 		}
 		if (id == TwilightForestHandler.getInstance().rootID) {
-			Block b = Block.blocksList[id];
 			int r = 2;
 			for (int i = -r; i <= r; i++) {
 				for (int j = -r; j <= r; j++) {
 					for (int k = -r; k <= r; k++) {
-						int id2 = world.getBlockId(x+i, y+j, z+k);
+						Block id2 = world.getBlock(x+i, y+j, z+k);
 						if (id2 == id) {
-							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
-							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
-							world.setBlock(x+i, y+j, z+k, 0);
+							id.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, id);
+							world.setBlockToAir(x+i, y+j, z+k);
 						}
 					}
 				}
 			}
 			return true;
 		}
-		else if (id == Block.mushroomCapRed.blockID || id == Block.mushroomCapBrown.blockID) {
-			Block b = Block.blocksList[id];
+		else if (id == Blocks.red_mushroom_block || id == Blocks.brown_mushroom_block) {
+			;
 			int r = 3;
 			for (int i = -r; i <= r; i++) {
 				for (int j = -r; j <= r; j++) {
 					for (int k = -r; k <= r; k++) {
-						int id2 = world.getBlockId(x+i, y+j, z+k);
+						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == Block.mushroomCapRed.blockID || id2 == Block.mushroomCapBrown.blockID) {
-							b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
-							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b, 0.25F, 1);
-							world.setBlock(x+i, y+j, z+k, 0);
+						if (id2 == Blocks.red_mushroom_block || id2 == Blocks.brown_mushroom_block) {
+							id.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, id, 0.25F, 1);
+							world.setBlockToAir(x+i, y+j, z+k);
 						}
 					}
 				}
@@ -190,14 +189,14 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			int x = xyz[0];
 			int y = xyz[1];
 			int z = xyz[2];
-			int id = world.getBlockId(x, y, z);
+			Block b = world.getBlock(x, y, z);
 			int meta = world.getBlockMetadata(x, y, z);
-			Block b = Block.blocksList[id];
+			;
 			if (b != null) {
 				ReikaSoundHelper.playBreakSound(world, x, y, z, b, 0.75F, 1);
 				if (!rainbow)
 					b.dropBlockAsItem(world, x, y, z, meta, fortune);
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 			}
 		}
 	}
@@ -216,11 +215,11 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final void registerIcons(IconRegister ico) {}
+	public final void registerIcons(IIconRegister ico) {}
 
 	@Override
-	public final Icon getIconFromDamage(int dmg) {
-		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.axeStone.getIconFromDamage(0);
+	public final IIcon getIconFromDamage(int dmg) {
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Items.stone_axe.getIconFromDamage(0);
 	}
 
 	public Class getTextureReferenceClass() {
@@ -244,5 +243,10 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		else {
 			return super.hitEntity(is, target, ep);
 		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getBasicName();
 	}
 }

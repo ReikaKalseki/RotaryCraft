@@ -9,15 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import java.awt.Color;
-
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+
+import java.awt.Color;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -45,8 +47,8 @@ public abstract class TileEntityProtectionDome extends TileEntityPowerReceiver i
 
 	protected final boolean isClear(World world, int x, int y, int z) {
 		for (int i = 1; i <= setRange; i++) {
-			int id = world.getBlockId(x, y+i, z);
-			if (id != 0 && Block.blocksList[id].getLightOpacity(world, x, y+i, z) > 0)
+			Block id = world.getBlock(x, y+i, z);
+			if (id != Blocks.air && id.getLightOpacity(world, x, y+i, z) > 0)
 				return false;
 		}
 		return true;

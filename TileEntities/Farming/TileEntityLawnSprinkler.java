@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -27,6 +18,17 @@ import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityLawnSprinkler extends SprinklerBlock {
 
@@ -79,12 +81,12 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 		int rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 		int rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
 		for (int i = y; i > y-4; i--) {
-			int id = world.getBlockId(rx, i, rz);
-			if (id == Block.fire.blockID) {
-				world.setBlock(rx, i, rz, 0);
+			Block id = world.getBlock(rx, i, rz);
+			if (id == Blocks.fire) {
+				world.setBlockToAir(rx, i, rz);
 				ReikaSoundHelper.playSoundAtBlock(world, rx, i, rz, "random.fizz");
 			}
-			else if (id != 0 && Block.blocksList[id].isOpaqueCube())
+			else if (id != Blocks.air && id.isOpaqueCube())
 				i = -999;
 		}
 	}
@@ -94,14 +96,14 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 		int rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 		int rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
 		for (int i = y; i > y-4; i--) {
-			int id = world.getBlockId(rx, i, rz);
+			Block id = world.getBlock(rx, i, rz);
 			int meta = world.getBlockMetadata(rx, i, rz);
-			if (id == Block.tilledField.blockID) {
+			if (id == Blocks.farmland) {
 				if (meta < 8)
 					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 				i = -999;
 			}
-			else if (id != 0 && Block.blocksList[id].isOpaqueCube())
+			else if (id != Blocks.air && id.isOpaqueCube())
 				i = -999;
 			else if (rand.nextInt(15) == 0) {
 				ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
@@ -111,8 +113,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				}
 				if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
 					//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
-					Block b = Block.blocksList[id];
-					b.updateTick(world, rx, i, rz, rand);
+					id.updateTick(world, rx, i, rz, rand);
 					world.markBlockForUpdate(rx, i, rz);
 				}
 			}

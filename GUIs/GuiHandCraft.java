@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
+import Reika.RotaryCraft.Containers.ContainerHandCraft;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +19,6 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.RotaryCraft.Containers.ContainerHandCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -37,8 +38,8 @@ public class GuiHandCraft extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), 28, 6, 4210752);
-		fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		fontRendererObj.drawString(StatCollector.translateToLocal("container.crafting"), 28, 6, 4210752);
+		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
 	}
 
 	/**

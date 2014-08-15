@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -26,6 +16,16 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelBelt;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderBelt extends RotaryTERenderer
 {
@@ -243,7 +243,7 @@ public class RenderBelt extends RotaryTERenderer
 		int[] color = tile.getBeltColor();
 		v5.setColorOpaque(color[0], color[1], color[2]);
 
-		Icon ico = Block.grass.getIcon(1, 0);
+		IIcon ico = Blocks.grass.getIcon(1, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();

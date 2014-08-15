@@ -9,7 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 import java.util.ArrayList;
 
@@ -19,10 +23,6 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -88,7 +88,7 @@ public class ToolCraftingHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		isWorktable = false;
-		if (ingredient != null && ingredient.itemID == ItemRegistry.BEDCHEST.getShiftedID()) {
+		if (ingredient != null && ingredient.getItem() == ItemRegistry.BEDCHEST.getItemInstance()) {
 			ItemStack jet = ItemRegistry.JETPACK.getStackOf();
 			arecipes.add(new CraftingRecipe(ItemRegistry.BEDPACK.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
 			isWorktable = true;
@@ -115,7 +115,7 @@ public class ToolCraftingHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override

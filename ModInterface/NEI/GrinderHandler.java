@@ -9,15 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
-
-import java.util.List;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
-
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -27,6 +19,14 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import java.util.List;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -91,7 +91,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -102,8 +102,8 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
 		CachedRecipe c = arecipes.get(recipe);
-		if (c.getIngredient() != null && c.getIngredient().item.itemID == ItemRegistry.CANOLA.getShiftedID()) {
-			drawTexturedModalRect(19, 10, 176, 71, 8, 55);
+		if (c.getIngredient() != null && c.getIngredient().item.getItem() == ItemRegistry.CANOLA.getItemInstance()) {
+			ReikaGuiAPI.instance.drawTexturedModalRect(19, 10, 176, 71, 8, 55);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (ingredient.itemID == ItemRegistry.CANOLA.getShiftedID()) {
+		if (ingredient.getItem() == ItemRegistry.CANOLA.getItemInstance()) {
 			arecipes.add(new CanolaRecipe());
 		}
 		else if (ReikaBlockHelper.isOre(ingredient)) {

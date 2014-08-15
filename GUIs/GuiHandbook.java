@@ -9,23 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -43,6 +26,23 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 public class GuiHandbook extends GuiScreen
 {
@@ -379,7 +379,7 @@ public class GuiHandbook extends GuiScreen
 	}
 
 	protected void drawAuxData(int posX, int posY) {
-		HandbookAuxData.drawPage(fontRenderer, ri, screen, page, subpage, posX, posY);
+		HandbookAuxData.drawPage(fontRendererObj, ri, screen, page, subpage, posX, posY);
 	}
 
 	private final void drawTabIcons() {
@@ -388,7 +388,7 @@ public class GuiHandbook extends GuiScreen
 		List<HandbookEntry> li = this.getAllTabsOnScreen();
 		for (int i = 0; i < li.size(); i++) {
 			HandbookEntry h = li.get(i);
-			ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, h.getTabIcon(), posX-17, posY-6+i*20);
+			ReikaGuiAPI.instance.drawItemStack(ri, fontRendererObj, h.getTabIcon(), posX-17, posY-6+i*20);
 		}
 	}
 
@@ -404,15 +404,15 @@ public class GuiHandbook extends GuiScreen
 		if (!this.isLimitedView()) {
 			ReikaRenderHelper.disableLighting();
 			String s = String.format("Page %d/%d", screen, this.getMaxPage());
-			//ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, s, posX+xSize+23, posY+5, 0xffffff);
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, s, posX+12+xSize+fontRenderer.getStringWidth(s), posY+20);
+			//ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, s, posX+xSize+23, posY+5, 0xffffff);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, s, posX+12+xSize+fontRendererObj.getStringWidth(s), posY+20);
 		}
 
 		this.drawAuxGraphics(posX, posY);
 	}
 
 	protected void drawAuxGraphics(int posX, int posY) {
-		HandbookAuxData.drawGraphics((HandbookRegistry)this.getEntry(), posX, posY, xSize, ySize, fontRenderer, ri, subpage);
+		HandbookAuxData.drawGraphics((HandbookRegistry)this.getEntry(), posX, posY, xSize, ySize, fontRendererObj, ri, subpage);
 	}
 
 	@Override
@@ -435,12 +435,12 @@ public class GuiHandbook extends GuiScreen
 		int xo = 0;
 		int yo = 0;
 		HandbookEntry h = this.getEntry();
-		fontRenderer.drawString(h.getTitle(), posX+xo+6, posY+yo+6, 0x000000);
+		fontRendererObj.drawString(h.getTitle(), posX+xo+6, posY+yo+6, 0x000000);
 		if (subpage == 0 || h.sameTextAllSubpages()) {
-			fontRenderer.drawSplitString(String.format("%s", h.getData()), posX+descX, posY+descY, 242, 0xffffff);
+			fontRendererObj.drawSplitString(String.format("%s", h.getData()), posX+descX, posY+descY, 242, 0xffffff);
 		}
 		else {
-			fontRenderer.drawSplitString(String.format("%s", h.getNotes()), posX+descX, posY+descY, 242, 0xffffff);
+			fontRendererObj.drawSplitString(String.format("%s", h.getNotes()), posX+descX, posY+descY, 242, 0xffffff);
 		}
 
 		super.drawScreen(x, y, f);
@@ -518,7 +518,7 @@ public class GuiHandbook extends GuiScreen
 			GL11.glScaled(sc, -sc, sc);
 			GL11.glRotatef(renderq, 1, 0, 0);
 			GL11.glRotatef(r, 0, 1, 0);
-			TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, 0, -0.5, variable);
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(te, -0.5, 0, -0.5, variable);
 			GL11.glRotatef(-r, 0, 1, 0);
 			GL11.glRotatef(-renderq, 1, 0, 0);
 			GL11.glTranslated(-dx, -dy, -dz);
@@ -533,7 +533,7 @@ public class GuiHandbook extends GuiScreen
 			GL11.glRotatef(renderq, 1, 0, 0);
 			GL11.glRotatef(r, 0, 1, 0);
 			ReikaTextureHelper.bindTerrainTexture();
-			rb.renderBlockAsItem(m.getBlockVariable(), m.getMachineMetadata(), 1);
+			rb.renderBlockAsItem(m.getBlock(), m.getMachineMetadata(), 1);
 			GL11.glRotatef(-r, 0, 1, 0);
 			GL11.glRotatef(-renderq, 1, 0, 0);
 			GL11.glScaled(1D/sc, -1D/sc, 1D/sc);

@@ -92,7 +92,7 @@ public class EntityIceBlock extends Entity {
 	@Override
 	public AxisAlignedBB getBoundingBox()
 	{
-		return AxisAlignedBB.getAABBPool().getAABB(posX, posY, posZ, posX+xWidth, posY+yWidth, posZ+zWidth);
+		return AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX+xWidth, posY+yWidth, posZ+zWidth);
 	}
 
 	@Override

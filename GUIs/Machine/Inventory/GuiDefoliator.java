@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiDefoliator extends GuiPowerOnlyMachine
 {
@@ -40,7 +41,7 @@ public class GuiDefoliator extends GuiPowerOnlyMachine
 		if (api.isMouseInBox(j+133, j+150, k+16, k+69)) {
 			int lvl = tile.getLevel();
 			String sg = String.format("Poison: %d/%d", lvl, tile.CAPACITY);
-			api.drawTooltipAt(fontRenderer, sg, x-j, y-k);
+			api.drawTooltipAt(fontRendererObj, sg, x-j, y-k);
 		}
 	}
 

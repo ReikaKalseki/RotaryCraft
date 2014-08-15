@@ -9,12 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.DragonOptions;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
+
+import net.minecraft.util.StatCollector;
 
 public class RotaryNames {
 
@@ -130,86 +130,6 @@ public class RotaryNames {
 		"machine.hose", "machine.pipe", "machine.fuelline", "machine.spiller", "machine.valve", "machine.bypass", "machine.separation"
 	};
 
-	public static void addNames() {
-
-		for (int i = 0; i < blockNames.length; i++) {
-			ItemStack blockStack = new ItemStack(RotaryCraft.decoblock, 1, i);
-			LanguageRegistry.addName(blockStack, getName(blockNames[i], false));
-		}
-
-		LanguageRegistry.addName(RotaryCraft.bedrockslice, getName("block.bedrockslice", true));
-
-		LanguageRegistry.addName(RotaryCraft.blastpane, getName("block.blastpane", false));
-		LanguageRegistry.addName(RotaryCraft.blastglass, getName("block.blastglass", false));
-
-		LanguageRegistry.addName(RotaryCraft.canola, getName("block.canola", true));
-
-		LanguageRegistry.addName(RotaryCraft.spawner, StatCollector.translateToLocal("item.spawner"));
-
-		LanguageRegistry.addName(RotaryCraft.miningpipe, getName("block.miningpipe", true));
-		LanguageRegistry.addName(RotaryCraft.lightblock, getName("block.light", true));
-		LanguageRegistry.addName(RotaryCraft.beamblock, getName("block.beam", true));
-		LanguageRegistry.addName(RotaryCraft.lightbridge, getName("block.bridge", true));
-		LanguageRegistry.addName(RotaryCraft.decoTank, getName("block.decotank", true));
-
-		for (int i = 0; i < shaftPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftcraft.itemID, 1, i), getName(shaftPartNames, i));
-		}
-		for (int i = 0; i < miscPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.misccraft, 1, i), getName(miscPartNames, i));
-		}
-		for (int i = 0; i < enginePartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.enginecraft, 1, i), getName(enginePartNames, i));
-		}
-		for (int i = 0; i < borerPartNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.borecraft, 1, i), getName(borerPartNames, i));
-		}
-		for (int i = 0; i < extractNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.extracts, 1, i), getName(extractNames, i));
-		}/*
-		ArrayList<String> modOres = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class);
-		for (int i = 0; i < modOres.size(); i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i), modOres.get(i)+" Dust");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+1), modOres.get(i)+" Slurry");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+2), modOres.get(i)+" Solution");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modextracts, 1, 4*i+3), modOres.get(i)+" Flakes");
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.modingots, 1, i), modOres.get(i)+" "+ModOreList.oreList[i].getTypeName());
-		}*/
-		for (int i = 0; i < compactNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.compacts, 1, i), getName(compactNames, i));
-		}
-		for (int i = 0; i < engineNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.engineitems, 1, i), getName(engineNames, i));
-		}
-		for (int i = 0; i < powderNames.length; i++) {
-			ItemStack powderstack = new ItemStack(RotaryCraft.powders, 1, i);
-			LanguageRegistry.addName(powderstack, getName(powderNames, powderstack.getItemDamage()));
-		}
-		for (int i = 0; i < interfaceNames.length; i++) {
-			ItemStack interstack = new ItemStack(RotaryCraft.modinterface, 1, i);
-			LanguageRegistry.addName(interstack, getName(interfaceNames, interstack.getItemDamage()));
-		}
-		for (int i = 0; i < shaftItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.shaftitems, 1, i), getName(shaftItemNames, i));
-		}
-		for (int i = 0; i < gearboxItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.gbxitems, 1, i), getGearboxName(i));
-		}
-		for (int i = 0; i < flywheelItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.flywheelitems, 1, i), getName(flywheelItemNames, i));
-		}
-		for (int i = 0; i < advGearItemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.advgearitems, 1, i), getName(advGearItemNames, i));
-		}
-		for (int i = 0; i < gearUnitNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.gearunits, 1, i), getName(gearUnitNames, i));
-		}
-
-		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			LanguageRegistry.addName(new ItemStack(RotaryCraft.machineplacer, 1, i), MachineRegistry.machineList[i].getName());
-		}
-	}
-
 	private static String getName(String[] names, int i) {
 		return StatCollector.translateToLocal(names[i]);
 	}
@@ -269,11 +189,39 @@ public class RotaryNames {
 		return gearboxItemNames.length;
 	}
 
+	public static int getNumberAdvGearTypes() {
+		return advGearItemNames.length;
+	}
+
+	public static int getNumberEngineTypes() {
+		return engineNames.length;
+	}
+
 	public static int getNumberFlywheelTypes() {
 		return flywheelItemNames.length;
 	}
 
 	public static int getNumberHydraulicTypes() {
 		return hydraulicItemNames.length;
+	}
+
+	public static String getModExtractName(int dmg) {
+		String base = ModOreList.oreList[dmg/4].displayName;
+		switch(dmg%4) {
+		case 0:
+			return base+" Dust";
+		case 1:
+			return base+" Slurry";
+		case 2:
+			return base+" Solution";
+		case 3:
+			return base+" Flakes";
+		default:
+			return base;
+		}
+	}
+
+	public static String getModIngotName(int dmg) {
+		return ModOreList.oreList[dmg].displayName+" "+ModOreList.oreList[dmg].getTypeName();
 	}
 }

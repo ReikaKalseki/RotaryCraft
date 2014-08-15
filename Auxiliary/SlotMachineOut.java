@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
 
 public class SlotMachineOut extends Slot {
 
@@ -71,6 +70,6 @@ public class SlotMachineOut extends Slot {
 	{
 		is.onCrafting(thePlayer.worldObj, thePlayer, field_48437_f);
 		field_48437_f = 0;
-		ModLoader.takenFromFurnace(thePlayer, is);
+		//ModLoader.takenFromFurnace(thePlayer, is);
 	}
 }

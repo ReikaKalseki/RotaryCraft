@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.StatCollector;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -25,6 +17,14 @@ import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerHeater;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.util.StatCollector;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 public class GuiHeater extends GuiMachine
 {
@@ -58,7 +58,7 @@ public class GuiHeater extends GuiMachine
 		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
-		input = new GuiTextField(fontRenderer, j+xSize/2+40, k+67, 32, 16);
+		input = new GuiTextField(fontRendererObj, j+xSize/2+40, k+67, 32, 16);
 		input.setFocused(false);
 		input.setMaxStringLength(4);
 	}
@@ -101,13 +101,13 @@ public class GuiHeater extends GuiMachine
 	{
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		api.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
+		api.drawCenteredStringNoShadow(fontRendererObj, tile.getMultiValuedName(), xSize/2, 5, 4210752);
 		if (tile instanceof IInventory)
-			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) +3, 4210752);
+			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) +3, 4210752);
 
-		fontRenderer.drawString("Temperature Control:", 26, 59, 4210752);
+		fontRendererObj.drawString("Temperature Control:", 26, 59, 4210752);
 		if (!input.isFocused()) {
-			fontRenderer.drawString(String.format("%d", heater.setTemperature), 140, 59, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", heater.setTemperature), 140, 59, 0xffffffff);
 		}
 	}
 
@@ -141,10 +141,10 @@ public class GuiHeater extends GuiMachine
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-25, 0, 0, (int)frac, 4);
 
-		api.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Speed:", xSize+var5+20, var6+69, 0xff000000);
-		api.drawCenteredStringNoShadow(fontRenderer, "Torque:", xSize+var5+20, var6+129, 0xff000000);
-		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", heater.power, heater.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Speed:", xSize+var5+20, var6+69, 0xff000000);
+		api.drawCenteredStringNoShadow(fontRendererObj, "Torque:", xSize+var5+20, var6+129, 0xff000000);
+		//this.drawCenteredStringNoShadow(fontRendererObj, String.format("%d/%d", heater.power, heater.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 
 	@Override

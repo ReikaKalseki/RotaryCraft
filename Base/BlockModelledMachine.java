@@ -9,18 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
-import net.minecraft.world.World;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
 public abstract class BlockModelledMachine extends BlockBasicMachine {
 
-	public BlockModelledMachine(int par1, Material par3Material) {
-		super(par1, par3Material);
+	public BlockModelledMachine(Material par3Material) {
+		super(par3Material);
 		//this.blockIndexInTexture = 2;
 	}
 
@@ -36,7 +38,7 @@ public abstract class BlockModelledMachine extends BlockBasicMachine {
 
 	@Override
 	public final int getRenderType() {
-		return -1;
+		return RotaryCraft.instance.isLocked() ? 0 : -1;
 	}
 
 	/** For disallowing this method in subclasses */
@@ -45,12 +47,12 @@ public abstract class BlockModelledMachine extends BlockBasicMachine {
 	}
 
 	@Override
-	public final Icon getIcon(int s, int meta) {
+	public final IIcon getIcon(int s, int meta) {
 		return icons[0][0];
 	}
 
 	@Override
-	public final void registerIcons(IconRegister par1IconRegister) {
+	public final void registerBlockIcons(IIconRegister par1IconRegister) {
 		icons[0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
 	}
 
@@ -59,7 +61,7 @@ public abstract class BlockModelledMachine extends BlockBasicMachine {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == null)
 			return null;
-		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
-		return AxisAlignedBB.getAABBPool().getAABB(x+m.getMinX(te), y+m.getMinY(te), z+m.getMinZ(te), x+m.getMaxX(te), y+m.getMaxY(te), z+m.getMaxZ(te));
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
+		return AxisAlignedBB.getBoundingBox(x+m.getMinX(te), y+m.getMinY(te), z+m.getMinZ(te), x+m.getMaxX(te), y+m.getMaxY(te), z+m.getMaxZ(te));
 	}
 }

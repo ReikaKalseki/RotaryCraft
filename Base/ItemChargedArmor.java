@@ -9,15 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 
+import net.minecraft.item.ItemStack;
+
 public abstract class ItemChargedArmor extends ItemRotaryArmor {
 
-	public ItemChargedArmor(int par1, EnumArmorMaterial par2, int par3, int par4, int ind) {
-		super(par1, par2, par3, par4, ind);
+	public ItemChargedArmor(ArmorMaterial par2, int par3, int par4, int ind) {
+		super(par2, par3, par4, ind);
 		this.setNoRepair();
 		hasSubtypes = true;
 	}

@@ -9,19 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 public class TileEntityLaserGun extends TileEntityAimedCannon {
 
@@ -46,7 +48,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	protected double[] getTarget(World world, int x, int y, int z) {
 		double[] xyzb = new double[4];
 		int r = this.getRange();
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
 		List inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		double mindist = this.getRange()+2;
 		int i_at_min = -1;
@@ -87,7 +89,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 			double dy = i*Math.sin(Math.toRadians(theta));
 			double dz = i*Math.cos(Math.toRadians(theta))*Math.sin(Math.toRadians(-phi+90));
 			int r = 1;
-			AxisAlignedBB light = AxisAlignedBB.getAABBPool().getAABB(xCoord+dx, yCoord+dy, zCoord+dz, xCoord+dx, yCoord+dy, zCoord+dz).expand(r, r, r);
+			AxisAlignedBB light = AxisAlignedBB.getBoundingBox(xCoord+dx, yCoord+dy, zCoord+dz, xCoord+dx, yCoord+dy, zCoord+dz).expand(r, r, r);
 			List in = world.getEntitiesWithinAABB(EntityLivingBase.class, light);
 			for (int k = 0; k < in.size(); k++) {
 				EntityLivingBase e = (EntityLivingBase)in.get(k);
@@ -97,9 +99,9 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 			int x = xCoord+(int)dx;
 			int y = yCoord+(int)dy;
 			int z = zCoord+(int)dz;
-			int id = world.getBlockId(x, y, z);
+			Block id = world.getBlock(x, y, z);
 			int meta = world.getBlockMetadata(x, y, z);
-			int id2 = this.getAffectedID(id, meta);
+			Block id2 = this.getAffectedID(id, meta);
 			int meta2 = this.getAffectedMetadata(id2, meta);
 			//ReikaJavaLibrary.pConsole(id+"  to  "+id2+"  @  "+x+", "+y+", "+z);
 			//ReikaJavaLibrary.pConsole(theta);
@@ -110,14 +112,14 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 					this.setRange((int)i+1);
 					return;
 				}
-				if (id == Block.netherrack.blockID) {
+				if (id == Blocks.netherrack) {
 					world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true, true);
 					world.markBlockForUpdate(x, y, z);
 					this.setRange((int)i+1);
 					return;
 				}
-				if (id == Block.tnt.blockID) {
-					world.setBlock(x, y, z, 0);
+				if (id == Blocks.tnt) {
+					world.setBlockToAir(x, y, z);
 					EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+0.5D, y+0.5D, z+0.5D, null);
 					world.spawnEntityInWorld(var6);
 					world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
@@ -126,7 +128,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 					return;
 				}
 			}
-			if (id != 0 && Block.opaqueCubeLookup[id]) {
+			if (id != Blocks.air && id.isOpaqueCube()) {
 				this.setRange((int)i+1);
 				return;
 			}
@@ -136,36 +138,36 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 		}
 	}
 
-	private int getAffectedID(int id, int meta) {
-		if (id == 0)
-			return 0;
-		if (id == Block.sand.blockID)
-			return Block.glass.blockID;
-		if (id == Block.stone.blockID || id == Block.stoneBrick.blockID || id == Block.sandStone.blockID)
-			return Block.lavaMoving.blockID;
-		if (id == Block.grass.blockID || id == Block.mycelium.blockID)
-			return Block.dirt.blockID;
-		if (id == Block.dirt.blockID || id == Block.tilledField.blockID)
-			return Block.sand.blockID;
-		if (id == Block.cobblestone.blockID)
-			return Block.lavaMoving.blockID;
-		if (id == Block.gravel.blockID)
-			return Block.cobblestone.blockID;
-		if (id == Block.gravel.blockID)
-			return Block.cobblestone.blockID;
-		if (id == Block.tallGrass.blockID || id == Block.web.blockID || id == Block.plantYellow.blockID || id == Block.snow.blockID ||
-				id == Block.plantRed.blockID || id == Block.mushroomRed.blockID || id == Block.mushroomBrown.blockID ||
-				id == Block.deadBush.blockID || id == Block.crops.blockID || id == 142 || id == 141 || id == Block.vine.blockID ||
-				id == Block.melonStem.blockID || id == Block.pumpkinStem.blockID || id == Block.waterlily.blockID)
-			return 0;
+	private Block getAffectedID(Block id, int meta) {
+		if (id == Blocks.air)
+			return Blocks.air;
+		if (id == Blocks.sand)
+			return Blocks.glass;
+		if (id == Blocks.stone || id == Blocks.stonebrick || id == Blocks.sandstone)
+			return Blocks.flowing_lava;
+		if (id == Blocks.grass || id == Blocks.mycelium)
+			return Blocks.dirt;
+		if (id == Blocks.dirt || id == Blocks.farmland)
+			return Blocks.sand;
+		if (id == Blocks.cobblestone)
+			return Blocks.flowing_lava;
+		if (id == Blocks.gravel)
+			return Blocks.cobblestone;
+		if (id == Blocks.gravel)
+			return Blocks.cobblestone;
+		if (id == Blocks.tallgrass || id == Blocks.web || id == Blocks.yellow_flower || id == Blocks.snow ||
+				id == Blocks.red_flower || id == Blocks.red_mushroom || id == Blocks.brown_mushroom ||
+				id == Blocks.deadbush || id == Blocks.wheat || id == Blocks.carrots || id == Blocks.potatoes || id == Blocks.vine ||
+				id == Blocks.melon_stem || id == Blocks.pumpkin_stem || id == Blocks.waterlily)
+			return Blocks.air;
 		if (ReikaWorldHelper.flammable(id))
-			return Block.fire.blockID;
-		if (id == Block.ice.blockID || id == Block.blockSnow.blockID)
-			return Block.waterMoving.blockID;
+			return Blocks.fire;
+		if (id == Blocks.ice || id == Blocks.snow)
+			return Blocks.flowing_water;
 		return id;
 	}
 
-	private int getAffectedMetadata(int id, int meta) {
+	private int getAffectedMetadata(Block id, int meta) {
 		return meta;
 	}
 

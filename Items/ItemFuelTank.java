@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -34,6 +23,19 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -41,8 +43,8 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
-	public ItemFuelTank(int ID, int index) {
-		super(ID, index);
+	public ItemFuelTank(int index) {
+		super(index);
 	}
 
 	@Override
@@ -99,7 +101,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		par3List.add(ItemRegistry.getEntryByID(par1).getStackOf());
 		for (int i = 0; i < creativeFluids.size(); i++) {
 			ItemStack is = ItemRegistry.getEntryByID(par1).getStackOf();
@@ -147,9 +149,9 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 		if (is.stackTagCompound != null) {
 			Fluid f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
 			int amt = this.getCurrentFillLevel(is);
-			int slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.JETPACK.getShiftedID(), ep.inventory);
+			int slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.JETPACK.getItemInstance(), ep.inventory);
 			if (slot == -1) {
-				slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.BEDPACK.getShiftedID(), ep.inventory);
+				slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.BEDPACK.getItemInstance(), ep.inventory);
 			}
 			if (slot != -1) {
 				ItemStack jet = ep.inventory.getStackInSlot(slot);
@@ -176,7 +178,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(x, y, z);
 		if (m == MachineRegistry.ENGINE) {
 			TileEntityEngine te = (TileEntityEngine)tile;
 			EngineType eng = te.getEngineType();

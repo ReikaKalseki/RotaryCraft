@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -29,6 +19,19 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityComposter extends InventoriedRCTileEntity implements TemperatureTE {
 
@@ -42,14 +45,14 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 
 	private static enum CompostMatter {
 
-		CRAP(1, Item.egg, Item.cookie, Item.wheat),
-		SUGARCANE(2, Item.reed),
-		PLANT(1, Block.sapling, Block.waterlily, Block.plantRed, Block.plantYellow, Block.mushroomBrown, Block.mushroomRed),
-		LEAF(2, Block.leaves),
-		MEAT(4, Item.beefRaw, Item.beefCooked, Item.porkCooked, Item.porkRaw, Item.chickenCooked, Item.chickenRaw),
-		FISH(3, Item.fishCooked, Item.fishRaw),
-		VEGGIE(2, Item.potato, Item.carrot, Item.bakedPotato, Item.poisonousPotato, Item.bread, Item.appleRed, Item.melon),
-		MOBS(3, Item.rottenFlesh, Item.spiderEye);
+		CRAP(1, Items.egg, Items.cookie, Items.wheat),
+		SUGARCANE(2, Items.reeds),
+		PLANT(1, Blocks.sapling, Blocks.waterlily, Blocks.red_flower, Blocks.yellow_flower, Blocks.brown_mushroom, Blocks.red_mushroom),
+		LEAF(2, Blocks.leaves),
+		MEAT(4, Items.beef, Items.cooked_beef, Items.cooked_porkchop, Items.porkchop, Items.cooked_chicken, Items.chicken),
+		FISH(3, Items.cooked_fished, Items.fish),
+		VEGGIE(2, Items.potato, Items.carrot, Items.baked_potato, Items.poisonous_potato, Items.bread, Items.apple, Items.melon),
+		MOBS(3, Items.rotten_flesh, Items.spider_eye);
 		//podzol for 1.7
 
 		private ArrayList<ItemStack> items = new ArrayList();
@@ -134,7 +137,7 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 			return 0;
 		if (inv[0] == null || inv[1] == null)
 			return 0;
-		if (inv[1].itemID != ItemRegistry.YEAST.getShiftedID())
+		if (inv[1].getItem() != ItemRegistry.YEAST.getItemInstance())
 			return 0;
 		CompostMatter c = CompostMatter.getMatterType(inv[0]);
 		if (c == null)
@@ -151,7 +154,7 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		if (i == 2)
 			return false;
 		if (i == 1)
-			return itemstack.itemID == ItemRegistry.YEAST.getShiftedID();
+			return itemstack.getItem() == ItemRegistry.YEAST.getItemInstance();
 		return CompostMatter.getMatterType(itemstack) != null;
 	}
 
@@ -172,11 +175,11 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		if (waterside != null) {
 			Tamb -= 5;
 		}
-		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 		if (iceside != null) {
 			Tamb -= 15;
 		}
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
 		if (fireside != null) {
 			Tamb += 50;
 		}

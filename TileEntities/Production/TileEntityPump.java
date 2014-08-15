@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -38,6 +24,22 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+
 public class TileEntityPump extends TileEntityPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
 
 	private BlockArray blocks = new BlockArray();
@@ -46,7 +48,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	public int damage = 0;
 
-	public final static int CAPACITY = 24*RotaryConfig.MILLIBUCKET;
+	public final static int CAPACITY = 24*1000;
 
 	private HybridTank tank = new HybridTank("pump", CAPACITY);
 
@@ -61,15 +63,14 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
 		this.getPower(true);
 		power = (long)omega*(long)torque;
-		int idbelow = world.getBlockId(x, y-1, z);
-		if (idbelow == 0)
+		Block idbelow = world.getBlock(x, y-1, z);
+		if (idbelow == Blocks.air)
 			return;
-		Block b = Block.blocksList[idbelow];
-		Fluid f = FluidRegistry.lookupFluidForBlock(b);
+		Fluid f = FluidRegistry.lookupFluidForBlock(idbelow);
 		if (f == null)
 			return;
 		if (blocks.isEmpty()) {
-			blocks.setLiquid(world.getBlockMaterial(x, y-1, z));
+			blocks.setLiquid(idbelow.getMaterial());
 			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, y-2, z-16, x+16, y-1, z+16);
 			blocks.reverseBlockOrder();
 		}
@@ -96,7 +97,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	}
 
 	private void suckUpMobs(World world, int x, int y, int z) {
-		AxisAlignedBB box = AxisAlignedBB.getAABBPool().getAABB(x, y-1, z, x+1, y, z+1);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y-1, z, x+1, y, z+1);
 		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < inbox.size(); i++) {
 			EntityLivingBase e = (EntityLivingBase)inbox.get(i);
@@ -121,11 +122,11 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			return;
 		if (tank.getLevel() >= CAPACITY)
 			return;
-		int liqid = world.getBlockId(loc[0], loc[1], loc[2]);
-		Fluid fluid = FluidRegistry.lookupFluidForBlock(Block.blocksList[liqid]);
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlockId(loc[0], loc[1], loc[2])));
+		Block liqid = world.getBlock(loc[0], loc[1], loc[2]);
+		Fluid fluid = FluidRegistry.lookupFluidForBlock(liqid);
+		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlock(loc[0], loc[1], loc[2])));
 		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc[0], loc[1], loc[2]))
-			world.setBlock(loc[0], loc[1], loc[2], 0);
+			world.setBlock(loc[0], loc[1], loc[2], Blocks.air);
 		int mult = 1;
 		if (this.canMultiply(fluid)) {
 			if (power/MINPOWER >= 16)
@@ -141,7 +142,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		}
 		if (fluid.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
-		tank.addLiquid(RotaryConfig.MILLIBUCKET*mult, fluid);
+		tank.addLiquid(1000*mult, fluid);
 		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
 	}
 
@@ -155,11 +156,10 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d, %d, %d, %d", x,y,z,(int)id));
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 49);
 		boolean dmg0 = (world.getBlockMetadata(x, y, z) == 0);
-		int liqid = world.getBlockId(x, y, z);
-		if (liqid == 0)
+		Block liqid = world.getBlock(x, y, z);
+		if (liqid == Blocks.air)
 			return false;
-		Block b = Block.blocksList[liqid];
-		Fluid f2 = FluidRegistry.lookupFluidForBlock(b);
+		Fluid f2 = FluidRegistry.lookupFluidForBlock(liqid);
 		Fluid f = tank.getActualFluid();
 		if (f2 == null)
 			return false;

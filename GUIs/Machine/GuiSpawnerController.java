@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -25,6 +18,13 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 public class GuiSpawnerController extends GuiPowerOnlyMachine
 {
@@ -57,7 +57,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 		int k = (height - ySize) / 2 - 12;
 		if (hasPower) {
 			buttonList.add(new GuiButton(0, j+xSize/2-48, -1+k+32, 80, 20, "Disable/Enable"));
-			input = new GuiTextField(fontRenderer, j+xSize/2-7, k+59, 26, 16);
+			input = new GuiTextField(fontRendererObj, j+xSize/2-7, k+59, 26, 16);
 			input.setFocused(false);
 			input.setMaxStringLength(3);
 		}
@@ -142,9 +142,9 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			int color = 4210752;
 			if (disabled)
 				color = 0xcccccc;
-			fontRenderer.drawString("Spawn Delay:", xSize/2-64, 51, color);
+			fontRendererObj.drawString("Spawn Delay:", xSize/2-64, 51, color);
 			if (!input.isFocused() && !disabled) {
-				fontRenderer.drawString(String.format("%d", spawnercontroller.setDelay), xSize/2+5, 51, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", spawnercontroller.setDelay), xSize/2+5, 51, 0xffffffff);
 			}
 		}
 	}
@@ -174,10 +174,10 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 				color = 0xff0000;
 			if (disabled) {
 				color = 0xaaaaaa;
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, "Infinity", j+xSize/2+28, k+51, color);
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, "Infinity", j+xSize/2+28, k+51, color);
 			}
 			else
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", spawnercontroller.getDelay()), j+xSize/2+58, k+51, color);
+				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", spawnercontroller.getDelay()), j+xSize/2+58, k+51, color);
 		}
 	}
 

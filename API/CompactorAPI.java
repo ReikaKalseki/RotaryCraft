@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public class CompactorAPI {
 
@@ -26,7 +27,7 @@ public class CompactorAPI {
 	 * 4 items in, one item out, producing 1 or 2 of the product. 'Pressure' is required pressure. */
 	public static void addCompactorRecipe(ItemStack in, ItemStack out, int pressure, int temperature) {
 		try {
-			add.invoke(instance, in.itemID, in.getItemDamage(), out, 0, pressure, temperature);
+			add.invoke(instance, in.getItem(), in.getItemDamage(), out, 0, pressure, temperature);
 		}
 		catch (IllegalAccessException e) {
 			ReikaJavaLibrary.pConsole("Error adding compactor recipe for "+in);

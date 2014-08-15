@@ -9,14 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.api.electricity.IVoltageOutput;
-import universalelectricity.api.energy.IEnergyInterface;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import universalelectricity.api.electricity.IVoltageOutput;
+import universalelectricity.api.energy.IEnergyInterface;
 
 public class TileEntityGenerator extends TileEntityPowerReceiver implements IEnergyInterface, IVoltageOutput {
 
@@ -60,12 +62,11 @@ public class TileEntityGenerator extends TileEntityPowerReceiver implements IEne
 			int dx = x+facingDir.offsetX;
 			int dy = y+facingDir.offsetY;
 			int dz = z+facingDir.offsetZ;
-			int id = world.getBlockId(dx, dy, dz);
-			if (id != 0) {
-				Block b = Block.blocksList[id];
+			Block b = world.getBlock(dx, dy, dz);
+			if (b != Blocks.air) {
 				int metadata = world.getBlockMetadata(dx, dy, dz);
 				if (b.hasTileEntity(metadata)) {
-					TileEntity te = world.getBlockTileEntity(dx, dy, dz);
+					TileEntity te = world.getTileEntity(dx, dy, dz);
 					if (te instanceof IEnergyInterface) {
 						IEnergyInterface ie = (IEnergyInterface)te;
 						if (ie.canConnect(facingDir, this)) {

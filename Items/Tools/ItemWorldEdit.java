@@ -9,25 +9,27 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+
 public class ItemWorldEdit extends ItemRotaryTool {
 
 	public int[] start = new int[3];
 	public int[] end = new int[3];
 
-	public ItemWorldEdit(int ID, int tex) {
-		super(ID, tex);
+	public ItemWorldEdit(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -43,14 +45,14 @@ public class ItemWorldEdit extends ItemRotaryTool {
 		}
 		MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
 		if (!WorldEditHelper.hasPlayer(ep)) {
-			ReikaChatHelper.write("Player "+ep.getEntityName()+" has no chosen block!");
+			ReikaChatHelper.write("Player "+ep.getCommandSenderName()+" has no chosen block!");
 			return false;
 		}
-		int id = WorldEditHelper.getCommandedID(ep);
+		Block id = WorldEditHelper.getCommandedID(ep);
 		int meta = WorldEditHelper.getCommandedMetadata(ep);
 
-		if (id != 0) {
-			if (id >= Block.blocksList.length || Block.blocksList[id] == null || Block.blocksList[id].getLocalizedName() == "") {
+		if (id != Blocks.air) {
+			if (id == null) {
 				ReikaChatHelper.write("Block "+id+" does not exist!");
 				return false;
 			}
@@ -76,7 +78,7 @@ public class ItemWorldEdit extends ItemRotaryTool {
 			if (e[0] != Integer.MIN_VALUE && e[1] != Integer.MIN_VALUE && e[2] != Integer.MIN_VALUE) {
 				if (s[0] != e[0] || s[1] != e[1] || s[2] != e[2]) {
 					String name;
-					if (id == 0)
+					if (id == Blocks.air)
 						name = "Air";
 					else
 						name = new ItemStack(id, 1, meta).getDisplayName();

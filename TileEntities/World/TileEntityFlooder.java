@@ -9,21 +9,23 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.World.ReikaChunkHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHandler, PipeConnector {
 
@@ -60,14 +62,14 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 		tickcount++;
 		if (!tank.isEmpty()) {
 			if (blocks.isEmpty()) {
-				blocks.recursiveAddWithBounds(world, x, y-1, z, 0, x-16, 0, z-16, x+16, y-1, z+16);
+				blocks.recursiveAddWithBounds(world, x, y-1, z, Blocks.air, x-16, 0, z-16, x+16, y-1, z+16);
 				blocks.recursiveAddWithBounds(world, x, y-1, z, this.getFluidID(), x-16, 0, z-16, x+16, y-1, z+16);
 				blocks.sortBlocksByHeight();
 			}
 			boolean drain = false;
 			if (drain) {
-				for (int i = 8; i <= 11; i++)
-					ReikaChunkHelper.removeBlocksFromChunk(world, x, z, i, -1);
+				//for (int i = 8; i <= 11; i++)
+				//	ReikaChunkHelper.removeBlocksFromChunk(world, x, z, i, -1);
 			}
 			else if (tickcount > 1 && !blocks.isEmpty()) {
 				tickcount = 0;
@@ -83,8 +85,8 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 		}
 	}
 
-	private int getFluidID() {
-		return !tank.isEmpty() && tank.getActualFluid().canBePlacedInWorld() ? tank.getActualFluid().getBlockID() : 0;
+	private Block getFluidID() {
+		return !tank.isEmpty() && tank.getActualFluid().canBePlacedInWorld() ? tank.getActualFluid().getBlock() : Blocks.air;
 	}
 
 	private boolean canTakeLiquid(Fluid f) {

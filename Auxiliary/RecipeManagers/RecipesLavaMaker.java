@@ -9,21 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.DragonAPI.ModInteract.MagicCropHandler;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.ModInteract.MagicCropHandler;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesLavaMaker {
 
@@ -33,24 +34,24 @@ public class RecipesLavaMaker {
 		return recipes;
 	}
 
-	private final HashMap<List<Integer>, FluidStack> list = new HashMap();
-	private final HashMap<List<Integer>, Integer> temperatures = new HashMap();
-	private final HashMap<List<Integer>, Long> energies = new HashMap();
+	private final ItemHashMap<FluidStack> list = new ItemHashMap();
+	private final ItemHashMap<Integer> temperatures = new ItemHashMap();
+	private final ItemHashMap<Long> energies = new ItemHashMap();
 
 	private RecipesLavaMaker() {
-		this.addRecipe(Block.stone, FluidRegistry.LAVA, 1000, 1000, 5200000);
-		this.addRecipe(Block.cobblestone, FluidRegistry.LAVA, 500, 1000, 2820000);
-		this.addRecipe(Block.netherrack, FluidRegistry.LAVA, 2000, 600, 480000);
-		this.addRecipe(Block.stoneBrick, FluidRegistry.LAVA, 1000, 1200, 4000000);
+		this.addRecipe(Blocks.stone, FluidRegistry.LAVA, 1000, 1000, 5200000);
+		this.addRecipe(Blocks.cobblestone, FluidRegistry.LAVA, 500, 1000, 2820000);
+		this.addRecipe(Blocks.netherrack, FluidRegistry.LAVA, 2000, 600, 480000);
+		this.addRecipe(Blocks.stonebrick, FluidRegistry.LAVA, 1000, 1200, 4000000);
 
 		this.addRecipe("stone", FluidRegistry.LAVA, 1000, 1000, 5200000);
 		this.addRecipe("cobblestone", FluidRegistry.LAVA, 500, 1000, 2820000);
 
 		this.addRecipe("dustGlowstone", "glowstone", 250, 400, 80000);
-		this.addRecipe(Block.glowStone, "glowstone", 1000, 500, 320000);
+		this.addRecipe(Blocks.glowstone, "glowstone", 1000, 500, 320000);
 		this.addRecipe("dustRedstone", "redstone", 100, 600, 120000);
-		this.addRecipe(Block.blockRedstone, "redstone", 900, 750, 1080000);
-		this.addRecipe(Item.enderPearl, "ender", 250, 400, 240000);
+		this.addRecipe(Blocks.redstone_block, "redstone", 900, 750, 1080000);
+		this.addRecipe(Items.ender_pearl, "ender", 250, 400, 240000);
 		this.addRecipe("dustCoal", "coal", 250, 300, 60000);
 
 		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000);
@@ -98,9 +99,9 @@ public class RecipesLavaMaker {
 	}
 
 	private void addRecipe(ItemStack in, FluidStack out, int temperature, long energy) {
-		list.put(Arrays.asList(in.itemID, in.getItemDamage()), out);
-		temperatures.put(Arrays.asList(in.itemID, in.getItemDamage()), temperature);
-		energies.put(Arrays.asList(in.itemID, in.getItemDamage()), energy);
+		list.put(in, out);
+		temperatures.put(in, temperature);
+		energies.put(in, energy);
 	}
 
 	private boolean validateFluid(String s) {
@@ -108,29 +109,27 @@ public class RecipesLavaMaker {
 	}
 
 	public FluidStack getMelting(ItemStack is) {
-		return list.get(Arrays.asList(is.itemID, is.getItemDamage()));
+		return list.get(is);
 	}
 
 	public int getMeltTemperature(ItemStack is) {
-		List key = Arrays.asList(is.itemID, is.getItemDamage());
-		return temperatures.containsKey(key) ? temperatures.get(key) : Integer.MIN_VALUE;
+		return temperatures.containsKey(is) ? temperatures.get(is) : Integer.MIN_VALUE;
 	}
 
 	public long getMeltingEnergy(ItemStack is) {
-		List key = Arrays.asList(is.itemID, is.getItemDamage());
-		return energies.containsKey(key) ? energies.get(key) : Integer.MIN_VALUE;
+		return energies.containsKey(is) ? energies.get(is) : Integer.MIN_VALUE;
 	}
 
 	public boolean isValidFuel(ItemStack is) {
-		return list.containsKey(Arrays.asList(is.itemID, is.getItemDamage()));
+		return list.containsKey(is);
 	}
 
 	public ArrayList<ItemStack> getSourceItems(Fluid f) {
 		ArrayList<ItemStack> li = new ArrayList();
-		for (List<Integer> key : list.keySet()) {
+		for (ItemStack key : list.keySet()) {
 			FluidStack fs = list.get(key);
 			if (fs.getFluid().equals(f))
-				li.add(new ItemStack(key.get(0), 1, key.get(1)));
+				li.add(key.copy());
 		}
 		return li;
 	}

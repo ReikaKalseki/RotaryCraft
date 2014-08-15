@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import java.util.List;
-
-import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -29,6 +20,16 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
+
+import java.util.List;
+
+import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -58,7 +59,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		this.adjustAim(world, x, y, z, meta);
 
 		if (!world.isRemote) {
-			AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
+			AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
 			List in = world.getEntitiesWithinAABB(Entity.class, above);
 			for (int i = 0; i < in.size(); i++) {
 				Entity e = (Entity)in.get(i);
@@ -210,7 +211,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 	public void breakMirror(World world, int x, int y, int z) {
 		broken = true;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getMachine().getBlockVariable(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
+			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getMachine().getBlock(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 1, 1);
 	}

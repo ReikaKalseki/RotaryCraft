@@ -9,22 +9,23 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.opengl.GL11;
-
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFridge;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -45,7 +46,7 @@ public class FridgeHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(new ItemStack(Block.ice), 94, 48);
+			return new PositionedStack(new ItemStack(Blocks.ice), 94, 48);
 		}
 	}
 
@@ -64,7 +65,7 @@ public class FridgeHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 1, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 1, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class FridgeHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (ingredient.itemID == Block.ice.blockID)
+		if (ReikaItemHelper.matchStackWithBlock(ingredient, Blocks.ice))
 			arecipes.add(new FridgeRecipe());
 	}
 
@@ -105,7 +106,7 @@ public class FridgeHandler extends TemplateRecipeHandler {
 	private void drawFluids(int recipe) {
 		Fluid f = FluidRegistry.getFluid("liquid nitrogen");
 		if (f != null) {
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

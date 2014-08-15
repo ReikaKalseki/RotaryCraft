@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerSorter;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class GuiSorter extends GuiPowerOnlyMachine {
 
@@ -38,7 +39,7 @@ public class GuiSorter extends GuiPowerOnlyMachine {
 		for (int k = 0; k < l*3; k++) {
 			ItemStack is = tile.getMapping(k);
 			if (is != null) {
-				api.drawItemStack(itemRenderer, fontRenderer, is, x+k%l*18, y+k/l*dy);
+				api.drawItemStack(itemRender, fontRendererObj, is, x+k%l*18, y+k/l*dy);
 			}
 		}
 	}

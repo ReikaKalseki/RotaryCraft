@@ -10,15 +10,15 @@
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 
 /** Make your TE implement this to be able to use the RotaryCraft pipe renderer classes on your own pipe. */
 public interface RenderableDuct {
 
 	/** The icon used for most of the solid texture */
-	public Icon getBlockIcon();
+	public IIcon getBlockIcon();
 
 	/** The block type used for most of the solid texture; usually also the main crafting ingredient */
 	public Block getPipeBlockType();
@@ -32,9 +32,9 @@ public interface RenderableDuct {
 	/** The contained liquid type. Null if empty. */
 	public Fluid getFluidType();
 
-	public Icon getGlassIcon();
+	public IIcon getGlassIcon();
 
-	public Icon getOverlayIcon();
+	public IIcon getOverlayIcon();
 
 	public boolean isFluidPipe();
 

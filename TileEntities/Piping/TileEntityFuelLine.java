@@ -9,15 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Piping;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe {
 
@@ -43,8 +45,8 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 	}
 
 	@Override
-	public Icon getBlockIcon() {
-		return Block.obsidian.getIcon(0, 0);
+	public IIcon getBlockIcon() {
+		return Blocks.obsidian.getIcon(0, 0);
 	}
 
 	@Override
@@ -99,7 +101,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 
 	@Override
 	public Block getPipeBlockType() {
-		return Block.obsidian;
+		return Blocks.obsidian;
 	}
 
 	@Override

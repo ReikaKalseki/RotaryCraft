@@ -9,30 +9,31 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryArmor;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
 public class ItemIOGoggles extends ItemRotaryArmor {
 
-	public ItemIOGoggles(int ID, int tex, int render) {
-		super(ID, RotaryCraft.IOGM, render, 0, tex);
+	public ItemIOGoggles(int tex, int render) {
+		super(RotaryCraft.IOGM, render, 0, tex);
 		this.setNoRepair();
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {/*
+	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {/*
 		int x = (int)ep.posX;
 		int y = (int)ep.posY;
 		int z = (int)ep.posZ;
 		for (int i = -6; i <= 6; i++) {
 			for (int j = -6; j <= 6; j++) {
 				for (int k = -6; k <= 6; k++) {
-					TileEntity te = world.getBlockTileEntity(x+i, y+j, z+k);
+					TileEntity te = world.getTileEntity(x+i, y+j, z+k);
 					if (te instanceof TileEntityIOMachine) {
 						TileEntityIOMachine io = (TileEntityIOMachine)te;
 						io.iotick = 512;

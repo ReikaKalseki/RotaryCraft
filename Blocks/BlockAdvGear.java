@@ -9,36 +9,38 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAdvGear extends BlockModelledMachine {
 
-	public BlockAdvGear(int ID, Material mat) {
-		super(ID, mat);
+	public BlockAdvGear(Material mat) {
+		super(mat);
 		////this.blockIndexInTexture = 8;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int par1, CreativeTabs xCreativeTabs, List yList) //Adds the metadata blocks to the creative inventory
+	public void getSubBlocks(Item par1, CreativeTabs xCreativeTabs, List yList) //Adds the metadata blocks to the creative inventory
 	{
 		for (int var4 = 0; var4 < 12; ++var4)
 			if (var4%4 == 0)
@@ -52,11 +54,11 @@ public class BlockAdvGear extends BlockModelledMachine {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean harv)
 	{
 		if (this.canHarvest(world, player, x, y, z));
 		this.harvestBlock(world, player, x, y, z, 0);
-		return world.setBlock(x, y, z, 0);
+		return world.setBlockToAir(x, y, z);
 	}
 
 	private boolean canHarvest(World world, EntityPlayer ep, int x, int y, int z) {
@@ -68,7 +70,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 	{
 		if (!this.canHarvest(world, ep, x, y, z))
 			return;
-		TileEntityAdvancedGear te = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
+		TileEntityAdvancedGear te = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);
 		if (te != null) {
 			ItemStack is = MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(te.getBlockMetadata()/4);
 			if (te.getGearType().storesEnergy()) {
@@ -96,11 +98,11 @@ public class BlockAdvGear extends BlockModelledMachine {
 	}
 
 	@Override
-	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getBlockTileEntity(x, y, z);
-		ItemStack is = new ItemStack(RotaryCraft.advgearitems.itemID, 1, adv.getBlockMetadata()/4);
+		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);
+		ItemStack is = ItemRegistry.ADVGEAR.getStackOfMetadata(adv.getBlockMetadata()/4);
 		if (adv.getGearType().storesEnergy()) {
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();

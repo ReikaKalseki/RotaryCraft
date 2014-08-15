@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -31,10 +17,26 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
+
 public class ItemPump extends ItemChargedTool {
 
-	public ItemPump(int ID, int index) {
-		super(ID, index);
+	public ItemPump(int index) {
+		super(index);
 	}
 
 	@Override
@@ -50,17 +52,16 @@ public class ItemPump extends ItemChargedTool {
 			int x = mov.blockX;
 			int y = mov.blockY;
 			int z = mov.blockZ;
-			int id = world.getBlockId(x, y, z);
-			if (id != 0) {
-				Block b = Block.blocksList[id];
+			Block id = world.getBlock(x, y, z);
+			if (id != Blocks.air) {
 				if (ReikaWorldHelper.isLiquidSourceBlock(world, x, y, z)) {
-					Fluid f = FluidRegistry.lookupFluidForBlock(b);
+					Fluid f = FluidRegistry.lookupFluidForBlock(id);
 					if (f != null && !world.isRemote) {
 						if (is.stackTagCompound == null) {
 							is.stackTagCompound = new NBTTagCompound();
 							is.stackTagCompound.setInteger("lvl", 1000);
 							ReikaNBTHelper.writeFluidToNBT(is.stackTagCompound, f);
-							world.setBlock(x, y, z, 0);
+							world.setBlockToAir(x, y, z);
 							is.setItemDamage(is.getItemDamage()-1);
 						}
 						else {
@@ -69,7 +70,7 @@ public class ItemPump extends ItemChargedTool {
 							if (f2.equals(f)) {
 								if (amt < TileEntityReservoir.CAPACITY) {
 									is.stackTagCompound.setInteger("lvl", amt+1000);
-									world.setBlock(x, y, z, 0);
+									world.setBlockToAir(x, y, z);
 									is.setItemDamage(is.getItemDamage()-1);
 								}
 								else {
@@ -82,11 +83,11 @@ public class ItemPump extends ItemChargedTool {
 						}
 					}
 					else {
-						RotaryCraft.logger.debug("Null fluid for block "+id+":"+b+", yet was marked as such!");
+						RotaryCraft.logger.debug("Null fluid for block "+id+", yet was marked as such!");
 					}
 				}
 				else {
-					RotaryCraft.logger.debug("Not a fluid block ("+id+":"+b+")");
+					RotaryCraft.logger.debug("Not a fluid block ("+id+")");
 				}
 			}
 		}
@@ -95,7 +96,7 @@ public class ItemPump extends ItemChargedTool {
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IFluidHandler && is.stackTagCompound != null) {
 			IFluidHandler fl = (IFluidHandler)te;
 			int amt = is.stackTagCompound.getInteger("lvl");

@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,13 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
-import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMobHarvester extends TileEntityPowerReceiver implements EnchantableMachine {
 
@@ -60,7 +61,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 			EntityLiving ent = (EntityLiving)inbox.get(i);
 			if (!(ent instanceof EntityVillager)) {
 				//this.laser = true;
-				world.markBlockForRenderUpdate(x, y, z);
+				world.func_147479_m(x, y, z);
 				if (ep != null && this.getDamage() > 0) {
 					ent.attackEntityFrom(new HarvesterDamage(this), this.getDamage());
 					if (this.getEnchantment(Enchantment.silkTouch) > 0 && rand.nextInt(20) == 0)

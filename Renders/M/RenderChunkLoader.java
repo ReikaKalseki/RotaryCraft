@@ -9,9 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
+
+import net.minecraft.tileentity.TileEntity;
 
 public class RenderChunkLoader extends RotaryTERenderer {
 

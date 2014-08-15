@@ -9,7 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 
 import java.util.ArrayList;
 
@@ -20,14 +27,6 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -151,7 +150,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		drawTexturedModalRect(0, 0, 5, 11, 166, 70);
+		ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, 5, 11, 166, 70);
 	}
 
 	@Override
@@ -192,7 +191,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		drawTexturedModalRect(6, 17, 176, 44, 11, 43);
+		ReikaGuiAPI.instance.drawTexturedModalRect(6, 17, 176, 44, 11, 43);
 		BlastTempRecipe r = ((BlastTempRecipe)arecipes.get(recipe));
 		String s = String.format("%dC", r.getRecipeTemperature());
 		FontRenderer f = Minecraft.getMinecraft().fontRenderer;

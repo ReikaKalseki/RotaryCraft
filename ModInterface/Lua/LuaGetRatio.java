@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.Lua;
 
-import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearType;
+
+import net.minecraft.tileentity.TileEntity;
 
 public class LuaGetRatio extends LuaMethod {
 

@@ -9,9 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class SlotFirework extends Slot {
@@ -34,7 +34,7 @@ public class SlotFirework extends Slot {
 	{
 		if (is == null)
 			return false;
-		if (is.itemID != Item.fireworkCharge.itemID)
+		if (is.getItem() != Items.firework_charge)
 			return true;
 		return (false);
 	}

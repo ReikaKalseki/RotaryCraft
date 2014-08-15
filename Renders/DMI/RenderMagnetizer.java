@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DMI;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -24,6 +18,12 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelMagnetizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
 
 public class RenderMagnetizer extends RotaryTERenderer
 {
@@ -72,7 +72,7 @@ public class RenderMagnetizer extends RotaryTERenderer
 		float var13;
 
 		ItemStack is = ItemStacks.shaftcore;
-		boolean hasItem = ReikaInventoryHelper.checkForItemStack(is.itemID, is.getItemDamage(), tile);
+		boolean hasItem = ReikaInventoryHelper.checkForItemStack(is.getItem(), is.getItemDamage(), tile);
 		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(hasItem), -tile.phi, 0);
 
 		this.closeGL(tile);

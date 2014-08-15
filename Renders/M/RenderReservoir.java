@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -30,6 +18,18 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderReservoir extends RotaryTERenderer
 {
@@ -127,7 +127,7 @@ public class RenderReservoir extends RotaryTERenderer
 	private void renderCover(TileEntityReservoir tr, double par2, double par4, double par6) {
 		GL11.glTranslated(par2, par4, par6);
 		ReikaTextureHelper.bindTerrainTexture();
-		Icon ico = Block.glass.getIcon(0, 0);
+		IIcon ico = Blocks.glass.getIcon(0, 0);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
@@ -155,11 +155,11 @@ public class RenderReservoir extends RotaryTERenderer
 				GL11.glEnable(GL11.GL_BLEND);
 			}
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			Icon ico = f.getIcon();
+			IIcon ico = f.getIcon();
 			if (ico == null) {
-				RotaryCraft.logger.logError("Fluid "+f.getID()+" ("+f.getLocalizedName()+") exists (block ID "+f.getBlockID()+") but has no icon! Registering bedrock texture as a placeholder!");
-				f.setIcons(Block.bedrock.getIcon(0, 0));
-				ico = Block.bedrock.getIcon(0, 0);
+				RotaryCraft.logger.logError("Fluid "+f.getID()+" ("+f.getLocalizedName()+") exists (block ID "+f.getBlock()+") but has no icon! Registering bedrock texture as a placeholder!");
+				f.setIcons(Blocks.bedrock.getIcon(0, 0));
+				ico = Blocks.bedrock.getIcon(0, 0);
 			}
 			float u = ico.getMinU();
 			float v = ico.getMinV();

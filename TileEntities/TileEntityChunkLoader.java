@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import java.util.List;
 
 import net.minecraft.world.ChunkCoordIntPair;
@@ -17,9 +21,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityChunkLoader extends TileEntityPowerReceiver implements LoadingCallback {
 

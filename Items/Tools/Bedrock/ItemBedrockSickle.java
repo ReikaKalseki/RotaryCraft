@@ -9,19 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import Reika.RotaryCraft.Base.ItemSickleBase;
+
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.RotaryCraft.Base.ItemSickleBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockSickle extends ItemSickleBase {
 
-	public ItemBedrockSickle(int ID, int index) {
-		super(ID, index);
+	public ItemBedrockSickle(int index) {
+		super(index);
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class ItemBedrockSickle extends ItemSickleBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack item = new ItemStack(par1, 1, 0);
 		item.addEnchantment(Enchantment.fortune, 5);

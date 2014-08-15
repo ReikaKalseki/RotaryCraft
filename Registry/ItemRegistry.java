@@ -9,28 +9,25 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Interfaces.RegistryEnum;
+import Reika.DragonAPI.Extras.ItemSpawner;
+import Reika.DragonAPI.Interfaces.ItemEnum;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+import Reika.RotaryCraft.Base.ItemMulti;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
@@ -39,8 +36,15 @@ import Reika.RotaryCraft.Items.ItemEngineUpgrade;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
 import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.Items.ItemHandBook;
+import Reika.RotaryCraft.Items.ItemModOre;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
 import Reika.RotaryCraft.Items.ItemSlide;
+import Reika.RotaryCraft.Items.Placers.ItemAdvGearPlacer;
+import Reika.RotaryCraft.Items.Placers.ItemEnginePlacer;
+import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
+import Reika.RotaryCraft.Items.Placers.ItemGearPlacer;
+import Reika.RotaryCraft.Items.Placers.ItemMachinePlacer;
+import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
 import Reika.RotaryCraft.Items.Tools.ItemCannonKey;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
@@ -84,124 +88,138 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShears;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShovel;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSickle;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
+
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public enum ItemRegistry implements RegistryEnum {
+public enum ItemRegistry implements ItemEnum {
 
-	SCREWDRIVER(0, false, 		"item.screwdriver", 		ItemScrewdriver.class),
-	METER(16, false, 			"item.meter", 				ItemMeter.class),
-	DEBUG(112, false, 			"item.debug", 				ItemDebug.class),
-	WORLDEDIT(114, 115, true, 	"item.worldedit", 			ItemWorldEdit.class),
-	HANDBOOK(208, false, 		"item.handbook", 			ItemHandBook.class),
-	YEAST(32, false, 			"item.yeast", 				ItemBasic.class),
-	ETHANOL(64, false, 			"item.ethanol", 			ItemBasic.class),
-	CANOLA(80, true, 			"item.canola", 				ItemCanolaSeed.class),
-	SPRING(96, true, 			"#item.spring", 			ItemCoil.class),
-	ULTRASOUND(128, true, 		"item.ultrasound", 			ItemUltrasound.class),
-	MOTION(144, true, 			"item.motion", 				ItemMotionTracker.class),
-	VACUUM(160, true, 			"item.vacuum", 				ItemVacuum.class),
-	STUNGUN(192, true, 			"item.stungun", 			ItemStunGun.class),
-	GRAVELGUN(176, true, 		"item.gravelgun", 			ItemGravelGun.class),
-	FIREBALL(224, 232, true, 	"item.firelauncher",		ItemFireballLauncher.class),
-	BEDPICK(101, false, 		"item.bedpick", 			ItemBedrockPickaxe.class),
-	BEDAXE(100, false, 			"item.bedaxe", 				ItemBedrockAxe.class),
-	BEDSHOVEL(102, false, 		"item.bedshovel", 			ItemBedrockShovel.class),
-	NVG(97, true, 				"item.nvg", 				ItemNightVisionGoggles.class),
-	NVH(48, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
-	HANDCRAFT(33, false, 		"item.handcraft", 			ItemHandheldCrafting.class),
-	RAILGUN(113, true, 			"#item.railgun", 			ItemRailGunAmmo.class),
-	BUCKET(104, 106, true, 		"#item.rcbucket", 			ItemFuelLubeBucket.class),
-	TARGET(98, false, 			"item.target", 				ItemTarget.class),
-	IOGOGGLES(1, false,			"item.iogoggles", 			ItemIOGoggles.class),
-	SLIDE(2, true, 				"item.slide", 				ItemSlide.class),
-	KEY(4, false,				"item.key",					ItemCannonKey.class),
-	SHELL(5, false,				"item.shell",				ItemBasic.class),
-	MINECART(6, false,			"item.ethacart",			ItemEthanolMinecart.class),
-	BEDHELM(7, false,			"item.bedhelm",				ItemBedrockArmor.class),
-	BEDCHEST(9, false,			"item.bedchest",			ItemBedrockArmor.class),
-	BEDLEGS(10, false,			"item.bedlegs",				ItemBedrockArmor.class),
-	BEDBOOTS(8, false,			"item.bedboots",			ItemBedrockArmor.class),
-	TILESELECTOR(11, false,		"item.tileselector",		ItemTileSelector.class),
-	BEDPACK(12, false,			"item.jetchest",			ItemJetPack.class),
-	STEELPICK(13, false,		"item.steelpick",			ItemSteelPick.class),
-	STEELAXE(14, false,			"item.steelaxe",			ItemSteelAxe.class),
-	STEELSHOVEL(15, false,		"item.steelshovel",			ItemSteelShovel.class),
-	STEELHELMET(17, false,		"item.steelhelmet",			ItemSteelArmor.class),
-	STEELCHEST(18, false,		"item.steelchest",			ItemSteelArmor.class),
-	STEELLEGS(19, false,		"item.steellegs",			ItemSteelArmor.class),
-	STEELBOOTS(20, false,		"item.steelboots",			ItemSteelArmor.class),
-	STRONGCOIL(99, true,		"#item.strongcoil",			ItemCoil.class),
-	JETPACK(28, false,			"item.ethanoljetpack",		ItemJetPack.class),
-	PUMP(29, true,				"item.handpump",			ItemPump.class),
-	JUMP(30, true,				"item.jumpboots",			ItemSpringBoots.class),
-	BEDJUMP(31, false,			"item.bedrockjump",			ItemSpringBoots.class),
-	FUEL(27, false,				"item.fueltank",			ItemFuelTank.class),
-	BEDHOE(21, false,			"item.bedrockhoe",			ItemBedrockHoe.class),
-	STEELHOE(22, false,			"item.steelhoe",			ItemSteelHoe.class),
-	BEDSWORD(23, false,			"item.bedrocksword",		ItemBedrockSword.class),
-	STEELSWORD(24, false,		"item.steelsword",			ItemSteelSword.class),
-	BEDSHEARS(25, false,		"item.bedrockshears",		ItemBedrockShears.class),
-	STEELSHEARS(26, false,		"item.steelshears",			ItemSteelShears.class),
-	FLAMETHROWER(28, false,		"item.flamethrower",		ItemFlamethrower.class),
-	DISK(3, false,				"item.musicboxdisc",		ItemDisk.class),
-	UPGRADE(240, true,			"#item.engineupgrade",		ItemEngineUpgrade.class),
-	CRAFTPATTERN(34, false,		"item.craftpattern",		ItemCraftPattern.class),
-	BEDSICKLE(36, false,		"item.bedsickle",			ItemBedrockSickle.class),
-	STEELSICKLE(35, false,		"item.steelsickle",			ItemSteelSickle.class),
-	GRAFTER(37, true,			"item.chargedgrafter",		ItemChargedGrafter.class, ModList.FORESTRY),
-	BEDGRAFTER(38, false,		"item.bedgrafter",			ItemBedrockGrafter.class, ModList.FORESTRY),
-	BEDSAW(39, false,			"item.bedsaw",				ItemBedrockSaw.class, ModList.MULTIPART),
-	BEDREVEAL(40, false,		"item.bedreveal",			ItemBedReveal.class, ModList.THAUMCRAFT);
+	SCREWDRIVER(0, 1, false, 		"item.screwdriver", 		ItemScrewdriver.class),
+	METER(16, 1, false, 			"item.meter", 				ItemMeter.class),
+	DEBUG(112, 1, false, 			"item.debug", 				ItemDebug.class),
+	WORLDEDIT(114, 115, 1, true, 	"item.worldedit", 			ItemWorldEdit.class),
+	HANDBOOK(208, 1, false, 		"item.handbook", 			ItemHandBook.class),
+	YEAST(32, 1, false, 			"item.yeast", 				ItemBasic.class),
+	ETHANOL(64, 1, false, 			"item.ethanol", 			ItemBasic.class),
+	CANOLA(80, 1, true, 			"item.canola", 				ItemCanolaSeed.class),
+	SPRING(96, 1, true, 			"item.spring", 				ItemCoil.class),
+	ULTRASOUND(128, 1, true, 		"item.ultrasound", 			ItemUltrasound.class),
+	MOTION(144, 1, true, 			"item.motion", 				ItemMotionTracker.class),
+	VACUUM(160, 1, true, 			"item.vacuum", 				ItemVacuum.class),
+	STUNGUN(192, 1, true, 			"item.stungun", 			ItemStunGun.class),
+	GRAVELGUN(176, 1, true, 		"item.gravelgun", 			ItemGravelGun.class),
+	FIREBALL(224, 232, 1, true, 	"item.firelauncher",		ItemFireballLauncher.class),
+	BEDPICK(101, 1, false, 			"item.bedpick", 			ItemBedrockPickaxe.class),
+	BEDAXE(100, 1, false, 			"item.bedaxe", 				ItemBedrockAxe.class),
+	BEDSHOVEL(102, 1, false, 		"item.bedshovel", 			ItemBedrockShovel.class),
+	NVG(97, 1, true, 				"item.nvg", 				ItemNightVisionGoggles.class),
+	NVH(48, 1, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
+	HANDCRAFT(33, 1, false, 		"item.handcraft", 			ItemHandheldCrafting.class),
+	RAILGUN(113, 1, true, 			"item.railgun", 			ItemRailGunAmmo.class),
+	BUCKET(104, 106, 1, true, 		"item.rcbucket", 			ItemFuelLubeBucket.class),
+	TARGET(98, 1, false, 			"item.target", 				ItemTarget.class),
+	IOGOGGLES(1, 1, false,			"item.iogoggles", 			ItemIOGoggles.class),
+	SLIDE(2, 1, true, 				"item.slide", 				ItemSlide.class),
+	KEY(4, 1, false,				"item.key",					ItemCannonKey.class),
+	SHELL(5, 1, false,				"item.shell",				ItemBasic.class),
+	MINECART(6, 1, false,			"item.ethacart",			ItemEthanolMinecart.class),
+	BEDHELM(7, 1, false,			"item.bedhelm",				ItemBedrockArmor.class),
+	BEDCHEST(9, 1, false,			"item.bedchest",			ItemBedrockArmor.class),
+	BEDLEGS(10, 1, false,			"item.bedlegs",				ItemBedrockArmor.class),
+	BEDBOOTS(8, 1, false,			"item.bedboots",			ItemBedrockArmor.class),
+	TILESELECTOR(11, 1, false,		"item.tileselector",		ItemTileSelector.class),
+	BEDPACK(12, 1, false,			"item.jetchest",			ItemJetPack.class),
+	STEELPICK(13, 1, false,			"item.steelpick",			ItemSteelPick.class),
+	STEELAXE(14, 1, false,			"item.steelaxe",			ItemSteelAxe.class),
+	STEELSHOVEL(15, 1, false,		"item.steelshovel",			ItemSteelShovel.class),
+	STEELHELMET(17, 1, false,		"item.steelhelmet",			ItemSteelArmor.class),
+	STEELCHEST(18, 1, false,		"item.steelchest",			ItemSteelArmor.class),
+	STEELLEGS(19, 1, false,			"item.steellegs",			ItemSteelArmor.class),
+	STEELBOOTS(20, 1, false,		"item.steelboots",			ItemSteelArmor.class),
+	STRONGCOIL(99, 1, true,			"item.strongcoil",			ItemCoil.class),
+	JETPACK(28, 1, false,			"item.ethanoljetpack",		ItemJetPack.class),
+	PUMP(29, 1, true,				"item.handpump",			ItemPump.class),
+	JUMP(30, 1, true,				"item.jumpboots",			ItemSpringBoots.class),
+	BEDJUMP(31, 1, false,			"item.bedrockjump",			ItemSpringBoots.class),
+	FUEL(27, 1, false,				"item.fueltank",			ItemFuelTank.class),
+	BEDHOE(21, 1, false,			"item.bedrockhoe",			ItemBedrockHoe.class),
+	STEELHOE(22, 1, false,			"item.steelhoe",			ItemSteelHoe.class),
+	BEDSWORD(23, 1, false,			"item.bedrocksword",		ItemBedrockSword.class),
+	STEELSWORD(24, 1, false,		"item.steelsword",			ItemSteelSword.class),
+	BEDSHEARS(25, 1, false,			"item.bedrockshears",		ItemBedrockShears.class),
+	STEELSHEARS(26, 1, false,		"item.steelshears",			ItemSteelShears.class),
+	FLAMETHROWER(28, 1, false,		"item.flamethrower",		ItemFlamethrower.class),
+	DISK(3, 1, false,				"item.musicboxdisc",		ItemDisk.class),
+	UPGRADE(240, 1, true,			"item.engineupgrade",		ItemEngineUpgrade.class),
+	CRAFTPATTERN(34, 1, false,		"item.craftpattern",		ItemCraftPattern.class),
+	BEDSICKLE(36, 1, false,			"item.bedsickle",			ItemBedrockSickle.class),
+	STEELSICKLE(35, 1, false,		"item.steelsickle",			ItemSteelSickle.class),
+	GRAFTER(37, 1, true,			"item.chargedgrafter",		ItemChargedGrafter.class, ModList.FORESTRY),
+	BEDGRAFTER(38, 1, false,		"item.bedgrafter",			ItemBedrockGrafter.class, ModList.FORESTRY),
+	BEDSAW(39, 1, false,			"item.bedsaw",				ItemBedrockSaw.class, ModList.MULTIPART),
+	BEDREVEAL(40, 1, false,			"item.bedreveal",			ItemBedReveal.class, ModList.THAUMCRAFT),
+	MACHINE(0, true,				"item.placer",				ItemMachinePlacer.class),
+	ENGINE(0, true,					"item.engplacer",			ItemEnginePlacer.class),
+	SHAFT(0, true,					"item.shaftplacer",			ItemShaftPlacer.class),
+	GEARBOX(0, true,				"item.gearplacer",			ItemGearPlacer.class),
+	FLYWHEEL(0, true,				"item.flyplacer",			ItemFlywheelPlacer.class),
+	ADVGEAR(0, true,				"item.advplacer",			ItemAdvGearPlacer.class),
+	SHAFTCRAFT(0, true,				"item.shaftcraft",			ItemMulti.class),
+	ENGINECRAFT(1, true,			"item.enginecraft",			ItemMulti.class),
+	MISCCRAFT(2, true,				"item.misccraft",			ItemMulti.class),
+	BORECRAFT(3, true,				"item.borecraft",			ItemMulti.class),
+	EXTRACTS(4, true,				"item.extracts",			ItemMulti.class),
+	COMPACTS(6, true,				"item.compacts",			ItemMulti.class),
+	POWDERS(8, true,				"item.powder",				ItemMulti.class),
+	GEARUNITS(23, true,				"item.gearunits",			ItemMulti.class),
+	MODINTERFACE(14, true,			"item.modinterface",		ItemMulti.class),
+	MODEXTRACTS(-1, true,			"item.modextracts",			ItemModOre.class),
+	MODINGOTS(-1, true,				"item.modingots",			ItemModOre.class),
+	SPAWNER(0, false,				"item.spawner",				ItemSpawner.class);
 
-	private int index;
-	private boolean hasSubtypes;
-	private String name;
-	private Class itemClass;
-	private int texturesheet;
-	private ModList condition;
+	private final int index;
+	private final int imageSheet;
+	private final boolean hasSubtypes;
+	private final String name;
+	private final Class itemClass;
+	private final ModList condition;
 
 	private int maxindex;
 
 	private ItemRegistry(int tex, boolean sub, String n, Class <?extends Item> iCl) {
-		this(tex, sub, n, iCl, null);
+		this(tex, 0, sub, n, iCl, null);
 	}
 
-	private ItemRegistry(int tex, boolean sub, String n, Class <?extends Item> iCl, ModList api) {
-		texturesheet = 1;
-		if (tex < 0) {
-			tex = -tex;
-			texturesheet = 0;
-		}
-		if (tex > 255) {
-			texturesheet = tex/256;
-			tex -= texturesheet*256;
-		}
+	private ItemRegistry(int tex, int sheet, boolean sub, String n, Class <?extends Item> iCl) {
+		this(tex, sheet, sub, n, iCl, null);
+	}
+
+	private ItemRegistry(int tex, int sheet, boolean sub, String n, Class <?extends Item> iCl, ModList api) {
 		index = tex;
 		hasSubtypes = sub;
 		name = n;
 		itemClass = iCl;
 		condition = api;
+		imageSheet = sheet;
 	}
 
-	private ItemRegistry(int lotex, int hitex, boolean sub, String n, Class <?extends Item> iCl) {
+	private ItemRegistry(int lotex, int hitex, int sheet, boolean sub, String n, Class <?extends Item> iCl) {
 		if (lotex > hitex)
 			throw new RegistrationException(RotaryCraft.instance, "Invalid item sprite registration for "+n+"! Backwards texture bounds?");
-		texturesheet = 1;
-		if (lotex < 0) {
-			lotex = -lotex;
-			hitex = -hitex;
-			texturesheet = 0;
-		}
-		if (lotex > 255) {
-			texturesheet = lotex/256;
-			lotex -= texturesheet*256;
-			hitex -= texturesheet*256;
-		}
 		index = lotex;
 		maxindex = lotex;
 		hasSubtypes = sub;
 		name = n;
 		itemClass = iCl;
+		condition = null;
+		imageSheet = sheet;
 	}
 
 	public static final ItemRegistry[] itemList = values();
@@ -210,14 +228,34 @@ public enum ItemRegistry implements RegistryEnum {
 	public Class[] getConstructorParamTypes() {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
-				return new Class[]{int.class, int.class, int.class, int.class}; // ID, Armor render, Sprite index, armor type
+				return new Class[]{int.class, int.class, int.class}; // Armor render, Sprite index, armor type
 			else if (this.isJetpack() || this.isJumpBoots())
-				return new Class[]{int.class, EnumArmorMaterial.class, int.class, int.class}; // ID, Material, Sprite index, Armor render
+				return new Class[]{ArmorMaterial.class, int.class, int.class}; // Material, Sprite index, Armor render
 			else
-				return new Class[]{int.class, int.class, int.class}; // ID, Sprite index, Armor render
+				return new Class[]{int.class, int.class}; // Sprite index, Armor render
 		}
+		if (this.isPlacer()) {
+			return new Class[0];
+		}
+		if (this.isModOre()) {
+			return new Class[0];
+		}
+		if (this == SPAWNER) {
+			return new Class[0];
+		}
+		return new Class[]{int.class}; // Sprite index
+	}
 
-		return new Class[]{int.class, int.class}; // ID, Sprite index
+	public boolean isCrafting() {
+		return ItemMulti.class.isAssignableFrom(itemClass);
+	}
+
+	public boolean isPlacer() {
+		return ItemBlockPlacer.class.isAssignableFrom(itemClass);
+	}
+
+	public boolean isModOre() {
+		return ItemModOre.class.isAssignableFrom(itemClass);
 	}
 
 	public boolean isBedrockArmor() {
@@ -246,17 +284,25 @@ public enum ItemRegistry implements RegistryEnum {
 	public Object[] getConstructorParams() {
 		if (this.isArmor()) {
 			if (this.isBedrockArmor() || this.isSteelArmor())
-				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender(), this.getArmorType()};
+				return new Object[]{this.getTextureIndex(), this.getArmorRender(), this.getArmorType()};
 			else if (this.isJetpack() || this.isJumpBoots())
-				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getArmorMaterial(), this.getTextureIndex(), this.getArmorRender()};
+				return new Object[]{this.getArmorMaterial(), this.getTextureIndex(), this.getArmorRender()};
 			else
-				return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex(), this.getArmorRender()};
+				return new Object[]{this.getTextureIndex(), this.getArmorRender()};
 		}
-		else
-			return new Object[]{RotaryCraft.config.getItemID(this.ordinal()), this.getTextureIndex()};
+		if (this.isPlacer()) {
+			return new Object[0];
+		}
+		if (this.isModOre()) {
+			return new Object[0];
+		}
+		if (this == SPAWNER) {
+			return new Object[0];
+		}
+		return new Object[]{this.getTextureIndex()};
 	}
 
-	private EnumArmorMaterial getArmorMaterial() {
+	private ArmorMaterial getArmorMaterial() {
 		if (this.isBedrockTypeArmor())
 			return RotaryCraft.BEDROCK;
 		if (this == JETPACK)
@@ -307,20 +353,20 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public static boolean isRegistered(ItemStack is) {
-		return isRegistered(is.itemID);
+		return isRegistered(is.getItem());
 	}
 
-	public static boolean isRegistered(int id) {
+	public static boolean isRegistered(Item id) {
 		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getShiftedID() == id)
+			if (itemList[i].getItemInstance() == id)
 				return true;
 		}
 		return false;
 	}
 
-	public static ItemRegistry getEntryByID(int id) {
+	public static ItemRegistry getEntryByID(Item id) {
 		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getShiftedID() == id)
+			if (itemList[i].getItemInstance() == id)
 				return itemList[i];
 		}
 		//throw new RegistrationException(RotaryCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
@@ -330,7 +376,11 @@ public enum ItemRegistry implements RegistryEnum {
 	public static ItemRegistry getEntry(ItemStack is) {
 		if (is == null)
 			return null;
-		return getEntryByID(is.itemID);
+		return getEntryByID(is.getItem());
+	}
+
+	public boolean matchItem(ItemStack is) {
+		return is != null && this.getItemInstance() == is.getItem();
 	}
 
 	public String getName(int dmg) {
@@ -340,25 +390,61 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public String getBasicName() {
-		String sg = name;
-		if (name.startsWith("#"))
-			sg = name.substring(1);
-		return StatCollector.translateToLocal(sg);
+		return StatCollector.translateToLocal(name);
 	}
 
 	public String getMultiValuedName(int dmg) {
-		if (!this.hasMultiValuedName())
-			throw new RuntimeException("Item "+name+" was called for a multi-name, yet does not have one!");
-		if (this == SPRING)
+		if (this.isCharged())
 			return this.getBasicName()+" ("+String.format("%d", dmg)+" kJ)";
-		if (this == STRONGCOIL)
+		switch(this) {
+		case SLIDE:
+			return this.getBasicName()+" ("+dmg+")";
+		case SPRING:
+		case STRONGCOIL:
 			return this.getBasicName()+" ("+String.format("%d", dmg)+" kJ)";
-		if (this == BUCKET)
+		case BUCKET:
 			return RotaryNames.getBucketName(dmg);
-		if (this == RAILGUN)
+		case RAILGUN:
 			return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
-		if (this == UPGRADE)
+		case UPGRADE:
 			return ItemEngineUpgrade.Upgrades.values()[dmg].desc;
+		case MODEXTRACTS:
+			return RotaryNames.getModExtractName(dmg);
+		case MODINGOTS:
+			return RotaryNames.getModIngotName(dmg);
+		case SHAFTCRAFT:
+			return StatCollector.translateToLocal(RotaryNames.shaftPartNames[dmg]);
+		case MISCCRAFT:
+			return StatCollector.translateToLocal(RotaryNames.miscPartNames[dmg]);
+		case BORECRAFT:
+			return StatCollector.translateToLocal(RotaryNames.borerPartNames[dmg]);
+		case ENGINECRAFT:
+			return StatCollector.translateToLocal(RotaryNames.enginePartNames[dmg]);
+		case EXTRACTS:
+			return StatCollector.translateToLocal(RotaryNames.extractNames[dmg]);
+		case COMPACTS:
+			return StatCollector.translateToLocal(RotaryNames.compactNames[dmg]);
+		case POWDERS:
+			return StatCollector.translateToLocal(RotaryNames.powderNames[dmg]);
+		case MODINTERFACE:
+			return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
+		case GEARUNITS:
+			return StatCollector.translateToLocal(RotaryNames.gearUnitNames[dmg]);
+		case SHAFT:
+			return RotaryNames.getShaftName(dmg);
+		case ENGINE:
+			return RotaryNames.getEngineName(dmg);
+		case GEARBOX:
+			return RotaryNames.getGearboxName(dmg);
+		case FLYWHEEL:
+			return RotaryNames.getFlywheelName(dmg);
+		case ADVGEAR:
+			return RotaryNames.getAdvGearName(dmg);
+		case MACHINE:
+			return MachineRegistry.machineList[dmg].getName();
+		default:
+			break;
+		}
 		throw new RuntimeException("Item "+name+" was called for a multi-name, but it was not registered!");
 	}
 
@@ -404,20 +490,22 @@ public enum ItemRegistry implements RegistryEnum {
 		return ReikaStringParser.stripSpaces(name).toLowerCase();
 	}
 
-	public int getID() {
-		return RotaryCraft.config.getItemID(this.ordinal());
-	}
-
-	public int getShiftedID() {
-		return RotaryCraft.config.getItemID(this.ordinal())+256;
-	}
-
 	public Item getItemInstance() {
-		return RotaryCraft.basicItems[this.ordinal()];
+		return RotaryCraft.items[this.ordinal()];
 	}
 
 	public boolean hasMultiValuedName() {
-		return name.startsWith("#");
+		if (this.isCharged())
+			return true;
+		if (this == UPGRADE)
+			return true;
+		if (this == BUCKET)
+			return true;
+		if (this.isTool() || this.isArmor())
+			return false;
+		if (this == CANOLA)
+			return false;
+		return this.getNumberMetadatas() > 1;
 	}
 
 	public boolean isTool() {
@@ -449,7 +537,11 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public int getTextureSheet() {
-		return texturesheet;
+		return imageSheet;
+	}
+
+	public boolean isMultiSheet() {
+		return this.getTextureIndex() < 0;
 	}
 
 	public int getNumberMetadatas() {
@@ -470,7 +562,7 @@ public enum ItemRegistry implements RegistryEnum {
 		case CANOLA:
 			return 2;
 		case NVH:
-			return Item.helmetDiamond.getMaxDamage();
+			return Items.diamond_helmet.getMaxDamage();
 		case SPRING:
 		case STRONGCOIL:
 			return 32000;
@@ -482,6 +574,40 @@ public enum ItemRegistry implements RegistryEnum {
 			return 4;
 		case UPGRADE:
 			return ItemEngineUpgrade.Upgrades.values().length;
+		case MODEXTRACTS:
+			return 4*ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
+		case MODINGOTS:
+			return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
+		case SHAFTCRAFT:
+			return RotaryNames.shaftPartNames.length;
+		case MISCCRAFT:
+			return RotaryNames.miscPartNames.length;
+		case BORECRAFT:
+			return RotaryNames.borerPartNames.length;
+		case ENGINECRAFT:
+			return RotaryNames.enginePartNames.length;
+		case EXTRACTS:
+			return RotaryNames.extractNames.length;
+		case COMPACTS:
+			return RotaryNames.compactNames.length;
+		case POWDERS:
+			return RotaryNames.powderNames.length;
+		case MODINTERFACE:
+			return RotaryNames.interfaceNames.length;
+		case GEARUNITS:
+			return RotaryNames.gearUnitNames.length;
+		case SHAFT:
+			return RotaryNames.getNumberShaftTypes();
+		case ENGINE:
+			return RotaryNames.getNumberEngineTypes();
+		case GEARBOX:
+			return RotaryNames.getNumberGearTypes();
+		case FLYWHEEL:
+			return RotaryNames.getNumberFlywheelTypes();
+		case ADVGEAR:
+			return RotaryNames.getNumberAdvGearTypes();
+		case MACHINE:
+			return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(MachineRegistry.class).size();
 		default:
 			throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
 		}
@@ -512,11 +638,11 @@ public enum ItemRegistry implements RegistryEnum {
 	}
 
 	public ItemStack getCraftedProduct(int amt) {
-		return new ItemStack(this.getShiftedID(), amt, 0);
+		return new ItemStack(this.getItemInstance(), amt, 0);
 	}
 
 	public ItemStack getCraftedMetadataProduct(int amt, int meta) {
-		return new ItemStack(this.getShiftedID(), amt, meta);
+		return new ItemStack(this.getItemInstance(), amt, meta);
 	}
 
 	public ItemStack getStackOf() {
@@ -546,43 +672,6 @@ public enum ItemRegistry implements RegistryEnum {
 	@Override
 	public Class getObjectClass() {
 		return itemClass;
-	}
-
-	@Override
-	public Class<? extends ItemBlock> getItemBlock() {
-		return null;
-	}
-
-	@Override
-	public boolean hasItemBlock() {
-		return false;
-	}
-
-	@Override
-	public String getConfigName() {
-		return this.getBasicName();
-	}
-
-	@Override
-	public int getDefaultID() {
-		return 30500+this.ordinal();
-	}
-
-	@Override
-	public boolean isBlock() {
-		return false;
-	}
-
-	@Override
-	public boolean isItem() {
-		return true;
-	}
-
-	@Override
-	public String getCategory() {
-		if (this.isTool())
-			return "Tool Item IDs";
-		return "Item IDs";
 	}
 
 	public boolean isDummiedOut() {

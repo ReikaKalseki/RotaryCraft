@@ -9,19 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.BlockFluidBase;
 
 public class TileEntitySonicBorer extends TileEntityPowerReceiver implements PressureTE {
 
@@ -116,8 +119,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 					for (int j = y-k; j <= y+k; j++) {
 						if (!this.canDrop(world, dx, j, i))
 							return -1;
-						int id = world.getBlockId(dx, j, i);
-						if (id != 0)
+						Block b = world.getBlock(dx, j, i);
+						if (b != Blocks.air)
 							nonair = true;
 					}
 				}
@@ -127,8 +130,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 					for (int j = y-k; j <= y+k; j++) {
 						if (!this.canDrop(world, i, j, dz))
 							return -1;
-						int id = world.getBlockId(i, j, dz);
-						if (id != 0)
+						Block b = world.getBlock(i, j, dz);
+						if (b != Blocks.air)
 							nonair = true;
 					}
 				}
@@ -138,8 +141,8 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 					for (int j = z-k; j <= z+k; j++) {
 						if (!this.canDrop(world, i, dy, j))
 							return -1;
-						int id = world.getBlockId(i, dy, j);
-						if (id != 0)
+						Block b = world.getBlock(i, dy, j);
+						if (b != Blocks.air)
 							nonair = true;
 					}
 				}
@@ -155,18 +158,17 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	}
 
 	public static boolean canDrop(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		if (id == 0)
+		Block b = world.getBlock(x, y, z);
+		if (b == Blocks.air)
 			return true;
-		Block b = Block.blocksList[id];
 		if (b.getBlockHardness(world, x, y, z) < 0)
 			return false;
-		if (b instanceof BlockFluid)
+		if (b instanceof BlockLiquid)
 			return false;
 		if (b instanceof BlockFluidBase)
 			return false;
 		int meta = world.getBlockMetadata(x, y, z);
-		if (id == ItemStacks.shieldblock.itemID && meta == ItemStacks.shieldblock.getItemDamage())
+		if (ReikaItemHelper.matchStackWithBlock(ItemStacks.shieldblock, b))
 			return false;
 		return true;
 	}

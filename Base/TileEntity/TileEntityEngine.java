@@ -9,21 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -31,7 +16,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -46,17 +30,35 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+
 public abstract class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
 PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	/** Water capacity */
-	public static final int CAPACITY = 60*RotaryConfig.MILLIBUCKET;
+	public static final int CAPACITY = 60*1000;
 	public int MAXTEMP = 1000;
 
 	/** Fuel capacity */
-	public static final int FUELCAP = 240*RotaryConfig.MILLIBUCKET;
+	public static final int FUELCAP = 240*1000;
 
-	public static final int LUBECAP = 24*RotaryConfig.MILLIBUCKET;
+	public static final int LUBECAP = 24*1000;
 
 	protected final HybridTank lubricant = new HybridTank("enginelube", LUBECAP);
 
@@ -84,7 +86,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	public final void setType(ItemStack is) {
-		if (is.itemID == RotaryCraft.engineitems.itemID) {
+		if (ItemRegistry.ENGINE.matchItem(is)) {
 			type = EngineType.engineList[is.getItemDamage()];
 		}
 	}
@@ -146,10 +148,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
-			int id = world.getBlockId(dx, dy, dz);
-			boolean fluid = Block.blocksList[id] instanceof BlockFluid;
+			Block id = world.getBlock(dx, dy, dz);
+			boolean fluid = id instanceof BlockLiquid || id instanceof BlockFluidBase;
 			flag = flag || fluid;
-			if (id == 0)
+			if (id == Blocks.air)
 				return false;
 			if (!fluid)
 				if (ReikaWorldHelper.softBlocks(world, dx, dy, dz))
@@ -279,8 +281,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	protected abstract void playSounds(World world, int x, int y, int z, float pitchMultiplier);
 
 	protected final boolean isMuffled(World world, int x, int y, int z) {
-		if (world.getBlockId(x, y+1, z) == Block.cloth.blockID) {
-			if (world.getBlockId(x, y-1, z) == Block.cloth.blockID || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
+		if (world.getBlock(x, y+1, z) == Blocks.wool) {
+			if (world.getBlock(x, y-1, z) == Blocks.wool || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
 				return true;
 		}
 		for (int i = 0; i < 6; i++) {
@@ -290,8 +292,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				if ((dir != write.getOpposite() && dir != write) || dir == ForgeDirection.UP) {
-					int id = world.getBlockId(dx, dy, dz);
-					if (id != Block.cloth.blockID)
+					Block b = world.getBlock(dx, dy, dz);
+					if (b != Blocks.wool)
 						return false;
 				}
 			}
@@ -471,7 +473,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		case AC:
 			return true;
 		case SPORT:
-			return (i == 0 && is.itemID == ItemRegistry.ETHANOL.getShiftedID()) || (i == 1 && type.isAdditive(is));
+			return (i == 0 && is.getItem() == ItemRegistry.ETHANOL.getItemInstance()) || (i == 1 && type.isAdditive(is));
 		default:
 			return false;
 		}
@@ -494,7 +496,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			return false;
 		}
 		if (type == EngineType.STEAM) {
-			return itemstack.itemID == Item.bucketEmpty.itemID;
+			return itemstack.getItem() == Items.bucket;
 		}
 		return false;
 	}
@@ -572,7 +574,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		float factor = type.getFuelUnitDuration()/(float)timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
 		if (factor <= 0)
 			return 0;
-		return (int)((fuel*type.getFuelUnitDuration()*(burnprogress))*5/factor/RotaryConfig.MILLIBUCKET);
+		return (int)((fuel*type.getFuelUnitDuration()*(burnprogress))*5/factor/1000);
 	}
 
 	/** In seconds */

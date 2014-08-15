@@ -9,24 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
+import Reika.DragonAPI.Interfaces.IPacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -66,11 +54,21 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
-import cpw.mods.fml.common.network.IPacketHandler;
-import cpw.mods.fml.common.network.Player;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.Random;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
 
 
-public abstract class PacketHandlerCore implements IPacketHandler {
+public class PacketHandlerCore implements IPacketHandler {
 
 	private TileEntityBorer borer;
 	private TileEntityBevelGear gbevel;
@@ -104,19 +102,12 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 	private TileEntityGPR gpr;
 
 	protected PacketRegistry pack;
-	protected PacketTypes packetType;
 
 	private static final Random rand = new Random();
 
-	@Override
-	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
-		this.process(packet, (EntityPlayer)player);
-	}
 
-	public abstract void process(Packet250CustomPayload packet, EntityPlayer ep);
-
-	public void handleData(Packet250CustomPayload packet, World world, EntityPlayer ep) {
-		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+	public void handleData(PacketObj packet, World world, EntityPlayer ep) {
+		DataInputStream inputStream = packet.getDataIn();
 		int control = Integer.MIN_VALUE;
 		int len;
 		int[] data = new int[0];
@@ -130,15 +121,22 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 		//System.out.print(packet.length);
 		try {
 			//ReikaJavaLibrary.pConsole(inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt());
-			packetType = PacketTypes.getPacketType(inputStream.readInt());
+			PacketTypes packetType = packet.getType();
 			switch(packetType) {
 			case SOUND:
-				SoundRegistry.playSoundPacket(inputStream);
+				control = inputStream.readInt();
+				SoundRegistry s = SoundRegistry.soundList[control];
+				double sx = inputStream.readDouble();
+				double sy = inputStream.readDouble();
+				double sz = inputStream.readDouble();
+				float v = inputStream.readFloat();
+				float p = inputStream.readFloat();
+				ReikaSoundHelper.playSound(s, sx, sy, sz, v, p);
 				return;
 			case STRING:
+				stringdata = packet.readString();
 				control = inputStream.readInt();
 				pack = PacketRegistry.getEnum(control);
-				stringdata = Packet.readString(inputStream, Short.MAX_VALUE);
 				break;
 			case DATA:
 				control = inputStream.readInt();
@@ -163,18 +161,18 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 				floatdata = inputStream.readFloat();
 				break;
 			case SYNC:
+				String name = packet.readString();
 				x = inputStream.readInt();
 				y = inputStream.readInt();
 				z = inputStream.readInt();
-				String name = Packet.readString(inputStream, Short.MAX_VALUE);
 				int value = inputStream.readInt();
 				ReikaPacketHelper.updateTileEntityData(world, x, y, z, name, value);
 				return;
 			case TANK:
+				String tank = packet.readString();
 				x = inputStream.readInt();
 				y = inputStream.readInt();
 				z = inputStream.readInt();
-				String tank = Packet.readString(inputStream, Short.MAX_VALUE);
 				int level = inputStream.readInt();
 				ReikaPacketHelper.updateTileEntityTankData(world, x, y, z, tank, level);
 				return;
@@ -192,7 +190,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 					longdata = inputStream.readLong();
 				break;
 			}
-			if (packetType != PacketTypes.RAW) {
+			if (packetType.hasCoordinates()) {
 				x = inputStream.readInt();
 				y = inputStream.readInt();
 				z = inputStream.readInt();
@@ -202,7 +200,7 @@ public abstract class PacketHandlerCore implements IPacketHandler {
 			e.printStackTrace();
 			return;
 		}
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		try {
 			switch (pack) {
 			case BORER: {

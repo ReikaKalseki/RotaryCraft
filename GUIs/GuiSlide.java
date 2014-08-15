@@ -9,18 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class GuiSlide extends GuiScreen {
 
@@ -41,7 +41,7 @@ public class GuiSlide extends GuiScreen {
 		super.initGui();
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
-		input = new GuiTextField(fontRenderer, j-2, k+31, xSize-16, 16);
+		input = new GuiTextField(fontRendererObj, j-2, k+31, xSize-16, 16);
 		input.setMaxStringLength(128);
 		input.setFocused(false);
 		input.setText(file);
@@ -93,10 +93,10 @@ public class GuiSlide extends GuiScreen {
 
 		if (!input.isFocused()) {
 			int d = input.getCursorPosition();
-			//fontRenderer.drawStringWithShadow(file.substring(d, Math.min(file.length(), 37+d)), posX+10, posY+ySize-15, 0xaaaaaa);
+			//fontRendererObj.drawStringWithShadow(file.substring(d, Math.min(file.length(), 37+d)), posX+10, posY+ySize-15, 0xaaaaaa);
 		}
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Select an image file. Be sure to include", posX+xSize/2+1, posY+4, 4210752);
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "C:/ and file extension and use \"/\", not \"\\\".", posX+xSize/2+1, posY+14, 4210752);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, "Select an image file. Be sure to include", posX+xSize/2+1, posY+4, 4210752);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, "C:/ and file extension and use \"/\", not \"\\\".", posX+xSize/2+1, posY+14, 4210752);
 		super.drawScreen(x, y, f);
 	}
 

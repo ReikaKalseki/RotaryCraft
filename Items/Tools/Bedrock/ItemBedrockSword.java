@@ -9,12 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import ic2.api.item.IElectricItem;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import net.machinemuse.api.electricity.MuseElectricItem;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -23,21 +32,13 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cofh.api.energy.IEnergyContainerItem;
 
 import com.google.common.collect.Multimap;
@@ -49,25 +50,15 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemBedrockSword(int par1, int tex) {
-		super(par1, EnumToolMaterial.EMERALD);
+	public ItemBedrockSword(int tex) {
+		super(ToolMaterial.EMERALD);
 		this.setIndex(tex);
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 
-		this.hackDamage();
-	}
-
-	private void hackDamage() {
-		Field f = ReikaObfuscationHelper.getField("weaponDamage");
-		try {
-			f.set(this, 12);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		field_150934_a = 12;
 	}
 
 	private void setIndex(int tex) {
@@ -90,7 +81,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	}
 
 	@Override
-	public float func_82803_g()
+	public float func_150931_i()
 	{
 		return 1;
 	}
@@ -99,7 +90,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	public boolean hitEntity(ItemStack is, EntityLivingBase target, EntityLivingBase player)
 	{
 		for (int i = 1; i < 5; i++) {
-			ItemStack arm = target.getCurrentItemOrArmor(i);
+			ItemStack arm = target.getEquipmentInSlot(i);
 			if (arm != null && this.canDamageArmorOf(target)) {
 				if (arm.getItem() instanceof MuseElectricItem) {
 					MuseElectricItem ms = (MuseElectricItem)arm.getItem();
@@ -112,7 +103,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 				else if (arm.getItem() instanceof IElectricItem) {
 					IElectricItem ie = (IElectricItem)arm.getItem();
 					///???
-					int id = ie.getEmptyItemId(arm);
+					Item id = ie.getEmptyItemId(arm);
 					ItemStack newarm = new ItemStack(id, 1, 0);
 					target.setCurrentItemOrArmor(i, newarm);
 				}
@@ -143,7 +134,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
+	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
 	{
 		return true;
 	}
@@ -154,7 +145,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	@Override
 	public int getItemEnchantability()
 	{
-		return ConfigRegistry.PREENCHANT.getState() ? 0 : EnumToolMaterial.IRON.getEnchantability();
+		return ConfigRegistry.PREENCHANT.getState() ? 0 : ToolMaterial.IRON.getEnchantability();
 	}
 
 	/**
@@ -183,7 +174,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	{
 		Multimap multimap = super.getItemAttributeModifiers();
 		boolean flag = multimap.remove(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), 9);
-		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", this.func_82803_g(), 0));
+		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", this.func_150931_i(), 0));
 		return multimap;
 	}
 
@@ -216,18 +207,23 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	}
 
 	@Override
-	public final Icon getIconFromDamage(int dmg) { //To get around a bug in backtools
-		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.swordStone.getIconFromDamage(0);
+	public final IIcon getIconFromDamage(int dmg) { //To get around a bug in backtools
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Items.stone_sword.getIconFromDamage(0);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack item = new ItemStack(par1, 1, 0);
 		item.addEnchantment(Enchantment.sharpness, 5);
 		item.addEnchantment(Enchantment.looting, 5);
 		par3List.add(item);
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getBasicName();
 	}
 
 }

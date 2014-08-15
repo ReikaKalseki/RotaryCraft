@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -32,19 +18,37 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemEnginePlacer extends ItemBlockPlacer {
 
-	public ItemEnginePlacer(int id) {
-		super(id);
+	public ItemEnginePlacer() {
+		super();
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
-		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava) {
+		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava) {
 			if (side == 0)
 				--y;
 			if (side == 1)
@@ -57,7 +61,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				--x;
 			if (side == 5)
 				++x;
-			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
+			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava)
 				return false;
 		}
 		this.clearBlocks(world, x, y, z);
@@ -76,14 +80,14 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			world.setBlock(x, y, z, MachineRegistry.ENGINE.getBlockID(), is.getItemDamage(), 3);
-			TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+			world.setBlock(x, y, z, MachineRegistry.ENGINE.getBlock(), is.getItemDamage(), 3);
+			TileEntityEngine eng = (TileEntityEngine)world.getTileEntity(x, y, z);
 			if (eng != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 				//eng.type = EngineType.setType(is.getItemDamage());
 				eng.setType(is);
 				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
-				eng.placer = ep.getEntityName();
+				eng.setPlacer(ep);
 				eng.setDataFromPlacer(is);
 				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 					eng.isFlipped = true;
@@ -95,7 +99,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 	}
 
 	@Override
-	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep,	World world, int x, int y, int z) {
+	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep, World world, int x, int y, int z) {
 		if (is.getItemDamage() == EngineType.HYDRO.ordinal()) {
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
@@ -105,45 +109,45 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 						b = 1;
 					else
 						a = 1;
-					int id = world.getBlockId(x+a*i, y+j, z+b*i);
+					Block id = world.getBlock(x+a*i, y+j, z+b*i);
 					if (!ReikaWorldHelper.softBlocks(world, x+a*i, y+j, z+b*i))
 						return false;
-					if (id != 0) {
+					if (id != Blocks.air) {
 						int meta = world.getBlockMetadata(x+a*i, y+j, z+b*i);
-						world.setBlock(x+a*i, y+j, z+b*i, 0);
-						Block.blocksList[id].dropBlockAsItem(world, x+a*i, y+j, z+b*i, meta, 0);
+						world.setBlockToAir(x+a*i, y+j, z+b*i);
+						id.dropBlockAsItem(world, x+a*i, y+j, z+b*i, meta, 0);
 					}
 				}
 			}
 		}
 		if (is.getItemDamage() == EngineType.WIND.ordinal()) {
-			if (world.getBlockId(x, y+1, z) == MachineRegistry.ENGINE.getBlockID()) {
-				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y+1, z);
+			if (world.getBlock(x, y+1, z) == MachineRegistry.ENGINE.getBlock()) {
+				TileEntityEngine te = (TileEntityEngine)world.getTileEntity(x, y+1, z);
 				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
-			if (world.getBlockId(x, y-1, z) == MachineRegistry.ENGINE.getBlockID()) {
-				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y-1, z);
+			if (world.getBlock(x, y-1, z) == MachineRegistry.ENGINE.getBlock()) {
+				TileEntityEngine te = (TileEntityEngine)world.getTileEntity(x, y-1, z);
 				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
-			if (world.getBlockId(x+1, y, z) == MachineRegistry.ENGINE.getBlockID()) {
-				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x+1, y, z);
+			if (world.getBlock(x+1, y, z) == MachineRegistry.ENGINE.getBlock()) {
+				TileEntityEngine te = (TileEntityEngine)world.getTileEntity(x+1, y, z);
 				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
-			if (world.getBlockId(x-1, y, z) == MachineRegistry.ENGINE.getBlockID()) {
-				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x-1, y, z);
+			if (world.getBlock(x-1, y, z) == MachineRegistry.ENGINE.getBlock()) {
+				TileEntityEngine te = (TileEntityEngine)world.getTileEntity(x-1, y, z);
 				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
-			if (world.getBlockId(x, y, z+1) == MachineRegistry.ENGINE.getBlockID()) {
-				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z+1);
+			if (world.getBlock(x, y, z+1) == MachineRegistry.ENGINE.getBlock()) {
+				TileEntityEngine te = (TileEntityEngine)world.getTileEntity(x, y, z+1);
 				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
-			if (world.getBlockId(x, y, z-1) == MachineRegistry.ENGINE.getBlockID()) {
-				TileEntityEngine te = (TileEntityEngine)world.getBlockTileEntity(x, y, z-1);
+			if (world.getBlock(x, y, z-1) == MachineRegistry.ENGINE.getBlock()) {
+				TileEntityEngine te = (TileEntityEngine)world.getTileEntity(x, y, z-1);
 				if (te.getEngineType() == EngineType.WIND)
 					return false;
 			}
@@ -171,7 +175,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 						d = -1;
 						break;
 					}
-					int id = world.getBlockId(x+a*i+c, y+j, z+b*i+d);
+					Block id = world.getBlock(x+a*i+c, y+j, z+b*i+d);
 					if (!ReikaWorldHelper.softBlocks(id))
 						return false;
 				}
@@ -182,92 +186,92 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 
 	@Override
 	protected void checkAndBreakAdjacent(World world, int x, int y, int z) {
-		TileEntityEngine eng = (TileEntityEngine)world.getBlockTileEntity(x, y, z);
+		TileEntityEngine eng = (TileEntityEngine)world.getTileEntity(x, y, z);
 		if (eng != null) {
 			if (eng.getEngineType() == EngineType.HYDRO) {
-				int id = world.getBlockId(x, y+1, z);
-				if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+				Block id = world.getBlock(x, y+1, z);
+				if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 					ReikaWorldHelper.dropBlockAt(world, x, y+1, z);
-					world.setBlock(x, y+1, z, 0);
+					world.setBlockToAir(x, y+1, z);
 				}
-				id = world.getBlockId(x, y-1, z);
-				if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+				id = world.getBlock(x, y-1, z);
+				if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 					ReikaWorldHelper.dropBlockAt(world, x, y-1, z);
-					world.setBlock(x, y-1, z, 0);
+					world.setBlockToAir(x, y-1, z);
 				}
 
 				if (eng.getBlockMetadata() < 2) {
-					id = world.getBlockId(x, y, z+1);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x, y, z+1);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y, z+1);
-						world.setBlock(x, y, z+1, 0);
+						world.setBlockToAir(x, y, z+1);
 					}
 
-					id = world.getBlockId(x, y, z-1);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x, y, z-1);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y, z-1);
-						world.setBlock(x, y, z-1, 0);
+						world.setBlockToAir(x, y, z-1);
 					}
 
-					id = world.getBlockId(x, y-1, z+1);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x, y-1, z+1);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y-1, z+1);
-						world.setBlock(x, y-1, z+1, 0);
+						world.setBlockToAir(x, y-1, z+1);
 					}
 
-					id = world.getBlockId(x, y-1, z-1);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x, y-1, z-1);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y-1, z-1);
-						world.setBlock(x, y-1, z-1, 0);
+						world.setBlockToAir(x, y-1, z-1);
 					}
 
-					id = world.getBlockId(x, y+1, z+1);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x, y+1, z+1);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y+1, z+1);
-						world.setBlock(x, y+1, z+1, 0);
+						world.setBlockToAir(x, y+1, z+1);
 					}
 
-					id = world.getBlockId(x, y+1, z-1);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x, y+1, z-1);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x, y+1, z-1);
-						world.setBlock(x, y+1, z-1, 0);
+						world.setBlockToAir(x, y+1, z-1);
 					}
 				}
 				else {
-					id = world.getBlockId(x-1, y, z);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x-1, y, z);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x-1, y, z);
-						world.setBlock(x-1, y, z, 0);
+						world.setBlockToAir(x-1, y, z);
 					}
 
-					id = world.getBlockId(x+1, y, z);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x+1, y, z);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x+1, y, z);
-						world.setBlock(x+1, y, z, 0);
+						world.setBlockToAir(x+1, y, z);
 					}
 
-					id = world.getBlockId(x-1, y-1, z);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x-1, y-1, z);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x-1, y-1, z);
-						world.setBlock(x-1, y-1, z, 0);
+						world.setBlockToAir(x-1, y-1, z);
 					}
 
-					id = world.getBlockId(x+1, y-1, z);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x+1, y-1, z);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x+1, y-1, z);
-						world.setBlock(x+1, y-1, z, 0);
+						world.setBlockToAir(x+1, y-1, z);
 					}
 
-					id = world.getBlockId(x-1, y+1, z);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x-1, y+1, z);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x-1, y+1, z);
-						world.setBlock(x-1, y+1, z, 0);
+						world.setBlockToAir(x-1, y+1, z);
 					}
 
-					id = world.getBlockId(x+1, y+1, z);
-					if (id != 0 && !ReikaBlockHelper.isLiquid(id)) {
+					id = world.getBlock(x+1, y+1, z);
+					if (id != Blocks.air && !ReikaBlockHelper.isLiquid(id)) {
 						ReikaWorldHelper.dropBlockAt(world, x+1, y+1, z);
-						world.setBlock(x+1, y+1, z, 0);
+						world.setBlockToAir(x+1, y+1, z);
 					}
 				}
 			}
@@ -276,7 +280,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs tab, List list) {
+	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.ENGINE.isAvailableInCreativeInventory()) {
 			for (int i = 0; i < EngineType.engineList.length; i++) {
 				ItemStack item = new ItemStack(id, 1, i);
@@ -311,5 +315,10 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			int dmg = is.stackTagCompound.getInteger("damage");
 			li.add(String.format("Damage: %.1f%s", dmg*12.5F, "%"));
 		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
 	}
 }

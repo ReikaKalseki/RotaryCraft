@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import mrtjp.projectred.api.IScrewdriver;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneLogic;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -43,47 +34,57 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
+
+import java.util.HashMap;
+
+import mrtjp.projectred.api.IScrewdriver;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneDiode;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
 
 
 public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer, powercrystals.minefactoryreloaded.api.IToolHammer
 {
-	public static byte[] maxdamage = new byte[4096]; //Max damage values (or tileentity datas) for the block ids associated
+	public static HashMap<Block, Integer> maxdamage = new HashMap(); //Max damage values (or tileentity datas) for the block ids associated
 
 
-	public ItemScrewdriver(int ID, int tex) {
-		super(ID, tex);
+	public ItemScrewdriver(int tex) {
+		super(tex);
 	}
 
 	static {
-		for (int i = 0; i < maxdamage.length; i++)
-			maxdamage[i] = -1;
-
-		maxdamage[Block.pistonBase.blockID] = 5;
-		maxdamage[Block.pistonStickyBase.blockID] = 5;
-		maxdamage[Block.dispenser.blockID] = 5;
-		maxdamage[Block.furnaceIdle.blockID] = 3;
-		maxdamage[Block.furnaceBurning.blockID] = 3;
-		maxdamage[Block.stairsWoodOak.blockID] = 7;
-		maxdamage[Block.stairsCobblestone.blockID] = 7;
-		maxdamage[Block.stairsBrick.blockID] = 7;
-		maxdamage[Block.stairsStoneBrick.blockID] = 7;
-		maxdamage[Block.stairsSandStone.blockID] = 7;
-		maxdamage[Block.stairsWoodSpruce.blockID] = 7;
-		maxdamage[Block.stairsWoodBirch.blockID] = 7;
-		maxdamage[Block.stairsWoodJungle.blockID] = 7;
-		maxdamage[Block.stairsNetherBrick.blockID] = 7;
-		maxdamage[Block.stairsNetherQuartz.blockID] = 7;
-		maxdamage[Block.dropper.blockID] = 5;
-		maxdamage[Block.pumpkinLantern.blockID] = 3;
+		maxdamage.put(Blocks.piston, 5);
+		maxdamage.put(Blocks.sticky_piston, 5);
+		maxdamage.put(Blocks.dispenser, 5);
+		maxdamage.put(Blocks.furnace, 3);
+		maxdamage.put(Blocks.lit_furnace, 3);
+		maxdamage.put(Blocks.oak_stairs, 7);
+		maxdamage.put(Blocks.stone_stairs, 7);
+		maxdamage.put(Blocks.brick_stairs, 7);
+		maxdamage.put(Blocks.stone_brick_stairs, 7);
+		maxdamage.put(Blocks.sandstone_stairs, 7);
+		maxdamage.put(Blocks.spruce_stairs, 7);
+		maxdamage.put(Blocks.birch_stairs, 7);
+		maxdamage.put(Blocks.jungle_stairs, 7);
+		maxdamage.put(Blocks.nether_brick_stairs, 7);
+		maxdamage.put(Blocks.quartz_stairs, 7);
+		maxdamage.put(Blocks.dropper, 5);
+		maxdamage.put(Blocks.lit_pumpkin, 3);
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
 		int damage = 0;
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof RotaryCraftTileEntity) {
 			RotaryCraftTileEntity t = (RotaryCraftTileEntity)te;
 			damage = t.getBlockMetadata();
@@ -309,12 +310,12 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 		}
 		else {
 			if (!world.isRemote) {
-				int id = world.getBlockId(x, y, z);
+				Block id = world.getBlock(x, y, z);
 				damage = world.getBlockMetadata(x, y, z);
-				if (id == Block.endPortalFrame.blockID) {
+				if (id == Blocks.end_portal_frame) {
 					if (damage >= 4) {
 						world.setBlockMetadataWithNotify(x, y, z, damage-4, 3);
-						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, new ItemStack(Item.eyeOfEnder));
+						ReikaItemHelper.dropItem(world, x+0.5, y+1, z+0.5, new ItemStack(Items.ender_eye));
 					}
 					else {
 						int newmeta = damage == 3 ? 0 : damage+1;
@@ -322,18 +323,20 @@ public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScr
 					}
 					return true;
 				}
-				if (Block.blocksList[id] instanceof BlockRedstoneLogic) {
+				if (id instanceof BlockRedstoneDiode) {
 					int newmeta = damage%4 == 3 ? damage-3 : damage+1;
 					world.setBlockMetadataWithNotify(x, y, z, newmeta, 3);
 					return true;
 				}
-				if ((id == Block.pistonStickyBase.blockID || id == Block.pistonBase.blockID) && world.isBlockIndirectlyGettingPowered(x, y, z))
+				if ((id == Blocks.sticky_piston || id == Blocks.piston) && world.isBlockIndirectlyGettingPowered(x, y, z))
 					return false;
-				if (damage < maxdamage[id] && maxdamage[id] != -1) {
-					world.setBlockMetadataWithNotify(x, y, z, damage+1, 3);
-				}
-				else if (maxdamage[id] != -1) {
-					world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+				if (maxdamage.containsKey(id)) {
+					if (damage < maxdamage.get(id)) {
+						world.setBlockMetadataWithNotify(x, y, z, damage+1, 3);
+					}
+					else {
+						world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+					}
 				}
 			}
 		}

@@ -9,24 +9,26 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSlide extends ItemBasic {
 
-	public ItemSlide(int ID, int index) {
-		super(ID, index);
+	public ItemSlide(int index) {
+		super(index);
 		maxStackSize = 1;
 		hasSubtypes = true;
 		this.setIndex(index);
@@ -39,7 +41,7 @@ public class ItemSlide extends ItemBasic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{
 		for (int i = 0; i < 24; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
@@ -60,7 +62,7 @@ public class ItemSlide extends ItemBasic {
 	}
 
 	@Override
-	public String getItemDisplayName(ItemStack is) {
+	public String getItemStackDisplayName(ItemStack is) {
 		String base = ItemRegistry.SLIDE.getBasicName();
 		int d = is.getItemDamage();
 		if (d < 24)

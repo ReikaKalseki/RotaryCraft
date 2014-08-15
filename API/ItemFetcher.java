@@ -23,7 +23,7 @@ public class ItemFetcher {
 	static {
 		try {
 			core = Class.forName("Reika.RotaryCraft.RotaryCraft", false, ItemFetcher.class.getClassLoader());
-			itemList = (Item[])core.getField("basicItems").get(null);
+			itemList = (Item[])core.getField("items").get(null);
 		}
 		catch (ClassNotFoundException e) {
 			System.out.println("RotaryCraft class not found!");
@@ -66,7 +66,7 @@ public class ItemFetcher {
 	public static boolean isPlayerHoldingAngularTransducer(EntityPlayer ep) {
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (is != null) {
-			return is.itemID == getItemByOrdinal(1).itemID;
+			return is.getItem() == getItemByOrdinal(1);
 		}
 		return false;
 	}
@@ -75,7 +75,7 @@ public class ItemFetcher {
 	public static boolean isPlayerHoldingBedrockPick(EntityPlayer ep) {
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (is != null) {
-			return is.itemID == getItemByOrdinal(15).itemID;
+			return is.getItem() == getItemByOrdinal(15);
 		}
 		return false;
 	}

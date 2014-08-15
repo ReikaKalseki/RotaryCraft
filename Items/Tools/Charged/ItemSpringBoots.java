@@ -9,30 +9,31 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.RotaryCraft.Base.ItemChargedArmor;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.RotaryCraft.Base.ItemChargedArmor;
-import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemSpringBoots extends ItemChargedArmor {
 
 	public final int JUMP_LEVEL = 3;
 	public final int SPEED_LEVEL = 2;
 
-	public ItemSpringBoots(int ID, EnumArmorMaterial mat, int tex, int render) {
-		super(ID, mat, render, 3, tex);
+	public ItemSpringBoots(ArmorMaterial mat, int tex, int render) {
+		super(mat, render, 3, tex);
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class ItemSpringBoots extends ItemChargedArmor {
 
 	@Override
 	public boolean providesProtection() {
-		return itemID == ItemRegistry.BEDJUMP.getShiftedID();
+		return this == ItemRegistry.BEDJUMP.getItemInstance();
 	}
 
 	@Override
@@ -54,12 +55,12 @@ public class ItemSpringBoots extends ItemChargedArmor {
 	@Override
 	public double getDamageMultiplier(DamageSource src) {
 		ItemBedrockArmor arm = (ItemBedrockArmor)ItemRegistry.BEDBOOTS.getItemInstance();
-		return itemID == ItemRegistry.BEDJUMP.getShiftedID() ? arm.getDamageMultiplier(src) : 1;
+		return this == ItemRegistry.BEDJUMP.getItemInstance() ? arm.getDamageMultiplier(src) : 1;
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
-		if (is.itemID == ItemRegistry.BEDJUMP.getShiftedID() || is.getItemDamage() > 0) {
+	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {
+		if (is.getItem() == ItemRegistry.BEDJUMP.getItemInstance() || is.getItemDamage() > 0) {
 			PotionEffect pot = ep.getActivePotionEffect(Potion.jump);
 			if (pot == null || pot.getAmplifier() < JUMP_LEVEL) {
 				ep.addPotionEffect(new PotionEffect(Potion.jump.id, 1, JUMP_LEVEL));
@@ -70,8 +71,8 @@ public class ItemSpringBoots extends ItemChargedArmor {
 			}
 			ep.stepHeight = 1.25F;
 			if (itemRand.nextInt(160) == 0) {
-				if (is.itemID != ItemRegistry.BEDJUMP.getShiftedID()) {
-					ep.setCurrentItemOrArmor(1, new ItemStack(is.itemID, is.stackSize, is.getItemDamage()-1));
+				if (is.getItem() != ItemRegistry.BEDJUMP.getItemInstance()) {
+					ep.setCurrentItemOrArmor(1, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1));
 					this.warnCharge(is);
 				}
 			}
@@ -81,10 +82,10 @@ public class ItemSpringBoots extends ItemChargedArmor {
 	}
 
 	@Override
-	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack is = new ItemStack(id, 1, 24000);
-		if (itemID == ItemRegistry.BEDJUMP.getShiftedID()) {
+		if (id == ItemRegistry.BEDJUMP.getItemInstance()) {
 			HashMap<Enchantment, Integer> ench = ((ItemBedrockArmor)ItemRegistry.BEDBOOTS.getItemInstance()).getDefaultEnchantments();
 			ReikaEnchantmentHelper.applyEnchantments(is, ench);
 		}

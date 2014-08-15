@@ -9,15 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
+import io.netty.buffer.ByteBuf;
+
 import java.awt.Color;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityDischarge extends Entity implements IEntityAdditionalSpawnData {
@@ -89,7 +87,7 @@ public class EntityDischarge extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeDouble(targetX);
 		data.writeDouble(targetY);
 		data.writeDouble(targetZ);
@@ -98,7 +96,7 @@ public class EntityDischarge extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		targetX = data.readDouble();
 		targetY = data.readDouble();
 		targetZ = data.readDouble();

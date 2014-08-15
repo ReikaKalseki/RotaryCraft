@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -24,6 +16,15 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPoweredLiquidIO;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
@@ -33,7 +34,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 	public static final int CAPACITY = 5*FluidContainerRegistry.BUCKET_VOLUME;
 
 	private static final ItemStack[] ingredients = {
-		new ItemStack(Item.blazePowder), ItemStacks.netherrackdust, ItemStacks.tar, new ItemStack(Item.magmaCream)
+		new ItemStack(Items.blaze_powder), ItemStacks.netherrackdust, ItemStacks.tar, new ItemStack(Items.magma_cream)
 	};
 
 	@Override

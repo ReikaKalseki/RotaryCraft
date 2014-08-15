@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiBlastFurnace extends GuiNonPoweredMachine
 {
@@ -39,7 +40,7 @@ public class GuiBlastFurnace extends GuiNonPoweredMachine
 		int c = 0;
 		if (blast.getTemperature() >= 1000)
 			c = 1;
-		api.drawCenteredStringNoShadow(fontRenderer, String.valueOf(blast.getTemperature())+"C", 17+c, 6, 4210752);
+		api.drawCenteredStringNoShadow(fontRendererObj, String.valueOf(blast.getTemperature())+"C", 17+c, 6, 4210752);
 	}
 
 	/**

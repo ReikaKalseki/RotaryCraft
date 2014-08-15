@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Surveying;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -23,11 +18,18 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 public class TileEntityGPR extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
 	/** A depth-by-width array of the discovered block IDs, materials, colors
 	 * drawn downwards (first slots are top layer) */
-	public int[][] ids = new int[256][81]; //from 0-16 -> centred on 8 (8 above and below)
+	public Block[][] ids = new Block[256][81]; //from 0-16 -> centred on 8 (8 above and below)
 	public int[][] metas = new int[256][81];
 
 	public int[][] colors = new int[256][81]; //these three arrays take 52KB RAM collectively (assuming Mat'l is 32bits)
@@ -41,7 +43,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	private int oldmeta = 0;
 
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)	{
-		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
+		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this)
 			return false;
 		if (yCoord > 96)
 			return false;
@@ -73,14 +75,14 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
 				for (int k = y; k >= 0; k--) {
-					int id = (world.getBlockId(x+i, k, z+j));
+					Block id = (world.getBlock(x+i, k, z+j));
 					if (ReikaWorldHelper.caveBlock(id))
 						numcave++;
 					else
 						numsolid++;
-					if (id == Block.web.blockID)
+					if (id == Blocks.web)
 						mineshaft = true;
-					if (id == Block.endPortal.blockID || id == Block.endPortalFrame.blockID)
+					if (id == Blocks.end_portal || id == Blocks.end_portal_frame)
 						stronghold = true;
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
 				}
@@ -118,7 +120,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		}
 	}
 
-	public int getBlockColor(int id, int meta) {
+	public int getBlockColor(Block id, int meta) {
 		return BlockColorMapper.instance.getColorForBlock(id, meta);
 	}
 
@@ -132,12 +134,12 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		if (a == 1) {
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
-					ids[i][j] = world.getBlockId(x+j-bounds[0]-diff, y-i-1, z);
+					ids[i][j] = world.getBlock(x+j-bounds[0]-diff, y-i-1, z);
 					metas[i][j] = world.getBlockMetadata(x+j-bounds[0]-diff, y-i-1, z);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
-					if (ids[i][j] == Block.endPortal.blockID || ids[i][j] == Block.endPortalFrame.blockID)
+					if (ids[i][j] == Blocks.end_portal || ids[i][j] == Blocks.end_portal_frame)
 						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
-					if (ids[i][j] == Block.mobSpawner.blockID)
+					if (ids[i][j] == Blocks.mob_spawner)
 						RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
 				}
 			}
@@ -145,12 +147,12 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		else {
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
-					ids[i][j] = world.getBlockId(x, y-i-1, z+j-bounds[0]-diff);
+					ids[i][j] = world.getBlock(x, y-i-1, z+j-bounds[0]-diff);
 					metas[i][j] = world.getBlockMetadata(x, y-i-1, z+j-bounds[0]-diff);
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
-					if (ids[i][j] == Block.endPortal.blockID || ids[i][j] == Block.endPortalFrame.blockID)
+					if (ids[i][j] == Blocks.end_portal || ids[i][j] == Blocks.end_portal_frame)
 						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
-					if (ids[i][j] == Block.mobSpawner.blockID)
+					if (ids[i][j] == Blocks.mob_spawner)
 						RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
 				}
 			}

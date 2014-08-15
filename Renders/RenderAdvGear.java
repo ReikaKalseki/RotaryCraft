@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -25,6 +19,12 @@ import Reika.RotaryCraft.Models.Animated.ModelCoil;
 import Reika.RotaryCraft.Models.Animated.ModelHighGear;
 import Reika.RotaryCraft.Models.Animated.ModelWorm;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderAdvGear extends RotaryTERenderer
 {

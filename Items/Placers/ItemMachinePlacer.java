@@ -9,23 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
-
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -41,23 +24,43 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMachinePlacer extends ItemBlockPlacer {
 
-	public ItemMachinePlacer(int ID) {
-		super(ID);
+	public ItemMachinePlacer() {
+		super();
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
-		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava) {
+		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava) {
 			if (side == 0)
 				--y;
 			if (side == 1)
@@ -70,7 +73,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				--x;
 			if (side == 5)
 				++x;
-			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && world.getBlockMaterial(x, y, z) != Material.water && world.getBlockMaterial(x, y, z) != Material.lava)
+			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava)
 				return false;
 		}
 		this.clearBlocks(world, x, y, z);
@@ -87,11 +90,11 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			world.setBlock(x, y, z, m.getBlockID(), m.getMachineMetadata(), 3);
+			world.setBlock(x, y, z, m.getBlock(), m.getMachineMetadata(), 3);
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getBlockTileEntity(x, y, z);
-		te.placer = ep.getEntityName();
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
+		te.setPlacer(ep);
 		if (te instanceof TemperatureTE) {
 			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 			((TemperatureTE)te).addTemperature(Tb);
@@ -189,9 +192,9 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			else if (m.is2Sided())
 				te.setBlockMetadata(RotaryAux.get2SidedMetadataFromPlayerLook(ep));
 			if (m.isXFlipped())
-				RotaryAux.flipXMetadatas(world.getBlockTileEntity(x, y, z));
+				RotaryAux.flipXMetadatas(world.getTileEntity(x, y, z));
 			if (m.isZFlipped())
-				RotaryAux.flipZMetadatas(world.getBlockTileEntity(x, y, z));
+				RotaryAux.flipZMetadatas(world.getTileEntity(x, y, z));
 		}
 		else {
 			world.setBlockMetadataWithNotify(x, y, z, m.getMachineMetadata(), 3);
@@ -204,10 +207,10 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				te.setBlockMetadata(RotaryAux.get2SidedMetadataFromPlayerLook(ep));
 
 			if (m.isXFlipped()) {
-				RotaryAux.flipXMetadatas(world.getBlockTileEntity(x, y, z));
+				RotaryAux.flipXMetadatas(world.getTileEntity(x, y, z));
 			}
 			if (m.isZFlipped()) {
-				RotaryAux.flipZMetadatas(world.getBlockTileEntity(x, y, z));
+				RotaryAux.flipZMetadatas(world.getTileEntity(x, y, z));
 			}
 		}
 		return true;
@@ -215,7 +218,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList[i];
 			if (!m.hasCustomPlacerItem() && m.isAvailableInCreativeInventory()) {
@@ -246,9 +249,9 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 	@Override
 	protected boolean checkValidBounds(ItemStack is, EntityPlayer ep, World world, int x, int y, int z) {
 		if (is.getItemDamage() == MachineRegistry.SMOKEDETECTOR.ordinal()) {
-			if (world.getBlockId(x, y+1, z) == 0)
+			if (world.getBlock(x, y+1, z) == Blocks.air)
 				return false;
-			return (Block.blocksList[world.getBlockId(x, y+1, z)].isOpaqueCube());
+			return (world.getBlock(x, y+1, z).isOpaqueCube());
 		}
 		return super.checkValidBounds(is, ep, world, x, y, z);
 	}
@@ -326,5 +329,10 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
 	}
 }

@@ -9,14 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.inventory.Container;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+
+import net.minecraft.inventory.Container;
+
+import org.lwjgl.opengl.GL11;
 
 public abstract class GuiPowerOnlyMachine extends GuiMachine {
 
@@ -40,7 +40,7 @@ public abstract class GuiPowerOnlyMachine extends GuiMachine {
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-53-(ySize-75), 0, 0, (int)frac, 4);
 
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, "Power:", xSize+var5+20, var6+9, 0xff000000);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, "Power:", xSize+var5+20, var6+9, 0xff000000);
 		//this.drawCenteredStringNoShadow(fontRenderer, String.format("%d/%d", spawnercontroller.power, spawnercontroller.MINPOWER), xSize+var5+16, var6+16, 0xff000000);
 	}
 

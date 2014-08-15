@@ -9,15 +9,24 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
+
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -25,13 +34,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityLandmine extends TileEntitySpringPowered {
 
@@ -49,7 +51,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	}
 
 	private boolean checkForPlayer(World world, int x, int y, int z) {
-		AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x, y+1, z, x+1, y+3, z+1);
+		AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x, y+1, z, x+1, y+3, z+1);
 		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLivingBase e = (EntityLivingBase)in.get(i);
@@ -60,7 +62,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	}
 
 	private boolean checkForArrow(World world, int x, int y, int z) {
-		AxisAlignedBB above = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(1, 1, 1);
+		AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(1, 1, 1);
 		List in = world.getEntitiesWithinAABB(EntityArrow.class, above);
 		return in.size() > 0;
 	}
@@ -78,12 +80,12 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 0, 0, 0);
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 1, 1);
 		for (int i = 1; i < 6; i++) {
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x-i, y, z, world.getBlockId(x-1, y, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x+i, y, z, world.getBlockId(x+1, y, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-i, z, world.getBlockId(x, y-1, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+i, z, world.getBlockId(x, y+1, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-i, world.getBlockId(x, y, z-1), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+i, world.getBlockId(x, y, z+1), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x-i, y, z, world.getBlock(x-1, y, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x+i, y, z, world.getBlock(x+1, y, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-i, z, world.getBlock(x, y-1, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+i, z, world.getBlock(x, y+1, z), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-i, world.getBlock(x, y, z-1), -1, x, y, z, 4);
+			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+i, world.getBlock(x, y, z+1), -1, x, y, z, 4);
 			this.chainedExplosion(world, x, y, z);
 		}
 	}
@@ -92,18 +94,23 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		if (chain)
 			this.chainedExplosion(world, x, y, z);
 		if (inv[1] != null && inv[2] != null && inv[3] != null && inv[4] != null) {
-			if (inv[1].itemID == Block.tnt.blockID && inv[2].itemID == Block.tnt.blockID && inv[3].itemID == Block.tnt.blockID && inv[4].itemID == Block.tnt.blockID)
+			boolean flag = true;
+			for (int i = 1; i <= 4; i++) {
+				if (!!ReikaItemHelper.matchStackWithBlock(inv[i], Blocks.tnt))
+					flag = false;
+			}
+			if (flag)
 				this.maxPowerExplosion(world, x, y, z);
 		}
 		float power = this.getExplosionPower();
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 		if (flaming) {
 			if (!world.isRemote)
 				world.newExplosion(null, x+0.5, y+0.5, z+0.5, power, true, true);
 		}
 		else if (!world.isRemote)
 			world.createExplosion(null, x+0.5, y+0.5, z+0.5, power, true);
-		AxisAlignedBB region = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(2, 2, 2);
+		AxisAlignedBB region = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(2, 2, 2);
 		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, region);
 		for (int i = 0; i < in.size(); i++) {
 			EntityLivingBase e = (EntityLivingBase)in.get(i);
@@ -121,7 +128,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 			}
 		}
 		if (shrapnel) {
-			AxisAlignedBB region2 = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
+			AxisAlignedBB region2 = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
 			List in2 = world.getEntitiesWithinAABB(EntityLivingBase.class, region2);
 			for (int i = 0; i < in2.size(); i++) {
 				EntityLivingBase e = (EntityLivingBase)in2.get(i);
@@ -137,8 +144,8 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		for (int i = -8; i <= 8; i++) {
 			for (int j = -8; j <= 8; j++) {
 				for (int k = -8; k <= 8; k++) {
-					if (world.getBlockId(x+i, y+j, z+k) == this.getTileEntityBlockID()) {
-						TileEntity te = world.getBlockTileEntity(x+i, y+j, z+k);
+					if (world.getBlock(x+i, y+j, z+k) == this.getTileEntityBlockID()) {
+						TileEntity te = world.getTileEntity(x+i, y+j, z+k);
 						if (te instanceof TileEntityLandmine)
 							((TileEntityLandmine)te).detonate(world, te.xCoord, te.yCoord, te.zCoord);
 					}
@@ -150,13 +157,13 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	private void getExplosionModifiers() {
 		for (int i = 5; i <= 8; i++) {
 			if (inv[i] != null) {
-				if (inv[i].itemID == Item.blazePowder.itemID)
+				if (inv[i].getItem() == Items.blaze_powder)
 					flaming = true;
-				if (inv[i].itemID == Item.spiderEye.itemID)
+				if (inv[i].getItem() == Items.spider_eye)
 					poison = true;
-				if (inv[i].itemID == Block.tnt.blockID)
+				if (ReikaItemHelper.matchStackWithBlock(inv[i], Blocks.tnt))
 					chain = true;
-				if (inv[i].itemID == Block.glass.blockID)
+				if (ReikaItemHelper.matchStackWithBlock(inv[i], Blocks.glass))
 					shrapnel = true;
 			}
 		}
@@ -166,7 +173,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		int num = 0;
 		for (int i = 1; i <= 4; i++)
 			if (inv[i] != null) {
-				if (inv[i].itemID == Item.gunpowder.itemID)
+				if (inv[i].getItem() == Items.gunpowder)
 					num++;
 			}
 		return 2F*num; //Each item is 1/2 block TNT (so capped at 2x)
@@ -177,7 +184,8 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	}
 
 	@Override
-	public void openChest() {
+	public void openInventory() {
+		super.openInventory();
 		if (inv[0] == null)
 			return;
 		if (rand.nextInt(65536-this.getAge())/2 == 0)
@@ -193,7 +201,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		case 2:
 		case 3:
 		case 4:
-			return is.itemID == Item.gunpowder.itemID;
+			return is.getItem() == Items.gunpowder;
 		case 5:
 		case 6:
 		case 7:
@@ -205,13 +213,13 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	}
 
 	private boolean isModifier(ItemStack is) {
-		if (is.itemID == Item.blazePowder.itemID)
+		if (is.getItem() == Items.blaze_powder)
 			return true;
-		if (is.itemID == Item.spiderEye.itemID)
+		if (is.getItem() == Items.spider_eye)
 			return true;
-		if (is.itemID == Block.tnt.blockID)
+		if (ReikaItemHelper.matchStackWithBlock(is, Blocks.tnt))
 			return true;
-		if (is.itemID == Block.glass.blockID)
+		if (ReikaItemHelper.matchStackWithBlock(is, Blocks.glass))
 			return true;
 		return false;
 	}

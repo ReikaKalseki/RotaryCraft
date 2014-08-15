@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 import Reika.ChromatiCraft.API.SpaceRift;
 import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -20,6 +17,10 @@ import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implements IOMachine {
 

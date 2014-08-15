@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -27,6 +17,17 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import java.util.List;
+
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
 
@@ -61,11 +62,11 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		boolean meat = false;
 		boolean fish = false;
 		boolean seed = false;
-		wheat = ReikaInventoryHelper.checkForItem(Item.wheat.itemID, inv);
-		carrot = ReikaInventoryHelper.checkForItem(Item.carrot.itemID, inv);
-		meat = ReikaInventoryHelper.checkForItem(Item.porkRaw.itemID, inv);
-		fish = ReikaInventoryHelper.checkForItem(Item.fishRaw.itemID, inv);
-		seed = ReikaInventoryHelper.checkForItem(Item.seeds.itemID, inv);
+		wheat = ReikaInventoryHelper.checkForItem(Items.wheat, inv);
+		carrot = ReikaInventoryHelper.checkForItem(Items.carrot, inv);
+		meat = ReikaInventoryHelper.checkForItem(Items.porkchop, inv);
+		fish = ReikaInventoryHelper.checkForItem(Items.fish, inv);
+		seed = ReikaInventoryHelper.checkForItem(Items.wheat_seeds, inv);
 		idle = (!wheat && !carrot && !meat && !fish && !seed);
 	}
 
@@ -86,7 +87,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		ItemStack item = null;
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
-				item = new ItemStack(inv[i].itemID, 1, inv[i].getItemDamage());
+				item = new ItemStack(inv[i].getItem(), 1, inv[i].getItemDamage());
 				if (ent.isBreedingItem(item)) {
 					return true;
 				}
@@ -118,7 +119,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		}
 		for (int i = 0; i < inroom.size(); i++) {
 			EntityAnimal ent = (EntityAnimal)inroom.get(i);
-			//ReikaJavaLibrary.pConsole(this.canBreed(ent)+" for "+ent.getEntityName());
+			//ReikaJavaLibrary.pConsole(this.canBreed(ent)+" for "+ent.getCommandSenderName());
 			if (this.canBreed(ent)) {
 				if (!(ent instanceof EntityTameable) || (ent instanceof EntityTameable && !((EntityTameable)ent).isSitting())) {
 					if (!ent.isInLove() && !ent.isChild() && pathing && ent.getGrowingAge() == 0) {
@@ -169,42 +170,42 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 
 		boolean exit = false;
 		for (int i = 1; i < 15 && !exit; i++) {
-			if (Block.opaqueCubeLookup[world.getBlockId(x+i+1, y, z)])
+			if (world.getBlock(x+i+1, y, z).isOpaqueCube())
 				exit = true;
 			else
 				maxx = x+i;
 		}
 		exit = false;
 		for (int i = 1; i < 15 && !exit; i++) {
-			if (Block.opaqueCubeLookup[world.getBlockId(x-i, y, z)])
+			if (world.getBlock(x-i, y, z).isOpaqueCube())
 				exit = true;
 			else
 				minx = x-i;
 		}
 		exit = false;
 		for (int i = 1; i < 15 && !exit; i++) {
-			if (Block.opaqueCubeLookup[world.getBlockId(x, y+i+1, z)])
+			if (world.getBlock(x, y+i+1, z).isOpaqueCube())
 				exit = true;
 			else
 				maxy = y+i;
 		}
 		exit = false;
 		for (int i = 1; i < 15 && !exit; i++) {
-			if (Block.opaqueCubeLookup[world.getBlockId(x, y-i, z)])
+			if (world.getBlock(x, y-i, z).isOpaqueCube())
 				exit = true;
 			else
 				miny = x-i;
 		}
 		exit = false;
 		for (int i = 1; i < 15 && !exit; i++) {
-			if (Block.opaqueCubeLookup[world.getBlockId(x, y, z+i+1)])
+			if (world.getBlock(x, y, z+i+1).isOpaqueCube())
 				exit = true;
 			else
 				maxz = z+i;
 		}
 		exit = false;
 		for (int i = 1; i < 15 && !exit; i++) {
-			if (Block.opaqueCubeLookup[world.getBlockId(x, y, z-i)])
+			if (world.getBlock(x, y, z-i).isOpaqueCube())
 				exit = true;
 			else
 				minz = z-i;
@@ -230,7 +231,8 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return (is.itemID == Item.wheat.itemID || is.itemID == Item.carrot.itemID || is.itemID == Item.fishRaw.itemID || is.itemID == Item.seeds.itemID || is.itemID == Item.porkRaw.itemID);
+		Item i = is.getItem();
+		return (i == Items.wheat || i == Items.carrot || i == Items.fish || i == Items.wheat_seeds || i == Items.porkchop);
 	}
 
 	@Override

@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerReservoir extends CoreContainer
 {

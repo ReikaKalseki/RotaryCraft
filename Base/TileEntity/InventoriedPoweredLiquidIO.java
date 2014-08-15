@@ -9,14 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import Reika.DragonAPI.Interfaces.InertIInv;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import Reika.DragonAPI.Interfaces.InertIInv;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 
 public abstract class InventoriedPoweredLiquidIO extends PoweredLiquidIO implements ISidedInventory {
 
@@ -30,17 +32,32 @@ public abstract class InventoriedPoweredLiquidIO extends PoweredLiquidIO impleme
 		inv[par1] = is;
 	}
 
-	public void openChest() {}
+	public final String getInventoryName() {
+		return this.getMultiValuedName();
+	}
 
-	public void closeChest() {}
+	public void openInventory() {}
 
-	public int getInventoryStackLimit() {
-		return 64;
+	public void closeInventory() {}
+
+	@Override
+	public final boolean hasCustomInventoryName() {
+		return true;
 	}
 
 	@Override
-	public boolean isInvNameLocalized() {
-		return false;
+	public final void markDirty() {
+		blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+
+		if (this.getBlockType() != Blocks.air)
+		{
+			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
+		}
+	}
+
+	public int getInventoryStackLimit() {
+		return 64;
 	}
 
 	public abstract boolean isItemValidForSlot(int slot, ItemStack is);
@@ -63,10 +80,6 @@ public abstract class InventoriedPoweredLiquidIO extends PoweredLiquidIO impleme
 		if (this instanceof InertIInv)
 			return false;
 		return ((IInventory)this).isItemValidForSlot(i, is);
-	}
-
-	public final String getInvName() {
-		return this.getMultiValuedName();
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer var1) {
@@ -97,12 +110,12 @@ public abstract class InventoriedPoweredLiquidIO extends PoweredLiquidIO impleme
 	{
 		super.readFromNBT(NBT);
 
-		NBTTagList nbttaglist = NBT.getTagList("Items");
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
 		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
 			if (byte0 >= 0 && byte0 < inv.length) {

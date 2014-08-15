@@ -9,21 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.SpaceRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -51,6 +36,22 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PipeConnector, IFluidHandler {
 
@@ -430,7 +431,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	private void overChargeExplosion(World world, int x, int y, int z) {
-		world.setBlock(x, y, z, 0);
+		world.setBlockToAir(x, y, z);
 		int num = isBedrockCoil ? 24 : 3;
 		int pow = isBedrockCoil ? 12 : 8;
 		int r = isBedrockCoil ? 9 : 1;
@@ -453,8 +454,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				for (int k = -r; k <= r; k++) {
 					double dd = ReikaMathLibrary.py3d(i, j*2, k);
 					if (dd <= r+0.5) {
-						if (world.getBlockId(x+i, y+j, z+k) != Block.bedrock.blockID) {
-							world.setBlock(x+i, y+j, z+k, 0);
+						if (world.getBlock(x+i, y+j, z+k) != Blocks.bedrock) {
+							world.setBlockToAir(x+i, y+j, z+k);
 							world.markBlockForUpdate(x+i, y+j, z+k);
 						}
 					}
@@ -495,30 +496,30 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public int getMaxRatio() {
 		if (belts[0] == null)
 			return 1;
-		if (belts[0].itemID != ItemStacks.belt.itemID || belts[0].getItemDamage() != ItemStacks.belt.getItemDamage())
+		if (belts[0].getItem() != ItemStacks.belt.getItem() || belts[0].getItemDamage() != ItemStacks.belt.getItemDamage())
 			return 1;
 		for (int i = 1; i <= 2; i++) {
 			if (belts[i] == null)
 				return 2;
-			if (belts[i].itemID != ItemStacks.belt.itemID || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
+			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
 				return 2;
 		}
 		for (int i = 3; i <= 6; i++) {
 			if (belts[i] == null)
 				return 4;
-			if (belts[i].itemID != ItemStacks.belt.itemID || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
+			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
 				return 4;
 		}
 		for (int i = 7; i <= 14; i++) {
 			if (belts[i] == null)
 				return 8;
-			if (belts[i].itemID != ItemStacks.belt.itemID || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
+			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
 				return 8;
 		}
 		for (int i = 15; i <= 30; i++) {
 			if (belts[i] == null)
 				return 16;
-			if (belts[i].itemID != ItemStacks.belt.itemID || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
+			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
 				return 16;
 		}
 		return 32;
@@ -557,7 +558,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		int dy = y+read.offsetY;
 		int dz = z+read.offsetZ;
 		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
-		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getBlockTileEntity(dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 		if (this.isProvider(te)) {
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
@@ -748,12 +749,12 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
-		NBTTagList nbttaglist = NBT.getTagList("Items");
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
 		belts = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
 			if (byte0 >= 0 && byte0 < belts.length)
@@ -798,17 +799,28 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		return this.getGearType() == GearType.CVT && ReikaItemHelper.matchStacks(itemstack, ItemStacks.belt);
 	}
 
+	public final String getInventoryName() {
+		return this.getMultiValuedName();
+	}
+
+	public void openInventory() {}
+
+	public void closeInventory() {}
+
 	@Override
-	public boolean isInvNameLocalized() {
-		return false;
+	public final boolean hasCustomInventoryName() {
+		return true;
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public final void markDirty() {
+		blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 
-	@Override
-	public void closeChest() {
+		if (this.getBlockType() != Blocks.air)
+		{
+			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
+		}
 	}
 
 	@Override

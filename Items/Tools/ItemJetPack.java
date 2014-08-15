@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import java.util.HashMap;
-import java.util.List;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Auxiliary.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.KeyWatcher.Key;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -33,6 +19,22 @@ import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -40,8 +42,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	private static final HashMap<String, Long> onGround = new HashMap();
 
-	public ItemJetPack(int ID, EnumArmorMaterial mat, int tex, int render) {
-		super(ID, mat, render, 1, tex);
+	public ItemJetPack(ArmorMaterial mat, int tex, int render) {
+		super(mat, render, 1, tex);
 	}
 
 	public int getFuel(ItemStack is) {
@@ -121,16 +123,16 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	}*/
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack is)
+	public void onArmorTick(World world, EntityPlayer player, ItemStack is)
 	{
 		boolean flying = this.useJetpack(player, is);
 
 		if (ConfigRegistry.EXPLODEPACK.getState()) {
 			if (this.getCurrentFillLevel(is) > 0) {
-				if (player.handleLavaMovement() && world.difficultySetting != 0) {
+				if (player.handleLavaMovement() && world.difficultySetting != EnumDifficulty.PEACEFUL) {
 					this.explode(world, player);
 				}
-				else if (player.isBurning() && world.difficultySetting > 1 && flying) {
+				else if (player.isBurning() && world.difficultySetting.ordinal() > 1 && flying) {
 					this.explode(world, player);
 				}
 			}
@@ -188,7 +190,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 					ep.fallDistance = -2;
 					if (ConfigRegistry.KICKFLYING.getState()) {
 						if (ep instanceof EntityPlayerMP) {
-							((EntityPlayerMP)ep).playerNetServerHandler.ticksForFloatKick = 0;
+							((EntityPlayerMP)ep).playerNetServerHandler.floatingTickCount = 0;
 						}
 					}
 				}
@@ -201,11 +203,11 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	}
 
 	private int getFuelUsageMultiplier() {
-		return itemID == ItemRegistry.BEDPACK.getShiftedID() ? 2 : 1;
+		return this == ItemRegistry.BEDPACK.getItemInstance() ? 2 : 1;
 	}
 
 	private void explode(World world, EntityPlayer player) {
-		ItemStack to = itemID == ItemRegistry.BEDPACK.getShiftedID() ? ItemRegistry.BEDCHEST.getEnchantedStack() : null;
+		ItemStack to = this == ItemRegistry.BEDPACK.getItemInstance() ? ItemRegistry.BEDCHEST.getEnchantedStack() : null;
 		player.setCurrentItemOrArmor(3, to);
 		world.createExplosion(player, player.posX, player.posY, player.posZ, 2, false);
 		double v = 4;
@@ -230,10 +232,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
-		if (itemID == ItemRegistry.BEDPACK.getShiftedID()) {
+		if (this == ItemRegistry.BEDPACK.getItemInstance()) {
 			HashMap<Enchantment, Integer> ench = ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDefaultEnchantments();
 			ReikaEnchantmentHelper.applyEnchantments(is, ench);
 		}
@@ -303,7 +305,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	public boolean providesProtection() {
-		return itemID == ItemRegistry.BEDPACK.getShiftedID();
+		return this == ItemRegistry.BEDPACK.getItemInstance();
 	}
 
 	@Override
@@ -314,7 +316,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	@Override
 	public double getDamageMultiplier(DamageSource src) {
 		ItemBedrockArmor arm = (ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance();
-		return itemID == ItemRegistry.BEDPACK.getShiftedID() ? arm.getDamageMultiplier(src) : 1;
+		return this == ItemRegistry.BEDPACK.getItemInstance() ? arm.getDamageMultiplier(src) : 1;
 	}
 
 	@Override

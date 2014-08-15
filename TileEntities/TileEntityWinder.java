@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -22,6 +19,11 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlotMachine, SimpleProvider, DiscreteFunction, ConditionalOperation {
 
@@ -75,7 +77,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 			tickcount = 0;
 			if (inv[0].getItemDamage() >= this.getMaxWind())
 				return;
-			inv[0] = new ItemStack(inv[0].itemID, 1, inv[0].getItemDamage()+1);
+			inv[0] = new ItemStack(inv[0].getItem(), 1, inv[0].getItemDamage()+1);
 			if (!world.isRemote && this.breakCoil()) {
 				inv[0] = null;
 				world.playSoundEffect(x, y, z, "random.break", 1F, 1F);
@@ -94,7 +96,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 			if (tickcount < this.getUnwindTime())
 				return;
 			tickcount = 0;
-			inv[0] = new ItemStack(inv[0].itemID, 1, inv[0].getItemDamage()-1);
+			inv[0] = new ItemStack(inv[0].getItem(), 1, inv[0].getItemDamage()-1);
 		}
 
 	}
@@ -133,7 +135,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 			return 0;
 		if (!(inv[0].getItem() instanceof TensionStorage))
 			return 0;
-		int id = inv[0].itemID;
+		Item id = inv[0].getItem();
 		int max = 0;
 		max = torque/((TensionStorage)inv[0].getItem()).getStiffness(inv[0]);
 		if (max > ItemRegistry.SPRING.getNumberMetadatas()) //technical limit
@@ -185,9 +187,9 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		if (is.itemID == ItemRegistry.SPRING.getShiftedID())
+		if (is.getItem() == ItemRegistry.SPRING.getItemInstance())
 			return true;
-		if (is.itemID == ItemRegistry.STRONGCOIL.getShiftedID())
+		if (is.getItem() == ItemRegistry.STRONGCOIL.getItemInstance())
 			return true;
 		return false;
 	}
@@ -196,7 +198,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 	public int getRedstoneOverride() {
 		if (inv[0] == null)
 			return 15;
-		if (inv[0].itemID != ItemRegistry.SPRING.getShiftedID())
+		if (inv[0].getItem() != ItemRegistry.SPRING.getItemInstance())
 			return 15;
 		if (inv[0].getItemDamage() >= torque && winding)
 			return 15;

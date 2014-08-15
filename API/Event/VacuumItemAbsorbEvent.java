@@ -9,9 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
+
+import net.minecraft.item.ItemStack;
 
 public class VacuumItemAbsorbEvent extends TileEntityEvent {
 

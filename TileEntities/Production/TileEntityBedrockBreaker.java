@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -29,17 +19,30 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.BedrockDigEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -66,10 +69,10 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			int hx = x+step*facing.offsetX;
 			int hy = y+step*facing.offsetY;
 			int hz = z+step*facing.offsetZ;
-			int id = world.getBlockId(hx, hy, hz);
-			if (id != 0) {
+			Block b = world.getBlock(hx, hy, hz);
+			if (b != Blocks.air) {
 				ReikaParticleHelper.CRITICAL.spawnAroundBlock(world, hx, hy, hz, 4);
-				ReikaSoundHelper.playStepSound(world, hx, hy, hz, Block.blocksList[id], 0.5F+rand.nextFloat(), 0.5F*rand.nextFloat());
+				ReikaSoundHelper.playStepSound(world, hx, hy, hz, b, 0.5F+rand.nextFloat(), 0.5F*rand.nextFloat());
 				//ReikaSoundHelper.playSoundAtBlock(world, hx, hy, hz, "dig.stone", );
 			}
 		}
@@ -93,14 +96,14 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			return false;
 		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return false;
-		return world.isRemote || ReikaPlayerAPI.playerCanBreakAt(world, x, y, z, placer);
+		return world.isRemote || ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x, y, z, this.getPlacer());
 	}
 
 	private boolean processBlock(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		if (this.isBedrock(id))
+		Block b = world.getBlock(x, y, z);
+		if (this.isBedrock(b))
 			return true;
-		if (id == RotaryCraft.bedrockslice.blockID)
+		if (b == BlockRegistry.BEDROCKSLICE.getBlockInstance())
 			return true;
 		return false;
 	}
@@ -123,34 +126,24 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
 		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return false;
-		int id = 0;
 		switch (metadata) {
 		case 0:
-			id = world.getBlockId(x-1, y, z);
 			read = ForgeDirection.WEST;
 			break;
 		case 1:
-			id = world.getBlockId(x+1, y, z);
 			read = ForgeDirection.EAST;
 			break;
 		case 2:
-			id = world.getBlockId(x, y, z-1);
 			read = ForgeDirection.NORTH;
 			break;
 		case 3:
-			id = world.getBlockId(x, y, z+1);
 			read = ForgeDirection.SOUTH;
 			break;
 		case 4:
-			id = world.getBlockId(x, y-1, z);
 			read = ForgeDirection.DOWN;
 			break;
 		case 5:
-			id = world.getBlockId(x, y+1, z);
 			read = ForgeDirection.UP;
-			break;
-		default:
-			id = 0;
 			break;
 		}
 		return true;
@@ -197,8 +190,8 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		}
 	}
 
-	private boolean isBedrock(int id) {
-		if (id == Block.bedrock.blockID)
+	private boolean isBedrock(Block id) {
+		if (id == Blocks.bedrock)
 			return true;
 		if (id == FactorizationHandler.getInstance().bedrockID)
 			return true;
@@ -207,19 +200,19 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 
 	public void grind(World world, int mx, int my, int mz, int x, int y, int z, int meta) {
 		if (this.processBlock(world, x, y, z)) {
-			if (this.isBedrock(world.getBlockId(x, y, z))) {
+			if (this.isBedrock(world.getBlock(x, y, z))) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-				world.setBlock(x, y, z, RotaryCraft.bedrockslice.blockID, 0, 3);
+				world.setBlock(x, y, z, BlockRegistry.BEDROCKSLICE.getBlockInstance(), 0, 3);
 			}
 			else {
 				int rockmetadata = world.getBlockMetadata(x, y, z);
 				if (rockmetadata < 15) {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-					world.setBlock(x, y, z, RotaryCraft.bedrockslice.blockID, rockmetadata+1, 3);
+					world.setBlock(x, y, z, BlockRegistry.BEDROCKSLICE.getBlockInstance(), rockmetadata+1, 3);
 				}
 				else {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-					world.setBlock(x, y, z, 0);
+					world.setBlockToAir(x, y, z);
 					ItemStack is = this.getDrops();
 					if (!this.chestCheck(world, x, y, z, is)) {
 						if (this.isInventoryFull())
@@ -234,13 +227,12 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			}
 		}
 		else {
-			int id = world.getBlockId(x, y, z);
-			if (id != 0) {
-				Block b = Block.blocksList[id];
+			Block b = world.getBlock(x, y, z);
+			if (b != Blocks.air) {
 				ReikaSoundHelper.playBreakSound(world, x, y, z, b);
 				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 					ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, world.getBlockMetadata(x, y, z));
-				world.setBlock(x, y, z, 0);
+				world.setBlockToAir(x, y, z);
 			}
 			this.incrementStep(world, mx, my, mz);
 		}
@@ -275,7 +267,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			int dx = x+i*facing.offsetX;
 			int dy = y+i*facing.offsetY;
 			int dz = z+i*facing.offsetZ;
-			//ReikaJavaLibrary.pConsole(step+"; "+i+" @ "+dx+","+dy+","+dz+" : "+world.getBlockId(dx, dy, dz), Side.SERVER);
+			//ReikaJavaLibrary.pConsole(step+"; "+i+" @ "+dx+","+dy+","+dz+" : "+world.getBlock(dx, dy, dz), Side.SERVER);
 			if (!ReikaWorldHelper.softBlocks(world, dx, dy, dz)) {
 				step = i;
 				return;

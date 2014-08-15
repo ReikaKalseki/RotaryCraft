@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -37,6 +23,21 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
 
@@ -349,7 +350,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void setMusicFromDisc(ItemStack is) {
-		if (is.itemID != ItemRegistry.DISK.getShiftedID())
+		if (is.getItem() != ItemRegistry.DISK.getItemInstance())
 			return;
 		if (is.stackTagCompound == null)
 			return;
@@ -357,9 +358,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		try {
 			for (int i = 0; i < 16; i++) {
 				if (is.stackTagCompound.hasKey("ch"+i)) {
-					NBTTagList li = is.stackTagCompound.getTagList("ch"+i);
+					NBTTagList li = is.stackTagCompound.getTagList("ch"+i, is.stackTagCompound.getId());
 					for (int k = 0; k < li.tagCount(); k++) {
-						NBTTagCompound nbt = (NBTTagCompound)li.tagAt(k);
+						NBTTagCompound nbt = li.getCompoundTagAt(k);
 						//ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Side.SERVER);
 						Note n = Note.readFromNBT(nbt);
 						this.addNote(i, n);
@@ -373,7 +374,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void saveMusicToDisk(ItemStack is) {
-		if (is.itemID != ItemRegistry.DISK.getShiftedID())
+		if (is.getItem() != ItemRegistry.DISK.getItemInstance())
 			return;
 		is.stackTagCompound = new NBTTagCompound();
 		for (int i = 0; i < 16; i++) {

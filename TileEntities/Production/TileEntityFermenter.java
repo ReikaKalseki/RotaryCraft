@@ -9,18 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -30,7 +19,6 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.DyeTrees.API.TreeGetter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -40,6 +28,19 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation
 {
@@ -77,7 +78,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
 			if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
 				for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
-					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Block.sapling, 1, j) : new ItemStack(Block.leaves, 1, j);
+					ReikaTreeHelper tree = ReikaTreeHelper.treeList[j];
+					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? tree.getSapling() : tree.getLeaf();
 					in.add(icon);
 				}
 			}
@@ -110,15 +112,15 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		for (int i = 0; i < 2; i++)
 			if (inv[i] == null)
 				return null;
-		if (inv[0].itemID == Item.sugar.itemID) {
+		if (inv[0].getItem() == Items.sugar) {
 			if (this.hasWater())
-				if(inv[1].itemID == Block.dirt.blockID)
-					return new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
+				if (ReikaItemHelper.matchStackWithBlock(inv[1], Blocks.dirt))
+					return new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
 		}
-		if (inv[0].itemID == ItemRegistry.YEAST.getShiftedID()) {
+		if (inv[0].getItem() == ItemRegistry.YEAST.getItemInstance()) {
 			if (this.getPlantValue(inv[1]) > 0)
 				if (this.hasWater())
-					return new ItemStack(ItemStacks.sludge.itemID, 1, ItemStacks.sludge.getItemDamage());
+					return ItemStacks.sludge.copy();;
 		}
 		return null;
 	}
@@ -140,9 +142,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (TreeGetter.isRainbowSapling(is))
 				return 16;
 		}
-		if (ModList.FORESTRY.isLoaded() && is.itemID == ForestryHandler.getInstance().saplingID)
+		if (ModList.FORESTRY.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ForestryHandler.getInstance().saplingID))
 			return 2;
-		if (ModList.EMASHER.isLoaded() && is.itemID == ModCropList.ALGAE.blockID)
+		if (ModList.EMASHER.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ModCropList.ALGAE.blockID))
 			return 3;
 		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
 		if (sap != null) {
@@ -175,7 +177,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		boolean fermenting = true;
 		if (this.getRecipe() == null)
 			return -1F;
-		if (this.getRecipe().itemID == ItemRegistry.YEAST.getShiftedID())
+		if (this.getRecipe().getItem() == ItemRegistry.YEAST.getItemInstance())
 			fermenting = false;
 		if (temperature < MINUSEFULTEMP)
 			return 1F/(MINUSEFULTEMP-temperature);
@@ -216,11 +218,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			idle = true;
 			return;
 		}
-		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
+		if (product.getItem() != ItemRegistry.YEAST.getItemInstance() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
 			return;
 		boolean red = world.isBlockIndirectlyGettingPowered(x, y, z);
 		if (red) {
-			if (product.itemID == ItemRegistry.YEAST.getShiftedID()) {
+			if (product.getItem() == ItemRegistry.YEAST.getItemInstance()) {
 				//return;
 			}
 		}
@@ -230,7 +232,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			}
 		}
 		if (inv[2] != null) {
-			if (product.itemID != inv[2].itemID) {
+			if (product.getItem() != inv[2].getItem()) {
 				fermenterCookTime = 0;
 				return;
 			}
@@ -257,13 +259,13 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (product == null) {
 			return false;
 		}
-		if (product.itemID != ItemRegistry.YEAST.getShiftedID() && (product.itemID != ItemStacks.sludge.itemID || product.getItemDamage() != ItemStacks.sludge.getItemDamage()))
+		if (product.getItem() != ItemRegistry.YEAST.getItemInstance() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
 			return false;
 		if (inv[2] != null) {
 			if (inv[2].stackSize >= inv[2].getMaxStackSize()) {
 				return false;
 			}
-			if (product.itemID != inv[2].itemID) {
+			if (product.getItem() != inv[2].getItem()) {
 				return false;
 			}
 		}
@@ -271,10 +273,10 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	private void make(ItemStack product) {
-		if (product.itemID == ItemRegistry.YEAST.getShiftedID()) {
+		if (product.getItem() == ItemRegistry.YEAST.getItemInstance()) {
 			if (inv[2] == null)
-				inv[2] = new ItemStack(ItemRegistry.YEAST.getShiftedID(), 1, 0);
-			else if (inv[2].itemID == ItemRegistry.YEAST.getShiftedID()) {
+				inv[2] = new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
+			else if (inv[2].getItem() == ItemRegistry.YEAST.getItemInstance()) {
 				if (inv[2].stackSize < inv[2].getMaxStackSize())
 					inv[2].stackSize++;
 				else
@@ -288,10 +290,10 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (rand.nextInt(4) == 0)
 				ReikaInventoryHelper.decrStack(1, inv);
 		}
-		if (product.itemID == ItemStacks.sludge.itemID && product.getItemDamage() == ItemStacks.sludge.getItemDamage()) {
+		if (ReikaItemHelper.matchStacks(product, ItemStacks.sludge)) {
 			if (inv[2] == null)
-				inv[2] = new ItemStack(ItemStacks.sludge.itemID, this.getPlantValue(inv[1]), ItemStacks.sludge.getItemDamage());
-			else if (inv[2].itemID == ItemStacks.sludge.itemID && inv[2].getItemDamage() == ItemStacks.sludge.getItemDamage()) {
+				inv[2] = ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, this.getPlantValue(inv[1]));
+			else if (ReikaItemHelper.matchStacks(inv[2], ItemStacks.sludge)) {
 				if (inv[2].stackSize < inv[2].getMaxStackSize())
 					inv[2].stackSize += ReikaMathLibrary.extrema(this.getPlantValue(inv[1]), inv[2].getMaxStackSize()-inv[2].stackSize, "min");
 				else
@@ -305,7 +307,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (rand.nextInt(2) == 0)
 				ReikaInventoryHelper.decrStack(0, inv);
 		}
-		this.onInventoryChanged();
+		this.markDirty();
 		tank.removeLiquid(CONSUME_WATER);
 	}
 
@@ -315,11 +317,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (waterside != null) {
 			Tamb -= 5;
 		}
-		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 		if (iceside != null) {
 			Tamb -= 15;
 		}
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.fire.blockID);
+		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
 		if (fireside != null) {
 			Tamb += 50;
 		}
@@ -342,7 +344,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public void testYeastKill() {
 		if (temperature < MAXTEMP)
 			return;
-		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.YEAST.getShiftedID(), inv);
+		int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.YEAST.getItemInstance(), inv);
 		if (slot != -1) {
 			ReikaInventoryHelper.decrStack(slot, inv);
 			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "random.fizz", 0.8F, 0.8F);
@@ -405,7 +407,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (red) {
 			switch(i) {
 			case 0:
-				return is.itemID == ItemRegistry.YEAST.getShiftedID();
+				return is.getItem() == ItemRegistry.YEAST.getItemInstance();
 			case 1:
 				return this.getPlantValue(is) > 0;
 			}
@@ -413,9 +415,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		else {
 			switch(i) {
 			case 0:
-				return is.itemID == Item.sugar.itemID;
+				return is.getItem() == Items.sugar;
 			case 1:
-				return is.itemID == Block.dirt.blockID;
+				return ReikaItemHelper.matchStackWithBlock(is, Blocks.dirt);
 			}
 		}
 		return false;

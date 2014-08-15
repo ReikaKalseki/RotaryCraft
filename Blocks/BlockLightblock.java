@@ -9,39 +9,46 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.BlockBasic;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.BlockBasic;
 
 public class BlockLightblock extends BlockBasic {
 
-	public Icon icon;
+	public IIcon icon;
 
-	public BlockLightblock(int ID) {
-		super(ID, Material.circuits);
+	public BlockLightblock() {
+		super(Material.circuits);
 		this.setResistance(3600000F);
 		this.setBlockUnbreakable();
 	}
 
 	@Override
-	public boolean isAirBlock(World world, int x, int y, int z) {
+	protected boolean isAvailableInCreativeMode() {
+		return false;
+	}
+
+	@Override
+	public boolean isAir(IBlockAccess world, int x, int y, int z) {
 		return true;
 	}
 
 	@Override
-	public int idDropped(int par1, Random par2Random, int par3)
-	{
-		return 0;
+	public Item getItemDropped(int id, Random r, int fortune) {
+		return null;
 	}
+
 
 	@Override
 	public int damageDropped(int par1)
@@ -68,7 +75,7 @@ public class BlockLightblock extends BlockBasic {
 	}
 
 	@Override
-	public final ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		return ret;
@@ -81,7 +88,7 @@ public class BlockLightblock extends BlockBasic {
 	}
 
 	@Override
-	public boolean isBlockReplaceable(World world, int x, int y, int z)
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z)
 	{
 		return true;
 	}
@@ -103,12 +110,12 @@ public class BlockLightblock extends BlockBasic {
 	}
 
 	@Override
-	public Icon getIcon(int s, int meta) {
+	public IIcon getIcon(int s, int meta) {
 		return icon;
 	}
 
 	@Override
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
 		if (RotaryCraft.instance.isLocked())
 			return;
 		icon = par1IconRegister.registerIcon("RotaryCraft:trans");

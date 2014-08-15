@@ -10,20 +10,22 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public enum PlantMaterials {
 
-	SUGARCANE(Item.reed, 1),
-	TALLGRASS(Block.tallGrass, 2),
-	LILYPAD(Block.waterlily, 1),
-	SAPLING(Block.sapling, 1),
-	ROSE(Block.plantRed, 1),
-	FLOWER(Block.plantYellow, 1),
-	VINES(Block.vine, 2),
-	LEAVES(Block.leaves, 2),
-	POTATO(Item.potato, 1);
+	SUGARCANE(Items.reeds, 1),
+	TALLGRASS(Blocks.tallgrass, 2),
+	LILYPAD(Blocks.waterlily, 1),
+	SAPLING(Blocks.sapling, 1),
+	ROSE(Blocks.red_flower, 1),
+	FLOWER(Blocks.yellow_flower, 1),
+	VINES(Blocks.vine, 2),
+	LEAVES(Blocks.leaves, 2),
+	POTATO(Items.potato, 1);
 
 	private ItemStack item;
 	private int multiplier;
@@ -44,7 +46,7 @@ public enum PlantMaterials {
 		if (is == null)
 			return false;
 		for (int i = 1; i < plantList.length; i++) {
-			if (plantList[i].item.itemID == is.itemID)
+			if (plantList[i].item.getItem() == is.getItem())
 				return true;
 		}
 		return false;
@@ -54,7 +56,7 @@ public enum PlantMaterials {
 		if (is == null)
 			return null;
 		for (int i = 0; i < plantList.length; i++) {
-			if (plantList[i].item.itemID == is.itemID)
+			if (plantList[i].item.getItem() == is.getItem())
 				return plantList[i];
 		}
 		return null;
@@ -70,7 +72,7 @@ public enum PlantMaterials {
 
 	public ItemStack getPlantItemForIcon() {
 		if (this == TALLGRASS)
-			return new ItemStack(item.itemID, 1, 1);
+			return new ItemStack(item.getItem(), 1, 1);
 		return item.copy();
 	}
 

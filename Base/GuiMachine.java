@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.StatCollector;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -32,6 +21,18 @@ import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.util.StatCollector;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -60,6 +61,14 @@ public abstract class GuiMachine extends GuiContainer {
 		return ySize;
 	}
 
+	public int getGuiLeft() {
+		return guiLeft;
+	}
+
+	public int getGuiTop() {
+		return guiTop;
+	}
+
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -75,7 +84,7 @@ public abstract class GuiMachine extends GuiContainer {
 	public void actionPerformed(GuiButton b) {
 		if (b.id == 24000 || b.id == 24001) {
 			ep.closeScreen();
-			if (ReikaInventoryHelper.checkForItem(ItemRegistry.HANDBOOK.getShiftedID(), ep.inventory.mainInventory))
+			if (ReikaInventoryHelper.checkForItem(ItemRegistry.HANDBOOK.getItemInstance(), ep.inventory.mainInventory))
 				ep.openGui(RotaryCraft.instance, GuiRegistry.LOADEDHANDBOOK.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 			else
 				ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOKPAGE.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
@@ -90,15 +99,15 @@ public abstract class GuiMachine extends GuiContainer {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		if (tile instanceof TileEntityProjector)
-			fontRenderer.drawString(tile.getMultiValuedName(), 6, 6, 4210752);
+			fontRendererObj.drawString(tile.getMultiValuedName(), 6, 6, 4210752);
 		else if (tile instanceof TileEntityScaleableChest)
-			fontRenderer.drawString(tile.getMultiValuedName(), 8, 6, 4210752);
+			fontRendererObj.drawString(tile.getMultiValuedName(), 8, 6, 4210752);
 		else
-			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRenderer, tile.getMultiValuedName(), xSize/2, 5, 4210752);
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, tile.getMultiValuedName(), xSize/2, 5, 4210752);
 
 		if (tile instanceof IInventory && this.labelInventory()) {
 			int dx = this.inventoryLabelLeft() ? 8 : xSize-58;
-			fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), dx, (ySize - 96) + 3, 4210752);
+			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), dx, (ySize - 96) + 3, 4210752);
 		}
 
 		this.drawHelpTab(j, k);
@@ -155,15 +164,15 @@ public abstract class GuiMachine extends GuiContainer {
 	protected abstract void drawPowerTab(int j, int k);
 
 	public void drawHelpTab(int j, int k) {
-		fontRenderer.drawString("?", -10, ySize/2-4, 0xffffff);
+		fontRendererObj.drawString("?", -10, ySize/2-4, 0xffffff);
 	}
 
 	@Override
-	protected final void drawSlotInventory(Slot slot) {
-		super.drawSlotInventory(slot);
+	protected final void func_146977_a(Slot slot) {
+		super.func_146977_a(slot);
 		if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
 			ReikaTextureHelper.bindFontTexture();
-			fontRenderer.drawString(String.format("%d", slot.slotNumber), slot.xDisplayPosition+1, slot.yDisplayPosition+1, 0x888888);
+			fontRendererObj.drawString(String.format("%d", slot.slotNumber), slot.xDisplayPosition+1, slot.yDisplayPosition+1, 0x888888);
 		}
 	}
 }

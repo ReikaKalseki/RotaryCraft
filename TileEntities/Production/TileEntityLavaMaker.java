@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -28,6 +21,14 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implements IFluidHandler, PipeConnector, TemperatureTE, ConditionalOperation {
 
@@ -244,12 +245,12 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 			this.overheat(world, x, y, z);
 		}
 		if (temperature > 50) {
-			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.snow.blockID);
+			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, 0, 0);
-			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Block.ice.blockID);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.air, 0);
+			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
 			if (side != null)
-				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Block.waterMoving.blockID, 0);
+				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.flowing_water, 0);
 		}
 	}
 

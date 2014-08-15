@@ -9,26 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NavigableSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.Icon;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.ItemReq;
@@ -53,6 +33,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -62,6 +43,26 @@ import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NavigableSet;
+
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.TreeMultimap;
 
@@ -153,14 +154,14 @@ public final class HandbookAuxData {
 			ItemStack[] out = new ItemStack[4];
 			if (van) {
 				in[0] = ReikaOreHelper.oreList[k].getOreBlock();
-				in[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
-				in[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
-				in[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
+				in[1] = ItemRegistry.EXTRACTS.getStackOfMetadata(k);
+				in[2] = ItemRegistry.EXTRACTS.getStackOfMetadata(k+8);
+				in[3] = ItemRegistry.EXTRACTS.getStackOfMetadata(k+16);
 
-				out[0] = new ItemStack(RotaryCraft.extracts.itemID, 1, k);
-				out[1] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+8);
-				out[2] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+16);
-				out[3] = new ItemStack(RotaryCraft.extracts.itemID, 1, k+24);
+				out[0] = ItemRegistry.EXTRACTS.getStackOfMetadata(k);
+				out[1] = ItemRegistry.EXTRACTS.getStackOfMetadata(k+8);
+				out[2] = ItemRegistry.EXTRACTS.getStackOfMetadata(k+16);
+				out[3] = ItemRegistry.EXTRACTS.getStackOfMetadata(k+24);
 
 				oreName = ReikaOreHelper.oreList[k].getName();
 			}
@@ -170,7 +171,7 @@ public final class HandbookAuxData {
 				ItemStack is = modores.get(i);
 				ModOreList ore = ModOreList.getModOreFromOre(is);
 				if (ore == null) {
-					ReikaJavaLibrary.pConsole("DRAGONAPI: ItemStack "+is.getDisplayName()+" ("+is.itemID+":"+is.getItemDamage()+")");
+					ReikaJavaLibrary.pConsole("DRAGONAPI: ItemStack "+is.getDisplayName()+" ("+is.getItem()+":"+is.getItemDamage()+")");
 					ReikaJavaLibrary.pConsole("has no mod ore list entry, yet was registered as such during load!");
 					ReikaJavaLibrary.pConsole("Contact both mod developers immediately!");
 					oreName = "ERROR";
@@ -200,14 +201,14 @@ public final class HandbookAuxData {
 		ItemStack[] in = new ItemStack[2];
 		ItemStack[] args;
 		out = (ItemRegistry.YEAST.getStackOf());
-		in = (new ItemStack[]{new ItemStack(Item.sugar), new ItemStack(Block.dirt)});
+		in = (new ItemStack[]{new ItemStack(Items.sugar), new ItemStack(Blocks.dirt)});
 		args = new ItemStack[]{out, in[0], in[1]};
 		fermenter.add(args);
 
 		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
 			if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
 				for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
-					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Block.sapling, 1, j) : new ItemStack(Block.leaves, 1, j);
+					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Blocks.sapling, 1, j) : new ItemStack(Blocks.leaves, 1, j);
 					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
 					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), icon});
 					args = new ItemStack[]{out, in[0], in[1]};
@@ -322,7 +323,7 @@ public final class HandbookAuxData {
 			int i = time-ReikaOreHelper.oreList.length;
 			String oreName;
 			if (van) {
-				in = new ItemStack(RotaryCraft.extracts, 1, time+24);
+				in = ItemRegistry.EXTRACTS.getStackOfMetadata(time+24);
 				oreName = ReikaOreHelper.oreList[time].getName();
 			}
 			else {
@@ -337,18 +338,18 @@ public final class HandbookAuxData {
 				f.drawString(words[k], dx+168, dy+36+f.FONT_HEIGHT*k-words.length*f.FONT_HEIGHT/2, 0);
 		}
 		else if (h == HandbookRegistry.COMPACTS) {
-			ItemStack in = new ItemStack(Item.coal);
-			ItemStack out = new ItemStack(Item.diamond.itemID, 2, 0);
+			ItemStack in = new ItemStack(Items.coal);
+			ItemStack out = new ItemStack(Items.diamond, 2, 0);
 			int k = (int)((System.nanoTime()/2000000000)%4);
 			if (k != 0)
-				in = new ItemStack(RotaryCraft.compacts.itemID, 1, k-1);
+				in = ItemRegistry.COMPACTS.getCraftedMetadataProduct(1, k-1);
 			if (k != 3)
-				out = new ItemStack(RotaryCraft.compacts.itemID, 2, k);
+				out = ItemRegistry.COMPACTS.getCraftedMetadataProduct(2, k);
 			MachineRecipeRenderer.instance.drawCompressor(dx+66, dy+14, in, dx+120, dy+41, out);
 		}
 		else if (h == HandbookRegistry.GLASS) {
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.obsidian), dx+87, dy+28);
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(RotaryCraft.blastglass), dx+145, dy+28);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.obsidian), dx+87, dy+28);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, BlockRegistry.BLASTGLASS.getStackOf(), dx+145, dy+28);
 		}
 		else if (h == HandbookRegistry.JETPACK) {
 			int k = (int)((System.nanoTime()/2000000000)%2);
@@ -385,11 +386,11 @@ public final class HandbookAuxData {
 		}
 		else if (h == HandbookRegistry.NETHERDUST) {
 			if ((System.nanoTime()/2000000000)%2 == 0) {
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.netherrack), dx+87, dy+28);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.netherrack), dx+87, dy+28);
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.netherrackdust, dx+145, dy+28);
 			}
 			else {
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.slowSand), dx+87, dy+28);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.soul_sand), dx+87, dy+28);
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.tar, dx+145, dy+28);
 			}
 		}
@@ -398,21 +399,21 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.silveringot, dx+145, dy+28);
 		}
 		else if (h == HandbookRegistry.SALT) {
-			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.bucketWater), dx+90, dy+28);
+			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Items.water_bucket), dx+90, dy+28);
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.salt, dx+166, dy+28);
 		}
 		else if (h == HandbookRegistry.SAWDUST) {
 			int k = (int)((System.nanoTime()/2000000000)%5);
 			switch (k) {
 			case 0:
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.bucketWater), dx+72+18, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Items.water_bucket), dx+72+18, dy+10);
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+36, dy+28);
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.stone), dx+72, dy+46);
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.stone), dx+72+18, dy+46);
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Block.stone), dx+72+36, dy+46);
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Item.paper.itemID, 8, 0), dx+166, dy+28);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72, dy+46);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72+18, dy+46);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72+36, dy+46);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, new ItemStack(Items.paper, 8, 0), dx+166, dy+28);
 				break;
 			case 1:
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
@@ -583,7 +584,7 @@ public final class HandbookAuxData {
 				if (liq != null) {
 					GL11.glColor4f(1, 1, 1, 1);
 					ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
-					Icon ico = liq.getFluid().getIcon();
+					IIcon ico = liq.getFluid().getIcon();
 					ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(posX+116, posY+38, ico, 16, 16);
 					ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(posX+116+16, posY+38, ico, 16, 16);
 					//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116, posY+38);

@@ -9,16 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
@@ -32,37 +23,27 @@ import Reika.RotaryCraft.Entities.EntityIceBlock;
 import Reika.RotaryCraft.Entities.EntityLiquidBlock;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Entities.EntitySonicShot;
-import Reika.RotaryCraft.Items.ItemBlockDecoTank;
-import Reika.RotaryCraft.Items.Placers.ItemBlockDeco;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class RotaryRegistration {
-
-	public static  void addBlocks() {
-		GameRegistry.registerBlock(RotaryCraft.bedrockslice, "BedrockSlice");
-
-		GameRegistry.registerBlock(RotaryCraft.decoblock, ItemBlockDeco.class, "MachineBlock");
-		GameRegistry.registerBlock(RotaryCraft.blastpane, "BlastGlass");
-		GameRegistry.registerBlock(RotaryCraft.blastglass, "BlastGlassPane");
-
-		GameRegistry.registerBlock(RotaryCraft.lightblock, "LightBlock");
-		GameRegistry.registerBlock(RotaryCraft.beamblock, "BeamBlock");
-		GameRegistry.registerBlock(RotaryCraft.lightbridge, "Bridge");
-
-		GameRegistry.registerBlock(RotaryCraft.miningpipe, "MiningPipe");
-
-		GameRegistry.registerBlock(RotaryCraft.canola, "Canola");
-		GameRegistry.registerBlock(RotaryCraft.decoTank, ItemBlockDecoTank.class, "DecoTank");
-	}
 
 	public static void addTileEntities() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
@@ -124,14 +105,6 @@ public class RotaryRegistration {
 		EntityRegistry.registerModEntity(EntityFlakShot.class, "Flak Shot", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
 	}
 
-	public static void instantiateMachines() {
-		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.machineBlocks);
-	}
-
-	public static void instantiateItems() {
-		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.basicItems);
-	}
-
 	public static void loadOreDictionary() {
 		if (!ModList.GREGTECH.isLoaded()) {//GT unificator causes an exploit, and no mods even use this anyways
 			OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot);
@@ -147,7 +120,7 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("RotaryCraft:dustBedrock", ItemStacks.bedrockdust);
 		OreDictionary.registerOre("RotaryCraft:ingotBedrock", ItemStacks.bedingot);
 
-		OreDictionary.registerOre("glassHardened", RotaryCraft.blastglass);
+		OreDictionary.registerOre("glassHardened", BlockRegistry.BLASTGLASS.getBlockInstance());
 
 		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
@@ -179,21 +152,21 @@ public class RotaryRegistration {
 		FluidRegistry.registerFluid(RotaryCraft.nitrogenFluid);
 		FluidRegistry.registerFluid(RotaryCraft.poisonFluid);
 
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Item.bucketEmpty));
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Item.bucketEmpty));
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(2), new ItemStack(Item.bucketEmpty));
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.nitrogenFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(3), new ItemStack(Item.bucketEmpty));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(2), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.nitrogenFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(3), new ItemStack(Items.bucket));
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static void setupLiquidIcons(TextureStitchEvent.Pre event) {
 		RotaryCraft.logger.log("Loading Liquid Icons");
 
-		if (event.map.textureType == 0) {
-			Icon jeticon = event.map.registerIcon("RotaryCraft:jetfuel_anim");
-			Icon lubeicon = event.map.registerIcon("RotaryCraft:lubricant_anim");
-			Icon ethanolicon = event.map.registerIcon("RotaryCraft:ethanol_anim");
-			Icon nitrogenicon = event.map.registerIcon("RotaryCraft:nitrogen_anim");
+		if (event.map.getTextureType() == 0) {
+			IIcon jeticon = event.map.registerIcon("RotaryCraft:jetfuel_anim");
+			IIcon lubeicon = event.map.registerIcon("RotaryCraft:lubricant_anim");
+			IIcon ethanolicon = event.map.registerIcon("RotaryCraft:ethanol_anim");
+			IIcon nitrogenicon = event.map.registerIcon("RotaryCraft:nitrogen_anim");
 			RotaryCraft.jetFuelFluid.setIcons(jeticon);
 			RotaryCraft.lubeFluid.setIcons(lubeicon);
 			RotaryCraft.ethanolFluid.setIcons(ethanolicon);

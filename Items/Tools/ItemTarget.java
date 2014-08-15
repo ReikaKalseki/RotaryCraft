@@ -9,19 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+
 public class ItemTarget extends ItemRotaryTool {
 
-	public ItemTarget(int ID, int tex) {
-		super(ID, tex);
+	public ItemTarget(int tex) {
+		super(tex);
 	}
 
 	@Override
@@ -29,8 +32,8 @@ public class ItemTarget extends ItemRotaryTool {
 		MovingObjectPosition mov = null;//= ReikaPlayerAPI.getLookedAtBlock(512);
 		for (float i = 0; i <= 512; i += 0.5) {
 			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
-			int id = world.getBlockId(xyz[0], xyz[1], xyz[2]);
-			if (id != 0) {
+			Block id = world.getBlock(xyz[0], xyz[1], xyz[2]);
+			if (id != Blocks.air) {
 				mov = new MovingObjectPosition(xyz[0], xyz[1], xyz[2], 0, ep.getLookVec());
 				break;
 			}
@@ -45,7 +48,7 @@ public class ItemTarget extends ItemRotaryTool {
 			for (int i = -range; i <= range; i++) {
 				for (int j = -range; j <= range; j++) {
 					for (int k = -range; k <= range; k++) {
-						TileEntity te = world.getBlockTileEntity((int)ep.posX+i, (int)ep.posY+j, (int)ep.posZ+k);
+						TileEntity te = world.getTileEntity((int)ep.posX+i, (int)ep.posY+j, (int)ep.posZ+k);
 						if (te instanceof TileEntityTNTCannon) {
 							TileEntityTNTCannon tc = (TileEntityTNTCannon)te;
 							if (tc.targetMode) {

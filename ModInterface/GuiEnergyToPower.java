@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.awt.Color;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -24,6 +17,13 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.PacketRegistry;
+
+import java.awt.Color;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiEnergyToPower extends GuiNonPoweredMachine {
 
@@ -90,33 +90,33 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 			this.drawRect(SHIFT+xSize/2-w+inset-dx, ySize-30-48+inset+i*dy, SHIFT+xSize/2+w-inset-dx, ySize-30-48+h-inset+i*dy, 0xff000000);
 		}
 
-		this.drawCenteredString(fontRenderer, String.format("Torque: %d Nm", torque), SHIFT+xSize/2-dx, ySize-30-48+6, 0xffffff);
+		this.drawCenteredString(fontRendererObj, String.format("Torque: %d Nm", torque), SHIFT+xSize/2-dx, ySize-30-48+6, 0xffffff);
 
-		this.drawCenteredString(fontRenderer, String.format("Speed: %d rad/s", omega), SHIFT+xSize/2-dx, ySize-30-48+6+dy, 0xffffff);
-		this.drawCenteredString(fontRenderer, String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)), SHIFT+xSize/2-dx, ySize-30-48+6+dy*2, 0xffffff);
+		this.drawCenteredString(fontRendererObj, String.format("Speed: %d rad/s", omega), SHIFT+xSize/2-dx, ySize-30-48+6+dy, 0xffffff);
+		this.drawCenteredString(fontRendererObj, String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)), SHIFT+xSize/2-dx, ySize-30-48+6+dy*2, 0xffffff);
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+171, j+188, k+21, k+90)) {
 			int e = engine.getStoredPower();
 			String sg = String.format("%d/%d %s", e, engine.getMaxStorage(), engine.getUnitDisplay());
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRenderer.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
-			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRenderer);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRendererObj.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
+			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRendererObj);
 		}
 
 		if (ReikaGuiAPI.instance.isMouseInBox(j+192, j+200, k+21, k+90)) {
 			int e = engine.getLubricant();
 			String sg = String.format("%d/%d mB", e, engine.getMaxLubricant());
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRenderer.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
-			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRenderer);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, sg, ReikaGuiAPI.instance.getMouseRealX()-j+fontRendererObj.getStringWidth(sg)+24, ReikaGuiAPI.instance.getMouseRealY()-k);
+			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRendererObj);
 		}
 
 		if (ReikaGuiAPI.instance.isMouseInBox(-12+j+xSize-20-23, -12+j+xSize-23, k+ySize-30-48+50, k+ySize-30-28+50)) {
 			String sg = "Redstone Control";
-			ReikaGuiAPI.instance.drawTooltipAt(fontRenderer, sg, ReikaGuiAPI.instance.getMouseRealX()-24-fontRenderer.getStringWidth(sg), ReikaGuiAPI.instance.getMouseRealY()-k);
-			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRenderer);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, sg, ReikaGuiAPI.instance.getMouseRealX()-24-fontRendererObj.getStringWidth(sg), ReikaGuiAPI.instance.getMouseRealY()-k);
+			//this.drawHoveringText(ReikaJavaLibrary.makeListFrom(sg), ReikaGuiAPI.instance.getMouseRealX()-j, ReikaGuiAPI.instance.getMouseRealY()-k, fontRendererObj);
 		}
 
 		int ddy = engine.isRedstoneControlEnabled() ? 0 : 1;
-		api.drawItemStack(itemRenderer, fontRenderer, engine.getRedstoneStateIcon(), 148, 71+ddy);
+		api.drawItemStack(itemRender, fontRendererObj, engine.getRedstoneStateIcon(), 148, 71+ddy);
 	}
 
 	@Override

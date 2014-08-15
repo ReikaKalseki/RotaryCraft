@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -27,6 +17,16 @@ import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class PipeRenderer extends RotaryTERenderer {
 
@@ -43,7 +43,7 @@ public class PipeRenderer extends RotaryTERenderer {
 		double in2 = 0.5-size+0.01;
 		double dd2 = in-in2;
 
-		Icon ico = tile.getFluidType().getIcon();
+		IIcon ico = tile.getFluidType().getIcon();
 		ReikaLiquidRenderer.bindFluidTexture(f);
 		if (f.getLuminosity() > 0)
 			ReikaRenderHelper.disableLighting();
@@ -331,7 +331,7 @@ public class PipeRenderer extends RotaryTERenderer {
 	}
 
 	private void renderBlock(RenderableDuct te, double par2, double par4, double par6) {
-		Icon ico = te.getBlockIcon();
+		IIcon ico = te.getBlockIcon();
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
@@ -399,7 +399,7 @@ public class PipeRenderer extends RotaryTERenderer {
 		double g1 = g/2;
 		double g2 = 1-g/2;
 
-		ico = Block.cloth.getIcon(0, ReikaDyeHelper.BLACK.getWoolMeta());
+		ico = Blocks.wool.getIcon(0, ReikaDyeHelper.BLACK.getWoolMeta());
 		u = ico.getMinU();
 		v = ico.getMinV();
 		du = ico.getMaxU();
@@ -473,7 +473,7 @@ public class PipeRenderer extends RotaryTERenderer {
 		float dl = size-window;
 		float dd = 0.5F-size;
 
-		Icon ico = tile.getBlockIcon();
+		IIcon ico = tile.getBlockIcon();
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float u2 = ico.getMaxU();
@@ -499,7 +499,7 @@ public class PipeRenderer extends RotaryTERenderer {
 		float mx = 1-dd-dl;
 		float my = 1-dd-dl;
 
-		Icon gico = Block.glass.getIcon(0, 0);
+		IIcon gico = Blocks.glass.getIcon(0, 0);
 		float gu = gico.getMinU();
 		float gv = gico.getMinV();
 		float gu2 = gico.getMaxU();

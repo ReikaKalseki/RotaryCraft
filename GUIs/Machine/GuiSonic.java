@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -22,6 +17,11 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Mouse;
 
 public class GuiSonic extends GuiPowerOnlyMachine
 {
@@ -66,10 +66,10 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		int xo = 0;
 		if (sonic.DECIBELMODE)
 			xo = 48;
-		input = new GuiTextField(fontRenderer, j+xSize/2-62, k+73, 86, 16);
+		input = new GuiTextField(fontRendererObj, j+xSize/2-62, k+73, 86, 16);
 		input.setFocused(false);
 		input.setMaxStringLength(12);
-		input2 = new GuiTextField(fontRenderer, j+xSize/2-62+xo, k+43, 86-xo, 16);
+		input2 = new GuiTextField(fontRendererObj, j+xSize/2-62+xo, k+43, 86-xo, 16);
 		input2.setFocused(false);
 		if (sonic.DECIBELMODE)
 			input2.setMaxStringLength(3);
@@ -157,27 +157,27 @@ public class GuiSonic extends GuiPowerOnlyMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRenderer.drawString("Volume:", xSize/2-92+xo, 35, 4210752);
+		fontRendererObj.drawString("Volume:", xSize/2-92+xo, 35, 4210752);
 		if (sonic.ENABLEFREQ)
-			fontRenderer.drawString("Frequency:", xSize/2-113, 65, 4210752);
+			fontRendererObj.drawString("Frequency:", xSize/2-113, 65, 4210752);
 		if (sonic.ENABLEFREQ) {
 			if (!input.isFocused())
-				fontRenderer.drawString(String.format("%d", sonic.setpitch), xSize/2-50, 65, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", sonic.setpitch), xSize/2-50, 65, 0xffffffff);
 		}
 		if (!input2.isFocused()) {
 			if (sonic.DECIBELMODE)
-				fontRenderer.drawString(String.format("%d", dB), xSize/2-50+xo, 35, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", dB), xSize/2-50+xo, 35, 0xffffffff);
 			else
-				fontRenderer.drawString(String.format("%d", sonic.setvolume), xSize/2-50+xo, 35, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", sonic.setvolume), xSize/2-50+xo, 35, 0xffffffff);
 		}
 
 
 		if (sonic.DECIBELMODE)
-			fontRenderer.drawString("dB", xSize/2+38, 35, 4210752);
+			fontRendererObj.drawString("dB", xSize/2+38, 35, 4210752);
 		else
-			fontRenderer.drawString("W/m^2", xSize/2+38, 35, 4210752);
+			fontRendererObj.drawString("W/m^2", xSize/2+38, 35, 4210752);
 		if (sonic.ENABLEFREQ)
-			fontRenderer.drawString("Hz", xSize/2+38, 65, 4210752);
+			fontRendererObj.drawString("Hz", xSize/2+38, 65, 4210752);
 	}
 
 	/**
@@ -197,14 +197,14 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		int color = 4210752;
 		if (vol > sonic.getMaxVolume())
 			color = 0xff0000;
-		//ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", sonic.getVolume()), j+xSize/2+85, k+65, color);
+		//ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", sonic.getVolume()), j+xSize/2+85, k+65, color);
 		color = 4210752;
 		this.drawPowerTab(j, k);
 		if (!sonic.ENABLEFREQ)
 			return;
 		if (freq > sonic.getMaxPitch())
 			color = 0xff0000;
-		//ImagedGuiButton.drawCenteredStringNoShadow(fontRenderer, String.format("(%d)", sonic.getPitch()), j+xSize/2+85, k+35, color);
+		//ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", sonic.getPitch()), j+xSize/2+85, k+35, color);
 	}
 
 	@Override

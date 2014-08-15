@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -36,9 +27,20 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
 public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver implements RangedEffect, ConditionalOperation {
 
-	private static final ArrayList<Integer> fertilizables = new ArrayList();
+	private static final ArrayList<Block> fertilizables = new ArrayList();
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -71,7 +73,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 
 		if (DragonAPICore.debugtest) {
 			tank.addLiquid(100, FluidRegistry.WATER);
-			inv[0] = new ItemStack(Item.dyePowder.itemID, 64, 15);
+			inv[0] = new ItemStack(Items.dye, 64, 15);
 		}
 
 		if (!world.isRemote && this.hasFertilizer()) {
@@ -92,22 +94,21 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		int dx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 		int dy = ReikaRandomHelper.getRandomPlusMinus(y, r);
 		int dz = ReikaRandomHelper.getRandomPlusMinus(z, r);
-		int id = world.getBlockId(dx, dy, dz);
+		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
 		int ddx = dx-x;
 		int ddy = dy-y;
 		int ddz = dz-z;
 		double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
-		if (id != 0 && dd <= this.getRange()) {
-			Block b = Block.blocksList[id];
-			b.updateTick(world, dx, dy, dz, rand);
+		if (id != Blocks.air && dd <= this.getRange()) {
+			id.updateTick(world, dx, dy, dz, rand);
 			world.markBlockForUpdate(dx, dy, dz);
 			if (this.didSomething(world, dx, dy, dz)) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.FERTILIZER.getMinValue(), world, dx, dy, dz);
 				if (ReikaRandomHelper.doWithChance(20))
 					this.consumeItem();
 			}
-			else if (id == Block.grass.blockID) {
+			else if (id == Blocks.grass) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.FERTILIZER.getMinValue(), world, dx, dy, dz);
 			}
 		}
@@ -126,11 +127,11 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	private boolean didSomething(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
+		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		ModCropList mod = ModCropList.getModCrop(id, meta);
-		ModWoodList sapling = ModWoodList.getModWoodFromSapling(new ItemStack(id, 1, meta));
+		ModWoodList sapling = ModWoodList.getModWoodFromSapling(id, meta);
 		boolean fert = fertilizables.contains(id);
 		if (crop != null)
 			return true;
@@ -177,7 +178,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 			return true;
 		if (ReikaItemHelper.matchStacks(is, ItemStacks.compost))
 			return true;
-		if (is.itemID == ForestryHandler.getInstance().fertilizerID)
+		if (is.getItem() == ForestryHandler.getInstance().fertilizerID)
 			return true;
 		return false;
 	}
@@ -195,17 +196,17 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	static {
-		addFertilizable(Block.sapling);
-		addFertilizable(Block.cactus);
-		addFertilizable(Block.reed);
-		addFertilizable(Block.mycelium);
-		addFertilizable(Block.melonStem);
-		addFertilizable(Block.pumpkinStem);
-		addFertilizable(Block.vine);
+		addFertilizable(Blocks.sapling);
+		addFertilizable(Blocks.cactus);
+		addFertilizable(Blocks.reeds);
+		addFertilizable(Blocks.mycelium);
+		addFertilizable(Blocks.melon_stem);
+		addFertilizable(Blocks.pumpkin_stem);
+		addFertilizable(Blocks.vine);
 	}
 
 	private static void addFertilizable(Block b) {
-		fertilizables.add(b.blockID);
+		fertilizables.add(b);
 	}
 
 	@Override

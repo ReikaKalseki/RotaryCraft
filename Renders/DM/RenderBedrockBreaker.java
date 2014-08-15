@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
-import java.util.ArrayList;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -25,6 +17,14 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelBedrockBreaker;
 import Reika.RotaryCraft.Models.Animated.ModelBedrockBreakerV;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
+
+import java.util.ArrayList;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderBedrockBreaker extends RotaryTERenderer
 {

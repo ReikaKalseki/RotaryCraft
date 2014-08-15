@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.util.HashMap;
-
-import net.minecraft.client.renderer.entity.RenderTNTPrimed;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.BlockSheetTexRenderer;
@@ -43,6 +37,12 @@ import Reika.RotaryCraft.Entities.RenderSonicShot;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import java.util.HashMap;
+
+import net.minecraft.client.renderer.entity.RenderTNTPrimed;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -54,13 +54,15 @@ public class ClientProxy extends CommonProxy
 {
 	//public static final int BlockSheetTexRenderID = RenderingRegistry.getNextAvailableRenderId();
 
-	public static final ItemSpriteSheetRenderer[] items = {
+	private static final ItemSpriteSheetRenderer[] items = {
 		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
 		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items2.png"),
 		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items3.png"),
 	};
 
-	public static final MultiSheetItemRenderer modOres = new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class);
+	private static final MultiSheetItemRenderer[] multisheets = {
+		new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class),
+	};
 
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
 	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png");
@@ -87,7 +89,11 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerSounds() {
-		MinecraftForge.EVENT_BUS.register(new SoundLoader(RotaryCraft.instance, SoundRegistry.soundList, SoundRegistry.SOUND_FOLDER));
+		new SoundLoader(RotaryCraft.class, SoundRegistry.soundList).register();
+	}
+
+	public static ItemSpriteSheetRenderer getSpritesheetRenderer(int index) {
+		return items[index];
 	}
 
 	@Override
@@ -124,7 +130,7 @@ public class ClientProxy extends CommonProxy
 		this.registerSpriteSheets();
 		this.registerBlockSheets();
 
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.spawner.itemID, spawner);
+		MinecraftForgeClient.registerItemRenderer(ItemRegistry.SPAWNER.getItemInstance(), spawner);
 	}
 
 	@Override
@@ -191,12 +197,12 @@ public class ClientProxy extends CommonProxy
 			}
 		}
 
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.machineplacer.itemID, machineItems);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.engineitems.itemID, machineItems);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gbxitems.itemID, machineItems);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.shaftitems.itemID, machineItems);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.advgearitems.itemID, machineItems);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.flywheelitems.itemID, machineItems);
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+			ItemRegistry ir = ItemRegistry.itemList[i];
+			if (ir.isPlacer()) {
+				MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), machineItems);
+			}
+		}
 		//MinecraftForgeClient.registerItemRenderer(RotaryCraft.hydraulicitems.itemID, machineItems);
 	}
 
@@ -206,24 +212,18 @@ public class ClientProxy extends CommonProxy
 	}
 
 	private void registerSpriteSheets() {
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.shaftcraft.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.enginecraft.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.borecraft.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.misccraft.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.powders.itemID, items[0]);
-		//MinecraftForgeClient.registerItemRenderer(RotaryCraft.pipeplacer.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.compacts.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.extracts.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.gearunits.itemID, items[0]);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modinterface.itemID, items[0]);
-
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getShiftedID()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());
-			MinecraftForgeClient.registerItemRenderer(ItemRegistry.itemList[i].getShiftedID(), items[ItemRegistry.itemList[i].getTextureSheet()]);
+			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getItemInstance()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());
+			ItemRegistry ir = ItemRegistry.itemList[i];
+			if (!ir.isPlacer()) {
+				if (ir.isMultiSheet()) {
+					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), multisheets[-ir.getTextureSheet()]);
+				}
+				else {
+					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), items[ir.getTextureSheet()]);
+				}
+			}
 		}
-
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modextracts.itemID, modOres);
-		MinecraftForgeClient.registerItemRenderer(RotaryCraft.modingots.itemID, modOres);
 	}
 
 	// Override any other methods that need to be handled differently client side.

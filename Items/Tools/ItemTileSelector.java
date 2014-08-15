@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+
 import java.util.Arrays;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,19 +20,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemTileSelector extends ItemRotaryTool {
 
-	public ItemTileSelector(int ID, int tex) {
-		super(ID, tex);
+	public ItemTileSelector(int tex) {
+		super(tex);
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof SelectableTiles && !ep.isSneaking()) {
 			SelectableTiles sc = (SelectableTiles)te;
 			this.setID(is, sc.getUniqueID());
@@ -46,7 +47,7 @@ public class ItemTileSelector extends ItemRotaryTool {
 		if (nbt == null)
 			return null;
 		int[] xyz = nbt.getIntArray("locID");
-		TileEntity te = world.getBlockTileEntity(xyz[0], xyz[1], xyz[2]);
+		TileEntity te = world.getTileEntity(xyz[0], xyz[1], xyz[2]);
 		if (te instanceof SelectableTiles) {
 			RotaryCraft.logger.debug("Read tile "+te+" at "+Arrays.toString(xyz));
 			return (SelectableTiles)te;

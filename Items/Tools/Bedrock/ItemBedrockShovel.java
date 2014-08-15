@@ -9,18 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.item.EnumToolMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,14 +29,14 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
 	private int index;
 
-	public ItemBedrockShovel(int ID, int tex) {
-		super(ID, EnumToolMaterial.GOLD);
+	public ItemBedrockShovel(int tex) {
+		super(ToolMaterial.GOLD);
 		this.setIndex(tex);
 		// this.blocksEffectiveAgainst = par4ArrayOfBlock;
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		efficiencyOnProperMaterial = 20F;
-		// this.efficiencyOnProperMaterial = par3EnumToolMaterial.getEfficiencyOnProperMaterial();
+		// this.efficiencyOnProperMaterial = par3ToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 4;
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
@@ -47,33 +48,35 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	}
 
 	@Override
-	public boolean canHarvestBlock(Block b) {
-		return b.blockMaterial != Material.rock && b.blockMaterial != Material.iron;
+	public boolean canHarvestBlock(Block b, ItemStack is) {
+		return b.getMaterial() != Material.rock && b.getMaterial() != Material.iron;
 	}
 
 	@Override
 	public int getItemEnchantability()
 	{
-		return Item.shovelIron.getItemEnchantability();
+		return Items.iron_shovel.getItemEnchantability();
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack is, Block b) {
+	public float getDigSpeed(ItemStack is, Block b, int meta) {
 		if (b == null)
 			return 0;
-		if (b.blockMaterial == Material.grass)
+		if (b.getMaterial() == Material.grass)
 			return 24F;
-		if (b.blockMaterial == Material.ground)
+		if (b.getMaterial() == Material.ground)
 			return 24F;
-		if (b.blockMaterial == Material.sand)
+		if (b.getMaterial() == Material.sand)
 			return 24F;
-		if (b.blockID == TinkerBlockHandler.getInstance().gravelOreID)
+		if (b == TinkerBlockHandler.getInstance().gravelOreID)
 			return 36F;
-		for (int i = 0; i < blocksEffectiveAgainst.length; i++) {
-			if (blocksEffectiveAgainst[i] == b)
-				return 24F;
-		}
+		if (field_150914_c.contains(b))
+			return 24F;
 		return 1F;
+	}
+
+	public boolean isAcceleratedOn(Block b) {
+		return field_150914_c.contains(b);
 	}
 
 	public String getTextureFile() {
@@ -90,11 +93,11 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final void registerIcons(IconRegister ico) {}
+	public final void registerIcons(IIconRegister ico) {}
 
 	@Override
-	public final Icon getIconFromDamage(int dmg) {
-		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Item.shovelStone.getIconFromDamage(0);
+	public final IIcon getIconFromDamage(int dmg) {
+		return RotaryCraft.instance.isLocked() ? ReikaTextureHelper.getMissingIcon() : Items.stone_shovel.getIconFromDamage(0);
 	}
 
 	public Class getTextureReferenceClass() {
@@ -104,5 +107,10 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	@Override
 	public String getTexture(ItemStack is) {
 		return "/Reika/RotaryCraft/Textures/Items/items2.png";
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack is) {
+		return ItemRegistry.getEntry(is).getBasicName();
 	}
 }

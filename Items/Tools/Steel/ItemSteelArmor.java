@@ -9,26 +9,28 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Steel;
 
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryArmor;
+
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSteelArmor extends ItemRotaryArmor {
 
-	public ItemSteelArmor(int ID, int tex, int render, int type) {
-		super(ID, RotaryCraft.HSLA, render, type, tex);
+	public ItemSteelArmor(int tex, int render, int type) {
+		super(RotaryCraft.HSLA, render, type, tex);
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer ep, ItemStack is) {
+	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {
 
 	}
 	/*
@@ -51,7 +53,7 @@ public class ItemSteelArmor extends ItemRotaryArmor {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
+	public void getSubItems(Item id, CreativeTabs cr, List li) //Adds the metadata blocks to the creative inventory
 	{
 		ItemStack is = new ItemStack(id, 1, 0);
 		li.add(is);

@@ -9,12 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.Slot.GhostSlot;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ContainerSorter extends CoreContainer {
 
