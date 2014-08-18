@@ -49,7 +49,7 @@ public class ItemWorldEdit extends ItemRotaryTool {
 			return false;
 		}
 		Block id = WorldEditHelper.getCommandedID(ep);
-		int meta = WorldEditHelper.getCommandedMetadata(ep);
+		int meta = id == Blocks.air ? 0 : WorldEditHelper.getCommandedMetadata(ep);
 
 		if (id != Blocks.air) {
 			if (id == null) {

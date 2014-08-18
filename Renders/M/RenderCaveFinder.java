@@ -89,7 +89,7 @@ public class RenderCaveFinder extends RotaryTERenderer {
 		lists.put(te, id);
 	}
 
-	public void renderPoints(TileEntityCaveFinder te, double p2, double p4, double p6) {
+	private void renderPoints(TileEntityCaveFinder te, double p2, double p4, double p6) {
 		if (te == null)
 			return;
 		if (!te.isInWorld())
