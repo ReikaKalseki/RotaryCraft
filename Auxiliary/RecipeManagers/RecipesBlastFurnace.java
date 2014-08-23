@@ -64,7 +64,7 @@ public class RecipesBlastFurnace
 			output = out.copy();
 		}*/
 
-		public BlastCrafting(ItemStack out, int temp, int speed, IRecipe ir, float xp) {
+		private BlastCrafting(ItemStack out, int temp, int speed, IRecipe ir, float xp) {
 			recipe = ir;
 			output = out;
 			temperature = temp;
