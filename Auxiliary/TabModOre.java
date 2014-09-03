@@ -8,12 +8,11 @@
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
-import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

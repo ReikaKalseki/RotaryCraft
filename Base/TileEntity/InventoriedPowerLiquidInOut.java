@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import Reika.DragonAPI.Interfaces.InertIInv;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -19,6 +16,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import Reika.DragonAPI.Interfaces.InertIInv;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 
 public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut implements ISidedInventory {
 

@@ -9,13 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
-
 import java.util.HashMap;
 import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 
 public class BlockColorInterface {
 

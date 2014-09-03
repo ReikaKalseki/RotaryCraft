@@ -9,14 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import Reika.DragonAPI.Base.BlockTEBase;
-
 import java.util.Random;
 
 import mcp.mobius.waila.api.IWailaBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Base.BlockTEBase;
 
 public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWailaBlock {
 

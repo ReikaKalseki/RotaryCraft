@@ -9,18 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.RotaryCraft.Registry.EngineType;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.RotaryCraft.Registry.EngineType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class TabRotaryCraft extends CreativeTabs {
 
-	public TabRotaryCraft(int position, String tabID) {
-		super(position, tabID); //The constructor for your tab
+	public TabRotaryCraft(int position, String label) {
+		super(position, label); //The constructor for your tab
 	}
 
 	@Override

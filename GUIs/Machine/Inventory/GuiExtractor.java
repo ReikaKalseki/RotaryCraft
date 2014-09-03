@@ -9,15 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.ContainerExtractor;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
-
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
 
 public class GuiExtractor extends GuiMachine
 {
@@ -30,9 +31,37 @@ public class GuiExtractor extends GuiMachine
 		ep = p5ep;
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
+	@Override
+	protected void drawGuiContainerForegroundLayer(int a, int b)
+	{
+		super.drawGuiContainerForegroundLayer(a, b);
+
+		if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+			int j = (width - xSize) / 2;
+			int k = (height - ySize) / 2;
+			int dx = j+19;
+			int dy = k+33;
+			if (api.isMouseInBox(dx, dx+4, dy, dy+18)) {
+				String s = String.format("Drill Status: %d%%", ext.getDrillLifeScaled(100));
+				api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-35, api.getMouseRealY()-15);
+			}
+
+			String var4 = "/Reika/RotaryCraft/Textures/GUI/extractorgui2.png";
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, 0, 200);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glColor4f(1, 1, 1, 0.5F);
+			this.drawTexturedModalRect(25, 33, 25, 33, 18, 18);
+			GL11.glDisable(GL11.GL_BLEND);
+
+			int i1 = ext.getCookProgressScaled(32, 0);
+			this.drawTexturedModalRect(29, 34, 176, 48, 10, i1);
+			GL11.glPopMatrix();
+		}
+	}
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -41,14 +70,21 @@ public class GuiExtractor extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = ext.getCookProgressScaled(32, 0);
 		int i2 = ext.getCookProgressScaled(28, 1);
 		int i3 = ext.getCookProgressScaled(28, 2);
 		int i4 = ext.getCookProgressScaled(32, 3);
-		this.drawTexturedModalRect(j + 29, k + 34, 176, 48, 10, i1);
+		if (!ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+			int i1 = ext.getCookProgressScaled(32, 0);
+			this.drawTexturedModalRect(j + 29, k + 34, 176, 48, 10, i1);
+		}
 		this.drawTexturedModalRect(j + 63, k + 35, 186, 48, 14, i2);
 		this.drawTexturedModalRect(j + 99, k + 35, 200, 48, 14, i3);
 		this.drawTexturedModalRect(j + 133, k + 49-i4, 176, 79-i4, 17, i4);
+
+		if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+			int i5 = ext.getDrillLifeScaled(16);
+			this.drawTexturedModalRect(j + 20, k + 50-i5, 178, 159-i5, 2, i5);
+		}
 	}
 
 	@Override
@@ -101,6 +137,6 @@ public class GuiExtractor extends GuiMachine
 
 	@Override
 	public String getGuiTexture() {
-		return "extractorgui";
+		return ConfigRegistry.EXTRACTORMAINTAIN.getState() ? "extractorgui2" : "extractorgui";
 	}
 }

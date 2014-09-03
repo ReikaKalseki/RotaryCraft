@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +21,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.ChromatiCraft.API.WorldRift;
+import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection {
 
@@ -110,7 +111,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m != null && m.isPipe())
 			return this.canConnectToPipe(m);
-		return this.interactsWithMachines() && this.isInteractableTile(this.getAdjacentTileEntity(side), side);
+		TileEntity te = this.getAdjacentTileEntity(side);
+		if (te instanceof WorldRift) {
+			return true;
+		}
+		return this.interactsWithMachines() && this.isInteractableTile(te, side);
 	}
 
 	private boolean isInteractableTile(TileEntity te, ForgeDirection side) {
@@ -134,7 +139,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		return Math.min(TransferAmount.QUARTER.getTransferred(max), this.getFluidLevel()-5);
 	}
 
-	public void dumpContents(World world, int x, int y, int z) {
+	private final void dumpContents(World world, int x, int y, int z) {
 		Fluid f = this.getFluidType();
 		if (this.getFluidLevel() <= 1 || f == null)
 			return;
@@ -150,6 +155,18 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				TileEntity te = world.getTileEntity(dx, dy, dz);
+
+				if (te instanceof WorldRift) {
+					WorldLocation loc = ((WorldRift)te).getLinkTarget();
+					if (loc != null) {
+						te = ((WorldRift)te).getTileEntityFrom(dir);
+						dx = loc.xCoord;
+						dy = loc.yCoord;
+						dz = loc.zCoord;
+						world = loc.getWorld();
+					}
+				}
+
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
 					if (this.canConnectToPipe(tp.getMachine()) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
@@ -206,7 +223,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		this.setLevel(this.getFluidLevel()+toadd);
 	}
 
-	public void intakeFluid(World world, int x, int y, int z) {
+	private final void intakeFluid(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			if (this.canInteractWith(world, x, y, z, dir)) {
@@ -214,6 +231,18 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				TileEntity te = world.getTileEntity(dx, dy, dz);
+
+				if (te instanceof WorldRift) {
+					WorldLocation loc = ((WorldRift)te).getLinkTarget();
+					if (loc != null) {
+						te = ((WorldRift)te).getTileEntityFrom(dir);
+						dx = loc.xCoord;
+						dy = loc.yCoord;
+						dz = loc.zCoord;
+						world = loc.getWorld();
+					}
+				}
+
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
 					if (this.canConnectToPipe(tp.getMachine()) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
@@ -345,6 +374,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		if (m != null && !m.isPipe() && m == m2)
 			return true;
 		TileEntity tile = worldObj.getTileEntity(x, y, z);
+		if (tile instanceof WorldRift) {
+			return true;
+		}
 		if (tile instanceof TileEntityPiping)
 			return ((TileEntityPiping) tile).canConnectToPipe(m);
 		else if (tile instanceof PipeConnector) {

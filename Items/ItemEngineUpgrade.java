@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

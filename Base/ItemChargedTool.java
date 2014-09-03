@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,6 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

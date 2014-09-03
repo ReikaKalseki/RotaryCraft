@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.BlowableCrop;
-import Reika.RotaryCraft.Base.BlockBasic;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,6 +33,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.BlowableCrop;
+import Reika.RotaryCraft.Base.BlockBasic;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop, IWailaBlock {
 

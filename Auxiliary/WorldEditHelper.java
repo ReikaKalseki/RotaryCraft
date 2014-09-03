@@ -14,26 +14,26 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Instantiable.Data.BlockMap.BlockKey;
 
 public class WorldEditHelper {
 
-	private static HashMap<EntityPlayer, ItemStack> commands = new HashMap();
+	private static HashMap<EntityPlayer, BlockKey> commands = new HashMap();
 
 	public static void addCommand(EntityPlayer ep, Block id, int meta) {
-		commands.put(ep, new ItemStack(id, meta));
+		commands.put(ep, new BlockKey(id, meta));
 	}
 
 	public static void addCommand(EntityPlayer ep, Item id, int meta) {
-		commands.put(ep, new ItemStack(id, meta));
+		commands.put(ep, new BlockKey(Block.getBlockFromItem(id), meta));
 	}
 
 	public static Block getCommandedID(EntityPlayer ep) {
-		return Block.getBlockFromItem(commands.get(ep).getItem());
+		return commands.get(ep).blockID;
 	}
 
 	public static int getCommandedMetadata(EntityPlayer ep) {
-		return commands.get(ep).getItemDamage();
+		return Math.max(commands.get(ep).metadata, 0);
 	}
 
 	public static boolean hasPlayer(EntityPlayer ep) {

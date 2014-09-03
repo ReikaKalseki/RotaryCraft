@@ -9,36 +9,41 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Instantiable.GUI.Slot.SlotXItems;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor1;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor2;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor3;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor4;
 import Reika.RotaryCraft.Auxiliary.SlotMachineOut;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
 
 public class ContainerExtractor extends CoreContainer
 {
 	private TileEntityExtractor extractor;
 	private int[] lastExtractorCookTime;
 
-	public ContainerExtractor(EntityPlayer player, TileEntityExtractor par2TileEntityExtractor)
+	public ContainerExtractor(EntityPlayer player, TileEntityExtractor te)
 	{
-		super(player, par2TileEntityExtractor);
+		super(player, te);
 		lastExtractorCookTime = new int[4];
-		extractor = par2TileEntityExtractor;
-		this.addSlotToContainer(new SlotExtractor1(par2TileEntityExtractor, 0, 26, 13));
-		this.addSlotToContainer(new SlotMachineOut(player, par2TileEntityExtractor, 4, 26, 55));
-		this.addSlotToContainer(new SlotExtractor2(par2TileEntityExtractor, 1, 62, 13));
-		this.addSlotToContainer(new SlotMachineOut(player, par2TileEntityExtractor, 5, 62, 55));
-		this.addSlotToContainer(new SlotExtractor3(par2TileEntityExtractor, 2, 98, 13));
-		this.addSlotToContainer(new SlotMachineOut(player, par2TileEntityExtractor, 6, 98, 55));
-		this.addSlotToContainer(new SlotExtractor4(par2TileEntityExtractor, 3, 134, 13));
-		this.addSlotToContainer(new SlotMachineOut(player, par2TileEntityExtractor, 7, 134, 55));
-		this.addSlotToContainer(new SlotMachineOut(player, par2TileEntityExtractor, 8, 152, 55));
+		extractor = te;
+		this.addSlotToContainer(new SlotExtractor1(te, 0, 26, 13));
+		this.addSlotToContainer(new SlotMachineOut(player, te, 4, 26, 55));
+		this.addSlotToContainer(new SlotExtractor2(te, 1, 62, 13));
+		this.addSlotToContainer(new SlotMachineOut(player, te, 5, 62, 55));
+		this.addSlotToContainer(new SlotExtractor3(te, 2, 98, 13));
+		this.addSlotToContainer(new SlotMachineOut(player, te, 6, 98, 55));
+		this.addSlotToContainer(new SlotExtractor4(te, 3, 134, 13));
+		this.addSlotToContainer(new SlotMachineOut(player, te, 7, 134, 55));
+		this.addSlotToContainer(new SlotMachineOut(player, te, 8, 152, 55));
+
+		if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+			this.addSlotToContainer(new SlotXItems(te, 9, 26, 34, 1));
+		}
 
 		this.addPlayerInventory(player);
 	}

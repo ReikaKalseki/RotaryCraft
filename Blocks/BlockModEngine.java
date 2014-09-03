@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.RotaryCraft.Base.BlockModelledMultiTE;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
+import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 
 public class BlockModEngine extends BlockModelledMultiTE {
 

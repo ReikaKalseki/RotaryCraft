@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.BlockBasic;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +22,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Base.BlockBasic;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

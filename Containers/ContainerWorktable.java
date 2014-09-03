@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
-import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
-import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -26,6 +19,12 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
+import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 
 public class ContainerWorktable extends CoreContainer {
 

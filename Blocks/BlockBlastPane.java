@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.DragonAPI.Interfaces.SidedTextureIndex;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -23,6 +19,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Interfaces.SidedTextureIndex;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockBlastPane extends BlockPane implements SidedTextureIndex {
 

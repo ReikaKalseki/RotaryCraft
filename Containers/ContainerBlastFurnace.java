@@ -9,16 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
-import net.minecraft.item.ItemStack;
 
 public class ContainerBlastFurnace extends CoreContainer
 {
@@ -37,7 +36,7 @@ public class ContainerBlastFurnace extends CoreContainer
 		id++;
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 3; j++) {
-				this.addSlotToContainer(new Slot(par2TileEntityBlastFurnace, id, 62+i*18, 17+j*18));
+				this.addSlotToContainer(new Slot(par2TileEntityBlastFurnace, id, 62+j*18, 17+i*18));
 				id++;
 			}
 		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityBlastFurnace, 10, 148, 35));

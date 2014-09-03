@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import Reika.DragonAPI.Instantiable.RecipePattern;
-import Reika.DragonAPI.Instantiable.Data.ImmutableList;
-import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
-
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
@@ -25,6 +18,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
+import Reika.DragonAPI.Instantiable.RecipePattern;
+import Reika.DragonAPI.Instantiable.Data.ImmutableList;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 
 public class RecipesBlastFurnace
 {

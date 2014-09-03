@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import Reika.DragonAPI.Base.CoreContainer;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 
 public class ContainerPowerBus extends CoreContainer {
 

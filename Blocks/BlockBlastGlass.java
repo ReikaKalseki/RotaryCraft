@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConnectedTextureGlass;
-import Reika.RotaryCraft.Base.BlockBasic;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -28,6 +23,10 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Interfaces.ConnectedTextureGlass;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.BlockBasic;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class BlockBlastGlass extends BlockBasic implements ConnectedTextureGlass {
 

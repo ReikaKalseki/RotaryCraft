@@ -19,7 +19,7 @@ public abstract class TileEntityBeamMachine extends TileEntityPowerReceiver {
 	protected int zstep;
 	protected int pipemeta;
 
-	public abstract void makeBeam(World world, int x, int y, int z, int meta);
+	protected abstract void makeBeam(World world, int x, int y, int z, int meta);
 
 	public final void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {

@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
-import Reika.DragonAPI.ModInteract.MagicCropHandler;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
@@ -25,6 +20,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.DragonAPI.ModInteract.MagicCropHandler;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesLavaMaker {
 

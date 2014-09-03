@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerLandmine;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiLandmine extends GuiNonPoweredMachine {
 

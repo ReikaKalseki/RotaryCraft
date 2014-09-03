@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 
 public class ShaftPowerBus {
 

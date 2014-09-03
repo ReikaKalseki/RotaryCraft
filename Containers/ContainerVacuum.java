@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import Reika.DragonAPI.Base.ContainerStackingStorage;
-import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
+import Reika.DragonAPI.Base.ContainerStackingStorage;
+import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 
 public class ContainerVacuum extends ContainerStackingStorage
 {

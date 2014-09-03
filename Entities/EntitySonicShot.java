@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
-import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
-
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -34,6 +25,14 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 
 public class EntitySonicShot extends EntityFireball {
 

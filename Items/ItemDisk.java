@@ -9,13 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemDisk extends ItemRotaryTool {
 

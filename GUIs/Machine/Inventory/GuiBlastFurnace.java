@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiBlastFurnace extends GuiNonPoweredMachine
 {

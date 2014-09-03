@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

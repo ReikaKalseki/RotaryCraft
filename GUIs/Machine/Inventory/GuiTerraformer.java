@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Containers.ContainerTerraformer;
-import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
-
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
@@ -29,6 +19,16 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
+import Reika.RotaryCraft.Containers.ContainerTerraformer;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 
 public class GuiTerraformer extends GuiPowerOnlyMachine {
 

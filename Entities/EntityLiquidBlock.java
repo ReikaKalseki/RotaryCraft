@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +16,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
 
 public class EntityLiquidBlock extends Entity {
 

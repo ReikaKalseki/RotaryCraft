@@ -9,16 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
-
-import org.lwjgl.opengl.GL11;
 
 public class GuiMobRadar extends GuiPowerOnlyMachine
 {

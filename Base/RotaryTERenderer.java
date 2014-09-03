@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import java.awt.Color;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -20,15 +28,6 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-
-import java.awt.Color;
-
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

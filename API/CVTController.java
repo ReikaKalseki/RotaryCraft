@@ -9,9 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
-
 import net.minecraft.tileentity.TileEntity;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 
 /** If you have an object that wishes to control a CVT, use this interface. You are responsible for getting the TE instance yourself.
  * The TE ({@link TileEntityAdvancedGear}) has a setController method. Only one controller per CVT, or you may get strange behavior. */

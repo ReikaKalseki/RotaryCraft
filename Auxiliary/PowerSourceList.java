@@ -9,18 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.ChromatiCraft.API.SpaceRift;
-import Reika.DragonAPI.Instantiable.WorldLocation;
-import Reika.RotaryCraft.API.PowerGenerator;
-import Reika.RotaryCraft.API.ShaftMerger;
-import Reika.RotaryCraft.API.ShaftPowerEmitter;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
-
 import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.RotaryCraft.API.PowerGenerator;
+import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
 public class PowerSourceList {
 
@@ -76,8 +75,8 @@ public class PowerSourceList {
 			else if (tile instanceof ShaftPowerEmitter) {
 				//return pwr; //for now
 			}
-			else if (tile instanceof SpaceRift) {
-				WorldLocation loc = ((SpaceRift)tile).getLinkTarget();
+			else if (tile instanceof WorldRift) {
+				WorldLocation loc = ((WorldRift)tile).getLinkTarget();
 				if (loc != null) {
 					int dx = loc.xCoord+dir.offsetX;
 					int dy = loc.yCoord+dir.offsetY;
@@ -130,6 +129,39 @@ public class PowerSourceList {
 
 	public boolean passesThrough(ShaftMerger sm) {
 		return mergers.contains(sm);
+	}
+
+	public boolean isEngineSpam() {
+		/*
+		if (engines.size() < 8)
+			return false;
+		long last = engines.get(0).getMaxPower();
+		Class c = engines.get(0).getClass();
+		for (int i = 1; i < engines.size(); i++) {
+			long pow = engines.get(i).getMaxPower();
+			Class c2 = engines.get(i).getClass();
+			if (pow != last || c2 != c)
+				return false;
+		}
+		if (sum = )
+			return true;*/
+		if (engines.isEmpty())
+			return false;
+		long sum = this.getMaxGennablePower();
+		long avg = sum/engines.size();
+		return sum/avg > 4;
+	}
+
+	public static PowerSourceList combine(PowerSourceList in1, PowerSourceList in2, ShaftMerger caller) {
+		PowerSourceList psl = new PowerSourceList();
+		psl.engines.addAll(in1.engines);
+		psl.engines.addAll(in2.engines);
+
+		psl.mergers.addAll(in1.mergers);
+		psl.mergers.addAll(in2.mergers);
+
+		psl.caller = caller;
+		return psl;
 	}
 
 }

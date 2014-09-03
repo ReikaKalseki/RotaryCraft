@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 
 public class GuiWorktable extends GuiNonPoweredMachine {
 

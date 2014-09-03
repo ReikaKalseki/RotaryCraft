@@ -9,6 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -23,14 +30,6 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -218,7 +217,7 @@ public class TorqueUsage {
 				torque += Math.max(TEMapR.get(tile)*((TileEntityPowerReceiver) tile).MINTORQUE, 1);
 		}
 		if (tile instanceof ShaftPowerReceiver) {
-			torque += ((ShaftPowerReceiver)tile).getMinTorque(reader.torque);
+			torque += Math.max(((ShaftPowerReceiver)tile).getMinTorque(reader.torque), 1);
 		}
 	}
 
@@ -290,7 +289,7 @@ public class TorqueUsage {
 			TileEntity write2 = spl.getWriteTileEntity2();
 			if (!spl.isSplitting()) {
 				TileEntity di = write;
-				if (di != null && di instanceof TileEntityIOMachine) {
+				if (di instanceof TileEntityIOMachine) {
 					TileEntityIOMachine io = ((TileEntityIOMachine)di);
 					TileEntity read = io.getReadTileEntity();
 					TileEntity read2 = io.getReadTileEntity2();
@@ -302,7 +301,7 @@ public class TorqueUsage {
 			else {
 				TileEntity di = write;
 				TileEntity di2 = write2;
-				if (di != null && di instanceof TileEntityIOMachine) {
+				if (di instanceof TileEntityIOMachine) {
 					TileEntityIOMachine io = ((TileEntityIOMachine)di);
 					TileEntity read = io.getReadTileEntity();
 					TileEntity read2 = io.getReadTileEntity2();
@@ -310,7 +309,7 @@ public class TorqueUsage {
 						count = recursiveCount(world, di, count);
 					}
 				}
-				if (di2 != null && di2 instanceof TileEntityIOMachine) {
+				if (di2 instanceof TileEntityIOMachine) {
 					TileEntityIOMachine io = ((TileEntityIOMachine)di2);
 					TileEntity read = io.getReadTileEntity();
 					TileEntity read2 = io.getReadTileEntity2();
@@ -323,7 +322,7 @@ public class TorqueUsage {
 		else if (tile instanceof TileEntityClutch) {
 			if (world.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord)) {
 				TileEntity di = ((TileEntityIOMachine) tile).getOutput();
-				if (di != null && di instanceof TileEntityIOMachine) {
+				if (di instanceof TileEntityIOMachine) {
 					if (((TileEntityIOMachine) di).getInput() == tile) {
 						count = recursiveCount(world, di, count);
 					}
@@ -338,7 +337,7 @@ public class TorqueUsage {
 					TileEntityBeltHub h2 = (TileEntityBeltHub)di;
 					TileEntity write = h2.getWriteTileEntity();
 					TileEntity dii = write;
-					if (dii != null && dii instanceof TileEntityIOMachine) {
+					if (dii instanceof TileEntityIOMachine) {
 						if (((TileEntityIOMachine) dii).getInput() == di) {
 							count = recursiveCount(world, dii, count);
 						}
@@ -348,7 +347,7 @@ public class TorqueUsage {
 		}
 		else {
 			TileEntity di = ((TileEntityIOMachine) tile).getOutput();
-			if (di != null && di instanceof TileEntityIOMachine) {
+			if (di instanceof TileEntityIOMachine) {
 				if (((TileEntityIOMachine) di).getInput() == tile) {
 					count = recursiveCount(world, di, count);
 				}

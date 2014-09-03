@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +23,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

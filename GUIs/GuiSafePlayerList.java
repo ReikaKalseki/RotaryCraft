@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
-import Reika.RotaryCraft.Registry.PacketRegistry;
-
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
@@ -24,6 +16,14 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public class GuiSafePlayerList extends GuiScreen {
 

@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.API.Event.RailgunImpactEvent;
-import Reika.RotaryCraft.Base.EntityTurretShot;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
-
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -43,6 +31,17 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidBase;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Event.RailgunImpactEvent;
+import Reika.RotaryCraft.Base.EntityTurretShot;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 
 public class EntityRailGunShot extends EntityTurretShot {
 

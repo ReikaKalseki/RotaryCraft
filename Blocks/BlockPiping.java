@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.RotaryCraft.ClientProxy;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.BlockBasicMultiTE;
-
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
@@ -21,6 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
+import Reika.RotaryCraft.ClientProxy;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 
 public class BlockPiping extends BlockBasicMultiTE {
 

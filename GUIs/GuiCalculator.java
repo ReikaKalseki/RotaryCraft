@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.RotaryCraft;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +16,9 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class GuiCalculator extends GuiScreen {
 

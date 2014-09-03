@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.ContainerSorter;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiSorter extends GuiPowerOnlyMachine {
 

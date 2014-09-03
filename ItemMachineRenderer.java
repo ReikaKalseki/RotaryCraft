@@ -9,20 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
-import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
-
 import java.util.Map;
 
 import net.minecraft.client.renderer.RenderBlocks;
@@ -34,6 +20,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public class ItemMachineRenderer implements IItemRenderer {
 
@@ -135,6 +136,8 @@ public class ItemMachineRenderer implements IItemRenderer {
 				TileEntityRendererDispatcher.instance.renderTileEntityAt(sha, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (ItemRegistry.MACHINE.matchItem(item)) {
+			GL11.glEnable(GL11.GL_BLEND);
+			BlendMode.DEFAULT.apply();
 			if (type == type.ENTITY) {
 				a = -0.5F;
 				b = -0.5F;
@@ -175,6 +178,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 					GL11.glRotated(-90, 0, 0, 1);
 				}
 			}
+			GL11.glDisable(GL11.GL_BLEND);
 		}
 	}
 }

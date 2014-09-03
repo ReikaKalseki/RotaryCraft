@@ -9,6 +9,26 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NavigableSet;
+
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.ItemReq;
@@ -43,26 +63,6 @@ import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NavigableSet;
-
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.TreeMultimap;
 
@@ -237,7 +237,7 @@ public final class HandbookAuxData {
 			}
 		}
 
-		if (ModList.DYETREES.isLoaded()) {
+		if (ModList.CHROMATICRAFT.isLoaded()) {
 			try {
 				Class tree = Class.forName("Reika.DyeTrees.API.TreeGetter");
 				Method sapling = tree.getMethod("getDyeSapling", int.class);

@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import Reika.DragonAPI.Interfaces.InertIInv;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.RotaryCraft.RotaryCraft;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -20,6 +16,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import Reika.DragonAPI.Interfaces.InertIInv;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver implements ISidedInventory {
 

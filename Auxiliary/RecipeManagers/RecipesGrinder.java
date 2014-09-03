@@ -9,16 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
-import Reika.DragonAPI.Interfaces.OreType.OreRarity;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.AppEngHandler;
-import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +18,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.AppEngHandler;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesGrinder {
 	private static final RecipesGrinder GrinderBase = new RecipesGrinder();
@@ -176,8 +174,7 @@ public class RecipesGrinder {
 			for (int k = 0; k < li.size(); k++) {
 				ItemStack is = li.get(k);
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				int amt = ore.getRarity() == OreRarity.RARE ? 4 : ore.isNether() ? 2 : 1;
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate*amt), 1F);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 1F);
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}

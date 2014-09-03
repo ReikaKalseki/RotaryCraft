@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -21,10 +26,6 @@ import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
@@ -188,12 +189,20 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 	}
 
-	public void getPower(boolean doublesided) {
+	protected final void getPower(boolean doubleSided) {
+		this.getPower(worldObj, xCoord, yCoord, zCoord, doubleSided);
+	}
+
+	private void getPower(World world, int x, int y, int z, boolean doubleSided) {
 		this.clear();
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", this.readx, this.ready, this.readz));
-		TileEntity te = this.getAdjacentTileEntity(read);
+		int dx = x+read.offsetX;
+		int dy = y+read.offsetY;
+		int dz = z+read.offsetZ;
+		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
+		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 		if (this.isProvider(te)) {
-			MachineRegistry m = this.getMachine(read);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.isCross()) {
@@ -239,6 +248,15 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			powerin[0][1] = torquein;
 			powerin[0][2] = omegain;
 		}
+		else if (te instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null)
+				this.getPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, doubleSided);
+			else {
+				torquein = omegain = 0;
+			}
+		}
 		else {
 			torquein = 0;
 			omegain = 0;
@@ -246,7 +264,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
 
-		if (!doublesided) {
+		if (!doubleSided) {
 			torque = torquein;
 			omega = omegain;
 			power = (long)omega*(long)torque;
@@ -260,9 +278,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		omegain = 0;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d  %d", powerin[0][0], powerin[0][1], powerin[0][2]));
 
-		te = this.getAdjacentTileEntity(read2);
+		dx = x+read2.offsetX;
+		dy = y+read2.offsetY;
+		dz = z+read2.offsetZ;
+		m = isCentered ? this.getMachine(read2) : MachineRegistry.getMachine(world, dx, dy, dz);
+		te = isCentered ? this.getAdjacentTileEntity(read2) : world.getTileEntity(dx, dy, dz);
 		if (this.isProvider(te)) {
-			MachineRegistry m = this.getMachine(read2);
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.isCross()) {
@@ -309,6 +330,15 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			powerin[1][1] = torquein;
 			powerin[1][2] = omegain;
 		}
+		else if (te instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null)
+				this.getPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, doubleSided);
+			else {
+				torquein = omegain = 0;
+			}
+		}
 		else {
 			torquein = 0;
 			omegain = 0;
@@ -323,30 +353,36 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 	}
 
-	public void getOffsetPower4Sided(int stepx, int stepy, int stepz) {
+	protected final void getOffsetPower4Sided(int stepx, int stepy, int stepz) {
+		this.getOffsetPower4Sided(worldObj, xCoord, yCoord, zCoord, stepx, stepy, stepz);
+	}
+
+	private void getOffsetPower4Sided(World world, int x, int y, int z, int stepx, int stepy, int stepz) {
 		read = ForgeDirection.EAST;
 		read2 = ForgeDirection.WEST;
 		read3 = ForgeDirection.SOUTH;
 		read4 = ForgeDirection.NORTH;
 		this.setPointingOffset(stepx, stepy, stepz);
 
-		int x1 = xCoord+stepx+read.offsetX;
-		int y1 = yCoord+stepy+read.offsetY;
-		int z1 = zCoord+stepz+read.offsetZ;
-		int x2 = xCoord+stepx+read2.offsetX;
-		int y2 = yCoord+stepy+read2.offsetY;
-		int z2 = zCoord+stepz+read2.offsetZ;
-		int x3 = xCoord+stepx+read3.offsetX;
-		int y3 = yCoord+stepy+read3.offsetY;
-		int z3 = zCoord+stepz+read3.offsetZ;
-		int x4 = xCoord+stepx+read4.offsetX;
-		int y4 = yCoord+stepy+read4.offsetY;
-		int z4 = zCoord+stepz+read4.offsetZ;
+		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 
-		MachineRegistry id1 = MachineRegistry.getMachine(worldObj, x1, y1, z1);
-		MachineRegistry id2 = MachineRegistry.getMachine(worldObj, x2, y2, z2);
-		MachineRegistry id3 = MachineRegistry.getMachine(worldObj, x3, y3, z3);
-		MachineRegistry id4 = MachineRegistry.getMachine(worldObj, x4, y4, z4);
+		int x1 = x+stepx+read.offsetX;
+		int y1 = y+stepy+read.offsetY;
+		int z1 = z+stepz+read.offsetZ;
+		int x2 = x+stepx+read2.offsetX;
+		int y2 = y+stepy+read2.offsetY;
+		int z2 = z+stepz+read2.offsetZ;
+		int x3 = x+stepx+read3.offsetX;
+		int y3 = y+stepy+read3.offsetY;
+		int z3 = z+stepz+read3.offsetZ;
+		int x4 = x+stepx+read4.offsetX;
+		int y4 = y+stepy+read4.offsetY;
+		int z4 = z+stepz+read4.offsetZ;
+
+		MachineRegistry id1 = MachineRegistry.getMachine(world, x1, y1, z1);
+		MachineRegistry id2 = MachineRegistry.getMachine(world, x2, y2, z2);
+		MachineRegistry id3 = MachineRegistry.getMachine(world, x3, y3, z3);
+		MachineRegistry id4 = MachineRegistry.getMachine(world, x4, y4, z4);
 		TileEntity te1 = this.getTileEntity(x1, y1, z1);
 		TileEntity te2 = this.getTileEntity(x2, y2, z2);
 		TileEntity te3 = this.getTileEntity(x3, y3, z3);
@@ -393,6 +429,20 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
+		}
+		else if (te1 instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te1;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null) {
+				this.getPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, false);
+			}
+			else {
+				torque = omega = 0;
+			}
+			torquein = torque;
+			omegain = omega;
+			omega = torque = 0;
+			power = 0;
 		}
 		powerin[0][0] = torquein*omegain;
 		powerin[0][1] = torquein;
@@ -444,6 +494,21 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 		}
+		else if (te2 instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te2;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null) {
+				read = read2;
+				this.getPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, false);
+			}
+			else {
+				torque = omega = 0;
+			}
+			torquein = torque;
+			omegain = omega;
+			omega = torque = 0;
+			power = 0;
+		}
 		powerin[1][0] = torquein*omegain;
 		powerin[1][1] = torquein;
 		powerin[1][2] = omegain;
@@ -493,6 +558,21 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
+		}
+		else if (te3 instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te3;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null) {
+				read = read3;
+				this.getPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, false);
+			}
+			else {
+				torque = omega = 0;
+			}
+			torquein = torque;
+			omegain = omega;
+			omega = torque = 0;
+			power = 0;
 		}
 		powerin[2][0] = torquein*omegain;
 		powerin[2][1] = torquein;
@@ -544,6 +624,21 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 		}
+		else if (te4 instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te4;
+			WorldLocation loc = sr.getLinkTarget();
+			if (loc != null) {
+				read = read4;
+				this.getPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, false);
+			}
+			else {
+				torque = omega = 0;
+			}
+			torquein = torque;
+			omegain = omega;
+			omega = torque = 0;
+			power = 0;
+		}
 		powerin[3][0] = torquein*omegain;
 		powerin[3][1] = torquein;
 		powerin[3][2] = omegain;
@@ -560,17 +655,17 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		}
 	}
 
-	public void getPowerBelow() {
+	protected final void getPowerBelow() {
 		read = ForgeDirection.DOWN;
 		this.getPower(false);
 	}
 
-	public void getPowerAbove() {
+	protected final void getPowerAbove() {
 		read = ForgeDirection.UP;
 		this.getPower(false);
 	}
 
-	public void getSummativeSidedPower() {
+	protected final void getSummativeSidedPower() {
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;

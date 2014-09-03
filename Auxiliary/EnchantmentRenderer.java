@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
@@ -24,6 +18,12 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public abstract class EnchantmentRenderer {
 

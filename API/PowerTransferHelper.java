@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-import Reika.ChromatiCraft.API.SpaceRift;
-import Reika.DragonAPI.Instantiable.WorldLocation;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
+import Reika.DragonAPI.Instantiable.WorldLocation;
 
 public class PowerTransferHelper {
 
@@ -25,8 +24,8 @@ public class PowerTransferHelper {
 		int dy = y+dir.offsetY;
 		int dz = z+dir.offsetZ;
 		TileEntity toCheck = tile.worldObj.getTileEntity(dx, dy, dz);
-		if (toCheck instanceof SpaceRift) {
-			SpaceRift sr = (SpaceRift)toCheck;
+		if (toCheck instanceof WorldRift) {
+			WorldRift sr = (WorldRift)toCheck;
 			WorldLocation loc = sr.getLinkTarget();
 			if (loc != null) {
 				return checkPowerFrom(loc.getTileEntity(), dir);

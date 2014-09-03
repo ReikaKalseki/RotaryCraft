@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public class GrinderAPI {
 

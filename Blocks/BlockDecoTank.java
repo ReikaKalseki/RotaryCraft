@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.ClientProxy;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConnectedTextureGlass;
-import Reika.RotaryCraft.Items.ItemBlockDecoTank;
-import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +27,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import Reika.DragonAPI.Interfaces.ConnectedTextureGlass;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.RotaryCraft.ClientProxy;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Items.ItemBlockDecoTank;
+import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 
 public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 

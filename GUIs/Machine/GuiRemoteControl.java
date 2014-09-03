@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 import Reika.RotaryCraft.Containers.ContainerRemoteControl;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiRemoteControl extends GuiNonPoweredMachine {
 

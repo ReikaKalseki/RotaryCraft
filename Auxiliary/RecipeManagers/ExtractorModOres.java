@@ -9,14 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ExtractorModOres {
 
@@ -158,7 +157,7 @@ public class ExtractorModOres {
 	}
 
 	public static ModOreList getOreFromExtract(ItemStack item) {
-		return ModOreList.oreList[(item.getItemDamage()/4)];
+		return ItemRegistry.MODEXTRACTS.matchItem(item) ? ModOreList.oreList[(item.getItemDamage()/4)] : null;
 	}
 
 	public static enum ExtractorStage {

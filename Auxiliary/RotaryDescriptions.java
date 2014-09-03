@@ -9,13 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.Language;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
-import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
@@ -57,14 +63,6 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.Language;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 
 public final class RotaryDescriptions {
 

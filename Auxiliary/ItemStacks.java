@@ -9,19 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.DragonAPI.Instantiable.PreferentialItemStack;
-import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.PreferentialItemStack;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public final class ItemStacks {
 

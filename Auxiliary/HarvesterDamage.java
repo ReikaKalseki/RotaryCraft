@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.EntityDamageSource;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
 
 public class HarvesterDamage extends EntityDamageSource {
 

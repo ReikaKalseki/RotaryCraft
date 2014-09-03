@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Note;
-
-import net.minecraft.tileentity.TileEntity;
 
 public class NoteEvent extends TileEntityEvent {
 

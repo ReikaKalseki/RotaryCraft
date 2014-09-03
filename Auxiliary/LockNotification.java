@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.DragonAPI.Auxiliary.PlayerHandler.PlayerTracker;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
+import Reika.DragonAPI.Auxiliary.PlayerHandler.PlayerTracker;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 
 public final class LockNotification implements PlayerTracker {
 

@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
-import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
-import Reika.DragonAPI.ModRegistry.ModCropList;
-import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.BlockColorInterface;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +20,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
+import Reika.DragonAPI.ModRegistry.ModCropList;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.BlockColorInterface;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class BlockColorMapper {
 

@@ -9,7 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import Reika.ChromatiCraft.API.SpaceRift;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
@@ -17,10 +20,6 @@ import Reika.RotaryCraft.API.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implements IOMachine {
 
@@ -266,8 +265,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		int ty = te.yCoord+te.pointoffsety;
 		int tz = te.zCoord+te.pointoffsetz;
 		TileEntity out = this.getAdjacentTileEntity(dir);
-		while (out instanceof SpaceRift) {
-			out = ((SpaceRift)out).getTileEntityFrom(dir);
+		while (out instanceof WorldRift) {
+			out = ((WorldRift)out).getTileEntityFrom(dir);
 		}
 		if (out == null)
 			return false;
@@ -334,8 +333,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 				}
 			}
 		}
-		else if (te instanceof SpaceRift) {
-			this.setPower(((SpaceRift)te).getTileEntityFrom(from), from, om, tq);
+		else if (te instanceof WorldRift) {
+			this.setPower(((WorldRift)te).getTileEntityFrom(from), from, om, tq);
 		}/*
 		else if (te instanceof TileEntityIOMachine) {
 			TileEntityIOMachine io = (TileEntityIOMachine)te;

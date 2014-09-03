@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.util.HashMap;
+
+import net.minecraft.client.renderer.entity.RenderTNTPrimed;
+import net.minecraft.item.Item;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.BlockSheetTexRenderer;
@@ -34,15 +40,10 @@ import Reika.RotaryCraft.Entities.RenderIceBlock;
 import Reika.RotaryCraft.Entities.RenderLiquidBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
 import Reika.RotaryCraft.Entities.RenderSonicShot;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-
-import java.util.HashMap;
-
-import net.minecraft.client.renderer.entity.RenderTNTPrimed;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -68,6 +69,7 @@ public class ClientProxy extends CommonProxy
 	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png");
 
 	public static final ItemMachineRenderer machineItems = new ItemMachineRenderer();
+	public static final DecoTankItemRenderer decotank = new DecoTankItemRenderer();
 	public static final SpawnerRenderer spawner = new SpawnerRenderer();
 
 	public static PipeBodyRenderer pipe;
@@ -89,7 +91,7 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerSounds() {
-		new SoundLoader(RotaryCraft.class, SoundRegistry.soundList).register();
+		new SoundLoader(SoundRegistry.soundList).register();
 	}
 
 	public static ItemSpriteSheetRenderer getSpritesheetRenderer(int index) {
@@ -131,6 +133,7 @@ public class ClientProxy extends CommonProxy
 		this.registerBlockSheets();
 
 		MinecraftForgeClient.registerItemRenderer(ItemRegistry.SPAWNER.getItemInstance(), spawner);
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockRegistry.DECOTANK.getBlockInstance()), decotank);
 	}
 
 	@Override

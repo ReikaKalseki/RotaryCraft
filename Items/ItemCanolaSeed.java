@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Base.ItemBasic;
-import Reika.RotaryCraft.Blocks.BlockCanola;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,6 +16,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Blocks.BlockCanola;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 
 public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 

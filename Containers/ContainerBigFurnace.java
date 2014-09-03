@@ -9,15 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
+import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 
 public class ContainerBigFurnace extends CoreContainer
 {

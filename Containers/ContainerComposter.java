@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 
 public class ContainerComposter extends CoreContainer
 {

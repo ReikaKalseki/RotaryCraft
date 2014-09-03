@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Blocks;
 
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Items.Tools.ItemDebug;
-import Reika.RotaryCraft.Items.Tools.ItemMeter;
-import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
-import Reika.RotaryCraft.Registry.GuiRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MaterialRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
-
 import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
@@ -36,6 +24,17 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Base.BlockModelledMachine;
+import Reika.RotaryCraft.Items.Tools.ItemDebug;
+import Reika.RotaryCraft.Items.Tools.ItemMeter;
+import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
+import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class BlockGearbox extends BlockModelledMachine {
 

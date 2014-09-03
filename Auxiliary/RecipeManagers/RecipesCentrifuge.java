@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.Data.ChancedOutputList;
-import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.ForestryRecipeHelper;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +21,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ForestryRecipeHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class RecipesCentrifuge
 {

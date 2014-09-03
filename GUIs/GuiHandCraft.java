@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
-import Reika.RotaryCraft.Containers.ContainerHandCraft;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -19,6 +17,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.RotaryCraft.Containers.ContainerHandCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

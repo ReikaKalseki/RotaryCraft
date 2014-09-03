@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-
-import net.minecraft.item.ItemStack;
 
 public abstract class ItemChargedArmor extends ItemRotaryArmor {
 
