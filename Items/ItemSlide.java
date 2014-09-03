@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items;
 
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemBasic;
-import Reika.RotaryCraft.Registry.GuiRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,6 +17,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemBasic;
+import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

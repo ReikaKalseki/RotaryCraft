@@ -9,16 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import Reika.DragonAPI.Base.TileEntityBase;
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.Items.ItemBlockDecoTank;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.RotaryCraft.Items.ItemBlockDecoTank;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 
 public class TileEntityDecoTank extends TileEntityBase {
 

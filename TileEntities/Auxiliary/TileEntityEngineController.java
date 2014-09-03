@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,6 +17,14 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
 

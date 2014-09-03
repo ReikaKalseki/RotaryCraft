@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemCalculator extends ItemRotaryTool {
 

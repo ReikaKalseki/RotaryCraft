@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
-
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
@@ -27,6 +18,14 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -65,7 +64,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					if (i*3+j < num) {
-						stacks.add(new PositionedStack(recipe.mainItem(), dx+18*j, dy+18*i));
+						stacks.add(new PositionedStack(recipe.mainItem(), dx+18*i, dy+18*j));
 					}
 				}
 			}
@@ -104,9 +103,9 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			try {
 				for (int i = 0; i < 3; i++) {
 					for (int j = 0; j < 3; j++) {
-						ItemStack is = items[i*3+j];
+						ItemStack is = items[i+j*3];
 						if (is != null) {
-							stacks.add(new PositionedStack(is, dx+18*j, dy+18*i));
+							stacks.add(new PositionedStack(is, dx+18*i, dy+18*j));
 						}
 					}
 				}

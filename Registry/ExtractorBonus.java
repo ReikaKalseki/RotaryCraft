@@ -9,13 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -23,13 +16,19 @@ import java.util.Random;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 
 public enum ExtractorBonus {
 
 	GOLD(ItemStacks.goldsolution, ItemStacks.silverflakes, 0.125F),
 	IRON(ItemStacks.ironsolution, ItemStacks.tungstenflakes, 0.025F),
 	COAL(ItemStacks.coalsolution, new ItemStack(Items.gunpowder), 0.0625F, ModList.REACTORCRAFT, ExtractorModOres.getFlakeProduct(ModOreList.PITCHBLENDE), ModList.IC2, ExtractorModOres.getFlakeProduct(ModOreList.URANIUM)), //Nod to gregtech
-	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.goldoreflakes, 0.125F),
+	COPPER(ExtractorModOres.getSolutionProduct(ModOreList.COPPER), ItemStacks.goldoreflakes, 0.25F),
 	LEAD(ExtractorModOres.getSolutionProduct(ModOreList.LEAD), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.25F),
 	NETHERGOLD(ExtractorModOres.getSolutionProduct(ModOreList.NETHERGOLD), ItemStacks.silverflakes, 0.125F),
 	NETHERIRON(ExtractorModOres.getSolutionProduct(ModOreList.NETHERIRON), ItemStacks.aluminumpowder, 0.125F),

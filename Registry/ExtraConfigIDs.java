@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import Reika.DragonAPI.Interfaces.IDRegistry;
-import Reika.RotaryCraft.RotaryCraft;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
+import Reika.DragonAPI.Interfaces.IDRegistry;
+import Reika.RotaryCraft.RotaryCraft;
 
 public enum ExtraConfigIDs implements IDRegistry {
 

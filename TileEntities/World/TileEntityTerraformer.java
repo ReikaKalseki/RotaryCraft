@@ -9,23 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
-import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Instantiable.ItemReq;
-import Reika.DragonAPI.Instantiable.Data.ColumnArray;
-import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
-import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.DurationRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +25,22 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.ItemReq;
+import Reika.DragonAPI.Instantiable.Data.ColumnArray;
+import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DurationRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.core.IAreaProvider;
 
 public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles, DiscreteFunction {

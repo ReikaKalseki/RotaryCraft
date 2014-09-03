@@ -9,6 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import java.util.HashMap;
+
+import mrtjp.projectred.api.IScrewdriver;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneDiode;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -34,19 +46,6 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
-
-import java.util.HashMap;
-
-import mrtjp.projectred.api.IScrewdriver;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneDiode;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
 

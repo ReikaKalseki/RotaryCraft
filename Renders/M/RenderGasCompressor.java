@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.ModelGasCompressor;
-import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
-
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Models.ModelGasCompressor;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

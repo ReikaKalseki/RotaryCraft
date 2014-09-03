@@ -14,12 +14,11 @@
 // - ZeuX
 package Reika.RotaryCraft.ModInterface;
 
-import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-
 import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelDynamo2 extends RotaryModelBase
 {

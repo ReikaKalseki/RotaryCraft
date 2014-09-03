@@ -9,9 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-
 import net.minecraft.item.ItemStack;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 import codechicken.microblock.Saw;
 
 public class ItemBedrockSaw extends ItemRotaryTool implements Saw {

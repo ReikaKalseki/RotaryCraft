@@ -1005,6 +1005,7 @@
 			Power Input: Bottom
 			Required Power: %dW
 			Required Torque: %d Nm
+			Storage Capacity: f*10^(0.5*log_2(torque))/40 mB, f = 1 for liquids and 8 for gases
 		</note>
 	</gastank>
 	<crafter>

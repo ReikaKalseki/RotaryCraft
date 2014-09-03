@@ -9,7 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import Reika.ChromatiCraft.API.SpaceRift;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.WorldLocation;
@@ -35,23 +50,8 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PipeConnector, IFluidHandler {
 
@@ -603,8 +603,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				}
 			}
 		}
-		else if (te instanceof SpaceRift) {
-			SpaceRift sr = (SpaceRift)te;
+		else if (te instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te;
 			WorldLocation loc = sr.getLinkTarget();
 			if (loc != null)
 				this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
@@ -682,7 +682,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 					}
 				}
 				if (omega > 0 && (world.getTotalWorldTime()&4) == 4)
-					lubricant.removeLiquid((int)ReikaMathLibrary.logbase(Math.max(omega, torque), 2));
+					lubricant.removeLiquid((int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(Math.max(omega, torque), 2)));
 			}
 			else {
 				omega = torque = 0;

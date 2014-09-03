@@ -9,7 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
+import java.util.List;
+
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -24,19 +37,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
-import java.util.List;
-
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
-
 public class TileEntityHydroEngine extends TileEntityEngine {
+
+	public boolean failed;
 
 	@Override
 	protected void consumeFuel() {
@@ -120,14 +123,14 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 				}
 			}
 		}
-		if (!lubricant.isEmpty() && omega > 0) {
+		if (!failed && !lubricant.isEmpty() && omega > 0) {
 			if (world.getWorldTime()%10 == 0)
 				lubricant.removeLiquid(1);
 		}
 	}
 
 	private boolean doesBlockObstructBlades(World world, int x, int y, int z) {
-		return !ReikaWorldHelper.softBlocks(world, x, y, z);
+		return !failed && !ReikaWorldHelper.softBlocks(world, x, y, z);
 	}
 
 	private int[] getWaterColumnPos() {
@@ -202,7 +205,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		return false;
 	}
 
-	public double getArrayTorqueMultiplier() {
+	private int getArrayTorqueMultiplier() {
 		boolean front = this.isFrontOfArray();
 		boolean back = this.isBackEndOfArray();
 		if (!front && !back)
@@ -212,7 +215,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		if (front) {
 			BlockArray b = new BlockArray();
 			b.recursiveAdd(worldObj, xCoord, yCoord, zCoord, this.getTileEntityBlockID());
-			double size = 0;
+			int size = 0;
 			for (int i = 0; i < b.getSize(); i++) {
 				int[] xyz = b.getNthBlock(i);
 				TileEntity te = worldObj.getTileEntity(xyz[0], xyz[1], xyz[2]);
@@ -267,19 +270,58 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	@Override
 	protected int getGenTorque(World world, int x, int y, int z, int meta) {
-		return (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z)*this.getArrayTorqueMultiplier());
+		if (failed)
+			return 1;
+		int fac = this.getArrayTorqueMultiplier();
+		int torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z)*fac);
+		if (torque/EngineType.HYDRO.getTorque() > 4) {
+			this.fail(world, x, y, z);
+		}
+		return torque;
+	}
+
+	private void fail(World world, int x, int y, int z) {
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.break");
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 0.2F, 0.5F);
+		failed = true;
 	}
 
 	@Override
 	protected void affectSurroundings(World world, int x, int y, int z, int meta) {
 		this.dealPanelDamage(world, x, y, z, meta);
 		this.spawnParticles(world, x, y, z);
+		if (failed) {
+			ForgeDirection dir = this.getWriteDirection();
+			ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
+			for (int i = -1; i <= y; i++) {
+				ReikaWorldHelper.dropBlockAt(world, x+left.offsetX, y+i, z+left.offsetZ);
+				world.setBlock(x+left.offsetX, y+i, z+left.offsetZ, Blocks.air);
+			}
+			ReikaWorldHelper.dropBlockAt(world, x, y+1, z);
+			ReikaWorldHelper.dropBlockAt(world, x, y-1, z);
+			world.setBlock(x, y+1, z, Blocks.air);
+			world.setBlock(x, y-1, z, Blocks.air);
+		}
 	}
 
 	private void spawnParticles(World world, int x, int y, int z) {
 		int[] xz = this.getWaterColumnPos();
 		ReikaParticleHelper.RAIN.spawnAroundBlock(world, x, y, z, 16);
 		ReikaParticleHelper.RAIN.spawnAroundBlock(world, xz[0], y, xz[1], 16);
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+
+		failed = NBT.getBoolean("fail");
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+
+		NBT.setBoolean("fail", failed);
 	}
 
 }

@@ -15,12 +15,11 @@
 
 package Reika.RotaryCraft.Models.Animated;
 
-import Reika.RotaryCraft.Base.RotaryModelBase;
-
 import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelDistillery extends RotaryModelBase
 {

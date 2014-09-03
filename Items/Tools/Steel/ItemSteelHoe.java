@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Steel;
 
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemStack;
 
 public class ItemSteelHoe extends ItemHoe implements IndexedItemSprites {
 

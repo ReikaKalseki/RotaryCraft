@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +18,13 @@ import net.minecraft.item.crafting.IRecipe;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;

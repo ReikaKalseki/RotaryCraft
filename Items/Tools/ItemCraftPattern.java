@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -19,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemCraftPattern extends ItemRotaryTool {
 

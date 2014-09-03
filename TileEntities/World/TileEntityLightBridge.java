@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Event.LightBridgePowerLossEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -17,12 +22,6 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityLightBridge extends TileEntityBeamMachine implements RangedEffect {
 
@@ -44,7 +43,7 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 	}
 
 	@Override
-	public void makeBeam(World world, int x, int y, int z, int metadata) {
+	protected void makeBeam(World world, int x, int y, int z, int metadata) {
 		int animstep = 0;
 		boolean blocked = false;
 		int dir = 0;

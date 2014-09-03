@@ -9,6 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -28,19 +40,6 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation
 {
@@ -93,7 +92,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				in.add(ModWoodList.woodList[i].getCorrespondingLeaf());
 			}
 		}
-		if (ModList.DYETREES.isLoaded()) {
+		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int j = 0; j < 16; j++) {
 				in.add(TreeGetter.getDyeSapling(j));
 				in.add(TreeGetter.getHeldDyeLeaf(j));
@@ -132,7 +131,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public static int getPlantValue(ItemStack is) {
 		if (is == null)
 			return 0;
-		if (ModList.DYETREES.isLoaded()) {
+		if (ModList.CHROMATICRAFT.isLoaded()) {
 			if (TreeGetter.isDyeSapling(is))
 				return PlantMaterials.SAPLING.getPlantValue();
 			if (TreeGetter.isDyeLeaf(is))

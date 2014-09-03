@@ -9,11 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.Random;
+
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-
-import java.util.Random;
 
 public enum DifficultyEffects {
 
@@ -29,7 +29,8 @@ public enum DifficultyEffects {
 	BREAKCOIL(16, 4, 1),
 	FURNACEMELT(1800, 600, 150),
 	CANOLA(new int[]{128,280}, new int[]{64,160}, new int[]{8,64}),
-	RAILGUNCRAFT(16, 8, 2);
+	RAILGUNCRAFT(16, 8, 2),
+	LUBEUSAGE(0.25F, 1F, 2.5F);
 
 	private boolean isChance = false;
 
@@ -147,14 +148,14 @@ public enum DifficultyEffects {
 	public boolean testChance() {
 		if (!isChance) {
 			ReikaJavaLibrary.pConsole(this+" is not chance, but was called for it!");
-			Thread.dumpStack();
+			ReikaJavaLibrary.dumpStack();
 			return false;
 		}
 		float chance = this.getChance();
 		return ReikaRandomHelper.doWithChance(chance);
 	}
 
-	private static EnumDifficulty getDifficulty() {
+	public static EnumDifficulty getDifficulty() {
 		return EnumDifficulty.getDifficulty(ConfigRegistry.DIFFICULTY.getValue());
 	}
 

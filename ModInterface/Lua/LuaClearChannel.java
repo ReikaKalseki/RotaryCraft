@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.Lua;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
-
-import net.minecraft.tileentity.TileEntity;
 
 public class LuaClearChannel extends LuaMethod {
 

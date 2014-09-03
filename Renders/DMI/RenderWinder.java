@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DMI;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -17,11 +22,6 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Models.Animated.ModelWinder;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
 
 public class RenderWinder extends RotaryTERenderer
 {

@@ -15,14 +15,14 @@
 
 package Reika.RotaryCraft.Models.Engine;
 
-import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-
 import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelHydro extends RotaryModelBase
 {
@@ -94,15 +94,23 @@ public class ModelHydro extends RotaryModelBase
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
+		boolean fail = (Boolean)li.get(0);
+
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);
 		Shape1.render(te, f5);
 		Shape1a.render(te, f5);
+
+		double d = 0.1875;
+		if (fail)
+			GL11.glTranslated(0, d, 0);
 		Shape2.render(te, f5);
 		Shape2a.render(te, f5);
 		Shape2b.render(te, f5);
 		Shape2c.render(te, f5);
+		if (fail)
+			GL11.glTranslated(0, -d, 0);
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(-phi, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);

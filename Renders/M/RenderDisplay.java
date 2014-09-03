@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.ModelDisplay;
-import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
-
 import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
@@ -26,6 +18,14 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Models.ModelDisplay;
+import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 
 public class RenderDisplay extends RotaryTERenderer {
 

@@ -56,7 +56,7 @@ public enum ConfigRegistry implements ConfigList {
 	RAILGUNDAMAGE("Railgun Block Damage", true),
 	GRAVELPLAYER("Allow Gravel Gun PvP", true),
 	CHESTGEN("Chest Generation Tier", 4),
-	HOSTILECRASH("Crash on hostile interference from other mods", true),
+	//HOSTILECRASH("Crash on hostile interference from other mods", true),
 	PROJECTORLINES("Render projector lines", true),
 	COLORBLIND("Color Blind Mode", false),
 	TURRETPLAYERS("Turrets can target players", true),
@@ -78,7 +78,8 @@ public enum ConfigRegistry implements ConfigList {
 	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", false),
 	CLEARCHAT("Tools Clear Chat", true),
 	KICKFLYING("Jetpack bypasses allow-flight property", true),
-	BLOWERSPILL("Item Pump Spills Items If Dumping To Air", true);
+	BLOWERSPILL("Item Pump Spills Items If Dumping To Air", true),
+	EXTRACTORMAINTAIN("Extractor Drill Wears Down", false);
 
 	private String label;
 	private boolean defaultState;

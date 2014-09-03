@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
@@ -20,23 +26,17 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation {
 
@@ -46,6 +46,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	/** The number of ticks that the current item has been cooking for */
 	private int[] extractorCookTime = new int[4];
+
+	public static final int DRILL_LIFE = 4096;
+	private int drillTime = ConfigRegistry.EXTRACTORMAINTAIN.getState() ? 0 : DRILL_LIFE;
 
 	public static final int CAPACITY = 16000;
 
@@ -67,7 +70,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				return;
 		boolean works = false;
 		for (int i = 0; i < 4; i++) {
-			if (this.canSmelt(i))
+			if (this.canProcess(i))
 				works = true;
 		}
 		idle = !works;
@@ -122,7 +125,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	public int getSizeInventory()
 	{
-		return 9;
+		return 10;
 	}
 
 	@Override
@@ -131,6 +134,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		super.readSyncTag(NBT);
 
 		extractorCookTime = NBT.getIntArray("CookTime");
+		drillTime = NBT.getInteger("drill");
 
 		for (int i = 0; i < 4; i++) {
 			extractableSlots[i] = NBT.getBoolean("extractable"+i);
@@ -142,6 +146,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	{
 		super.writeSyncTag(NBT);
 		NBT.setIntArray("CookTime", extractorCookTime);
+		NBT.setInteger("drill", drillTime);
 
 		for (int i = 0; i < 4; i++) {
 			NBT.setBoolean("extractable"+i, extractableSlots[i]);
@@ -173,6 +178,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return (extractorCookTime[i] * par1)/2 / time;
 	}
 
+	public int getDrillLifeScaled(int a) {
+		return drillTime * a / DRILL_LIFE;
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta)
 	{
@@ -184,17 +193,27 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		this.throughPut();
 		if (world.isRemote)
 			return;
+		if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+			if (drillTime <= 0 && inv[9] != null && ReikaItemHelper.matchStacks(inv[9], ItemStacks.drill)) {
+				ReikaInventoryHelper.decrStack(9, inv);
+				drillTime = DRILL_LIFE;
+			}
+		}
+		else {
+			drillTime = DRILL_LIFE;
+			inv[9] = null;
+		}
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
-			if (this.canSmelt(i)) {
+			if (this.canProcess(i)) {
 				flag1 = true;
 			}
-			if (this.canSmelt(i)) {
+			if (this.canProcess(i)) {
 				extractorCookTime[i]++;
 				if (extractorCookTime[i] >= this.getOperationTime(i+1)) {
 					extractorCookTime[i] = 0;
 					if (!this.processModOre(i))
-						this.smeltItem(i);
+						this.processItem(i);
 					flag1 = true;
 				}
 			}
@@ -208,10 +227,14 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	/**
 	 * Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc.
 	 */
-	private boolean canSmelt(int i)
+	private boolean canProcess(int i)
 	{
 		if (power < machine.getMinPower(i) || omega < machine.getMinSpeed(i) || torque < machine.getMinTorque(i))
 			return false;
+
+		if (i == 0 && drillTime <= 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState())
+			return false;
+
 		if ((i == 1 || i == 2) && tank.isEmpty())
 			return false;
 
@@ -284,9 +307,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	/**
 	 * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
 	 */
-	public void smeltItem(int i)
+	public void processItem(int i)
 	{
-		if (!this.canSmelt(i))
+		if (!this.canProcess(i))
 			return;
 		ItemStack itemstack = RecipesExtractor.recipes().getSmeltingResult(inv[i]);
 		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
@@ -300,6 +323,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		else if (ReikaItemHelper.matchStacks(inv[i+4], itemstack))
 			inv[i+4].stackSize += num;
 
+		if (i == 0 && drillTime > 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+			drillTime--;
+		}
 		if (i == 3) {
 			this.bonusItems(inv[i]);
 			RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());
@@ -401,12 +427,14 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
 			return slot == 1+is.getItemDamage()%4;
 		}
+		if (slot == 9)
+			return ConfigRegistry.EXTRACTORMAINTAIN.getState() && ReikaItemHelper.matchStacks(is, ItemStacks.drill);
 		return false;
 	}
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.canSmelt(0) && !this.canSmelt(1) && !this.canSmelt(2) && !this.canSmelt(3))
+		if (!this.canProcess(0) && !this.canProcess(1) && !this.canProcess(2) && !this.canProcess(3))
 			return 15;
 		return 0;
 	}

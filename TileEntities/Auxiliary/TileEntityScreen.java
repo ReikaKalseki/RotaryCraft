@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +16,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityScreen extends InventoriedPowerReceiver {
 

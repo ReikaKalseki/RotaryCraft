@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -19,15 +27,6 @@ import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
 public enum HandbookRegistry implements HandbookEntry {
 

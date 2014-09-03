@@ -9,13 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
-import Reika.RotaryCraft.Base.ItemChargedTool;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.ItemChargedTool;
 
 public class ItemFlamethrower extends ItemChargedTool {
 

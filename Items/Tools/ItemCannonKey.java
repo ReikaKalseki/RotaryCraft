@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import Reika.DragonAPI.DragonOptions;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
-import Reika.RotaryCraft.Registry.GuiRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -24,6 +16,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonOptions;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class ItemCannonKey extends ItemRotaryTool {
 

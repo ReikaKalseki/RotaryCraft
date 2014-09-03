@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -16,11 +21,6 @@ import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelWoodcutter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
 
 public class RenderWoodcutter extends RotaryTERenderer
 {

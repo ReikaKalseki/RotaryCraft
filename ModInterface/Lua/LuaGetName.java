@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.Lua;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-
-import net.minecraft.tileentity.TileEntity;
 
 public class LuaGetName extends LuaMethod {
 

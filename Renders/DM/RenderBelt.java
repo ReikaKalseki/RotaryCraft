@@ -9,14 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.Animated.ModelBelt;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
-
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +18,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.Auxiliary.IORenderer;
+import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Models.Animated.ModelBelt;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 
 public class RenderBelt extends RotaryTERenderer
 {

@@ -9,6 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -27,19 +39,6 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
 
@@ -75,7 +74,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		}
 	}
 
-	public void spreadFire(World world, int x, int y, int z, int meta, int range) {
+	private void spreadFire(World world, int x, int y, int z, int meta, int range) {
 		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null) {
 			int a = 0;
 			if (meta > 1)
@@ -140,7 +139,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	@Override
-	public void makeBeam(World world, int x, int y, int z, int meta) {
+	protected void makeBeam(World world, int x, int y, int z, int meta) {
 		if (power < MINPOWER)
 			return;
 		long power2 = Math.min(power, MAXPOWER);
@@ -203,7 +202,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.spreadFire(world, x, y, z, meta, range);
 	}
 
-	public void clearBlocks(World world, int x, int y, int z, int meta, int range) {
+	private void clearBlocks(World world, int x, int y, int z, int meta, int range) {
 		int a = 0;
 		if (meta > 1)
 			a = 1;
@@ -324,7 +323,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 	}
 
-	public void dropBlocks(World world, int x, int y, int z, Block id, int meta) {
+	private void dropBlocks(World world, int x, int y, int z, Block id, int meta) {
 		if (id != Blocks.air)
 			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, id.getDrops(world, x, y, z, meta, 0));
 		world.setBlockToAir(x, y, z);

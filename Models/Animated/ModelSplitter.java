@@ -15,14 +15,14 @@
 
 package Reika.RotaryCraft.Models.Animated;
 
-import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
-import Reika.RotaryCraft.Base.RotaryModelBase;
-
 import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 
 
 public class ModelSplitter extends RotaryModelBase
@@ -221,6 +221,7 @@ public class ModelSplitter extends RotaryModelBase
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
+		boolean fail = (Boolean)li.get(0);
 		Shape3a.render(te, f5);
 		Shape2.render(te, f5);
 		Shape5.render(te, f5);
@@ -230,44 +231,46 @@ public class ModelSplitter extends RotaryModelBase
 		Shape3.render(te, f5);
 		Shape6.render(te, f5);
 
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
-		Shape17.render(te, f5);
-		Shape20.render(te, f5);
-		Shape13.render(te, f5);
-		Shape12.render(te, f5);
-		Shape21.render(te, f5);
-		Shape16.render(te, f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
+		if (!fail) {
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(phi, 1, 0, 0);
+			GL11.glTranslated(0, -1, 0);
+			Shape17.render(te, f5);
+			Shape20.render(te, f5);
+			Shape13.render(te, f5);
+			Shape12.render(te, f5);
+			Shape21.render(te, f5);
+			Shape16.render(te, f5);
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(-phi, 1, 0, 0);
+			GL11.glTranslated(0, -1, 0);
 
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
-		Shape12a.render(te, f5);
-		Shape20a.render(te, f5);
-		Shape16a.render(te, f5);
-		Shape17a.render(te, f5);
-		Shape21a.render(te, f5);
-		Shape13a.render(te, f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(phi, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(-phi, 1, 0, 0);
+			GL11.glTranslated(0, -1, 0);
+			Shape12a.render(te, f5);
+			Shape20a.render(te, f5);
+			Shape16a.render(te, f5);
+			Shape17a.render(te, f5);
+			Shape21a.render(te, f5);
+			Shape13a.render(te, f5);
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(phi, 1, 0, 0);
+			GL11.glTranslated(0, -1, 0);
 
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(phi, 0, 0, 1);
-		GL11.glTranslated(0, -1, 0);
-		Shape15.render(te, f5);
-		Shape18.render(te, f5);
-		Shape19.render(te, f5);
-		Shape14.render(te, f5);
-		Shape23.render(te, f5);
-		Shape22.render(te, f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-phi, 0, 0, 1);
-		GL11.glTranslated(0, -1, 0);
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(phi, 0, 0, 1);
+			GL11.glTranslated(0, -1, 0);
+			Shape15.render(te, f5);
+			Shape18.render(te, f5);
+			Shape19.render(te, f5);
+			Shape14.render(te, f5);
+			Shape23.render(te, f5);
+			Shape22.render(te, f5);
+			GL11.glTranslated(0, 1, 0);
+			GL11.glRotatef(-phi, 0, 0, 1);
+			GL11.glTranslated(0, -1, 0);
+		}
 	}
 
 }

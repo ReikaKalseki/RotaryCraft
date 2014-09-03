@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +31,17 @@ import net.minecraft.world.World;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeType;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffect {
 
@@ -266,7 +265,10 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	private void chargeNode(INode te) {
 		//ReikaJavaLibrary.pConsole(te.getNodeType()+":"+te.getAspects().aspects);
-		te.setNodeVisBase((short)32000);
+		te.setNodeVisBase(Aspect.ENERGY, (short)32000);
+		te.setNodeVisBase(Aspect.WEAPON, (short)32000);
+		te.setNodeVisBase(Aspect.MECHANISM, (short)32000);
+
 		te.addToContainer(Aspect.ENERGY, (short)8000);
 		te.addToContainer(Aspect.WEAPON, (short)1000);
 		te.addToContainer(Aspect.MECHANISM, (short)2000);

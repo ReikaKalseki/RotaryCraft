@@ -9,19 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.RotaryCraft.Auxiliary.IORenderer;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.ModelMonitor;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.RotaryCraft.Auxiliary.IORenderer;
+import Reika.RotaryCraft.Base.RotaryTERenderer;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Models.ModelMonitor;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
 
 public class RenderMonitor extends RotaryTERenderer
 {
@@ -74,6 +75,7 @@ public class RenderMonitor extends RotaryTERenderer
 		var14.renderAll(tile, null, -tile.phi, 0);
 		if (tile.isInWorld()) {
 			GL11.glDisable(GL11.GL_LIGHTING);
+			ReikaRenderHelper.disableEntityLighting();
 			FontRenderer var17 = this.getFontRenderer();
 			float var10 = 0.6666667F*1.2F;
 			GL11.glScalef(var10, -var10, -var10);
@@ -125,6 +127,7 @@ public class RenderMonitor extends RotaryTERenderer
 			}
 
 			GL11.glDepthMask(true);
+			ReikaRenderHelper.enableEntityLighting();
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 

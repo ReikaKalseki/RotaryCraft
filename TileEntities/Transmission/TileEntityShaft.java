@@ -9,7 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import Reika.ChromatiCraft.API.SpaceRift;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -24,16 +33,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityShaft extends TileEntity1DTransmitter {
 	public int[] readtorque = new int[2];
@@ -395,8 +394,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					}
 				}
 			}
-			else if (te1 instanceof SpaceRift) {
-				SpaceRift sr = (SpaceRift)te1;
+			else if (te1 instanceof WorldRift) {
+				WorldRift sr = (WorldRift)te1;
 				WorldLocation loc = sr.getLinkTarget();
 				if (loc != null)
 					this.crossTransfer(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, true, false);
@@ -445,8 +444,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					}
 				}
 			}
-			else if (te2 instanceof SpaceRift) {
-				SpaceRift sr = (SpaceRift)te2;
+			else if (te2 instanceof WorldRift) {
+				WorldRift sr = (WorldRift)te2;
 				WorldLocation loc = sr.getLinkTarget();
 				if (loc != null)
 					this.crossTransfer(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, false, true);
@@ -521,8 +520,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				}
 			}
 		}
-		else if (te instanceof SpaceRift) {
-			SpaceRift sr = (SpaceRift)te;
+		else if (te instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te;
 			WorldLocation loc = sr.getLinkTarget();
 			if (loc != null)
 				this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);

@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-
 import java.util.Arrays;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemTileSelector extends ItemRotaryTool {
 

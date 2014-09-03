@@ -9,7 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import Reika.ChromatiCraft.API.SpaceRift;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -28,12 +33,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityFlywheel extends TileEntityTransmissionMachine implements SimpleProvider, PowerGenerator, ShaftMerger {
 
@@ -222,7 +221,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
-		switch(metadata) {
+		switch(metadata%4) {
 		case 0:
 			read = ForgeDirection.WEST;
 			break;
@@ -288,8 +287,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 				}
 			}
 		}
-		else if (te instanceof SpaceRift) {
-			SpaceRift sr = (SpaceRift)te;
+		else if (te instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te;
 			WorldLocation loc = sr.getLinkTarget();
 			if (loc != null)
 				this.process(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);

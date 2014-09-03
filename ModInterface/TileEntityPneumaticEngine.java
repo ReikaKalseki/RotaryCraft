@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import java.awt.Color;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -16,13 +22,6 @@ import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-
-import java.awt.Color;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
@@ -130,7 +129,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	}
 
 	public int powerRequest(ForgeDirection from) {
-		float needed = pp.getMaxEnergyStored() - pp.getEnergyStored();
+		double needed = pp.getMaxEnergyStored() - pp.getEnergyStored();
 		return (int) Math.ceil(Math.min(pp.getMaxEnergyReceived(), needed));
 	}
 

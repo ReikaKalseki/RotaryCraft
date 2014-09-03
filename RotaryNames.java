@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
-
-import net.minecraft.util.StatCollector;
 
 public class RotaryNames {
 

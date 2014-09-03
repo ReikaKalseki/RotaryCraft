@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
-import Reika.RotaryCraft.Base.ItemChargedTool;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.Items;
@@ -21,6 +16,10 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
+import Reika.RotaryCraft.Base.ItemChargedTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

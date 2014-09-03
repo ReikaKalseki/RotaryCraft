@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
-import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
-import Reika.MeteorCraft.Entity.EntityMeteor;
-import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
-import Reika.RotaryCraft.Entities.EntityRailGunShot;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import icbm.api.IMissile;
 
 import java.util.ArrayList;
@@ -52,6 +41,16 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
+import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
+import Reika.MeteorCraft.Entity.EntityMeteor;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
+import Reika.RotaryCraft.Entities.EntityRailGunShot;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityForceField extends TileEntityProtectionDome implements EnchantableMachine {
 

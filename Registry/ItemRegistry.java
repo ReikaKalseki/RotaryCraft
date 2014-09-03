@@ -9,6 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.HashMap;
+
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
@@ -88,15 +98,6 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShears;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShovel;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSickle;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ItemRegistry implements ItemEnum {
@@ -193,6 +194,9 @@ public enum ItemRegistry implements ItemEnum {
 
 	private int maxindex;
 
+	public static final ItemRegistry[] itemList = values();
+	private static final HashMap<Item, ItemRegistry> itemMap = new HashMap();
+
 	private ItemRegistry(int tex, boolean sub, String n, Class <?extends Item> iCl) {
 		this(tex, 0, sub, n, iCl, null);
 	}
@@ -221,8 +225,6 @@ public enum ItemRegistry implements ItemEnum {
 		condition = null;
 		imageSheet = sheet;
 	}
-
-	public static final ItemRegistry[] itemList = values();
 
 	@Override
 	public Class[] getConstructorParamTypes() {
@@ -357,20 +359,11 @@ public enum ItemRegistry implements ItemEnum {
 	}
 
 	public static boolean isRegistered(Item id) {
-		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getItemInstance() == id)
-				return true;
-		}
-		return false;
+		return getEntryByID(id) != null;
 	}
 
 	public static ItemRegistry getEntryByID(Item id) {
-		for (int i = 0; i < itemList.length; i++) {
-			if (itemList[i].getItemInstance() == id)
-				return itemList[i];
-		}
-		//throw new RegistrationException(RotaryCraft.instance, "Item ID "+id+" was called to the item registry but does not exist there!");
-		return null;
+		return itemMap.get(id);
 	}
 
 	public static ItemRegistry getEntry(ItemStack is) {
@@ -835,6 +828,13 @@ public enum ItemRegistry implements ItemEnum {
 			return false;
 		default:
 			return true;
+		}
+	}
+
+	public static void loadMappings() {
+		for (int i = 0; i < itemList.length; i++) {
+			ItemRegistry r = itemList[i];
+			itemMap.put(r.getItemInstance(), r);
 		}
 	}
 }

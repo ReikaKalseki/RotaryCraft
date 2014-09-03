@@ -9,13 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 public class RenderForceField extends RenderProtectionDome
 {

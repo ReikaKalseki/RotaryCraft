@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.recipe.DefaultOverlayHandler;

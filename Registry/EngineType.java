@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -23,13 +29,6 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityMicroturbine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityWindEngine;
-
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public enum EngineType {
 	DC(256, 4, TileEntityDCEngine.class),
@@ -229,7 +228,7 @@ public enum EngineType {
 		case MICRO:
 			return 24;
 		case JET:
-			return 4;
+			return 3;
 		default:
 			return 0;
 		}

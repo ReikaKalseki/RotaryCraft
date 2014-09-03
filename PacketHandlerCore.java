@@ -9,6 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.Random;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Interfaces.IPacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -54,18 +65,6 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
-
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
 
 
 public class PacketHandlerCore implements IPacketHandler {
@@ -188,6 +187,8 @@ public class PacketHandlerCore implements IPacketHandler {
 				}
 				else
 					longdata = inputStream.readLong();
+				break;
+			case NBT:
 				break;
 			}
 			if (packetType.hasCoordinates()) {

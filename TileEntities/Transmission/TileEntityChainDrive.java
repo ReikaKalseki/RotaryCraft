@@ -9,11 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-
-import net.minecraft.item.ItemStack;
 
 
 public class TileEntityChainDrive extends TileEntityBeltHub {

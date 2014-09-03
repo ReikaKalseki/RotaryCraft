@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import Reika.DragonAPI.Interfaces.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
-import Reika.RotaryCraft.ClientProxy;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
-import Reika.RotaryCraft.Base.RotaryTERenderer;
-
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -27,6 +18,15 @@ import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
+import Reika.RotaryCraft.ClientProxy;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
+import Reika.RotaryCraft.Base.RotaryTERenderer;
 
 public class PipeRenderer extends RotaryTERenderer {
 

@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Charged;
 
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.RotaryCraft.Base.ItemChargedArmor;
-import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +21,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.RotaryCraft.Base.ItemChargedArmor;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemSpringBoots extends ItemChargedArmor {
 

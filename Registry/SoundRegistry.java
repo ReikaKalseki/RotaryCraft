@@ -9,17 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import Reika.DragonAPI.Instantiable.WorldLocation;
-import Reika.DragonAPI.Interfaces.SoundEnum;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.RotaryCraft;
-
 import java.net.URL;
 
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Interfaces.SoundEnum;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -89,9 +88,9 @@ public enum SoundRegistry implements SoundEnum {
 		}
 		name = n;
 		if (this.isNote())
-			path = SOUND_FOLDER+MUSIC_FOLDER+name+SOUND_EXT;
+			path = PREFIX+SOUND_FOLDER+MUSIC_FOLDER+name+SOUND_EXT;
 		else
-			path = SOUND_FOLDER+name+SOUND_EXT;
+			path = PREFIX+SOUND_FOLDER+name+SOUND_EXT;
 		category = cat;
 	}
 

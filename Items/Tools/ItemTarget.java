@@ -9,10 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -20,6 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 
 public class ItemTarget extends ItemRotaryTool {
 

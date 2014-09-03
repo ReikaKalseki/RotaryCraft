@@ -9,14 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
 import forestry.api.arboriculture.IToolGrafter;
 
 public class ItemBedrockGrafter extends ItemRotaryTool implements IToolGrafter {

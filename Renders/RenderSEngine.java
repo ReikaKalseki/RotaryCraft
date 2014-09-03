@@ -9,10 +9,17 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+
 import Reika.DragonAPI.Instantiable.Effects.Glow;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -26,13 +33,7 @@ import Reika.RotaryCraft.Models.Engine.ModelMicroTurbine;
 import Reika.RotaryCraft.Models.Engine.ModelPerformance;
 import Reika.RotaryCraft.Models.Engine.ModelSteam;
 import Reika.RotaryCraft.Models.Engine.ModelWind;
-
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -211,7 +212,7 @@ public class RenderSEngine extends RotaryTERenderer
 				d = 0.375;
 				GL11.glTranslated(0, d, 0);
 				GL11.glScaled(s, s, s);
-				var21.renderAll(tile, null, 0, 0);
+				var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(((TileEntityHydroEngine)tile).failed), 0, 0);
 				GL11.glScaled(1D/s, 1D/s, 1D/s);
 				GL11.glTranslated(0, -d, 0);
 				break;
@@ -253,7 +254,7 @@ public class RenderSEngine extends RotaryTERenderer
 			var18.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case HYDRO:
-			var21.renderAll(tile, null, -tile.phi, 0);
+			var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(((TileEntityHydroEngine)tile).failed), -tile.phi, 0);
 			break;
 		case MICRO:
 			var19.renderAll(tile, null, -tile.phi, 0);

@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -32,6 +26,11 @@ import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

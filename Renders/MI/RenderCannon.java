@@ -9,6 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -18,13 +25,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Models.ModelCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
-
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class RenderCannon extends RotaryTERenderer
 {

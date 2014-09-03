@@ -9,17 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import Reika.DragonAPI.Auxiliary.KeyWatcher;
-import Reika.DragonAPI.Auxiliary.KeyWatcher.Key;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.API.Fillable;
-import Reika.RotaryCraft.Base.ItemRotaryArmor;
-import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +24,16 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Auxiliary.KeyWatcher;
+import Reika.DragonAPI.Auxiliary.KeyWatcher.Key;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Fillable;
+import Reika.RotaryCraft.Base.ItemRotaryArmor;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -9,7 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
-import Reika.ChromatiCraft.API.SpaceRift;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -24,22 +36,10 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler {
 
@@ -218,7 +218,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			}
 			else if (!world.isRemote && type.consumesLubricant()) {
 				if (tickcount >= 80) {
-					tank.removeLiquid(Math.max(1, (int)ReikaMathLibrary.logbase(omegain, 2)/4));
+					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(omegain, 2)/4)));
 					tickcount = 0;
 				}
 			}
@@ -279,34 +279,32 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				TileEntityShaft devicein = (TileEntityShaft)te;
 				if (devicein.isCross()) {
 					this.readFromCross(devicein);
-					return;
 				}
-				if (devicein.isWritingTo(this)) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
 			}
-			if (te instanceof SimpleProvider) {
+			else if (te instanceof SimpleProvider) {
 				this.copyStandardPower(te);
 			}
-			if (m == MachineRegistry.POWERBUS) {
+			else if (m == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
 			}
-			if (te instanceof ShaftPowerEmitter) {
+			else if (te instanceof ShaftPowerEmitter) {
 				ShaftPowerEmitter sp = (ShaftPowerEmitter)te;
 				if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
 					torquein = sp.getTorque();
 					omegain = sp.getOmega();
 				}
 			}
-			if (m == MachineRegistry.SPLITTER) {
+			else if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
 					this.readFromSplitter(devicein);
-					return;
 				}
 				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
@@ -314,8 +312,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				}
 			}
 		}
-		else if (te instanceof SpaceRift) {
-			SpaceRift sr = (SpaceRift)te;
+		else if (te instanceof WorldRift) {
+			WorldRift sr = (WorldRift)te;
 			WorldLocation loc = sr.getLinkTarget();
 			if (loc != null)
 				this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);

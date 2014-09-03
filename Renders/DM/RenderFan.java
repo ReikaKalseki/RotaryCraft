@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -17,12 +23,6 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.Animated.ModelFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class RenderFan extends RotaryTERenderer
 {

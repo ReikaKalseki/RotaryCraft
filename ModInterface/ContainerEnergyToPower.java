@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerEnergyToPower extends CoreContainer {
 

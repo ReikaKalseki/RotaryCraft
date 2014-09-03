@@ -9,16 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
+import net.minecraft.tileentity.TileEntity;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelSmokeDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
-
-import net.minecraft.tileentity.TileEntity;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class RenderSmokeDetector extends RotaryTERenderer
 {

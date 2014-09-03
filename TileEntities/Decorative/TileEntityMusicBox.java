@@ -9,21 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
-import Reika.DragonAPI.IO.ReikaFileReader;
-import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.Event.NoteEvent;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
-
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,6 +23,20 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Event.NoteEvent;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
 

@@ -9,6 +9,25 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.net.URL;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
@@ -70,26 +89,6 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
-
-import java.net.URL;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import thaumcraft.api.aspects.Aspect;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -331,6 +330,8 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "RiComikka", 15.00F);
 		DonatorController.instance.addDonation(instance, "Spork", 10.00F);
 		DonatorController.instance.addDonation(instance, "Demosthenex", 50.00F);
+		DonatorController.instance.addDonation(instance, "Lavious", 15.00F);
+		DonatorController.instance.addDonation(instance, "Paul17041993", 20.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
@@ -476,6 +477,7 @@ public class RotaryCraft extends DragonAPIMod {
 		RotaryRegistration.setupLiquids();
 
 		BlockRegistry.loadMappings();
+		ItemRegistry.loadMappings();
 	}
 
 	private static void registerBlock(Block b) {

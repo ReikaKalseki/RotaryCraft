@@ -9,34 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
-import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.DartOreHandler;
-import Reika.DragonAPI.ModInteract.MFRHandler;
-import Reika.DragonAPI.ModInteract.MagicCropHandler;
-import Reika.DragonAPI.ModInteract.MekanismHandler;
-import Reika.DragonAPI.ModInteract.OpenBlockHandler;
-import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
-import Reika.DragonAPI.ModInteract.ThaumOreHandler;
-import Reika.DragonAPI.ModInteract.ThermalHandler;
-import Reika.DragonAPI.ModInteract.TransitionalOreHandler;
-import Reika.DragonAPI.ModInteract.TwilightForestHandler;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.BlockBasicMachine;
-import Reika.RotaryCraft.Base.BlockBasicMultiTE;
-import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +29,34 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DartOreHandler;
+import Reika.DragonAPI.ModInteract.MFRHandler;
+import Reika.DragonAPI.ModInteract.MagicCropHandler;
+import Reika.DragonAPI.ModInteract.MekanismHandler;
+import Reika.DragonAPI.ModInteract.OpenBlockHandler;
+import Reika.DragonAPI.ModInteract.ThaumBlockHandler;
+import Reika.DragonAPI.ModInteract.ThaumOreHandler;
+import Reika.DragonAPI.ModInteract.ThermalHandler;
+import Reika.DragonAPI.ModInteract.TransitionalOreHandler;
+import Reika.DragonAPI.ModInteract.TwilightForestHandler;
+import Reika.GeoStrata.API.RockGetter;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.BlockBasicMachine;
+import Reika.RotaryCraft.Base.BlockBasicMultiTE;
+import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import com.xcompwiz.mystcraft.api.MystObjects;
 
@@ -128,10 +128,6 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
 			}
-			if (ModList.THAUMCRAFT.isLoaded() && ThaumBlockHandler.getInstance().isCrystalCluster(block)) {
-				this.dropDirectBlock(block, world, x, y, z);
-				return true;
-			}
 			if (ModList.DARTCRAFT.isLoaded() && DartOreHandler.getInstance().isDartOre(block)) {
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
@@ -145,6 +141,12 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 				return true;
 			}
 		}
+
+		if (ModList.THAUMCRAFT.isLoaded() && ThaumBlockHandler.getInstance().isCrystalCluster(block)) {
+			this.dropDirectBlock(block, world, x, y, z);
+			return true;
+		}
+
 		if (ConfigRegistry.BEDPICKSPAWNERS.getState() && id == Blocks.mob_spawner) {
 			TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getTileEntity(x, y, z);
 			if (ConfigRegistry.SPAWNERLEAK.getState())
@@ -201,6 +203,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 32F;
 		if (b == MachineRegistry.GEARBOX.getBlock())
 			return 32F;
+		if (ModList.GEOSTRATA.isLoaded() && RockGetter.isGeoStrataRock(b))
+			return 35F;
 		if (b == Blocks.mob_spawner)
 			return 18F;
 		if (b == Blocks.monster_egg)

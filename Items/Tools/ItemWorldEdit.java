@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
-import Reika.RotaryCraft.Base.ItemRotaryTool;
-import Reika.RotaryCraft.Registry.GuiRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -22,6 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
+import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Registry.GuiRegistry;
 
 public class ItemWorldEdit extends ItemRotaryTool {
 

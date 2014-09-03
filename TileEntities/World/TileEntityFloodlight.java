@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.RotaryCraft.RotaryCraft;
@@ -18,11 +22,6 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class TileEntityFloodlight extends TileEntityBeamMachine implements RangedEffect {
 
@@ -47,7 +46,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	}
 
 	@Override
-	public void makeBeam(World world, int x, int y, int z, int metadata) {
+	protected void makeBeam(World world, int x, int y, int z, int metadata) {
 		//ReikaJavaLibrary.pConsole(lastRange+":"+this.getRange(), Side.SERVER);
 		int r = this.getRange();
 		if (lastRange != r) {
