@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
+import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -22,7 +23,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerProvider;
@@ -42,25 +42,10 @@ public class CanolaBee extends BeeSpecies {
 		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 5);
 	}
 
-	private final class AlleleCanola implements IAlleleFlowers {
+	private final class AlleleCanola extends BasicGene implements IAlleleFlowers {
 
 		public AlleleCanola() {
-			AlleleManager.alleleRegistry.registerAllele(this);
-		}
-
-		@Override
-		public String getUID() {
-			return "flower.canola";
-		}
-
-		@Override
-		public boolean isDominant() {
-			return true;
-		}
-
-		@Override
-		public String getName() {
-			return "Canola";
+			super("flower.canola", "Canola");
 		}
 
 		@Override

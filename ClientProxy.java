@@ -22,6 +22,7 @@ import Reika.DragonAPI.Instantiable.Rendering.ForcedTextureArmorModel;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.MultiSheetItemRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.SpawnerRenderer;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
@@ -41,6 +42,7 @@ import Reika.RotaryCraft.Entities.RenderLiquidBlock;
 import Reika.RotaryCraft.Entities.RenderRailGunShot;
 import Reika.RotaryCraft.Entities.RenderSonicShot;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -227,6 +229,13 @@ public class ClientProxy extends CommonProxy
 				}
 			}
 		}
+	}
+
+	@Override
+	public void initClasses() {
+		super.initClasses();
+		ReikaJavaLibrary.initClass(HandbookRegistry.class);
+		ReikaJavaLibrary.initClass(SoundRegistry.class);
 	}
 
 	// Override any other methods that need to be handled differently client side.

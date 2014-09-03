@@ -71,22 +71,13 @@ import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.MachineAspectMapper;
 import Reika.RotaryCraft.ModInterface.OreForcer;
-import Reika.RotaryCraft.ModInterface.Lua.LuaMethods;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
-import Reika.RotaryCraft.Registry.ExtractorBonus;
-import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.MobBait;
-import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.Registry.PlantMaterials;
-import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -371,18 +362,7 @@ public class RotaryCraft extends DragonAPIMod {
 		OreForcer.instance.forceCompatibility();
 
 		//RotaryRecipes.addModInterface();
-
-		ReikaJavaLibrary.initClass(DifficultyEffects.class);
-		ReikaJavaLibrary.initClass(ExtractorBonus.class);
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-			ReikaJavaLibrary.initClass(HandbookRegistry.class);
-		ReikaJavaLibrary.initClass(MobBait.class);
-		ReikaJavaLibrary.initClass(PlantMaterials.class);
-		ReikaJavaLibrary.initClass(EngineType.class);
-		ReikaJavaLibrary.initClass(SoundRegistry.class);
-		ReikaJavaLibrary.initClass(PacketRegistry.class);
-		ReikaJavaLibrary.initClass(PowerReceivers.class);
-		ReikaJavaLibrary.initClass(LuaMethods.class);
+		proxy.initClasses();
 
 		TileEntityReservoir.initCreativeFluids();
 		TileEntityFluidCompressor.initCreativeFluids();

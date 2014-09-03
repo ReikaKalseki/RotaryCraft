@@ -10,6 +10,15 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.ModInterface.Lua.LuaMethods;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.ExtractorBonus;
+import Reika.RotaryCraft.Registry.MobBait;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import Reika.RotaryCraft.Registry.PlantMaterials;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 
 public class CommonProxy
 {
@@ -44,6 +53,17 @@ public class CommonProxy
 
 	public void registerSounds() {
 
+	}
+
+	public void initClasses() {
+		ReikaJavaLibrary.initClass(DifficultyEffects.class);
+		ReikaJavaLibrary.initClass(ExtractorBonus.class);
+		ReikaJavaLibrary.initClass(MobBait.class);
+		ReikaJavaLibrary.initClass(PlantMaterials.class);
+		ReikaJavaLibrary.initClass(EngineType.class);
+		ReikaJavaLibrary.initClass(PacketRegistry.class);
+		ReikaJavaLibrary.initClass(PowerReceivers.class);
+		ReikaJavaLibrary.initClass(LuaMethods.class);
 	}
 
 }// End class CommonProxy
