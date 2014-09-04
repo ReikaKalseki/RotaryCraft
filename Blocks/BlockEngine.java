@@ -14,18 +14,23 @@ import java.util.ArrayList;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 
 public class BlockEngine extends BlockModelledMachine {
@@ -33,6 +38,139 @@ public class BlockEngine extends BlockModelledMachine {
 	public BlockEngine(Material mat) {
 		super(mat);
 		//this.blockIndexInTexture = 14;
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
+		super.onBlockActivated(world, x, y, z, ep, side, par7, par8, par9);
+		if (RotaryCraft.instance.isLocked())
+			return false;
+		TileEntity te = world.getTileEntity(x, y, z);
+
+		ItemStack is = ep.getCurrentEquippedItem();
+		if (te instanceof TileEntityEngine) {
+			if (is != null && is.getItem() == ItemRegistry.FUEL.getItemInstance())
+				return false;
+			TileEntityEngine tile = (TileEntityEngine)te;
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
+				if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
+					((TileEntityJetEngine)tile).repairJet();
+					if (!ep.capabilities.isCreativeMode)
+						--is.stackSize;
+					return true;
+				}
+			}
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.compressor)) {
+				if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
+					((TileEntityJetEngine)tile).repairJetPartial();
+					if (!ep.capabilities.isCreativeMode)
+						--is.stackSize;
+					return true;
+				}
+			}
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.bedrockshaft)) {
+				if (tile.getEngineType() == EngineType.HYDRO && !((TileEntityHydroEngine)tile).isBedrock()) {
+					((TileEntityHydroEngine)tile).makeBedrock();
+					if (!ep.capabilities.isCreativeMode)
+						--is.stackSize;
+					return true;
+				}
+			}
+			if (is != null && is.stackSize == 1) {
+				if (is.getItem() == Items.bucket) {
+					if (tile.getEngineType().isEthanolFueled()) {
+						if (tile.getFuelLevel() >= 1000) {
+							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
+							tile.subtractFuel(1000);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
+						}
+						return true;
+					}
+					if (tile.getEngineType().isJetFueled()) {
+						if (tile.getFuelLevel() >= 1000) {
+							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket.copy());
+							tile.subtractFuel(1000);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
+						}
+						return true;
+					}
+					if (tile.getEngineType().requiresLubricant()) {
+						if (tile.getLube() >= 1000) {
+							ep.setCurrentItemOrArmor(0, ItemStacks.lubebucket.copy());
+							tile.removeLubricant(1000);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
+						}
+						return true;
+					}
+				}
+				if (tile.getEngineType().isJetFueled()) {
+					if (ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
+						if (tile.getFuelLevel() <= tile.FUELCAP-1000) {
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addFuel(1000);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine is too full to add fuel!");
+						}
+						return true;
+					}
+				}
+				if (tile.getEngineType().isEthanolFueled()) {
+					if (ReikaItemHelper.matchStacks(is, ItemStacks.ethanolbucket)) {
+						if (tile.getFuelLevel() <= tile.FUELCAP-1000) {
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addFuel(1000);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine is too full to add fuel!");
+						}
+						return true;
+					}
+				}
+				if (tile.getEngineType().requiresLubricant()) {
+					if (ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
+						if (tile.getLube() <= tile.LUBECAP-1000) {
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addLubricant(1000);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine is too full to add lubricant!");
+						}
+						return true;
+					}
+				}
+				if (tile.getEngineType().needsWater()) {
+					if (is != null && is.getItem() == Items.water_bucket) {
+						if (tile.getWater() <= tile.CAPACITY-1000) {
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+							tile.addWater(1000);
+						}
+						else {
+							ReikaChatHelper.clearChat();
+							ReikaChatHelper.write("Engine is too full to add water!");
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -146,9 +284,15 @@ public class BlockEngine extends BlockModelledMachine {
 				if (eng.getEngineType() == EngineType.JET) {
 					TileEntityJetEngine tj = (TileEntityJetEngine)eng;
 					if (tj.FOD > 0) {
-						todrop.stackTagCompound = new NBTTagCompound();
+						if (todrop.stackTagCompound == null)
+							todrop.stackTagCompound = new NBTTagCompound();
 						todrop.stackTagCompound.setInteger("damage", tj.FOD);
 					}
+				}
+				else if (eng.getEngineType() == EngineType.HYDRO) {
+					if (todrop.stackTagCompound == null)
+						todrop.stackTagCompound = new NBTTagCompound();
+					todrop.stackTagCompound.setBoolean("bed", ((TileEntityHydroEngine)eng).isBedrock());
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;

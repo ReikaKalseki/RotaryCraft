@@ -15,6 +15,7 @@ import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -40,6 +41,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 public class TileEntityHydroEngine extends TileEntityEngine {
 
 	public boolean failed;
+	private boolean bedrock;
 
 	@Override
 	protected void consumeFuel() {
@@ -49,6 +51,17 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	@Override
 	protected void internalizeFuel() {
 
+	}
+
+	public boolean isBedrock() {
+		return bedrock;
+	}
+
+	@Override
+	public void setDataFromPlacer(ItemStack is) {
+		if (is.stackTagCompound != null) {
+			bedrock = is.stackTagCompound.getBoolean("bed");
+		}
 	}
 
 	@Override
@@ -274,7 +287,8 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			return 1;
 		int fac = this.getArrayTorqueMultiplier();
 		int torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z)*fac);
-		if (torque/EngineType.HYDRO.getTorque() > 4) {
+		int r = bedrock ? 16 : 4;
+		if (torque/EngineType.HYDRO.getTorque() > r) {
 			this.fail(world, x, y, z);
 		}
 		return torque;
@@ -315,6 +329,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		super.readSyncTag(NBT);
 
 		failed = NBT.getBoolean("fail");
+		bedrock = NBT.getBoolean("bedrock");
 	}
 
 	@Override
@@ -322,6 +337,11 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("fail", failed);
+		NBT.setBoolean("bedrock", bedrock);
+	}
+
+	public void makeBedrock() {
+		bedrock = true;
 	}
 
 }

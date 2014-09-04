@@ -240,7 +240,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 20F;
 		if (b == ThermalHandler.getInstance().ductID) //fails as of newer TE, because is TileMultipart
 			return 48F;
-		if (MystObjects.crystal != null && b == MystObjects.crystal)
+		if (ModList.MYSTCRAFT.isLoaded() && MystObjects.crystal != null && b == MystObjects.crystal)
 			return 20F;
 		if (TwilightForestHandler.getInstance().isMazeStone(b))
 			return 60F;

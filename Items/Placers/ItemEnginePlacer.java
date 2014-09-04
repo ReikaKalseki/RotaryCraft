@@ -314,6 +314,11 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			int dmg = is.stackTagCompound.getInteger("damage");
 			li.add(String.format("Damage: %.1f%s", dmg*12.5F, "%"));
 		}
+		if (is.stackTagCompound != null) {
+			if (is.stackTagCompound.getBoolean("bed")) {
+				li.add("Bedrock Upgrade");
+			}
+		}
 	}
 
 	@Override

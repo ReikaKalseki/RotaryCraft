@@ -51,11 +51,9 @@ import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
-import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
@@ -158,120 +156,6 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 					if (!ep.capabilities.isCreativeMode)
 						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 					return true;
-				}
-			}
-		}
-		else if (te instanceof TileEntityEngine) {
-			if (is != null && is.getItem() == ItemRegistry.FUEL.getItemInstance())
-				return false;
-			TileEntityEngine tile = (TileEntityEngine)te;
-			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.turbine)) {
-				if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
-					((TileEntityJetEngine)tile).repairJet();
-					if (!ep.capabilities.isCreativeMode)
-						--is.stackSize;
-					return true;
-				}
-			}
-			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.compressor)) {
-				if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
-					((TileEntityJetEngine)tile).repairJetPartial();
-					if (!ep.capabilities.isCreativeMode)
-						--is.stackSize;
-					return true;
-				}
-			}
-			if (is != null && is.stackSize == 1) {
-				if (is.getItem() == Items.bucket) {
-					if (tile.getEngineType().isEthanolFueled()) {
-						if (tile.getFuelLevel() >= 1000) {
-							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
-							tile.subtractFuel(1000);
-						}
-						else {
-							ReikaChatHelper.clearChat();
-							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
-						}
-						return true;
-					}
-					if (tile.getEngineType().isJetFueled()) {
-						if (tile.getFuelLevel() >= 1000) {
-							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket.copy());
-							tile.subtractFuel(1000);
-						}
-						else {
-							ReikaChatHelper.clearChat();
-							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
-						}
-						return true;
-					}
-					if (tile.getEngineType().requiresLubricant()) {
-						if (tile.getLube() >= 1000) {
-							ep.setCurrentItemOrArmor(0, ItemStacks.lubebucket.copy());
-							tile.removeLubricant(1000);
-						}
-						else {
-							ReikaChatHelper.clearChat();
-							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
-						}
-						return true;
-					}
-				}
-				if (tile.getEngineType().isJetFueled()) {
-					if (ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
-						if (tile.getFuelLevel() <= tile.FUELCAP-1000) {
-							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-							tile.addFuel(1000);
-						}
-						else {
-							ReikaChatHelper.clearChat();
-							ReikaChatHelper.write("Engine is too full to add fuel!");
-						}
-						return true;
-					}
-				}
-				if (tile.getEngineType().isEthanolFueled()) {
-					if (ReikaItemHelper.matchStacks(is, ItemStacks.ethanolbucket)) {
-						if (tile.getFuelLevel() <= tile.FUELCAP-1000) {
-							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-							tile.addFuel(1000);
-						}
-						else {
-							ReikaChatHelper.clearChat();
-							ReikaChatHelper.write("Engine is too full to add fuel!");
-						}
-						return true;
-					}
-				}
-				if (tile.getEngineType().requiresLubricant()) {
-					if (ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
-						if (tile.getLube() <= tile.LUBECAP-1000) {
-							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-							tile.addLubricant(1000);
-						}
-						else {
-							ReikaChatHelper.clearChat();
-							ReikaChatHelper.write("Engine is too full to add lubricant!");
-						}
-						return true;
-					}
-				}
-				if (tile.getEngineType().needsWater()) {
-					if (is != null && is.getItem() == Items.water_bucket) {
-						if (tile.getWater() <= tile.CAPACITY-1000) {
-							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-							tile.addWater(1000);
-						}
-						else {
-							ReikaChatHelper.clearChat();
-							ReikaChatHelper.write("Engine is too full to add water!");
-						}
-						return true;
-					}
 				}
 			}
 		}
