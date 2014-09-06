@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
@@ -225,33 +226,31 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		boolean front = this.isFrontOfArray();
 		boolean back = this.isBackEndOfArray();
 		//ReikaJavaLibrary.pConsole(back, Side.SERVER, xCoord == -548);
-		if (!front && !back)
-			return 1;
-		if (back)
-			return 0;
-		if (front) {
-			int size = 1;
-			TileEntity te = this.getAdjacentTileEntity(write.getOpposite());
-			while (te instanceof TileEntityHydroEngine) {
-				TileEntityHydroEngine eng = (TileEntityHydroEngine)te;
-				if (eng.getRequirements(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, eng.getBlockMetadata())) {
-					if (eng.omega == omega) {
-						//float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
-						size++;
-						te = eng.getAdjacentTileEntity(eng.write.getOpposite());
-					}
-					else {
-						ReikaParticleHelper.CRITICAL.spawnAroundBlock(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, 5);
-						if (rand.nextInt(3) == 0)
-							ReikaSoundHelper.playSoundAtBlock(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, "mob.blaze.hit");
-						break;
-					}
+		//if (front) {
+		ArrayList<TileEntityHydroEngine> li = new ArrayList();
+		int size = 1;
+		TileEntity te = this.getAdjacentTileEntity(write.getOpposite());
+		while (te instanceof TileEntityHydroEngine && te != this && !li.contains(te)) {
+			TileEntityHydroEngine eng = (TileEntityHydroEngine)te;
+			li.add(eng);
+			if (eng.getRequirements(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, eng.getBlockMetadata())) {
+				if (eng.omega == omega && !eng.failed) {
+					//float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
+					size++;
+					te = eng.getAdjacentTileEntity(eng.write.getOpposite());
+				}
+				else {
+					ReikaParticleHelper.CRITICAL.spawnAroundBlock(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, 5);
+					if (rand.nextInt(3) == 0)
+						ReikaSoundHelper.playSoundAtBlock(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, "mob.blaze.hit");
+					break;
 				}
 			}
-			return size;
 		}
-		else //never happens
-			return 1;
+		return size;
+		//}
+		//else //never happens
+		//	return 1;
 	}
 
 	@Override

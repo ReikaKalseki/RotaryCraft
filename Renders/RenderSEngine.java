@@ -95,7 +95,9 @@ public class RenderSEngine extends RotaryTERenderer
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
 			break;
 		case HYDRO:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/hydrotex.png");
+			TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
+			String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
+			this.bindTextureByName(sg);
 			break;
 		case MICRO:
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
@@ -173,12 +175,14 @@ public class RenderSEngine extends RotaryTERenderer
 				var18.renderAll(tile, null, Float.MIN_NORMAL, 0);
 				break;
 			case HYDRO:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/hydrotex.png");
+				TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
+				String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
+				this.bindTextureByName(sg);
 				s = 0.7;
 				d = 0.375;
 				GL11.glTranslated(0, d, 0);
 				GL11.glScaled(s, s, s);
-				var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(((TileEntityHydroEngine)tile).failed), 0, 0);
+				var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), 0, 0);
 				GL11.glScaled(1D/s, 1D/s, 1D/s);
 				GL11.glTranslated(0, -d, 0);
 				break;
@@ -220,7 +224,8 @@ public class RenderSEngine extends RotaryTERenderer
 			var18.renderAll(tile, null, -tile.phi, 0);
 			break;
 		case HYDRO:
-			var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(((TileEntityHydroEngine)tile).failed), -tile.phi, 0);
+			TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
+			var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), -tile.phi, 0);
 			break;
 		case MICRO:
 			var19.renderAll(tile, null, -tile.phi, 0);

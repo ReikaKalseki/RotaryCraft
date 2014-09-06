@@ -95,6 +95,7 @@ public class ModelHydro extends RotaryModelBase
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
 		boolean fail = (Boolean)li.get(0);
+		boolean bedrock = (Boolean)li.get(1);
 
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 1, 0, 0);

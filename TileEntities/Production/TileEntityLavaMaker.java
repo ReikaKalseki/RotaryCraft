@@ -120,7 +120,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE || m == MachineRegistry.FUELLINE;
+		return m.isStandardPipe() || m == MachineRegistry.FUELLINE;
 	}
 
 	@Override

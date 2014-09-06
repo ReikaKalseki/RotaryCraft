@@ -118,7 +118,7 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override

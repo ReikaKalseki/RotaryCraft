@@ -48,6 +48,7 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Blocks.BlockAdvGear;
@@ -683,7 +684,11 @@ public enum MachineRegistry {
 	}
 
 	public boolean isPipe() {
-		return BlockPiping.class.isAssignableFrom(blockClass);
+		return TileEntityPiping.class.isAssignableFrom(te);
+	}
+
+	public boolean isStandardPipe() {
+		return this == PIPE || this == BEDPIPE;
 	}
 
 	public boolean hasInv() {

@@ -13,7 +13,6 @@ import java.util.Random;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -34,7 +33,6 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -62,7 +60,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 
-public abstract class BlockBasicMachine extends BlockTEBase implements SidedTextureIndex, IWailaDataProvider {
+public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implements SidedTextureIndex {
 
 	protected Random par5Random = new Random();
 
@@ -227,12 +225,6 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 			return ((TileEntityPiping)world.getTileEntity(x, y, z)).getMachine().getCraftedProduct();
 		}
 		return m.getCraftedProduct();
-	}
-
-	@Override
-	public final boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
-	{
-		return false;
 	}
 
 	@Override

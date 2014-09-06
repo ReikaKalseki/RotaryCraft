@@ -59,72 +59,77 @@ public class ItemMulti extends ItemBasic {
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (this.isProperBelt(m, is)) {
-			TileEntityBeltHub te = (TileEntityBeltHub)world.getTileEntity(x, y, z);
-			if (is.stackTagCompound == null) {
-				is.stackTagCompound = new NBTTagCompound();
-				is.stackTagCompound.setInteger("ex", Integer.MIN_VALUE);
-				is.stackTagCompound.setInteger("ey", Integer.MIN_VALUE);
-				is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
-				is.stackTagCompound.setInteger("rx", Integer.MIN_VALUE);
-				is.stackTagCompound.setInteger("ry", Integer.MIN_VALUE);
-				is.stackTagCompound.setInteger("rz", Integer.MIN_VALUE);
-			}
-			if (te.isEmitting) {
-				is.stackTagCompound.setInteger("ex", x);
-				is.stackTagCompound.setInteger("ey", y);
-				is.stackTagCompound.setInteger("ez", z);
-			}
-			else {
-				is.stackTagCompound.setInteger("rx", x);
-				is.stackTagCompound.setInteger("ry", y);
-				is.stackTagCompound.setInteger("rz", z);
-			}
-			int ex = is.stackTagCompound.getInteger("ex");
-			int ey = is.stackTagCompound.getInteger("ey");
-			int ez = is.stackTagCompound.getInteger("ez");
-			int rx = is.stackTagCompound.getInteger("rx");
-			int ry = is.stackTagCompound.getInteger("ry");
-			int rz = is.stackTagCompound.getInteger("rz");
-
-			int dl = Math.abs(ex-rx+ey-ry+ez-rz)-1;
-
-			//ReikaJavaLibrary.pConsole(dl);
-			if (is.stackSize >= dl || ep.capabilities.isCreativeMode) {
-				if (rx != Integer.MIN_VALUE && ry != Integer.MIN_VALUE && rz != Integer.MIN_VALUE) {
-					if (ex != Integer.MIN_VALUE && ey != Integer.MIN_VALUE && ez != Integer.MIN_VALUE) {
-						TileEntityBeltHub em = (TileEntityBeltHub)world.getTileEntity(ex, ey, ez);
-						TileEntityBeltHub rec = (TileEntityBeltHub)world.getTileEntity(rx, ry, rz);
-
-						//ReikaJavaLibrary.pConsole(rec+"\n"+em);
-						if (em == null) {
-							ReikaChatHelper.writeString("Belt Hub missing at "+ex+", "+ey+", "+ez);
-							is.stackTagCompound = null;
-							return false;
-						}
-						if (rec == null) {
-							ReikaChatHelper.writeString("Belt Hub missing at "+rx+", "+ry+", "+rz);
-							is.stackTagCompound = null;
-							return false;
-						}
-						rec.resetOther();
-						em.resetOther();
-						em.reset();
-						rec.reset();
-						boolean src = em.setSource(rx, ry, rz);
-						boolean tg = rec.setTarget(ex, ey, ez);
-						//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
-						if (src && tg) {
-							//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
-							if (!ep.capabilities.isCreativeMode)
-								is.stackSize -= dl;
-						}
-						is.stackTagCompound = null;
-					}
-				}
-			}
+			return this.tryBeltConnection(world, x, y, z, is, ep);
 		}
 		else
 			is.stackTagCompound = null;
+		return false;
+	}
+
+	private boolean tryBeltConnection(World world, int x, int y, int z, ItemStack is, EntityPlayer ep) {
+		TileEntityBeltHub te = (TileEntityBeltHub)world.getTileEntity(x, y, z);
+		if (is.stackTagCompound == null) {
+			is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setInteger("ex", Integer.MIN_VALUE);
+			is.stackTagCompound.setInteger("ey", Integer.MIN_VALUE);
+			is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
+			is.stackTagCompound.setInteger("rx", Integer.MIN_VALUE);
+			is.stackTagCompound.setInteger("ry", Integer.MIN_VALUE);
+			is.stackTagCompound.setInteger("rz", Integer.MIN_VALUE);
+		}
+		if (te.isEmitting) {
+			is.stackTagCompound.setInteger("ex", x);
+			is.stackTagCompound.setInteger("ey", y);
+			is.stackTagCompound.setInteger("ez", z);
+		}
+		else {
+			is.stackTagCompound.setInteger("rx", x);
+			is.stackTagCompound.setInteger("ry", y);
+			is.stackTagCompound.setInteger("rz", z);
+		}
+		int ex = is.stackTagCompound.getInteger("ex");
+		int ey = is.stackTagCompound.getInteger("ey");
+		int ez = is.stackTagCompound.getInteger("ez");
+		int rx = is.stackTagCompound.getInteger("rx");
+		int ry = is.stackTagCompound.getInteger("ry");
+		int rz = is.stackTagCompound.getInteger("rz");
+
+		int dl = Math.abs(ex-rx+ey-ry+ez-rz)-1;
+
+		//ReikaJavaLibrary.pConsole(dl);
+		if (is.stackSize >= dl || ep.capabilities.isCreativeMode) {
+			if (rx != Integer.MIN_VALUE && ry != Integer.MIN_VALUE && rz != Integer.MIN_VALUE) {
+				if (ex != Integer.MIN_VALUE && ey != Integer.MIN_VALUE && ez != Integer.MIN_VALUE) {
+					TileEntityBeltHub em = (TileEntityBeltHub)world.getTileEntity(ex, ey, ez);
+					TileEntityBeltHub rec = (TileEntityBeltHub)world.getTileEntity(rx, ry, rz);
+
+					//ReikaJavaLibrary.pConsole(rec+"\n"+em);
+					if (em == null) {
+						ReikaChatHelper.writeString("Belt Hub missing at "+ex+", "+ey+", "+ez);
+						is.stackTagCompound = null;
+						return false;
+					}
+					if (rec == null) {
+						ReikaChatHelper.writeString("Belt Hub missing at "+rx+", "+ry+", "+rz);
+						is.stackTagCompound = null;
+						return false;
+					}
+					rec.resetOther();
+					em.resetOther();
+					em.reset();
+					rec.reset();
+					boolean src = em.setSource(rx, ry, rz);
+					boolean tg = rec.setTarget(ex, ey, ez);
+					//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
+					if (src && tg) {
+						//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
+						if (!ep.capabilities.isCreativeMode)
+							is.stackSize -= dl;
+					}
+					is.stackTagCompound = null;
+				}
+			}
+		}
 		return false;
 	}
 

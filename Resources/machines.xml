@@ -332,7 +332,7 @@
 	</sonicweapon>
 	<blastfurnace>
 		<desc>
-			The blast furnace is the main way to make steel. Simply supply carbon (in the form of coal or coke) at the left, gunpowder at the bottom-left, sand in the top-right, and fill any or all of the middle nine slots with iron ingots. Heat the machine to %dC to start the alloying process. The machine will operate more efficiently with coke and with more slots full of iron. The coal is not fuel - an external heat source is required. This machine is also used to make bedrock ingots. To make that, put 4 bedrock dust in the left, one steel ingot in the top-left of the grid, and heat the machine to 1000C.
+			The blast furnace is the main way to make steel. Simply supply carbon (in the form of coal or coke) at the left, gunpowder at the bottom-left, sand in the top-left, and fill any or all of the middle nine slots with iron ingots. Heat the machine to %dC to start the alloying process. The machine will operate more efficiently with coke and with more slots full of iron. The coal is not fuel - an external heat source is required. This machine is also used to make bedrock ingots. To make that, put 4 bedrock dust in the left, one steel ingot in the top-left of the grid, and heat the machine to %dC.
 		</desc>
 		<note>
 			Steel Requirements: Coal/coke in left slot, gunpowder in bottom-left, sand in top-left, iron in middle slots
@@ -815,6 +815,14 @@
 		<note>
 		</note>
 	</separation>
+	<bedpipe>
+		<desc>
+			The bedrock pipe is identical to the steel pipe except that it is able to withstand far higher pressures and temperatures.
+		</desc>
+		<note>
+
+		</note>
+	</bedpipe>
 	<aggregator>
 		<desc>
 			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed. It must be cooled to below ambient temperature to function.
@@ -850,9 +858,9 @@
 			The sonic borer uses shock waves to dig tunnels. This allows it to be aimed in any direction and work more quickly than the standard borer. The only disadvantage is the sonic borer drops the blocks at their original locations, rather than transporting them to the machine for easy collection. If you supply too much power, this machine will suffer a violent failure.
 		</desc>
 		<note>
-		Required Power: %dW
-		Required Torque: %d Nm
-		Power Input: Back
+			Required Power: %dW
+			Required Torque: %d Nm
+			Power Input: Back
 		</note>
 	</sonicborer>
 	<sorting>
