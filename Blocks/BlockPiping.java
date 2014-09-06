@@ -94,8 +94,9 @@ public class BlockPiping extends BlockBasicMultiTE {
 		iconBlocks[5][0] = Blocks.nether_brick.getIcon(0, 0);
 		iconBlocks[6][0] = Blocks.lapis_block.getIcon(0, 0);
 		iconBlocks[7][0] = Blocks.sandstone.getIcon(0, 0);
+		iconBlocks[8][0] = ico.registerIcon("rotarycraft:bedrock");
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 9; i++) {
 			iconBlocks[i][1] = Blocks.glass.getIcon(0, 0);
 		}
 	}

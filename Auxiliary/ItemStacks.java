@@ -190,6 +190,7 @@ public final class ItemStacks {
 	public static final ItemStack anthrablock 		= BlockRegistry.DECO.getStackOfMetadata(1);
 	public static final ItemStack lonsblock 		= BlockRegistry.DECO.getStackOfMetadata(2);
 	public static final ItemStack shieldblock 		= BlockRegistry.DECO.getStackOfMetadata(3);
+	public static final ItemStack bedingotblock 	= BlockRegistry.DECO.getStackOfMetadata(4);
 
 	public static final ItemStack slipperyComb 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(0);
 	public static final ItemStack slipperyPropolis 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(1);

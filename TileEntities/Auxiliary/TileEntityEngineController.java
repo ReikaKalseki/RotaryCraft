@@ -24,6 +24,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
+import Reika.RotaryCraft.Registry.EngineType.EngineClass;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
@@ -92,8 +93,11 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		return 0;
 	}
 
-	public int getFuelMultiplier() {
-		return setting.fuelFactor;
+	public int getFuelMultiplier(EngineClass e) {
+		int base = setting.fuelFactor;
+		if (e == EngineClass.TURBINE)
+			base /= 8;
+		return Math.max(1, base);
 	}
 
 	public float getSoundStretch() {

@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Extras.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -48,8 +49,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
 import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
-
-
+@Strippable(value = {"buildcraft.api.tools.IToolWrench", "mrtjp.projectred.api.IScrewdriver", "binnie.extratrees.api.IToolHammer", "powercrystals.minefactoryreloaded.api.IToolHammer"})
 public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer, powercrystals.minefactoryreloaded.api.IToolHammer
 {
 	public static HashMap<Block, Integer> maxdamage = new HashMap(); //Max damage values (or tileentity datas) for the block ids associated

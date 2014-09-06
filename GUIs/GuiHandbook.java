@@ -38,7 +38,9 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -485,7 +487,10 @@ public class GuiHandbook extends GuiScreen
 		float variable = 0;
 		if (h.isEngine() && h != HandbookRegistry.SOLAR) {
 			//((TileEntityEngine)te).type = EngineType.engineList[h.getOffset()];
-			variable = -1000F*(h.getOffset()+1);
+			//variable = -1000F*(h.getOffset()+1);
+			EngineType type = EngineType.engineList[h.getOffset()];
+			te = type.getTEInstanceForRender();
+			((TileEntityEngine)te).setType(type.getCraftedProduct());
 		}
 		if (h == HandbookRegistry.SHAFT) {
 			variable = -1000F*(timeStep+1);

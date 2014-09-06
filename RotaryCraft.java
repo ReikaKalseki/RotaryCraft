@@ -386,7 +386,7 @@ public class RotaryCraft extends DragonAPIMod {
 				}
 			}
 
-		if (ModList.GEOSTRATA.isLoaded()) {
+		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 				MachineRegistry m = MachineRegistry.machineList[i];
 				if (!m.allowsAcceleration())

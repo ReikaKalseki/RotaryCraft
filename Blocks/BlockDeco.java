@@ -16,9 +16,11 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -65,6 +67,26 @@ public class BlockDeco extends BlockBasic {
 	}
 
 	@Override
+	public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity e)
+	{
+		return super.canEntityDestroy(world, x, y, z, e) && world.getBlockMetadata(x, y, z) != ItemStacks.bedingotblock.getItemDamage();
+	}
+
+	@Override
+	public float getExplosionResistance(Entity e, World world, int x, int y, int z, double eX, double eY, double eZ)
+	{
+		if (world.getBlockMetadata(x, y, z) == ItemStacks.bedingotblock.getItemDamage())
+			return 6000F;
+		return super.getExplosionResistance(e, world, x, y, z, eX, eY, eZ);
+	}
+
+	@Override
+	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+		if (world.getBlockMetadata(x, y, z) == ItemStacks.bedingotblock.getItemDamage())
+			world.setBlock(x, y, z, this, ItemStacks.bedingotblock.getItemDamage(), 3);
+	}
+
+	@Override
 	public boolean isOpaqueCube() {
 		return true;
 	}
@@ -84,9 +106,9 @@ public class BlockDeco extends BlockBasic {
 
 	@Override
 	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		if (world.getBlockMetadata(x, y, z) != ItemStacks.anthrablock.getItemDamage())
-			return 0;
-		return 30;
+		if (world.getBlockMetadata(x, y, z) == ItemStacks.anthrablock.getItemDamage())
+			return 30;
+		return 0;
 	}
 
 	@Override
@@ -108,6 +130,7 @@ public class BlockDeco extends BlockBasic {
 		icons[1][0] = par1IconRegister.registerIcon("RotaryCraft:anthra");
 		icons[2][0] = par1IconRegister.registerIcon("RotaryCraft:lons");
 		icons[3][0] = par1IconRegister.registerIcon("RotaryCraft:shield");
+		icons[4][0] = par1IconRegister.registerIcon("RotaryCraft:bedrock");
 	}
 
 	@Override

@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -44,9 +43,9 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	public static final int HORIZPRESSURE = 20;
 	public static final int DOWNPRESSURE = 0;
 
-	public static final int MAXPRESSURE = 2400000;
+	private static final int MAXPRESSURE = 2400000;
 
-	public int getPressure() {
+	public final int getPressure() {
 		if (liquid == null || liquidLevel <= 0)
 			return 101300;
 		//p = rho*R*T approximation
@@ -57,29 +56,29 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	}
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {
+	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
 
-		if (ModList.BCFACTORY.isLoaded() && ModList.REACTORCRAFT.isLoaded()) { //Only if, since need a way to pipe it
-			if (this.contains(FluidRegistry.getFluid("uranium hexafluoride")) || this.contains(FluidRegistry.getFluid("hydrofluoric acid"))) {
-				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
-				for (int i = 0; i < 6; i++) {
-					ForgeDirection dir = dirs[i];
-					int dx = x+dir.offsetX;
-					int dy = y+dir.offsetY;
-					int dz = z+dir.offsetZ;
-					MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-					if (m == MachineRegistry.PIPE) {
-						TileEntityPipe p = (TileEntityPipe)world.getTileEntity(dx, dy, dz);
-						p.setFluid(liquid);
-						p.addFluid(5);
-						//ReikaParticleHelper.SMOKE.spawnAroundBlock(world, dx, dy, dz, 8);
-					}
+		//if (ModList.BCFACTORY.isLoaded() && ModList.REACTORCRAFT.isLoaded()) { //Only if, since need a way to pipe it
+		if (this.contains(FluidRegistry.getFluid("uranium hexafluoride")) || this.contains(FluidRegistry.getFluid("hydrofluoric acid"))) {
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (m == MachineRegistry.PIPE) {
+					TileEntityPipe p = (TileEntityPipe)world.getTileEntity(dx, dy, dz);
+					p.setFluid(liquid);
+					p.addFluid(5);
+					//ReikaParticleHelper.SMOKE.spawnAroundBlock(world, dx, dy, dz, 8);
 				}
-				world.setBlockToAir(x, y, z);
-				ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 8);
 			}
+			world.setBlockToAir(x, y, z);
+			ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 8);
 		}
+		//}
 
 		if (rand.nextInt(60) == 0) {
 			ReikaWorldHelper.temperatureEnvironment(world, x, y, z, this.getTemperature());
@@ -88,7 +87,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		if (liquid != null) {
 			int temp = liquid.getTemperature(worldObj, xCoord, yCoord, zCoord);
 			temperature = temp > 750 ? temp-425 : temp-273;
-			if (temperature > 2500) {
+			if (temperature > this.getMaxTemperature()) {
 				this.overheat(worldObj, xCoord, yCoord, zCoord);
 			}
 		}
@@ -96,9 +95,17 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 			temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		}
 
-		if (this.getPressure() > MAXPRESSURE) {
+		if (this.getPressure() > this.getMaxPressure()) {
 			this.overpressure(world, x, y, z);
 		}
+	}
+
+	public int getMaxTemperature() {
+		return 2500;
+	}
+
+	public int getMaxPressure() {
+		return MAXPRESSURE;
 	}
 
 	private void overpressure(World world, int x, int y, int z) {
@@ -128,7 +135,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
+		return m == MachineRegistry.BEDPIPE || m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 
 	@Override

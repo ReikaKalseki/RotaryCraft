@@ -75,16 +75,26 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote) {
-			flowTimer.update();
-			if (flowTimer.checkCap()) {
-				this.intakeFluid(world, x, y, z);
-				this.dumpContents(world, x, y, z);
-			}
+		if (this.getTicksExisted() < 5) {
+			this.syncAllData(true);
+			world.markBlockForUpdate(x, y, z);
 		}
+		Fluid f = this.getFluidType();
+		//if (!world.isRemote) {
+		flowTimer.update();
+		if (flowTimer.checkCap()) {
+			this.intakeFluid(world, x, y, z);
+			this.dumpContents(world, x, y, z);
+		}
+		//}
 		if (this.getFluidLevel() <= 0) {
 			this.setLevel(0);
 			this.setFluid(null);
+		}
+		Fluid f2 = this.getFluidType();
+		if (f != f2) {
+			this.syncAllData(true);
+			world.markBlockForUpdate(x, y, z);
 		}
 	}
 
@@ -332,6 +342,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			connections[i] = this.shouldTryToConnect(dirs[i]);
 			world.func_147479_m(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
+		this.syncAllData(true);
+		world.markBlockForUpdate(x, y, z);
 		world.func_147479_m(x, y, z);
 	}
 
@@ -426,11 +438,6 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		Block b = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
 		return b != this.getMachine().getBlock() || meta != this.getMachine().getMachineMetadata();
-	}
-
-	@Override
-	public boolean needsToCauseBlockUpdates() {
-		return true;
 	}
 
 	@Override

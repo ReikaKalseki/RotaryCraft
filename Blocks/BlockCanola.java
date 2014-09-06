@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import mcp.mobius.waila.api.IWailaBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -39,7 +39,7 @@ import Reika.RotaryCraft.API.BlowableCrop;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop, IWailaBlock {
+public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop, IWailaDataProvider {
 
 	private final Random rand = new Random();
 

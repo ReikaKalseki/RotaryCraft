@@ -928,7 +928,7 @@
 	</dynamo>
 	<magnetic>
 		<desc>
-			The magnetostatic engine functions much like the pneumatic engine. It accumulates RF provided to it, and its output speed can be selected to choose the total power output.
+			The magnetostatic engine functions much like the pneumatic engine. It accepts RF provided to it, and its output speed can be selected to choose the total power output.
 		</desc>
 		<note>
 			Conduit Input: Back

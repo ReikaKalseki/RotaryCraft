@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.electricity.IVoltageInput;
 import universalelectricity.api.energy.IEnergyInterface;
+import Reika.DragonAPI.Extras.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -25,7 +26,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-
+@Strippable(value = {"universalelectricity.api.electricity.IVoltageInput", "universalelectricity.api.energy.IEnergyInterface"})
 public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerGenerator, SimpleProvider, IEnergyInterface, IVoltageInput {
 
 	public static int CAPACITY = 90000;

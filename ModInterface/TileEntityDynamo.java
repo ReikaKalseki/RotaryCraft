@@ -14,13 +14,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Extras.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cofh.api.energy.IEnergyHandler;
-
+@Strippable(value = {"cofh.api.energy.IEnergyHandler"})
 public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergyHandler {
 
 	private ForgeDirection facingDir;

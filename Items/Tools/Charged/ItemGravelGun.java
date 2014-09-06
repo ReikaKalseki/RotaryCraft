@@ -126,7 +126,7 @@ public class ItemGravelGun extends ItemChargedTool {
 			if (infov.size() > 0) {
 				if (!ep.capabilities.isCreativeMode)
 					ReikaInventoryHelper.findAndDecrStack(Blocks.gravel, -1, ep.inventory.mainInventory);
-				return new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1);
+				return new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-this.getChargeConsumed(is.getItemDamage()));
 			}
 		}
 		return is;
@@ -167,7 +167,13 @@ public class ItemGravelGun extends ItemChargedTool {
 		}
 	}
 
+	private int getChargeConsumed(int charge) {
+		return Math.max(1, ReikaMathLibrary.logbase2(1+charge));
+	}
+
 	private int getAttackDamage(int charge) {
+		if (charge == 1)
+			return 1;
 		long pow = ReikaMathLibrary.longpow(charge/2, 3); //fits in long (^6 does not)
 		double base = 1.0001+Math.pow(charge, 0.1875)/150000D;
 		return (int)(1+(ReikaMathLibrary.logbase(pow, 2)/2)*ReikaMathLibrary.doubpow(base, charge));

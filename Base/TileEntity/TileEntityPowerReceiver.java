@@ -269,7 +269,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			omega = omegain;
 			power = (long)omega*(long)torque;
 			if (power != prevpower) {
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				prevpower = power;
 			}
 			return;
@@ -348,7 +348,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		omega = (int) powers[2];
 		power = (long)torque*(long)omega;
 		if (power != prevpower) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			prevpower = power;
 		}
 	}
@@ -650,7 +650,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		omega = (int) powers[2];
 		power = (long)torque*(long)omega;
 		if (power != prevpower) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			prevpower = power;
 		}
 	}
@@ -716,7 +716,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			if (rand.nextInt(5) == 0)
 				worldObj.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
 			if (power != prevpower) {
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				prevpower = power;
 			}
 			return;
@@ -729,7 +729,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		torque = (int)ReikaArrayHelper.sumArray(powers[1]);
 		power = (long)omega * (long)torque;
 		if (power != prevpower) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			prevpower = power;
 		}
 	}

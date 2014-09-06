@@ -25,7 +25,6 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -200,15 +199,8 @@ public class GuiCVT extends GuiNonPoweredMachine
 		}
 
 		if (redstone) {
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_BLEND);
-			//api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.redstone_torch), 129, 31);
-			ReikaTextureHelper.bindTerrainTexture();
-			this.drawTexturedModelRectFromIcon(129, 31, Blocks.redstone_torch.getIcon(0, 0), 16, 16);
-			this.drawTexturedModelRectFromIcon(129, 54, Blocks.unlit_redstone_torch.getIcon(0, 0), 16, 16);
-			//api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.unlit_redstone_torch), 129, 54);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.redstone_torch), 129, 31);
+			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.unlit_redstone_torch), 129, 54);
 
 			this.drawCenteredString(fontRendererObj, cvt.getCVTString(true), 188, 37, 0xffffff);
 			this.drawCenteredString(fontRendererObj, cvt.getCVTString(false), 188, 60, 0xffffff);

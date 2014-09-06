@@ -331,7 +331,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 							//this.updateSpeed(max, omega < max);
 						}
 						int fuelcap = timer.getCapOf("fuel");
-						fuelcap = fuelcap*te.getFuelMultiplier();
+						fuelcap = fuelcap*te.getFuelMultiplier(type.type);
 						timer.setCap("fuel", fuelcap);
 						pitch = te.getSoundStretch();
 						soundfactor = 1F/te.getSoundStretch();

@@ -25,6 +25,7 @@ public enum PlantMaterials {
 	FLOWER(Blocks.yellow_flower, 1),
 	VINES(Blocks.vine, 2),
 	LEAVES(Blocks.leaves, 2),
+	LEAVES2(Blocks.leaves2, 2),
 	POTATO(Items.potato, 1);
 
 	private ItemStack item;

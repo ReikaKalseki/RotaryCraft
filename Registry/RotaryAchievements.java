@@ -34,11 +34,11 @@ public enum RotaryAchievements {
 	BORER(			2, 4,	MachineRegistry.BORER, 											PCB,			false),
 	JETFUEL(		4, -4,	ItemRegistry.BUCKET.getStackOfMetadata(1), 						MAKEYEAST,		false), //make
 	RECYCLE(		4, -8,	ItemStacks.scrap, 												JETFUEL,		false),
-	JETENGINE(		6, -4,	EngineType.JET.getItem(), 										JETFUEL,		true),
+	JETENGINE(		6, -4,	EngineType.JET.getCraftedProduct(), 							JETFUEL,		true),
 	MAKERAILGUN(	0, 6,	MachineRegistry.RAILGUN, 										PCB,			true),
 	SUCKEDINTOJET(	6, -8,	Items.rotten_flesh, 											JETENGINE,		false),
 	BEDROCKBREAKER(	-4, 2,	ItemStacks.bedrockdust, 										MAKESTEEL,		false), //break bedrock with
-	STEAMENGINE(	-8, 0,	EngineType.STEAM.getItem(), 									PUMP,			false), //turn on
+	STEAMENGINE(	-8, 0,	EngineType.STEAM.getCraftedProduct(), 							PUMP,			false), //turn on
 	STEELSHAFT(		-2, -2,	MaterialRegistry.STEEL.getShaftItem(), 							MAKESTEEL,		false), //make
 	CVT(			-2, -4,	MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(1), 	STEELSHAFT,		false), //make
 	BEDROCKSHAFT(	-4, 4,	MaterialRegistry.BEDROCK.getShaftItem(), 						BEDROCKBREAKER,	false), //make

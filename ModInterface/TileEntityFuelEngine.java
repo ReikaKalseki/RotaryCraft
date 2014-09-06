@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Extras.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -30,12 +31,13 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Registry.EngineType.EngineClass;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
-
+@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
 public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidHandler, SimpleProvider, PowerGenerator, IPipeConnection,
 TemperatureTE {
 
@@ -93,7 +95,7 @@ TemperatureTE {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
 		if (m == MachineRegistry.ECU) {
 			TileEntityEngineController te = (TileEntityEngineController)world.getTileEntity(x, y-1, z);
-			return 36*te.getFuelMultiplier();
+			return 36*te.getFuelMultiplier(EngineClass.PISTON);
 		}
 		return 36;
 	}

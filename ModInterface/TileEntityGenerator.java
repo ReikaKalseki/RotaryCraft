@@ -16,9 +16,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.electricity.IVoltageOutput;
 import universalelectricity.api.energy.IEnergyInterface;
+import Reika.DragonAPI.Extras.APIStripper.Strippable;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
+@Strippable(value = {"universalelectricity.api.electricity.IVoltageOutput", "universalelectricity.api.energy.IEnergyInterface"})
 public class TileEntityGenerator extends TileEntityPowerReceiver implements IEnergyInterface, IVoltageOutput {
 
 	public static final int OUTPUT_VOLTAGE = 24000;

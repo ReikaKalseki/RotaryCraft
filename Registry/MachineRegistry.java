@@ -113,6 +113,7 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityWoodcutter;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityBedrockPipe;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityBypass;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
@@ -316,13 +317,14 @@ public enum MachineRegistry {
 	BLOWER(				"machine.blower",			BlockDMachine.class,		TileEntityBlower.class,				4),
 	PORTALSHAFT(		"machine.portalshaft",		BlockDMMachine.class,		TileEntityPortalShaft.class,		15,	"RenderPortalShaft"),
 	REFRIGERATOR(		"machine.refrigerator",		BlockDMIMachine.class,		TileEntityRefrigerator.class,		11,	"RenderFridge"),
-	GASTANK(			"machine.gastank",			BlockMMachine.class,		TileEntityFluidCompressor.class,		20, "RenderGasCompressor"),
+	GASTANK(			"machine.gastank",			BlockMMachine.class,		TileEntityFluidCompressor.class,	20, "RenderGasCompressor"),
 	CRAFTER(			"machine.crafter",			BlockIMachine.class,		TileEntityAutoCrafter.class,		7),
 	COMPOSTER(			"machine.composter",		BlockMIMachine.class,		TileEntityComposter.class,			23, "RenderComposter"),
 	ANTIAIR(			"machine.antiair",			BlockMIMachine.class,		TileEntityAAGun.class,				24, "RenderAAGun"),
 	PIPEPUMP(			"machine.pipepump",			BlockDMMachine.class,		TileEntityPipePump.class,			16,	"RenderPipePump"),
 	CHAIN(				"machine.chain",			BlockDMMachine.class,		TileEntityChainDrive.class,			17, "RenderBelt"),
-	CENTRIFUGE(			"machine.centrifuge",		BlockMIMachine.class,		TileEntityCentrifuge.class,			25, "RenderCentrifuge");
+	CENTRIFUGE(			"machine.centrifuge",		BlockMIMachine.class,		TileEntityCentrifuge.class,			25, "RenderCentrifuge"),
+	BEDPIPE(			"machine.bedpipe", 			BlockPiping.class,			TileEntityBedrockPipe.class,		8,	"PipeRenderer");
 
 	private final String name;
 	private final Class te;

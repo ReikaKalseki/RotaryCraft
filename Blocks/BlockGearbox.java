@@ -31,7 +31,6 @@ import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
-import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -163,7 +162,6 @@ public class BlockGearbox extends BlockModelledMachine {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int par6, float par7, float par8, float par9)
 	{
-		super.onBlockActivated(world, x, y, z, ep, par6, par7, par8, par9);
 		if (RotaryCraft.instance.isLocked())
 			return false;
 		if (ep.isSneaking())
@@ -222,14 +220,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			}
 		}
 
-		TileEntity tileentity = world.getTileEntity(x, y, z);
-
-		if (tileentity != null)
-		{
-			ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, x, y, z);
-		}
-
-		return true;
+		return super.onBlockActivated(world, x, y, z, ep, par6, par7, par8, par9);
 	}
 
 	@Override

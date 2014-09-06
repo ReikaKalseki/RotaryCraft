@@ -22,7 +22,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -203,7 +202,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		MachineRegistry to = this.getMachine(write);
 		if (to == MachineRegistry.ENGINE) {
 			TileEntityEngine te = (TileEntityEngine)this.getAdjacentTileEntity(write);
-			return te.getEngineType() == EngineType.HYDRO;
+			return te.getEngineType() == EngineType.HYDRO && !((TileEntityHydroEngine)te).failed;
 		}
 		return false;
 	}
@@ -215,35 +214,37 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			TileEntityEngine te = (TileEntityEngine)worldObj.getTileEntity(backx, yCoord, backz);
 			return te.getEngineType() == EngineType.HYDRO;
 		}
+		TileEntity te = this.getAdjacentTileEntity(write);
+		if (te instanceof TileEntityHydroEngine) {
+			return ((TileEntityHydroEngine)te).failed;
+		}
 		return false;
 	}
 
 	private int getArrayTorqueMultiplier() {
 		boolean front = this.isFrontOfArray();
 		boolean back = this.isBackEndOfArray();
+		//ReikaJavaLibrary.pConsole(back, Side.SERVER, xCoord == -548);
 		if (!front && !back)
 			return 1;
 		if (back)
 			return 0;
 		if (front) {
-			BlockArray b = new BlockArray();
-			b.recursiveAdd(worldObj, xCoord, yCoord, zCoord, this.getTileEntityBlockID());
-			int size = 0;
-			for (int i = 0; i < b.getSize(); i++) {
-				int[] xyz = b.getNthBlock(i);
-				TileEntity te = worldObj.getTileEntity(xyz[0], xyz[1], xyz[2]);
-				if (te instanceof TileEntityHydroEngine) {
-					TileEntityHydroEngine eng = (TileEntityHydroEngine)te;
-					if (eng.getRequirements(worldObj, xyz[0], xyz[1], xyz[2], eng.getBlockMetadata())) {
-						if (eng.omega == omega) {
-							//float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
-							size += 1;//*fac;
-						}
-						else {
-							ReikaParticleHelper.CRITICAL.spawnAroundBlock(worldObj, xyz[0], xyz[1], xyz[2], 5);
-							if (rand.nextInt(3) == 0)
-								ReikaSoundHelper.playSoundAtBlock(worldObj, xyz[0], xyz[1], xyz[2], "mob.blaze.hit");
-						}
+			int size = 1;
+			TileEntity te = this.getAdjacentTileEntity(write.getOpposite());
+			while (te instanceof TileEntityHydroEngine) {
+				TileEntityHydroEngine eng = (TileEntityHydroEngine)te;
+				if (eng.getRequirements(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, eng.getBlockMetadata())) {
+					if (eng.omega == omega) {
+						//float fac = eng.getHydroFactor(worldObj, xyz[0], xyz[1], xyz[2], true);
+						size++;
+						te = eng.getAdjacentTileEntity(eng.write.getOpposite());
+					}
+					else {
+						ReikaParticleHelper.CRITICAL.spawnAroundBlock(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, 5);
+						if (rand.nextInt(3) == 0)
+							ReikaSoundHelper.playSoundAtBlock(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, "mob.blaze.hit");
+						break;
 					}
 				}
 			}
@@ -288,7 +289,8 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		int fac = this.getArrayTorqueMultiplier();
 		int torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z)*fac);
 		int r = bedrock ? 16 : 4;
-		if (torque/EngineType.HYDRO.getTorque() > r) {
+		double ratio = (double)torque/EngineType.HYDRO.getTorque();
+		if (ratio > r) {
 			this.fail(world, x, y, z);
 		}
 		return torque;
@@ -297,6 +299,13 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	private void fail(World world, int x, int y, int z) {
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.break");
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 0.2F, 0.5F);
+		/*
+		TileEntity te = this.getAdjacentTileEntity(write.getOpposite());
+		while (te instanceof TileEntityHydroEngine) {
+			TileEntityHydroEngine eng = (TileEntityHydroEngine)te;
+			eng.getGenTorque(world, eng.xCoord, eng.yCoord, eng.zCoord, eng.getBlockMetadata());
+			te = eng.getAdjacentTileEntity(write.getOpposite());
+		}*/
 		failed = true;
 	}
 
@@ -322,6 +331,11 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		int[] xz = this.getWaterColumnPos();
 		ReikaParticleHelper.RAIN.spawnAroundBlock(world, x, y, z, 16);
 		ReikaParticleHelper.RAIN.spawnAroundBlock(world, xz[0], y, xz[1], 16);
+		if (failed) {
+			if (rand.nextInt(5) == 0)
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "mob.blaze.hit");
+			ReikaParticleHelper.CRITICAL.spawnAroundBlockWithOutset(world, x, y, z, 3, 0.25);
+		}
 	}
 
 	@Override

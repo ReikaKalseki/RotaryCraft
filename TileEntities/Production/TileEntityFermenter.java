@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -26,7 +27,6 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
@@ -75,16 +75,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public static List<ItemStack> getAllValidPlants() {
 		List<ItemStack> in = new ArrayList();
 		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
-			if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
-				for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
-					ReikaTreeHelper tree = ReikaTreeHelper.treeList[j];
-					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? tree.getSapling() : tree.getLeaf();
-					in.add(icon);
-				}
-			}
-			else {
-				in.add(PlantMaterials.plantList[i].getPlantItem());
-			}
+			PlantMaterials p = PlantMaterials.plantList[i];
+			Item item = p.getPlantItem().getItem();
+			item.getSubItems(item, item.getCreativeTab(), in);
 		}
 		for (int i = 0; i < ModWoodList.woodList.length; i++) {
 			if (ModWoodList.woodList[i].exists()) {
@@ -96,6 +89,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			for (int j = 0; j < 16; j++) {
 				in.add(TreeGetter.getDyeSapling(j));
 				in.add(TreeGetter.getHeldDyeLeaf(j));
+				in.add(TreeGetter.getDyeFlower(j));
 			}
 			in.add(TreeGetter.getRainbowLeaf());
 			in.add(TreeGetter.getRainbowSapling());

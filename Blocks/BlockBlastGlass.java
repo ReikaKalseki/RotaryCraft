@@ -60,7 +60,7 @@ public class BlockBlastGlass extends BlockBasic implements ConnectedTextureGlass
 	}
 
 	@Override
-	public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
+	public float getExplosionResistance(Entity e, World world, int x, int y, int z, double eX, double eY, double eZ)
 	{
 		return 6000F;
 	}

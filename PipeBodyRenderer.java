@@ -13,26 +13,21 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderWorldEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Exception.WTFException;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
@@ -81,10 +76,6 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		Tessellator.instance.addVertex(0, 0, 0);
-		Tessellator.instance.addVertex(0, 0, 0);
-		Tessellator.instance.addVertex(0, 0, 0);
-		Tessellator.instance.addVertex(0, 0, 0);
 		RenderableDuct tile = (RenderableDuct)world.getTileEntity(x, y, z);
 		for (int i = 0; i < 6; i++) {
 			switch(renderPass) {
@@ -96,6 +87,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 					this.renderLiquid(tile, x, y, z, dirs[i]);
 				}
 				break;
+			default:
+				throw new WTFException(RotaryCraft.instance, "Who screwed up the render passes?", true);
 			}
 		}
 		Tessellator.instance.addVertex(0, 0, 0);
@@ -106,6 +99,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	/** Rendering outside the main render block. */
+	/*
 	@SubscribeEvent
 	public void finalRender(RenderWorldEvent.Post evt) {
 		int i = evt.renderer.posX;
@@ -148,7 +142,7 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 			}
 		}
 	}
-
+	 */
 	@Override
 	public boolean shouldRender3DInInventory(int model) {
 		return true;
@@ -219,8 +213,8 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 			return;
 		Tessellator v5 = Tessellator.instance;
 		//TesselatorVertexState st = ReikaRenderHelper.getTessellatorState();
-		Entity e = Minecraft.getMinecraft().renderViewEntity;
-		v5.draw();
+		//Entity e = Minecraft.getMinecraft().renderViewEntity;
+		//v5.draw();
 		float size = 0.75F/2F;
 		float window = 0.5F/2F;
 		float dl = size-window;
@@ -230,6 +224,9 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		double dd2 = in-in2;
 
 		IIcon ico = f.getIcon();
+		if (ico == null) {
+			ico = RenderBlocks.getInstance().getIconSafe(ico);
+		}
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float u2 = ico.getMaxU();
@@ -237,10 +234,10 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 		double du = dd2*(u2-u)/4D;
 
 		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		v5.startDrawingQuads();
+		//GL11.glEnable(GL11.GL_BLEND);
+		//GL11.glEnable(GL11.GL_CULL_FACE);
+		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		//v5.startDrawingQuads();
 		v5.addTranslation(x, y, z);
 		int mix = tile.getPipeBlockType().getMixedBrightnessForBlock(Minecraft.getMinecraft().theWorld, x, y, z);
 		ReikaLiquidRenderer.bindFluidTexture(f);
@@ -496,9 +493,9 @@ public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
 			}
 		}
 		v5.addTranslation(-x, -y, -z);
-		v5.draw();
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		v5.startDrawingQuads();
+		//v5.draw();
+		//GL11.glDisable(GL11.GL_CULL_FACE);
+		//v5.startDrawingQuads();
 		//v5.setVertexState(st);
 
 		//GL11.glEnable(GL11.GL_BLEND);

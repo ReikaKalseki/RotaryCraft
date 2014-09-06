@@ -42,7 +42,6 @@ public class BlockEngine extends BlockModelledMachine {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int side, float par7, float par8, float par9) {
-		super.onBlockActivated(world, x, y, z, ep, side, par7, par8, par9);
 		if (RotaryCraft.instance.isLocked())
 			return false;
 		TileEntity te = world.getTileEntity(x, y, z);
@@ -170,7 +169,7 @@ public class BlockEngine extends BlockModelledMachine {
 				}
 			}
 		}
-		return false;
+		return super.onBlockActivated(world, x, y, z, ep, side, par7, par8, par9);
 	}
 
 	@Override

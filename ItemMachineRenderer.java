@@ -81,7 +81,8 @@ public class ItemMachineRenderer implements IItemRenderer {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(eng, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
+			eng.setType(item);
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(eng, a, 0.0D, b, 0);
 		}
 		else if (ItemRegistry.GEARBOX.matchItem(item)) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.GEARBOX, item.getItemDamage());

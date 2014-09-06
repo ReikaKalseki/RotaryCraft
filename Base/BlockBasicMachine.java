@@ -11,9 +11,9 @@ package Reika.RotaryCraft.Base;
 import java.util.List;
 import java.util.Random;
 
-import mcp.mobius.waila.api.IWailaBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -62,7 +62,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 
-public abstract class BlockBasicMachine extends BlockTEBase implements SidedTextureIndex, IWailaBlock {
+public abstract class BlockBasicMachine extends BlockTEBase implements SidedTextureIndex, IWailaDataProvider {
 
 	protected Random par5Random = new Random();
 
@@ -85,7 +85,7 @@ public abstract class BlockBasicMachine extends BlockTEBase implements SidedText
 
 	@Override
 	public abstract IIcon getIcon(int s, int meta);
-	/** Sides: 0 bottom, 1 top, 2 back, 3 front, 4 right, 5 left */
+	/* Sides: 0 bottom, 1 top, 2 back, 3 front, 4 right, 5 left */
 	@Override
 	public abstract void registerBlockIcons(IIconRegister par1IconRegister);
 
