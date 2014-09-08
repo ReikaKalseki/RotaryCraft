@@ -12,7 +12,7 @@ package Reika.RotaryCraft.API;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
-import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 
 public class PowerTransferHelper {
 

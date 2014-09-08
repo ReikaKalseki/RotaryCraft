@@ -16,6 +16,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.Connectable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
@@ -29,7 +30,8 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider, TransmissionReceiver {
+public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider, TransmissionReceiver,
+Connectable {
 
 	public boolean isEmitting;
 	private int wetTimer = 0;
@@ -439,6 +441,11 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 
 	public ItemStack getBeltItem() {
 		return ItemStacks.belt.copy();
+	}
+
+	@Override
+	public boolean isEmitting() {
+		return isEmitting;
 	}
 
 }

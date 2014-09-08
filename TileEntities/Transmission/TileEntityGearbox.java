@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;

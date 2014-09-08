@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;

@@ -41,7 +41,7 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
 	public BlockDecoTank() {
 		super(Material.glass);
-		this.setResistance(6000);
+		this.setResistance(2);
 		this.setHardness(0.35F);
 		this.setLightOpacity(0);
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotary);
