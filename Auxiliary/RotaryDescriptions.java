@@ -18,7 +18,6 @@ import net.minecraft.client.resources.Language;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
@@ -200,13 +199,12 @@ public final class RotaryDescriptions {
 
 			if (m.isDummiedOut()) {
 				desc += "\nThis machine is currently unavailable.";
-				if (m.hasPrerequisite() && !m.getPrerequisite().isLoaded())
+				if (m.getModDependency() != null && !m.getModDependency().isLoaded())
 					desc += "\nThis machine depends on another mod.";
 				aux += "\nNote: Dummied Out";
 			}
 			if (m.hasPrerequisite()) {
-				String sg = m.getPrerequisite().getModLabel().replaceAll("[|]", "");
-				aux += "\nDependencies: "+ReikaStringParser.splitCamelCase(sg).replaceAll(" Craft", "Craft");
+				aux += "\nDependencies: "+m.getPrerequisite();
 			}
 			if (m.isIncomplete()) {
 				desc += "\nThis machine is incomplete. Use at your own risk.";

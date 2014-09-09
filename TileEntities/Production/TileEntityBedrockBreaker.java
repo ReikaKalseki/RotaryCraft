@@ -221,19 +221,21 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 					}
 					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
 					MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, x, y, z));
-					this.incrementStep(world, mx, my, mz);
+					if (!world.isRemote)
+						this.incrementStep(world, mx, my, mz);
 				}
 			}
 		}
 		else {
 			Block b = world.getBlock(x, y, z);
-			if (b != Blocks.air) {
+			if (b != Blocks.air && b.getBlockHardness(world, x, y, z) > 0) {
 				ReikaSoundHelper.playBreakSound(world, x, y, z, b);
 				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 					ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, world.getBlockMetadata(x, y, z));
 				world.setBlockToAir(x, y, z);
 			}
-			this.incrementStep(world, mx, my, mz);
+			if (!world.isRemote)
+				this.incrementStep(world, mx, my, mz);
 		}
 	}
 

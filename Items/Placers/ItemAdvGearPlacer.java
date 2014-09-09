@@ -82,7 +82,7 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 			if (adv.getGearType().storesEnergy()) {
 				adv.setEnergyFromNBT(is.stackTagCompound);
 				adv.setBedrock(is.stackTagCompound.getBoolean("bedrock"));
-				adv.setCreative(is.stackTagCompound.getBoolean("creative"));
+				adv.setCreative(is.stackTagCompound.getBoolean("creative") && ep.capabilities.isCreativeMode);
 			}
 			if (adv.getGearType().isLubricated()) {
 				adv.setLubricantFromNBT(is.stackTagCompound);

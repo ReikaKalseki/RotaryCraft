@@ -32,6 +32,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockMap;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -275,8 +276,8 @@ public enum MachineRegistry {
 	SELFDESTRUCT(		"machine.selfdestruct",		BlockMachine.class,			TileEntitySelfDestruct.class,		3),
 	COOLINGFIN(			"machine.coolingfin",		BlockDMMachine.class,		TileEntityCoolingFin.class,			9, 	"RenderFin"),
 	WORKTABLE(			"machine.worktable",		BlockIMachine.class,		TileEntityWorktable.class,			6),
-	COMPRESSOR(			"machine.compressor", 		BlockModEngine.class,		TileEntityAirCompressor.class,		0, 	"RenderCompressor", ModList.BCENERGY),
-	PNEUENGINE(			"machine.pneuengine",		BlockModEngine.class,		TileEntityPneumaticEngine.class,	1, 	"RenderPneumatic", ModList.BCENERGY),
+	COMPRESSOR(			"machine.compressor", 		BlockModEngine.class,		TileEntityAirCompressor.class,		0, 	"RenderCompressor", PowerTypes.MJ),
+	PNEUENGINE(			"machine.pneuengine",		BlockModEngine.class,		TileEntityPneumaticEngine.class,	1, 	"RenderPneumatic", PowerTypes.MJ),
 	DISPLAY(			"machine.display",			BlockMMachine.class,		TileEntityDisplay.class,			12, "RenderDisplay"),
 	LAMP(				"machine.lamp",				BlockMachine.class,			TileEntityLamp.class,				4),
 	EMP(				"machine.emp",				BlockMMachine.class,		TileEntityEMP.class,				14, "RenderEMP"),
@@ -291,8 +292,8 @@ public enum MachineRegistry {
 	STEAMTURBINE(		"machine.steamturbine", 	BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", ModList.RAILCRAFT),
 	FERTILIZER(			"machine.fertilizer",		BlockMIMachine.class,		TileEntityFertilizer.class,			19, "RenderFertilizer"),
 	LAVAMAKER(			"machine.lavamaker",		BlockMIMachine.class,		TileEntityLavaMaker.class,			20, "RenderRockMelter"),
-	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2, 	"RenderGenerator", ModList.UE),
-	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3, 	"RenderElecMotor", ModList.UE),
+	GENERATOR(			"machine.generator",		BlockModEngine.class,		TileEntityGenerator.class,			2, 	"RenderGenerator", PowerTypes.UE),
+	ELECTRICMOTOR(		"machine.electricmotor",	BlockModEngine.class,		TileEntityElectricMotor.class,		3, 	"RenderElecMotor", PowerTypes.UE),
 	VALVE(				"machine.valve",			BlockPiping.class,			TileEntityValve.class,				4, 	"PipeRenderer"),
 	BYPASS(				"machine.bypass",			BlockPiping.class,			TileEntityBypass.class,				5, 	"PipeRenderer"),
 	SEPARATION(			"machine.separation",		BlockPiping.class,			TileEntitySeparatorPipe.class,		6, 	"PipeRenderer"),
@@ -307,8 +308,8 @@ public enum MachineRegistry {
 	BIGFURNACE(			"machine.bigfurnace",		BlockMIMachine.class,		TileEntityBigFurnace.class,			22, "RenderBigFurnace"),
 	DISTILLER(			"machine.distiller",		BlockMMachine.class,		TileEntityDistillery.class,			18, "RenderDistillery"),
 	SUCTION(			"machine.suction",			BlockPiping.class,			TileEntitySuctionPipe.class,		7, "PipeRenderer"),
-	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", ModList.THERMALEXPANSION),
-	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", ModList.THERMALEXPANSION),
+	DYNAMO(				"machine.dynamo", 			BlockModEngine.class,		TileEntityDynamo.class,				5, "RenderDynamo", PowerTypes.RF),
+	MAGNETIC(			"machine.magnetic",			BlockModEngine.class,		TileEntityMagnetic.class,			6, "RenderMagnetic", PowerTypes.RF),
 	CRYSTALLIZER(		"machine.crystal",			BlockDMIMachine.class,		TileEntityCrystallizer.class,		9, "RenderCrystal"),
 	BUSCONTROLLER(		"machine.buscontroller",	BlockDMachine.class,		TileEntityBusController.class,		3),
 	POWERBUS(			"machine.bus",				BlockMachine.class,			TileEntityPowerBus.class,			5),
@@ -335,6 +336,7 @@ public enum MachineRegistry {
 	private boolean hasRender = false;
 	private String renderClass;
 	private ModList requirement;
+	private PowerTypes powertype;
 	private PowerReceivers receiver;
 	private TileEntity renderInstance;
 
@@ -365,6 +367,13 @@ public enum MachineRegistry {
 		this(n, b, tile, m);
 		hasRender = true;
 		renderClass = r;
+
+		receiver = PowerReceivers.initialize(this);
+	}
+
+	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, PowerTypes p) {
+		this(n, b, tile, m, r);
+		powertype = p;
 
 		receiver = PowerReceivers.initialize(this);
 	}
@@ -1041,27 +1050,31 @@ public enum MachineRegistry {
 			return true;
 		if (this == SPILLER)
 			return true;
-		if (this.hasPrerequisite() && !this.getPrerequisite().isLoaded())
+		if (requirement != null && !requirement.isLoaded())
 			return true;
-		if (this.hasPrerequisite() && this.getPrerequisite() == ModList.MEKANISM)
+		if (powertype != null && !powertype.exists())
 			return true;
 		return false;
 	}
 
 	public boolean hasPrerequisite() {
-		return requirement != null;
+		return requirement != null || powertype != null;
 	}
 
-	public ModList getPrerequisite() {
-		if (!this.hasPrerequisite())
-			;//throw new RegistrationException(RotaryCraft.instance, this.getName()+" has no prerequisites and yet was called for them!");
+	public ModList getModDependency() {
 		return requirement;
 	}
 
-	public boolean preReqSatisfied() {
-		if (!this.hasPrerequisite())
-			return true;
-		return this.getPrerequisite().isLoaded();
+	public PowerTypes getPowerDependency() {
+		return powertype;
+	}
+
+	public String getPrerequisite() {
+		if (requirement != null)
+			return requirement.getDisplayName();
+		if (powertype != null)
+			return powertype.name();
+		return "None";
 	}
 
 	public boolean renderInPass1() {
