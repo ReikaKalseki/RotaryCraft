@@ -98,8 +98,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 
 	private void forceSilkTouch(ItemStack is, World world, Entity entity, int slot) {
 		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
-			entity.playSound("random.break", 1, 1);
 			if (entity instanceof EntityPlayer) {
+				entity.playSound("random.break", 1, 1);
 				EntityPlayer ep = (EntityPlayer)entity;
 				ep.inventory.setInventorySlotContents(slot, null);
 				ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
