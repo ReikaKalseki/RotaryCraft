@@ -35,7 +35,6 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -92,15 +91,15 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		for (int i = 1; i < 5; i++) {
 			ItemStack arm = target.getEquipmentInSlot(i);
 			if (arm != null && this.canDamageArmorOf(target)) {
-				if (PowerTypes.RF.exists() && arm.getItem() instanceof MuseElectricItem) {
+				if (arm.getItem() instanceof MuseElectricItem) {
 					MuseElectricItem ms = (MuseElectricItem)arm.getItem();
 					ms.extractEnergy(arm, 5000, false);
 				}
-				else if (PowerTypes.RF.exists() && arm.getItem() instanceof IEnergyContainerItem) {
+				else if (arm.getItem() instanceof IEnergyContainerItem) {
 					IEnergyContainerItem ie = (IEnergyContainerItem)arm.getItem();
 					ie.extractEnergy(arm, 5000, false);
 				}
-				else if (PowerTypes.EU.exists() && arm.getItem() instanceof IElectricItem) {
+				else if (arm.getItem() instanceof IElectricItem) {
 					IElectricItem ie = (IElectricItem)arm.getItem();
 					///???
 					Item id = ie.getEmptyItem(arm);

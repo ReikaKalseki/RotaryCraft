@@ -46,7 +46,7 @@ public class RecipesCrystallizer
 		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice));
 		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone));
 
-		this.addRecipe("rc ethanol", 100, ItemRegistry.ETHANOL.getStackOf());
+		this.addRecipe("rc ethanol", 1000, ItemRegistry.ETHANOL.getStackOf());
 	}
 
 	private void addRecipe(Fluid f, int amount, ItemStack out)
