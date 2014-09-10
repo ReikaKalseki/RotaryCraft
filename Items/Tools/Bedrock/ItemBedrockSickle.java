@@ -54,4 +54,6 @@ public class ItemBedrockSickle extends ItemSickleBase {
 		par3List.add(item);
 	}
 
+	-- force enchants --
+
 }
