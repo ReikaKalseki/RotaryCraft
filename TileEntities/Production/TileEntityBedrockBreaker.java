@@ -228,7 +228,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		}
 		else {
 			Block b = world.getBlock(x, y, z);
-			if (b != Blocks.air && b.getBlockHardness(world, x, y, z) > 0) {
+			if (b != Blocks.air && b.getBlockHardness(world, x, y, z) >= 0) {
 				ReikaSoundHelper.playBreakSound(world, x, y, z, b);
 				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 					ReikaRenderHelper.spawnDropParticles(world, x, y, z, b, world.getBlockMetadata(x, y, z));

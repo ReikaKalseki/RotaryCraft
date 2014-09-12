@@ -78,7 +78,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		super.updateTileEntity();
 		tickcount++;
 		if (worldObj.isRemote)
-			return;
+			;//return;
 		switch(this.getBlockMetadata()) {
 		case 0:
 			this.getPowerBelow();
@@ -188,6 +188,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	{
 		super.writeSyncTag(NBT);
 		NBT.setFloat("theta", theta);
+		NBT.setFloat("phi", phi);
 		NBT.setInteger("direction", dir);
 	}
 
@@ -224,6 +225,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	{
 		super.readSyncTag(NBT);
 		theta = NBT.getFloat("theta");
+		phi = NBT.getFloat("phi");
 		dir = NBT.getInteger("direction");
 	}
 

@@ -56,9 +56,14 @@ public class TileEntityFreezeGun extends TileEntityInventoriedCannon {
 
 	private void convertSnow() {
 		int slot = ReikaInventoryHelper.locateInInventory(Blocks.snow, inv);
-		if (slot != -1 && ReikaInventoryHelper.canAcceptMoreOf(Items.snowball, 0, inv)) {
+		if (slot != -1 && ReikaInventoryHelper.canAcceptMoreOf(Items.snowball, 0, 4, this)) {
 			ReikaInventoryHelper.decrStack(slot, inv);
 			ReikaInventoryHelper.addToIInv(new ItemStack(Items.snowball, 4, 0), this);
+		}
+		slot = ReikaInventoryHelper.locateInInventory(Blocks.ice, inv);
+		if (slot != -1 && ReikaInventoryHelper.canAcceptMoreOf(Items.snowball, 0, 16, this)) {
+			ReikaInventoryHelper.decrStack(slot, inv);
+			ReikaInventoryHelper.addToIInv(new ItemStack(Items.snowball, 16, 0), this);
 		}
 	}
 

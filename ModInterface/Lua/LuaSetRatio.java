@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearType;
+import dan200.computercraft.api.lua.LuaException;
 
 public class LuaSetRatio extends LuaMethod {
 
@@ -21,7 +22,7 @@ public class LuaSetRatio extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws Exception {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear) te;
 		if (adv.getGearType() == GearType.CVT) {
 			int ratio = ((Double)args[0]).intValue();

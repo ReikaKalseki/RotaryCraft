@@ -87,7 +87,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		if (inv[0].stackSize > 1) {
 			return false;
 		}
-		if (ReikaItemHelper.matchStacks(inv[0], ItemStacks.shaftcore)) {
+		if (!ReikaItemHelper.matchStacks(inv[0], ItemStacks.shaftcore)) {
 			return false;
 		}
 		return true;

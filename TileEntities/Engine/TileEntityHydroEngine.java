@@ -31,7 +31,10 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -223,10 +226,6 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	}
 
 	private int getArrayTorqueMultiplier() {
-		boolean front = this.isFrontOfArray();
-		boolean back = this.isBackEndOfArray();
-		//ReikaJavaLibrary.pConsole(back, Side.SERVER, xCoord == -548);
-		//if (front) {
 		ArrayList<TileEntityHydroEngine> li = new ArrayList();
 		int size = 1;
 		TileEntity te = this.getAdjacentTileEntity(write.getOpposite());
@@ -248,9 +247,6 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			}
 		}
 		return size;
-		//}
-		//else //never happens
-		//	return 1;
 	}
 
 	@Override
@@ -357,4 +353,26 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		bedrock = true;
 	}
 
+	@Override
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+		PowerSourceList psl = super.getPowerSources(io, caller);
+		ArrayList<TileEntityHydroEngine> li = new ArrayList();
+		ArrayList<TileEntityHydroEngine> li2 = new ArrayList();
+		TileEntity te = this.getAdjacentTileEntity(write.getOpposite());
+		while (te instanceof TileEntityHydroEngine && te != this && !li2.contains(te)) {
+			TileEntityHydroEngine eng = (TileEntityHydroEngine)te;
+			li2.add(eng);
+			if (eng.getRequirements(worldObj, eng.xCoord, eng.yCoord, eng.zCoord, eng.getBlockMetadata())) {
+				if (eng.omega == omega && !eng.failed) {
+					li.add(eng);
+					te = eng.getAdjacentTileEntity(eng.write.getOpposite());
+				}
+
+			}
+		}
+		for (int i = 0; i < li.size(); i++) {
+			psl.addSource(li.get(i));
+		}
+		return psl;
+	}
 }

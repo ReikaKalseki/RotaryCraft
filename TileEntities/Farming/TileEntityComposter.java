@@ -194,8 +194,8 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 			temperature++;
 		if (temperature*2 < Tamb)
 			temperature++;
-		if (temperature > MAXTEMP)
-			temperature = MAXTEMP;
+		//if (temperature > MAXTEMP)
+		//	temperature = MAXTEMP;
 	}
 
 	@Override

@@ -232,6 +232,16 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				return true;
 			}
 		}
+		if (m == MachineRegistry.SPLITTER) {
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.bedrock2x)) {
+				TileEntitySplitter tile = (TileEntitySplitter)te;
+				tile.setBedrock();
+				if (!ep.capabilities.isCreativeMode)
+					is.stackSize--;
+				((TileEntityBase)te).syncAllData(true);
+				return true;
+			}
+		}
 		if (m == MachineRegistry.BUSCONTROLLER) {
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {

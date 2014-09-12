@@ -34,6 +34,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	private HybridTank tank = new HybridTank("ecu", FUELCAP);
 
 	public boolean redstoneMode;
+	private int redstoneTick = 0;
+	private int prevRedstone;
 
 	private EngineSettings setting = EngineSettings.FULL;
 
@@ -72,7 +74,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	}
 
 	public boolean canProducePower() {
-		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) && !redstoneMode)
+		if (prevRedstone > 0 && !redstoneMode)
 			return false;
 		return setting.speedFactor != 0;
 	}
@@ -137,8 +139,16 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+
+		if (redstoneTick > 0)
+			redstoneTick--;
+		int power = redstoneTick == 0 ? world.getBlockPowerInput(x, y, z) : prevRedstone;
+		if (prevRedstone != power)
+			redstoneTick = 60;
+		prevRedstone = power;
+		//ReikaJavaLibrary.pConsole(prevRedstone+":"+this.canProducePower(), Side.SERVER);
+
 		if (redstoneMode) {
-			int power = world.getBlockPowerInput(x, y, z);
 			setting = power == 15 ? EngineSettings.SHUTDOWN : EngineSettings.list[4-power/3];
 		}
 		//ReikaJavaLibrary.pConsole(tank);

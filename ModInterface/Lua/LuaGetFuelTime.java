@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import dan200.computercraft.api.lua.LuaException;
 
 public class LuaGetFuelTime extends LuaMethod {
 
@@ -21,7 +22,7 @@ public class LuaGetFuelTime extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws Exception {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
 		int time = ((TileEntityEngine)te).getFuelDuration();
 		return new Object[]{ReikaFormatHelper.getSecondsAsClock(time)};
 	}

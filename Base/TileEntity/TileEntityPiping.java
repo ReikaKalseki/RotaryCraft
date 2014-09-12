@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.Arrays;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -323,6 +325,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		return connections[dir.ordinal()];
 	}
 
+	public boolean isConnectedDirectly(ForgeDirection dir) {
+		return connections[dir.ordinal()];
+	}
+
 	@Override
 	public final AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
@@ -418,12 +424,22 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	{
 		super.readSyncTag(NBT);
 
+		boolean update = false;
+
+		boolean[] old = new boolean[connections.length];
+		System.arraycopy(connections, 0, old, 0, old.length);
 		for (int i = 0; i < 6; i++) {
 			connections[i] = NBT.getBoolean("conn"+i);
 		}
+		update = !Arrays.equals(old, connections);
 
-		this.setFluid(ReikaNBTHelper.getFluidFromNBT(NBT));
+		Fluid f = ReikaNBTHelper.getFluidFromNBT(NBT);
+		update = update || f != this.getFluidType();
+		this.setFluid(f);
 		this.setLevel(NBT.getInteger("level"));
+
+		if (worldObj != null && update)
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public boolean isConnectedToNonSelf(ForgeDirection dir) {

@@ -48,7 +48,7 @@ public class ItemVacuum extends ItemChargedTool {
 		for (int i = 0; i < inrange.size(); i++) {
 			EntityItem ent = (EntityItem)inrange.get(i);
 			ItemStack is2 = ent.getEntityItem();
-			if (ReikaInventoryHelper.canAcceptMoreOf(is2.getItem(), is2.getItemDamage(), ep.inventory.mainInventory)) {
+			if (ReikaInventoryHelper.canAcceptMoreOf(is2, ep.inventory)) {
 				double dx = (ep.posX - ent.posX);
 				double dy = (ep.posY - ent.posY);
 				double dz = (ep.posZ - ent.posZ);

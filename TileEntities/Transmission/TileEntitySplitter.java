@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.ArrayList;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -20,12 +22,13 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntitySplitter extends TileEntityTransmissionMachine implements GuiController, ShaftMerger {
+public class TileEntitySplitter extends TileEntityTransmissionMachine implements GuiController, ShaftMerger, NBTMachine {
 
 	public int[] writeinline = new int[2]; //xz coords
 	public int[] writebend = new int[2]; //xz coords
@@ -35,6 +38,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	private int splitmode = 1;
 
 	public boolean failed;
+	private boolean bedrock;
 
 	private int cheatCount = 0;
 	private int cheatTick = 0;
@@ -473,8 +477,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	private boolean canCombine(PowerSourceList in1, PowerSourceList in2, int t1, int t2) {
-		if (t1 == t2)
+		if (bedrock)
 			return true;
+		//if (t1 == t2)
+		//	return true;
 		if (t1 == 0 || t2 == 0)
 			return true;
 		/*
@@ -510,6 +516,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	public boolean isSplitting() {
 		return this.getBlockMetadata() >= 8;
+	}
+
+	public boolean isBedrock() {
+		return bedrock;
 	}
 
 	private boolean isLoopingPower(PowerSourceList in1, PowerSourceList in2) {
@@ -613,6 +623,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		super.writeSyncTag(NBT);
 		NBT.setInteger("mode", splitmode);
 		NBT.setBoolean("fail", failed);
+		NBT.setBoolean("bedrock", bedrock);
 	}
 
 	@Override
@@ -621,6 +632,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		super.readSyncTag(NBT);
 		splitmode = NBT.getInteger("mode");
 		failed = NBT.getBoolean("fail");
+		bedrock = NBT.getBoolean("bedrock");
 	}
 
 	@Override
@@ -727,5 +739,38 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	@Override
 	public int getWriteZ2() {
 		return write2 != null ? zCoord+write2.offsetZ : Integer.MIN_VALUE;
+	}
+
+	@Override
+	public NBTTagCompound getTagsToWriteToStack() {
+		NBTTagCompound NBT = new NBTTagCompound();
+		NBT.setBoolean("bedrock", bedrock);
+		return NBT;
+	}
+
+	@Override
+	public void setDataFromItemStackTag(NBTTagCompound NBT) {
+		bedrock = NBT != null && NBT.getBoolean("bedrock");
+	}
+
+	@Override
+	public ArrayList<NBTTagCompound> getCreativeModeVariants() {
+		ArrayList<NBTTagCompound> li = new ArrayList();
+		li.add(new NBTTagCompound());
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("bedrock", true);
+		li.add(nbt);
+		return li;
+	}
+
+	@Override
+	public ArrayList<String> getDisplayTags(NBTTagCompound NBT) {
+		ArrayList<String> li = new ArrayList();
+		li.add(NBT != null && NBT.getBoolean("bedrock") ? "Bedrock" : "Steel");
+		return li;
+	}
+
+	public void setBedrock() {
+		bedrock = true;
 	}
 }

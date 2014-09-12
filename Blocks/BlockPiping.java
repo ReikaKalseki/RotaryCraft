@@ -16,10 +16,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 
 public class BlockPiping extends BlockBasicMultiTE {
 
@@ -105,5 +109,23 @@ public class BlockPiping extends BlockBasicMultiTE {
 	public IIcon getIcon(int s, int meta) {
 		s = Math.min(s, 1);
 		return iconBlocks[meta][s];
+	}
+
+	@Override
+	public final AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		TileEntityPiping te = (TileEntityPiping)world.getTileEntity(x, y, z);
+		double d = 0.125;
+		double[] dd = new double[6];
+		for (int i = 0; i < 6; i++)
+			dd[i] = te.isConnectedDirectly(ForgeDirection.VALID_DIRECTIONS[i]) ? 0 : d;
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x+dd[4], y+dd[1], z+dd[2], x+1-dd[5], y+1-dd[0], z+1-dd[3]);
+		this.setBounds(box, x, y, z);
+		return box;
+	}
+
+	@Override
+	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		return this.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 }

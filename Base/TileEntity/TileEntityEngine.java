@@ -654,7 +654,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	@Override
-	public final PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		return new PowerSourceList().addSource(this);
 	}
 

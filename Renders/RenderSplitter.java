@@ -44,7 +44,8 @@ public class RenderSplitter extends RotaryTERenderer
 		ModelSplitter var14 = SplitterModel;
 		ModelSplitter2 var15 = SplitterModel2;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/splittertex.png");
+		String s = tile.isBedrock() ? "bedsplittertex" : "splittertex";
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+s+".png");
 
 		this.setupGL(tile, par2, par4, par6);
 
