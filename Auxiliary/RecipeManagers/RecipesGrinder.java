@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -170,9 +171,8 @@ public class RecipesGrinder {
 	public void addOreRecipes() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
-			ArrayList<ItemStack> li = ore.getAllOreBlocks();
-			for (int k = 0; k < li.size(); k++) {
-				ItemStack is = li.get(k);
+			Collection<ItemStack> li = ore.getAllOreBlocks();
+			for (ItemStack is : li) {
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
 				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 1F);
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);

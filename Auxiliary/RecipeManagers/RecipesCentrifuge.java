@@ -10,8 +10,8 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -53,7 +53,7 @@ public class RecipesCentrifuge
 		this.addRecipe(ItemStacks.netherrackdust, null, new ItemStack(Items.glowstone_dust), new ItemStack(Items.gunpowder));
 
 		if (ModList.FORESTRY.isLoaded()) {
-			HashMap<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
+			Map<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
 			for (ItemStack in : centrifuge.keySet()) {
 				ArrayList<ItemStack> out = new ArrayList();
 				out.addAll(centrifuge.get(in).getAllItems());

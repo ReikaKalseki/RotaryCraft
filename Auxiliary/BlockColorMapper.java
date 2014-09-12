@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -325,9 +325,8 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
 			int color = ore.oreColor;
-			ArrayList<ItemStack> li = ore.getAllOreBlocks();
-			for (int k = 0; k < li.size(); k++) {
-				ItemStack is = li.get(k);
+			Collection<ItemStack> li = ore.getAllOreBlocks();
+			for (ItemStack is : li) {
 				Block id = Block.getBlockFromItem(is.getItem());
 				int meta = is.getItemDamage();
 				this.addOrSetColorMapping(id, meta, color, true);

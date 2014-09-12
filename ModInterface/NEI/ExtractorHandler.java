@@ -50,7 +50,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 				if (block != null)
 					oreBlock = ReikaJavaLibrary.makeListFrom(block.copy());
 				else
-					oreBlock = modore.getAllOreBlocks();
+					oreBlock = new ArrayList(modore.getAllOreBlocks());
 				if (oreBlock.isEmpty()) {
 					oreBlock.add(new ItemStack(Blocks.fire));
 				}
