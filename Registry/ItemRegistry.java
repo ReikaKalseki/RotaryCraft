@@ -434,7 +434,7 @@ public enum ItemRegistry implements ItemEnum {
 		case ADVGEAR:
 			return RotaryNames.getAdvGearName(dmg);
 		case MACHINE:
-			return MachineRegistry.machineList[dmg].getName();
+			return MachineRegistry.machineList.get(dmg).getName();
 		default:
 			break;
 		}

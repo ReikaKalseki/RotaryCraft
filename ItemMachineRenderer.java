@@ -146,7 +146,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			}
 			if (item.getItemDamage() >= MachineRegistry.machineList.length)
 				return;
-			MachineRegistry machine = MachineRegistry.machineList[item.getItemDamage()];
+			MachineRegistry machine = MachineRegistry.machineList.get(item.getItemDamage());
 			if (machine.isPipe()) {
 				if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
 					double d = 0.5;
@@ -172,7 +172,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 					double d = 0.5;
 					GL11.glTranslated(d, d, d);
 				}
-				rb.renderBlockAsItem(MachineRegistry.machineList[item.getItemDamage()].getBlock(), MachineRegistry.machineList[item.getItemDamage()].getMachineMetadata(), 1);
+				rb.renderBlockAsItem(MachineRegistry.machineList.get(item.getItemDamage()).getBlock(), MachineRegistry.machineList.get(item.getItemDamage()).getMachineMetadata(), 1);
 				if (enchant) {
 					GL11.glRotated(90, 0, 0, 1);
 					ReikaSpriteSheets.renderEffect(type, item);

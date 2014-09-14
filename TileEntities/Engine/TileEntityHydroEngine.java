@@ -23,6 +23,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -170,7 +171,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	private float getHydroFactor(World world, int x, int y, int z) {
 		double grav = ReikaPhysicsHelper.g;
-		if (world.provider instanceof IGalacticraftWorldProvider) {
+		if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 			grav += ig.getGravity()*10;
 		}

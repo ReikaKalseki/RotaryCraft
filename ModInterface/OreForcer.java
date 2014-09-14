@@ -291,9 +291,9 @@ public final class OreForcer {
 			ArrayList list = (ArrayList)blacklist.get(null);
 			RotaryCraft.logger.log("Breaking force wrench on RotaryCraft machines!");
 			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-				Class machine = MachineRegistry.machineList[i].getTEClass();
+				Class machine = MachineRegistry.machineList.get(i).getTEClass();
 				list.add(machine);
-				RotaryCraft.logger.log("Force wrench no longer works on "+MachineRegistry.machineList[i].getName()+"!");
+				RotaryCraft.logger.log("Force wrench no longer works on "+MachineRegistry.machineList.get(i).getName()+"!");
 			}
 			blacklist.set(null, list);
 		}

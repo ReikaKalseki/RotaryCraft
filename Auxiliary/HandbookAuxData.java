@@ -100,7 +100,7 @@ public final class HandbookAuxData {
 
 	public static void addPowerData() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
+			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (!m.isDummiedOut()) {
 				if (m.isPowerReceiver() && !m.isModConversionEngine() && !m.isPoweredTransmissionMachine()) {
 					PowerReceivers p = m.getPowerReceiverEntry();
@@ -659,7 +659,7 @@ public final class HandbookAuxData {
 					int di = (subpage-1)*36;
 					int max = Math.min(di+36, MachineRegistry.machineList.length);
 					for (int i = di; i < max; i++) {
-						MachineRegistry m = MachineRegistry.machineList[i];
+						MachineRegistry m = MachineRegistry.machineList.get(i);
 						ItemStack is = m.getCraftedProduct();
 						if (m.hasSubdivisions()) {
 							int meta = m.getNumberSubtypes();

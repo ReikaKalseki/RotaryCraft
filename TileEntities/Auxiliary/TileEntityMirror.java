@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -95,7 +96,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
 		float sun = ReikaWorldHelper.getSunIntensity(worldObj);
-		if (worldObj.provider instanceof ISolarLevel) {
+		if (InterfaceCache.instance.instanceOf("ISolarLevel", worldObj.provider)) {
 			ISolarLevel isl = (ISolarLevel)worldObj.provider;
 			sun *= isl.getSolarEnergyMultiplier();
 		}

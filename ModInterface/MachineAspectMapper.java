@@ -405,7 +405,7 @@ public class MachineAspectMapper {
 
 	public void register() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
+			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (m.hasSubdivisions()) {
 				int n = m.getNumberSubtypes();
 				for (int k = 0; k < n; k++) {

@@ -14,10 +14,12 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -71,10 +73,21 @@ public class ItemBedrockSickle extends ItemSickleBase {
 				entity.playSound("random.break", 1, 1);
 				EntityPlayer ep = (EntityPlayer)entity;
 				ep.inventory.setInventorySlotContents(slot, null);
+				ep.attackEntityFrom(DamageSource.generic, 10);
 				ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
 				is = null;
 			}
 		}
+	}
+
+	@Override
+	public boolean onEntityItemUpdate(EntityItem ei) {
+		ItemStack is = ei.getEntityItem();
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
+			ei.playSound("random.break", 1, 1);
+			ei.setDead();
+		}
+		return false;
 	}
 
 	@Override

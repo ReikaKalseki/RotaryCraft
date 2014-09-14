@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import icbm.api.IMissile;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +40,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
@@ -211,7 +210,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 					world.createExplosion(null, x, y, z, 4F, true);
 				tickcount = 0;
 			}
-			if (threat instanceof IMissile) {
+			if (InterfaceCache.instance.instanceOf("IMissile", threat)) {
 				threat.setDead();
 				if (!world.isRemote)
 					world.createExplosion(null, x, y, z, 4F, true);

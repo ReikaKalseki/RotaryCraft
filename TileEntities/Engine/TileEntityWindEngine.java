@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Engine;
 
 import java.util.List;
 
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -18,6 +19,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -70,6 +72,10 @@ public class TileEntityWindEngine extends TileEntityEngine {
 			if (y < 4)
 				return 0;
 			float f = (y-4)/16F;
+			if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
+				IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+				f *= ig.getWindLevel();
+			}
 			if (f > 1)
 				f = 1;
 			return f;
@@ -78,6 +84,10 @@ public class TileEntityWindEngine extends TileEntityEngine {
 			if (y < 62)
 				return 0;
 			float f = (y-62)/62F;
+			if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
+				IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+				f *= ig.getWindLevel();
+			}
 			if (f > 1)
 				f = 1;
 			return f;

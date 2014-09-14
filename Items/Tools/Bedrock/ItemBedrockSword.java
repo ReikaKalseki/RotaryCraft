@@ -28,8 +28,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import universalelectricity.api.item.IEnergyItem;
+import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -91,20 +94,24 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		for (int i = 1; i < 5; i++) {
 			ItemStack arm = target.getEquipmentInSlot(i);
 			if (arm != null && this.canDamageArmorOf(target)) {
-				if (arm.getItem() instanceof MuseElectricItem) {
+				if (InterfaceCache.instance.instanceOf("MuseElectricItem", arm.getItem())) {
 					MuseElectricItem ms = (MuseElectricItem)arm.getItem();
 					ms.extractEnergy(arm, 5000, false);
 				}
-				else if (arm.getItem() instanceof IEnergyContainerItem) {
+				else if (InterfaceCache.instance.instanceOf("IEnergyContainerItem", arm.getItem())) {
 					IEnergyContainerItem ie = (IEnergyContainerItem)arm.getItem();
 					ie.extractEnergy(arm, 5000, false);
 				}
-				else if (arm.getItem() instanceof IElectricItem) {
+				else if (InterfaceCache.instance.instanceOf("IElectricItem", arm.getItem())) {
 					IElectricItem ie = (IElectricItem)arm.getItem();
 					///???
 					Item id = ie.getEmptyItem(arm);
 					ItemStack newarm = new ItemStack(id, 1, 0);
 					target.setCurrentItemOrArmor(i, newarm);
+				}
+				else if (InterfaceCache.instance.instanceOf("IEnergyItem", arm.getItem())) {
+					IEnergyItem ie = (IEnergyItem)arm.getItem();
+					ie.discharge(arm, 5000, true);
 				}
 				else if (arm.getItem() instanceof ItemBedrockArmor) {
 					//do nothing
@@ -189,6 +196,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 			if (entity instanceof EntityPlayer) {
 				EntityPlayer ep = (EntityPlayer)entity;
 				ep.inventory.setInventorySlotContents(slot, null);
+				ep.attackEntityFrom(DamageSource.generic, 10);
 				ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
 				is = null;
 			}

@@ -240,7 +240,7 @@ public enum PowerReceivers {
 	}
 
 	public static PowerReceivers getEnumFromMachineIndex(int index) {
-		return MachineRegistry.machineList[index].getPowerReceiverEntry();
+		return MachineRegistry.machineList.get(index).getPowerReceiverEntry();
 	}
 
 	public static PowerReceivers initialize(MachineRegistry m) {
@@ -265,7 +265,7 @@ public enum PowerReceivers {
 
 	public MachineRegistry getMachine() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
+			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (m.getPowerReceiverEntry() == this)
 				return m;
 		}

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -26,6 +27,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -132,9 +134,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	protected final boolean hasAir(World world, int x, int y, int z) {
 		if (this.isDrowned(world, x, y, z))
 			return false;
-		if (world.provider instanceof IGalacticraftWorldProvider) {
+		if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			if (ig.getSoundVolReductionAmount() > 1)
+			if (!ig.hasBreathableAtmosphere() || !ig.isGasPresent(IAtmosphericGas.OXYGEN))
 				return false;
 		}
 		return true;

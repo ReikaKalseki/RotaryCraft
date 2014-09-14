@@ -46,9 +46,9 @@ public class RotaryRegistration {
 
 	public static void addTileEntities() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			String label = "RC"+MachineRegistry.machineList[i].getDefaultName().toLowerCase().replaceAll("\\s","");
-			GameRegistry.registerTileEntity(MachineRegistry.machineList[i].getTEClass(), label);
-			ReikaJavaLibrary.initClass(MachineRegistry.machineList[i].getTEClass());
+			String label = "RC"+MachineRegistry.machineList.get(i).getDefaultName().toLowerCase().replaceAll("\\s","");
+			GameRegistry.registerTileEntity(MachineRegistry.machineList.get(i).getTEClass(), label);
+			ReikaJavaLibrary.initClass(MachineRegistry.machineList.get(i).getTEClass());
 		}
 		for (int i = 0; i < EngineType.engineList.length; i++) {
 			String label = "RC"+EngineType.engineList[i].name().toLowerCase().replaceAll("\\s","");

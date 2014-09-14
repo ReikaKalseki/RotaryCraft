@@ -154,7 +154,7 @@ public enum EngineType {
 	}
 
 	public boolean isAirBreathing() {
-		return (this == GAS || this == SPORT || this == MICRO || this == JET);
+		return this == GAS || this == SPORT || this == MICRO || this == JET;
 	}
 
 	public boolean electricNoise() {
@@ -170,19 +170,19 @@ public enum EngineType {
 	}
 
 	public boolean steamNoise() {
-		return (this == STEAM);
+		return this == STEAM;
 	}
 
 	public boolean jetNoise() {
-		return (this == JET);
+		return this == JET;
 	}
 
 	public boolean turbineNoise() {
-		return (this == JET || this == MICRO);
+		return this == JET || this == MICRO;
 	}
 
 	public boolean windNoise() {
-		return (this == WIND);
+		return this == WIND;
 	}
 
 	public boolean canHurtPlayer() {

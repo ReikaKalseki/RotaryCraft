@@ -128,7 +128,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 
 		ArrayList<ItemStack> li = new ArrayList();
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
+			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (m.isAvailableInCreativeInventory() && !m.hasCustomPlacerItem())
 				li.add(m.getCraftedProduct());
 		}

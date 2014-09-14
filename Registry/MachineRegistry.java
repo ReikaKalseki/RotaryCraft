@@ -29,6 +29,7 @@ import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.BlockMap;
+import Reika.DragonAPI.Instantiable.Data.ImmutableArray;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -340,7 +341,7 @@ public enum MachineRegistry {
 	private PowerReceivers receiver;
 	private TileEntity renderInstance;
 
-	public static final MachineRegistry[] machineList = values();
+	public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray(values());
 	private static final BlockMap<MachineRegistry> machineMappings = new BlockMap();
 
 	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m) {
@@ -391,7 +392,7 @@ public enum MachineRegistry {
 			RotaryCraft.logger.logError("ID "+id+" and metadata "+metad+" are not a valid machine identification pair!");
 			return null;
 		}
-		Class TEClass = machineList[index].te;
+		Class TEClass = machineList.get(index).te;
 		try {
 			return (TileEntity)TEClass.newInstance();
 		}
@@ -1249,7 +1250,7 @@ public enum MachineRegistry {
 	public static ArrayList<MachineRegistry> getEnchantableMachineList() {
 		ArrayList<MachineRegistry> li = new ArrayList<MachineRegistry>();
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
+			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (m.isEnchantable()) {
 				li.add(m);
 			}
@@ -1261,7 +1262,7 @@ public enum MachineRegistry {
 	public static ArrayList<Object[]> getDeepEnchantableMachineList() {
 		ArrayList<Object[]> li = new ArrayList<Object[]>();
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
+			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (m.isEnchantable()) {
 				Object[] o = new Object[2];
 				o[0] = m;
@@ -1423,7 +1424,7 @@ public enum MachineRegistry {
 
 	static {
 		for (int i = 0; i < machineList.length; i++) {
-			MachineRegistry m = machineList[i];
+			MachineRegistry m = machineList.get(i);
 			Block id = m.getBlock();
 			int meta = m.meta;
 			machineMappings.put(id, meta, m);

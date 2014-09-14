@@ -82,7 +82,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		List inblock = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		if (inblock.size() > 0)
 			return false;
-		MachineRegistry m = MachineRegistry.machineList[is.getItemDamage()];
+		MachineRegistry m = MachineRegistry.machineList.get(is.getItemDamage());
 		if (!ep.canPlayerEdit(x, y, z, 0, is))
 			return false;
 		else
@@ -219,7 +219,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList[i];
+			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (!m.hasCustomPlacerItem() && m.isAvailableInCreativeInventory()) {
 				ItemMachineRenderer ir = ClientProxy.machineItems;
 				TileEntity te = m.createTEInstanceForRender(0);
@@ -257,14 +257,14 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 
 	@Override
 	public int getMetadata(int meta) {
-		return MachineRegistry.machineList[meta].getMachineMetadata();
+		return MachineRegistry.machineList.get(meta).getMachineMetadata();
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
 		int i = is.getItemDamage();
-		MachineRegistry m = MachineRegistry.machineList[i];
+		MachineRegistry m = MachineRegistry.machineList.get(i);
 		ItemMachineRenderer ir = ClientProxy.machineItems;
 		TileEntity te = ir.getRenderingInstance(m, 0);
 		if (m.isIncomplete()) {

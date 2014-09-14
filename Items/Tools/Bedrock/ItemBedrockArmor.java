@@ -100,6 +100,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 				if (entity instanceof EntityPlayer) {
 					EntityPlayer ep = (EntityPlayer)entity;
 					ep.inventory.setInventorySlotContents(slot, null);
+					ep.attackEntityFrom(DamageSource.generic, 10);
 					ReikaChatHelper.sendChatToPlayer(ep, "The damaged tool has broken.");
 					is = null;
 					break;

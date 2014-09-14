@@ -27,6 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
@@ -102,6 +103,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 				entity.playSound("random.break", 1, 1);
 				EntityPlayer ep = (EntityPlayer)entity;
 				ep.inventory.setInventorySlotContents(slot, null);
+				ep.attackEntityFrom(DamageSource.generic, 10);
 				ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
 				is = null;
 			}
