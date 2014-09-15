@@ -136,27 +136,27 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	}
 
 	public final TileEntity getReadTileEntity() {
-		return this.getAdjacentTileEntity(read);
+		return read != null ? this.getAdjacentTileEntity(read) : null;
 	}
 
 	public final TileEntity getReadTileEntity2() {
-		return this.getAdjacentTileEntity(read2);
+		return read2 != null ? this.getAdjacentTileEntity(read2) : null;
 	}
 
 	public final TileEntity getReadTileEntity3() {
-		return this.getAdjacentTileEntity(read3);
+		return read3 != null ? this.getAdjacentTileEntity(read3) : null;
 	}
 
 	public final TileEntity getReadTileEntity4() {
-		return this.getAdjacentTileEntity(read4);
+		return read4 != null ? this.getAdjacentTileEntity(read4) : null;
 	}
 
 	public final TileEntity getWriteTileEntity() {
-		return this.getAdjacentTileEntity(write);
+		return write != null ? this.getAdjacentTileEntity(write) : null;
 	}
 
 	public final TileEntity getWriteTileEntity2() {
-		return this.getAdjacentTileEntity(write2);
+		return write2 != null ? this.getAdjacentTileEntity(write2) : null;
 	}
 
 	public abstract boolean canProvidePower();

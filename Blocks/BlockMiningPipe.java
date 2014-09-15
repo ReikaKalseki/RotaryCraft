@@ -117,7 +117,7 @@ public class BlockMiningPipe extends BlockBasic {
 		}
 	}
 
-	private ForgeDirection getDirectionFromMeta(int meta) {
+	public static ForgeDirection getDirectionFromMeta(int meta) {
 		switch (meta) {
 		case 0:
 			return ForgeDirection.EAST;

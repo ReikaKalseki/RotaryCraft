@@ -52,6 +52,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
+import Reika.RotaryCraft.Blocks.BlockMiningPipe;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -78,6 +79,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public boolean[][] cutShape = new boolean[7][5]; // 7 cols, 5 rows
 
 	private boolean jammed = false;
+
+	private boolean isMiningAir = false;
 
 	@Override
 	public int getTextureStateForSide(int s) {
@@ -116,9 +119,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	private void setJammed(boolean jam) {
+		if (jam != jammed) {
+			ReikaWorldHelper.causeAdjacentUpdates(worldObj, xCoord, yCoord, zCoord);
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 		jammed = jam;
-		ReikaWorldHelper.causeAdjacentUpdates(worldObj, xCoord, yCoord, zCoord);
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -160,7 +165,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (omega <= 0)
 			return;
 
-		if (tickcount >= this.getOperationTime()) {
+		if (tickcount == 1 || step == 1) {
+			isMiningAir = this.checkMiningAir(world, x, y, z, meta);
+		}
+
+		//ReikaJavaLibrary.pConsole(isMiningAir+":"+tickcount+"/"+this.getOperationTime(), Side.SERVER);
+
+		if ((tickcount >= this.getOperationTime()) || (isMiningAir && tickcount%5 == 0)) {
+			this.skipMiningPipes(world, x, y, z, meta, 0, 16);
 			this.calcReqPower(world, x, y, z, meta);
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
@@ -175,6 +187,63 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			tickcount = 0;
 			mintorque = 0;
 			reqpow = 0;
+			isMiningAir = false;
+		}
+	}
+
+	private boolean checkMiningAir(World world, int x, int y, int z, int meta) {
+		int a = 0;
+		if (meta > 1)
+			a = 1;
+		int b = 1-a;
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 5; j++) {
+				if (cutShape[i][j] || step == 1) {
+					int xread = x+step*xstep+a*(i-3);
+					int yread = y+step*ystep+(4-j);
+					int zread = z+step*zstep+b*(i-3);
+					if (world.getBlock(xread, yread, zread) != Blocks.air) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	private void skipMiningPipes(World world, int x, int y, int z, int meta, int stepped, int max) {
+		if (stepped >= max)
+			return;
+		int a = 0;
+		if (meta > 1)
+			a = 1;
+		int b = 1-a;
+		boolean allpipe = true;
+		boolean haspipe = false;
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 5; j++) {
+				if (cutShape[i][j] || step == 1) {
+					int xread = x+step*xstep+a*(i-3);
+					int yread = y+step*ystep+(4-j);
+					int zread = z+step*zstep+b*(i-3);
+					//ReikaJavaLibrary.pConsole(xread+","+yread+","+zread);
+					if (world.getBlock(xread, yread, zread) == BlockRegistry.MININGPIPE.getBlockInstance()) {
+						haspipe = true;
+						int meta2 = world.getBlockMetadata(xread, yread, zread);
+						ForgeDirection dir = BlockMiningPipe.getDirectionFromMeta(meta2);
+						if (meta2 == 3 || Math.abs(dir.offsetX) == Math.abs(xstep) && Math.abs(dir.offsetZ) == Math.abs(zstep)) {
+
+						}
+						else {
+							allpipe = false;
+						}
+					}
+				}
+			}
+		}
+		if (haspipe && allpipe) {
+			step++;
+			this.skipMiningPipes(world, x, y, z, meta, stepped+1, max);
 		}
 	}
 
@@ -237,13 +306,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (metadata > 1)
 			a = 1;
 		int b = 1-a;
-		int xread;
-		int yread;
-		int zread;
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					xread = x+step*xstep+a*(i-3); yread = y+step*ystep+(4-j); zread = z+step*zstep+b*(i-3);
+					int xread = x+step*xstep+a*(i-3);
+					int yread = y+step*ystep+(4-j);
+					int zread = z+step*zstep+b*(i-3);
 					this.reqPowAdd(world, xread, yread, zread);
 				}
 			}

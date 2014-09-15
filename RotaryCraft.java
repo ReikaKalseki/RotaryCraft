@@ -276,6 +276,8 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
 
+		FMLInterModComms.sendMessage("Waila", "register", "Reika.RotaryCraft.ModInteract.RotaryWailaProvider.registerObjects");
+
 		if (!this.isLocked()) {
 			RotaryRecipes.addRecipes();
 		}
