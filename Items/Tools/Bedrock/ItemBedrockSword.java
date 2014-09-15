@@ -32,12 +32,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import universalelectricity.api.item.IEnergyItem;
-import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -94,22 +94,22 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		for (int i = 1; i < 5; i++) {
 			ItemStack arm = target.getEquipmentInSlot(i);
 			if (arm != null && this.canDamageArmorOf(target)) {
-				if (InterfaceCache.instance.instanceOf("MuseElectricItem", arm.getItem())) {
+				if (InterfaceCache.MUSEELECTRICITEM.instanceOf(arm.getItem())) {
 					MuseElectricItem ms = (MuseElectricItem)arm.getItem();
 					ms.extractEnergy(arm, 5000, false);
 				}
-				else if (InterfaceCache.instance.instanceOf("IEnergyContainerItem", arm.getItem())) {
+				else if (InterfaceCache.RFENERGYITEM.instanceOf(arm.getItem())) {
 					IEnergyContainerItem ie = (IEnergyContainerItem)arm.getItem();
 					ie.extractEnergy(arm, 5000, false);
 				}
-				else if (InterfaceCache.instance.instanceOf("IElectricItem", arm.getItem())) {
+				else if (InterfaceCache.IELECTRICITEM.instanceOf(arm.getItem())) {
 					IElectricItem ie = (IElectricItem)arm.getItem();
 					///???
 					Item id = ie.getEmptyItem(arm);
 					ItemStack newarm = new ItemStack(id, 1, 0);
 					target.setCurrentItemOrArmor(i, newarm);
 				}
-				else if (InterfaceCache.instance.instanceOf("IEnergyItem", arm.getItem())) {
+				else if (InterfaceCache.UEENERGYITEM.instanceOf(arm.getItem())) {
 					IEnergyItem ie = (IEnergyItem)arm.getItem();
 					ie.discharge(arm, 5000, true);
 				}

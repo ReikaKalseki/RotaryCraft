@@ -18,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -26,6 +25,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -96,7 +96,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
 		float sun = ReikaWorldHelper.getSunIntensity(worldObj);
-		if (InterfaceCache.instance.instanceOf("ISolarLevel", worldObj.provider)) {
+		if (InterfaceCache.ISOLARLEVEL.instanceOf(worldObj.provider)) {
 			ISolarLevel isl = (ISolarLevel)worldObj.provider;
 			sun *= isl.getSolarEnergyMultiplier();
 		}

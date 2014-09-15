@@ -19,8 +19,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -72,7 +72,7 @@ public class TileEntityWindEngine extends TileEntityEngine {
 			if (y < 4)
 				return 0;
 			float f = (y-4)/16F;
-			if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
+			if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 				IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 				f *= ig.getWindLevel();
 			}
@@ -84,7 +84,7 @@ public class TileEntityWindEngine extends TileEntityEngine {
 			if (y < 62)
 				return 0;
 			float f = (y-62)/62F;
-			if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
+			if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 				IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 				f *= ig.getWindLevel();
 			}

@@ -40,11 +40,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
@@ -210,7 +210,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 					world.createExplosion(null, x, y, z, 4F, true);
 				tickcount = 0;
 			}
-			if (InterfaceCache.instance.instanceOf("IMissile", threat)) {
+			if (InterfaceCache.IMISSILE.instanceOf(threat)) {
 				threat.setDead();
 				if (!world.isRemote)
 					world.createExplosion(null, x, y, z, 4F, true);
