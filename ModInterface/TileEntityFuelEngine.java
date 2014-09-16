@@ -390,8 +390,10 @@ TemperatureTE {
 	@Override
 	public void overheat(World world, int x, int y, int z) {
 		world.setBlockToAir(x, y, z);
-		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
-		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 8, true, true);
+		if (!world.isRemote) {
+			world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
+			world.newExplosion(null, x+0.5, y+0.5, z+0.5, 8, true, true);
+		}
 	}
 
 }

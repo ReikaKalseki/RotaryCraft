@@ -154,7 +154,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	}
 
 	public boolean contains(Fluid f) {
-		return f.equals(liquid);
+		return f != null && f.equals(liquid);
 	}
 
 	@Override

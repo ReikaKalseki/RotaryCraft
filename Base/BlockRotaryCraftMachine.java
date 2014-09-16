@@ -11,12 +11,13 @@ package Reika.RotaryCraft.Base;
 
 import java.util.Random;
 
+import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Base.BlockTEBase;
 
-public abstract class BlockRotaryCraftMachine extends BlockTEBase/* implements IWailaDataProvider*/ {
+public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWailaDataProvider {
 
 	protected Random par5Random = new Random();
 

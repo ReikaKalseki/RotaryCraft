@@ -22,6 +22,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
+import Reika.DragonAPI.ModInteract.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
@@ -29,8 +30,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
-
-import com.xcompwiz.mystcraft.api.MystObjects;
 
 public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 
@@ -77,7 +76,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			type = PortalType.NETHER;
 		if (id == Blocks.end_portal)
 			type = PortalType.END;
-		if (ModList.MYSTCRAFT.isLoaded() && MystObjects.portal != null && MystObjects.portal == id)
+		if (ModList.MYSTCRAFT.isLoaded() && id == MystCraftHandler.getInstance().portalID)
 			type = PortalType.MYSTCRAFT;
 		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().portalID)
 			type = PortalType.TWILIGHT;

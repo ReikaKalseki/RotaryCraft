@@ -8,8 +8,11 @@
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
+import java.util.List;
 import java.util.Random;
 
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -21,12 +24,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -36,12 +41,18 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
+import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
@@ -246,7 +257,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 	public final String getTextureFile(){
 		return "/Reika/RotaryCraft/Textures/Terrain/textures.png"; //return the block texture where the block texture is saved in
 	}
-	/*
+
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
 		return MachineRegistry.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
 	}
@@ -331,5 +342,5 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		String s2 = EnumChatFormatting.BLUE.toString();
 		currenttip.add(s2+s1+"RotaryCraft");
 		return currenttip;
-	}*/
+	}
 }
