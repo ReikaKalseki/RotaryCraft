@@ -81,6 +81,11 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return i == 7 || i == 8 || extractableSlots[i/2];
 	}
 
+	@Override
+	public boolean validatesInputs() {
+		return true;
+	}
+
 	private int getSmeltNumber(OreType ore, ItemStack is) {
 		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		if (ore != null) {
