@@ -13,14 +13,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
@@ -33,9 +36,11 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
+import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -133,9 +138,6 @@ public class GuiHandbook extends GuiScreen
 		HandbookRegistry.addRelevantButtons(j, k, screen, buttonList);
 	}
 
-	/**
-	 * Returns true if this GUI should pause the game when it is displayed in single-player
-	 */
 	@Override
 	public final boolean doesGuiPauseGame()
 	{
@@ -152,6 +154,8 @@ public class GuiHandbook extends GuiScreen
 			return HandbookAuxData.getPowerDataSize()-1;
 		if (h == HandbookRegistry.COMPUTERCRAFT)
 			return MachineRegistry.machineList.length/36+1;
+		if (h == HandbookRegistry.ALERTS)
+			return HandbookNotifications.getNewAlerts().size()/3;
 		return 1;
 	}
 
@@ -270,7 +274,6 @@ public class GuiHandbook extends GuiScreen
 		int lastx = mx;
 		int lasty = my;
 		mc.thePlayer.closeScreen();
-		//ModLoader.openGUI(player, new GuiHandbook(player, worldObj));
 		Mouse.setCursorPosition(lastx, lasty);
 	}
 
@@ -294,6 +297,8 @@ public class GuiHandbook extends GuiScreen
 			return PageType.GREYBOX;
 		if (h == HandbookRegistry.TIMING)
 			return PageType.GREYBOX;
+		if (h == HandbookRegistry.ALERTS)
+			return PageType.BLACKBOX;
 		if (subpage == 1)
 			return PageType.PLAIN;
 		if (h == HandbookRegistry.STEELINGOT)
@@ -347,7 +352,8 @@ public class GuiHandbook extends GuiScreen
 		ANIMALBAIT("k"),
 		TERRAFORMER("l"),
 		MACHINERENDER("m"),
-		GREYBOX("n");
+		GREYBOX("n"),
+		BLACKBOX("o");
 
 		private final String endString;
 
@@ -410,7 +416,41 @@ public class GuiHandbook extends GuiScreen
 			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, s, posX+12+xSize+fontRendererObj.getStringWidth(s), posY+20);
 		}
 
+		if (HandbookNotifications.newAlerts()) {
+			ReikaTextureHelper.bindFinalTexture(DragonAPICore.class, "Resources/warning.png");
+			GL11.glEnable(GL11.GL_BLEND);
+			Tessellator v5 = Tessellator.instance;
+			int x = posX+257;
+			int y = posY+18;
+			int alpha = (int)(155+100*Math.sin(Math.toRadians(System.currentTimeMillis()/8%360)));
+			v5.startDrawingQuads();
+			v5.setColorRGBA_I(0xffffff, alpha);
+			v5.addVertexWithUV(x, y+24, 0, 0, 1);
+			v5.addVertexWithUV(x+24, y+24, 0, 1, 1);
+			v5.addVertexWithUV(x+24, y, 0, 1, 0);
+			v5.addVertexWithUV(x, y, 0, 0, 0);
+			v5.draw();
+			GL11.glDisable(GL11.GL_BLEND);
+		}
+
 		this.drawAuxGraphics(posX, posY);
+	}
+
+	@Override
+	protected final void mouseClicked(int x, int y, int a) {
+		super.mouseClicked(x, y, a);
+		int j = (width - xSize) / 2-2;
+		int k = (height - ySize) / 2-8;
+		if (a == 0) {
+			int dx = x-j;
+			int dy = y-k;
+			if (ReikaMathLibrary.isValueInsideBoundsIncl(261, 377, dx) && ReikaMathLibrary.isValueInsideBoundsIncl(22, 36, dy)) {
+				mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+				screen = HandbookRegistry.ALERTS.getScreen();
+				page = HandbookRegistry.ALERTS.getPage();
+				this.initGui();
+			}
+		}
 	}
 
 	protected void drawAuxGraphics(int posX, int posY) {
@@ -515,6 +555,7 @@ public class GuiHandbook extends GuiScreen
 			variable = -3000F;
 		}
 		double sc = 48;
+		GL11.glPushMatrix();
 		if (m.hasModel() && !m.isPipe()) {
 			double dx = x;
 			double dy = y+21;
@@ -524,10 +565,6 @@ public class GuiHandbook extends GuiScreen
 			GL11.glRotatef(renderq, 1, 0, 0);
 			GL11.glRotatef(r, 0, 1, 0);
 			TileEntityRendererDispatcher.instance.renderTileEntityAt(te, -0.5, 0, -0.5, variable);
-			GL11.glRotatef(-r, 0, 1, 0);
-			GL11.glRotatef(-renderq, 1, 0, 0);
-			GL11.glTranslated(-dx, -dy, -dz);
-			GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
 		}
 		else {
 			double dx = x;
@@ -539,11 +576,8 @@ public class GuiHandbook extends GuiScreen
 			GL11.glRotatef(r, 0, 1, 0);
 			ReikaTextureHelper.bindTerrainTexture();
 			rb.renderBlockAsItem(m.getBlock(), m.getMachineMetadata(), 1);
-			GL11.glRotatef(-r, 0, 1, 0);
-			GL11.glRotatef(-renderq, 1, 0, 0);
-			GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
-			GL11.glTranslated(-dx, -dy, -dz);
 		}
+		GL11.glPopMatrix();
 	}
 
 	private void drawMachineRender(int posX, int posY) {

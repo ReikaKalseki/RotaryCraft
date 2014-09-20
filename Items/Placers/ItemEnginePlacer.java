@@ -81,18 +81,18 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 				--is.stackSize;
 			world.setBlock(x, y, z, MachineRegistry.ENGINE.getBlock(), is.getItemDamage(), 3);
 			TileEntityEngine eng = (TileEntityEngine)world.getTileEntity(x, y, z);
-			if (eng != null) {
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				//eng.type = EngineType.setType(is.getItemDamage());
-				eng.setType(is);
-				eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
-				eng.setPlacer(ep);
-				eng.setDataFromPlacer(is);
-				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
-					eng.isFlipped = true;
-				}
-				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
+			//if (eng != null) {
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
+			//eng.type = EngineType.setType(is.getItemDamage());
+			eng.setType(is);
+			eng.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+			eng.setPlacer(ep);
+			eng.setDataFromPlacer(is);
+			if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
+				eng.isFlipped = true;
 			}
+			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
+			//}
 		}
 		return true;
 	}

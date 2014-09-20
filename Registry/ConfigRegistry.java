@@ -79,7 +79,10 @@ public enum ConfigRegistry implements ConfigList {
 	CLEARCHAT("Tools Clear Chat", true),
 	KICKFLYING("Jetpack bypasses allow-flight property", true),
 	BLOWERSPILL("Item Pump Spills Items If Dumping To Air", true),
-	EXTRACTORMAINTAIN("Extractor Drill Wears Down", false);
+	EXTRACTORMAINTAIN("Extractor Drill Wears Down", false),
+	HARDGRAVELGUN("Hardmode Gravel Gun", false),
+	BORERMAINTAIN("Borer Requires Maintenance", false),
+	NOMINERS("Disable Automining Machines", false);
 
 	private String label;
 	private boolean defaultState;

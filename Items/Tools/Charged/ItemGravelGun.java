@@ -98,7 +98,7 @@ public class ItemGravelGun extends ItemChargedTool {
 							ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is.getItemDamage()));
 						}
 						else {
-							int dmg = this.getAttackDamage(is.getItemDamage());
+							float dmg = this.getAttackDamage(is.getItemDamage());
 							if (ent instanceof EntityPlayer) {
 								for (int n = 1; n < 5; n++) {
 									ItemRegistry ir = ItemRegistry.getEntry(ent.getEquipmentInSlot(n));
@@ -171,17 +171,25 @@ public class ItemGravelGun extends ItemChargedTool {
 		return Math.max(1, ReikaMathLibrary.logbase2(1+charge));
 	}
 
-	private int getAttackDamage(int charge) {
+	private float getAttackDamage(int charge) {
 		if (charge == 1)
 			return 1;
 		long pow = ReikaMathLibrary.longpow(charge/2, 3); //fits in long (^6 does not)
-		double base = 1.0001+Math.pow(charge, 0.1875)/150000D;
-		return (int)(1+(ReikaMathLibrary.logbase(pow, 2)/2)*ReikaMathLibrary.doubpow(base, charge));
+		double base = this.getExpBase()+Math.pow(charge, this.getPowR())/150000D;
+		return (float)(1+(ReikaMathLibrary.logbase(pow, 2)/2)*ReikaMathLibrary.doubpow(base, charge));
+	}
+
+	private double getPowR() {
+		return ConfigRegistry.HARDGRAVELGUN.getState() ? 0.15 : 0.1875;
+	}
+
+	private double getExpBase() {
+		return ConfigRegistry.HARDGRAVELGUN.getState() ? 1.00005 : 1.0001;
 	}
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
-		int dmg = this.getAttackDamage(is.getItemDamage());
+		float dmg = this.getAttackDamage(is.getItemDamage());
 		li.add(String.format("Dealing %.1f hearts of damage per shot", dmg/2F));
 	}
 

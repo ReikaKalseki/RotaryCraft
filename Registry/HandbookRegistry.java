@@ -54,6 +54,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	TRANSFER("Basics of Power Transfer"),
 	TIERS("Machine Tiers"),
 	TIMING("Duration Time"),
+	ALERTS("Notifications"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
@@ -641,6 +642,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return false;
 		if (this == TIMING)
 			return false;
+		if (this == ALERTS)
+			return false;
 		if (this.getParent() == TERMS)
 			return true;
 		if (isParent)
@@ -1062,6 +1065,8 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == TIERS)
 			return true;
 		if (this == COMPUTERCRAFT)
+			return true;
+		if (this == ALERTS)
 			return true;
 		return false;
 	}

@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -35,7 +36,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements TemperatureTE, ConditionalOperation {
-	//give ability to heat blast furnace
 	private int temperature;
 	public int fx;
 	public int fy;
@@ -50,7 +50,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (torque >= MINTORQUE && power >= MINPOWER && omega > 0 && this.hasHeatableMachine(world)) {
 			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
-		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		int Tamb = power > MINPOWER && torque > MINTORQUE ? 25 : ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z); //to prevent nether exploit
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/5;
 		}
@@ -139,9 +139,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 					}
 				}
 			}
-			return;
 		}
-		this.hijackFurnace(world, x, y, z, meta);
+		else
+			this.hijackFurnace(world, x, y, z, meta);
 	}
 
 	private void heatMachine(World world, int x, int y, int z) {
@@ -191,6 +191,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 				if (smeltTime >= 200) {
 					if (smelt != null) {
 						tile.smeltItem();
+						int xp = MathHelper.ceiling_float_int(FurnaceRecipes.smelting().func_151398_b(smelt));
+						ReikaWorldHelper.splitAndSpawnXP(world, fx+0.5, fy+0.6, fz+0.5, xp, 600);
 					}
 					else if (special != null) {
 						ReikaInventoryHelper.decrStack(0, tile, 1);

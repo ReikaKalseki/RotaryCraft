@@ -31,6 +31,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Instantiable.Alert;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.ArrayMap;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -684,6 +685,18 @@ public final class HandbookAuxData {
 							}
 						}
 					}
+				}
+			}
+			else if (h == HandbookRegistry.ALERTS) {
+				List<Alert> li = HandbookNotifications.getNewAlerts();
+				int dy = 0;
+				int base = subpage*3;
+				int max = Math.min(base+3, li.size());
+				for (int i = base; i < max; i++) {
+					Alert a = li.get(i);
+					String msg = a.getMessage();
+					font.drawSplitString(msg, posX+10, posY+88+dy*44, 245, 0xffffff);
+					dy++;
 				}
 			}
 		}

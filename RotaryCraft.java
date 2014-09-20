@@ -54,6 +54,7 @@ import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
+import Reika.RotaryCraft.Auxiliary.HandbookNotifications.HandbookConfigVerifier;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
@@ -263,6 +264,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public void load(FMLInitializationEvent event) {
 		if (this.isLocked())
 			PlayerHandler.instance.registerTracker(LockNotification.instance);
+
 		if (!this.isLocked()) {
 			proxy.addArmorRenders();
 			proxy.registerRenderers();
@@ -347,6 +349,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (ConfigRegistry.HANDBOOK.getState())
 			PlayerFirstTimeTracker.addTracker(new HandbookTracker());
+		PlayerHandler.instance.registerTracker(HandbookConfigVerifier.instance);
 
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.REACTORCRAFT, "Endgame power generation of multiple gigawatts");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.ELECTRICRAFT, "Easier and lower-CPU-load power transmission and distribution");

@@ -244,6 +244,7 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		super.readSyncTag(NBT);
 
 		temperature = NBT.getInteger("temp");
+		xp = NBT.getFloat("xp");
 	}
 
 	@Override
@@ -251,6 +252,7 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("temp", temperature);
+		NBT.setFloat("xp", xp);
 	}
 
 	@Override

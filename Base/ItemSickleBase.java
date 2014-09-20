@@ -53,7 +53,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
 						ModWoodList leaf2 = ModWoodList.getModWoodFromLeaf(id2, meta2);
-						if (id2 == id || leaf2 == leaf) {
+						if (id2 == id || (leaf2 == leaf && leaf != null)) {
 							Block b2 = id2;
 							b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2, 0.25F, 1);
@@ -92,7 +92,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					for (int k = -r; k <= r; k++) {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == TreeGetter.getRainbowLeafID()) {
+						if (id2 == id) {
 							Block b2 = id2;
 							//b.dropBlockAsItem(world, x+i, y+j, z+k, meta, fortune);
 							ReikaItemHelper.addToList(items, b2.getDrops(world, x, y, z, meta2, fortune));
