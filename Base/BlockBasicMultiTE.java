@@ -102,6 +102,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
@@ -238,6 +239,17 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				tile.setBedrock();
 				if (!ep.capabilities.isCreativeMode)
 					is.stackSize--;
+				((TileEntityBase)te).syncAllData(true);
+				return true;
+			}
+		}
+		if (m == MachineRegistry.BORER) {
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.drill)) {
+				TileEntityBorer tile = (TileEntityBorer)te;
+				if (tile.repair()) {
+					if (!ep.capabilities.isCreativeMode)
+						is.stackSize--;
+				}
 				((TileEntityBase)te).syncAllData(true);
 				return true;
 			}

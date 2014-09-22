@@ -54,7 +54,7 @@ public class DecoTankItemRenderer implements IItemRenderer {
 				float dx = -0.5F, dy = -0.5F, dz = -0.5F;
 				v5.startDrawingQuads();
 				v5.addTranslation(dx, dy, dz);
-				v5.setColorOpaque(255, 255, 255);
+				v5.setColorOpaque_I(f.getColor());
 				v5.setBrightness(240);
 				v5.addVertexWithUV(0, 1, 1, u, dv);
 				v5.addVertexWithUV(1, 1, 1, du, dv);

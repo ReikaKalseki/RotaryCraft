@@ -118,8 +118,8 @@ public class ItemMulti extends ItemBasic {
 					em.resetOther();
 					em.reset();
 					rec.reset();
-					boolean src = em.setSource(rx, ry, rz);
-					boolean tg = rec.setTarget(ex, ey, ez);
+					boolean src = em.setSource(world, rx, ry, rz);
+					boolean tg = rec.setTarget(world, ex, ey, ez);
 					//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
 					if (src && tg) {
 						//ReikaJavaLibrary.pConsole("connected", Side.SERVER);

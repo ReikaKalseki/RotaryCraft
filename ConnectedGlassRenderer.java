@@ -303,13 +303,13 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 					v5.setNormal(0, 1, 0);
 					ReikaLiquidRenderer.bindFluidTexture(f);
 					if (f.getLuminosity() > 0) {
-						v5.setColorOpaque(255, 255, 255);
 						v5.setBrightness(240);
 						//ReikaRenderHelper.disableLighting();
 					}
 					else {
 						v5.setBrightness(mix);
 					}
+					v5.setColorOpaque_I(f.getColor());
 					IIcon ico = f.getIcon();
 					float u = ico.getMinU();
 					float du = ico.getMaxU();

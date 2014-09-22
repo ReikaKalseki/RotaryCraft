@@ -54,6 +54,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Blocks.BlockMiningPipe;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -82,6 +83,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	private boolean isMiningAir = false;
 
+	private int durability = ConfigRegistry.BORERMAINTAIN.getState() ? 256 : Integer.MAX_VALUE;
+
 	@Override
 	public int getTextureStateForSide(int s) {
 		switch(this.getBlockMetadata()) {
@@ -95,6 +98,13 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return s == 3 ? this.getActiveTexture() : 0;
 		}
 		return 0;
+	}
+
+	public boolean repair() {
+		if (durability > 0)
+			return false;
+		durability = ConfigRegistry.BORERMAINTAIN.getState() ? 256 : Integer.MAX_VALUE;
+		return true;
 	}
 
 	public boolean isJammed() {
@@ -136,6 +146,18 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		power = (long)omega*(long)torque;
 		if (power == 0)
 			this.setJammed(false);
+
+		if (durability <= 0) {
+			if (tickcount%5 == 0) {
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.75F, 0.05F);
+				for (int i = 0; i < 6; i++) {
+					world.spawnParticle("smoke", x+rand.nextDouble(), y+1+rand.nextDouble()*0.2, z+rand.nextDouble(), 0, 0, 0);
+					world.spawnParticle("crit", x+rand.nextDouble(), y+1+rand.nextDouble()*0.2, z+rand.nextDouble(), 0, 0, 0);
+				}
+			}
+			return;
+		}
+
 		boolean nodig = true;
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -179,6 +201,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (!world.isRemote) {
 					this.forceGenAndPopulate(world, x, y, z, meta);
 					this.dig(world, x, y, z, meta);
+					if (isMiningAir)
+						durability--;
 				}
 			}
 			else {
@@ -605,6 +629,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		super.writeSyncTag(NBT);
 		NBT.setInteger("step", step);
 		NBT.setBoolean("jam", jammed);
+		NBT.setInteger("dura", durability);
 	}
 
 	@Override
@@ -613,6 +638,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		super.readSyncTag(NBT);
 		step = NBT.getInteger("step");
 		jammed = NBT.getBoolean("jam");
+		durability = NBT.getInteger("dura");
 	}
 
 	@Override

@@ -19,13 +19,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityTNTCannon extends TileEntityLaunchCannon {
@@ -158,28 +156,22 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 
 	@Override
 	protected boolean fire(World world, int x, int y, int z) {
-		if (ConfigRegistry.ALLOWTNTCANNON.getState()) {
-			for (int i = 0; i < 1; i++) {
-				ReikaInventoryHelper.findAndDecrStack(Blocks.tnt, -1, inv);
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*rand.nextFloat()*12, 0.1F*rand.nextFloat());
-				world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
-				EntityCustomTNT tnt = new EntityCustomTNT(world, x+0.5, y+1.5-0.0625, z+0.5, null, this.getFuseTime());
-				double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
-				tnt.motionX = xyz[0];
-				tnt.motionY = xyz[1];
-				tnt.motionZ = xyz[2];
-				if (!world.isRemote) {
-					tnt.velocityChanged = true;
-					world.spawnEntityInWorld(tnt);
-				}
-				//fired.add(tnt);
+		for (int i = 0; i < 1; i++) {
+			ReikaInventoryHelper.findAndDecrStack(Blocks.tnt, -1, inv);
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*rand.nextFloat()*12, 0.1F*rand.nextFloat());
+			world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
+			EntityCustomTNT tnt = new EntityCustomTNT(world, x+0.5, y+1.5-0.0625, z+0.5, null, this.getFuseTime());
+			double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
+			tnt.motionX = xyz[0];
+			tnt.motionY = xyz[1];
+			tnt.motionZ = xyz[2];
+			if (!world.isRemote) {
+				tnt.velocityChanged = true;
+				world.spawnEntityInWorld(tnt);
 			}
-			return true;
+			//fired.add(tnt);
 		}
-		else {
-			ReikaChatHelper.sendChatToAllOnServer(this+" cannot fire as the TNT cannon has been disabled.");
-			return false;
-		}
+		return true;
 	}
 
 	private int getFuseTime() {

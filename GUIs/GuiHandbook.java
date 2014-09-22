@@ -431,6 +431,14 @@ public class GuiHandbook extends GuiScreen
 			v5.addVertexWithUV(x, y, 0, 0, 0);
 			v5.draw();
 			GL11.glDisable(GL11.GL_BLEND);
+
+			int i = Mouse.getX() * width / mc.displayWidth;
+			int j = height - Mouse.getY() * height / mc.displayHeight - 1;
+			int dx = i-posX;
+			int dy = j-posY;
+			if (ReikaMathLibrary.isValueInsideBoundsIncl(261, 377, dx) && ReikaMathLibrary.isValueInsideBoundsIncl(22, 36, dy)) {
+				ReikaGuiAPI.instance.drawTooltip(fontRendererObj, "Some config settings have been changed.");
+			}
 		}
 
 		this.drawAuxGraphics(posX, posY);
@@ -449,6 +457,7 @@ public class GuiHandbook extends GuiScreen
 				screen = HandbookRegistry.ALERTS.getScreen();
 				page = HandbookRegistry.ALERTS.getPage();
 				this.initGui();
+				HandbookNotifications.clearAlert();
 			}
 		}
 	}
@@ -477,17 +486,26 @@ public class GuiHandbook extends GuiScreen
 		int xo = 0;
 		int yo = 0;
 		HandbookEntry h = this.getEntry();
-		fontRendererObj.drawString(h.getTitle(), posX+xo+6, posY+yo+6, 0x000000);
+		boolean disable = h.isConfigDisabled();
+		String s = h.getTitle()+(disable ? " (Disabled)" : "");
+		fontRendererObj.drawString(s, posX+xo+6, posY+yo+6, disable ? 0xff0000 : 0x000000);
+		int c = disable ? 0x777777 : 0xffffff;
+		int px = posX+descX;
 		if (subpage == 0 || h.sameTextAllSubpages()) {
-			fontRendererObj.drawSplitString(String.format("%s", h.getData()), posX+descX, posY+descY, 242, 0xffffff);
+			fontRendererObj.drawSplitString(String.format("%s", h.getData()), px, posY+descY, 242, c);
 		}
 		else {
-			fontRendererObj.drawSplitString(String.format("%s", h.getNotes()), posX+descX, posY+descY, 242, 0xffffff);
+			fontRendererObj.drawSplitString(String.format("%s", h.getNotes()), px, posY+descY, 242, c);
+		}
+		if (disable) {
+			fontRendererObj.drawSplitString("This machine has been disabled by your server admin or modpack creator.", px, posY+descY, 242, 0xffffff);
+			fontRendererObj.drawSplitString("Contact them for further information or to request that they remove this restriction.", px, posY+descY+27, 242, 0xffffff);
+			fontRendererObj.drawSplitString("If you are the server admin or pack creator, use the configuration files to change this setting.", px, posY+descY+54, 242, 0xffffff);
 		}
 
 		super.drawScreen(x, y, f);
 
-		if (subpage == 0)
+		if (subpage == 0 && !disable)
 			this.drawRecipes();
 
 		if (!this.isLimitedView()) {

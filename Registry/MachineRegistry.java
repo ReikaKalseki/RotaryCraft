@@ -1222,7 +1222,15 @@ public enum MachineRegistry {
 	}
 
 	public boolean isCraftable() {
-		return !this.isDummiedOut() && !this.isTechnical();
+		return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
+	}
+
+	public boolean isConfigDisabled() {
+		if (this == BORER || this == SONICBORER)
+			return ConfigRegistry.NOMINERS.getState();
+		if (this == TNTCANNON)
+			return !ConfigRegistry.ALLOWTNTCANNON.getState();
+		return false;
 	}
 
 	public boolean isTechnical() {

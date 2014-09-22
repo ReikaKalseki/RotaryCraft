@@ -688,15 +688,25 @@ public final class HandbookAuxData {
 				}
 			}
 			else if (h == HandbookRegistry.ALERTS) {
+				String title = "These are the config settings that have been changed from the defaults, and may have significant "+
+						"changes to the gameplay. If you have further questions, or you wish for these changes to be undone, contact "+
+						"your server admin or modpack creator.";
+				font.drawSplitString(title, posX+8, posY+20, 220, 0x333333);
 				List<Alert> li = HandbookNotifications.getNewAlerts();
-				int dy = 0;
-				int base = subpage*3;
-				int max = Math.min(base+3, li.size());
-				for (int i = base; i < max; i++) {
-					Alert a = li.get(i);
-					String msg = a.getMessage();
-					font.drawSplitString(msg, posX+10, posY+88+dy*44, 245, 0xffffff);
-					dy++;
+				if (li.isEmpty()) {
+					font.drawSplitString("All config settings are identical to defaults.", posX+10, posY+88, 245, 0xffffff);
+					font.drawSplitString("Your gameplay is in line with what has been intended.", posX+10, posY+98, 245, 0xffffff);
+				}
+				else {
+					int dy = 0;
+					int base = subpage*3;
+					int max = Math.min(base+3, li.size());
+					for (int i = base; i < max; i++) {
+						Alert a = li.get(i);
+						String msg = a.getMessage();
+						font.drawSplitString(msg, posX+10, posY+88+dy*44, 245, 0xffffff);
+						dy++;
+					}
 				}
 			}
 		}

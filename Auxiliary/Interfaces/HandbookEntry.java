@@ -31,4 +31,6 @@ public interface HandbookEntry {
 
 	public int getPage();
 
+	public boolean isConfigDisabled();
+
 }

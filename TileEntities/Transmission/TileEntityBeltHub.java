@@ -179,7 +179,7 @@ Connectable {
 		}
 	}
 
-	public final boolean setTarget(int x, int y, int z) {
+	public final boolean setTarget(World world, int x, int y, int z) {
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
@@ -193,7 +193,7 @@ Connectable {
 		return true;
 	}
 
-	public final boolean setSource(int x, int y, int z) {
+	public final boolean setSource(World world, int x, int y, int z) {
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (source[0] != Integer.MIN_VALUE && source[1] != Integer.MIN_VALUE && source[2] != Integer.MIN_VALUE)
@@ -316,7 +316,7 @@ Connectable {
 	public final PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		if (isEmitting) {
 			TileEntityBeltHub tile = (TileEntityBeltHub)worldObj.getTileEntity(source[0], source[1], source[2]);
-			return tile.getPowerSources(io, caller);
+			return tile != null ? tile.getPowerSources(io, caller) : new PowerSourceList();
 		}
 		else {
 			return PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);

@@ -22,9 +22,17 @@ public class HandbookNotifications {
 
 	private static HashMap<UUID, ArrayList<Alert>> data = new HashMap();
 
+	private static HashMap<UUID, Boolean> alert = new HashMap();
+
 	@SideOnly(Side.CLIENT)
 	public static boolean newAlerts() {
-		return !getNewAlerts().isEmpty();
+		UUID uid = Minecraft.getMinecraft().thePlayer.getUniqueID();
+		return alert.containsKey(uid);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void clearAlert() {
+		alert.remove(Minecraft.getMinecraft().thePlayer.getUniqueID());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -89,17 +97,23 @@ public class HandbookNotifications {
 		public void onPlayerLogin(EntityPlayer ep) {
 			NBTTagCompound eptag = ReikaPlayerAPI.getDeathPersistentNBT(ep);
 			NBTTagCompound nbt = eptag.hasKey(NBT_TAG) ? eptag.getCompoundTag(NBT_TAG) : new NBTTagCompound();
+			boolean empty = true;
 			for (ConfigRegistry cfg : data.keySet()) {
 				String tag = cfg.name().toLowerCase();
 				boolean mark = nbt.getBoolean(tag);
-				if (this.isChanged(cfg)) {
+				boolean chg = this.isChanged(cfg);
+				if (chg != mark)
+					empty = false;
+				if (chg) {
 					addAlert(ep, cfg, levels.get(cfg), data.get(cfg));
-					nbt.setBoolean(tag, true);
 				}
-				else if (mark) {
-					nbt.removeTag(tag);
+				else {
+
 				}
+				nbt.setBoolean(tag, chg);
 			}
+			if (!empty)
+				alert.put(ep.getUniqueID(), true);
 			eptag.setTag(NBT_TAG, nbt);
 		}
 

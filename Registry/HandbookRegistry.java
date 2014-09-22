@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
+import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
@@ -54,7 +55,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	TRANSFER("Basics of Power Transfer"),
 	TIERS("Machine Tiers"),
 	TIMING("Duration Time"),
-	ALERTS("Notifications"),
+	ALERTS("Config Alerts"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
@@ -1067,7 +1068,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == COMPUTERCRAFT)
 			return true;
 		if (this == ALERTS)
-			return true;
+			return !HandbookNotifications.getNewAlerts().isEmpty();
 		return false;
 	}
 
@@ -1080,6 +1081,11 @@ public enum HandbookRegistry implements HandbookEntry {
 	@Override
 	public boolean hasMachineRender() {
 		return this.isEngine() || this.isTrans() || this.isMachine();
+	}
+
+	@Override
+	public boolean isConfigDisabled() {
+		return machine != null && machine.isConfigDisabled();
 	}
 
 }
