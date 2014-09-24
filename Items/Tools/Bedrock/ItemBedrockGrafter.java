@@ -35,7 +35,7 @@ public class ItemBedrockGrafter extends ItemRotaryTool implements IToolGrafter {
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
 			if (b.getMaterial() == Material.leaves) {
-				int r = 4;
+				int r = ep.isSneaking() ? 0 : 4;
 				for (int i = -r; i <= r; i++) {
 					for (int j = -r; j <= r; j++) {
 						for (int k = -r; k <= r; k++) {

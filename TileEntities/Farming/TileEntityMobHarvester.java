@@ -77,8 +77,8 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	}
 
 	public int getDamage() {
-		int pdiff = 2+(int)(power/MINPOWER);
-		int ppdiff = (int)ReikaMathLibrary.intpow(pdiff, 6);
+		double pdiff = 2+(0.5*power/MINPOWER);
+		double ppdiff = ReikaMathLibrary.intpow(pdiff, 6);
 		return (int)ReikaMathLibrary.logbase(ppdiff, 2)+2*this.getEnchantment(Enchantment.sharpness);
 	}
 

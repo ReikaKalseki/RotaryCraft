@@ -146,6 +146,11 @@ public class RotaryRecipes {
 			}
 		}
 
+		//if (ModList.APPENG.isLoaded()) {
+		//	GameRegistry.addRecipe(AppEngHandler.getInstance().getBasicChipPattern(), " K ", "rgr", " s ", 'K', ItemRegistry.BEDKNIFE.getStackOf(), 'r', Items.redstone, 'g', Items.gold_ingot, 's', AppEngHandler.getInstance().getSilicon());
+		//	GameRegistry.addRecipe(AppEngHandler.getInstance().getAdvancedChipPattern(), " K ", "rgr", " s ", 'K', ItemRegistry.BEDKNIFE.getStackOf(), 'r', Items.redstone, 'g', Items.diamond, 's', AppEngHandler.getInstance().getSilicon());
+		//}
+
 		if (ModList.THAUMCRAFT.isLoaded()) {
 			try {
 				ResourceLocation rl1 = new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png");
@@ -661,6 +666,7 @@ public class RotaryRecipes {
 		ItemRegistry.BEDSICKLE.addEnchantedBlastRecipe(1000, 4, " B ", "  B", "SB ", 'S', ItemStacks.shaftitem, 'B', ItemStacks.bedingot);
 		ItemRegistry.BEDGRAFTER.addBlastRecipe(1000, 4, "  S", " s ", "s  ", 'S', ItemStacks.bedingot, 's', ItemStacks.shaftitem);
 		ItemRegistry.BEDSAW.addBlastRecipe(1000, 4, "sss", " SS", " bb", 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem, 'S', Items.iron_ingot);
+		//ItemRegistry.BEDKNIFE.addBlastRecipe(1000, 4, "  s", "qs ", "bb ", 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem, 'q', AppEngHandler.getInstance().getCertusQuartz());
 		ItemRegistry.BEDHELM.addEnchantedBlastRecipe(1200, 4, "III", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDBOOTS.addEnchantedBlastRecipe(1200, 4, "I I", "I I", 'I', ItemStacks.bedingot);
 		ItemRegistry.BEDCHEST.addEnchantedBlastRecipe(1200, 4, "I I", "III", "III", 'I', ItemStacks.bedingot);
@@ -676,7 +682,6 @@ public class RotaryRecipes {
 		ItemRegistry.STEELSICKLE.addRecipe(" B ", "  B", "SB ", 'S', Items.stick, 'B', ItemStacks.steelingot);
 
 		ItemRegistry.GRAFTER.addRecipe("  S", "Ss ", "CS ", 'C', ItemRegistry.SPRING.getStackOf(), 'S', ItemStacks.steelingot, 's', Items.stick);
-
 
 		ItemRegistry.STEELHELMET.addRecipe("III", "I I", 'I', ItemStacks.steelingot);
 		ItemRegistry.STEELBOOTS.addRecipe("I I", "I I", 'I', ItemStacks.steelingot);

@@ -183,7 +183,8 @@ public enum ItemRegistry implements ItemEnum {
 	MODINTERFACE(14, true,			"item.modinterface",		ItemMulti.class),
 	MODEXTRACTS(-1, true,			"item.modextracts",			ItemModOre.class),
 	MODINGOTS(-1, true,				"item.modingots",			ItemModOre.class),
-	SPAWNER(0, false,				"item.spawner",				ItemSpawner.class);
+	SPAWNER(0, false,				"item.spawner",				ItemSpawner.class),
+	;//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
 
 	private final int index;
 	private final int imageSheet;

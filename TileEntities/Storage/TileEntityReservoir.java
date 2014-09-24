@@ -115,6 +115,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("jet fuel"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
+				flammable = flammable || f.equals(FluidRegistry.getFluid("biofuel")) || f.equals(FluidRegistry.getFluid("bioethanol"));
 				if (flammable) {
 					world.setBlockToAir(x, y, z);
 					world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
