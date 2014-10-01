@@ -92,11 +92,15 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 	}
 
 	private void makeSteam() {
-		if (this.getWater() >= FluidContainerRegistry.BUCKET_VOLUME && (output.isEmpty() || output.canTakeIn(1000))) {
+		if (this.getWater() >= FluidContainerRegistry.BUCKET_VOLUME && (output.isEmpty() || output.canTakeIn(this.getProducedSteam()))) {
 			input.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
-			output.fill(FluidRegistry.getFluidStack("steam", FluidContainerRegistry.BUCKET_VOLUME), true);
+			output.addLiquid(this.getProducedSteam(), FluidRegistry.getFluid("steam"));
 			storedEnergy -= ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp());
 		}
+	}
+
+	private int getProducedSteam() {
+		return 8000;
 	}
 
 	private int getWaterTemp() {

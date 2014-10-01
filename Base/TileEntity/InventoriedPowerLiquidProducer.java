@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 
 public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProducer implements ISidedInventory {
 
@@ -109,7 +110,7 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
 	{
 		super.readFromNBT(NBT);
 
-		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBTTypes.COMPOUND.ID);
 		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)

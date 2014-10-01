@@ -14,6 +14,7 @@ import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import codechicken.lib.vec.Rectangle4i;
 import codechicken.nei.api.INEIGuiAdapter;
 
@@ -38,7 +39,10 @@ public class NEITabOccluder extends INEIGuiAdapter {
 	}
 
 	private Rectangle4i getTabBox(GuiMachine gm) {
-		if (gm instanceof GuiNonPoweredMachine) {
+		if (gm instanceof GuiWorktable) {
+			return new Rectangle4i(gm.getGuiLeft()+gm.getXSize(), gm.getGuiTop()+78, Math.min(((GuiWorktable)gm).getRollout(), 63), 64);
+		}
+		else if (gm instanceof GuiNonPoweredMachine) {
 			return null;
 		}
 		else if (gm instanceof GuiVacuum) {

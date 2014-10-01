@@ -49,12 +49,24 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	public static final int DRILL_LIFE = 4096;
 	private int drillTime = ConfigRegistry.EXTRACTORMAINTAIN.getState() ? 0 : DRILL_LIFE;
+	private boolean bedrock = false;
 
 	public static final int CAPACITY = 16000;
 
 	public boolean idle = false;
 
 	public boolean[] extractableSlots = new boolean[4];
+
+	public boolean upgrade() {
+		if (bedrock)
+			return false;
+		bedrock = true;
+		return true;
+	}
+
+	public boolean isBedrock() {
+		return true;
+	}
 
 	public int getCookTime(int stage) {
 		return extractorCookTime[stage];
@@ -86,7 +98,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return true;
 	}
 
-	private int getSmeltNumber(OreType ore, ItemStack is) {
+	private int getSmeltNumber(int stage, OreType ore, ItemStack is) {
+		if (bedrock && stage == 0)
+			return 2;
 		//ReikaJavaLibrary.pConsole(RotaryConfig.getDifficulty());
 		if (ore != null) {
 			if (ore.getRarity() == OreRarity.RARE) {
@@ -95,7 +109,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				else
 					return 1;
 			}
-			boolean nether = ore.isNether();
+			boolean nether = ore instanceof ModOreList && ((ModOreList)ore).isNetherOres();
 			if (is.getItemDamage() == 1 && (ore == ModOreList.FORCE || ore == ModOreList.MIMICHITE))
 				nether = true;
 			if (ReikaItemHelper.matchStackWithBlock(is, MagicCropHandler.getInstance().netherOreID))
@@ -140,6 +154,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 		extractorCookTime = NBT.getIntArray("CookTime");
 		drillTime = NBT.getInteger("drill");
+		bedrock = NBT.getBoolean("bedrock");
 
 		for (int i = 0; i < 4; i++) {
 			extractableSlots[i] = NBT.getBoolean("extractable"+i);
@@ -152,6 +167,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		super.writeSyncTag(NBT);
 		NBT.setIntArray("CookTime", extractorCookTime);
 		NBT.setInteger("drill", drillTime);
+		NBT.setBoolean("bedrock", bedrock);
 
 		for (int i = 0; i < 4; i++) {
 			NBT.setBoolean("extractable"+i, extractableSlots[i]);
@@ -184,7 +200,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	public int getDrillLifeScaled(int a) {
-		return drillTime * a / DRILL_LIFE;
+		return bedrock ? a : drillTime * a / DRILL_LIFE;
 	}
 
 	@Override
@@ -198,15 +214,17 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		this.throughPut();
 		if (world.isRemote)
 			return;
-		if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
-			if (drillTime <= 0 && inv[9] != null && ReikaItemHelper.matchStacks(inv[9], ItemStacks.drill)) {
-				ReikaInventoryHelper.decrStack(9, inv);
-				drillTime = DRILL_LIFE;
+		if (!bedrock) {
+			if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+				if (drillTime <= 0 && inv[9] != null && ReikaItemHelper.matchStacks(inv[9], ItemStacks.drill)) {
+					ReikaInventoryHelper.decrStack(9, inv);
+					drillTime = DRILL_LIFE;
+				}
 			}
-		}
-		else {
-			drillTime = DRILL_LIFE;
-			inv[9] = null;
+			else {
+				drillTime = DRILL_LIFE;
+				inv[9] = null;
+			}
 		}
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
@@ -237,7 +255,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (power < machine.getMinPower(i) || omega < machine.getMinSpeed(i) || torque < machine.getMinTorque(i))
 			return false;
 
-		if (i == 0 && drillTime <= 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState())
+		if (i == 0 && !bedrock && drillTime <= 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState())
 			return false;
 
 		if ((i == 1 || i == 2) && tank.isEmpty())
@@ -320,7 +338,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
 		ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].getItem()) : this.getVanillaOreByItem(inv[i]);
 		//ReikaJavaLibrary.pConsole(ore, Side.SERVER);
-		int num = this.getSmeltNumber(ore, inv[i]);
+		int num = this.getSmeltNumber(i, ore, inv[i]);
 		if (inv[i+4] == null) {
 			inv[i+4] = itemstack.copy();
 			inv[i+4].stackSize *= num;
@@ -328,7 +346,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		else if (ReikaItemHelper.matchStacks(inv[i+4], itemstack))
 			inv[i+4].stackSize += num;
 
-		if (i == 0 && drillTime > 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
+		if (i == 0 && !bedrock && drillTime > 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
 			drillTime--;
 		}
 		if (i == 3) {
@@ -369,7 +387,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			if (ModOreList.isModOre(inv[i]) && i == 0) {
 				m = ModOreList.getModOreFromOre(inv[0]);
 				ItemStack is = ExtractorModOres.getDustProduct(m);
-				if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(m, inv[0]), is.getItemDamage(), inv, i+4)) {
+				if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[0]), is.getItemDamage(), inv, i+4)) {
 					ReikaInventoryHelper.decrStack(i, inv);
 				}
 				return true;
@@ -377,7 +395,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			else if (ExtractorModOres.isModOreIngredient(inv[i])) {
 				if (ExtractorModOres.isDust(m, inv[i].getItemDamage()) && i == 1) {
 					ItemStack is = ExtractorModOres.getSlurryProduct(m);
-					if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(m, inv[i]), is.getItemDamage(), inv, i+4)) {
+					if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[i]), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						tank.removeLiquid(1000/8);
 					}
@@ -385,7 +403,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				if (ExtractorModOres.isSlurry(m, inv[i].getItemDamage()) && i == 2) {
 					ItemStack is = ExtractorModOres.getSolutionProduct(m);
-					if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(m, inv[i]), is.getItemDamage(), inv, i+4)) {
+					if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[i]), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						tank.removeLiquid(1000/8);
 					}
@@ -393,7 +411,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				if (ExtractorModOres.isSolution(m, inv[i].getItemDamage()) && i == 3) {
 					ItemStack is = ExtractorModOres.getFlakeProduct(m);
-					if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(m, inv[i]), is.getItemDamage(), inv, i+4)) {
+					if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[i]), is.getItemDamage(), inv, i+4)) {
 						ReikaInventoryHelper.decrStack(i, inv);
 						this.bonusItems(inv[i]);
 						RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());
@@ -433,7 +451,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			return slot == 1+is.getItemDamage()%4;
 		}
 		if (slot == 9)
-			return ConfigRegistry.EXTRACTORMAINTAIN.getState() && ReikaItemHelper.matchStacks(is, ItemStacks.drill);
+			return !bedrock && ConfigRegistry.EXTRACTORMAINTAIN.getState() && ReikaItemHelper.matchStacks(is, ItemStacks.drill);
 		return false;
 	}
 

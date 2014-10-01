@@ -258,6 +258,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 				this.harvest(world, x, y, z, (BlowableCrop)id);
 			return;
 		}
+		//ReikaJavaLibrary.pConsole(id+":"+ModCropList.getModCrop(id, meta), id != Blocks.air);
 		boolean crop = ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta);
 		if (id != Blocks.snow && id != Blocks.web && id != Blocks.leaves && id != Blocks.leaves2 && id != Blocks.tallgrass &&
 				id != Blocks.fire && !crop)

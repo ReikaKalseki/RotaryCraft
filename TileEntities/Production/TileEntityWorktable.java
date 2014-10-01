@@ -37,6 +37,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	public boolean craftable = false;
 	private ItemStack toCraft;
 	private boolean lastPower;
+	private boolean hasProgram;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -235,7 +236,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 
 	@Override
 	public int getSizeInventory() {
-		return 18;
+		return 27;
 	}
 
 	@Override
@@ -247,12 +248,12 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (i >= 9)
 			return false;
-		return i < 9;
+		return hasProgram ? inv[i+18] != null && ReikaItemHelper.matchStacks(inv[i+18], itemstack) : true;
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return i >= 9;
+		return i >= 9 && i < 18;
 	}
 
 	public ItemStack getToCraft() {
@@ -274,6 +275,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("lastpwr", lastPower);
+		NBT.setBoolean("prog", hasProgram);
 	}
 
 	@Override
@@ -282,8 +284,32 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		super.readSyncTag(NBT);
 
 		lastPower = NBT.getBoolean("lastpwr");
+		hasProgram = NBT.getBoolean("prog");
 	}
 
 	@Override
-	public void onEMP() {}
+	public void onEMP() {
+
+	}
+
+	public ItemStack getProgrammedSlot(int i, int k) {
+		ItemStack is = inv[18+i*3+k];
+		return is != null ? is.copy() : null;
+	}
+
+	public void setMapping(int slot, ItemStack is) {
+		inv[slot] = is != null ? is.copy() : null;
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+
+		hasProgram = false;
+		for (int i = 18; i < 27; i++) {
+			if (inv[i] != null) {
+				hasProgram = true;
+			}
+		}
+	}
 }

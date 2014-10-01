@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Instantiable.GUI.Slot.SlotXItems;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
@@ -52,6 +53,15 @@ public class ContainerWorktable extends CoreContainer {
 			}
 		}
 
+		dx = 153;
+		int dy = 84;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				//this.addSlotToContainer(new GhostSlot(te, 18+i*3+j, dx+26+j*18, dy+i*18));
+				this.addSlotToContainer(new SlotXItems(te, 18+i*3+j, dx+26+j*18, dy+i*18, 1));
+			}
+		}
+
 		this.updateCraftMatrix();
 
 		this.addPlayerInventory(player);
@@ -67,8 +77,19 @@ public class ContainerWorktable extends CoreContainer {
 	}
 
 	@Override
-	public ItemStack slotClick(int slot, int par2, int par3, EntityPlayer ep) {
-		ItemStack is = super.slotClick(slot, par2, par3, ep);
+	public ItemStack slotClick(int slot, int par2, int action, EntityPlayer ep) {
+		/*
+		if (slot >= 18 && slot < tile.getSizeInventory()) {
+			ItemStack held = ep.inventory.getItemStack();
+			tile.setMapping(slot, ReikaItemHelper.getSizedItemStack(held, 1));
+			return held;
+		}
+		 */
+
+		if (action == 4 && slot >= 18 && slot < tile.getSizeInventory())
+			action = 0;
+
+		ItemStack is = super.slotClick(slot, par2, action, ep);
 		this.updateCraftMatrix();
 		this.onCraftMatrixChanged(craftMatrix);
 		InventoryPlayer ip = ep.inventory;

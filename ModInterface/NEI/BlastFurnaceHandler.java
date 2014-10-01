@@ -100,18 +100,13 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			ItemStack[] items = recipe.getArrayForDisplay();
 			int dx = 57;
 			int dy = 6;
-			try {
-				for (int i = 0; i < 3; i++) {
-					for (int j = 0; j < 3; j++) {
-						ItemStack is = items[i+j*3];
-						if (is != null) {
-							stacks.add(new PositionedStack(is, dx+18*i, dy+18*j));
-						}
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					ItemStack is = items[i+j*3];
+					if (is != null) {
+						stacks.add(new PositionedStack(is, dx+18*i, dy+18*j));
 					}
 				}
-			}
-			catch (Exception e) {
-				e.printStackTrace();
 			}
 			return stacks;
 		}

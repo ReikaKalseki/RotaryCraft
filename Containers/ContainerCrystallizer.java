@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
@@ -29,7 +28,6 @@ public class ContainerCrystallizer extends CoreContainer
 		int posY = te.yCoord;
 		int posZ = te.zCoord;
 
-		ReikaJavaLibrary.pConsole(this);
 		this.addSlot(0, 80, 35);
 		this.addSlot(1, 125, 35);
 

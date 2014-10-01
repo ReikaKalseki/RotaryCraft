@@ -172,7 +172,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			power = 0;
 			return;
 		}
-		this.process(world, x, y, z);
+		if (read != null && write != null)
+			this.process(world, x, y, z);
 		power = omega*torque;
 		this.testFailure();
 		this.playSounds();

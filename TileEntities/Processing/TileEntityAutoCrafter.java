@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.RecipePattern;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -140,7 +141,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 			ItemStack is = inv[i];
 			if (is != null && is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null) {
 				ItemStack[] items = new ItemStack[10];
-				NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", is.stackTagCompound.getId());
+				NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", NBTTypes.COMPOUND.ID);
 				for (int k = 0; k < nbttaglist.tagCount(); k++)				{
 					NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(k);
 					short byte0 = nbttagcompound.getShort("Slot");

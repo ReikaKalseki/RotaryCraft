@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableSet;
@@ -29,7 +27,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Alert;
 import Reika.DragonAPI.Instantiable.ItemReq;
@@ -44,11 +41,9 @@ import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
@@ -60,7 +55,6 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
-import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
@@ -202,77 +196,15 @@ public final class HandbookAuxData {
 		ItemStack[] in = new ItemStack[2];
 		ItemStack[] args;
 		out = (ItemRegistry.YEAST.getStackOf());
-		in = (new ItemStack[]{new ItemStack(Items.sugar), new ItemStack(Blocks.dirt)});
+		in = new ItemStack[]{new ItemStack(Items.sugar), new ItemStack(Blocks.dirt)};
 		args = new ItemStack[]{out, in[0], in[1]};
 		fermenter.add(args);
 
-		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
-			if (PlantMaterials.plantList[i] == PlantMaterials.SAPLING || PlantMaterials.plantList[i] == PlantMaterials.LEAVES) {
-				for (int j = 0; j < ReikaTreeHelper.treeList.length; j++) {
-					ItemStack icon = PlantMaterials.plantList[i] == PlantMaterials.SAPLING ? new ItemStack(Blocks.sapling, 1, j) : new ItemStack(Blocks.leaves, 1, j);
-					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
-					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), icon});
-					args = new ItemStack[]{out, in[0], in[1]};
-					fermenter.add(args);
-				}
-			}
-			else {
-				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.plantList[i].getPlantValue()));
-				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), PlantMaterials.plantList[i].getPlantItemForIcon()});
-				args = new ItemStack[]{out, in[0], in[1]};
-				fermenter.add(args);
-			}
-		}
-
-		for (int i = 0; i < ModWoodList.woodList.length; i++) {
-			if (ModWoodList.woodList[i].exists()) {
-				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()*TileEntityFermenter.getModWoodValue(ModWoodList.woodList[i])));
-				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingSapling()});
-				args = new ItemStack[]{out, in[0], in[1]};
-				fermenter.add(args);
-
-				out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()*TileEntityFermenter.getModWoodValue(ModWoodList.woodList[i])));
-				in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), ModWoodList.woodList[i].getCorrespondingLeaf()});
-				args = new ItemStack[]{out, in[0], in[1]};
-				fermenter.add(args);
-			}
-		}
-
-		if (ModList.CHROMATICRAFT.isLoaded()) {
-			try {
-				Class tree = Class.forName("Reika.DyeTrees.API.TreeGetter");
-				Method sapling = tree.getMethod("getDyeSapling", int.class);
-				Method leaf = tree.getMethod("getHeldDyeLeaf", int.class);
-				for (int j = 0; j < 16; j++) {
-					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.SAPLING.getPlantValue()));
-					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)sapling.invoke(null, j)});
-					args = new ItemStack[]{out, in[0], in[1]};
-					fermenter.add(args);
-
-					out = (ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, PlantMaterials.LEAVES.getPlantValue()));
-					in = (new ItemStack[]{ItemRegistry.YEAST.getStackOf(), (ItemStack)leaf.invoke(null, j)});
-					args = new ItemStack[]{out, in[0], in[1]};
-					fermenter.add(args);
-				}
-			}
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			}
-			catch (SecurityException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
-			catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
+		List<ItemStack> li = TileEntityFermenter.getAllValidPlants();
+		for (ItemStack plant : li) {
+			int num = TileEntityFermenter.getPlantValue(plant);
+			out = ReikaItemHelper.getSizedItemStack(ItemRegistry.ETHANOL.getStackOf(), num);
+			fermenter.add(new ItemStack[]{out, ItemRegistry.YEAST.getStackOf(), plant});
 		}
 	}
 

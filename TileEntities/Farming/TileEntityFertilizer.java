@@ -30,6 +30,7 @@ import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.BlowableCrop;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -139,6 +140,8 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		if (sapling != null)
 			return true;
 		if (fert)
+			return true;
+		if (id instanceof BlowableCrop)
 			return true;
 		return false;
 	}

@@ -19,8 +19,7 @@ public enum ExtraConfigIDs implements IDRegistry {
 
 	//ACHIEVEMENT("Extra IDs", "Achievement Base ID", 24000, null),
 
-	FREEZEID("Other IDs", "Freeze Potion ID", 35, Potion.class),
-	GROWTHID("Other IDs", "Growth Hormone ID", 36, Potion.class);
+	FREEZEID("Other IDs", "Freeze Potion ID", 35, Potion.class);
 	//DEAFID("Other IDs", "Deafness ID", 37, Potion.class);
 
 	private String name;
@@ -28,7 +27,7 @@ public enum ExtraConfigIDs implements IDRegistry {
 	private int defaultID;
 	private Class type;
 
-	public static final ExtraConfigIDs[] idList = ExtraConfigIDs.values();
+	public static final ExtraConfigIDs[] idList = values();
 
 	private ExtraConfigIDs(String cat, String n, int d, Class c) {
 		name = n;

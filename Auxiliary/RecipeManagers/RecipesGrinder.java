@@ -22,6 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
@@ -33,7 +34,6 @@ public class RecipesGrinder {
 
 	public static final int ore_rate = 3;
 
-	/** The list of smelting results. */
 	private ItemHashMap<ItemStack> recipes = new ItemHashMap();
 
 	private ArrayList<ItemStack> products = new ArrayList();
@@ -84,7 +84,7 @@ public class RecipesGrinder {
 		this.addRecipe(Blocks.ladder, this.getSizedSawdust(4), 0.3F);
 		this.addRecipe(Blocks.wooden_pressure_plate, this.getSizedSawdust(8), 0.3F);
 		this.addRecipe(Blocks.stone_pressure_plate, new ItemStack(Blocks.cobblestone, 2, ItemStacks.sawdust.getItemDamage()), 0.3F);
-		this.addRecipe(Items.bowl, this.getSizedSawdust(12), 0.3F);
+		this.addRecipe(Items.bowl, this.getSizedSawdust(ModList.GREGTECH.isLoaded() ? 4 : 12), 0.3F);
 		this.addRecipe(Items.wooden_door, this.getSizedSawdust(24), 0.3F);
 		this.addRecipe(Items.sign, this.getSizedSawdust(24), 0.3F);
 		this.addRecipe(Items.stick, this.getSizedSawdust(2), 0.3F);
@@ -93,6 +93,7 @@ public class RecipesGrinder {
 		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15), 0.3F);
 		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0), 0.6F);
 
+		/*
 		this.addRecipe(Blocks.coal_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24), 0F);
 		this.addRecipe(Blocks.iron_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 25), 0F);
 		this.addRecipe(Blocks.gold_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 26), 0F);
@@ -101,6 +102,7 @@ public class RecipesGrinder {
 		this.addRecipe(Blocks.diamond_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 29), 0F);
 		this.addRecipe(Blocks.emerald_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 30), 0F);
 		this.addRecipe(Blocks.quartz_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 31), 0.7F);
+		 */
 
 		this.addRecipe(Items.coal, ItemStacks.coaldust, 0);
 	}
@@ -174,7 +176,17 @@ public class RecipesGrinder {
 			Collection<ItemStack> li = ore.getAllOreBlocks();
 			for (ItemStack is : li) {
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 1F);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 0.25F);
+				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
+			}
+		}
+
+		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
+			ReikaOreHelper ore = ReikaOreHelper.oreList[i];
+			Collection<ItemStack> li = ore.getAllOreBlocks();
+			for (ItemStack is : li) {
+				ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 0.25F);
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}

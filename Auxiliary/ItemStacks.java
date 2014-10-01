@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
@@ -107,6 +108,7 @@ public final class ItemStacks {
 	public static final ItemStack compoundturb 		= ItemRegistry.MISCCRAFT.getStackOfMetadata(12);
 	public static final ItemStack bedrockcoil 		= ItemRegistry.MISCCRAFT.getStackOfMetadata(13);
 	public static final ItemStack chain 			= ItemRegistry.MISCCRAFT.getStackOfMetadata(14);
+	public static final ItemStack bedrockdrill 		= ItemRegistry.MISCCRAFT.getStackOfMetadata(15);
 
 	public static final ItemStack impeller 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(0);
 	public static final ItemStack compressor 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(1);
@@ -197,11 +199,12 @@ public final class ItemStacks {
 
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
 
+	private static final Item mod = ItemRegistry.MODINGOTS.getItemInstance();
 	public static final PreferentialItemStack electric = new PreferentialItemStack(Items.gold_ingot, "ingotElectrum");
-	public static final PreferentialItemStack conductive = new PreferentialItemStack(Items.gold_ingot, "ingotCopper");
-	public static final PreferentialItemStack conductiveCheap = new PreferentialItemStack(ItemStacks.steelingot, "ingotCopper");
-	public static final PreferentialItemStack heavy = new PreferentialItemStack(Items.gold_ingot, "ingotLead");
-	public static final PreferentialItemStack reflective = new PreferentialItemStack(Items.iron_ingot, "ingotSilver");
+	public static final PreferentialItemStack conductive = new PreferentialItemStack(Items.gold_ingot, "ingotCopper").blockItem(mod);
+	public static final PreferentialItemStack conductive2 = new PreferentialItemStack(ItemStacks.steelingot, "ingotCopper").blockItem(mod);
+	public static final PreferentialItemStack heavy = new PreferentialItemStack(Items.gold_ingot, "ingotLead").blockItem(mod);
+	public static final PreferentialItemStack reflective = new PreferentialItemStack(Items.iron_ingot, "ingotSilver").blockItem(mod);
 
 	public static List getModSteels() {
 		return modsteel;

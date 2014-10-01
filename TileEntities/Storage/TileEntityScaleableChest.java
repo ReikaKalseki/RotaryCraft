@@ -22,6 +22,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Interfaces.MultiPageInventory;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
@@ -315,7 +316,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 
 	public void readInventoryFromItem(ItemStack is) {
 		if (is.stackTagCompound != null) {
-			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", is.stackTagCompound.getId());
+			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", NBTTypes.COMPOUND.ID);
 			inv = new ItemStack[this.getSizeInventory()];
 
 			for (int i = 0; i < nbttaglist.tagCount(); i++)

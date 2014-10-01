@@ -26,6 +26,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCentrifuge;
@@ -67,7 +68,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(input, 21, 28);
+			return new PositionedStack(ReikaItemHelper.getSizedItemStack(input, 1), 21, 28);
 		}
 	}
 

@@ -87,7 +87,7 @@ public class ItemStunGun extends ItemChargedTool {
 			Block id = world.getBlock(x, y, z);
 			int meta = world.getBlockMetadata(x, y, z);
 			Material mat = ReikaWorldHelper.getMaterial(world, x, y, z);
-			if (id != Blocks.air && (id instanceof BlockLiquid || id instanceof BlockFluidBase) && (id == Blocks.web || id == Blocks.red_mushroom ||
+			if (id != Blocks.air && !(id instanceof BlockLiquid || id instanceof BlockFluidBase) && (id == Blocks.web || id == Blocks.red_mushroom ||
 					id == Blocks.gravel ||  id == Blocks.monster_egg  || id == Blocks.brown_mushroom ||
 					id == Blocks.waterlily || id == Blocks.flower_pot ||
 					ReikaBlockHelper.isOre(id, meta) || (ReikaWorldHelper.softBlocks(id) && id != Blocks.snow))) {

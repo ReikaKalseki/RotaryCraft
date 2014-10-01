@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 
 public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiver implements ISidedInventory {
 
@@ -29,10 +29,6 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
 	}
 
 	public final void setInventorySlotContents(int par1, ItemStack is) {
-		if (this.validatesInputs() && !this.isItemValidForSlot(par1, is)) {
-			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, is);
-			return;
-		}
 		inv[par1] = is;
 	}
 
@@ -119,7 +115,7 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
 	{
 		super.readFromNBT(NBT);
 
-		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBTTypes.COMPOUND.ID);
 		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)

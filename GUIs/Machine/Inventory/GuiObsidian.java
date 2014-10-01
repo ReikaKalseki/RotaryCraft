@@ -41,12 +41,12 @@ public class GuiObsidian extends GuiMachine
 		if (api.isMouseInBox(j+47, j+55, k+16, k+71)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRendererObj, String.format("Water: %d", obs.getWater()/1000), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("Water: %dmB", obs.getWater()), mx-j, my-k);
 		}
 		if (api.isMouseInBox(j+119, j+127, k+16, k+71)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRendererObj, String.format("Lava: %d", obs.getLava()/1000), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("Lava: %dmB", obs.getLava()), mx-j, my-k);
 		}
 	}
 

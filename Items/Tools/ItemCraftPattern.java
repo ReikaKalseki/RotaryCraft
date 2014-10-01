@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 
 public class ItemCraftPattern extends ItemRotaryTool {
@@ -35,7 +36,7 @@ public class ItemCraftPattern extends ItemRotaryTool {
 		}
 		else {
 			ItemStack[] items = new ItemStack[10];
-			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", is.stackTagCompound.getId());
+			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", NBTTypes.COMPOUND.ID);
 			for (int k = 0; k < nbttaglist.tagCount(); k++)				{
 				NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(k);
 				short byte0 = nbttagcompound.getShort("Slot");

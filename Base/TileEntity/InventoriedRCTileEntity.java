@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 
 public abstract class InventoriedRCTileEntity extends RotaryCraftTileEntity implements ISidedInventory {
 
@@ -71,7 +72,7 @@ public abstract class InventoriedRCTileEntity extends RotaryCraftTileEntity impl
 	}
 
 	@Override
-	public final void markDirty() {
+	public void markDirty() {
 		blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 
@@ -105,7 +106,7 @@ public abstract class InventoriedRCTileEntity extends RotaryCraftTileEntity impl
 	{
 		super.readFromNBT(NBT);
 
-		NBTTagList nbttaglist = NBT.getTagList("Items", NBT.getId());
+		NBTTagList nbttaglist = NBT.getTagList("Items", NBTTypes.COMPOUND.ID);
 		inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); i++)

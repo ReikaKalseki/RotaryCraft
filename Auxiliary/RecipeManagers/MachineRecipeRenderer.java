@@ -23,7 +23,6 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
@@ -64,13 +63,22 @@ public class MachineRecipeRenderer {
 	}
 
 	public void drawBlastFurnaceCrafting(int x, int y, int x2, int y2, ItemStack output) {
-		List c = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(output);
-		ReikaGuiAPI.instance.drawCustomRecipeList(itemRender, font, c, x, y, x2, y2);
+		List<BlastCrafting> c = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(output);
+		int n = (int)(System.nanoTime()/1000000000)%c.size();
+		this.drawBlastFurnaceCrafting(x, y, x2, y2, c.get(n));
 	}
 
 	public void drawBlastFurnaceCrafting(int x, int y, int x2, int y2, BlastCrafting r) {
-		List c = ReikaJavaLibrary.makeListFrom(r);
-		ReikaGuiAPI.instance.drawCustomRecipeList(itemRender, font, c, x, y, x2, y2);
+		ItemStack[] items = r.getArrayForDisplay();
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				ItemStack is = items[i+j*3];
+				if (is != null) {
+					gui.drawItemStack(itemRender, is, x+18*i, y+18*j-8);
+				}
+			}
+		}
+		gui.drawItemStack(itemRender, r.outputItem(), x2+4, y2-4);
 	}
 
 	public void drawBlastFurnace(int x, int y, int x2, int y2, BlastRecipe r) {

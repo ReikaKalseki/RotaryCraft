@@ -213,8 +213,10 @@ public class TorqueUsage {
 			else if (tile instanceof TileEntityBusController){
 				manageBus(world, (TileEntityBusController)tile);
 			}
-			else
-				torque += Math.max(TEMapR.get(tile)*((TileEntityPowerReceiver) tile).MINTORQUE, 1);
+			else {
+				int min = ((TileEntityPowerReceiver) tile).getMachine().isModConversionEngine() ? 1024 : 1;
+				torque += Math.max(TEMapR.get(tile)*((TileEntityPowerReceiver) tile).MINTORQUE, min);
+			}
 		}
 		if (tile instanceof ShaftPowerReceiver) {
 			torque += Math.max(((ShaftPowerReceiver)tile).getMinTorque(reader.torque), 1);

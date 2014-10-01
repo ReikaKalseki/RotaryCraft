@@ -76,9 +76,9 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 			}
 			else
 				timer.reset();
-		}
 
-		smeltTick = timer.getTick();
+			smeltTick = timer.getTick();
+		}
 
 		sound.update();
 		if (omega > 0) {

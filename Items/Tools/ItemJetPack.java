@@ -57,10 +57,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 		if (newFuel < 0)
 			newFuel = 0;
 
-		NBTTagCompound nbt = is.stackTagCompound;
-		if (nbt == null)
+		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
-		nbt.setInteger("fuel", newFuel);
+		is.stackTagCompound.setInteger("fuel", newFuel);
 	}
 
 	public Fluid getFuelType() {

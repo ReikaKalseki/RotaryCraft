@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.World;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,7 +46,7 @@ import buildcraft.api.core.IAreaProvider;
 
 public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implements SelectableTiles, DiscreteFunction {
 
-	private static final ObjectWeb transforms = new ObjectWeb(BiomeGenBase.class);
+	private static final ObjectWeb<BiomeGenBase> transforms = new ObjectWeb();
 	private static final HashMap<List<BiomeGenBase>, List<ItemReq>> itemReqs = new HashMap<List<BiomeGenBase>, List<ItemReq>>();
 	private static final HashMap<List<BiomeGenBase>, Integer> powerReqs = new HashMap<List<BiomeGenBase>, Integer>();
 	private static final HashMap<List<BiomeGenBase>, FluidStack> liquidReqs = new HashMap<List<BiomeGenBase>, FluidStack>();
@@ -344,9 +345,8 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		for (int i = 0; i < BiomeGenBase.biomeList.length; i++) {
 			BiomeGenBase start = BiomeGenBase.biomeList[i];
 			if (transforms.hasNode(start)) {
-				List<BiomeGenBase> tgs = transforms.getChildren(start);
-				for (int j = 0; j < tgs.size(); j++) {
-					BiomeGenBase to = tgs.get(j);
+				Collection<BiomeGenBase> tgs = transforms.getChildren(start);
+				for (BiomeGenBase to : tgs) {
 					Object[] o = new Object[5];
 					o[0] = start;
 					o[1] = to;

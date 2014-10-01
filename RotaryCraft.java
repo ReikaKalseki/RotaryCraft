@@ -60,7 +60,6 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
-import Reika.RotaryCraft.Auxiliary.PotionGrowthHormone;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -147,7 +146,6 @@ public class RotaryCraft extends DragonAPIMod {
 	public static Entity fallblock;
 
 	public static FreezePotion freeze;
-	public static PotionGrowthHormone growth;
 	public static PotionDeafness deafness;
 
 	@Instance("RotaryCraft")
@@ -241,10 +239,6 @@ public class RotaryCraft extends DragonAPIMod {
 		PotionCollisionTracker.instance.addPotionID(instance, id, FreezePotion.class);
 		freeze = (FreezePotion)new FreezePotion(id).setPotionName("Frozen Solid");
 
-		id = ExtraConfigIDs.GROWTHID.getValue();
-		PotionCollisionTracker.instance.addPotionID(instance, id, PotionGrowthHormone.class);
-		growth = (PotionGrowthHormone)new PotionGrowthHormone(id).setPotionName("Growth Hormone");
-
 		ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new PacketHandlerCore());
 
 		//id = ExtraConfigIDs.DEAFID.getValue();
@@ -327,6 +321,7 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "Paul17041993", 20.00F);
 		DonatorController.instance.addDonation(instance, "Mattabase", 40.00F);
 		DonatorController.instance.addDonation(instance, "Celestial Phoenix", 100.00F);
+		DonatorController.instance.addDonation(instance, "SemicolonDash", 50.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");

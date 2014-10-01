@@ -32,6 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -523,6 +524,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (id.isAir(world, x, y, z))
 			return false;
 		if (id instanceof BlockLiquid || id instanceof BlockFluidBase)
+			return false;
+		if (id instanceof BlockTieredResource)
 			return false;
 		if (id.hasTileEntity(world.getBlockMetadata(x, y, z)))
 			return false;

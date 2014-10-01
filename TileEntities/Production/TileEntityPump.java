@@ -86,11 +86,11 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));
 		}
 
-		if (power > MINPOWER && soundtick >= 100) {
+		if (power > MINPOWER && torque >= MINTORQUE && soundtick >= 100) {
 			soundtick = 0;
 			SoundRegistry.PUMP.playSoundAtBlock(world, x, y, z, 0.5F, 1);
 		}
-		if (power > MINPOWER)
+		if (power > MINPOWER && torque >= MINTORQUE)
 			this.suckUpMobs(world, x, y, z);
 	}
 
@@ -216,7 +216,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			phi = 0;
 			return;
 		}
-		if (power < MINPOWER)
+		if (power < MINPOWER || torque < MINTORQUE)
 			return;
 		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}

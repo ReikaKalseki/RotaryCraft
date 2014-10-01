@@ -75,7 +75,7 @@ public class RotaryNames {
 	public static final String[] miscPartNames = {
 		"crafting.barrel", "crafting.lens", "crafting.power", "crafting.heatcore", "crafting.lim", "crafting.prop", "crafting.hub",
 		"crafting.mirror", "crafting.generator", "crafting.accel", "crafting.turretbase", "crafting.aiming", "crafting.compound",
-		"crafting.bedcoil", "crafting.chain"
+		"crafting.bedcoil", "crafting.chain", "crafting.beddrill"
 	};
 
 	public static final String[] gearUnitNames = {
@@ -86,7 +86,8 @@ public class RotaryNames {
 	};
 
 	public static final String[] borerPartNames = {
-		"crafting.drill", "crafting.pressure", "crafting.radar", "crafting.sonar", "crafting.pcb", "crafting.screen", "crafting.mixer", "crafting.saw", "crafting.bearing",
+		"crafting.drill", "crafting.pressure", "crafting.radar", "crafting.sonar", "crafting.pcb", "crafting.screen", "crafting.mixer",
+		"crafting.saw", "crafting.bearing",
 		"crafting.belt", "crafting.ballbearing", "crafting.brake", "crafting.coil",
 		"crafting.stoneshaft", "crafting.diamondshaft", "crafting.bedrockshaft"
 	};

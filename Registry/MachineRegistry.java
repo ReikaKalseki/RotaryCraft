@@ -1112,7 +1112,7 @@ public enum MachineRegistry {
 	}
 
 	public void addRecipe(IRecipe ir) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
@@ -1121,7 +1121,7 @@ public enum MachineRegistry {
 	}
 
 	public void addOreRecipe(Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedProduct(), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1131,7 +1131,7 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedOreRecipe(int size, Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1141,7 +1141,7 @@ public enum MachineRegistry {
 	}
 
 	public void addMetaOreRecipe(int meta, Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1151,7 +1151,7 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedMetaOreRecipe(int size, int meta, Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
 			WorktableRecipes.getInstance().addRecipe(ir);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
@@ -1161,7 +1161,7 @@ public enum MachineRegistry {
 	}
 
 	public void addRecipe(ItemStack is, Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(is, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(is, obj);
@@ -1170,7 +1170,7 @@ public enum MachineRegistry {
 	}
 
 	public void addCrafting(Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedProduct(), obj);
@@ -1180,7 +1180,7 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedCrafting(int num, Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
@@ -1190,7 +1190,7 @@ public enum MachineRegistry {
 	}
 
 	public void addMetaCrafting(int metadata, Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
@@ -1202,7 +1202,7 @@ public enum MachineRegistry {
 	public void addNBTMetaCrafting(NBTTagCompound NBT, int metadata, Object... obj) {
 		ItemStack is = this.getCraftedMetadataProduct(metadata);
 		is.stackTagCompound = (NBTTagCompound)NBT.copy();
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(is, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(is, obj);
@@ -1212,7 +1212,7 @@ public enum MachineRegistry {
 	}
 
 	public void addSizedMetaCrafting(int num, int metadata, Object... obj) {
-		if (!this.isDummiedOut() && this.isCraftable()) {
+		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);

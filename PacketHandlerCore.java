@@ -212,6 +212,7 @@ public class PacketHandlerCore implements IPacketHandler {
 						for (int i = 0; i < 5; i++) {
 							for (int j = 0; j < 7; j++) {
 								borer.cutShape[j][i] = !borer.cutShape[j][i];
+								borer.syncAllData(true);
 							}
 						}
 					}

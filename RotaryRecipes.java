@@ -31,6 +31,7 @@ import thaumcraft.api.research.ResearchCategories;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
+import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -110,17 +111,11 @@ public class RotaryRecipes {
 		FluidStack ethanol = FluidRegistry.getFluidStack("rc ethanol", 100);
 		int energy = 750;
 		ThermalRecipeHelper.addCrucibleRecipe(ItemRegistry.ETHANOL.getStackOf(), ethanol, energy);
-
-		ItemStack bedrock = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4).copy();
 		//ThermalRecipeHelper.addInductionSmelter(ItemStacks.steelingot.copy(), bedrock, ItemStacks.bedingot.copy(), 48000);
 
-		ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);
-		ItemStack receptionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1);
+		//ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);
 		//ItemStack energyCell = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellReinforced", 1);
-		ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);
-
-		MachineRegistry.DYNAMO.addOreRecipe(" C ", "GIG", "IRI", 'C', transmissionCoil, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Items.redstone);
-		MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', "ingotCopper", 'C', receptionCoil, 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'l', "ingotLead", 's', "ingotSilver");
+		//ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);
 
 		ThermalRecipeHelper.addCoolant(RotaryCraft.nitrogenFluid, 40000);
 		ThermalRecipeHelper.addCompressionFuel(RotaryCraft.ethanolFluid, 125000); //1/4 of forestry
@@ -132,6 +127,12 @@ public class RotaryRecipes {
 
 		addProps();
 		RecipesGrinder.getRecipes().addModRecipes();
+
+		ItemStack coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1) : ItemStacks.power;
+		MachineRegistry.DYNAMO.addOreRecipe(" C ", "GIG", "IRI", 'C', coil, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Items.redstone);
+		coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1) : ItemStacks.goldcoil;
+		Object ps = new PreferentialItemStack(Items.iron_ingot, "ingotLead").blockItem(ItemRegistry.MODINGOTS.getItemInstance()).getItem();
+		MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', ItemStacks.conductive.getItem(), 'C', coil, 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'l', ps, 's', "ingotSilver");
 
 		if (ModList.TINKERER.isLoaded())
 			;//GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));

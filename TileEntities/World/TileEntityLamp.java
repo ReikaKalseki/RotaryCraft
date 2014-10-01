@@ -151,7 +151,7 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 
 	@Override
 	public int getRange() {
-		return 8;
+		return this.getMaxRange();
 	}
 
 	@Override

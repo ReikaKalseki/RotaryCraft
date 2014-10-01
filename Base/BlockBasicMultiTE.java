@@ -52,6 +52,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -405,13 +406,21 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (m == MachineRegistry.EXTRACTOR) {
 			TileEntityExtractor ex = (TileEntityExtractor)te;
-			if (ex.getLevel()+1000 <= ex.CAPACITY && is != null && is.getItem() == Items.water_bucket) {
-				ex.addLiquid(1000);
-				if (!ep.capabilities.isCreativeMode) {
-					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+			if (is != null) {
+				if (is.getItem() == Items.water_bucket && ex.getLevel()+1000 <= ex.CAPACITY) {
+					ex.addLiquid(1000);
+					if (!ep.capabilities.isCreativeMode) {
+						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+					}
+					((TileEntityBase)te).syncAllData(true);
+					return true;
 				}
-				((TileEntityBase)te).syncAllData(true);
-				return true;
+				else if (ReikaItemHelper.matchStacks(is, ItemStacks.bedrockdrill)) {
+					if (ex.upgrade() && !ep.capabilities.isCreativeMode)
+						is.stackSize--;
+					((TileEntityBase)te).syncAllData(true);
+					return true;
+				}
 			}
 		}
 		if (m == MachineRegistry.PULSEJET) {
@@ -509,7 +518,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				try {
 					TileEntityDisplay td = (TileEntityDisplay)te;
 					NBTTagCompound nbt = is.stackTagCompound;
-					NBTTagList li = nbt.getTagList("pages", 8); //8 == string
+					NBTTagList li = nbt.getTagList("pages", NBTTypes.STRING.ID);
 					ArrayList<String> s = new ArrayList();
 					for (int i = 0; i < li.tagCount(); i++) {
 						String ns = li.getStringTagAt(i);

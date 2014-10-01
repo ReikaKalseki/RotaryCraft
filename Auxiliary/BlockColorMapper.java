@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.Data.BlockMap.BlockKey;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -252,10 +253,10 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	}
 
 	private void loadModData() {
-		Set<ItemStack> keys = BlockColorInterface.getMappedBlocks();
-		for (ItemStack li : keys) {
-			Block id = Block.getBlockFromItem(li.getItem());
-			int meta = li.getItemDamage();
+		Set<BlockKey> keys = BlockColorInterface.getMappedBlocks();
+		for (BlockKey key : keys) {
+			Block id = key.blockID;
+			int meta = key.metadata;
 			int color = BlockColorInterface.getColor(id, meta);
 			RotaryCraft.logger.log("Received mod request for block "+id+":"+meta+" to have color mapping "+color);
 			this.addOrSetColorMapping(id, meta, color, false);

@@ -168,10 +168,15 @@ public abstract class GuiMachine extends GuiContainer {
 
 	@Override
 	protected final void func_146977_a(Slot slot) {
-		super.func_146977_a(slot);
+		if (this.renderSlot(slot))
+			super.func_146977_a(slot);
 		if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
 			ReikaTextureHelper.bindFontTexture();
 			fontRendererObj.drawString(String.format("%d", slot.slotNumber), slot.xDisplayPosition+1, slot.yDisplayPosition+1, 0x888888);
 		}
+	}
+
+	protected boolean renderSlot(Slot slot) {
+		return true;
 	}
 }

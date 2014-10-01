@@ -23,6 +23,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityAggregator extends PoweredLiquidProducer implements TemperatureTE, DiscreteFunction {
 
@@ -68,7 +69,16 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			TileEntity te = this.getAdjacentTileEntity(dir);
-			if (te instanceof IFluidHandler) {
+			if (te instanceof TileEntityPipe) {
+				TileEntityPipe p = (TileEntityPipe)te;
+				int dL = (tank.getLevel()-p.getFluidLevel())/4;
+				if (dL > 0 && (p.getFluidType() == null || tank.getActualFluid().equals(p.getFluidType()))) {
+					p.setFluid(tank.getActualFluid());
+					p.addFluid(dL);
+					tank.removeLiquid(dL);
+				}
+			}
+			else if (te instanceof IFluidHandler) {
 				IFluidHandler ifl = (IFluidHandler)te;
 				int added = ifl.fill(dir.getOpposite(), tank.getFluid(), true);
 				if (added > 0) {
