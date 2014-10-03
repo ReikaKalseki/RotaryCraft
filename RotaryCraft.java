@@ -148,6 +148,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public static FreezePotion freeze;
 	public static PotionDeafness deafness;
 
+	public static String currentVersion = "v@MAJOR_VERSION@@MINOR_VERSION@";
+
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance = new RotaryCraft();
 
@@ -200,6 +202,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
+		this.verifyVersions();
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);

@@ -28,6 +28,8 @@ import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
+import Reika.RotaryCraft.Items.Tools.ItemJetPack;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -44,6 +46,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		if (!world.isRemote) {
 			this.chargeTools();
 			this.makeJetplate();
+			this.makeJetPropel();
+			this.wingJetpacks();
 			this.makeBedjump();
 
 			if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
@@ -53,6 +57,47 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 				}
 			}
 			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
+		}
+	}
+
+	private void makeJetPropel() {
+		ItemStack is = inv[4];
+		if (is != null) {
+			Item item = is.getItem();
+			if (item instanceof ItemJetPack) {
+				ItemJetPack pack = (ItemJetPack)item;
+				if (!pack.isPropelled(is)) {
+					if (ReikaItemHelper.matchStacks(inv[7], EngineType.JET.getCraftedProduct())) {
+						ReikaInventoryHelper.decrStack(7, inv);
+						pack.setPropelled(is, true);
+						inv[13] = is.copy();
+						inv[4] = null;
+					}
+				}
+			}
+		}
+	}
+
+	private void wingJetpacks() {
+		ItemStack is = inv[4];
+		if (is != null) {
+			Item item = is.getItem();
+			if (item instanceof ItemJetPack) {
+				ItemJetPack pack = (ItemJetPack)item;
+				if (!pack.isWinged(is)) {
+					ItemStack ingot = pack.getMaterial();
+					for (int i = 0; i < 3; i++) {
+						if (!ReikaItemHelper.matchStacks(inv[i], ingot))
+							return;
+					}
+					for (int i = 0; i < 3; i++) {
+						ReikaInventoryHelper.decrStack(i, inv);
+					}
+					pack.setWinged(is, true);
+					inv[13] = is.copy();
+					inv[4] = null;
+				}
+			}
 		}
 	}
 

@@ -55,7 +55,7 @@
 		The tile selector is used to add tiles to the memories of some machines, like the terraformer. If you right-click the machine with the tool, it binds the tool to it, and then right-clicking anywhere else adds that block to the machine's storage. To add machine's blocks, shift-right-click them.
 	</tileselect>
 	<jetpack>
-	A jetpack allows you to fly, making construction and navigation (or even combat) much easier. It consumes rather a lot of ethanol, so keep an eye on the fuel gauge.
+		A jetpack allows you to fly, making construction and navigation (or even combat) much easier. It consumes rather a lot of fuel, so keep an eye on the fuel gauge. Using jet fuel provides a thrust boost, as does adding a gas turbine engine. Also, adding three ingots across the top in a worktable will add a wing, aiding its ability to glide.
 	
 		The bedrock chestplate can be combined with the jetpack to get both the ability to fly and the protection of the chestplate. Because of the added mass, it is slightly less powerful and responds slightly more sluggishly.
 	</jetpack>

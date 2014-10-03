@@ -14,6 +14,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
@@ -41,6 +43,7 @@ public class JetpackFuelOverlay {
 					ItemJetPack i = (ItemJetPack)is.getItem();
 					int fuel = i.getCurrentFillLevel(is);
 					float frac = fuel/(float)i.getCapacity(is);
+					Fluid fluid = fuel > 0 ? i.getCurrentFluid(is) : null;
 					ReikaTextureHelper.bindTexture(RotaryCraft.class, "Textures/GUI/overlays.png");
 					Tessellator v5 = Tessellator.instance;
 					int height = event.resolution.getScaledHeight();
@@ -50,16 +53,19 @@ public class JetpackFuelOverlay {
 					float f = 1-frac;
 					float dy = h*f;
 					//ReikaJavaLibrary.pConsole(1-frac);
+					float u = w;
+					if (fluid != null && fluid.equals(FluidRegistry.getFluid("jet fuel")))
+						u += w;
 					v5.startDrawingQuads();
 					v5.addVertexWithUV(4, 	height/2+32, 	0, 	0, h);
 					v5.addVertexWithUV(12,	height/2+32, 	0, 	w, h);
 					v5.addVertexWithUV(12,	height/2-32, 	0, 	w, 0);
 					v5.addVertexWithUV(4, 	height/2-32, 	0, 	0, 0);
 
-					v5.addVertexWithUV(4, 	height/2+32, 	0, 	w, h);
-					v5.addVertexWithUV(12,	height/2+32, 	0, 	w*2, h);
-					v5.addVertexWithUV(12,	height/2-32+f*64, 	0, 	w*2, f*h);
-					v5.addVertexWithUV(4, 	height/2-32+f*64, 	0, 	w, f*h);
+					v5.addVertexWithUV(4, 	height/2+32, 	0, 	u, h);
+					v5.addVertexWithUV(12,	height/2+32, 	0, 	u+w, h);
+					v5.addVertexWithUV(12,	height/2-32+f*64, 	0, 	u+w, f*h);
+					v5.addVertexWithUV(4, 	height/2-32+f*64, 	0, 	u, f*h);
 					v5.draw();
 					Minecraft.getMinecraft().fontRenderer.drawString(String.format("%d%s", (int)(frac*100), "%"), 1, height/2-40, 0xffffff);
 					Minecraft.getMinecraft().fontRenderer.drawString(String.format("%dmB", fuel), 1, height/2+33, 0xffffff);

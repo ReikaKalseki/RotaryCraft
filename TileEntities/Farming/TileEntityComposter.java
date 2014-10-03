@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Farming;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -21,9 +22,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -47,12 +48,11 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		CRAP(1, Items.egg, Items.cookie, Items.wheat),
 		SUGARCANE(2, Items.reeds),
 		PLANT(1, Blocks.sapling, Blocks.waterlily, Blocks.red_flower, Blocks.yellow_flower, Blocks.brown_mushroom, Blocks.red_mushroom),
-		LEAF(2, Blocks.leaves),
+		LEAF(2, Blocks.leaves, Blocks.leaves2, Blocks.grass, Blocks.vine, Blocks.tallgrass, Blocks.double_plant),
 		MEAT(4, Items.beef, Items.cooked_beef, Items.cooked_porkchop, Items.porkchop, Items.cooked_chicken, Items.chicken),
 		FISH(3, Items.cooked_fished, Items.fish),
 		VEGGIE(2, Items.potato, Items.carrot, Items.baked_potato, Items.poisonous_potato, Items.bread, Items.apple, Items.melon),
 		MOBS(3, Items.rotten_flesh, Items.spider_eye);
-		//podzol for 1.7
 
 		private ArrayList<ItemStack> items = new ArrayList();
 		public final int value;
@@ -61,14 +61,15 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 
 		private CompostMatter(int value, Block... items) {
 			this.value = value;
-			for (int i = 0; i < items.length; i++)
-				this.items.add(new ItemStack(items[i]));
+			for (int i = 0; i < items.length; i++) {
+				this.items.add(new ItemStack(items[i], 1, OreDictionary.WILDCARD_VALUE));
+			}
 		}
 
 		private CompostMatter(int value, Item... items) {
 			this.value = value;
 			for (int i = 0; i < items.length; i++)
-				this.items.add(new ItemStack(items[i]));
+				this.items.add(new ItemStack(items[i], 1, OreDictionary.WILDCARD_VALUE));
 		}
 
 		private CompostMatter(int value, ItemStack... items) {
@@ -87,7 +88,7 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		}
 
 		public List<ItemStack> getAllItems() {
-			return ReikaJavaLibrary.copyList(items);
+			return Collections.unmodifiableList(items);
 		}
 	}
 

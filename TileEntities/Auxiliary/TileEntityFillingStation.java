@@ -138,7 +138,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 	}
 
 	private int getFluidToAdd() {
-		int toadd = (int)ReikaMathLibrary.logbase(omega, 2);
+		int toadd = 4*(int)ReikaMathLibrary.logbase(omega, 2);
 		return Math.min(toadd, tank.getLevel());
 	}
 

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -94,7 +95,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public List<Note> getNotesInChannel(int channel) {
-		return ReikaJavaLibrary.copyList(musicQueue[channel]);
+		return Collections.unmodifiableList(musicQueue[channel]);
 	}
 
 	@Override

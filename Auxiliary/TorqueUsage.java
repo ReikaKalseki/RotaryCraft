@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
@@ -225,27 +225,23 @@ public class TorqueUsage {
 
 	private static void manageBus(World world, TileEntityBusController tile) {
 		ShaftPowerBus bus = tile.getBus();
-		List<TileEntityPowerBus> blocks = bus.getBlocks();
-		for (int i = 0; i < blocks.size(); i++) {
-			TileEntityPowerBus te = null;
-			if (blocks.get(i) instanceof TileEntityPowerBus) {
-				te = blocks.get(i);
-				for (int k = 2; k < 6; k++) {
-					ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[k];
-					if (te.canOutputToSide(dir)) {
-						TileEntity out = world.getTileEntity(te.xCoord+dir.offsetX, te.yCoord+dir.offsetY, te.zCoord+dir.offsetZ);
-						if (out != null && out instanceof TileEntityIOMachine) {
-							TileEntityIOMachine io = (TileEntityIOMachine)out;
-							TileEntity read = io.getReadTileEntity();
-							TileEntity read2 = io.getReadTileEntity2();
-							TileEntity read3 = io.getReadTileEntity3();
-							TileEntity read4 = io.getReadTileEntity4();
-							if ((io.getInput() == te || read == te || read2 == te || read3 == te || read4 == te)) {
-								double ratio = te.getAbsRatio(dir);
-								if (!te.isSideSpeedMode(dir))
-									ratio = 1D/ratio;
-								addToList(out, tile, ratio*TEMapR.get(tile));
-							}
+		Collection<TileEntityPowerBus> blocks = bus.getBlocks();
+		for (TileEntityPowerBus te : blocks) {
+			for (int k = 2; k < 6; k++) {
+				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[k];
+				if (te.canOutputToSide(dir)) {
+					TileEntity out = world.getTileEntity(te.xCoord+dir.offsetX, te.yCoord+dir.offsetY, te.zCoord+dir.offsetZ);
+					if (out != null && out instanceof TileEntityIOMachine) {
+						TileEntityIOMachine io = (TileEntityIOMachine)out;
+						TileEntity read = io.getReadTileEntity();
+						TileEntity read2 = io.getReadTileEntity2();
+						TileEntity read3 = io.getReadTileEntity3();
+						TileEntity read4 = io.getReadTileEntity4();
+						if ((io.getInput() == te || read == te || read2 == te || read3 == te || read4 == te)) {
+							double ratio = te.getAbsRatio(dir);
+							if (!te.isSideSpeedMode(dir))
+								ratio = 1D/ratio;
+							addToList(out, tile, ratio*TEMapR.get(tile));
 						}
 					}
 				}

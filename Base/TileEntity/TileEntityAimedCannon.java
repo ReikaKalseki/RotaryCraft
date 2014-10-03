@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -284,7 +285,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	}
 
 	public List<String> getCopyOfSafePlayerList() {
-		return ReikaJavaLibrary.copyList(safePlayers);
+		return Collections.unmodifiableList(safePlayers);
 	}
 
 	public int getOperationTime() {

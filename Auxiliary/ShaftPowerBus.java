@@ -10,12 +10,12 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
@@ -127,8 +127,8 @@ public class ShaftPowerBus {
 		blocks.clear();
 	}
 
-	public List<TileEntityPowerBus> getBlocks() {
-		return ReikaJavaLibrary.copyList(blocks);
+	public Collection<TileEntityPowerBus> getBlocks() {
+		return Collections.unmodifiableCollection(blocks);
 	}
 
 	public int getSize() {

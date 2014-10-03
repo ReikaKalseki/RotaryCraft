@@ -80,7 +80,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	private boolean isCreative;
 
-	private StepTimer redstoneTimer = new StepTimer(20);
+	private StepTimer redstoneTimer = new StepTimer(40);
 
 	public boolean torquemode = true;
 

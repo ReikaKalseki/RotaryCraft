@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.NavigableSet;
 
@@ -588,7 +589,7 @@ public final class HandbookAuxData {
 			}
 			else if (h == HandbookRegistry.COMPUTERCRAFT) {
 				if (subpage > 0) {
-					List<LuaMethod> li = LuaMethod.getMethods();
+					Collection<LuaMethod> li = LuaMethod.getMethods();
 					int di = (subpage-1)*36;
 					int max = Math.min(di+36, MachineRegistry.machineList.length);
 					for (int i = di; i < max; i++) {
@@ -606,8 +607,7 @@ public final class HandbookAuxData {
 						ReikaGuiAPI.instance.drawItemStackWithTooltip(item, font, is, x, y);
 						if (ReikaGuiAPI.instance.isMouseInBox(x, x+17, y, y+17)) {
 							int k = 0;
-							for (int j = 0; j < li.size(); j++) {
-								LuaMethod cur = li.get(j);
+							for (LuaMethod cur : li) {
 								if (cur.isClassInstanceOf(m.getTEClass())) {
 									ReikaRenderHelper.disableLighting();
 									String s = cur.getReturnType().displayName+" "+cur.displayName+"("+cur.getArgsAsString()+")";

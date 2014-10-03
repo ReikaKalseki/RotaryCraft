@@ -25,7 +25,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -124,7 +123,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	public static int getPlantValue(ItemStack is) {
-		ReikaJavaLibrary.pConsole("noitem", is == null);
 		if (is == null)
 			return 0;
 		if (ModList.CHROMATICRAFT.isLoaded()) {
@@ -152,7 +150,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			return PlantMaterials.LEAVES.getPlantValue()*getModWoodValue(leaf);
 		}
 		PlantMaterials plant = PlantMaterials.getPlantEntry(is);
-		ReikaJavaLibrary.pConsole("noplant", plant == null);
 		if (plant == null)
 			return 0;
 		return plant.getPlantValue();

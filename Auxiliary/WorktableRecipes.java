@@ -24,7 +24,6 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.ImmutableList;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
 public class WorktableRecipes
@@ -220,13 +219,9 @@ public class WorktableRecipes
 		}
 	}
 
-	/**
-	 * returns the List<> of all recipes in copy to disallow editing<br>
-	 * This one is for you, NEI.
-	 */
 	public List getRecipeListCopy()
 	{
-		return ReikaJavaLibrary.copyList(recipes);
+		return Collections.unmodifiableList(recipes);
 	}
 
 	public IRecipe getInputRecipe(ItemStack is) {
