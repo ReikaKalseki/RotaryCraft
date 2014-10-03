@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,8 +25,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -44,7 +41,6 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.IgnoredByBorer;
 import Reika.RotaryCraft.API.Event.BorerDigEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -200,7 +196,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
 				if (!world.isRemote) {
-					this.forceGenAndPopulate(world, x, y, z, meta);
+					ReikaWorldHelper.forceGenAndPopulate(world, x+step*xstep, y, z+step*zstep, meta);
 					this.dig(world, x, y, z, meta);
 					if (isMiningAir)
 						durability--;
@@ -269,25 +265,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (haspipe && allpipe) {
 			step++;
 			this.skipMiningPipes(world, x, y, z, meta, stepped+1, max);
-		}
-	}
-
-	private void forceGenAndPopulate(World world, int x, int y, int z, int meta) {
-		int xread = x+step*xstep;
-		int zread = z+step*zstep;
-		Chunk ch = world.getChunkFromBlockCoords(xread, zread);
-		IChunkProvider p = world.getChunkProvider();
-		if (!ch.isTerrainPopulated) {
-			try {
-				p.populate(p, xread >> 4, zread >> 4);
-			}
-			catch (ConcurrentModificationException e) {
-				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population due to a ConcurrentModificationException! Contact Reika with information on any mods that might be multithreading worldgen!");
-			}
-			catch (Exception e) {
-				RotaryCraft.logger.log("Chunk at "+x+", "+z+" failed to allow population!");
-				e.printStackTrace();
-			}
 		}
 	}
 
