@@ -413,7 +413,7 @@ public class GuiHandbook extends GuiScreen
 			ReikaRenderHelper.disableLighting();
 			String s = String.format("Page %d/%d", screen, this.getMaxPage());
 			//ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, s, posX+xSize+23, posY+5, 0xffffff);
-			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, s, posX+12+xSize+fontRendererObj.getStringWidth(s), posY+20);
+			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, s, posX+24+xSize+fontRendererObj.getStringWidth(s), posY+20);
 		}
 
 		if (HandbookNotifications.newAlerts()) {

@@ -47,6 +47,15 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 				}
 			}
 		}*/
+		if (rollout <= 8) {
+			int j = (width - xSize) / 2;
+			int k = (height - ySize) / 2;
+			int x1 = 176;
+			int x2 = 183;
+			if (api.isMouseInBox(j+x1, j+x2, k+78, k+141)) {
+				api.drawTooltipAt(fontRendererObj, "Set Pattern", a-40, b-10);
+			}
+		}
 	}
 
 	@Override
@@ -63,7 +72,7 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	protected boolean isMouseOverSlot(Slot slot, int w, int h)
+	public boolean isMouseOverSlot(Slot slot, int w, int h)
 	{
 		return this.renderSlot(slot) && super.isMouseOverSlot(slot, w, h);
 	}

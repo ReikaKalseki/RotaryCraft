@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,8 +27,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Auxiliary.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.KeyWatcher.Key;
+import Reika.DragonAPI.Interfaces.MultiLayerItemSprite;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -39,7 +42,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemJetPack extends ItemRotaryArmor implements Fillable {
+public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayerItemSprite {
 
 	public ItemJetPack(ArmorMaterial mat, int tex, int render) {
 		super(mat, render, 1, tex);
@@ -160,7 +163,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			}
 		}
 
-		if (ep.motionY < 0 && winged && floatmode) {
+		if (ep.motionY < 0 && winged && floatmode && !ep.isPlayerSleeping()) {
 			boolean sneak = ep.isSneaking();
 			double ang = Math.cos(Math.toRadians(ep.rotationPitch));
 			double d = ep.motionY <= -2 ? 0.0625 : ep.motionY <= -1 ? 0.125 : ep.motionY <= -0.5 ? 0.25 : 0.5; //gives curve
@@ -187,10 +190,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 		return is.stackTagCompound != null && is.stackTagCompound.getBoolean("eng");
 	}
 
-	public void setPropelled(ItemStack is, boolean wing) {
+	public void setPropelled(ItemStack is, boolean prop) {
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setBoolean("eng", wing);
+		is.stackTagCompound.setBoolean("eng", prop);
 	}
 
 	public boolean isWinged(ItemStack is) {
@@ -211,12 +214,16 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 		return this == ItemRegistry.BEDPACK.getItemInstance();
 	}
 
+	public boolean isSteel() {
+		return this == ItemRegistry.STEELPACK.getItemInstance();
+	}
+
 	private int getFuelUsageMultiplier() {
 		return this.isBedrock() ? 2 : 1;
 	}
 
 	private void explode(World world, EntityPlayer player) {
-		ItemStack to = this.isBedrock() ? ItemRegistry.BEDCHEST.getEnchantedStack() : null;
+		ItemStack to = this.isBedrock() ? ItemRegistry.BEDCHEST.getEnchantedStack() : this.isSteel() ? ItemRegistry.STEELCHEST.getStackOf() : null;
 		player.setCurrentItemOrArmor(3, to);
 		world.createExplosion(player, player.posX, player.posY, player.posZ, 2, false);
 		double v = 4;
@@ -251,14 +258,21 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 			ReikaEnchantmentHelper.applyEnchantments(is, ench);
 		}
 		ItemStack is2 = is.copy();
-		if (is.stackTagCompound == null)
-			is.stackTagCompound = new NBTTagCompound();
+		ItemStack is3 = is.copy();
 		Fluid f = ConfigRegistry.JETFUELPACK.getState() ? FluidRegistry.getFluid("jet fuel") : FluidRegistry.getFluid("rc ethanol");
 		this.setFuel(is, f, this.getMaxFuel(is));
+		this.setFuel(is3, FluidRegistry.getFluid("jet fuel"), this.getMaxFuel(is3));
+		ItemStack is5 = is3.copy();
+		this.setWinged(is3, true);
+		ItemStack is4 = is3.copy();
+		this.setPropelled(is4, true);
 		ItemRegistry ir = ItemRegistry.getEntry(is);
 		if (ir.isAvailableInCreativeInventory()) {
-			li.add(is);
 			li.add(is2);
+			li.add(is);
+			li.add(is5);
+			li.add(is3);
+			li.add(is4);
 		}
 	}
 	/*
@@ -294,6 +308,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	}
 
 	private void setFuel(ItemStack is, Fluid f, int amt) {
+		if (is.stackTagCompound == null)
+			is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("fuel", amt);
 		if (amt > 0) {
 			ReikaNBTHelper.writeFluidToNBT(is.stackTagCompound, f);
@@ -333,16 +349,16 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 		ItemRegistry ir = ItemRegistry.getEntry(item);
 		return ir != null ? ir.getTextureIndex() : 0;
 	}
-	 */
+	 *//*
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
 		int a = this.isWinged(item) ? 32 : 0;
 		return a+super.getItemSpriteIndex(item);
-	}
+	}*/
 
 	@Override
 	public boolean providesProtection() {
-		return this.isBedrock();
+		return this.isBedrock() || this.isSteel();
 	}
 
 	@Override
@@ -352,7 +368,12 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	public double getDamageMultiplier(DamageSource src) {
-		return this.isBedrock() ? ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDamageMultiplier(src) : 1;
+		if (this.isBedrock())
+			return ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDamageMultiplier(src);
+		else if (this.isSteel())
+			return ((ItemBedrockArmor)ItemRegistry.STEELCHEST.getItemInstance()).getDamageMultiplier(src);
+		else
+			return 1;
 	}
 
 	@Override
@@ -362,6 +383,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
 	@Override
 	public Fluid getCurrentFluid(ItemStack is) {
+		if (is.stackTagCompound == null)
+			return null;
 		int lvl = this.getCurrentFillLevel(is);
 		Fluid f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
 		if (lvl > 0 && f == null) {
@@ -374,5 +397,16 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	public boolean isJetFueled(ItemStack is) {
 		Fluid f = this.getCurrentFluid(is);
 		return f != null && f.equals(FluidRegistry.getFluid("jet fuel"));
+	}
+
+	@Override
+	public int[] getIndices(ItemStack is) {
+		ArrayList li = new ArrayList();
+		li.add(this.getItemSpriteIndex(is));
+		if (this.isWinged(is)) {
+			int w = this.isBedrock() ? 59 : this.isSteel() ? 61 : 60;
+			li.add(w);
+		}
+		return ReikaArrayHelper.intListToArray(li);
 	}
 }

@@ -184,6 +184,7 @@ public enum ItemRegistry implements ItemEnum {
 	MODEXTRACTS(-1, true,			"item.modextracts",			ItemModOre.class),
 	MODINGOTS(-1, true,				"item.modingots",			ItemModOre.class),
 	SPAWNER(0, false,				"item.spawner",				ItemSpawner.class),
+	STEELPACK(44, 1, false,			"item.steelpack",			ItemJetPack.class);
 	;//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
 
 	private final int index;
@@ -308,6 +309,8 @@ public enum ItemRegistry implements ItemEnum {
 	private ArmorMaterial getArmorMaterial() {
 		if (this.isBedrockTypeArmor())
 			return RotaryCraft.BEDROCK;
+		if (this.isSteelTypeArmor())
+			return RotaryCraft.HSLA;
 		if (this == JETPACK)
 			return RotaryCraft.JETPACK;
 		if (this == JUMP)
@@ -316,7 +319,7 @@ public enum ItemRegistry implements ItemEnum {
 	}
 
 	public boolean isJetpack() {
-		if (this == JETPACK || this == BEDPACK)
+		if (this == JETPACK || this == BEDPACK || this == STEELPACK)
 			return true;
 		return false;
 	}
@@ -338,6 +341,7 @@ public enum ItemRegistry implements ItemEnum {
 		case STEELCHEST:
 		case JETPACK:
 		case BEDPACK:
+		case STEELPACK:
 			return 1;
 		case BEDHELM:
 		case STEELHELMET:
@@ -462,6 +466,10 @@ public enum ItemRegistry implements ItemEnum {
 		if (this == BEDREVEAL)
 			return RotaryCraft.proxy.armor;
 		throw new RegistrationException(RotaryCraft.instance, "Item "+name+" is an armor yet has no specified render!");
+	}
+
+	private boolean isSteelTypeArmor() {
+		return this == STEELPACK || this.isSteelArmor();
 	}
 
 	private boolean isSteelArmor() {
@@ -618,6 +626,7 @@ public enum ItemRegistry implements ItemEnum {
 		case BEDBOOTS:
 		case BEDPACK:
 		case JETPACK:
+		case STEELPACK:
 		case STEELHELMET:
 		case STEELCHEST:
 		case STEELLEGS:
