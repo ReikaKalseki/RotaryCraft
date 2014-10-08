@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -86,6 +87,8 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 			if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 				((TileEntityGearbox)tile).isFlipped = true;
 			}
+			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+			((TemperatureTE)tile).addTemperature(Tb);
 		}
 		return true;
 	}

@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -34,6 +35,7 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -41,7 +43,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
@@ -51,6 +53,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	private HybridTank tank = new HybridTank("gear", 24000);
 	private boolean failed;
+
+	private int temperature;
+	private StepTimer tempTimer = new StepTimer(20);
 
 	private static final int MAX_DAMAGE = 480;
 
@@ -81,7 +86,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		case STONE:
 			return 8000;
 		case WOOD:
-			return 3000;
+			return 0;//3000;
 		default:
 			return 0;
 		}
@@ -194,6 +199,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
 		this.getLube(world, x, y, z, meta);
+		tempTimer.update();
+		if (tempTimer.checkCap()) {
+			this.updateTemperature(world, x, y, z, meta);
+		}
 
 		this.basicPowerReceiver();
 		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
@@ -414,6 +423,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		NBT.setBoolean("reduction", reduction);
 		NBT.setInteger("damage", damage);
 		NBT.setBoolean("fail", failed);
+		NBT.setInteger("temp", temperature);
 
 		tank.writeToNBT(NBT);
 	}
@@ -437,6 +447,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		reduction = NBT.getBoolean("reduction");
 		damage = NBT.getInteger("damage");
 		failed = NBT.getBoolean("fail");
+		temperature = NBT.getInteger("temp");
 
 		tank.readFromNBT(NBT);
 	}
@@ -539,5 +550,52 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public MachineRegistry getMachine() {
 		return MachineRegistry.GEARBOX;
+	}
+
+	@Override
+	public void updateTemperature(World world, int x, int y, int z, int meta) {
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		if (type == MaterialRegistry.WOOD) {
+			if (omega > 0) {
+				temperature++;
+				world.playSound(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 1, 1, true);
+			}
+		}
+		else if (type == MaterialRegistry.STONE) {
+			if (omega > 8192) {
+				temperature++;
+				world.playSound(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 1, 1, true);
+			}
+		}
+		else {
+			temperature = Tamb;
+		}
+		if (temperature > 90 && rand.nextBoolean()) {
+			damage++;
+		}
+		if (temperature > 120) {
+			this.overheat(world, x, y, z);
+		}
+	}
+
+	@Override
+	public void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public int getThermalDamage() {
+		return 0;
+	}
+
+	@Override
+	public void overheat(World world, int x, int y, int z) {
+		if (type.isFlammable())
+			ReikaWorldHelper.ignite(world, x, y, z);
 	}
 }
