@@ -83,6 +83,7 @@ public class TileEntitySmokeDetector extends TileEntitySpringPowered implements 
 		return time;
 	}
 	 */
+
 	public boolean checkValidCoil() {
 		return this.hasCoil();
 	}

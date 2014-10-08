@@ -1315,6 +1315,8 @@ public enum MachineRegistry {
 	public boolean canFlip() {
 		switch(this) {
 		case SPLITTER:
+		case SMOKEDETECTOR:
+		case SPRINKLER:
 			return false;
 		default:
 			return true;
