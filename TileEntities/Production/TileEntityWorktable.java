@@ -131,7 +131,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	private void makeBedjump() {
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getItemInstance(), inv);
 		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getItemInstance(), inv);
-		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
+		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
 			inv[jumpslot] = null;
 			inv[armorslot] = null;
 			ItemStack is = ItemRegistry.BEDJUMP.getEnchantedStack();
@@ -239,7 +239,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STRONGCOIL.getItemInstance(), inv);
 		Item toolid = this.getTool();
 		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inv);
-		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
+		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
 			Item coilid = inv[coilslot].getItem();
 			int toolmeta = inv[toolslot].getItemDamage();
 			int coilmeta = inv[coilslot].getItemDamage();
@@ -270,8 +270,9 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			plateslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STEELCHEST.getItemInstance(), inv);
 		else
 			bed = true;
+		//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
-		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 16)) {
+		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
 			ItemStack jet = inv[jetslot];
 			int original = jet.stackTagCompound != null ? jet.stackTagCompound.getInteger("fuel") : 0;
 			inv[jetslot] = null;

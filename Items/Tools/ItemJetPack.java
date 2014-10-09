@@ -36,6 +36,7 @@ import Reika.RotaryCraft.API.Fillable;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
+import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -371,7 +372,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		if (this.isBedrock())
 			return ((ItemBedrockArmor)ItemRegistry.BEDCHEST.getItemInstance()).getDamageMultiplier(src);
 		else if (this.isSteel())
-			return ((ItemBedrockArmor)ItemRegistry.STEELCHEST.getItemInstance()).getDamageMultiplier(src);
+			return ((ItemSteelArmor)ItemRegistry.STEELCHEST.getItemInstance()).getDamageMultiplier(src);
 		else
 			return 1;
 	}
