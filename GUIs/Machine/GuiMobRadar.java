@@ -80,7 +80,7 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 	private void drawRadar(int a, int b) {
 		for (int i = radar.getBounds()[0]; i <= radar.getBounds()[1]; i++) {
 			for (int j = radar.getBounds()[0]; j <=	 radar.getBounds()[1]; j++) {
-				this.drawMobIcon(a+7, b+16, UNIT*i, UNIT*j, radar.mobs[i][j], i, j);
+				this.drawMobIcon(a+7, b+16, UNIT*i, UNIT*j, radar.getID(i, j), i, j);
 			}
 		}
 	}

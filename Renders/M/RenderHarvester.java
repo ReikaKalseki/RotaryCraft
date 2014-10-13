@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -19,7 +17,6 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -94,12 +91,8 @@ public class RenderHarvester extends RotaryTERenderer
 	}
 
 	private void renderLaser(TileEntityMobHarvester harv, double par2, double par4, double par6) {
-		if (harv.inbox == null)
-			return;
 		ReikaRenderHelper.prepareGeoDraw(true);
-		boolean laser1 = harv.inbox.size() > 0;
-		boolean laser2 = harv.inbox.size() == 1 && (harv.inbox.get(0) instanceof EntityPlayer || harv.inbox.get(0) instanceof EntityVillager);
-		if (laser1 && !laser2 && !ReikaEntityHelper.allAreDead(harv.inbox, true)) {
+		if (harv.laser) {
 			ReikaAABBHelper.renderAABB(harv.getLaser(), par2, par4, par6, harv.xCoord, harv.yCoord, harv.zCoord, -960, 255, 0, 0, false);
 			ReikaAABBHelper.renderAABB(harv.getLaser().expand(0.125, 0.001, 0.125), par2, par4, par6, harv.xCoord, harv.yCoord, harv.zCoord, -192, 255, 128, 128, false);
 		}

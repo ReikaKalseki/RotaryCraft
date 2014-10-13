@@ -115,7 +115,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return toolClass.toLowerCase().equals("pickax") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
+		return toolClass.toLowerCase().contains("pick") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
 	}
 
 	@Override

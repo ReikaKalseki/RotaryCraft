@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Surveying;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 
 	private int[][] colors = new int[49][49]; // |<--- 24 ---- R ---- 24 --->|
 	private int[][] mobs = new int[49][49];
-	private List<EntityLivingBase> inzone;
+	private List<EntityLivingBase> inzone = new ArrayList();
 	public String owner;
 
 	public static final int FALLOFF = 1024; //1kW per extra meter
@@ -146,6 +147,10 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	public int getID(int x, int z) {
+		return mobs[x][z];
 	}
 
 }

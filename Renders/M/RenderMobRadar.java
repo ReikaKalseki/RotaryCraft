@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
@@ -86,7 +88,8 @@ public class RenderMobRadar extends RotaryTERenderer
 			return;
 		if (!te.isInWorld())
 			return;
-		if (te.inzone == null)
+		List<EntityLivingBase> li = te.getEntities();
+		if (li == null)
 			return;
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityPlayer ep = te.getPlacer();
@@ -108,8 +111,7 @@ public class RenderMobRadar extends RotaryTERenderer
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		Tessellator v5 = Tessellator.instance;
-		for (int i = 0; i < te.inzone.size(); i++) {
-			EntityLivingBase ent = (EntityLivingBase)te.inzone.get(i);
+		for (EntityLivingBase ent : li) {
 			if (ent != null && ent != mc.thePlayer) {
 				float v = ent.height;
 				v = 2;
