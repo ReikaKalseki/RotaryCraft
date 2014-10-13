@@ -62,8 +62,7 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	}
 
 	private void sortItems(World world, int x, int y, int z, List<EntityItem> li) {
-		for (int i = 0; i < li.size(); i++) {
-			EntityItem ei = li.get(i);
+		for (EntityItem ei : li) {
 			ItemStack eis = ei.getEntityItem();
 			ItemStack is = eis.copy();
 			if (eis.stackSize <= 1)

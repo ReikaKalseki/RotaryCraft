@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Surveying;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -37,7 +38,11 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 	private int[][] topBlocks = new int[2*MAXRANGE+1][2*MAXRANGE+1];
 	private int[][] mobs = new int[2*MAXRANGE+1][2*MAXRANGE+1];
 	private int[][] topY = new int[2*MAXRANGE+1][2*MAXRANGE+1];
-	public List inzone;
+	private List<EntityLivingBase> inzone;
+
+	public List<EntityLivingBase> getEntities() {
+		return Collections.unmodifiableList(inzone);
+	}
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -74,8 +79,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 		int maxrange = this.getMaxRange();
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-range, 0, z-range, x+1+range, y+1, z+1+range);
 		inzone = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
-		for (int i = 0; i < inzone.size(); i++) {
-			EntityLivingBase ent = (EntityLivingBase)inzone.get(i);
+		for (EntityLivingBase ent : inzone) {
 			int ex = (int)ent.posX-x;
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;

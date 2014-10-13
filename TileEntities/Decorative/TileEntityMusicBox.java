@@ -99,15 +99,16 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		if (this.hasSavedFile())
+			this.read();
+	}
+
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
 		//ReikaJavaLibrary.pConsole(Arrays.toString(musicQueue), Side.SERVER);
-
-		if (this.getTicksExisted() == 0) {
-			if (this.hasSavedFile())
-				this.read();
-		}
 
 		if (power < LOOPPOWER) {
 			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {

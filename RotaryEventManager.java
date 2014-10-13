@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,8 +91,24 @@ public class RotaryEventManager {
 		EntityLivingBase e = evt.entityLiving;
 		if (evt.ammount < 1000) {
 			if (e instanceof EntityPlayer) {
-				if (ItemBedrockArmor.isWearingFullSuitOf(e))
+				if (ItemBedrockArmor.isWearingFullSuitOf(e)) {
 					evt.ammount = Math.min(evt.ammount, 5);
+					if (evt.ammount <= 1) {
+						evt.ammount = 0;
+						return;
+					}
+					else {
+						Entity attacker = evt.source.getSourceOfDamage();
+						if (attacker instanceof EntityPlayer) {
+							ItemStack held = ((EntityPlayer)attacker).getCurrentEquippedItem();
+							if (held != null && "rapier".equals(held.getItem().getClass().getSimpleName().toLowerCase())) {
+								evt.ammount = 0;
+								int dmg = held.getItem().getDamage(held);
+								held.getItem().setDamage(held, dmg+120);
+							}
+						}
+					}
+				}
 			}
 		}
 	}

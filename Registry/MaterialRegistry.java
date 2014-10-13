@@ -71,11 +71,15 @@ public enum MaterialRegistry {
 	}
 
 	public boolean isDamageableGear() {
-		return !this.isInfiniteStrength() && this != WOOD;
+		return !this.isInfiniteStrength();
 	}
 
 	public boolean isInfiniteStrength() {
 		return this == BEDROCK;
+	}
+
+	public boolean needsLubricant() {
+		return this != WOOD && this.isDamageableGear();
 	}
 
 	public boolean consumesLubricant() {

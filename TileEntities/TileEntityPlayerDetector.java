@@ -109,7 +109,7 @@ public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements
 		//else
 		inbox = world.getEntitiesWithinAABB(EntityPlayer.class, box);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", inbox.size()));
-		return (inbox.size() > 0);
+		return inbox.size() > 0;
 	}
 
 	public int getRange() {

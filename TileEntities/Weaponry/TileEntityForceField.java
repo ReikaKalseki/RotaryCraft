@@ -83,14 +83,13 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 		this.spawnParticles(world, x, y, z);
 		this.setColor(64*4/tickcount, 128+128*4/tickcount, 255);
 		AxisAlignedBB field = this.getRangedBox();
-		List threats = world.getEntitiesWithinAABB(Entity.class, field);
-		for (int i = 0; i < threats.size(); i++) {
-			this.protect(world, threats, i);
+		List<Entity> threats = world.getEntitiesWithinAABB(Entity.class, field);
+		for (Entity e : threats) {
+			this.protect(world, e);
 		}
 	}
 
-	private void protect(World world, List threats, int i) {
-		Entity threat = (Entity)threats.get(i);
+	private void protect(World world, Entity threat) {
 		double x = threat.posX;
 		double y = threat.posY;
 		double z = threat.posZ;
@@ -132,7 +131,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 					List var2 = Items.potionitem.getEffects(((EntityPotion)threat).getPotionDamage());
 					if (var2 != null && !var2.isEmpty()) {
 						AxisAlignedBB var3 = ((EntityPotion)threat).boundingBox.expand(4.0D, 2.0D, 4.0D);
-						List var4 = ((EntityPotion)threat).worldObj.getEntitiesWithinAABB(EntityLivingBase.class, var3);
+						List<EntityPotion> var4 = ((EntityPotion)threat).worldObj.getEntitiesWithinAABB(EntityLivingBase.class, var3);
 						if (var4 != null && !var4.isEmpty()) {
 							Iterator var5 = var4.iterator();
 							while (var5.hasNext()) {

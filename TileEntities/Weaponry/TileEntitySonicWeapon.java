@@ -144,10 +144,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	public void testEye(World world, int x, int y, int z) {
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
-		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase ent : inbox) {
 			boolean vuln = true;
-			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
 					vuln = false;
@@ -169,10 +168,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	public void testBrain(World world, int x, int y, int z) {
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
-		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase ent : inbox) {
 			boolean vuln = true;
-			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
 					vuln = false;
@@ -209,10 +207,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	public void testLung(World world, int x, int y, int z) {
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
-		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase ent : inbox) {
 			boolean vuln = true;
-			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
 					vuln = false;
@@ -230,25 +227,12 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		//ReikaChatHelper.write(this.getMaxVolume());
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(range, range, range);
-		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);/*
-		if (inbox.size() > 0) {
-			for (int i = 0; i < inbox.size(); i++) {
-		boolean vuln = true;
-				EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
-				if (vuln && ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getVolume()) >= LETHALVOLUME)
-					ReikaJavaLibrary.pConsole(ent.getCommandSenderName()+" @ "+ent.posX+", "+ent.posZ+" ("+i+"/"+inbox.size()+") @ Range "+Math.sqrt(this.getVolume()/LETHALVOLUME));
-			}
-		}*/
-		for (int i = 0; i < inbox.size(); i++) {
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase ent : inbox) {
 			boolean vuln = true;
-			EntityLivingBase ent = (EntityLivingBase)inbox.get(i);
 			if (ent instanceof EntityPlayer)
 				if (!this.isPlayerVulnerable((EntityPlayer)ent))
 					vuln = false;
-			//ReikaChatHelper.write(this.volume);
-			//ReikaChatHelper.write(this.LETHALVOLUME-ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getMaxVolume()));
-			//ReikaChatHelper.write(this.LETHALVOLUME);
-			//ReikaChatHelper.write(ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getMaxVolume()));
 			if (vuln && ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getVolume()) >= LETHALVOLUME)
 				ent.attackEntityFrom(DamageSource.outOfWorld, Integer.MAX_VALUE);
 		}

@@ -89,8 +89,7 @@ public class EntitySonicShot extends EntityFireball {
 	private void hurtMobs(World world, int x, int y, int z) {
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(3, 3, 3);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < li.size(); i++) {
-			EntityLivingBase e = li.get(i);
+		for (EntityLivingBase e : li) {
 			e.attackEntityFrom(DamageSource.inWall, 1);
 		}
 	}

@@ -48,6 +48,11 @@ public class GuiSteam extends GuiNonPoweredMachine
 	}
 
 	@Override
+	public boolean labelInventory() {
+		return false;
+	}
+
+	@Override
 	public String getGuiTexture() {
 		return "steamgui";
 	}

@@ -44,9 +44,8 @@ public class TileEntityContainment extends TileEntityProtectionDome {
 		if (power < MINPOWER)
 			return;
 		this.spawnParticles(world, x, y, z);
-		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getRangedBox());
-		for (int i = 0; i < inbox.size(); i++) {
-			EntityLivingBase e = (EntityLivingBase)inbox.get(i);
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getRangedBox());
+		for (EntityLivingBase e : inbox) {
 			if (ReikaEntityHelper.isHostile(e) && !(e instanceof EntityDragon || e instanceof EntityWither)) {
 				this.markNoDespawn(e);
 				double dx = e.posX-x-0.5;

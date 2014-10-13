@@ -29,6 +29,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
+import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -47,8 +49,10 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			this.chargeTools();
 			this.makeJetplate();
 			this.makeJetPropel();
+			this.coolJetpacks();
 			this.wingJetpacks();
 			this.makeBedjump();
+			this.makeNightHelmet();
 
 			if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
 				if (!this.craft()) {
@@ -60,16 +64,49 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		}
 	}
 
+	private void makeNightHelmet() {
+		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDHELM.getItemInstance(), inv);
+		int visslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.NVG.getItemInstance(), inv);
+		if (visslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
+			inv[visslot] = null;
+			inv[armorslot] = null;
+			ItemStack is = inv[armorslot].copy();
+			HelmetUpgrades.NIGHTVISION.enable(is, true);
+			inv[9] = is;
+		}
+	}
+
+	private void coolJetpacks() {
+		ItemStack is = inv[4];
+		if (is != null) {
+			Item item = is.getItem();
+			if (item instanceof ItemJetPack) {
+				ItemJetPack pack = (ItemJetPack)item;
+				if (!PackUpgrades.COOLING.existsOn(is)) {
+					boolean items = ReikaItemHelper.matchStacks(inv[3], MachineRegistry.COOLINGFIN.getCraftedProduct());
+					items &= ReikaItemHelper.matchStacks(inv[5], MachineRegistry.COOLINGFIN.getCraftedProduct());
+					if (items) {
+						ReikaInventoryHelper.decrStack(3, inv);
+						ReikaInventoryHelper.decrStack(5, inv);
+						PackUpgrades.COOLING.enable(is, true);
+						inv[13] = is.copy();
+						inv[4] = null;
+					}
+				}
+			}
+		}
+	}
+
 	private void makeJetPropel() {
 		ItemStack is = inv[4];
 		if (is != null) {
 			Item item = is.getItem();
 			if (item instanceof ItemJetPack) {
 				ItemJetPack pack = (ItemJetPack)item;
-				if (!pack.isPropelled(is)) {
+				if (!PackUpgrades.JET.existsOn(is)) {
 					if (ReikaItemHelper.matchStacks(inv[7], EngineType.JET.getCraftedProduct())) {
 						ReikaInventoryHelper.decrStack(7, inv);
-						pack.setPropelled(is, true);
+						PackUpgrades.JET.enable(is, true);
 						inv[13] = is.copy();
 						inv[4] = null;
 					}
@@ -84,7 +121,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			Item item = is.getItem();
 			if (item instanceof ItemJetPack) {
 				ItemJetPack pack = (ItemJetPack)item;
-				if (!pack.isWinged(is)) {
+				if (!PackUpgrades.WING.existsOn(is)) {
 					ItemStack ingot = pack.getMaterial();
 					for (int i = 0; i < 3; i++) {
 						if (!ReikaItemHelper.matchStacks(inv[i], ingot))
@@ -93,7 +130,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 					for (int i = 0; i < 3; i++) {
 						ReikaInventoryHelper.decrStack(i, inv);
 					}
-					pack.setWinged(is, true);
+					PackUpgrades.WING.enable(is, true);
 					inv[13] = is.copy();
 					inv[4] = null;
 				}
@@ -274,13 +311,11 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
 		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
 			ItemStack jet = inv[jetslot];
-			int original = jet.stackTagCompound != null ? jet.stackTagCompound.getInteger("fuel") : 0;
+			NBTTagCompound tag = jet.stackTagCompound != null ? (NBTTagCompound)jet.stackTagCompound.copy() : null;
 			inv[jetslot] = null;
 			inv[plateslot] = null;
 			ItemStack is = bed ? ItemRegistry.BEDPACK.getEnchantedStack() : ItemRegistry.STEELPACK.getStackOf();
-			if (is.stackTagCompound == null)
-				is.stackTagCompound = new NBTTagCompound();
-			is.stackTagCompound.setInteger("charge", original);
+			is.stackTagCompound = tag;
 			inv[9] = is;
 		}
 	}

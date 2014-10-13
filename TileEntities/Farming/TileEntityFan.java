@@ -152,10 +152,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			}
 		}
 		AxisAlignedBB zone = this.getBlowZone(meta, range);
-		List inzone = world.getEntitiesWithinAABB(Entity.class, zone);
+		List<Entity> inzone = world.getEntitiesWithinAABB(Entity.class, zone);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", inzone.size()));
-		for (int k = 0; k < inzone.size(); k++) {
-			Entity caught = (Entity)inzone.get(k);
+		for (Entity caught : inzone) {
 			double mass = ReikaEntityHelper.getEntityMass(caught);
 			if (caught.motionX < AXISSPEEDCAP && xstep != 0) {
 				double d = caught.posX-x;

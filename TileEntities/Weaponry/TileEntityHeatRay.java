@@ -248,17 +248,14 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				world.markBlockForUpdate(dx, dy, dz);
 			}
 			AxisAlignedBB zone = this.getBurnZone(metadata, step);
-			List inzone = worldObj.getEntitiesWithinAABB(Entity.class, zone);
-			for (int i = 0; i < inzone.size(); i++) {
-				if (inzone.get(i) instanceof Entity) {
-					Entity caught = (Entity)inzone.get(i);
-					if (!(caught instanceof EntityItem)) //Do not burn drops
-						caught.setFire(this.getBurnTime());	// 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
-					if (caught instanceof EntityTNTPrimed)
-						world.spawnParticle("lava", caught.posX+rand.nextFloat(), caught.posY+rand.nextFloat(), caught.posZ+rand.nextFloat(), 0, 0, 0);
-					if (caught instanceof Laserable) {
-						((Laserable)caught).whenInBeam(world, MathHelper.floor_double(caught.posX), MathHelper.floor_double(caught.posY), MathHelper.floor_double(caught.posZ), power, step);
-					}
+			List<Entity> inzone = worldObj.getEntitiesWithinAABB(Entity.class, zone);
+			for (Entity caught : inzone) {
+				if (!(caught instanceof EntityItem)) //Do not burn drops
+					caught.setFire(this.getBurnTime());	// 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
+				if (caught instanceof EntityTNTPrimed)
+					world.spawnParticle("lava", caught.posX+rand.nextFloat(), caught.posY+rand.nextFloat(), caught.posZ+rand.nextFloat(), 0, 0, 0);
+				if (caught instanceof Laserable) {
+					((Laserable)caught).whenInBeam(world, MathHelper.floor_double(caught.posX), MathHelper.floor_double(caught.posY), MathHelper.floor_double(caught.posZ), power, step);
 				}
 			}
 		}

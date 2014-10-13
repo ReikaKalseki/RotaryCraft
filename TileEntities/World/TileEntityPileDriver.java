@@ -16,11 +16,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -70,9 +69,8 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 	public void addNausea(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(15, 15, 15); // 5m radius
-		List sick = world.getEntitiesWithinAABB(EntityPlayer.class, box);
-		for (int k = 0; k < sick.size(); k++) {
-			EntityPlayer ep = (EntityPlayer)sick.get(k);
+		List<EntityPlayer> sick = world.getEntitiesWithinAABB(EntityPlayer.class, box);
+		for (EntityPlayer ep : sick) {
 			if (ep != null)
 				ep.addPotionEffect(new PotionEffect(Potion.confusion.id, 150, 10));
 		}
@@ -107,9 +105,8 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 	public void bounce(World world, int x, int y, int z) { //bounce entities
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-2, y, z-2, x+3, y+1, z+3).expand(24, 24, 24);
-		List inzone = world.getEntitiesWithinAABB(Entity.class, zone);
-		for (int i = 0; i < inzone.size(); i++) {
-			Entity ent = (Entity)inzone.get(i);
+		List<Entity> inzone = world.getEntitiesWithinAABB(Entity.class, zone);
+		for (Entity ent : inzone) {
 			if (ent != null) {
 				if (ent.onGround && !world.isRemote)
 					ent.motionY += 0.5 / ReikaMathLibrary.doubpow(ReikaMathLibrary.py3d(ent.posX-x, ent.posY-y, ent.posZ-z), 0.5);
@@ -156,17 +153,9 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			}
 		}
 		AxisAlignedBB nearby = AxisAlignedBB.getBoundingBox(x-range, y-range, z-range, x+1+range, y+1+range, z+1+range);
-		List inzone = world.getEntitiesWithinAABB(EntityPainting.class, nearby);
-		for (int p = 0; p < inzone.size(); p++) {
-			EntityPainting ep = (EntityPainting)inzone.get(p);
-			if (ep != null)
-				ep.attackEntityFrom(DamageSource.outOfWorld, 100);
-		}
-		inzone = world.getEntitiesWithinAABB(EntityItemFrame.class, nearby);
-		for (int p = 0; p < inzone.size(); p++) {
-			EntityItemFrame eif = (EntityItemFrame)inzone.get(p);
-			if (eif != null)
-				eif.attackEntityFrom(DamageSource.outOfWorld, 100);
+		List<EntityHanging> inzone = world.getEntitiesWithinAABB(EntityHanging.class, nearby);
+		for (EntityHanging ep : inzone) {
+			ep.attackEntityFrom(DamageSource.outOfWorld, 100);
 		}
 	}
 

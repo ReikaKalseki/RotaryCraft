@@ -411,9 +411,35 @@ public class GuiHandbook extends GuiScreen
 
 		if (!this.isLimitedView()) {
 			ReikaRenderHelper.disableLighting();
+			int msx = ReikaGuiAPI.instance.getMouseRealX();
+			int msy = ReikaGuiAPI.instance.getMouseRealY();
 			String s = String.format("Page %d/%d", screen, this.getMaxPage());
 			//ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, s, posX+xSize+23, posY+5, 0xffffff);
 			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, s, posX+24+xSize+fontRendererObj.getStringWidth(s), posY+20);
+			if (ReikaGuiAPI.instance.isMouseInBox(posX-18, posX+2, posY+0, posY+220)) {
+				String sg = "";
+				List<HandbookEntry> li = this.getAllTabsOnScreen();
+				int idx = (msy-posY)/20;
+				if (idx >= li.size()) {
+					int diff = idx-li.size();
+					switch(diff) {
+					case 0:
+						sg = "Next";
+						break;
+					case 1:
+						sg = "Back";
+						break;
+					case 2:
+						sg = "Return";
+						break;
+					}
+				}
+				else {
+					HandbookEntry h = li.get(idx);
+					sg = h.getTitle();
+				}
+				ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, sg, msx+fontRendererObj.getStringWidth(sg)+30, msy);
+			}
 		}
 
 		if (HandbookNotifications.newAlerts()) {

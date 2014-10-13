@@ -21,9 +21,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
@@ -38,9 +42,24 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		super(RotaryCraft.BEDROCK, render, type, tex);
 	}
 
-	@Override
-	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {
+	public static enum HelmetUpgrades {
+		NIGHTVISION();
 
+		private static final HelmetUpgrades[] list = values();
+
+		public boolean existsOn(ItemStack is) {
+			return is.stackTagCompound != null && is.stackTagCompound.getBoolean(this.getNBT());
+		}
+
+		private String getNBT() {
+			return this.name().toLowerCase();
+		}
+
+		public void enable(ItemStack is, boolean set) {
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setBoolean(this.getNBT(), set);
+		}
 	}
 
 	@Override
@@ -50,6 +69,14 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		ItemStack is = new ItemStack(id, 1, 0);
 		ReikaEnchantmentHelper.applyEnchantments(is, this.getDefaultEnchantments());
 		li.add(is);
+	}
+
+	@Override
+	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {
+		if (armorType == 0 && HelmetUpgrades.NIGHTVISION.existsOn(is)) {
+			ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
+			ReikaEntityHelper.setNoPotionParticles(ep);
+		}
 	}
 
 	public HashMap<Enchantment, Integer> getDefaultEnchantments() {

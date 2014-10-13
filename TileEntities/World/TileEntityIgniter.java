@@ -75,12 +75,13 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 			int fy = y-yspread+rand.nextInt(yspread+1);
 			this.fire(world, x, y, z, fx, fy, fz);
 		}
-		if (temperature < ANIMALIGNITION)
-			return;
-		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(spread, yspread, spread));
-		for (int i = 0; i < in.size(); i++) {
-			EntityLivingBase ent = (EntityLivingBase)in.get(i);
-			ent.setFire(1);
+
+		if (temperature >= ANIMALIGNITION) {
+			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(spread, yspread, spread);
+			List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+			for (EntityLivingBase ent : in) {
+				ent.setFire(1);
+			}
 		}
 	}
 

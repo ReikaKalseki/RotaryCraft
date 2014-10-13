@@ -78,7 +78,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		if (power < MINPOWER)
 			return;
 		this.testIdle();
-		List inrange = this.getEntities(world, x, y, z, EntityAnimal.class);
+		List<EntityAnimal> inrange = this.getEntities(world, x, y, z);
 		this.breed(world, x, y, z, inrange);
 	}
 
@@ -110,14 +110,13 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		ReikaInventoryHelper.decrStack(slot, inv);
 	}
 
-	private void breed(World world, int x, int y, int z, List inroom) {
+	private void breed(World world, int x, int y, int z, List<EntityAnimal> inroom) {
 		boolean pathing = false;
 		if (tickcount >= 20) {
 			tickcount = 0;
 			pathing = true;
 		}
-		for (int i = 0; i < inroom.size(); i++) {
-			EntityAnimal ent = (EntityAnimal)inroom.get(i);
+		for (EntityAnimal ent : inroom) {
 			//ReikaJavaLibrary.pConsole(this.canBreed(ent)+" for "+ent.getCommandSenderName());
 			if (this.canBreed(ent)) {
 				if (!(ent instanceof EntityTameable) || (ent instanceof EntityTameable && !((EntityTameable)ent).isSitting())) {
@@ -148,9 +147,9 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		}
 	}
 
-	private List getEntities(World world, int x, int y, int z, Class entity) {
+	private List<EntityAnimal> getEntities(World world, int x, int y, int z) {
 		AxisAlignedBB room = this.getBox(x, y, z, this.getRange());
-		List inroom = world.getEntitiesWithinAABB(entity, room);
+		List inroom = world.getEntitiesWithinAABB(EntityAnimal.class, room);
 		return inroom;
 	}
 

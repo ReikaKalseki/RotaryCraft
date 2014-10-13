@@ -87,9 +87,8 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 		//this.syncTNTData(world, x, y, z);
 		if (targetMode) {
 			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(256, 256, 256);
-			List in = world.getEntitiesWithinAABB(EntityTNTPrimed.class, box);
-			for (int i = 0; i < in.size(); i++) {
-				EntityTNTPrimed tnt = (EntityTNTPrimed)in.get(i);
+			List<EntityTNTPrimed> in = world.getEntitiesWithinAABB(EntityTNTPrimed.class, box);
+			for (EntityTNTPrimed tnt : in) {
 				if (!tnt.onGround) {
 					//Nullify air resistance
 					tnt.motionX /= 0.869800000190734863D;

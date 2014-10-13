@@ -49,6 +49,34 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		super(mat, render, 1, tex);
 	}
 
+	public static enum PackUpgrades {
+		WING("Winged"),
+		JET("Thrust Boost"),
+		COOLING("Fin-Cooled");
+
+		public final String label;
+
+		private static final PackUpgrades[] list = values();
+
+		private PackUpgrades(String s) {
+			label = s;
+		}
+
+		public boolean existsOn(ItemStack is) {
+			return is.stackTagCompound != null && is.stackTagCompound.getBoolean(this.getNBT());
+		}
+
+		private String getNBT() {
+			return this.name().toLowerCase();
+		}
+
+		public void enable(ItemStack is, boolean set) {
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setBoolean(this.getNBT(), set);
+		}
+	}
+
 	public int getFuel(ItemStack is) {
 		NBTTagCompound nbt = is.stackTagCompound;
 		if (nbt == null)
@@ -75,7 +103,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	{
 		boolean flying = this.useJetpack(player, is);
 
-		if (ConfigRegistry.EXPLODEPACK.getState()) {
+		if (!PackUpgrades.COOLING.existsOn(is)) {
 			if (this.getCurrentFillLevel(is) > 0) {
 				if (player.handleLavaMovement() && world.difficultySetting != EnumDifficulty.PEACEFUL) {
 					this.explode(world, player);
@@ -95,8 +123,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		horiz = horiz || KeyWatcher.instance.isKeyDown(ep, Key.LEFT) || KeyWatcher.instance.isKeyDown(ep, Key.RIGHT);
 		float maxSpeed = jetbonus ? 3 : 1.25F;
 		double hspeed = ReikaMathLibrary.py3d(ep.motionX, 0, ep.motionZ);
-		boolean winged = this.isWinged(is);
-		boolean propel = this.isPropelled(is) && this.isJetFueled(is);
+		boolean winged = PackUpgrades.WING.existsOn(is);
+		boolean propel = PackUpgrades.JET.existsOn(is) && this.isJetFueled(is);
 		boolean floatmode = !hoverMode;
 		float thrust = winged ? 0.15F : hoverMode ? 0.05F : 0.1F;
 		if (propel)
@@ -187,26 +215,6 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		return isFlying;
 	}
 
-	public boolean isPropelled(ItemStack is) {
-		return is.stackTagCompound != null && is.stackTagCompound.getBoolean("eng");
-	}
-
-	public void setPropelled(ItemStack is, boolean prop) {
-		if (is.stackTagCompound == null)
-			is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setBoolean("eng", prop);
-	}
-
-	public boolean isWinged(ItemStack is) {
-		return is.stackTagCompound != null && is.stackTagCompound.getBoolean("wings");
-	}
-
-	public void setWinged(ItemStack is, boolean wing) {
-		if (is.stackTagCompound == null)
-			is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setBoolean("wings", wing);
-	}
-
 	public ItemStack getMaterial() {
 		return this.isBedrock() ? ItemStacks.bedingot : ItemStacks.steelingot;
 	}
@@ -241,10 +249,12 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
-		if (this.isWinged(is))
-			li.add("Winged");
-		if (this.isPropelled(is))
-			li.add("Thrust Boost");
+		for (int i = 0; i < PackUpgrades.list.length; i++) {
+			PackUpgrades pack = PackUpgrades.list[i];
+			if (pack.existsOn(is)) {
+				li.add(pack.label);
+			}
+		}
 		int ch = is.stackTagCompound != null ? is.stackTagCompound.getInteger("fuel") : 0;
 		li.add(ch > 0 ? String.format("Fuel: %d mB of %s", ch, this.getCurrentFluid(is).getLocalizedName()) : "No Fuel");
 	}
@@ -264,16 +274,17 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		this.setFuel(is, f, this.getMaxFuel(is));
 		this.setFuel(is3, FluidRegistry.getFluid("jet fuel"), this.getMaxFuel(is3));
 		ItemStack is5 = is3.copy();
-		this.setWinged(is3, true);
-		ItemStack is4 = is3.copy();
-		this.setPropelled(is4, true);
+		PackUpgrades.WING.enable(is3, true);
+		for (int i = 0; i < PackUpgrades.list.length; i++) {
+			PackUpgrades pack = PackUpgrades.list[i];
+			pack.enable(is3, true);
+		}
 		ItemRegistry ir = ItemRegistry.getEntry(is);
 		if (ir.isAvailableInCreativeInventory()) {
 			li.add(is2);
 			li.add(is);
 			li.add(is5);
 			li.add(is3);
-			li.add(is4);
 		}
 	}
 	/*
@@ -404,7 +415,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	public int[] getIndices(ItemStack is) {
 		ArrayList li = new ArrayList();
 		li.add(this.getItemSpriteIndex(is));
-		if (this.isWinged(is)) {
+		if (PackUpgrades.WING.existsOn(is)) {
 			int w = this.isBedrock() ? 59 : this.isSteel() ? 61 : 60;
 			li.add(w);
 		}

@@ -41,7 +41,7 @@ public class TileEntityPipePump extends TileEntityPowerReceiver implements PipeR
 		this.getSummativeSidedPower();
 		this.getIOSidesDefault(world, x, y, z, meta);
 
-		if (this.getTicksExisted() < 2)
+		if (this.getTicksExisted() == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		if (power >= MINPOWER && omega >= MINSPEED) {

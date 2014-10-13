@@ -99,9 +99,9 @@ public class RecipesPulseFurnace
 		this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), 0F);	//1 ingot per block of rail
 		this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), 0F);
 
-		if (ModList.THERMALEXPANSION.isLoaded()) {
-			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "dustEnderium", 1);
-			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "ingotEnderium", 1);
+		if (ModList.THERMALFOUNDATION.isLoaded()) {
+			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustEnderium", 1);
+			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotEnderium", 1);
 			if (enderdust == null && enderingot == null)
 				RotaryCraft.logger.logError("No item found for TE3 enderium crafting!");
 			else

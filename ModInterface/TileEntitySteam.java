@@ -67,7 +67,7 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 		this.getIOSides(world, x, y, z, meta);
 		write = this.getFacing().getOpposite();
 
-		if (this.getTicksExisted() < 2)
+		if (this.getTicksExisted() == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 
 		this.updateSpeed();

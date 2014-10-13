@@ -185,8 +185,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 		int z2 = write.offsetZ != 0 ? write.offsetZ > 0 ? z+5 : z+1 : z+1;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x1, y, z1, x2, y+1, z2);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < li.size(); i++) {
-			EntityLivingBase e = li.get(i);
+		for (EntityLivingBase e : li) {
 			e.attackEntityFrom(DamageSource.onFire, 1);
 		}
 	}
@@ -200,12 +199,12 @@ public class TileEntityJetEngine extends TileEntityEngine {
 			return;
 		for (int step = 0; step < 8; step++) {
 			AxisAlignedBB zone = this.getSuctionZone(world, x, y, z, meta, step);
-			List inzone = world.getEntitiesWithinAABB(Entity.class, zone);
-			for (int i = 0; i < inzone.size(); i++) {
+			List<Entity> inzone = world.getEntitiesWithinAABB(Entity.class, zone);
+			for (Entity caught : inzone) {
 				boolean immune = false;
 				float mult = 1;
-				if (inzone.get(i) instanceof EntityPlayer) {
-					EntityPlayer caughtpl = (EntityPlayer)inzone.get(i);
+				if (caught instanceof EntityPlayer) {
+					EntityPlayer caughtpl = (EntityPlayer)caught;
 					if (caughtpl.capabilities.isCreativeMode)
 						immune = true;
 					ItemStack is = caughtpl.getCurrentArmor(0);
@@ -216,9 +215,8 @@ public class TileEntityJetEngine extends TileEntityEngine {
 							mult = 0.1F;
 					}
 				}
-				if (inzone.get(i) instanceof EntityTurretShot)
+				if (caught instanceof EntityTurretShot)
 					immune = true;
-				Entity caught = (Entity)inzone.get(i);
 				if (!immune) {
 					caught.motionX += (x+0.5D - caught.posX)/20*mult;
 					caught.motionY += (y+0.5D - caught.posY)/20*mult;
@@ -407,9 +405,8 @@ public class TileEntityJetEngine extends TileEntityEngine {
 
 	public void jetEngineDetonation(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB zone = this.getFlameZone(world, x, y, z, meta);
-		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
-		for (int i = 0; i < in.size(); i++) {
-			EntityLivingBase e = (EntityLivingBase)in.get(i);
+		List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
+		for (EntityLivingBase e : in) {
 			e.setFire(2);
 		}
 		double vx = (x-backx)/2D;
@@ -503,8 +500,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	private void launchEntities(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(8, 8, 8);
 		List<Entity> inbox = world.getEntitiesWithinAABB(Entity.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
-			Entity e = inbox.get(i);
+		for (Entity e : inbox) {
 			double dx = e.posX-x-0.5;
 			double dy = e.posY-y-0.5;
 			double dz = e.posZ-z-0.5;

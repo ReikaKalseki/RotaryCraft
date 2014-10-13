@@ -102,9 +102,8 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 
 	private void ignite(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+2, z+1);
-		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
-			EntityLivingBase hot = (EntityLivingBase)inbox.get(i);
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase hot : inbox) {
 			hot.setFire(temperature/50);
 		}
 	}

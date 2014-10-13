@@ -146,6 +146,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 						return;
 
 		xp += out.stackSize*bc.xp;
+		if (this.getPlacer() != null)
+			out.onCrafting(worldObj, this.getPlacer(), out.stackSize);
 
 		for (int i = 1; i < 10; i++) {
 			if (inv[i] != null)

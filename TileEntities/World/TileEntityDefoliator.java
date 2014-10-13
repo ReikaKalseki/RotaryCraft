@@ -139,8 +139,7 @@ public class TileEntityDefoliator extends InventoriedPowerLiquidReceiver impleme
 
 				AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(3, 3, 3);
 				List<EntityLivingBase> li2 = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-				for (int i = 0; i < li2.size(); i++) {
-					EntityLivingBase e = li2.get(i);
+				for (EntityLivingBase e : li2) {
 					e.addPotionEffect(new PotionEffect(Potion.poison.id, 50, 3));
 					e.attackEntityFrom(DamageSource.generic, 0.5F);
 				}

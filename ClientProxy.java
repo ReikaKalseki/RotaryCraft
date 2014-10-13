@@ -160,7 +160,7 @@ public class ClientProxy extends CommonProxy
 		addArmorTexture(ItemRegistry.JUMP, "/Reika/RotaryCraft/Textures/Misc/jump.png");
 		addArmorTexture(ItemRegistry.BEDJUMP, "/Reika/RotaryCraft/Textures/Misc/bedrock_jump.png");
 		addArmorTexture(ItemRegistry.NVG, "/Reika/RotaryCraft/Textures/Misc/NVGoggles.png");
-		addArmorTexture(ItemRegistry.NVH, "/Reika/RotaryCraft/Textures/Misc/NVHelmet.png");
+		//addArmorTexture(ItemRegistry.NVH, "/Reika/RotaryCraft/Textures/Misc/NVHelmet.png");
 		addArmorTexture(ItemRegistry.IOGOGGLES, "/Reika/RotaryCraft/Textures/Misc/IOGoggles.png");
 		addArmorTexture(ItemRegistry.BEDHELM, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
 		addArmorTexture(ItemRegistry.BEDREVEAL, "/Reika/RotaryCraft/Textures/Misc/bedreveal.png");

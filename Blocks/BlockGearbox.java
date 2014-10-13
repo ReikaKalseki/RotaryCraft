@@ -207,7 +207,7 @@ public class BlockGearbox extends BlockModelledMachine {
 					return true;
 				}
 				else if (ReikaItemHelper.matchStacks(held, ItemStacks.lubebucket) && held.stackSize == 1) {
-					if (tile.getGearboxType().isDamageableGear()) {
+					if (tile.getGearboxType().needsLubricant()) {
 						int amt = 1000;
 						if (tile.canTakeLubricant(amt)) {
 							tile.addLubricant(amt);

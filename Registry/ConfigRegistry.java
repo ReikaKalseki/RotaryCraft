@@ -62,7 +62,7 @@ public enum ConfigRegistry implements ConfigList {
 	TURRETPLAYERS("Turrets can target players", true),
 	HSLADICT("Allow RC steel to be used in other mods", false),
 	PREENCHANT("Lock enchants on bedrock tools", true),
-	EXPLODEPACK("Explode jetpack if player is in lava", true),
+	//EXPLODEPACK("Explode jetpack if player is in lava", true),
 	SPRINKLER("Sprinkler Particle Density", 4),
 	HANDBOOK("Spawn with RC Handbook", true),
 	CONSERVEPACK("Conservative Jetpack Firing", true),

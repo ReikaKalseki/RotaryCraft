@@ -152,6 +152,9 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 			if (slot == -1) {
 				slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.BEDPACK.getItemInstance(), ep.inventory);
 			}
+			if (slot == -1) {
+				slot = ReikaInventoryHelper.locateIDInInventory(ItemRegistry.STEELPACK.getItemInstance(), ep.inventory);
+			}
 			if (slot != -1) {
 				ItemStack jet = ep.inventory.getStackInSlot(slot);
 				ItemJetPack item = (ItemJetPack)jet.getItem();

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Surveying;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.EntityList;
@@ -27,9 +28,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
-	public int[][] colors = new int[49][49]; // |<--- 24 ---- R ---- 24 --->|
-	public int[][] mobs = new int[49][49];
-	public List inzone;
+	private int[][] colors = new int[49][49]; // |<--- 24 ---- R ---- 24 --->|
+	private int[][] mobs = new int[49][49];
+	private List<EntityLivingBase> inzone;
 	public String owner;
 
 	public static final int FALLOFF = 1024; //1kW per extra meter
@@ -38,6 +39,10 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	public boolean animal = true;
 	public boolean player = true;
 	private boolean isJammed;
+
+	public List<EntityLivingBase> getEntities() {
+		return Collections.unmodifiableList(inzone);
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -70,10 +75,11 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 		int range = this.getRange();
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-range, 0, z-range, x+1+range, 255, z+1+range);
 		inzone = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
-		for (int i = 0; i < inzone.size(); i++) {
-			EntityLivingBase ent = (EntityLivingBase)inzone.get(i);
-			if (ent instanceof RadarJammer && ((RadarJammer)ent).jamRadar(worldObj, xCoord, yCoord, zCoord))
+		for (EntityLivingBase ent : inzone) {
+			if (ent instanceof RadarJammer && ((RadarJammer)ent).jamRadar(worldObj, xCoord, yCoord, zCoord)) {
 				isJammed = true;
+				break;
+			}
 			int ex = (int)ent.posX-x;
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;

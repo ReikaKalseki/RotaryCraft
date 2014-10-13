@@ -77,9 +77,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 				if (ConfigRegistry.BLOCKDAMAGE.getState())
 					ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, temp);
 				AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+i, y+1, z+j, x+i+1, y+2, z+j+1);
-				List in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
-				for (int k = 0; k < in.size(); k++) {
-					EntityLivingBase e = (EntityLivingBase)in.get(k);
+				List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
+				for (EntityLivingBase e : in) {
 					if (temp > 400)
 						e.setFire(3);
 				}

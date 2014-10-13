@@ -117,9 +117,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	@SuppressWarnings("unused")
 	private void suck(World world, int x, int y, int z) {
 		AxisAlignedBB box = this.getBox(world, x, y, z);
-		List inbox = world.getEntitiesWithinAABB(EntityItem.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
-			EntityItem ent = (EntityItem)inbox.get(i);
+		List<EntityItem> inbox = world.getEntitiesWithinAABB(EntityItem.class, box);
+		for (EntityItem ent : inbox) {
 			//Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.posX, ent.posY, ent.posZ, x+0.5, y+0.5, z+0.5);
 			//if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
 			if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
@@ -136,9 +135,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 					ent.velocityChanged = true;
 			}
 		}
-		List inbox2 = world.getEntitiesWithinAABB(EntityXPOrb.class, box);
-		for (int i = 0; i < inbox2.size(); i++) {
-			EntityXPOrb ent = (EntityXPOrb)inbox2.get(i);
+		List<EntityXPOrb> inbox2 = world.getEntitiesWithinAABB(EntityXPOrb.class, box);
+		for (EntityXPOrb ent : inbox2) {
 			if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
 				double dx = (x+0.5 - ent.posX);
 				double dy = (y+0.5 - ent.posY);
@@ -159,9 +157,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		if (world.isRemote)
 			return;
 		AxisAlignedBB close = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(0.25D, 0.25D, 0.25D);
-		List closeitems = world.getEntitiesWithinAABB(EntityItem.class, close);
-		for (int i = 0; i < closeitems.size(); i++) {
-			EntityItem ent = (EntityItem)closeitems.get(i);
+		List<EntityItem> closeitems = world.getEntitiesWithinAABB(EntityItem.class, close);
+		for (EntityItem ent : closeitems) {
 			if (ent.delayBeforeCanPickup <= 0) {
 				ItemStack is = ent.getEntityItem();
 				int targetslot = this.checkForStack(is);
@@ -179,9 +176,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 				MinecraftForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy(): null));
 			}
 		}
-		List closeorbs = world.getEntitiesWithinAABB(EntityXPOrb.class, close);
-		for (int i = 0; i < closeorbs.size(); i++) {
-			EntityXPOrb xp = (EntityXPOrb)closeorbs.get(i);
+		List<EntityXPOrb> closeorbs = world.getEntitiesWithinAABB(EntityXPOrb.class, close);
+		for (EntityXPOrb xp : closeorbs) {
 			int val = xp.getXpValue();
 			experience += val;
 			xp.setDead();

@@ -36,8 +36,6 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	public String owner;
 	public boolean laser;
 
-	public List inbox;
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -54,13 +52,12 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		//if (this.tickcount < 5)
 		//return;
 		//this.tickcount = 0;
+		boolean oneplus = false;
 		AxisAlignedBB box = this.getBox();
-		inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
-			EntityLiving ent = (EntityLiving)inbox.get(i);
+		List<EntityLiving> inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
+		for (EntityLiving ent : inbox) {
 			if (!(ent instanceof EntityVillager)) {
-				//this.laser = true;
-				world.func_147479_m(x, y, z);
+				oneplus = true;
 				if (ep != null && this.getDamage() > 0) {
 					ent.attackEntityFrom(new HarvesterDamage(this), this.getDamage());
 					if (this.getEnchantment(Enchantment.silkTouch) > 0 && rand.nextInt(20) == 0)
@@ -72,8 +69,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 				ent.motionY = 0;
 			}
 		}
-		if (inbox.size() == 0 && !(inbox.size() == 1 && (inbox.get(0) instanceof EntityPlayer || inbox.get(0) instanceof EntityVillager)))
-			laser = false;
+		laser = oneplus;
 	}
 
 	public int getDamage() {

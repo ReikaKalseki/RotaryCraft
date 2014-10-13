@@ -86,6 +86,11 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		this.getCoordsFromIAP(world, x, y, z);
+	}
+
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
@@ -103,8 +108,6 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			}
 			}*/
 
-		if (this.getTicksExisted() < 1)
-			this.getCoordsFromIAP(world, x, y, z);
 		//ReikaJavaLibrary.pConsole(coords, Side.SERVER);
 
 		if (coords.isEmpty()) {

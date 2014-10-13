@@ -123,8 +123,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 		int r = this.getRange();
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).offset(0, 1, 0).expand(r, 1, r);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < li.size(); i++) {
-			EntityLivingBase e = li.get(i);
+		for (EntityLivingBase e : li) {
 			e.attackEntityFrom(DamageSource.generic, 0.5F);
 		}
 	}

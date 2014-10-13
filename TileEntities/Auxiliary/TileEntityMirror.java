@@ -60,9 +60,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 
 		if (!world.isRemote) {
 			AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
-			List in = world.getEntitiesWithinAABB(Entity.class, above);
-			for (int i = 0; i < in.size(); i++) {
-				Entity e = (Entity)in.get(i);
+			List<Entity> in = world.getEntitiesWithinAABB(Entity.class, above);
+			for (Entity e : in) {
 				double m = ReikaEntityHelper.getEntityMass(e);
 				//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
 				if (e.motionY < -0.1 && m-e.motionY*20 > 80) {

@@ -50,9 +50,8 @@ public class TileEntityWindEngine extends TileEntityEngine {
 			break;
 		}
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x+c, y, z+d, x+1+c, y+1, z+1+d).expand(a, 1, b);
-		List in = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < in.size(); i++) {
-			EntityLivingBase ent = (EntityLivingBase)in.get(i);
+		List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase ent : in) {
 			ent.attackEntityFrom(DamageSource.generic, 1);
 		}
 	}

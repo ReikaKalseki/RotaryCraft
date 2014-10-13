@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -32,6 +33,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation {
 
@@ -192,7 +194,8 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.ice) != null)
 			Tamb -= 30;
 
-		if (ReikaItemHelper.matchStacks(ItemStacks.dryice, inv[1])) {
+		ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
+		if (ReikaItemHelper.matchStacks(ItemStacks.dryice, inv[1]) || (cryo != null && ReikaItemHelper.matchStacks(cryo, inv[1]))) {
 			Tamb -= 40;
 			if (temperature > Tamb+4 || rand.nextInt(20) == 0)
 				ReikaInventoryHelper.decrStack(1, inv);

@@ -96,9 +96,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	private void suckUpMobs(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y-1, z, x+1, y, z+1);
-		List inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < inbox.size(); i++) {
-			EntityLivingBase e = (EntityLivingBase)inbox.get(i);
+		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase e : inbox) {
 			e.attackEntityFrom(DamageSource.generic, 5);
 		}
 		if (inbox.size() > 0 && !ReikaEntityHelper.allAreDead(inbox, false))

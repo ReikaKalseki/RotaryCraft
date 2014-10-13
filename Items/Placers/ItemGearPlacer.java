@@ -103,7 +103,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 			par3List.add("Damage: "+dmg+"%");
 		}
 
-		if (is.stackTagCompound.hasKey("lube") && mat.isDamageableGear()) {
+		if (is.stackTagCompound.hasKey("lube") && mat.needsLubricant()) {
 			par3List.add("Lubricant: "+is.stackTagCompound.getInteger("lube")+" mB");
 		}
 	}

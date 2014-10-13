@@ -35,9 +35,8 @@ public class TileEntityItemRefresher extends TileEntityPowerReceiver implements 
 			return;
 		int range = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x-range, y-range, z-range, x+1+range, y+1+range, z+1+range);
-		List items = world.getEntitiesWithinAABB(EntityItem.class, box);
-		for (int i = 0; i < items.size(); i++) {
-			EntityItem item = (EntityItem)items.get(i);
+		List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, box);
+		for (EntityItem item : items) {
 			if (item.age > item.lifespan-20)
 				item.age = item.lifespan-20;
 			if (item.motionY == 0)

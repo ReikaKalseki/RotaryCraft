@@ -223,23 +223,19 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 			List effects = Items.potionitem.getEffects(potionDamage[i]);
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.potionDamage[i]));
 			if (effects != null && !effects.isEmpty()) {
-				List inroom = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, room);
+				List<EntityLivingBase> inroom = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, room);
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", inroom.size()));
-				if (inroom != null && !inroom.isEmpty()) {
-					Iterator iter = inroom.iterator();
-					while (iter.hasNext()) {
-						EntityLivingBase mob = (EntityLivingBase)iter.next();
-						Iterator potioneffects = effects.iterator();
-						while (potioneffects.hasNext()) {
-							PotionEffect effect = (PotionEffect)potioneffects.next();
-							int id = effect.getPotionID();
-							if (!Potion.potionTypes[id].isInstant()) {
-								int bonus = this.getMultiplier(i) - 1;  //-1 since adding
-								if (effect.getAmplifier() == 1)
-									bonus *= 2;
-								mob.addPotionEffect(new PotionEffect(id, 100, effect.getAmplifier()+bonus));
-								//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", effect.getAmplifier()));
-							}
+				for (EntityLivingBase mob : inroom) {
+					Iterator potioneffects = effects.iterator();
+					while (potioneffects.hasNext()) {
+						PotionEffect effect = (PotionEffect)potioneffects.next();
+						int id = effect.getPotionID();
+						if (!Potion.potionTypes[id].isInstant()) {
+							int bonus = this.getMultiplier(i) - 1;  //-1 since adding
+							if (effect.getAmplifier() == 1)
+								bonus *= 2;
+							mob.addPotionEffect(new PotionEffect(id, 100, effect.getAmplifier()+bonus));
+							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", effect.getAmplifier()));
 						}
 					}
 				}

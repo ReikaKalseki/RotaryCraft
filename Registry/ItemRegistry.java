@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Registry;
 import java.util.HashMap;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
@@ -63,7 +62,6 @@ import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
-import Reika.RotaryCraft.Items.Tools.ItemNightVisionHelmet;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Items.Tools.ItemTarget;
 import Reika.RotaryCraft.Items.Tools.ItemTileSelector;
@@ -121,7 +119,7 @@ public enum ItemRegistry implements ItemEnum {
 	BEDAXE(100, 1, false, 			"item.bedaxe", 				ItemBedrockAxe.class),
 	BEDSHOVEL(102, 1, false, 		"item.bedshovel", 			ItemBedrockShovel.class),
 	NVG(97, 1, true, 				"item.nvg", 				ItemNightVisionGoggles.class),
-	NVH(48, 1, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
+	//NVH(48, 1, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
 	HANDCRAFT(33, 1, false, 		"item.handcraft", 			ItemHandheldCrafting.class),
 	RAILGUN(113, 1, true, 			"item.railgun", 			ItemRailGunAmmo.class),
 	BUCKET(104, 106, 1, true, 		"item.rcbucket", 			ItemFuelLubeBucket.class),
@@ -453,8 +451,8 @@ public enum ItemRegistry implements ItemEnum {
 			return RotaryCraft.proxy.IOGoggles;
 		if (this == NVG)
 			return RotaryCraft.proxy.NVGoggles;
-		if (this == NVH)
-			return RotaryCraft.proxy.NVHelmet;
+		//if (this == NVH)
+		//	return RotaryCraft.proxy.NVHelmet;
 		if (this.isBedrockArmor())
 			return RotaryCraft.proxy.armor;
 		if (this.isSteelArmor())
@@ -521,8 +519,8 @@ public enum ItemRegistry implements ItemEnum {
 	public boolean isCharged() {
 		if (this == BEDJUMP)
 			return false;
-		if (this == NVH)
-			return false;
+		//if (this == NVH)
+		//	return false;
 		return ItemChargedTool.class.isAssignableFrom(itemClass) || ItemChargedArmor.class.isAssignableFrom(itemClass);
 	}
 
@@ -563,8 +561,8 @@ public enum ItemRegistry implements ItemEnum {
 		case WORLDEDIT:
 		case CANOLA:
 			return 2;
-		case NVH:
-			return Items.diamond_helmet.getMaxDamage();
+			//case NVH:
+			//	return Items.diamond_helmet.getMaxDamage();
 		case SPRING:
 		case STRONGCOIL:
 			return 32000;
@@ -619,7 +617,7 @@ public enum ItemRegistry implements ItemEnum {
 		switch(this) {
 		case IOGOGGLES:
 		case NVG:
-		case NVH:
+			//case NVH:
 		case BEDHELM:
 		case BEDCHEST:
 		case BEDLEGS:

@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
@@ -94,8 +93,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 			break;
 		}
 		boolean flag = false;
-		for (int i = 0; i < li.size(); i++) {
-			Entity e = li.get(i);
+		for (EntityLivingBase e : li) {
 			int x2 = (int)Math.floor(e.posX);
 			int z2 = (int)Math.floor(e.posZ);
 			int y2 = (int)e.posY-1;
