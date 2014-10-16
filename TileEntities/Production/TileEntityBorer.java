@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -437,11 +439,19 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 				return true;
 			}
-			ArrayList<ItemStack> items = id.getDrops(world, xread, yread, zread, meta, this.getEnchantment(Enchantment.fortune));
-			for (int i = 0; i < items.size(); i++) {
-				ItemStack is = items.get(i);
-				if (!this.chestCheck(world, x, y, z, is)) {
-					ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
+			int fortune = this.getEnchantment(Enchantment.fortune);
+			Collection<ItemStack> items = id.getDrops(world, xread, yread, zread, meta, fortune);
+			if (id instanceof BlockTieredResource) {
+				EntityPlayer ep = this.getPlacer();
+				BlockTieredResource bt = (BlockTieredResource)id;
+				boolean harvest = ep != null && bt.isPlayerSufficientTier(world, x, y, z, ep);
+				items = harvest ? bt.getHarvestResources(world, x, y, z, fortune) : bt.getNoHarvestResources(world, x, y, z, fortune);
+			}
+			if (items != null) {
+				for (ItemStack is : items) {
+					if (!this.chestCheck(world, x, y, z, is)) {
+						ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
+					}
 				}
 			}
 		}
