@@ -21,12 +21,15 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.ScheduledTickEvent;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class ItemSpringBoots extends ItemChargedArmor {
+public class ItemSpringBoots extends ItemChargedArmor implements PostTicker {
 
 	public final int JUMP_LEVEL = 3;
 	public final int SPEED_LEVEL = 2;
@@ -75,9 +78,16 @@ public class ItemSpringBoots extends ItemChargedArmor {
 					this.warnCharge(is);
 				}
 			}
+			ReikaPlayerAPI.schedulePlayerTick(ep, 5, this);
 		}
 		else
 			ep.stepHeight = 0.5F;
+	}
+
+	@SubscribeEvent
+	public void undoStepHeight(ScheduledTickEvent evt) {
+		EntityPlayer ep = evt.getData(0); //need better system
+		ep.stepHeight = 0.5F;
 	}
 
 	@Override

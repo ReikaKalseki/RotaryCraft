@@ -396,6 +396,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, Block id, int meta) {
 		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().mazeStoneID)
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
+		if (id == Blocks.bedrock || id == Blocks.end_portal_frame)
+			return false;
 		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, xread, yread, zread, id, meta, this.getPlacer()))
 			return false;
 		TileEntity tile = this.getTileEntity(xread, yread, zread);

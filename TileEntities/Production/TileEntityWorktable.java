@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
@@ -29,8 +30,8 @@ import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Containers.ContainerWorktable;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
-import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -315,7 +316,9 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			inv[jetslot] = null;
 			inv[plateslot] = null;
 			ItemStack is = bed ? ItemRegistry.BEDPACK.getEnchantedStack() : ItemRegistry.STEELPACK.getStackOf();
-			is.stackTagCompound = tag;
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag);
 			inv[9] = is;
 		}
 	}
