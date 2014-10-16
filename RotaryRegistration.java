@@ -120,6 +120,7 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("RotaryCraft:ingotBedrock", ItemStacks.bedingot);
 
 		OreDictionary.registerOre("glassHardened", BlockRegistry.BLASTGLASS.getBlockInstance());
+		OreDictionary.registerOre("blockGlassHardened", BlockRegistry.BLASTGLASS.getBlockInstance());
 
 		ExtractorModOres.registerRCIngots();
 		ItemStacks.registerSteels();
