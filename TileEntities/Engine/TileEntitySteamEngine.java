@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Engine;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -22,6 +23,8 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntitySteamEngine extends TileEntityEngine {
+
+	private int dryTicks = 0;
 
 	@Override
 	public boolean canConsumeFuel() {
@@ -35,7 +38,16 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 
 	@Override
 	protected void internalizeFuel() {
-
+		if (water.isEmpty()) {
+			dryTicks++;
+		}
+		else {
+			if (dryTicks > 900) {
+				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+				worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 6, false);
+			}
+			dryTicks = 0;
+		}
 	}
 
 	@Override
@@ -110,6 +122,22 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	@Override
 	protected void affectSurroundings(World world, int x, int y, int z, int meta) {
 
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+
+		NBT.setInteger("dry", dryTicks);
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+
+		dryTicks = NBT.getInteger("dry");
 	}
 
 }

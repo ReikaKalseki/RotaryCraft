@@ -82,8 +82,11 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 		for (int i = y; i > y-4; i--) {
 			Block id = world.getBlock(rx, i, rz);
 			if (id == Blocks.fire) {
-				world.setBlockToAir(rx, i, rz);
-				ReikaSoundHelper.playSoundAtBlock(world, rx, i, rz, "random.fizz");
+				Block id2 = world.getBlock(rx, i-1, rz);
+				if (id2 != Blocks.netherrack) {
+					world.setBlockToAir(rx, i, rz);
+					ReikaSoundHelper.playSoundAtBlock(world, rx, i, rz, "random.fizz");
+				}
 			}
 			else if (id != Blocks.air && id.isOpaqueCube())
 				i = -999;

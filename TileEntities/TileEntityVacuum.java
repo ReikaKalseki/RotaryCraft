@@ -38,7 +38,11 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect/*, IFluidHandler*/ {
 
-	public int experience = 0;
+	private int experience = 0;
+
+	public int getExperience() {
+		return experience;
+	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -202,7 +206,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		for (int j = 0; j < inv.length; j++) {
 			if (inv[j] != null) {
 				if (ReikaItemHelper.matchStacks(is, inv[j])) {
-					if (this.areNBTTagsCombineable(is, inv[j])) {
+					if (ItemStack.areItemStackTagsEqual(is, inv[j])) {
 						if (inv[j].stackSize+size <= this.getInventoryStackLimit()) {
 							target = j;
 							j = inv.length;
@@ -220,18 +224,6 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		if (target == -1)
 			target = firstempty;
 		return target;
-	}
-
-	private boolean areNBTTagsCombineable(ItemStack is, ItemStack is2) {
-		if ((is.stackTagCompound == null && is2.stackTagCompound == null))
-			return true;
-		if ((is.stackTagCompound == null || is2.stackTagCompound == null))
-			return false;
-		//if (is.stackTagCompound.getName() == null || is.stackTagCompound.getName().isEmpty())
-		//	is.stackTagCompound.setName("tag"); //is done by the TE's NBT functions anyways
-		if (ItemStack.areItemStackTagsEqual(is, is2))
-			return true;
-		return false;
 	}
 
 	private AxisAlignedBB getBox(World world, int x, int y, int z) {

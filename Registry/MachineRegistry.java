@@ -1432,6 +1432,15 @@ public enum MachineRegistry {
 		}
 	}
 
+	public boolean isUncraftable() {
+		switch(this) {
+		case COOLINGFIN:
+			return false;
+		default:
+			return true;
+		}
+	}
+
 	static {
 		for (int i = 0; i < machineList.length; i++) {
 			MachineRegistry m = machineList.get(i);

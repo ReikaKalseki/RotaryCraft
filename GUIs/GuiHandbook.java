@@ -646,7 +646,9 @@ public class GuiHandbook extends GuiScreen
 		y -= 8*Math.sin(Math.abs(Math.toRadians(renderq)));
 
 		if (h.hasMachineRender()) {
+			GL11.glEnable(GL11.GL_BLEND);
 			this.doRenderMachine(x, y, h);
+			GL11.glDisable(GL11.GL_BLEND);
 		}
 		GL11.glTranslated(0, 0, -32);
 	}

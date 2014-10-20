@@ -36,7 +36,7 @@ public class ContainerVacuum extends ContainerStackingStorage
 		for (int i = 0; i < crafters.size(); i++)
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
-			icrafting.sendProgressBarUpdate(this, 1, vac.experience);
+			//icrafting.sendProgressBarUpdate(this, 1, vac.experience);
 		}
 	}
 
@@ -44,7 +44,7 @@ public class ContainerVacuum extends ContainerStackingStorage
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 1: vac.experience = par2; break;
+		//case 1: vac.experience = par2; break;
 		}
 	}
 

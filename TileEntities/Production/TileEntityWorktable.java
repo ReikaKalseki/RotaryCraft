@@ -229,6 +229,10 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			return true;
 		if (is.stackTagCompound.hasKey("ench"))
 			return true;
+		if (ir == ItemRegistry.MACHINE) {
+			MachineRegistry r = MachineRegistry.machineList.get(is.getItemDamage());
+			return !r.isUncraftable();
+		}
 		return false;
 	}
 

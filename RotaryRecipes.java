@@ -181,7 +181,7 @@ public class RotaryRecipes {
 						ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
 
 				};
-				InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 2, al, in, recipe);
+				InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
 				String name = "Bedrock Helmet of Revealing";
 				CustomThaumResearch res = new CustomThaumResearch("BEDREVEAL", "rotarycraft", al, 0, 0, 0, out).setName(name);
 				res.setDescription("Combining the protection of bedrock with the power of a Thaumometer");

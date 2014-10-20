@@ -23,7 +23,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityPlayerDetector extends TileEntityPowerReceiver implements GuiController, RangedEffect {
-	public static final int FALLOFF = 1024; // 1kW per meter range
+	public static final int FALLOFF = 128; // 1kW per meter range
 	public static final int SPEEDFACTOR = 32; //32 rad/s per -tick
 	public static final int BASESPEED = 100; //5s reaction time by default
 

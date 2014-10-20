@@ -69,6 +69,9 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		ItemStack is = new ItemStack(id, 1, 0);
 		ReikaEnchantmentHelper.applyEnchantments(is, this.getDefaultEnchantments());
 		li.add(is);
+		ItemStack is2 = is.copy();
+		HelmetUpgrades.NIGHTVISION.enable(is2, true);
+		li.add(is2);
 	}
 
 	@Override
@@ -174,6 +177,11 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 				return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int getItemSpriteIndex(ItemStack item) {
+		return this == ItemRegistry.BEDHELM.getItemInstance() && HelmetUpgrades.NIGHTVISION.existsOn(item) ? 48 : super.getItemSpriteIndex(item);
 	}
 
 }

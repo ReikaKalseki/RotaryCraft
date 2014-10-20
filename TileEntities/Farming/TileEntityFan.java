@@ -133,6 +133,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			return false;
 		if (b.isOpaqueCube() || b.renderAsNormalBlock())
 			return true;
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.LAWNSPRINKLER || m == MachineRegistry.SPRINKLER)
+			return false;
 		if (b.getMaterial().isSolid())
 			return true;
 		return false;

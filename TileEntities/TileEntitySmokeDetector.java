@@ -51,14 +51,16 @@ public class TileEntitySmokeDetector extends TileEntitySpringPowered implements 
 		}
 		//ReikaChatHelper.write(ReikaWorldHelper.findNearBlock(world, x, y, z, 8, Blocks.fire.blockID));
 		if (ReikaWorldHelper.findNearBlock(world, x, y, z, 8, Blocks.fire)) {
-			if (!isAlarm)
+			if (!isAlarm) {
+				isAlarm = true;
 				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
-			isAlarm = true;
+			}
 		}
 		else {
-			if (isAlarm)
+			if (isAlarm) {
+				isAlarm = false;
 				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
-			isAlarm = false;
+			}
 		}
 		if (this.lowBattery())
 			isLowBatt = true;

@@ -72,7 +72,7 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRendererObj.drawString("XP: "+String.format("%d", vac.experience), 150-fontRendererObj.getStringWidth(String.format("%d", vac.experience)), 6, 4210752);
+		fontRendererObj.drawString("XP: "+String.format("%d", vac.getExperience()), 150-fontRendererObj.getStringWidth(String.format("%d", vac.getExperience())), 6, 4210752);
 	}
 
 	/**

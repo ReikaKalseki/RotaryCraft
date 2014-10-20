@@ -27,6 +27,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
@@ -54,7 +55,7 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent
-	public void bonemealEvent (BonemealEvent event)
+	public void bonemealEvent(BonemealEvent event)
 	{
 		if (!event.world.isRemote)  {
 			if (event.block == BlockRegistry.CANOLA.getBlockInstance()) {
@@ -68,7 +69,18 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent
-	public void fallEvent (LivingFallEvent event)
+	public void onRemoveArmor(RemoveFromSlotEvent evt) {
+		int id = evt.slotID;
+		if (evt.slotID == 36) { //foot armor
+			ItemStack is = evt.getItem();
+			if (is != null && is.getItem() instanceof ItemSpringBoots) {
+				evt.player.stepHeight = 0.5F;
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void fallEvent(LivingFallEvent event)
 	{
 		EntityLivingBase e = event.entityLiving;
 		ItemStack is = e.getEquipmentInSlot(1);

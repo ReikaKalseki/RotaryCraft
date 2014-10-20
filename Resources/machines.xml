@@ -265,7 +265,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Range = 8+Power/%d m
+			Range = 8+(Power*4)/%d m
 			Power Input: Any side
 		</note>
 	</vacuum>
@@ -676,7 +676,7 @@
 	</terraformer>
 	<fuelenhancer>
 		<desc>
-			The fuel enhancer can take standard petroleum fuel, like that used by Combustion Engines, and then purify and refine it further, ultimately producing jet fuel. Note that the purification process causes an twofold decrease in fuel volume, and that the machine still needs magma cream, blaze powder, netherrack dust, and tar.
+			The fuel enhancer can take standard petroleum fuel, like that used by Combustion Engines, and then purify and refine it further, ultimately producing jet fuel. Note that the purification process causes an fourfold decrease in fuel volume, and that the machine still needs magma cream, blaze powder, netherrack dust, and tar.
 		</desc>
 		<note>
 			Required Power: %dW

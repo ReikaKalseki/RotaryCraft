@@ -344,8 +344,15 @@ public class ItemMeter extends ItemRotaryTool
 					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
 					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
-				if (power >= clicked.MINPOWER)
-					ReikaChatHelper.writeString(String.format("Liquid Contents:\n%dmB of %s", clicked.getLevel(), clicked.getContainedFluid().getLocalizedName()));
+				if (power >= clicked.MINPOWER) {
+					if (clicked.getLevel() > 0) {
+						String sg = String.format("Liquid Contents:\n%dmB of %s", clicked.getLevel(), clicked.getContainedFluid().getLocalizedName());
+						ReikaChatHelper.writeString(sg);
+					}
+					else {
+						ReikaChatHelper.writeString(String.format("%s has no liquid.", m.getName()));
+					}
+				}
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					RotaryAux.writeMessage("minpower");

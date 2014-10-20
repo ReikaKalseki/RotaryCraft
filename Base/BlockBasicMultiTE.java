@@ -667,7 +667,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (te instanceof IInventory && !(te instanceof TileEntityScaleableChest))
 			ReikaItemHelper.dropInventory(world, x, y, z);
 		if (te instanceof TileEntityVacuum) {
-			ReikaWorldHelper.splitAndSpawnXP(world, x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), ((TileEntityVacuum)(te)).experience);
+			ReikaWorldHelper.splitAndSpawnXP(world, x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), ((TileEntityVacuum)(te)).getExperience());
 		}
 		if (te instanceof TileEntityLightBridge) {
 			((TileEntityLightBridge)te).lightsOut(world, x, y, z);

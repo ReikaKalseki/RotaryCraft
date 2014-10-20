@@ -73,6 +73,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		//ReikaJavaLibrary.pConsole(input+":"+output);
 
 		int factor = 5;
+		int ratio = 4;
 
 		//ReikaJavaLibrary.pConsoleSideOnly("BC: "+this.getBCFuel()+"    JET: "+this.getJetFuel(), Side.CLIENT);
 
@@ -83,8 +84,8 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		if (omega < MINSPEED)
 			convert = false;
 
-		if (convert && input.getFluid() != null && input.getFluid().amount >= 2*factor && this.hasItems()) {
-			FluidStack drain = input.drain(2*factor, true);
+		if (convert && input.getFluid() != null && input.getFluid().amount >= ratio*factor && this.hasItems()) {
+			FluidStack drain = input.drain(ratio*factor, true);
 			output.fill(FluidRegistry.getFluidStack("jet fuel", factor), true);
 			if (!world.isRemote)
 				this.consumeItems();

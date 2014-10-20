@@ -270,9 +270,6 @@ public class ModelCentrifuge extends RotaryModelBase
 		Shape2j.render(te, f5);
 		Shape2k.render(te, f5);
 		Shape3.render(te, f5);
-		Shape4.render(te, f5);
-		Shape4a.render(te, f5);
-		Shape4b.render(te, f5);
 		Shape3a.render(te, f5);
 		Shape3c.render(te, f5);
 		Shape3b.render(te, f5);
@@ -287,6 +284,9 @@ public class ModelCentrifuge extends RotaryModelBase
 		Shape4c.render(te, f5);
 		Shape4d.render(te, f5);
 		Shape4e.render(te, f5);
+		Shape4.render(te, f5);
+		Shape4a.render(te, f5);
+		Shape4b.render(te, f5);
 		GL11.glRotatef(-phi, 0, 1, 0);
 	}
 
