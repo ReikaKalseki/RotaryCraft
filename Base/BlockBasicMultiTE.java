@@ -98,7 +98,6 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
@@ -299,18 +298,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						}
 					}
 				}
-			}
-		}
-		if (m == MachineRegistry.CRAFTER) {
-			if (is != null && is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance()) {
-				TileEntityAutoCrafter tc = (TileEntityAutoCrafter)te;
-				ItemStack[] items = new ItemStack[9];
-				for (int i = 0; i < 9; i++)
-					if (i != 4)
-						items[i] = new ItemStack(Blocks.planks);
-				tc.writePattern(is, items);
-				((TileEntityBase)te).syncAllData(true);
-				return true;
 			}
 		}
 		if (m == MachineRegistry.RESERVOIR) {
@@ -705,12 +692,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				}
 			}
 			tile.resetOther();
-		}
+		}/*
 		if (te instanceof TileEntityAutoCrafter) {
 			TileEntityAutoCrafter tile = (TileEntityAutoCrafter)te;
 			ArrayList<ItemStack> li = tile.getAllIngredients();
 			//ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-		}
+		}*/
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 

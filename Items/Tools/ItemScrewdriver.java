@@ -38,6 +38,7 @@ import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
@@ -261,6 +262,11 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench
 				else {
 					clicked.phi += 5;
 				}
+				return true;
+			}
+			if (m == MachineRegistry.CRAFTER) {
+				TileEntityAutoCrafter clicked = (TileEntityAutoCrafter)te;
+				clicked.continuous = !clicked.continuous;
 				return true;
 			}
 			if (m == MachineRegistry.GEARBOX) {

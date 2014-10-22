@@ -167,6 +167,11 @@ public class ItemMulti extends ItemBasic {
 						}
 					}
 				}
+				else {
+					is.stackTagCompound.removeTag("magnet");
+					if (is.stackTagCompound.hasNoTags())
+						is.stackTagCompound = null;
+				}
 			}
 		}
 	}

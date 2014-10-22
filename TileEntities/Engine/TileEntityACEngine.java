@@ -52,11 +52,20 @@ public class TileEntityACEngine extends TileEntityEngine {
 
 		if (!world.isRemote && ac && timer.checkCap("fuel")) {
 			int m = is.stackTagCompound.getInteger("magnet");
-			m--;
-			is.stackTagCompound.setInteger("magnet", m);
+			this.magnetize(is, m-1);
 		}
 
 		return ac;
+	}
+
+	private void magnetize(ItemStack is, int amt) {
+		if (amt > 0)
+			is.stackTagCompound.setInteger("magnet", amt);
+		else {
+			is.stackTagCompound.removeTag("magnet");
+			if (is.stackTagCompound.hasNoTags())
+				is.stackTagCompound = null;
+		}
 	}
 
 	@Override

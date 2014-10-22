@@ -19,7 +19,8 @@ public enum GuiRegistry {
 	LOADEDHANDBOOK(),
 	SAFEPLAYERS(),
 	SPYCAM(),
-	SLIDE();
+	SLIDE(),
+	PATTERN();
 
 	private static final GuiRegistry[] guiList = GuiRegistry.values();
 
@@ -29,6 +30,8 @@ public enum GuiRegistry {
 		if (this == HANDCRAFT)
 			return true;
 		if (this == WORLDEDIT)
+			return true;
+		if (this == PATTERN)
 			return true;
 		return false;
 	}

@@ -51,6 +51,7 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
@@ -99,6 +100,7 @@ public class PacketHandlerCore implements IPacketHandler {
 	private TileEntityBlower blower;
 	private TileEntityDefoliator defo;
 	private TileEntityGPR gpr;
+	private TileEntityAutoCrafter crafter;
 
 	protected PacketRegistry pack;
 
@@ -565,6 +567,10 @@ public class PacketHandlerCore implements IPacketHandler {
 				gpr = (TileEntityGPR)te;
 				int direction = data[0];
 				gpr.shift(gpr.getGuiDirection(), direction);
+				break;
+			case CRAFTER:
+				crafter = (TileEntityAutoCrafter)te;
+				crafter.triggerCraftingCycle(data[0]);
 				break;
 			}
 		}
