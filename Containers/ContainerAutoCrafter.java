@@ -40,13 +40,13 @@ public class ContainerAutoCrafter extends CoreContainer
 		for (int i = 0; i < crafters.size(); i++) {
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 			for (int k = 0; k < 18; k++) {
-				icrafting.sendProgressBarUpdate(this, k, crafter.crafting[k] ? 1 : 0);
+				icrafting.sendProgressBarUpdate(this, k, crafter.crafting[k]);
 			}
 		}
 	}
 
 	@Override
 	public void updateProgressBar(int par1, int par2) {
-		crafter.crafting[par1] = par2 == 1;
+		crafter.crafting[par1] = par2;
 	}
 }

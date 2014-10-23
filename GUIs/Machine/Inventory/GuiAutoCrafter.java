@@ -65,6 +65,21 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
 
+		GL11.glEnable(GL11.GL_BLEND);
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
+		int x = 7;
+		int y = 36;
+		for (int i = 0; i < 18; i++) {
+			if (crafter.crafting[i] > 0) {
+				int dx = x+(i%9)*18;
+				int dy = i >= 9 ? y+62 : y;
+				float alpha = crafter.crafting[i]/2F;
+				GL11.glColor4f(1, 1, 1, alpha);
+				this.drawTexturedModalRect(dx, dy, 176, 11, 18, 9);
+				//ReikaJavaLibrary.pConsole(i);
+			}
+		}
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	@Override

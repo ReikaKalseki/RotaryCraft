@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.inventory.IInventory;
@@ -19,9 +19,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.DragonAPI.Instantiable.Data.MENetwork;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -34,7 +36,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	public boolean continuous = true;
 	//private final HashMap<ItemStack, Integer> ingredients = new HashMap();
 	private final ItemCollection ingredients = new ItemCollection();
-	public boolean[] crafting = new boolean[18];
+	public int[] crafting = new int[18];
+	private MENetwork network;
 
 	private final StepTimer updateTimer = new StepTimer(50);
 
@@ -42,22 +45,32 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
-		this.resetCraftingDisplay();
+		this.tickCraftingDisplay();
 		if (power >= MINPOWER) {
 			//this.eatIngredients();
 			updateTimer.update();
-			if (updateTimer.checkCap()) {
-				//this.buildCache();
+			if (updateTimer.checkCap() && !world.isRemote) {
+				this.buildCache();
 			}
 
 			if (continuous) {
 				this.attemptAllSlotCrafting();
 			}
+
+			this.injectItems();
 		}
 	}
 
-	private void resetCraftingDisplay() {
-		crafting = new boolean[18];
+	private void injectItems() {
+		if (ModList.APPENG.isLoaded()) {
+
+		}
+	}
+
+	private void tickCraftingDisplay() {
+		for (int i = 0; i < 18; i++) {
+			crafting[i] = Math.max(crafting[i]-1, 0);
+		}
 	}
 
 	private void buildCache() {
@@ -66,24 +79,32 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		if (te instanceof IInventory) {
 			ingredients.addInventory((IInventory)te);
 		}
+
+		if (ModList.APPENG.isLoaded()) {
+			network = MENetwork.getConnectedTo(this);
+		}
 	}
 
 	public void triggerCraftingCycle(int slot) {
-		ItemStack out = this.getSlotRecipeOutput(slot);
-		if (out != null)
-			this.attemptSlotCrafting(slot);
+		if (power >= MINPOWER) {
+			ItemStack out = this.getSlotRecipeOutput(slot);
+			if (out != null)
+				this.attemptSlotCrafting(slot);
+		}
 	}
 
 	public void triggerCrafting(int slot, int amt) {
-		ItemStack out = this.getSlotRecipeOutput(slot);
-		if (out != null) {
-			int space = inv[slot+18].getMaxStackSize()-inv[slot+18].stackSize;
-			int tocraft = ReikaMathLibrary.multiMin(amt, this.getInventoryStackLimit(), out.getMaxStackSize(), space);
-			int cycles = tocraft/out.stackSize;
-			for (int i = 0; i < cycles; i++) {
-				boolean flag = this.attemptSlotCrafting(slot);
-				if (!flag)
-					break;
+		if (power >= MINPOWER) {
+			ItemStack out = this.getSlotRecipeOutput(slot);
+			if (out != null) {
+				int space = inv[slot+18].getMaxStackSize()-inv[slot+18].stackSize;
+				int tocraft = ReikaMathLibrary.multiMin(amt, this.getInventoryStackLimit(), out.getMaxStackSize(), space);
+				int cycles = tocraft/out.stackSize;
+				for (int i = 0; i < cycles; i++) {
+					boolean flag = this.attemptSlotCrafting(slot);
+					if (!flag)
+						break;
+				}
 			}
 		}
 	}
@@ -91,8 +112,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	private ItemStack getSlotRecipeOutput(int slot) {
 		ItemStack is = inv[slot];
 		if (is != null && is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null) {
-			ItemStack[] items = ItemCraftPattern.getItems(is);
-			return items[9];
+			return ItemCraftPattern.getRecipeOutput(is);
 		}
 		return null;
 	}
@@ -106,33 +126,38 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	private boolean attemptSlotCrafting(int i) {
 		ItemStack is = inv[i];
 		if (is != null && is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null) {
-			ItemStack[] items = ItemCraftPattern.getItems(is);
-			ItemStack out = items[9];//this.getRecipeOutput(items);
+			ArrayList<ItemStack>[] items = ItemCraftPattern.getItems(is);
+			ItemStack out = ItemCraftPattern.getRecipeOutput(is);
 			if (out != null) {
+				//ReikaJavaLibrary.pConsole("crafting "+out+" from "+Arrays.toString(items));
 				return this.tryCrafting(i, out, items);
 			}
 		}
 		return false;
 	}
 
-	private boolean tryCrafting(int i, ItemStack out, ItemStack[] items) {
+	private boolean tryCrafting(int i, ItemStack out, ArrayList<ItemStack>[] items) {
 		int slot = i+18;
 		int size = inv[slot] != null ? inv[slot].stackSize : 0;
 		if (inv[slot] == null || (ReikaItemHelper.matchStacks(out, inv[slot]) && size+out.stackSize <= out.getMaxStackSize())) {
-			ItemHashMap<Integer> counts = new ItemHashMap();
+			ItemHashMap<Integer> counts = new ItemHashMap(); //ingredient requirements
+			ItemHashMap<ArrayList<ItemStack>> options = new ItemHashMap();
 			for (int k = 0; k < 9; k++) {
-				if (items[k] != null) {
-					Integer req = counts.get(items[k]);
+				if (items[k] != null && !items[k].isEmpty()) {
+					Integer req = counts.get(items[k].get(0));
 					int val = req != null ? req.intValue() : 0;
-					counts.put(items[k], val+items[k].stackSize);
+					counts.put(items[k].get(0), val+1); // items[k].stackSize ?
+					options.put(items[k].get(0), items[k]);
 				}
 			}
 			for (ItemStack is : counts.keySet()) {
 				int req = counts.get(is);
-				int has = ingredients.getItemCountWithOreEquivalence(is);
+				int has = this.getAvailableIngredients(options.get(is));
 				int missing = req-has;
 				if (missing > 0) {
-					if (!this.tryCraftIntermediates(missing, is)) {
+					//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
+					if (!this.tryCraftIntermediates(missing, options.get(is))) {
+						//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
 						return false;
 					}
 				}
@@ -143,20 +168,41 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		return false;
 	}
 
-	private boolean tryCraftIntermediates(int num, ItemStack is) {
+	private int getAvailableIngredients(ArrayList<ItemStack> li) {
+		int count = 0;
+		ItemHashMap<Long> map = network != null ? network.getMEContents() : null;
+		//ReikaJavaLibrary.pConsole(map);
+		for (ItemStack is : li) {
+			//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
+			count += ingredients.getItemCount(is);
+			if (map != null) {
+				Long me = map.get(is);
+				count += me != null ? me.intValue() : 0;
+			}
+		}
+
+		return count;
+	}
+
+	private boolean tryCraftIntermediates(int num, ArrayList<ItemStack> li) {
 		int run = 0;
 		HashMap<Integer, Integer> ranSlots = new HashMap();
-		for (int i = 0; i < 18; i++) {
-			ItemStack out = this.getSlotRecipeOutput(i);
-			//ReikaJavaLibrary.pConsole(i+":"+out+" & "+is);
-			if (out != null && this.matchStacks(is, out)) {
-				while (run < num && this.attemptSlotCrafting(i)) {
-					run += out.stackSize;
-					Integer get = ranSlots.get(i);
-					int val = get != null ? get.intValue() : 0;
-					ranSlots.put(i, Math.min(num, val+out.stackSize));
+		for (ItemStack is : li) {
+			for (int i = 0; i < 18 && run < num; i++) {
+				ItemStack out = this.getSlotRecipeOutput(i);
+				//ReikaJavaLibrary.pConsole(i+":"+out+" & "+is);
+				if (out != null && ReikaItemHelper.matchStacks(is, out)) {
+					//ReikaJavaLibrary.pConsole("attempting slot "+i+", because "+out+" matches "+is);
+					while (run < num && this.attemptSlotCrafting(i)) {
+						run += out.stackSize;
+						Integer get = ranSlots.get(i);
+						int val = get != null ? get.intValue() : 0;
+						ranSlots.put(i, Math.min(num, val+out.stackSize));
+					}
 				}
 			}
+			if (run >= num)
+				break;
 		}
 		if (run >= num) {
 			for (int slot : ranSlots.keySet()) {
@@ -171,18 +217,37 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		return false;
 	}
 
-	private boolean matchStacks(ItemStack is, ItemStack out) {
-		return ReikaItemHelper.matchStacks(is, out) || Arrays.equals(OreDictionary.getOreIDs(out), OreDictionary.getOreIDs(is));
-	}
-
 	private void craft(int slot, int size, ItemStack out, ItemHashMap<Integer> counts) {
 		inv[slot] = ReikaItemHelper.getSizedItemStack(out, size+out.stackSize);
 		if (out.stackTagCompound != null)
 			inv[slot].stackTagCompound = (NBTTagCompound)out.stackTagCompound.copy();
 		for (ItemStack is : counts.keySet()) {
 			int req = counts.get(is);
-			ingredients.removeXItems(is, req);
+			if (is.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+				int dec = req;
+				for (int k = 0; k < OreDictionary.WILDCARD_VALUE; k++) {
+					ItemStack is2 = new ItemStack(is.getItem(), 1, k);
+					int rem = ingredients.removeXItems(is2, req);
+					dec -= rem;
+					if (dec > 0) {
+						int diff = req-rem;
+						if (diff > 0 && network != null) {
+							dec -= network.removeFromMESystem(is2, diff);
+						}
+					}
+					if (dec <= 0)
+						break;
+				}
+			}
+			else {
+				int rem = ingredients.removeXItems(is, req);
+				int diff = req-rem;
+				if (diff > 0 && network != null) {
+					network.removeFromMESystem(is, diff);
+				}
+			}
 		}
+		crafting[slot-18] = 5;
 		this.markDirty();
 	}
 

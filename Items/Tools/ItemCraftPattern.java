@@ -9,18 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
@@ -46,13 +48,14 @@ public class ItemCraftPattern extends ItemRotaryTool {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
-		FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+		//FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 		if (is.stackTagCompound == null) {
 			li.add("No Crafting Pattern.");
 		}
 		else {
-			ItemStack[] items = this.getItems(is);
-			li.add("Crafts "+items[9].stackSize+" "+items[9].getDisplayName());//+" with:");
+			ItemStack item = this.getRecipeOutput(is);
+			if (item != null)
+				li.add("Crafts "+item.stackSize+" "+item.getDisplayName());//+" with:");
 			/*
 			for (int i = 0; i < 3; i++) {
 				StringBuilder sb = new StringBuilder();
@@ -68,43 +71,92 @@ public class ItemCraftPattern extends ItemRotaryTool {
 	}
 
 	public static ItemStack getRecipeOutput(ItemStack is) {
-		ItemStack[] items = getItems(is);
-		return items[9] != null ? items[9].copy() : null;
+		ItemStack item = is.stackTagCompound != null ? ItemStack.loadItemStackFromNBT(is.stackTagCompound.getCompoundTag("output")) : null;
+		return item != null ? item.copy() : null;
 	}
 
-	public static ItemStack[] getItems(ItemStack is) {
-		ItemStack[] items = new ItemStack[10];
+	public static ArrayList<ItemStack>[] getItems(ItemStack is) {
+		ArrayList<ItemStack>[] items = new ArrayList[9];
 		if (is.stackTagCompound != null) {
-			NBTTagList nbttaglist = is.stackTagCompound.getTagList("Items", NBTTypes.COMPOUND.ID);
-			for (int k = 0; k < nbttaglist.tagCount(); k++)				{
-				NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(k);
-				short byte0 = nbttagcompound.getShort("Slot");
-				items[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+			NBTTagCompound recipe = is.stackTagCompound.getCompoundTag("recipe");
+			for (int i = 0; i < 9; i++) {
+				NBTTagList tag = recipe.getTagList(String.valueOf(i), NBTTypes.COMPOUND.ID);
+				ArrayList<ItemStack> li = new ArrayList();
+				for (int k = 0; k < tag.tagCount(); k++) {
+					NBTTagCompound nbt = tag.getCompoundTagAt(k);
+					ItemStack in = ItemStack.loadItemStackFromNBT(nbt);
+					if (in != null)
+						li.add(in);
+				}
+				items[i] = li;
 			}
 		}
 		return items;
 	}
 
+	private static void resetNBT(ItemStack is) {
+		if (is.stackTagCompound != null) {
+			is.stackTagCompound.removeTag("output");
+			is.stackTagCompound.removeTag("recipe");
+		}
+	}
+
 	public static void setRecipe(ItemStack is, InventoryCrafting ic) {
-		is.stackTagCompound = new NBTTagCompound();
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < 9; i++) {
-			ItemStack in = ic.getStackInSlot(i);
-			if (in != null) {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setShort("Slot", (short)i);
-				in.writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
+		resetNBT(is);
+		if (is.stackTagCompound == null)
+			is.stackTagCompound = new NBTTagCompound();
+		IRecipe ir = getRecipe(ic);
+		if (ir == null)
+			return;
+		NBTTagCompound recipe = new NBTTagCompound();
+		ItemStack out = ir.getRecipeOutput();
+		ArrayList<Object> reqs = ReikaRecipeHelper.getAllInputsInRecipe(ir);
+		Object[] items = new Object[10];
+		for (int i = 0; i < reqs.size(); i++) {
+			Object in = reqs.get(i);
+			NBTTagList tag = new NBTTagList();
+			if (in instanceof ArrayList) {
+				ArrayList<ItemStack> li = (ArrayList<ItemStack>)in;
+				for (ItemStack item : li) {
+					NBTTagCompound nbt = new NBTTagCompound();
+					item.writeToNBT(nbt);
+					tag.appendTag(nbt);
+				}
+			}
+			else if (in instanceof ItemStack) {
+				ItemStack item = (ItemStack)in;
+				NBTTagCompound nbt = new NBTTagCompound();
+				item.writeToNBT(nbt);
+				tag.appendTag(nbt);
+				if (item.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+					nbt = new NBTTagCompound();
+					ItemStack is2 = item.copy();
+					is2.setItemDamage(0);
+					is2.writeToNBT(nbt);
+					tag.appendTag(nbt);
+				}
+			}
+			else {
+
+			}
+			recipe.setTag(String.valueOf(i), tag);
+		}
+		is.stackTagCompound.setTag("recipe", recipe);
+		NBTTagCompound outt = new NBTTagCompound();
+		if (out != null)
+			out.writeToNBT(outt);
+		is.stackTagCompound.setTag("output", outt);
+		//ReikaJavaLibrary.pConsole(Arrays.toString(items)+" -> "+out);
+	}
+
+	private static IRecipe getRecipe(InventoryCrafting ic) {
+		List<IRecipe> li = CraftingManager.getInstance().getRecipeList();
+		for (IRecipe ir : li)  {
+			if (ir.matches(ic, null)) {
+				return ir;
 			}
 		}
-		is.stackTagCompound.setTag("Items", nbttaglist);
-		ItemStack out = CraftingManager.getInstance().findMatchingRecipe(ic, null);
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		nbttagcompound.setShort("Slot", (short)9);
-		if (out != null)
-			out.writeToNBT(nbttagcompound);
-		//ReikaJavaLibrary.pConsole(Arrays.toString(items)+" -> "+out);
-		nbttaglist.appendTag(nbttagcompound);
+		return null;
 	}
 
 }
