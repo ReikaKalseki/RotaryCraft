@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect/*, IFluidHandler*/ {
 
 	private int experience = 0;
+	public boolean equidistant = true;
 
 	public int getExperience() {
 		return experience;
@@ -228,8 +229,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	private AxisAlignedBB getBox(World world, int x, int y, int z) {
 		int expand = this.getRange();
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(expand, expand, expand);
-		return box;
+		AxisAlignedBB base = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
+		return equidistant ? base.expand(expand, expand, expand) : base.expand(expand, 2, expand);
 	}
 
 	public int getRange() {
@@ -251,6 +252,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	{
 		super.readSyncTag(NBT);
 		experience = NBT.getInteger("xp");
+		equidistant = NBT.getBoolean("equi");
 	}
 
 	@Override
@@ -258,6 +260,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	{
 		super.writeSyncTag(NBT);
 		NBT.setInteger("xp", experience);
+		NBT.setBoolean("equi", equidistant);
 	}
 
 	@Override

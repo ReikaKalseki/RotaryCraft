@@ -332,6 +332,9 @@ public class ItemMulti extends ItemBasic {
 			row -= 16;
 		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)
 			return 16*9+item.getItemDamage()-32;
+		if (ItemRegistry.ENGINECRAFT.matchItem(item) && item.getItemDamage() >= 16) {
+			row += 9;
+		}
 		return 16*row+item.getItemDamage()%16;
 	}
 

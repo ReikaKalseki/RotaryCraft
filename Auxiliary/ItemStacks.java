@@ -122,6 +122,7 @@ public final class ItemStacks {
 	public static final ItemStack waterplate 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(13);
 	public static final ItemStack shaftcore 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(14);
 	public static final ItemStack igniter 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(15);
+	public static final ItemStack diamondshaftcore 	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(16);
 
 	public static final ItemStack woodgear 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(9);
 	public static final ItemStack stonegear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(10);

@@ -63,7 +63,7 @@ public class RotaryNames {
 	public static final String[] enginePartNames = {
 		"crafting.impeller", "crafting.compressor", "crafting.turbine", "crafting.diffuser", "crafting.combustor", "crafting.cylinder",
 		"crafting.radiator", "crafting.condenser", "crafting.goldcoil", "crafting.woodgear", "crafting.stonegear", "crafting.diamondgear",
-		"crafting.bedrockgear", "crafting.paddle", "crafting.shaftcore", "crafting.ignition"
+		"crafting.bedrockgear", "crafting.paddle", "crafting.shaftcore", "crafting.ignition", "crafting.diamondcore"
 	};
 
 	public static final String[] shaftPartNames = {
