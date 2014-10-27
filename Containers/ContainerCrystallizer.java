@@ -11,12 +11,12 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
-public class ContainerCrystallizer extends CoreContainer
+public class ContainerCrystallizer extends ContainerIOMachine
 {
 	private TileEntityCrystallizer te;
 

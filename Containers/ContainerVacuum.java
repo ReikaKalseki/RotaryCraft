@@ -10,9 +10,11 @@
 package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import Reika.DragonAPI.Base.ContainerStackingStorage;
+import Reika.RotaryCraft.PacketHandlerCore;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 
 public class ContainerVacuum extends ContainerStackingStorage
@@ -37,6 +39,10 @@ public class ContainerVacuum extends ContainerStackingStorage
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 			//icrafting.sendProgressBarUpdate(this, 1, vac.experience);
+
+
+			if (icrafting instanceof EntityPlayerMP)
+				PacketHandlerCore.sendPowerSyncPacket(vac, (EntityPlayerMP)icrafting);
 		}
 	}
 

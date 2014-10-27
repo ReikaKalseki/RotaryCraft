@@ -13,10 +13,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 
-public class ContainerAutoCrafter extends CoreContainer
+public class ContainerAutoCrafter extends ContainerIOMachine
 {
 	private TileEntityAutoCrafter crafter;
 

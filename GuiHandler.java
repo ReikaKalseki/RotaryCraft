@@ -257,7 +257,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerVacuum(player, (TileEntityVacuum) te);
 		}
 		if (te instanceof TileEntityHeater) {
-			return new ContainerHeater(player, te);
+			return new ContainerHeater(player, (TileEntityHeater) te);
 		}
 		if (te instanceof TileEntityObsidianMaker) {
 			return new ContainerObsidian(player, (TileEntityObsidianMaker) te);

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,6 +32,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -572,6 +574,13 @@ public class PacketHandlerCore implements IPacketHandler {
 				crafter = (TileEntityAutoCrafter)te;
 				crafter.triggerCraftingCycle(data[0]);
 				break;
+			case POWERSYNC:
+				TileEntityIOMachine io = (TileEntityIOMachine)te;
+				io.torque = data[0];
+				io.omega = data[1];
+				long pwr = (long)data[3] << 32 | data[2] & 0xFFFFFFFFL;
+				io.power = pwr;
+				break;
 			}
 		}
 		catch (NullPointerException e) {
@@ -581,6 +590,18 @@ public class PacketHandlerCore implements IPacketHandler {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+
+	public static void sendPowerSyncPacket(TileEntityIOMachine iotile, EntityPlayerMP ep) {
+		int p1 = (int)iotile.power;
+		int p2 = (int)(iotile.power >> 32);
+		if (ep != null) {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, ep, iotile.torque, iotile.omega, p1, p2);
+		}
+		else {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, iotile.torque, iotile.omega, p1, p2);
 		}
 	}
 }

@@ -11,10 +11,10 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 
-public class ContainerItemCannon extends CoreContainer
+public class ContainerItemCannon extends ContainerIOMachine
 {
 	private TileEntityItemCannon cannon;
 

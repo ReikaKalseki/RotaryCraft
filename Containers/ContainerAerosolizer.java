@@ -11,22 +11,16 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 
-public class ContainerAerosolizer extends CoreContainer
+public class ContainerAerosolizer extends ContainerIOMachine
 {
 	private TileEntityAerosolizer aerosolizer;
-	private int lastAerosolizerCookTime;
-	private int lastAerosolizerBurnTime;
-	private int lastAerosolizerItemBurnTime;
 
 	public ContainerAerosolizer(EntityPlayer player, TileEntityAerosolizer par2TileEntityAerosolizer)
 	{
 		super(player, par2TileEntityAerosolizer);
-		lastAerosolizerCookTime = 0;
-		lastAerosolizerBurnTime = 0;
-		lastAerosolizerItemBurnTime = 0;
 		aerosolizer = par2TileEntityAerosolizer;
 		int var3; int var4;
 

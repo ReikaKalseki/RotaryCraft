@@ -11,10 +11,10 @@ package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 
-public class ContainerScreen extends CoreContainer {
+public class ContainerScreen extends ContainerIOMachine {
 
 	public ContainerScreen(EntityPlayer player, TileEntityScreen te) {
 		super(player, te);

@@ -10,10 +10,10 @@
 package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 
-public class ContainerDefoliator extends CoreContainer
+public class ContainerDefoliator extends ContainerIOMachine
 {
 	private TileEntityDefoliator te;
 

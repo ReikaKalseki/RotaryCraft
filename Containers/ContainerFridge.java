@@ -12,10 +12,10 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.SlotFurnace;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 
-public class ContainerFridge extends CoreContainer
+public class ContainerFridge extends ContainerIOMachine
 {
 	private TileEntityRefrigerator fridge;
 	private int time;

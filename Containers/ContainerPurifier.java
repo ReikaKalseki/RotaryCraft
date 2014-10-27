@@ -13,22 +13,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPurifier;
 
-public class ContainerPurifier extends CoreContainer
+public class ContainerPurifier extends ContainerIOMachine
 {
 	private TileEntityPurifier purifier;
 	private int lastPurifierCookTime;
-	private int lastPurifierBurnTime;
-	private int lastPurifierItemBurnTime;
 
 	public ContainerPurifier(EntityPlayer player, TileEntityPurifier par2TileEntityPurifier)
 	{
 		super(player, par2TileEntityPurifier);
 		lastPurifierCookTime = 0;
-		lastPurifierBurnTime = 0;
-		lastPurifierItemBurnTime = 0;
 		purifier = par2TileEntityPurifier;
 		this.addSlotToContainer(new Slot(par2TileEntityPurifier, 0, 35, 16));
 		this.addSlotToContainer(new Slot(par2TileEntityPurifier, 7, 53, 16));

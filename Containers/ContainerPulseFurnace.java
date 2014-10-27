@@ -13,12 +13,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 
-public class ContainerPulseFurnace extends CoreContainer {
+public class ContainerPulseFurnace extends ContainerIOMachine {
 	private TileEntityPulseFurnace pulseFurnace;
 
 	public ContainerPulseFurnace(EntityPlayer player, TileEntityPulseFurnace par2TileEntityPulseFurnace)

@@ -10,10 +10,10 @@
 package Reika.RotaryCraft.Containers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.DragonAPI.Base.CoreContainer;
+import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 
-public class ContainerCentrifuge extends CoreContainer
+public class ContainerCentrifuge extends ContainerIOMachine
 {
 	private TileEntityCentrifuge te;
 

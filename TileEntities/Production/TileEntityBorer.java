@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -67,8 +68,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public boolean drops = true;
 
-	public int reqpow;
-	public int mintorque;
+	private int reqpow;
+	private int mintorque;
 
 	/** Power required to break a block, per 0.1F hardness */
 	public static final int DIGPOWER = 64;
@@ -81,6 +82,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private boolean jammed = false;
 
 	private boolean isMiningAir = false;
+
+	private boolean hitProtection = false;
+	private int notifiedPlayer = 0;
 
 	private int durability = ConfigRegistry.BORERMAINTAIN.getState() ? 256 : Integer.MAX_VALUE;
 
@@ -128,11 +132,12 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	private void setJammed(boolean jam) {
-		if (jam != jammed) {
+		boolean old = jammed;
+		jammed = jam;
+		if (old != jammed) {
 			ReikaWorldHelper.causeAdjacentUpdates(worldObj, xCoord, yCoord, zCoord);
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		jammed = jam;
 	}
 
 	@Override
@@ -145,6 +150,20 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		power = (long)omega*(long)torque;
 		if (power == 0)
 			this.setJammed(false);
+
+		if (hitProtection && notifiedPlayer < 10) {
+			if (world.getTotalWorldTime()%100 == 0) {
+				EntityPlayer ep = this.getPlacer();
+				if (ep != null) {
+					notifiedPlayer++;
+					int hx = this.getHeadX();
+					int hz = this.getHeadZ();
+					String sg = "Your "+this+" has hit a protected area at "+hx+", "+hz+" and has jammed.";
+					ReikaChatHelper.sendChatToPlayer(ep, sg);
+				}
+
+			}
+		}
 
 		if (durability <= 0) {
 			if (tickcount%5 == 0) {
@@ -200,7 +219,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (!world.isRemote) {
 					ReikaWorldHelper.forceGenAndPopulate(world, x+step*xstep, y, z+step*zstep, meta);
 					this.dig(world, x, y, z, meta);
-					if (isMiningAir)
+					if (!isMiningAir)
 						durability--;
 				}
 			}
@@ -398,8 +417,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
 		if (id == Blocks.bedrock || id == Blocks.end_portal_frame)
 			return false;
-		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, xread, yread, zread, id, meta, this.getPlacer()))
+		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, xread, yread, zread, id, meta, this.getPlacer())) {
+			hitProtection = true;
 			return false;
+		}
 		TileEntity tile = this.getTileEntity(xread, yread, zread);
 		if (tile instanceof RotaryCraftTileEntity)
 			return false;
