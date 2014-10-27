@@ -106,9 +106,6 @@ public class ItemFireballLauncher extends ItemChargedTool {
 		return is;
 	}
 
-	/**
-	 * How long it takes to use or consume an item
-	 */
 	@Override
 	public int getMaxItemUseDuration(ItemStack is)
 	{
