@@ -92,27 +92,28 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	}
 
 	public boolean applyEnchants(ItemStack is) {
+		boolean flag = false;
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.sharpness, is)) {
 			enchantments.put(Enchantment.sharpness, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness, is));
-			return true;
+			flag = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fireAspect, is)) {
 			enchantments.put(Enchantment.fireAspect, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect, is));
-			return true;
+			flag = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
 			enchantments.put(Enchantment.silkTouch, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch, is));
-			return true;
+			flag = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.looting, is))	 {
 			enchantments.put(Enchantment.looting, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.looting, is));
-			return true;
+			flag = true;
 		}
 		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is))	 {
 			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
-			return true;
+			flag = true;
 		}
-		return false;
+		return flag;
 	}
 
 	public ArrayList<Enchantment> getValidEnchantments() {

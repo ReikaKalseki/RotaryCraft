@@ -75,7 +75,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		for (int i = -3; i <= 3; i++) {
 			for (int j = -3; j <= 3; j++) {
 				if (ConfigRegistry.BLOCKDAMAGE.getState())
-					ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, temp);
+					ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, Math.min(temp, 1750));
 				AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+i, y+1, z+j, x+i+1, y+2, z+j+1);
 				List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
 				for (EntityLivingBase e : in) {
@@ -200,9 +200,6 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		tank.setContents(water, FluidRegistry.WATER);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -211,9 +208,6 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		tank.writeToNBT(NBT);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

@@ -743,16 +743,16 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
 		if (read != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX+this.getPointingOffsetX(), yCoord+read.offsetY+this.getPointingOffsetY(), zCoord+read.offsetZ+this.getPointingOffsetZ(), this, caller));
 		}
 		if (read2 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX+this.getPointingOffsetX(), yCoord+read2.offsetY+this.getPointingOffsetY(), zCoord+read2.offsetZ+this.getPointingOffsetZ(), this, caller));
 		}
 		if (read3 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read3, xCoord+read3.offsetX, yCoord+read3.offsetY, zCoord+read3.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read3, xCoord+read3.offsetX+this.getPointingOffsetX(), yCoord+read3.offsetY+this.getPointingOffsetY(), zCoord+read3.offsetZ+this.getPointingOffsetZ(), this, caller));
 		}
 		if (read4 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read4, xCoord+read4.offsetX, yCoord+read4.offsetY, zCoord+read4.offsetZ, this, caller));
+			pwr.addAll(pwr.getAllFrom(worldObj, read4, xCoord+read4.offsetX+this.getPointingOffsetX(), yCoord+read4.offsetY+this.getPointingOffsetY(), zCoord+read4.offsetZ+this.getPointingOffsetZ(), this, caller));
 		}
 		return pwr;
 	}

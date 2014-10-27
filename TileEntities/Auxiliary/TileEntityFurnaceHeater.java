@@ -50,7 +50,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (torque >= MINTORQUE && power >= MINPOWER && omega > 0 && this.hasHeatableMachine(world)) {
 			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
-		int Tamb = power > MINPOWER && torque > MINTORQUE ? 25 : ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z); //to prevent nether exploit
+		int Tamb = power > MINPOWER && torque > MINTORQUE ? 30 : ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z); //to prevent nether exploit
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/5;
 		}

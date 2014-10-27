@@ -53,6 +53,20 @@ public class RotaryEventManager {
 	private RotaryEventManager() {
 
 	}
+	/*
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void renderItemInSlot(RenderItemInSlotEvent evt) {
+		if (evt.getGuiClass() == GuiAutoCrafter.class) {
+			if (evt.slotIndex < 18) {
+				ItemStack is = evt.getItem();
+				if (is != null) {
+					ItemStack out = ItemCraftPattern.getRecipeOutput(is);
+					ReikaGuiAPI.instance.drawItemStack(new RenderItem(), out, evt.slotX, evt.slotY);
+				}
+			}
+		}
+	}*/
 
 	@SubscribeEvent
 	public void bonemealEvent(BonemealEvent event)

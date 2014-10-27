@@ -24,6 +24,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Data.MENetwork;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -34,7 +35,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 
 	public boolean continuous = true;
-	//private final HashMap<ItemStack, Integer> ingredients = new HashMap();
 	private final ItemCollection ingredients = new ItemCollection();
 	public int[] crafting = new int[18];
 	private MENetwork network;
@@ -47,7 +47,6 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		this.getSummativeSidedPower();
 		this.tickCraftingDisplay();
 		if (power >= MINPOWER) {
-			//this.eatIngredients();
 			updateTimer.update();
 			if (updateTimer.checkCap() && !world.isRemote) {
 				this.buildCache();
@@ -86,6 +85,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	}
 
 	public void triggerCraftingCycle(int slot) {
+		ReikaJavaLibrary.pConsole(slot);
 		if (power >= MINPOWER) {
 			ItemStack out = this.getSlotRecipeOutput(slot);
 			if (out != null)
@@ -255,52 +255,21 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		return ingredients.hasItem(is);
 	}
 
-	/*
-	private boolean hasIngredient(ItemStack is) {
-		return ingredients.containsKey(is);
-	}
-
-	private void eatIngredients() {
-		if (inv[54] != null) {
-			this.feedInItem(inv[54]);
-			inv[54] = null;
-		}
-	}
-	 */
 	@Override
 	public boolean canExtractItem(int i, ItemStack is, int j) {
-		return i >= 18;//j == 0 ? i == 55 : i == 56; //pull ingredients from bottom; products elsewhere
+		return i >= 18;
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return 46;//57; //54 patterns + 1 ingredients in + 1 ingredient feed out + 1 product feed out
+		return 46;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
-		return i < 18 && ItemRegistry.CRAFTPATTERN.matchItem(is);//i == 54;
-	}
-	/*
-	@Override
-	public ItemStack getStackInSlot(int par1) {
-		return par1 == 55 ? this.getFirstIngredientToRemove() : super.getStackInSlot(par1);
+		return i < 18 && ItemRegistry.CRAFTPATTERN.matchItem(is);
 	}
 
-	@Override
-	public void setInventorySlotContents(int par1, ItemStack is) {
-		if (par1 == 54) {
-			this.feedInItem(is);
-		}
-		else if (par1 == 55) {
-			if (is == null)
-				this.removeFirstIngredient();
-		}
-		else {
-			super.setInventorySlotContents(par1, is);
-		}
-	}
-	 */
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 

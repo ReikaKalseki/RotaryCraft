@@ -570,7 +570,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		else {
 			temperature = Tamb;
 		}
-		if (temperature > 90 && rand.nextBoolean()) {
+		if (temperature > 90 && rand.nextBoolean() && (type == MaterialRegistry.STONE || type == MaterialRegistry.WOOD)) {
 			damage++;
 		}
 		if (temperature > 120) {

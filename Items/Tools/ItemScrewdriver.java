@@ -52,10 +52,12 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
 import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
+
+import com.carpentersblocks.api.ICarpentersHammer;
 @Strippable(value = {"buildcraft.api.tools.IToolWrench", "mrtjp.projectred.api.IScrewdriver", "binnie.extratrees.api.IToolHammer",
 		"powercrystals.minefactoryreloaded.api.IToolHammer", "santa.api.interfaces.wrench.IWrench"})
 public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer,
-powercrystals.minefactoryreloaded.api.IToolHammer, IWrench
+powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer
 {
 	public static HashMap<Block, Integer> maxdamage = new HashMap(); //Max damage values (or tileentity datas) for the block ids associated
 
@@ -387,5 +389,16 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench
 	@Override
 	public boolean isWrench() {
 		return true; //hairy spice
+	}
+
+	//Carpenter's Blocks
+	@Override
+	public void onHammerUse(World world, EntityPlayer player) {
+
+	}
+
+	@Override
+	public boolean canUseHammer(World world, EntityPlayer player) {
+		return true;
 	}
 }
