@@ -155,7 +155,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
-		ReikaGuiAPI.instance.drawTexturedModalRectWithDepth(0, 0, 5, 11, 166, 70, -300);
+		ReikaGuiAPI.instance.drawTexturedModalRectWithDepth(0, 0, 5, 11, 166, 70, 0);
 	}
 
 	@Override
@@ -211,11 +211,13 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 
 	public int getDupeChance(int recipe) {
 		ExtractorRecipe ir = (ExtractorRecipe)arecipes.get(recipe);
-		if (ir != null && ir.modore != null) {
-			if (ir.modore.getRarity() == OreRarity.RARE)
+		if (ir != null) {
+			OreRarity r = ir.modore != null ? ir.modore.getRarity() : ir.ore.getRarity();
+			if (r == OreRarity.RARE)
 				return TileEntityExtractor.oreCopyRare;
-			else if (ir.modore.isNether()) //.isNetherOres()
+			if (ir.modore != null && ir.modore.isNetherOres()) {
 				return TileEntityExtractor.oreCopyNether;
+			}
 		}
 		return TileEntityExtractor.oreCopy;
 	}

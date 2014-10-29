@@ -61,11 +61,14 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (bedrock)
 			return false;
 		bedrock = true;
+		if (inv[9] != null)
+			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, inv[9]);
+		inv[9] = ItemStacks.bedrockdrill.copy();
 		return true;
 	}
 
 	public boolean isBedrock() {
-		return true;
+		return bedrock;
 	}
 
 	public int getCookTime(int stage) {
@@ -90,6 +93,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		if (i >= 9)
+			return false;
 		return i == 7 || i == 8 || extractableSlots[i/2];
 	}
 

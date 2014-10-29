@@ -1018,7 +1018,7 @@
 	</gastank>
 	<crafter>
 		<desc>
-			The autocrafter allows you to automate crafting of anything from the vanilla crafting table or the worktable, with an infinite capacity for ingredients. It has two modes: In autonomous mode, it continuously crafts as long as it has ingredients to do so; in request mode, it will craft the requested items and then sit idle. Ingredients can be pumped in any side, and products can be pumped out any side. Ingredients can only be extracted from the bottom. The machine can store up to 54 crafting recipe patterns.
+			The autocrafter allows you to automate crafting of anything from the vanilla crafting table. It has two modes: In autonomous mode, it continuously crafts as long as it has ingredients to do so; in request mode, it will craft one cycle of the requested items and then sit idle. It can read any inventory above it or it can draw from an Applied Energistics network for its ingredient supply. This machine can store 18 patterns, and thus can craft 18 recipes in parallel.
 		</desc>
 		<note>
 			Power Input: Any Side
