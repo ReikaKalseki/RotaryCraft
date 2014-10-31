@@ -27,6 +27,7 @@ import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.Event.ShaftFailureEvent;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -468,6 +469,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	@Override
 	protected void transferPower(World world, int x, int y, int z, int meta) {
+		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
+			return;
 		reading2Dir = false;
 		if (this.isCross()) {
 			this.crossTransfer(world, x, y, z, true, true);

@@ -80,7 +80,7 @@ public class CompactorHandler extends TemplateRecipeHandler {
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		int dy = 4;
-		ReikaGuiAPI.instance.drawTexturedModalRectWithDepth(0, dy, 5, dy, 166, 75, 0);
+		ReikaGuiAPI.instance.drawTexturedModalRectWithDepth(0, dy, 5, dy, 166, 75, ReikaGuiAPI.NEI_DEPTH);
 	}
 
 	@Override

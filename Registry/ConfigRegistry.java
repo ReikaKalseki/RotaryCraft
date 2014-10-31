@@ -74,6 +74,7 @@ public enum ConfigRegistry implements ConfigList {
 	VOIDHOLE("Allow Bedrock Breaker to Break Y=0", false),
 	JETFUELPACK("Jetpack Requires Jet Fuel", false),
 	ALLOWTNTCANNON("Allow TNT Cannon", true),
+	ALLOWEMP("Allow EMP", true),
 	EXTRAIRON("Iron Ore Density", 1F),
 	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", false),
 	CLEARCHAT("Tools Clear Chat", true),

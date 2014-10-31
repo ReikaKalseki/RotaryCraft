@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -227,6 +228,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	protected void transferPower(World world, int x, int y, int z, int meta, boolean check1, boolean check2) {
+		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
+			return;
 		if (check1 && check2)
 			omegain = torquein = 0;
 		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;

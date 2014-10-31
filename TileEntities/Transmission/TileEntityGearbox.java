@@ -33,6 +33,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -276,6 +277,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	protected void transferPower(World world, int x, int y, int z, int meta) {
 		this.calculateRatio();
+		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
+			return;
+		boolean flag = true;
 		omegain = torquein = 0;
 		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 		int dx = x+read.offsetX;
@@ -314,6 +318,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
 					this.readFromSplitter(devicein);
+					flag = false;
 				}
 				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
@@ -334,25 +339,27 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			return;
 		}
 
-		if (reduction) {
-			omega = omegain / ratio;
-			if (torquein <= RotaryConfig.torquelimit/ratio)
-				torque = torquein * ratio;
-			else {
-				torque = RotaryConfig.torquelimit;
-				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
+		if (flag) {
+			if (reduction) {
+				omega = omegain / ratio;
+				if (torquein <= RotaryConfig.torquelimit/ratio)
+					torque = torquein * ratio;
+				else {
+					torque = RotaryConfig.torquelimit;
+					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
+				}
 			}
-		}
-		else {
-			if (omegain <= RotaryConfig.omegalimit/ratio)
-				omega = omegain * ratio;
 			else {
-				omega = RotaryConfig.omegalimit;
-				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
+				if (omegain <= RotaryConfig.omegalimit/ratio)
+					omega = omegain * ratio;
+				else {
+					omega = RotaryConfig.omegalimit;
+					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
+				}
+				torque = torquein / ratio;
 			}
-			torque = torquein / ratio;
 		}
 		torque *= this.getDamagedPowerFactor();
 		if (torque <= 0)

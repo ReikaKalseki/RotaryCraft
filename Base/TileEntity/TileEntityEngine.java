@@ -38,6 +38,7 @@ import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -314,8 +315,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			power = 0;
 		}
 		else {
-			this.initialize(world, x, y, z, meta);
-			power = (long)torque*(long)omega;
+			if (!worldObj.isRemote || RotaryAux.getPowerOnClient) {
+				this.initialize(world, x, y, z, meta);
+				power = (long)torque*(long)omega;
+			}
 			if (power > 0)
 				this.affectSurroundings(world, x, y, z, meta);
 		}

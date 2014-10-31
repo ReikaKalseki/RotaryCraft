@@ -276,6 +276,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
+		te.syncAllData(false);
 		if (te instanceof TemperatureTE && !(te instanceof TileEntityEngine))
 			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)

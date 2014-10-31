@@ -73,6 +73,7 @@ public class HandbookNotifications {
 
 		private HandbookConfigVerifier() {
 			this.addEntry(ConfigRegistry.ALLOWTNTCANNON, Level.INFO, "The TNT Cannon has been disabled.");
+			this.addEntry(ConfigRegistry.ALLOWEMP, Level.INFO, "The EMP has been disabled.");
 			this.addEntry(ConfigRegistry.ATTACKBLOCKS, Level.WARNING, "Machines like the heat ray and EMP will not break blocks.");
 			this.addEntry(ConfigRegistry.RAILGUNDAMAGE, Level.WARNING, "The Railgun will not cause block damage.");
 			this.addEntry(ConfigRegistry.BANRAIN, Level.WARNING, "The Silver Iodide Cannon's ability to make rain has been disabled.");

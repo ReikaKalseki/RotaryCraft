@@ -1230,6 +1230,8 @@ public enum MachineRegistry {
 			return ConfigRegistry.NOMINERS.getState();
 		if (this == TNTCANNON)
 			return !ConfigRegistry.ALLOWTNTCANNON.getState();
+		if (this == EMP)
+			return !ConfigRegistry.ALLOWEMP.getState();
 		return false;
 	}
 

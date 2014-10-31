@@ -147,11 +147,6 @@ public class RotaryRecipes {
 			}
 		}
 
-		//if (ModList.APPENG.isLoaded()) {
-		//	GameRegistry.addRecipe(AppEngHandler.getInstance().getBasicChipPattern(), " K ", "rgr", " s ", 'K', ItemRegistry.BEDKNIFE.getStackOf(), 'r', Items.redstone, 'g', Items.gold_ingot, 's', AppEngHandler.getInstance().getSilicon());
-		//	GameRegistry.addRecipe(AppEngHandler.getInstance().getAdvancedChipPattern(), " K ", "rgr", " s ", 'K', ItemRegistry.BEDKNIFE.getStackOf(), 'r', Items.redstone, 'g', Items.diamond, 's', AppEngHandler.getInstance().getSilicon());
-		//}
-
 		if (ModList.THAUMCRAFT.isLoaded()) {
 			try {
 				ResourceLocation rl1 = new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png");

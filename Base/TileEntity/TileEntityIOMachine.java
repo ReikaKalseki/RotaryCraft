@@ -55,7 +55,42 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 			iotick -= 8;
 		superCalled = true;
 	}
+	/*
+	@Override
+	protected void onDataSync(boolean fullNBT) {
+		this.recursiveSyncPower(fullNBT, new ArrayList());
+	}
 
+	private void recursiveSyncPower(boolean fullNBT, Collection<TileEntityIOMachine> li) {
+		li.add(this);
+		TileEntity te = this.getWriteTileEntity();
+		if (te instanceof TileEntityIOMachine && !li.contains(te)) {
+			((TileEntityIOMachine) te).recursiveSyncPower(fullNBT, li);
+		}
+		TileEntity te2 = this.getWriteTileEntity2();
+		if (te2 instanceof TileEntityIOMachine && !li.contains(te2)) {
+			((TileEntityIOMachine) te2).recursiveSyncPower(fullNBT, li);
+		}
+
+		TileEntity tea = this.getReadTileEntity();
+		//ReikaJavaLibrary.pConsole(li.contains(tea), tea instanceof TileEntityMonitor);
+		if (tea instanceof TileEntityIOMachine && !li.contains(tea)) {
+			((TileEntityIOMachine) tea).recursiveSyncPower(fullNBT, li);
+		}
+		TileEntity teb = this.getReadTileEntity2();
+		if (teb instanceof TileEntityIOMachine && !li.contains(teb)) {
+			((TileEntityIOMachine) teb).recursiveSyncPower(fullNBT, li);
+		}
+		TileEntity tec = this.getReadTileEntity3();
+		if (tec instanceof TileEntityIOMachine && !li.contains(tec)) {
+			((TileEntityIOMachine) tec).recursiveSyncPower(fullNBT, li);
+		}
+		TileEntity ted = this.getReadTileEntity4();
+		if (ted instanceof TileEntityIOMachine && !li.contains(ted)) {
+			((TileEntityIOMachine) ted).recursiveSyncPower(fullNBT, li);
+		}
+	}
+	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

@@ -44,6 +44,8 @@ public class RotaryAux {
 	public static final Color[] sideColors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
 	public static final String[] sideColorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
 
+	public static final boolean getPowerOnClient = false;
+
 	private static List<Class<? extends TileEntity>> shaftPowerBlacklist = new ArrayList<Class<? extends TileEntity>>();
 
 	static {

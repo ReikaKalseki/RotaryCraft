@@ -20,6 +20,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
@@ -194,6 +195,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	}
 
 	private void getPower(World world, int x, int y, int z, boolean doubleSided) {
+		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
+			return;
 		this.clear();
 		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", this.readx, this.ready, this.readz));
@@ -358,6 +361,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	}
 
 	private void getOffsetPower4Sided(World world, int x, int y, int z, int stepx, int stepy, int stepz) {
+		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
+			return;
 		read = ForgeDirection.EAST;
 		read2 = ForgeDirection.WEST;
 		read3 = ForgeDirection.SOUTH;
@@ -666,6 +671,8 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	}
 
 	protected final void getSummativeSidedPower() {
+		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
+			return;
 		int x = xCoord;
 		int y = yCoord;
 		int z = zCoord;
