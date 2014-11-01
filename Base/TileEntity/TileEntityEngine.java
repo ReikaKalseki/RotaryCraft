@@ -317,8 +317,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		else {
 			if (!worldObj.isRemote || RotaryAux.getPowerOnClient) {
 				this.initialize(world, x, y, z, meta);
-				power = (long)torque*(long)omega;
 			}
+			power = (long)torque*(long)omega;
 			if (power > 0)
 				this.affectSurroundings(world, x, y, z, meta);
 		}

@@ -468,7 +468,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				EntityPlayer ep = this.getPlacer();
 				BlockTieredResource bt = (BlockTieredResource)id;
 				boolean harvest = ep != null && bt.isPlayerSufficientTier(world, x, y, z, ep);
-				items = harvest ? bt.getHarvestResources(world, x, y, z, fortune) : bt.getNoHarvestResources(world, x, y, z, fortune);
+				items = harvest ? bt.getHarvestResources(world, x, y, z, fortune, ep) : bt.getNoHarvestResources(world, x, y, z, fortune, ep);
 			}
 			if (items != null) {
 				for (ItemStack is : items) {
