@@ -21,11 +21,11 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.DragonAPI.ModInteract.ReikaEUHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
@@ -368,7 +368,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELTTEMP, TileEntityBlastFurnace.BEDROCKTEMP);
 		addData(MachineRegistry.SCALECHEST, TileEntityScaleableChest.MAXSIZE);
 		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
-		addData(MachineRegistry.GENERATOR, TileEntityGenerator.OUTPUT_VOLTAGE);
+		addData(MachineRegistry.GENERATOR, ReikaEUHelper.WATTS_PER_EU);
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXOMEGA);
 

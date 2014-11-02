@@ -83,7 +83,8 @@ public enum ConfigRegistry implements ConfigList {
 	EXTRACTORMAINTAIN("Extractor Drill Wears Down", false),
 	HARDGRAVELGUN("Hardmode Gravel Gun", false),
 	BORERMAINTAIN("Borer Requires Maintenance", false),
-	NOMINERS("Disable Automining Machines", false);
+	NOMINERS("Disable Automining Machines", false),
+	HARDEU("Hard Mode EU Compatibility", false);
 
 	private String label;
 	private boolean defaultState;

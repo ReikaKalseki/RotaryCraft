@@ -759,7 +759,7 @@
 	</lavamaker>
 	<generator>
 		<desc>
-			The electric generator takes in shaft power and produces electrical power. The voltage remains constant at %dV, but the current scales with the amount of power going in.
+			The electric generator takes in shaft power and produces IC2 electrical power at a rate of %.0f W/EU. The total power output as well as EU packet size scales with the amount of power going in.
 		</desc>
 		<note>
 			Power Input: Back
@@ -767,7 +767,7 @@
 	</generator>
 	<electricmotor>
 		<desc>
-			The electric motor uses UE electrical power to produce shaft power. Use its GUI to choose the speed output. Higher power outputs will require more electrical power and a higher supply voltage.
+			The electric motor uses IC2 electrical power to produce shaft power. Use its GUI to choose the speed output. Higher power outputs will require more electrical power and a higher supply voltage.
 		</desc>
 		<note>
 			Wire Connection: Back
