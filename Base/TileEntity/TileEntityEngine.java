@@ -44,6 +44,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -280,7 +281,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		}
 	}
 
-	protected abstract void playSounds(World world, int x, int y, int z, float pitchMultiplier);
+	protected abstract void playSounds(World world, int x, int y, int z, float pitchMultiplier, float vol);
 
 	protected final boolean isMuffled(World world, int x, int y, int z) {
 		if (world.getBlock(x, y+1, z) == Blocks.wool) {
@@ -364,7 +365,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			this.consumeFuel();
 
 		if (power > 0) {
-			this.playSounds(world, x, y, z, pitch);
+			if (ConfigRegistry.ENGINESOUNDS.getState())
+				this.playSounds(world, x, y, z, pitch, ConfigRegistry.ENGINEVOLUME.getFloat());
 		}
 		else if (soundtick < this.getSoundLength(soundfactor))
 			soundtick = 2000;

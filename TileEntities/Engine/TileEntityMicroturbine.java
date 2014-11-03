@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Engine;
 
 import net.minecraft.world.World;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityMicroturbine extends TileEntityEngine {
@@ -37,13 +36,10 @@ public class TileEntityMicroturbine extends TileEntityEngine {
 	}
 
 	@Override
-	protected void playSounds(World world, int x, int y, int z, float pitchMultiplier) {
+	protected void playSounds(World world, int x, int y, int z, float pitchMultiplier, float volume) {
 		soundtick++;
-		if (!ConfigRegistry.ENGINESOUNDS.getState())
-			return;
-		float volume = 1;
 		if (this.isMuffled(world, x, y, z)) {
-			volume = 0.3125F;
+			volume *= 0.3125F;
 		}
 
 		if (soundtick < this.getSoundLength(1F/pitchMultiplier) && soundtick < 2000)

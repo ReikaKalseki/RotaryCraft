@@ -550,17 +550,14 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	}
 
 	@Override
-	protected void playSounds(World world, int x, int y, int z, float pitchMultiplier) {
+	protected void playSounds(World world, int x, int y, int z, float pitchMultiplier, float volume) {
 		soundtick++;
 		if (FOD > 0 && rand.nextInt(2*(9-FOD)) == 0) {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+rand.nextFloat(), 1F);
 			world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 		}
-		if (!ConfigRegistry.ENGINESOUNDS.getState())
-			return;
-		float volume = 1;
 		if (this.isMuffled(world, x, y, z)) {
-			volume = 0.3125F;
+			volume *= 0.3125F;
 		}
 
 		if (soundtick < this.getSoundLength(1F/pitchMultiplier) && soundtick < 2000)

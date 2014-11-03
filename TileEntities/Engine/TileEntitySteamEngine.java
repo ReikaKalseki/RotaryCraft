@@ -18,7 +18,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -62,13 +61,10 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	}
 
 	@Override
-	protected void playSounds(World world, int x, int y, int z, float pitchMultiplier) {
+	protected void playSounds(World world, int x, int y, int z, float pitchMultiplier, float volume) {
 		soundtick++;
-		if (!ConfigRegistry.ENGINESOUNDS.getState())
-			return;
-		float volume = 1;
 		if (this.isMuffled(world, x, y, z)) {
-			volume = 0.3125F;
+			volume *= 0.3125F;
 		}
 
 		if (soundtick < this.getSoundLength(1F/pitchMultiplier) && soundtick < 2000)

@@ -378,7 +378,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.SEPARATION.addSizedCrafting(4, "sGs", "OGO", "sGs", 'O', Blocks.lapis_block, 'G', Blocks.glass, 's', ItemStacks.steelingot);
 
-		MachineRegistry.GENERATOR.addCrafting("gps", "iGs", "ppp", 'p', ItemStacks.basepanel, 'g', Items.gold_ingot, 's', ItemStacks.steelingot, 'G', ItemStacks.generator, 'i', ItemStacks.impeller, 's', ItemStacks.shaftcore);
+		MachineRegistry.GENERATOR.addCrafting("gpS", "iGs", "ppp", 'S', ItemStacks.steelingot, 'p', ItemStacks.basepanel, 'g', Items.gold_ingot, 's', ItemStacks.steelingot, 'G', ItemStacks.generator, 'i', ItemStacks.impeller, 's', ItemStacks.shaftcore);
 
 		MachineRegistry.ELECTRICMOTOR.addCrafting("SGS", "BCB", "SGS", 'G', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'B', ItemStacks.basepanel, 'C', ItemStacks.diamondshaftcore);
 

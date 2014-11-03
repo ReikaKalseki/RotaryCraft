@@ -18,6 +18,7 @@ import Reika.RotaryCraft.RotaryCraft;
 public enum ConfigRegistry implements ConfigList {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
+	ENGINEVOLUME("Engine Volume", 1F),
 	GPRORES("GPR Renders Ores", true),
 	INSTACUT("Instant Woodcutter", true),
 	RENDERFORCEFIELD("Show Force Fields", true),
