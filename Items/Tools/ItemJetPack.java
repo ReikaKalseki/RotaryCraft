@@ -300,6 +300,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 
 	@Override
 	public boolean isValidFluid(Fluid f, ItemStack is) {
+		Fluid f2 = this.getCurrentFluid(is);
+		if (f2 != null && !f2.equals(f2))
+			return false;
 		if (f.equals(FluidRegistry.getFluid("jet fuel")))
 			return true;
 		if (f.equals(FluidRegistry.getFluid("rocket fuel")))
