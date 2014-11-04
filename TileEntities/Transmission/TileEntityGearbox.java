@@ -213,7 +213,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		int oldlube = 0;
 		if (type.needsLubricant() && omegain > 0) {
 			if (tank.isEmpty()) {
-				if (!world.isRemote && damage < MAX_DAMAGE && rand.nextInt(40) == 0) {
+				if (!world.isRemote && damage < MAX_DAMAGE && rand.nextInt(40) == 0 && this.getTicksExisted() >= 100) {
 					damage++;
 					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 				}

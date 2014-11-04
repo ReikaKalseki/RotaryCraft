@@ -19,8 +19,12 @@ import thaumcraft.api.IGoggles;
 import thaumcraft.api.IVisDiscountGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.IRevealer;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Extras.APIStripper.Strippable;
+import Reika.DragonAPI.Extras.ModDependent;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
+@Strippable(value = {"thaumcraft.api.nodes.IRevealer", "thaumcraft.api.IGoggles", "thaumcraft.api.IVisDiscountGear"})
 public class ItemBedReveal extends ItemBedrockArmor implements IRevealer, IGoggles, IVisDiscountGear {
 
 	public ItemBedReveal(int tex, int render) {
@@ -43,6 +47,7 @@ public class ItemBedReveal extends ItemBedrockArmor implements IRevealer, IGoggl
 	}
 
 	@Override
+	@ModDependent(mod = ModList.THAUMCRAFT)
 	public int getVisDiscount(ItemStack is, EntityPlayer ep, Aspect a) {
 		return a == Aspect.ORDER || a == Aspect.ENTROPY ? 10 : 5;
 	}
