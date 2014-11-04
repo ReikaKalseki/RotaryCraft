@@ -18,12 +18,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class BlockPiping extends BlockBasicMultiTE {
 
@@ -31,7 +33,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 
 	public BlockPiping(Material par3Material) {
 		super(par3Material);
-		this.setHardness(0F);
+		this.setHardness(MathHelper.clamp_float(ConfigRegistry.PIPEHARDNESS.getFloat(), 0, 1));
 		this.setResistance(1F);
 		this.setLightLevel(0F);
 	}

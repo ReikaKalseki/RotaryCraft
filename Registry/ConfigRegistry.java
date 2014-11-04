@@ -85,7 +85,8 @@ public enum ConfigRegistry implements ConfigList {
 	HARDGRAVELGUN("Hardmode Gravel Gun", false),
 	BORERMAINTAIN("Borer Requires Maintenance", false),
 	NOMINERS("Disable Automining Machines", false),
-	HARDEU("Hard Mode EU Compatibility", false);
+	HARDEU("Hard Mode EU Compatibility", false),
+	PIPEHARDNESS("Pipe Block Hardness", 0F);
 
 	private String label;
 	private boolean defaultState;

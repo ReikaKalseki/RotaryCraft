@@ -308,13 +308,10 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			ForgeDirection dir = this.getWriteDirection();
 			ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 			for (int i = -1; i <= y; i++) {
-				ReikaWorldHelper.dropBlockAt(world, x+left.offsetX, y+i, z+left.offsetZ);
-				world.setBlock(x+left.offsetX, y+i, z+left.offsetZ, Blocks.air);
+				ReikaWorldHelper.dropAndDestroyBlockAt(world, x+left.offsetX, y+i, z+left.offsetZ, false);
 			}
-			ReikaWorldHelper.dropBlockAt(world, x, y+1, z);
-			ReikaWorldHelper.dropBlockAt(world, x, y-1, z);
-			world.setBlock(x, y+1, z, Blocks.air);
-			world.setBlock(x, y-1, z, Blocks.air);
+			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y+1, z, false);
+			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y-1, z, false);
 		}
 	}
 
