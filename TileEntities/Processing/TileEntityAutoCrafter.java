@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Extras.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
@@ -37,6 +38,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	public boolean continuous = true;
 	private final ItemCollection ingredients = new ItemCollection();
 	public int[] crafting = new int[18];
+	@ModDependent(mod = ModList.APPENG)
 	private MENetwork network;
 
 	private final StepTimer updateTimer = new StepTimer(50);
@@ -170,7 +172,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 
 	private int getAvailableIngredients(ArrayList<ItemStack> li) {
 		int count = 0;
-		ItemHashMap<Long> map = network != null ? network.getMEContents() : null;
+		ItemHashMap<Long> map = ModList.APPENG.isLoaded() && network != null ? network.getMEContents() : null;
 		//ReikaJavaLibrary.pConsole(map);
 		for (ItemStack is : li) {
 			//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
@@ -231,8 +233,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 					dec -= rem;
 					if (dec > 0) {
 						int diff = req-rem;
-						if (diff > 0 && network != null) {
-							dec -= network.removeFromMESystem(is2, diff);
+						if (ModList.APPENG.isLoaded()) {
+							if (diff > 0 && network != null) {
+								dec -= network.removeFromMESystem(is2, diff);
+							}
 						}
 					}
 					if (dec <= 0)
@@ -242,8 +246,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 			else {
 				int rem = ingredients.removeXItems(is, req);
 				int diff = req-rem;
-				if (diff > 0 && network != null) {
-					network.removeFromMESystem(is, diff);
+				if (ModList.APPENG.isLoaded()) {
+					if (diff > 0 && network != null) {
+						network.removeFromMESystem(is, diff);
+					}
 				}
 			}
 		}
