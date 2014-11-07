@@ -23,6 +23,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ContainerCraftingPattern extends Container {
 
@@ -93,7 +94,8 @@ public class ContainerCraftingPattern extends Container {
 		super.onContainerClosed(ep);
 
 		ItemStack is = ep.getCurrentEquippedItem();
-		ItemCraftPattern.setRecipe(is, craftMatrix);
+		if (ItemRegistry.CRAFTPATTERN.matchItem(is))
+			ItemCraftPattern.setRecipe(is, craftMatrix);
 	}
 
 	@Override
