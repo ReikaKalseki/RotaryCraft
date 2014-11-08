@@ -351,7 +351,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 					else {
 						//this.updateSpeed(0, false);
 						this.resetPower();
-						return;
+						soundtick = 0;
 					}
 				}
 			}
@@ -359,10 +359,12 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 		this.basicPowerReceiver();
 
-		timer.updateTicker("fuel");
 		this.internalizeFuel();
-		if (type.burnsFuel() && timer.checkCap("fuel") && this.canConsumeFuel())
-			this.consumeFuel();
+		if (power > 0) {
+			timer.updateTicker("fuel");
+			if (type.burnsFuel() && timer.checkCap("fuel") && this.canConsumeFuel())
+				this.consumeFuel();
+		}
 
 		if (power > 0) {
 			if (ConfigRegistry.ENGINESOUNDS.getState())

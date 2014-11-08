@@ -20,8 +20,8 @@ import thaumcraft.api.IVisDiscountGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.IRevealer;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Extras.APIStripper.Strippable;
-import Reika.DragonAPI.Extras.ModDependent;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 @Strippable(value = {"thaumcraft.api.nodes.IRevealer", "thaumcraft.api.IGoggles", "thaumcraft.api.IVisDiscountGear"})
