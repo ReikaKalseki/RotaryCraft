@@ -209,7 +209,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.getNumberShaftTypes()-1, " S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem); //Shaft cross
 
-		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "SSS", "SrS", "SSS", 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks);
+		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 't', getBlastFurnaceGatingMaterial(), 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks);
 
 		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);
 
@@ -1003,5 +1003,63 @@ public class RotaryRecipes {
 	private static void addRecipeToBoth(ItemStack out, Object... in) {
 		GameRegistry.addRecipe(out, in);
 		WorktableRecipes.getInstance().addRecipe(out, in);
+	}
+
+	public static ItemStack getBlastFurnaceGatingMaterial() {
+		int index = ConfigRegistry.BLASTMAT.getValue();
+		ItemStack item = null;
+		ArrayList<ItemStack> ores = null;
+		switch (index) {
+		case 1:
+			ores = OreDictionary.getOres("ingotAlumite");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 2:
+			ores = OreDictionary.getOres("ingotObsidian");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 3:
+			item = new ItemStack(Blocks.obsidian);
+			break;
+		case 4:
+			ores = OreDictionary.getOres("ingotSteel");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 5:
+			ores = OreDictionary.getOres("ingotCopper");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 6:
+			item = new ItemStack(Items.gold_ingot);
+			break;
+		case 7:
+			ores = OreDictionary.getOres("ingotSilver");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 8:
+			ores = OreDictionary.getOres("ingotOsmium");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 9:
+			ores = OreDictionary.getOres("ingotBrass");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 10:
+			ores = OreDictionary.getOres("ingotBronze");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		default:
+			item = ReikaItemHelper.stoneBricks;
+			break;
+		}
+		return item != null ? item.copy() : ReikaItemHelper.stoneBricks.copy();
 	}
 }

@@ -86,7 +86,8 @@ public enum ConfigRegistry implements ConfigList {
 	BORERMAINTAIN("Borer Requires Maintenance", false),
 	NOMINERS("Disable Automining Machines", false),
 	HARDEU("Hard Mode EU Compatibility", false),
-	PIPEHARDNESS("Pipe Block Hardness", 0F);
+	PIPEHARDNESS("Pipe Block Hardness", 0F),
+	BLASTMAT("Blast Furnace Crafting Material", 0);
 
 	private String label;
 	private boolean defaultState;
