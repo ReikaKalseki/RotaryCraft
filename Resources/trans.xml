@@ -10,7 +10,7 @@
 		Bevel gears are used to change the direction of power transmission without changing the torque or speed. Unlike their inline cousins, they do not need lubricant, and will operate continuously and losslessly.
 	</bevel>
 	<splitter>
-		The shaft junction does exactly what it sounds like. In 'merge' mode, it will take two engines' outputs and combine them, outputting the sum of the torques at the input speed. Note that trying to combine inputs of different speeds will merely result in a shower of sparks. In 'split' mode, they will take an input and send some torque each way, at the input speed. To swap modes, shift-right-click with the screwdriver.
+		The shaft junction does exactly what it sounds like. In 'merge' mode, it will take two engines' outputs and combine them, outputting the sum of the torques at the input speed. Note that trying to combine inputs of different speeds will merely result in a shower of sparks, and combining too many engines' power will overload the junction. In 'split' mode, they will take an input and send some torque each way, at the input speed. To swap modes, shift-right-click with the screwdriver.
 	</splitter>
 	<clutch>
 		The clutch is basically a gated shaft - when powered by redstone, it transmits its input torque and speed unchanged. Unpower it, and it outputs nothing.
