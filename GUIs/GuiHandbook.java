@@ -31,6 +31,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
+import Reika.DragonAPI.Interfaces.HandbookEntry;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -42,7 +43,6 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
-import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -85,7 +85,6 @@ public class GuiHandbook extends GuiScreen
 	protected float renderq = 22.5F;
 
 	protected static final RenderBlocks rb = new RenderBlocks();
-
 	protected static final RenderItem ri = new RenderItem();
 
 	public GuiHandbook(EntityPlayer p5ep, World world, int s, int p)
@@ -191,11 +190,6 @@ public class GuiHandbook extends GuiScreen
 		if (button.id == 11) {
 			if (screen < this.getMaxPage()) {
 				screen++;
-				page = 0;
-				subpage = 0;
-			}
-			else {
-				screen = 0;
 				page = 0;
 				subpage = 0;
 			}
@@ -420,8 +414,8 @@ public class GuiHandbook extends GuiScreen
 				String sg = "";
 				List<HandbookEntry> li = this.getAllTabsOnScreen();
 				int idx = (msy-posY)/20;
-				if (idx >= li.size()) {
-					int diff = idx-li.size();
+				if (idx >= 8) {
+					int diff = idx-8;
 					switch(diff) {
 					case 0:
 						sg = "Next";
@@ -434,11 +428,12 @@ public class GuiHandbook extends GuiScreen
 						break;
 					}
 				}
-				else {
+				else if (idx < li.size()) {
 					HandbookEntry h = li.get(idx);
 					sg = h.getTitle();
 				}
-				ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, sg, msx+fontRendererObj.getStringWidth(sg)+30, msy);
+				if (!sg.isEmpty())
+					ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, sg, msx+fontRendererObj.getStringWidth(sg)+30, msy);
 			}
 		}
 
