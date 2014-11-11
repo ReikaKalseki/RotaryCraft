@@ -21,11 +21,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ForestryRecipeHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class RecipesCentrifuge
@@ -63,6 +65,12 @@ public class RecipesCentrifuge
 
 		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("lubricant"), 50), ItemStacks.slipperyPropolis);
 		this.addRecipe(ItemStacks.slipperyPropolis, new FluidStack(FluidRegistry.getFluid("lubricant"), 150));
+
+		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {
+			ItemStack lead = OreDictionary.getOres("dustLead").get(0);
+			ItemStack silver = OreDictionary.getOres("dustSilver").get(0);
+			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, lead, silver);
+		}
 	}
 
 	private void addRecipe(ItemStack in, ArrayList<ItemStack> out, FluidStack fs)
