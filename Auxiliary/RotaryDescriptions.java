@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaEUHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
@@ -236,6 +237,7 @@ public final class RotaryDescriptions {
 		for (int i = 0; i < resourcetabs.length; i++) {
 			HandbookRegistry h = resourcetabs[i];
 			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase());
+			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
@@ -453,5 +455,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.ANTIAIR, PowerReceivers.ANTIAIR.getMinPower(), PowerReceivers.ANTIAIR.getMinTorque());
 		addNotes(MachineRegistry.PIPEPUMP, PowerReceivers.PIPEPUMP.getMinPower(), PowerReceivers.PIPEPUMP.getMinSpeed());
 		addNotes(MachineRegistry.CENTRIFUGE, PowerReceivers.CENTRIFUGE.getMinPower(), PowerReceivers.CENTRIFUGE.getMinSpeed());
+
+		addData(HandbookRegistry.TUNGSTEN, RecipesFrictionHeater.getRecipes().getRecipeByInput(ItemStacks.tungstenflakes).requiredTemperature);
 	}
 }

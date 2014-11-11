@@ -408,8 +408,10 @@ public class RecipesBlastFurnace
 		ArrayList<BlastCrafting> li = new ArrayList();
 		for (int i = 0; i < craftingList.size(); i++) {
 			BlastCrafting r = craftingList.get(i);
-			if (ReikaItemHelper.matchStacks(is, r.outputItem()))
+			//ReikaJavaLibrary.pConsole(r.output.getDisplayName());
+			if (ReikaItemHelper.matchStacks(is, r.outputItem())) {
 				li.add(r.copy());
+			}
 		}
 		return li;
 	}

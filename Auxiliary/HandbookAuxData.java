@@ -236,6 +236,9 @@ public final class HandbookAuxData {
 		else if (h.isSmelting()) {
 			ItemStack out = h.getSmelting();
 			ReikaGuiAPI.instance.drawSmelting(ri, f, out, dx+87, dy+36, dx+141, dy+32);
+			if (h == HandbookRegistry.TUNGSTEN) {
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemStacks.tungstenflakes, dx+87, dy+28);
+			}
 		}
 		else if (h == HandbookRegistry.EXTRACTS) {
 			int time = 1000000000;

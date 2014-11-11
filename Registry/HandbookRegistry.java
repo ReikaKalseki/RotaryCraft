@@ -275,7 +275,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	ALUMINUM("Aluminum Powder"),
 	RAILGUNAMMO("Railgun Ammunition"),
 	SLIDES("Projector Slides"),
-	EXPLOSIVES("Explosive Shells");
+	EXPLOSIVES("Explosive Shells"),
+	TUNGSTEN("Tungsten");
 
 	private MachineRegistry machine;
 	private ItemRegistry item;
@@ -929,6 +930,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	public boolean isSmelting() {
 		if (this == ETHANOL)
 			return true;
+		if (this == TUNGSTEN)
+			return true;
 		return false;
 	}
 
@@ -937,6 +940,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return null;
 		if (this == ETHANOL)
 			return ItemRegistry.ETHANOL.getStackOf();
+		if (this == TUNGSTEN)
+			return ItemStacks.tungsteningot;
 		return ItemStacks.barrel;
 	}
 

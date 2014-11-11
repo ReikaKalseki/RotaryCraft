@@ -305,6 +305,8 @@ public class GuiHandbook extends GuiScreen
 			return PageType.COMPACTOR;
 		if (h == HandbookRegistry.GLASS)
 			return PageType.SMELTING;
+		if (h == HandbookRegistry.TUNGSTEN)
+			return PageType.SMELTING;
 		if (h == HandbookRegistry.NETHERDUST)
 			return PageType.SMELTING;
 		if (h == HandbookRegistry.YEAST)

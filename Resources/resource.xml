@@ -72,4 +72,7 @@
 	<explosives>
 		Explosive Shells are alternative ammunition for the railgun. They are cheaper to make, but deal less damage to entities hit by them, and are more destructive to the terrain around them.
 	</explosives>
+	<tungsten>
+		Tungsten is a byproduct of processing iron ore in the Extractor, and is used for high-temperature, high-strength, or high-pressure applications. It can only be smelted in a vanilla furnace above %dC.
+	</tungsten>
 </resource>
