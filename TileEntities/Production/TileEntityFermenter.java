@@ -97,6 +97,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (ModList.EMASHER.isLoaded()) {
 			in.add(new ItemStack(ModCropList.ALGAE.blockID, 1, 0));
 		}
+		if (ModList.FORESTRY.isLoaded()) {
+			in.add(new ItemStack(ForestryHandler.getInstance().saplingID));
+		}
 		return in;
 	}
 
