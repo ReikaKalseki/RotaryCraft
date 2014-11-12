@@ -9,27 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -47,6 +41,8 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
+	private final HashMap<Integer, PathEntity> paths = new HashMap();
+
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return true;
@@ -61,20 +57,13 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			return;
 		int range = this.getRange();
 		AxisAlignedBB box = this.getBox(x, y, z, range);
-		List inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
-		Iterator<EntityLiving> it = inbox.iterator();
-		while (it.hasNext()) {
-			EntityLiving e = it.next();
-			NBTTagCompound nbt = e.getEntityData();
-			if (world.getTotalWorldTime()-nbt.getLong("baitbox") < 400)
-				it.remove();
-		}
+		List<EntityLiving> inbox = world.getEntitiesWithinAABB(EntityLiving.class, box);
 		if (!inbox.isEmpty() && (world.getTotalWorldTime()&3) == 0) {
-			for (int i = 0; i < Math.min(1, inbox.size()); i++) {
-				EntityLiving ent = (EntityLiving)inbox.get(rand.nextInt(inbox.size()));
+			for (EntityLiving ent : inbox) {
 				//ReikaChatHelper.write(this.canAttract(ent)+"  "+ent.getCommandSenderName());
 				//ReikaJavaLibrary.pConsole(this.canRepel(ent), ent instanceof EntityPigZombie);
 				if (this.canRepel(ent)) {
+					//ReikaJavaLibrary.pConsole(ent, Side.SERVER);
 					this.applyEffect(world, x, y, z, ent, false);
 					//ReikaChatHelper.write(this.canAttract(ent));
 				}
@@ -88,6 +77,10 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			}
 		}
 		tickcount = 0;
+	}
+
+	public void onBreak() {
+		paths.clear();
 	}
 
 	private int maxMobs() { //Omega + config file
@@ -147,27 +140,22 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	private void applyEffect(World world, int x, int y, int z, EntityLiving ent, boolean attract) {
 		if (world.isRemote)
 			;//return;
-		//ReikaChatHelper.write(attract+" for "+ent.getCommandSenderName());
-		int r = this.getRange();
-		PathEntity path = null;
+		PathEntity path = paths.get(ent.getEntityId());
+		if (path == null) {
+			path = this.getPath(ent, world, x, y, z, attract);
+			//ReikaJavaLibrary.pConsole(ent);
+			paths.put(ent.getEntityId(), path);
+		}
 		int[] xyz = new int[3];
 		if (!attract) {
 			xyz = this.getRepelTo(world, x, y, z, ent);
 			this.dropHeldItemAndRun(world, x, y, z, ent);
 		}
+		//ReikaChatHelper.write(attract+" for "+ent.getCommandSenderName());
 		if (!((ent instanceof EntityTameable && ((EntityTameable)ent).isSitting()))) {
 			ent.getNavigator().clearPathEntity();
-			if (attract) {
-				path = ent.getNavigator().getPathToXYZ(x, y, z);
-				if (path == null)
-					path =  worldObj.getEntityPathToXYZ(ent, x, y, z, r, true, false, true, true);
-				//ReikaJavaLibrary.pConsole(x+":"+y+":"+z, Side.SERVER);
-				//ReikaJavaLibrary.pConsole(ent.getNavigator().getPathToXYZ(x, y, z), Side.SERVER);
-			}
-			else {
-				//path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
-				path =  worldObj.getEntityPathToXYZ(ent, xyz[0], xyz[1], xyz[2], r, true, false, true, true);
-			}/*
+
+			/*
 			ent.posY = 75;
 			if (ent.posY > 60) {
 			if (path != null)
@@ -179,54 +167,11 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			if (ent instanceof EntityCreeper && ent.getNavigator().getPath() != null)
 			ReikaChatHelper.write(ent.getNavigator().getPath().isSamePath(path));
 			else if (ent instanceof EntityCreeper && ent.posY >= 65) ReikaChatHelper.write(null);*/
-			ent.getNavigator().setPath(path, 1F);
+			ent.getNavigator().setPath(path, 0.5F);
 			//if (ent instanceof EntityCreeper && ent.getNavigator().getPath() != null)
 			//ReikaChatHelper.write(ent.getNavigator().getPath().isSamePath(path));
 		}
-		//ReikaJavaLibrary.pConsole(ent, ent.getClass() == EntityCreeper.class);
-		if (ent instanceof EntitySpider) {
-			if (attract)
-				path = ent.getNavigator().getPathToXYZ(x, y, z);
-			else {
-				path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
-			}
-			((EntitySpider)ent).setPathToEntity(path);
-		}
-		if (ent instanceof EntityBlaze) {
-			if (attract)
-				path = ent.getNavigator().getPathToXYZ(x, y, z);
-			else {
-				path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
-			}
-			((EntityBlaze)ent).setPathToEntity(path);
-		}
-		if (ent instanceof EntitySilverfish) {
-			if (attract)
-				path = ent.getNavigator().getPathToXYZ(x, y, z);
-			else {
-				path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
-			}
-			((EntitySilverfish)ent).setPathToEntity(path);
-		}
-		if (ent instanceof EntityPigZombie) {
-			if (ent.getNavigator().getPath() != null)
-				//ReikaChatHelper.write(ent.getNavigator().getPath().getFinalPathPoint().xCoord+", "+ent.getNavigator().getPath().getFinalPathPoint().yCoord+", "+ent.getNavigator().getPath().getFinalPathPoint().zCoord);
-				if (attract)
-					path = ent.getNavigator().getPathToXYZ(x, y, z);
-				else {
-					path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
-				}
-			((EntityPigZombie)ent).setPathToEntity(path);
-		}
-		if (ent instanceof EntityEnderman) {
-			if (attract)
-				path = ent.getNavigator().getPathToXYZ(x, y, z);
-			else {
-				path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
-			}
-			((EntityEnderman)ent).setPathToEntity(path);
-		}
-		if (ent instanceof EntitySlime || ent instanceof EntityMagmaCube || ent instanceof EntityGhast || ent instanceof EntitySquid) {
+		if (ent instanceof EntitySlime || ent instanceof EntityMagmaCube || ent instanceof EntityGhast || ent instanceof EntitySquid || true) {
 			if (attract) {
 				if (!(ent instanceof EntitySlime) || !ent.onGround) {
 					path = ent.getNavigator().getPathToXYZ(x, y, z);
@@ -270,6 +215,27 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			if (!world.isRemote)
 				ent.velocityChanged = true;
 		}
+	}
+
+	private PathEntity getPath(EntityLiving ent, World world, int x, int y, int z, boolean attract) {
+		int r = this.getRange();
+		PathEntity path = null;
+		int[] xyz = new int[3];
+		if (!attract) {
+			xyz = this.getRepelTo(world, x, y, z, ent);
+		}
+		if (attract) {
+			path = ent.getNavigator().getPathToXYZ(x, y, z);
+			if (path == null)
+				path = worldObj.getEntityPathToXYZ(ent, x, y, z, r, true, false, true, true);
+			//ReikaJavaLibrary.pConsole(x+":"+y+":"+z, Side.SERVER);
+			//ReikaJavaLibrary.pConsole(ent.getNavigator().getPathToXYZ(x, y, z), Side.SERVER);
+		}
+		else {
+			//path = ent.getNavigator().getPathToXYZ(xyz[0], xyz[1], xyz[2]);
+			path = worldObj.getEntityPathToXYZ(ent, xyz[0], xyz[1], xyz[2], r, true, false, true, true);
+		}
+		return path;
 	}
 
 	public int getRange() {

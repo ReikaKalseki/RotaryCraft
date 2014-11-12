@@ -96,6 +96,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
@@ -667,6 +668,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (te instanceof TileEntityLamp) {
 			((TileEntityLamp)te).clearAll();
+		}
+		if (te instanceof TileEntityBaitBox) {
+			((TileEntityBaitBox)te).onBreak();
 		}
 		if (te instanceof TileEntityBeamMirror) {
 			((TileEntityBeamMirror)te).lightsOut();
