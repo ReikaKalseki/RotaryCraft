@@ -584,8 +584,8 @@ public class PacketHandlerCore implements IPacketHandler {
 			}
 		}
 		catch (NullPointerException e) {
-			ReikaJavaLibrary.pConsole("Machine/item was deleted before its packet could be received!");
-			ReikaChatHelper.writeString("Machine/item was deleted before its packet could be received!");
+			ReikaJavaLibrary.pConsole("Machine/item was deleted before its packet "+pack+" could be received!");
+			ReikaChatHelper.writeString("Machine/item was deleted before its packet "+pack+" could be received!");
 			e.printStackTrace();
 		}
 		catch (Exception e) {
