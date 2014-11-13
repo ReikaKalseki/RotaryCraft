@@ -23,6 +23,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -187,7 +188,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	@Override
 	public void onFirstTick(World world, int x, int y, int z) {
 		this.getIOSides(world, x, y, z, this.getBlockMetadata());
-		if (!world.isRemote)
+		if (!world.isRemote && ModList.IC2.isLoaded())
 			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 	}
 
@@ -197,7 +198,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	}
 
 	private void removeTileFromNet(World world, int x, int y, int z) {
-		if (!world.isRemote)
+		if (!world.isRemote && ModList.IC2.isLoaded())
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 	}
 }

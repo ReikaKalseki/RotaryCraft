@@ -68,6 +68,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 			if (tank.isEmpty()) {
 				omega = torque = 0;
 				power = 0;
+				return;
 			}
 			else {
 				if (power > 0) {
@@ -75,8 +76,8 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 				}
 			}
 		}
-		else
-			this.getPower(false);
+
+		this.getPower(false);
 
 		//ReikaJavaLibrary.pConsole(this.getOfferedEnergy(), Side.SERVER);
 		/*
@@ -131,7 +132,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 
 	@Override
 	public void onFirstTick(World world, int x, int y, int z) {
-		if (!world.isRemote)
+		if (!world.isRemote && ModList.IC2.isLoaded())
 			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 	}
 
@@ -141,7 +142,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 	}
 
 	private void removeTileFromNet(World world, int x, int y, int z) {
-		if (!world.isRemote)
+		if (!world.isRemote && ModList.IC2.isLoaded())
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 	}
 

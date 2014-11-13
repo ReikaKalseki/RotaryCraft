@@ -281,7 +281,7 @@
 	</woodcutter>
 	<ecu>
 		<desc>
-			The engine controller can throttle down the fuel-powered engines. When throttled down, they output their usual torque, but at a fraction of the speed. The benefit of this is that they consume fuel more slowly; slower speeds have greater efficiencies than faster ones. Modes are changed by right-clicking the ECU with a screwdriver. The ECU can also accept a redstone input, which will shut the engine down entirely.
+			The engine controller can throttle down the fuel-powered engines. When throttled down, they output their usual torque, but at a fraction of the speed. The benefit of this is that they consume fuel more slowly; slower speeds have greater efficiencies than faster ones, though turbine engines do not see as large a benefit. Modes are changed by right-clicking the ECU with a screwdriver. The ECU can also accept a redstone input, which will shut the engine down entirely.
 		</desc>
 		<note>
 			Available Modes:

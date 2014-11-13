@@ -55,7 +55,7 @@ import buildcraft.api.tools.IToolWrench;
 
 import com.carpentersblocks.api.ICarpentersHammer;
 @Strippable(value = {"buildcraft.api.tools.IToolWrench", "mrtjp.projectred.api.IScrewdriver", "binnie.extratrees.api.IToolHammer",
-		"powercrystals.minefactoryreloaded.api.IToolHammer", "santa.api.interfaces.wrench.IWrench"})
+		"powercrystals.minefactoryreloaded.api.IToolHammer", "santa.api.interfaces.wrench.IWrench", "com.carpentersblocks.api.ICarpentersHammer"})
 public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer,
 powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer
 {
