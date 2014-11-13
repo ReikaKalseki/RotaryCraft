@@ -2,7 +2,7 @@
 <machines>
 	<bedrockbreaker>
 		<desc>
-			The bedrock breaker will, when sufficiently powered, gradually grind away at the bedrock blocks in front of it with a 4-block range. When each block is consumed, it will expel some bedrock dust, which can be used to make the highest tier of tools or shafts and gears - bedrock. This machine's operational speed goes up as the input speed does. This machine will NOT break the bedrock at layer 0.
+			The bedrock breaker will, when sufficiently powered, gradually grind away at the bedrock blocks in front of it and move on to the next block. When each block is consumed, it will expel some bedrock dust, which can be used to make the highest tier of tools or shafts and gears - bedrock. This machine's operational speed goes up as the input speed does. This machine will NOT break the bedrock at layer 0.
 		</desc>
 		<note>
 			Required Power: %dW
