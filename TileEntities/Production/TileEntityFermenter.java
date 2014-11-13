@@ -98,7 +98,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			in.add(new ItemStack(ModCropList.ALGAE.blockID, 1, 0));
 		}
 		if (ModList.FORESTRY.isLoaded()) {
-			in.add(new ItemStack(ForestryHandler.getInstance().saplingID));
+			in.add(new ItemStack(ForestryHandler.getInstance().saplingItem));
+			in.add(new ItemStack(ForestryHandler.getInstance().leafID));
 		}
 		return in;
 	}
@@ -140,10 +141,15 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (TreeGetter.isRainbowSapling(is))
 				return 16;
 		}
-		if (ModList.FORESTRY.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ForestryHandler.getInstance().saplingID))
+		if (ModList.FORESTRY.isLoaded() && is.getItem() == ForestryHandler.getInstance().saplingItem) {
 			return 2;
-		if (ModList.EMASHER.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ModCropList.ALGAE.blockID))
+		}
+		if (ModList.FORESTRY.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ForestryHandler.getInstance().leafID)) {
+			return 4;
+		}
+		if (ModList.EMASHER.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ModCropList.ALGAE.blockID)) {
 			return 3;
+		}
 		ModWoodList sap = ModWoodList.getModWoodFromSapling(is);
 		if (sap != null) {
 			return PlantMaterials.SAPLING.getPlantValue()*getModWoodValue(sap);
@@ -214,6 +220,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 		if (product == null) {
 			idle = true;
+			fermenterCookTime = 0;
 			return;
 		}
 		if (product.getItem() != ItemRegistry.YEAST.getItemInstance() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
