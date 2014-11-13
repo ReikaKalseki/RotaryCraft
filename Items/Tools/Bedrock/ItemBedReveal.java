@@ -47,7 +47,7 @@ public class ItemBedReveal extends ItemBedrockArmor implements IRevealer, IGoggl
 	}
 
 	@Override
-	@ModDependent(mod = ModList.THAUMCRAFT)
+	@ModDependent(ModList.THAUMCRAFT)
 	public int getVisDiscount(ItemStack is, EntityPlayer ep, Aspect a) {
 		return a == Aspect.ORDER || a == Aspect.ENTROPY ? 10 : 5;
 	}

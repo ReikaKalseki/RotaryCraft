@@ -38,7 +38,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	public boolean continuous = true;
 	private final ItemCollection ingredients = new ItemCollection();
 	public int[] crafting = new int[18];
-	@ModDependent(mod = ModList.APPENG)
+	@ModDependent(ModList.APPENG)
 	private MENetwork network;
 
 	private final StepTimer updateTimer = new StepTimer(50);

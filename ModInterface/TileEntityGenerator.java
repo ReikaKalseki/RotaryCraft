@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.ModInteract.ReikaEUHelper;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -133,17 +134,23 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 	@Override
 	public void onFirstTick(World world, int x, int y, int z) {
 		if (!world.isRemote && ModList.IC2.isLoaded())
-			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+			this.addTileToNet();
+	}
+
+	@ModDependent(ModList.IC2)
+	private void addTileToNet() {
+		MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 	}
 
 	@Override
 	protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalidate) {
-		this.removeTileFromNet(world, x, y, z);
+		if (!world.isRemote && ModList.IC2.isLoaded())
+			this.removeTileFromNet();
 	}
 
-	private void removeTileFromNet(World world, int x, int y, int z) {
-		if (!world.isRemote && ModList.IC2.isLoaded())
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+	@ModDependent(ModList.IC2)
+	private void removeTileFromNet() {
+		MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
@@ -101,7 +102,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private boolean hasOutputTile() {
 		TileEntity te = this.getAdjacentTileEntity(write);
-		return te instanceof IPowerReceptor;
+		return ModList.BCENERGY.isLoaded() && te instanceof IPowerReceptor;
 	}
 
 	@Override
@@ -126,7 +127,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 
-		if (power > 0) {
+		if (power > 0 && ModList.BCENERGY.isLoaded()) {
 			TileEntity tile = this.getAdjacentTileEntity(write);
 			if (tile instanceof IPowerReceptor) {
 				IPowerReceptor rc = (IPowerReceptor)tile;
