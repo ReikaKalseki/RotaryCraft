@@ -1222,6 +1222,10 @@ public enum MachineRegistry {
 	}
 
 	public boolean isCraftable() {
+		if (requirement != null && !requirement.isLoaded())
+			return false;
+		if (powertype != null && !powertype.exists())
+			return false;
 		return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
 	}
 
