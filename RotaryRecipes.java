@@ -1042,16 +1042,11 @@ public class RotaryRecipes {
 				item = ores.get(0);
 			break;
 		case 8:
-			ores = OreDictionary.getOres("ingotOsmium");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 9:
 			ores = OreDictionary.getOres("ingotBrass");
 			if (!ores.isEmpty())
 				item = ores.get(0);
 			break;
-		case 10:
+		case 9:
 			ores = OreDictionary.getOres("ingotBronze");
 			if (!ores.isEmpty())
 				item = ores.get(0);
@@ -1060,6 +1055,8 @@ public class RotaryRecipes {
 			item = ReikaItemHelper.stoneBricks;
 			break;
 		}
+		if (item.getItem() == ItemRegistry.MODINGOTS.getItemInstance())
+			item = null;
 		return item != null ? item.copy() : ReikaItemHelper.stoneBricks.copy();
 	}
 }

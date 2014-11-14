@@ -350,6 +350,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 
 	private void reqPowAdd(World world, int xread, int yread, int zread) {
+		if (xread > 3000000 || zread > 3000000) {
+			reqpow = -1;
+			return;
+		}
 		if (!this.ignoreBlockExistence(world, xread, yread, zread)) {
 			Block id = world.getBlock(xread, yread, zread);
 			int meta = world.getBlockMetadata(xread, yread, zread);
