@@ -102,7 +102,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public int getDamagePercent() {
-		return (int)(100*(1-Math.pow(0.99, damage)));
+		return this.getDamagePercent(damage);
 	}
 
 	@Override
@@ -604,5 +604,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	public void overheat(World world, int x, int y, int z) {
 		if (type.isFlammable())
 			ReikaWorldHelper.ignite(world, x, y, z);
+	}
+
+	public static int getDamagePercent(int val) {
+		return (int)(100*(1-Math.pow(0.99, val)));
 	}
 }

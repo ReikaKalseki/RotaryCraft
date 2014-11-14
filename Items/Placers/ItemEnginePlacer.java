@@ -325,4 +325,13 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 	public String getItemStackDisplayName(ItemStack is) {
 		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
 	}
+
+	@Override
+	protected double getBrokenFraction(ItemStack is) {
+		if (is.stackTagCompound != null) {
+			int fod = is.stackTagCompound.getInteger("damage");
+			return fod*0.125;
+		}
+		return 0;
+	}
 }

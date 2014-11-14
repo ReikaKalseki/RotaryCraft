@@ -50,8 +50,10 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
+import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -289,16 +291,52 @@ public final class HandbookAuxData {
 			ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, BlockRegistry.BLASTGLASS.getStackOf(), dx+145, dy+28);
 		}
 		else if (h == HandbookRegistry.JETPACK) {
-			int k = (int)((System.nanoTime()/2000000000)%2);
+			int k = (int)((System.nanoTime()/6000000000L)%5);
+			int k2 = (int)((System.nanoTime()/3000000000L)%2);
+			int k3 = (int)((System.nanoTime()/2000000000L)%3);
 			if (k == 0) {
 				ItemStack out = ItemRegistry.JETPACK.getEnchantedStack();
 				ArrayList li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), out);
 				ReikaGuiAPI.instance.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
 			}
-			else {
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDCHEST.getEnchantedStack(), dx+72, dy+10);
+			else if (k == 1) {
+				ItemStack plate = k2 == 0 ? ItemRegistry.STEELCHEST.getStackOf() : ItemRegistry.BEDCHEST.getEnchantedStack();
+				ItemStack out = k2 == 0 ? ItemRegistry.STEELPACK.getStackOf() : ItemRegistry.BEDPACK.getEnchantedStack();
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, plate, dx+72, dy+10);
 				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.JETPACK.getStackOf(), dx+90, dy+10);
-				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ItemRegistry.BEDPACK.getEnchantedStack(), dx+166, dy+28);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, out, dx+166, dy+28);
+			}
+			else if (k == 2) { //wing
+				ItemStack ing = k3 != 2 ? ItemStacks.steelingot : ItemStacks.bedingot;
+				ItemStack pack = k3 == 0 ? ItemRegistry.JETPACK.getStackOf() : k3 == 1 ? ItemRegistry.STEELPACK.getStackOf() : ItemRegistry.BEDPACK.getEnchantedStack();
+				ItemStack out = k3 == 0 ? ItemRegistry.JETPACK.getStackOf() : k3 == 1 ? ItemRegistry.STEELPACK.getStackOf() : ItemRegistry.BEDPACK.getEnchantedStack();
+				PackUpgrades.WING.enable(out, true);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ing, dx+72, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ing, dx+90, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, ing, dx+108, dy+10);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, pack, dx+90, dy+28);
+				ReikaGuiAPI.instance.drawItemStack(ri, f, out, dx+166, dy+28);
+				ReikaGuiAPI.instance.drawMultilineTooltip(out, dx+166, dy+28);
+			}
+			else if (k == 3) { //cooling
+				ItemStack pack = k3 == 0 ? ItemRegistry.JETPACK.getStackOf() : k3 == 1 ? ItemRegistry.STEELPACK.getStackOf() : ItemRegistry.BEDPACK.getEnchantedStack();
+				ItemStack out = k3 == 0 ? ItemRegistry.JETPACK.getStackOf() : k3 == 1 ? ItemRegistry.STEELPACK.getStackOf() : ItemRegistry.BEDPACK.getEnchantedStack();
+				PackUpgrades.COOLING.enable(out, true);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, MachineRegistry.COOLINGFIN.getCraftedProduct(), dx+72, dy+28);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, MachineRegistry.COOLINGFIN.getCraftedProduct(), dx+108, dy+28);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, pack, dx+90, dy+28);
+				ReikaGuiAPI.instance.drawItemStack(ri, f, out, dx+166, dy+28);
+				ReikaGuiAPI.instance.drawMultilineTooltip(out, dx+166, dy+28);
+
+			}
+			else if (k == 4) { //thrust boost
+				ItemStack pack = k3 == 0 ? ItemRegistry.JETPACK.getStackOf() : k3 == 1 ? ItemRegistry.STEELPACK.getStackOf() : ItemRegistry.BEDPACK.getEnchantedStack();
+				ItemStack out = k3 == 0 ? ItemRegistry.JETPACK.getStackOf() : k3 == 1 ? ItemRegistry.STEELPACK.getStackOf() : ItemRegistry.BEDPACK.getEnchantedStack();
+				PackUpgrades.JET.enable(out, true);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, EngineType.JET.getCraftedProduct(), dx+90, dy+46);
+				ReikaGuiAPI.instance.drawItemStackWithTooltip(ri, f, pack, dx+90, dy+28);
+				ReikaGuiAPI.instance.drawItemStack(ri, f, out, dx+166, dy+28);
+				ReikaGuiAPI.instance.drawMultilineTooltip(out, dx+166, dy+28);
 			}
 		}
 		else if (h == HandbookRegistry.JUMPBOOTS) {

@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -99,7 +98,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 			return;
 		MaterialRegistry mat = MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length];
 		if (is.stackTagCompound.hasKey("damage") && mat.isDamageableGear()) {
-			int dmg = (int)(100*(1-ReikaMathLibrary.doubpow(0.99, is.stackTagCompound.getInteger("damage"))));
+			int dmg = TileEntityGearbox.getDamagePercent(is.stackTagCompound.getInteger("damage"));
 			par3List.add("Damage: "+dmg+"%");
 		}
 
@@ -126,5 +125,14 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
 		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
+	}
+
+	@Override
+	protected double getBrokenFraction(ItemStack is) {
+		if (is.stackTagCompound != null) {
+			int dmg = is.stackTagCompound.getInteger("damage");
+			return TileEntityGearbox.getDamagePercent(dmg)/100D;
+		}
+		return 0;
 	}
 }

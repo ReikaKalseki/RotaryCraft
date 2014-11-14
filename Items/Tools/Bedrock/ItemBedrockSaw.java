@@ -10,9 +10,11 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import codechicken.microblock.Saw;
 
+@Strippable(value = {"codechicken.microblock.Saw"})
 public class ItemBedrockSaw extends ItemRotaryTool implements Saw {
 
 	public ItemBedrockSaw(int index) {
