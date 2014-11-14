@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Farming;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,7 +42,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
-	private final HashMap<Integer, PathEntity> paths = new HashMap();
+	private final HashMap<UUID, PathEntity> paths = new HashMap();
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -140,11 +141,11 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	private void applyEffect(World world, int x, int y, int z, EntityLiving ent, boolean attract) {
 		if (world.isRemote)
 			;//return;
-		PathEntity path = paths.get(ent.getEntityId());
+		PathEntity path = paths.get(ent.getUniqueID());
 		if (path == null) {
 			path = this.getPath(ent, world, x, y, z, attract);
 			//ReikaJavaLibrary.pConsole(ent);
-			paths.put(ent.getEntityId(), path);
+			paths.put(ent.getUniqueID(), path);
 		}
 		int[] xyz = new int[3];
 		if (!attract) {
