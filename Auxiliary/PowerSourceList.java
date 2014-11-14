@@ -149,7 +149,7 @@ public class PowerSourceList {
 			return false;
 		long sum = this.getMaxGennablePower();
 		long avg = sum/engines.size();
-		return sum/avg > 4;
+		return avg > 0 && sum/avg > 4;
 	}
 
 	public static PowerSourceList combine(PowerSourceList in1, PowerSourceList in2, ShaftMerger caller) {
