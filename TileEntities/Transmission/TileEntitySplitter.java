@@ -371,11 +371,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			if (read != null && read2 != null) {
 				in1 = PowerSourceList.getAllFrom(world, read, x+read.offsetX, y+read.offsetY, z+read.offsetZ, this, this);
 				in2 = PowerSourceList.getAllFrom(world, read2, x+read2.offsetX, y+read2.offsetY, z+read2.offsetZ, this, this);
+
 				if (this.isLoopingPower(in1, in2)) {
-					omega = Math.min(omegain, omegain2);
-					torque = Math.min(torquein, torquein2);
-					power = (long)omega*(long)torque;
-					return;
+					omega = torque = 0;
+					power = 0;
+					this.fail();
 				}
 			}
 
@@ -535,8 +535,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			omegain2 = omegain;
 			torquein2 = torquein;
 			return true;
+
 		}
-		return in1.passesThrough(this) || in2.passesThrough(this);
+		int st = torquein+torquein2;
+		int so = omegain+omegain2;
+		return st > 0 && so > 0 && (in1.passesThrough(this) || in2.passesThrough(this));
 	}
 
 	private void writeToReceiver() {
