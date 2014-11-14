@@ -369,8 +369,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			PowerSourceList in1 = null;
 			PowerSourceList in2 = null;
 			if (read != null && read2 != null) {
+				//ReikaJavaLibrary.pConsole("====================", Side.SERVER, xCoord == -1011);
 				in1 = PowerSourceList.getAllFrom(world, read, x+read.offsetX, y+read.offsetY, z+read.offsetZ, this, this);
+				//ReikaJavaLibrary.pConsole("--------------", Side.SERVER, xCoord == -1011);
 				in2 = PowerSourceList.getAllFrom(world, read2, x+read2.offsetX, y+read2.offsetY, z+read2.offsetZ, this, this);
+				//ReikaJavaLibrary.pConsole("==================", Side.SERVER, xCoord == -1011);
 
 				if (this.isLoopingPower(in1, in2)) {
 					omega = torque = 0;
@@ -526,6 +529,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	private boolean isLoopingPower(PowerSourceList in1, PowerSourceList in2) {
+		/*
 		if (torquein*omegain != 0 && in1.getRealMaxPower() == 0) {
 			omegain = omegain2;
 			torquein = torquein2;
@@ -536,9 +540,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			torquein2 = torquein;
 			return true;
 
-		}
+		}*/
 		int st = torquein+torquein2;
 		int so = omegain+omegain2;
+		//ReikaJavaLibrary.pConsole(in1, Side.SERVER, xCoord == -1011);
 		return st > 0 && so > 0 && (in1.passesThrough(this) || in2.passesThrough(this));
 	}
 
@@ -673,9 +678,6 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	@Override
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
-		if (this.equals(caller)) {
-			return pwr;
-		}
 		if (caller == null)
 			caller = this;
 		if (!this.isSplitting()) { //merge

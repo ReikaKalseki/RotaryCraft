@@ -55,18 +55,38 @@ public class PowerSourceList {
 	public static PowerSourceList getAllFrom(World world, ForgeDirection dir, int x, int y, int z, TileEntityIOMachine io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
 
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof ShaftMerger) {
+			if (pwr.mergers.contains(tile)) {
+				pwr.engines.clear();
+				pwr.mergers.clear();
+				return pwr;
+			}
+			pwr.mergers.add((ShaftMerger)tile);
+		}
+
 		try {
-			TileEntity tile = world.getTileEntity(x, y, z);
+			//ReikaJavaLibrary.pConsole(tile, Side.SERVER, io.xCoord == -1011);
 			if (tile instanceof TileEntityIOMachine) {
 				TileEntityIOMachine te = (TileEntityIOMachine)tile;
-				if (te.isReadingFrom(io))
+				if (te.isReadingFrom(io)) {
+					//ReikaJavaLibrary.pConsole(0, Side.SERVER, io.xCoord == -1011);
 					return pwr;
-				if (te.isReadingFrom2(io))
+				}
+				if (te.isReadingFrom2(io)) {
+					//ReikaJavaLibrary.pConsole(1, Side.SERVER, io.xCoord == -1011);
 					return pwr;
-				if (te.isReadingFrom3(io))
+				}
+				if (te.isReadingFrom3(io)) {
+					//ReikaJavaLibrary.pConsole(2, Side.SERVER, io.xCoord == -1011);
 					return pwr;
-				if (te.isReadingFrom4(io))
+				}
+				if (te.isReadingFrom4(io)) {
+					//ReikaJavaLibrary.pConsole(3, Side.SERVER, io.xCoord == -1011);
 					return pwr;
+				}
+				//ReikaJavaLibrary.pConsole(4+": "+te, Side.SERVER, io.xCoord == -1011);
 				pwr.addAll(te.getPowerSources(io, caller));
 			}
 			else if (tile instanceof PowerGenerator) {
@@ -83,10 +103,6 @@ public class PowerSourceList {
 					int dz = loc.zCoord+dir.offsetZ;
 					return getAllFrom(world, dir, dx, dy, dz, io, caller);
 				}
-			}
-
-			if (tile instanceof ShaftMerger) {
-				pwr.mergers.add((ShaftMerger)tile);
 			}
 			pwr.caller = caller;
 			return pwr;
