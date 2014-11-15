@@ -42,6 +42,7 @@ import Reika.RotaryCraft.Containers.ContainerComposter;
 import Reika.RotaryCraft.Containers.ContainerCraftingPattern;
 import Reika.RotaryCraft.Containers.ContainerCrystallizer;
 import Reika.RotaryCraft.Containers.ContainerDefoliator;
+import Reika.RotaryCraft.Containers.ContainerDryingBed;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
 import Reika.RotaryCraft.Containers.ContainerExtractor;
 import Reika.RotaryCraft.Containers.ContainerFermenter;
@@ -108,6 +109,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCompactor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiComposter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDefoliator;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDryer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiEthanol;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiExtractor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
@@ -157,6 +159,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
@@ -343,6 +346,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityAutoCrafter) {
 			return new ContainerAutoCrafter(player, (TileEntityAutoCrafter)te);
+		}
+		if (te instanceof TileEntityDryingBed) {
+			return new ContainerDryingBed(player, (TileEntityDryingBed) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -562,6 +568,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityAutoCrafter) {
 			return new GuiAutoCrafter(player, (TileEntityAutoCrafter)te);
+		}
+		if (te instanceof TileEntityDryingBed) {
+			return new GuiDryer(player, (TileEntityDryingBed) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

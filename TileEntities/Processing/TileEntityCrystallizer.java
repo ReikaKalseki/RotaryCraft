@@ -43,7 +43,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 
 	private int temperature;
 
-	public int smeltTick;
+	public int freezeTick;
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -79,7 +79,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 			else
 				timer.reset();
 
-			smeltTick = timer.getTick();
+			freezeTick = timer.getTick();
 		}
 
 		sound.update();
@@ -116,7 +116,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	}
 
 	public int getProgressScaled(int s) {
-		return s * smeltTick / timer.getCap();
+		return s * freezeTick / timer.getCap();
 	}
 
 	public int getLiquidScaled(int s) {

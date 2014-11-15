@@ -43,6 +43,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final ComposterHandler compost = new ComposterHandler();
 	private static final LavaMakerHandler melter = new LavaMakerHandler();
 	private static final CentrifugeHandler centrifuge = new CentrifugeHandler();
+	private static final DryingBedHandler dryingbed = new DryingBedHandler();
 
 	private static final NEITabOccluder occlusion = new NEITabOccluder();
 
@@ -106,6 +107,9 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 
 		API.registerRecipeHandler(centrifuge);
 		API.registerUsageHandler(centrifuge);
+
+		API.registerRecipeHandler(dryingbed);
+		API.registerUsageHandler(dryingbed);
 
 		RotaryCraft.logger.log("Hiding technical blocks from NEI!");
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {

@@ -133,6 +133,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	CRYSTAL(MachineRegistry.CRYSTALLIZER),
 	COMPOST(MachineRegistry.COMPOSTER),
 	CENTRIFUGE(MachineRegistry.CENTRIFUGE),
+	DRYING(MachineRegistry.DRYING),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),

@@ -9,40 +9,44 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
-public class RecipesCrystallizer
+public class RecipesDryingBed
 {
-	private static final RecipesCrystallizer CrystallizerBase = new RecipesCrystallizer();
+	private static final RecipesDryingBed DryingBase = new RecipesDryingBed();
 
 	private HashMap<Fluid, ItemStack> recipeList = new HashMap();
 	private HashMap<Fluid, Integer> amounts = new HashMap();
 
-	public static final RecipesCrystallizer getRecipes()
+	public static final RecipesDryingBed getRecipes()
 	{
-		return CrystallizerBase;
+		return DryingBase;
 	}
 
-	private RecipesCrystallizer()
+	private RecipesDryingBed()
 	{
-		this.addRecipe("ender", 250, new ItemStack(Items.ender_pearl));
-		this.addRecipe("redstone", 100, new ItemStack(Items.redstone));
-		this.addRecipe("glowstone", 250, new ItemStack(Items.glowstone_dust));
-		this.addRecipe("coal", 100, new ItemStack(Items.coal));
+		this.addRecipe(FluidRegistry.WATER, 250, ItemStacks.salt);
+		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Items.gold_nugget));
+		this.addRecipe("oil", 200, ItemStacks.tar);
 
-		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice));
-		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone));
+		ArrayList<ItemStack> li = OreDictionary.getOres("rubber");
+		if (li == null || li.isEmpty()) {
+			li = OreDictionary.getOres("itemRubber");
+		}
+		if (li != null && !li.isEmpty())
+			this.addRecipe("lubricant", 100, li.get(0));
 
-		this.addRecipe("rc ethanol", 1000, ItemRegistry.ETHANOL.getStackOf());
+		this.addRecipe("chroma", 2000, new ItemStack(Items.emerald));
 	}
 
 	private void addRecipe(Fluid f, int amount, ItemStack out)
@@ -58,7 +62,7 @@ public class RecipesCrystallizer
 			this.addRecipe(f, amount, out);
 	}
 
-	public ItemStack getFreezingResult(FluidStack liquid)
+	public ItemStack getDryingResult(FluidStack liquid)
 	{
 		Fluid f = liquid.getFluid();
 		if (amounts.containsKey(f)) {
@@ -87,5 +91,9 @@ public class RecipesCrystallizer
 				return amounts.get(f);
 		}
 		return 0;
+	}
+
+	public boolean isRecipeFluid(Fluid f) {
+		return recipeList.containsKey(f);
 	}
 }

@@ -26,9 +26,6 @@ public class RenderDefoliator extends RotaryTERenderer
 {
 	private ModelDefoliator DefoliatorModel = new ModelDefoliator();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityDefoliatorAt(TileEntityDefoliator tile, double par2, double par4, double par6, float par8)
 	{
 		ModelDefoliator var14;

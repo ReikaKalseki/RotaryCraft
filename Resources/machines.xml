@@ -1055,4 +1055,12 @@
 			Power Input: Bottom
 		</note>
 	</centrifuge>
+	<drying>
+		<desc>
+			The drying bed is where some liquids can evaporate or coagulate to leave other items behind.
+		</desc>
+		<note>
+			
+		</note>
+	</drying>
 </machines>
