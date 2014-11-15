@@ -41,7 +41,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 		public PositionedStack getResult() {
 			if (input != null) {
 				ItemStack is = RecipesDryingBed.getRecipes().getDryingResult(this.getEntry());
-				return new PositionedStack(is, 75, 24);
+				return new PositionedStack(is, 120, 25);
 			}
 			return null;
 		}

@@ -437,6 +437,8 @@ public class RotaryRecipes {
 		MachineRegistry.CHAIN.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', ItemStacks.basepanel, 'G', ItemStacks.steelgear, 's', ItemStacks.steelingot);
 
 		MachineRegistry.CENTRIFUGE.addCrafting("SGS", "S S", "PgP", 'P', ItemStacks.basepanel, 'g', ItemStacks.gearunit4, 'S', ItemStacks.steelingot, 'G', Blocks.glass_pane);
+
+		MachineRegistry.DRYING.addCrafting("S S", "SPS", "S S", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 	}
 
 	private static void addCraftItems() {

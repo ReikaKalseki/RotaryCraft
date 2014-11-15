@@ -44,7 +44,7 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 		public PositionedStack getResult() {
 			if (input != null) {
 				ItemStack is = RecipesCrystallizer.getRecipes().getFreezingResult(this.getEntry());
-				return new PositionedStack(is, 75, 24);
+				return new PositionedStack(is, 75, 25);
 			}
 			return null;
 		}

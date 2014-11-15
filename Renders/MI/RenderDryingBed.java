@@ -18,6 +18,8 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -25,6 +27,7 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Interfaces.AnimatedSpritesheet;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Interfaces.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -77,8 +80,7 @@ public class RenderDryingBed extends RotaryTERenderer {
 			this.renderItem(te);
 		}
 		if (te.isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-			if (te.hasFluid())
-				this.renderFluid(te);
+			this.renderFluid(te);
 		}
 		GL11.glPopMatrix();
 	}
@@ -94,7 +96,7 @@ public class RenderDryingBed extends RotaryTERenderer {
 			GL11.glEnable(GL11.GL_BLEND);
 			//GL11.glDisable(GL11.GL_ALPHA_TEST);
 			//GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glColor4f(1, 1, 1, 1.2F-te.progress/400F);
+			GL11.glColor4f(1, 1, 1, 1.2F*te.progress/400F);
 
 			IItemRenderer iir = MinecraftForgeClient.getItemRenderer(is, ItemRenderType.INVENTORY);
 			Item item = is.getItem();
@@ -160,7 +162,8 @@ public class RenderDryingBed extends RotaryTERenderer {
 				GL11.glRotatef(90, 1, 0, 0);
 				//GL11.glTranslated(0, -b, 0);
 				GL11.glScaled(s, s, s);
-				ItemRenderer.renderItemIn2D(v5, u, v, du, dv, 256, 256, thick);GL11.glPopMatrix();
+				ItemRenderer.renderItemIn2D(v5, u, v, du, dv, 256, 256, thick);
+				GL11.glPopMatrix();
 			}
 			GL11.glDisable(GL11.GL_BLEND);
 			//GL11.glEnable(GL11.GL_CULL_FACE);
@@ -170,22 +173,32 @@ public class RenderDryingBed extends RotaryTERenderer {
 	}
 
 	private void renderFluid(TileEntityDryingBed tile) {
-		ReikaTextureHelper.bindTerrainTexture();
-		Tessellator v5 = Tessellator.instance;
-		IIcon ico = tile.getFluid().getStillIcon();
-		float u = ico.getMinU();
-		float v = ico.getMinV();
-		float du = ico.getMaxU();
-		float dv = ico.getMaxV();
-		int l = tile.getLevel();
-		double h = l > 0 ? 0.8125+l*0.125/tile.getCapacity() : 0.5;
-		v5.startDrawingQuads();
-		v5.setBrightness(240);
-		v5.addVertexWithUV(0+0.0625, h, 1-0.0625, u, v);
-		v5.addVertexWithUV(1-0.0625, h, 1-0.0625, du, v);
-		v5.addVertexWithUV(1-0.0625, h, 0+0.0625, du, dv);
-		v5.addVertexWithUV(0+0.0625, h, 0+0.0625, u, dv);
-		v5.draw();
+		Fluid f = tile.getFluid();
+		if (f != null) {
+			ReikaTextureHelper.bindTerrainTexture();
+			Tessellator v5 = Tessellator.instance;
+			IIcon ico = f.getStillIcon();
+			float u = ico.getMinU();
+			float v = ico.getMinV();
+			float du = ico.getMaxU();
+			float dv = ico.getMaxV();
+			int l = tile.getLevel();
+			if (!f.equals(FluidRegistry.LAVA)) {
+				GL11.glEnable(GL11.GL_BLEND);
+			}
+			double h = l > 0 ? 0.8125+l*0.125/tile.getCapacity() : 0.5;
+			if (f.getLuminosity() > 0 && tile.hasWorldObj())
+				ReikaRenderHelper.disableLighting();
+			v5.startDrawingQuads();
+			v5.setColorOpaque_I(0xffffff);
+			v5.addVertexWithUV(0+0.0625, h, 1-0.0625, u, v);
+			v5.addVertexWithUV(1-0.0625, h, 1-0.0625, du, v);
+			v5.addVertexWithUV(1-0.0625, h, 0+0.0625, du, dv);
+			v5.addVertexWithUV(0+0.0625, h, 0+0.0625, u, dv);
+			v5.draw();
+			ReikaRenderHelper.enableLighting();
+			GL11.glDisable(GL11.GL_BLEND);
+		}
 	}
 
 }
