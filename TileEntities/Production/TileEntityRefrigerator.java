@@ -79,16 +79,21 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 			return false;
 		if (inv[0] == null)
 			return false;
-		if (tank.isFull())
+		if (!tank.canTakeIn(this.getProducedLN2()))
 			return false;
 		return ReikaItemHelper.matchStackWithBlock(inv[0], Blocks.ice) && (inv[1] == null || inv[1].stackSize < inv[1].getMaxStackSize());
 	}
 
 	private void cycle() {
 		ReikaInventoryHelper.decrStack(0, inv);
-		tank.addLiquid(100, FluidRegistry.getFluid("liquid nitrogen"));
-		if (rand.nextInt(5) == 0)
+		tank.addLiquid(this.getProducedLN2(), FluidRegistry.getFluid("liquid nitrogen"));
+		if (rand.nextInt(4) == 0)
 			ReikaInventoryHelper.addOrSetStack(ItemStacks.dryice, inv, 1);
+	}
+
+	private int getProducedLN2() {
+		int over = torque/MINTORQUE;
+		return Math.min(2000, 100*over*over);
 	}
 
 	public void setLevel(int lvl) {
