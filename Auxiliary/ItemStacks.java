@@ -51,6 +51,7 @@ public final class ItemStacks {
 	public static final ItemStack redgoldingot 		= ItemRegistry.COMPACTS.getStackOfMetadata(6);
 	public static final ItemStack silveringot 		= ItemRegistry.COMPACTS.getStackOfMetadata(7);
 	public static final ItemStack coke 				= ItemRegistry.COMPACTS.getStackOfMetadata(8);
+	public static final ItemStack springingot		= ItemRegistry.COMPACTS.getStackOfMetadata(9);
 
 	public static final ItemStack basepanel 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(0);
 	public static final ItemStack steelingot 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(1);

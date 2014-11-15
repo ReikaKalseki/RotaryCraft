@@ -16,6 +16,7 @@ import java.util.Random;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -470,7 +471,7 @@ public class RotaryRecipes {
 		ReikaRecipeHelper.addOreRecipe(ItemStacks.igniter, "G G", "SRS", "SSS", 'S', ItemStacks.steelingot, 'R', Items.redstone, 'G', "ingotElectrum");
 
 		GameRegistry.addRecipe(ItemStacks.waterplate, new Object[]{
-				"PPP", "PPP", "PPP", 'P', ItemStacks.basepanel});
+				"PPP", "PPP", "SSS", 'P', ItemStacks.basepanel, 'S', ItemStacks.springingot});
 		GameRegistry.addRecipe(ItemStacks.prop, new Object[]{
 				" S ", " I ", " P ", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'I', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.hub, new Object[]{
@@ -993,6 +994,9 @@ public class RotaryRecipes {
 
 		//ReikaRecipeHelper.addSmelting(ItemStacks.scrap, ItemStacks.steelingot, 0.4F);
 		ReikaRecipeHelper.addSmelting(ItemStacks.ironscrap, new ItemStack(Items.iron_ingot), 0.4F);
+
+		IRecipe ir = ReikaRecipeHelper.getShapelessRecipeFor(ItemStacks.springingot, ItemStacks.steelingot, new ItemStack(Items.redstone), ItemStacks.coke);
+		RecipesBlastFurnace.getRecipes().addRecipe(ItemStacks.springingot, 950, ir, 1, 0.4F);
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

@@ -129,9 +129,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	}
 
 	public ItemStack getDrops(int metadata) {
-		int ndrops = 2+rand.nextInt(8)+rand.nextInt(5);
-		if (metadata < GROWN)
-			ndrops = 1;
+		int ndrops = metadata == GROWN ? (1+rand.nextInt(2))*(2+rand.nextInt(8)+rand.nextInt(5)) : 1;
 		ItemStack items = ItemRegistry.CANOLA.getCraftedProduct(ndrops);
 		return items;
 	}

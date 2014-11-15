@@ -302,12 +302,13 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
 		if (fireside != null) {
-			Tamb += 200;
+			Tamb += Tamb >= 300 ? 100 : 200;
 		}
 		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
 		if (lavaside != null) {
-			Tamb += 600;
+			Tamb += Tamb >= 300 ? 400 : 600;
 		}
+
 		if (temperature > Tamb)
 			temperature--;
 		if (temperature > Tamb*2)
