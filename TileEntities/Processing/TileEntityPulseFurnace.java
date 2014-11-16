@@ -41,7 +41,6 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
 
-	/** The number of ticks that the current item has been cooking for */
 	public int pulseFurnaceCookTime;
 
 	public static final int CAPACITY = 3000;
@@ -246,12 +245,14 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			if (temperature >= 980) //8x speed if about to fail
 				smelttick += tick*4;
 		}
-		else
+		else {
 			smelttick = 0;
+		}
 		if (smelttick < SMELTTICKS && !flag2)
 			return;
+		if (smelttick > SMELTTICKS)
+			smelttick = SMELTTICKS;
 		flag2 = true;
-		smelttick = 0;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
 		if (!worldObj.isRemote) {
 			flag1 = true;
@@ -262,6 +263,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 					pulseFurnaceCookTime = 0;
 					this.smeltItem();
 					flag1 = true;
+					smelttick = 0;
 					//flag2 = false;
 				}
 			}
