@@ -11,7 +11,6 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 
 import org.lwjgl.opengl.GL11;
 
@@ -28,7 +27,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiVacuum extends GuiPowerOnlyMachine
 {
-	private IInventory upperVacuumInventory;
 	private TileEntityVacuum vac;
 
 	/**
@@ -39,7 +37,6 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 	public GuiVacuum(EntityPlayer p5ep, TileEntityVacuum te)
 	{
 		super(new ContainerVacuum(p5ep, te), te);
-		upperVacuumInventory = p5ep.inventory;
 		allowUserInput = false;
 		short var3 = 222;
 		int var4 = var3 - 108;

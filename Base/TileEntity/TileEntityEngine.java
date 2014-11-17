@@ -82,6 +82,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	protected long lastpower = 0;
 
+	private float fuelcost = 1;
+
 	protected ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
 	public final EngineType getEngineType() {
@@ -125,8 +127,11 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	protected abstract void consumeFuel();
 
-	protected int getConsumedFuel() {
-		return type == EngineType.JET ? 10 : 10;
+	protected final int getConsumedFuel() {
+		int base = type == EngineType.JET ? 10 : 10;
+		base *= fuelcost;
+		base = Math.max(1, base);
+		return base;
 	}
 
 	protected abstract void internalizeFuel();
@@ -229,7 +234,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			break;
 		}
 
-		timer.setCap("fuel", type.getFuelUnitDuration());
 		timer.setCap("sound", this.getSoundLength());
 
 		if (timer.checkCap("temperature")) {
@@ -319,6 +323,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			if (!worldObj.isRemote || RotaryAux.getPowerOnClient) {
 				this.initialize(world, x, y, z, meta);
 			}
+			timer.setCap("fuel", type.getFuelUnitDuration());
 			power = (long)torque*(long)omega;
 			if (power > 0)
 				this.affectSurroundings(world, x, y, z, meta);
@@ -336,9 +341,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 							int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
 							//this.updateSpeed(max, omega < max);
 						}
-						int fuelcap = timer.getCapOf("fuel");
-						fuelcap = fuelcap*te.getFuelMultiplier(type.type);
-						timer.setCap("fuel", fuelcap);
+						fuelcost = 1F/te.getFuelMultiplier(type.type);
 						pitch = te.getSoundStretch();
 						soundfactor = 1F/te.getSoundStretch();
 						int soundcap = timer.getCapOf("sound");
@@ -430,6 +433,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 		if (type.requiresLubricant())
 			lubricant.writeToNBT(NBT);
+
+		NBT.setFloat("fueldur", fuelcost);
 	}
 
 	@Override
@@ -449,6 +454,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			water.readFromNBT(NBT);
 		if (type.isEthanolFueled() || type.isJetFueled())
 			fuel.readFromNBT(NBT);
+
+		fuelcost = NBT.getFloat("fueldur");
 	}
 
 	@Override
@@ -585,6 +592,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		if (fuel > 0)
 			burnprogress = 1F-timer.getPortionOfCap("fuel")/fuel;
 		float factor = type.getFuelUnitDuration()/(float)timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
+		factor *= fuelcost;
 		if (factor <= 0)
 			return 0;
 		return (int)((fuel*type.getFuelUnitDuration()*(burnprogress))*5/factor/1000);

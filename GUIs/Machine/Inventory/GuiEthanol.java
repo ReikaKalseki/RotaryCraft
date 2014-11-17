@@ -17,7 +17,7 @@ import Reika.RotaryCraft.Containers.ContainerEthanol;
 
 public class GuiEthanol extends GuiNonPoweredMachine
 {
-	private TileEntityEngine Ethanol;
+	private TileEntityEngine engine;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 	int x;
 	int y;
@@ -25,7 +25,7 @@ public class GuiEthanol extends GuiNonPoweredMachine
 	public GuiEthanol(EntityPlayer p5ep, TileEntityEngine te)
 	{
 		super(new ContainerEthanol(p5ep, te), te);
-		Ethanol = te;
+		engine = te;
 		xSize = 176;
 		ySize = 166;
 		ep = p5ep;
@@ -40,7 +40,7 @@ public class GuiEthanol extends GuiNonPoweredMachine
 		int x = api.getMouseRealX();
 		int y = api.getMouseRealY();
 		if (api.isMouseInBox(j+84, j+90, k+16, k+71)) {
-			int time = Ethanol.getFuelDuration();
+			int time = engine.getFuelDuration();
 			String sg = String.format("Fuel: %s", ReikaFormatHelper.getSecondsAsClock(time));
 			api.drawTooltipAt(fontRendererObj, sg, x-j, y-k);
 		}
@@ -56,7 +56,7 @@ public class GuiEthanol extends GuiNonPoweredMachine
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		int i1 = Ethanol.getFuelScaled(54);
+		int i1 = engine.getFuelScaled(54);
 		this.drawTexturedModalRect(j+85, k+71-i1, 200, 55-i1, 5, i1);
 
 	}
