@@ -13,15 +13,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.EntityList;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.ConfigurableEntitySelector;
 import Reika.DragonAPI.Interfaces.GuiController;
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.RotaryCraft.API.RadarJammer;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -29,8 +27,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
-	private int[][] colors = new int[49][49]; // |<--- 24 ---- R ---- 24 --->|
-	private int[][] mobs = new int[49][49];
 	private List<EntityLivingBase> inzone = new ArrayList();
 	public String owner;
 
@@ -40,6 +36,8 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 	public boolean animal = true;
 	public boolean player = true;
 	private boolean isJammed;
+
+	private ConfigurableEntitySelector selector = new ConfigurableEntitySelector();
 
 	public List<EntityLivingBase> getEntities() {
 		return Collections.unmodifiableList(inzone);
@@ -54,28 +52,18 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 
 	public int getRange() {
 		int range = (int)(8+(power-MINPOWER)/FALLOFF);
-		if (range > 24)
-			return 24;
-		return range;
+		return Math.min(range, this.getMaxRange());
 	}
 
 	public boolean isJammed() {
 		return isJammed;
 	}
 
-	public int[] getBounds() {
-		int range = this.getRange();
-		int[] bounds = {24-range, 24+range};
-		return bounds;
-	}
-
 	public void getMobs(World world, int x, int y, int z) {
-		colors = ReikaArrayHelper.fillMatrix(colors, 0);
-		mobs = ReikaArrayHelper.fillMatrix(mobs, 0);
 		isJammed = false;
 		int range = this.getRange();
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-range, 0, z-range, x+1+range, 255, z+1+range);
-		inzone = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
+		inzone = world.selectEntitiesWithinAABB(EntityLivingBase.class, zone, this.getSelector());
 		for (EntityLivingBase ent : inzone) {
 			if (ent instanceof RadarJammer && ((RadarJammer)ent).jamRadar(worldObj, xCoord, yCoord, zCoord)) {
 				isJammed = true;
@@ -84,15 +72,14 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 			int ex = (int)ent.posX-x;
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;
-			if (EntityList.getEntityID(ent) > 0 && Math.abs(ex) < 25 && Math.abs(ez) < 25 && ((ReikaEntityHelper.isHostile(ent) && hostile) || (!ReikaEntityHelper.isHostile(ent) && animal))) {
-				colors[ex+24][ez+24] = ReikaEntityHelper.mobToColor(ent);
-				mobs[ex+24][ez+24] = EntityList.getEntityID(ent);
-			}
-			else if (ent instanceof EntityPlayer && Math.abs(ex) < 25 && Math.abs(ez) < 25 && player) {
-				colors[ex+24][ez+24] = ReikaEntityHelper.mobToColor(ent);
-				mobs[ex+24][ez+24] = -1;
-			}
 		}
+	}
+
+	private IEntitySelector getSelector() {
+		selector.animals = animal;
+		selector.players = player;
+		selector.hostiles = hostile;
+		return selector;
 	}
 
 	@Override
@@ -141,16 +128,12 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 
 	@Override
 	public int getMaxRange() {
-		return 24;
+		return 256;
 	}
 
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
-	}
-
-	public int getID(int x, int z) {
-		return mobs[x][z];
 	}
 
 }

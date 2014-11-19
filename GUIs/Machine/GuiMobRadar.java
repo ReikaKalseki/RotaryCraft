@@ -9,12 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import java.util.List;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
@@ -24,31 +28,16 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 {
 
 	private TileEntityMobRadar radar;
-	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
-	int x;
-	int y;
 	public static final int UNIT = 4;
-	private boolean hostile = true;
-	private boolean animal = true;
-	private boolean players = true;
-	private int direction;
 
-	public GuiMobRadar(EntityPlayer p5ep, TileEntityMobRadar MobRadar)
+	public GuiMobRadar(EntityPlayer p5ep, TileEntityMobRadar te)
 	{
-		super(new CoreContainer(p5ep, MobRadar), MobRadar);
-		radar = MobRadar;
+		super(new CoreContainer(p5ep, te), te);
+		radar = te;
 		ySize = 223;
 		xSize = 214;
 		ep = p5ep;
-		hostile = radar.hostile;
-		animal = radar.animal;
-		players = radar.player;
-		direction = MathHelper.floor_double((ep.rotationYaw * 4F) / 360F + 0.5D);
-		while (direction > 3)
-			direction -= 4;
-		while (direction < 0)
-			direction += 4;
 	}
 
 	@Override
@@ -69,19 +58,26 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2+1;
 
-		this.drawRect(j+xSize/2-1-radar.getRange()*UNIT, k+ySize/2+5+radar.getRange()*UNIT, j+xSize/2+1+radar.getRange()*UNIT, k+ySize/2+6+radar.getRange()*UNIT, 0xffffffff);
-		this.drawRect(j+xSize/2-1-radar.getRange()*UNIT, k+ySize/2+4-radar.getRange()*UNIT, j+xSize/2+1+radar.getRange()*UNIT, k+ySize/2+5-radar.getRange()*UNIT, 0xffffffff);
-		this.drawRect(j+xSize/2-1-radar.getRange()*UNIT, k+ySize/2+4-radar.getRange()*UNIT, j+xSize/2-radar.getRange()*UNIT, k+ySize/2+6+radar.getRange()*UNIT, 0xffffffff);
-		this.drawRect(j+xSize/2+radar.getRange()*UNIT, k+ySize/2+4-radar.getRange()*UNIT, j+xSize/2+1+radar.getRange()*UNIT, k+ySize/2+6+radar.getRange()*UNIT, 0xffffffff);
+		//this.drawRect(j+xSize/2-1-radar.getRange()*UNIT, k+ySize/2+5+radar.getRange()*UNIT, j+xSize/2+1+radar.getRange()*UNIT, k+ySize/2+6+radar.getRange()*UNIT, 0xffffffff);
+		//this.drawRect(j+xSize/2-1-radar.getRange()*UNIT, k+ySize/2+4-radar.getRange()*UNIT, j+xSize/2+1+radar.getRange()*UNIT, k+ySize/2+5-radar.getRange()*UNIT, 0xffffffff);
+		//this.drawRect(j+xSize/2-1-radar.getRange()*UNIT, k+ySize/2+4-radar.getRange()*UNIT, j+xSize/2-radar.getRange()*UNIT, k+ySize/2+6+radar.getRange()*UNIT, 0xffffffff);
+		//this.drawRect(j+xSize/2+radar.getRange()*UNIT, k+ySize/2+4-radar.getRange()*UNIT, j+xSize/2+1+radar.getRange()*UNIT, k+ySize/2+6+radar.getRange()*UNIT, 0xffffffff);
+
+		int a = j+7;
+		int b = k+16;
 
 		this.drawRadar(j, k);
+		fontRendererObj.drawString(radar.getRange()+"m", a+102, b, 0xaaffaa);
+		fontRendererObj.drawString((int)(0.63*radar.getRange())+"m", a+102, b+37, 0xaaffaa);
+		fontRendererObj.drawString(MathHelper.ceiling_double_int(0.31*radar.getRange())+"m", a+102, b+69, 0xaaffaa);
 	}
 
 	private void drawRadar(int a, int b) {
-		for (int i = radar.getBounds()[0]; i <= radar.getBounds()[1]; i++) {
-			for (int j = radar.getBounds()[0]; j <=	 radar.getBounds()[1]; j++) {
-				this.drawMobIcon(a+7, b+16, UNIT*i, UNIT*j, radar.getID(i, j), i, j);
-			}
+		List<EntityLivingBase> li = radar.getEntities();
+		for (EntityLivingBase e : li) {
+			int dx = 100+MathHelper.floor_double(100*(e.posX-radar.xCoord-0.5)/radar.getRange());
+			int dz = 100+MathHelper.floor_double(100*(e.posZ-radar.zCoord-0.5)/radar.getRange());
+			this.drawMobIcon(a+7, b+16, dx, dz, ReikaEntityHelper.getEntityID(e), dx, dz);
 		}
 	}
 
