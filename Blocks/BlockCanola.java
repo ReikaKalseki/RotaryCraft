@@ -33,12 +33,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlowableCrop;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
+@Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop, IWailaDataProvider {
 
 	private final Random rand = new Random();
@@ -287,17 +291,20 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	}
 
 	@Override
+	@ModDependent(ModList.WAILA)
 	public ItemStack getWailaStack(IWailaDataAccessor acc, IWailaConfigHandler cfg) {
 		return ItemRegistry.CANOLA.getStackOf();
 	}
 
 	@Override
+	@ModDependent(ModList.WAILA)
 	public List<String> getWailaHead(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
 		currenttip.add(EnumChatFormatting.WHITE+"Canola Plant");
 		return currenttip;
 	}
 
 	@Override
+	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
 		int meta = acc.getMetadata();
 		currenttip.add(String.format("Growth Stage: %d%s", 100*meta/GROWN, "%"));
@@ -305,6 +312,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	}
 
 	@Override
+	@ModDependent(ModList.WAILA)
 	public List<String> getWailaTail(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
 		String s1 = EnumChatFormatting.ITALIC.toString();
 		String s2 = EnumChatFormatting.BLUE.toString();
