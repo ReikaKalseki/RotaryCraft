@@ -12,8 +12,8 @@ package Reika.RotaryCraft.API;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import Reika.DragonAPI.Instantiable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.BlockMap;
-import Reika.DragonAPI.Instantiable.Data.BlockMap.BlockKey;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 
 public class BlockColorInterface {

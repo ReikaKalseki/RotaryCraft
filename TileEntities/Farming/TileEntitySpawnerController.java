@@ -49,7 +49,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	public int getDelay() {
-		if (setDelay > this.getOperationTime())
+		if (setDelay >= this.getOperationTime())
 			return setDelay;
 		else
 			return this.getOperationTime();
@@ -72,7 +72,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			//this.shutdownSpawner(world, x, y, z);
 			disable = false;
 			hijackdelay = 255;
-			setDelay = 0;
+			//setDelay = 0;
 			return;
 		}
 		this.applyToSpawner(world, x, y, z);
@@ -167,8 +167,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		MobSpawnerBaseLogic lgc = tile.func_145881_a();
 		double var5;
 
-		if (world.isRemote)
-		{
+		if (world.isRemote) {
 			double var1 = x + world.rand.nextFloat();
 			double var3 = y + world.rand.nextFloat();
 			var5 = z + world.rand.nextFloat();
@@ -183,19 +182,16 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			lgc.field_98284_d = lgc.field_98287_c;
 			lgc.field_98287_c = (lgc.field_98287_c + 1000.0F / (hijackdelay + 200.0F)) % 360.0D;
 		}
-		else
-		{
+		else {
 
-			if (hijackdelay > 0)
-			{
+			if (hijackdelay > 0) {
 				--hijackdelay;
 				return;
 			}
 
 			hijackdelay = this.getDelay();
 
-			for (int i = 0; i < spawnCount; ++i)
-			{
+			for (int i = 0; i < spawnCount; i++) {
 				Entity toSpawn = EntityList.createEntityByName(lgc.getEntityNameToSpawn(), world);
 
 				// This is the max-6 code int var4 = world.getEntitiesWithinAABB(var13.getClass(), AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)x, (double)y, (double)z, (double)(x + 1), (double)(y + 1), (double)(z + 1)).expand((double)(this.spawnRange * 2), 4.0D, (double)(this.spawnRange * 2))).size();
@@ -223,9 +219,6 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -235,9 +228,6 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		NBT.setBoolean("disable", disable);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

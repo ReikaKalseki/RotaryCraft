@@ -14,7 +14,7 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import Reika.DragonAPI.Instantiable.Data.BlockMap.BlockKey;
+import Reika.DragonAPI.Instantiable.BlockKey;
 
 public class WorldEditHelper {
 
