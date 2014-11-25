@@ -9,19 +9,23 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Containers.ContainerJet;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 
 public class GuiJet extends GuiNonPoweredMachine
 {
-	private TileEntityEngine eng;
-	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-
-	int x;
-	int y;
+	private final TileEntityEngine eng;
+	private final TileEntityJetEngine jet;
+	private boolean burn;
 
 	public GuiJet(EntityPlayer p5ep, TileEntityEngine te)
 	{
@@ -30,6 +34,34 @@ public class GuiJet extends GuiNonPoweredMachine
 		xSize = 176;
 		ySize = 166;
 		ep = p5ep;
+		jet = eng instanceof TileEntityJetEngine ? (TileEntityJetEngine)eng : null;
+		burn = jet != null && jet.canAfterBurn && jet.burnerActive;
+	}
+
+	@Override
+	public void initGui() {
+		super.initGui();
+
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+
+		if (jet != null) {
+			int u = jet.burnerActive ? 36 : 0;
+			int v = jet.canAfterBurn ? 72 : 90;
+			buttonList.add(new ImagedGuiButton(0, j+32, k+36, 36, 18, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
+		}
+	}
+
+	@Override
+	public void actionPerformed(GuiButton b) {
+		super.actionPerformed(b);
+
+		if (b.id == 0 && jet != null && jet.canAfterBurn) {
+			burn = !burn;
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.getMinValue(), eng, burn ? 1 : 0);
+			jet.burnerActive = burn;
+			this.initGui();
+		}
 	}
 
 	@Override
@@ -45,11 +77,14 @@ public class GuiJet extends GuiNonPoweredMachine
 			String sg = String.format("Fuel: %s", ReikaFormatHelper.getSecondsAsClock(time));
 			api.drawTooltipAt(fontRendererObj, sg, x-j, y-k);
 		}
+
+		if (jet != null) {
+			if (api.isMouseInBox(j+32, j+68, k+36, k+54)) {
+				api.drawTooltipAt(fontRendererObj, "Afterburner", x-j, y-k);
+			}
+		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{

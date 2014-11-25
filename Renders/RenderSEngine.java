@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Models.Engine.ModelPerformance;
 import Reika.RotaryCraft.Models.Engine.ModelSteam;
 import Reika.RotaryCraft.Models.Engine.ModelWind;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -103,7 +104,8 @@ public class RenderSEngine extends RotaryTERenderer
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
 			break;
 		case JET:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex.png");
+			String s = ((TileEntityJetEngine)tile).canAfterBurn ? "_b": "";
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex"+s+".png");
 			break;
 		}
 

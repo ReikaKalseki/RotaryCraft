@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -34,14 +35,18 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ThermalMachine;
 import Reika.RotaryCraft.API.Event.JetEngineEnterFailureEvent;
 import Reika.RotaryCraft.API.Event.JetEngineExplosionEvent;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -52,7 +57,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityJetEngine extends TileEntityEngine {
+public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine, UpgradeableMachine {
 
 	private boolean isJetFailing = false;
 
@@ -65,10 +70,14 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	private int dumpvz;
 
 	private StepTimer jetstarttimer = new StepTimer(479);
+	private int afterburnTick = 2000;
 
 	private int chickenCount = 0;
 
 	private boolean isChoking = false;
+
+	public boolean canAfterBurn;
+	public boolean burnerActive;
 
 	@Override
 	public int getFuelLevel() {
@@ -78,6 +87,11 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	@Override
 	protected void consumeFuel() {
 		fuel.removeLiquid(this.getConsumedFuel());
+	}
+
+	@Override
+	protected int getConsumedFuel() {
+		return this.isAfterburning() ? 25 : 10;
 	}
 
 	@Override
@@ -166,8 +180,10 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	}
 
 	private void heatJet(World world, int x, int y, int z, int meta) {
-		int T = 1400*omega/type.getSpeed();
-		for (int i = 1; i < 4; i++) {
+		int temp = this.isAfterburning() ? 1750 : 1200;
+		int T = temp*omega/type.getSpeed();
+		int r = this.isAfterburning() ? 6 : 4;
+		for (int i = 1; i < r; i++) {
 			int dx = x+write.offsetX*i;
 			int dz = z+write.offsetZ*i;
 			TileEntity te = this.getTileEntity(dx, y, dz);
@@ -178,6 +194,9 @@ public class TileEntityJetEngine extends TileEntityEngine {
 			else if (te instanceof ThermalMachine) {
 				((ThermalMachine)te).setTemperature(T);
 			}
+			if (this.isAfterburning()) {
+				ReikaWorldHelper.temperatureEnvironment(world, dx, y, dz, Math.min(1400, T));
+			}
 		}
 		int x1 = write.offsetX != 0 ? write.offsetX > 0 ? x : x-4 : x;
 		int x2 = write.offsetX != 0 ? write.offsetX > 0 ? x+5 : x+1 : x+1;
@@ -186,7 +205,7 @@ public class TileEntityJetEngine extends TileEntityEngine {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x1, y, z1, x2, y+1, z2);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (EntityLivingBase e : li) {
-			e.attackEntityFrom(DamageSource.onFire, 1);
+			e.attackEntityFrom(DamageSource.onFire, this.isAfterburning() ? 4 : 1);
 		}
 	}
 
@@ -522,6 +541,8 @@ public class TileEntityJetEngine extends TileEntityEngine {
 
 		NBT.setBoolean("choke", isChoking);
 		NBT.setBoolean("jetfail", isJetFailing);
+		NBT.setBoolean("burn", canAfterBurn);
+		NBT.setBoolean("burning", burnerActive);
 	}
 
 	@Override
@@ -531,6 +552,8 @@ public class TileEntityJetEngine extends TileEntityEngine {
 
 		isChoking = NBT.getBoolean("choke");
 		isJetFailing = NBT.getBoolean("jetfail");
+		canAfterBurn = NBT.getBoolean("burn");
+		burnerActive = NBT.getBoolean("burning");
 	}
 
 	@Override
@@ -552,12 +575,23 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	@Override
 	protected void playSounds(World world, int x, int y, int z, float pitchMultiplier, float volume) {
 		soundtick++;
+		afterburnTick++;
 		if (FOD > 0 && rand.nextInt(2*(9-FOD)) == 0) {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F+rand.nextFloat(), 1F);
 			world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 		}
 		if (this.isMuffled(world, x, y, z)) {
 			volume *= 0.3125F;
+		}
+
+		if (this.isAfterburning() && afterburnTick >= 50) {
+			afterburnTick = 0;
+			float vol = 0.9F;
+			if (omega < type.getSpeed()) {
+				vol *= Math.pow(0.75, type.getSpeed()/omega);
+			}
+			SoundRegistry.AFTERBURN.playSoundAtBlock(world, x, y, z, vol, 1);
+			SoundRegistry.AFTERBURN.playSoundAtBlock(world, x, y, z, vol, 1);
 		}
 
 		if (soundtick < this.getSoundLength(1F/pitchMultiplier) && soundtick < 2000)
@@ -572,6 +606,10 @@ public class TileEntityJetEngine extends TileEntityEngine {
 			soundtick = 2000;
 	}
 
+	public boolean isAfterburning() {
+		return canAfterBurn && burnerActive;
+	}
+
 	@Override
 	public boolean hasTemperature() {
 		return isJetFailing;
@@ -584,7 +622,10 @@ public class TileEntityJetEngine extends TileEntityEngine {
 
 	@Override
 	protected int getGenTorque(World world, int x, int y, int z, int meta) {
-		return EngineType.JET.getTorque()/ReikaMathLibrary.intpow2(2, FOD);
+		int amt = EngineType.JET.getTorque();
+		if (this.isAfterburning())
+			amt *= 2;
+		return amt/ReikaMathLibrary.intpow2(2, FOD);
 	}
 
 	@Override
@@ -598,6 +639,43 @@ public class TileEntityJetEngine extends TileEntityEngine {
 		}
 		this.spawnSmokeParticles(world, x, y, z, meta);
 		jetstarttimer.update();
+		if (this.isAfterburning()) {
+			this.afterBurnParticles(world, x, y, z);
+		}
+	}
+
+	private void afterBurnParticles(World world, int x, int y, int z) {
+		double dx = x-backx;
+		double dz = z-backz;
+		dx /= 2;
+		dz /= 2;
+		double vx = (x-backx)*6D;
+		double vz = (z-backz)*6D;
+		for (int i = 0; i < 16; i++) {
+			int r = 255;
+			int g = 0;
+			int b = 0;
+			double px = dx+x+0.25+0.5*rand.nextDouble()+vx*rand.nextDouble();
+			double pz = dz+z+0.25+0.5*rand.nextDouble()+vz*rand.nextDouble();
+			double dd = Math.abs(px-x)+Math.abs(pz-z);
+			if (dd < 1.5+rand.nextDouble()) {
+				r = 0;
+				g = 127;
+				b = 255;
+			}
+			else if (dd < 2.5+rand.nextDouble()) {
+				r = 255;
+				g = 255;
+				b = 255;
+			}
+			else if (dd < 3+rand.nextDouble()*2) {
+				g = 255;
+			}
+			else if (dd < 5+rand.nextDouble()*3 && rand.nextBoolean()) {
+				g = 10;
+			}
+			ReikaParticleHelper.spawnColoredParticleAt(world, px, y+0.75*rand.nextDouble(), pz, r, g, b);
+		}
 	}
 
 	private void spawnSmokeParticles(World world, int x, int y, int z, int meta) {
@@ -633,6 +711,45 @@ public class TileEntityJetEngine extends TileEntityEngine {
 	@Override
 	public boolean isBroken() {
 		return FOD >= 8;
+	}
+
+	@Override
+	public NBTTagCompound getTagsToWriteToStack() {
+		if (canAfterBurn) {
+			NBTTagCompound NBT = new NBTTagCompound();
+			NBT.setBoolean("burn", canAfterBurn);
+			return NBT;
+		}
+		return null;
+	}
+
+	@Override
+	public void setDataFromItemStackTag(NBTTagCompound NBT) {
+		canAfterBurn = NBT != null && NBT.getBoolean("burn");
+	}
+
+	@Override
+	public ArrayList<NBTTagCompound> getCreativeModeVariants() {
+		return new ArrayList();
+	}
+
+	@Override
+	public ArrayList<String> getDisplayTags(NBTTagCompound NBT) {
+		ArrayList<String> li = new ArrayList();
+		if (NBT != null && NBT.getBoolean("burn")) {
+			li.add("With Afterburner");
+		}
+		return li;
+	}
+
+	@Override
+	public void upgrade() {
+		canAfterBurn = true;
+	}
+
+	@Override
+	public boolean canUpgradeWith(ItemStack item) {
+		return !canAfterBurn && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.AFTERBURNER.ordinal();
 	}
 
 }

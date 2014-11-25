@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Placers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -31,6 +33,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -284,6 +287,16 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			for (int i = 0; i < EngineType.engineList.length; i++) {
 				ItemStack item = new ItemStack(id, 1, i);
 				list.add(item);
+				TileEntityEngine te = (TileEntityEngine)MachineRegistry.ENGINE.createTEInstanceForRender(i);
+				if (te instanceof NBTMachine) {
+					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
+					for (int k = 0; k < li.size(); k++) {
+						NBTTagCompound NBT = li.get(k);
+						ItemStack is = new ItemStack(id, 1, i);
+						is.stackTagCompound = NBT;
+						list.add(is);
+					}
+				}
 			}
 		}
 	}
@@ -318,6 +331,10 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			if (is.stackTagCompound.getBoolean("bed")) {
 				li.add("Bedrock Upgrade");
 			}
+		}
+		TileEntityEngine te = (TileEntityEngine)MachineRegistry.ENGINE.createTEInstanceForRender(i);
+		if (te instanceof NBTMachine && is.stackTagCompound != null) {
+			li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
 		}
 	}
 

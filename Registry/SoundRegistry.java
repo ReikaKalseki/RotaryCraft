@@ -64,7 +64,8 @@ public enum SoundRegistry implements SoundEnum {
 	FRIDGE("#fridge"),
 	JETSTART("#jetstart"),
 	SONIC("#sonic"),
-	SHORTJET("shortjet");
+	SHORTJET("shortjet"),
+	AFTERBURN("afterburner");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 

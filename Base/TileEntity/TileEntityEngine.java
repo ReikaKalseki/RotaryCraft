@@ -126,7 +126,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	protected abstract void consumeFuel();
 
 	protected int getConsumedFuel() {
-		return type == EngineType.JET ? 10 : 10;
+		return 10;
 	}
 
 	protected abstract void internalizeFuel();
@@ -315,6 +315,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			power = 0;
 		}
 		else {
+			timer.setCap("fuel", type.getFuelUnitDuration());
 			if (!worldObj.isRemote || RotaryAux.getPowerOnClient) {
 				this.initialize(world, x, y, z, meta);
 			}
@@ -587,7 +588,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		float factor = type.getFuelUnitDuration()/(float)timer.getCapOf("fuel"); //to compensate for 4x burn during spinup
 		if (factor <= 0)
 			return 0;
-		return (int)((fuel*type.getFuelUnitDuration()*(burnprogress))*5/factor/1000);
+		return (int)((fuel*type.getFuelUnitDuration()*(burnprogress))*5/factor/1000*10D/this.getConsumedFuel());
 	}
 
 	/** In seconds */

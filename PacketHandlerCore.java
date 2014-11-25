@@ -581,6 +581,9 @@ public class PacketHandlerCore implements IPacketHandler {
 				long pwr = (long)data[3] << 32 | data[2] & 0xFFFFFFFFL;
 				io.power = pwr;
 				break;
+			case AFTERBURN:
+				((TileEntityJetEngine)te).burnerActive = data[0] > 0;
+				break;
 			}
 		}
 		catch (NullPointerException e) {

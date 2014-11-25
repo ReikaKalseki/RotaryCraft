@@ -101,7 +101,8 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 		MAGNETOSTATIC2("Converter Tier 2 Upgrade"), //Made in magnetizer
 		MAGNETOSTATIC3("Converter Tier 3 Upgrade"), //Made with pulse jet ingot
 		MAGNETOSTATIC4("Converter Tier 4 Upgrade"), //Made with 4MW extractor product
-		MAGNETOSTATIC5("Converter Tier 5 Upgrade"); //Made with bedrock
+		MAGNETOSTATIC5("Converter Tier 5 Upgrade"), //Made with bedrock
+		AFTERBURNER("Afterburner Upgrade");
 
 		public final String desc;
 
