@@ -403,7 +403,7 @@ public enum ItemRegistry implements ItemEnum {
 		case RAILGUN:
 			return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
 		case UPGRADE:
-			return ItemEngineUpgrade.Upgrades.values()[dmg].desc;
+			return ItemEngineUpgrade.Upgrades.values()[dmg].getName();
 		case MODEXTRACTS:
 			return RotaryNames.getModExtractName(dmg);
 		case MODINGOTS:
