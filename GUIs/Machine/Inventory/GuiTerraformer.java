@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
@@ -93,7 +94,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 				api.drawLine(48, 17+i*39, 16+48, 16+17+i*39, 0);
 				api.drawLine(16+48, 17+i*39, 48, 16+17+i*39, 0);
 			}
-			List<ItemStack> items = terra.getItemsForTransform(from, to);
+			ArrayList<ItemStack> items = terra.getItemsForTransform(from, to);
 			if (items != null && !items.isEmpty()) {
 				int step = (int)((System.nanoTime()/500000000)%items.size());
 				ItemStack is = items.get(step);

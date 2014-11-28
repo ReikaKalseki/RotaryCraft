@@ -61,6 +61,7 @@ import Reika.RotaryCraft.Registry.MobBait;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
+import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer.BiomeTransform;
 
 import com.google.common.collect.TreeMultimap;
 
@@ -532,16 +533,16 @@ public final class HandbookAuxData {
 			}
 			else if (h == HandbookRegistry.TERRA && subpage == 1) {
 				RenderItem ri = item;
-				ArrayList<Object[]> transforms = TileEntityTerraformer.getTransformList();
+				ArrayList<BiomeTransform> transforms = TileEntityTerraformer.getTransformList();
 				int time = 2000000000;
 				int k = (int)((System.nanoTime()/time)%transforms.size());
 				String tex = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
 				ReikaTextureHelper.bindTexture(RotaryCraft.class, tex);
-				Object[] data = transforms.get(k);
-				BiomeGenBase from = (BiomeGenBase)data[0];
+				BiomeTransform data = transforms.get(k);
+				BiomeGenBase from = data.change.start;
 				BiomeGenBase from_ = from;
 				from = ReikaBiomeHelper.getParentBiomeType(from);
-				BiomeGenBase to = (BiomeGenBase)data[1];
+				BiomeGenBase to = data.change.finish;
 				ReikaGuiAPI.instance.drawTexturedModalRect(posX+16, posY+22, 32*(from.biomeID%8), 32*(from.biomeID/8), 32, 32);
 				ReikaGuiAPI.instance.drawTexturedModalRect(posX+80, posY+22, 32*(to.biomeID%8), 32*(to.biomeID/8), 32, 32);
 				String name = ReikaStringParser.splitCamelCase(from_.biomeName);
@@ -554,8 +555,8 @@ public final class HandbookAuxData {
 				for (int i = 0; i < words2.length; i++) {
 					ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, words2[i], posX+97, posY+57+i*font.FONT_HEIGHT, 0);
 				}
-				font.drawString(String.format("%.3f kW", (Integer)data[2]/1000D), posX+116, posY+22, 0);
-				FluidStack liq = (FluidStack)data[3];
+				font.drawString(String.format("%.3f kW", data.power/1000D), posX+116, posY+22, 0);
+				FluidStack liq = data.getFluid();
 				if (liq != null) {
 					GL11.glColor4f(1, 1, 1, 1);
 					ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
@@ -566,10 +567,12 @@ public final class HandbookAuxData {
 					//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116+16, posY+38);
 					ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, String.format("%d", liq.amount), posX+116+16, posY+38+5, 0);
 				}
-				List<ItemReq> li = (List<ItemReq>)data[4];
-				for (int i = 0; i < li.size(); i++) {
-					ItemStack is = li.get(i).asItemStack();
+				Collection<ItemReq> li = data.getItems();
+				int i = 0;
+				for (ItemReq r : li) {
+					ItemStack is = r.asItemStack();
 					ReikaGuiAPI.instance.drawItemStack(ri, font, is, posX+190, posY+8+i*18);
+					i++;
 				}
 			}
 			else if (h == HandbookRegistry.TIERS) {
