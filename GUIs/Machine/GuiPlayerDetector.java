@@ -117,7 +117,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 
 	@Override
 	public String getGuiTexture() {
-		return "playerdetectorgui";
+		return "rangegui";
 	}
 
 }

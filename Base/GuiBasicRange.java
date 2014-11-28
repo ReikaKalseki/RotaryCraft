@@ -11,9 +11,6 @@ package Reika.RotaryCraft.Base;
 
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
-
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -26,10 +23,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 
 public class GuiBasicRange extends GuiPowerOnlyMachine
 {
-	public int range;
-	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-	int x;
-	int y;
+	private int range;
 	private GuiTextField input;
 
 	public GuiBasicRange(EntityPlayer p5ep, TileEntityPowerReceiver te)
@@ -39,7 +33,6 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 		ySize = 46;
 		ep = p5ep;
 		range = ((RangedEffect)pwr).getRange();
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.range));
 	}
 
 	@Override
@@ -67,8 +60,6 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		x = Mouse.getX();
-		y = Mouse.getY();
 		if (input.getText().isEmpty()) {
 			return;
 		}
@@ -90,9 +81,6 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 		}
 	}
 
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
@@ -103,9 +91,6 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -122,6 +107,6 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 
 	@Override
 	public String getGuiTexture() {
-		return "playerdetectorgui";
+		return "rangegui";
 	}
 }

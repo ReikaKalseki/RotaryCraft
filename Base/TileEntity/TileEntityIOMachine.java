@@ -17,6 +17,7 @@ import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.API.SimpleShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -349,7 +350,17 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	}
 
 	private void setPower(TileEntity te, ForgeDirection from, int om, int tq) {
-		if (te instanceof ShaftPowerReceiver) {
+		if (te instanceof SimpleShaftPowerReceiver) {
+			if (this.isBlacklistedReceiver(te)) {
+				if (omega > 0 && torque > 0)
+					this.affectBlacklistedReceiver(te);
+			}
+			else {
+				SimpleShaftPowerReceiver sp = (SimpleShaftPowerReceiver)te;
+				sp.setPowered(sp.canReadFrom(from.getOpposite()) && om > 0 && tq > 0);
+			}
+		}
+		else if (te instanceof ShaftPowerReceiver) {
 			if (this.isBlacklistedReceiver(te)) {
 				if (omega > 0 && torque > 0)
 					this.affectBlacklistedReceiver(te);
