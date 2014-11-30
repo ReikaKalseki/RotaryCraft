@@ -39,22 +39,6 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	public static final int UPLOSS = 1*0;
 	public static final int DOWNLOSS = -1*0;
 
-	public static final int UPPRESSURE = 40;
-	public static final int HORIZPRESSURE = 20;
-	public static final int DOWNPRESSURE = 0;
-
-	private static final int MAXPRESSURE = 2400000;
-
-	public final int getPressure() {
-		if (liquid == null || liquidLevel <= 0)
-			return 101300;
-		//p = rho*R*T approximation
-		if (liquid.isGaseous())
-			return 101300+(128*(int)(liquidLevel/1000D*liquid.getTemperature()*Math.abs(liquid.getDensity())/1000D));
-		else
-			return 101300+liquidLevel*24;
-	}
-
 	@Override
 	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateEntity(world, x, y, z, meta);
@@ -94,33 +78,10 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		else {
 			temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		}
-
-		if (this.getPressure() > this.getMaxPressure()) {
-			this.overpressure(world, x, y, z);
-		}
 	}
 
 	public int getMaxTemperature() {
 		return 2500;
-	}
-
-	public int getMaxPressure() {
-		return MAXPRESSURE;
-	}
-
-	private void overpressure(World world, int x, int y, int z) {
-		if (!world.isRemote) {
-			if (liquid.canBePlacedInWorld()) {
-				world.setBlock(x, y, z, liquid.getBlock());
-			}
-			else {
-				world.setBlockToAir(x, y, z);
-			}
-		}
-		world.markBlockForUpdate(x, y, z);
-		world.notifyBlockOfNeighborChange(x, y, z, liquid.getBlock());
-		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
-		ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
 	}
 
 	@Override

@@ -27,6 +27,8 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
@@ -36,7 +38,45 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection {
 
+	public static final int UPPRESSURE = 40;
+	public static final int HORIZPRESSURE = 20;
+	public static final int DOWNPRESSURE = 0;
+
+	private static final int MAXPRESSURE = 2400000;
+
 	private boolean[] connections = new boolean[6];
+
+	public final int getPressure() {
+		Fluid f = this.getFluidType();
+		int amt = this.getFluidLevel();
+		if (f == null || amt <= 0)
+			return 101300;
+		//p = rho*R*T approximation
+		if (f.isGaseous())
+			return 101300+(128*(int)(amt/1000D*f.getTemperature()*Math.abs(f.getDensity())/1000D));
+		else
+			return 101300+amt*24;
+	}
+
+	public int getMaxPressure() {
+		return MAXPRESSURE;
+	}
+
+	private void overpressure(World world, int x, int y, int z) {
+		Fluid f = this.getFluidType();
+		if (!world.isRemote) {
+			if (f.canBePlacedInWorld()) {
+				world.setBlock(x, y, z, f.getBlock());
+			}
+			else {
+				world.setBlockToAir(x, y, z);
+			}
+		}
+		world.markBlockForUpdate(x, y, z);
+		world.notifyBlockOfNeighborChange(x, y, z, f.getBlock());
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
+		ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
+	}
 
 	public abstract int getFluidLevel();
 
@@ -97,6 +137,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		if (f != f2) {
 			this.syncAllData(true);
 			world.markBlockForUpdate(x, y, z);
+		}
+
+		if (this.getPressure() > this.getMaxPressure()) {
+			this.overpressure(world, x, y, z);
 		}
 	}
 
