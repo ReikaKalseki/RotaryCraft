@@ -50,7 +50,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (torque >= MINTORQUE && power >= MINPOWER && omega > 0 && this.hasHeatableMachine(world)) {
 			temperature += 3*ReikaMathLibrary.logbase(omega, 2)*ReikaMathLibrary.logbase(torque, 2);
 		}
-		int Tamb = power > MINPOWER && torque > MINTORQUE ? 30 : ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z); //to prevent nether exploit
+		int Tamb = power > MINPOWER && torque > MINTORQUE ? 30 : ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z); //prevent nether exploit
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/5;
 		}
@@ -62,7 +62,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature > MAXTEMP)
 			temperature = MAXTEMP;
 		if (temperature >= MAXTEMP)
-			if (!world.isRemote && rand.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0 && ConfigRegistry.BLOCKDAMAGE.getState())
+			if (!world.isRemote && ConfigRegistry.BLOCKDAMAGE.getState() && rand.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0)
 				this.meltFurnace(world);
 		if (temperature < Tamb)
 			temperature = Tamb;
@@ -189,10 +189,12 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 				smeltTime++;
 				tile.furnaceCookTime = Math.min(smeltTime, 195);
 				if (smeltTime >= 200) {
-					if (smelt != null) {
+					if (smelt != null && tile.canSmelt()) {
 						tile.smeltItem();
-						int xp = MathHelper.ceiling_float_int(FurnaceRecipes.smelting().func_151398_b(smelt));
-						ReikaWorldHelper.splitAndSpawnXP(world, fx+0.5, fy+0.6, fz+0.5, xp, 600);
+						if (ConfigRegistry.FRICTIONXP.getState()) {
+							int xp = MathHelper.ceiling_float_int(FurnaceRecipes.smelting().func_151398_b(smelt));
+							ReikaWorldHelper.splitAndSpawnXP(world, fx+0.5, fy+0.6, fz+0.5, xp, 600);
+						}
 					}
 					else if (special != null) {
 						ReikaInventoryHelper.decrStack(0, tile, 1);

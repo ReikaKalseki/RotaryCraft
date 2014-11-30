@@ -87,7 +87,8 @@ public enum ConfigRegistry implements ConfigList {
 	NOMINERS("Disable Automining Machines", false),
 	HARDEU("Hard Mode EU Compatibility", false),
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
-	BLASTMAT("Blast Furnace Crafting Material", 0);
+	BLASTMAT("Blast Furnace Crafting Material", 0),
+	FRICTIONXP("Spawn XP from Friction Heater", true);
 
 	private String label;
 	private boolean defaultState;
