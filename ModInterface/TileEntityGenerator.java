@@ -35,7 +35,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 
 	private ForgeDirection facingDir;
 
-	public static final boolean hardModeEU = ConfigRegistry.HARDEU.getState() || ModList.GREGTECH.isLoaded();
+	public static final boolean hardModeEU = ConfigRegistry.HARDEU.getState();
 
 	public ForgeDirection getFacing() {
 		return facingDir != null ? facingDir : ForgeDirection.EAST;

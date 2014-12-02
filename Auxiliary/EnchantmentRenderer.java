@@ -11,10 +11,8 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -32,18 +30,12 @@ public abstract class EnchantmentRenderer {
 	private static double par6;
 	private static final double expand = 0.0625;
 
-	private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
-
-	public static void bindGlint() {
-		Minecraft.getMinecraft().renderEngine.bindTexture(RES_ITEM_GLINT);
-	}
-
 	public static void renderGlint(TileEntity tile, RotaryModelBase model, ArrayList li, double par2, double par4, double par6) {
 		int x = tile.xCoord;
 		int y = tile.yCoord;
 		int z = tile.zCoord;
 		float f9 = (System.nanoTime()/100000000)%64/64F;
-		bindGlint();
+		ReikaTextureHelper.bindEnchantmentTexture();
 		GL11.glEnable(GL11.GL_BLEND);
 		BlendMode.OVERLAYDARK.apply();
 		float f10 = 0.5F;

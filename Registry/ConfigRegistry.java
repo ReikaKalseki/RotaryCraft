@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.RotaryCraft.RotaryConfig;
@@ -85,7 +86,7 @@ public enum ConfigRegistry implements ConfigList {
 	HARDGRAVELGUN("Hardmode Gravel Gun", false),
 	BORERMAINTAIN("Borer Requires Maintenance", false),
 	NOMINERS("Disable Automining Machines", false),
-	HARDEU("Hard Mode EU Compatibility", false),
+	HARDEU("Hard Mode EU Compatibility", ModList.GREGTECH.isLoaded()),
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
 	BLASTMAT("Blast Furnace Crafting Material", 0),
 	FRICTIONXP("Spawn XP from Friction Heater", true);

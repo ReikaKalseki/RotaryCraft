@@ -85,8 +85,8 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		if (te instanceof IFluidHandler) {
 			IFluidHandler ic = (IFluidHandler)te;
 			if (output.getFluid() != null) {
-				ic.fill(ForgeDirection.DOWN, output.getFluid(), true);
-				output.drain(output.getFluid().amount, true);
+				int amt = ic.fill(ForgeDirection.DOWN, output.getFluid(), true);
+				output.removeLiquid(amt);
 			}
 		}
 	}
