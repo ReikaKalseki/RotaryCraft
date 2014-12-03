@@ -533,6 +533,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				return true;
 			}
 		}
+		if (m == MachineRegistry.BLOWER) {
+			if (is != null && ReikaItemHelper.matchStacks(is, m.getCraftedProduct()))
+				return false;
+		}
 		if (m == MachineRegistry.MIRROR) {
 			TileEntityMirror tm = (TileEntityMirror)te;
 			if (tm.broken) {
