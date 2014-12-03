@@ -228,7 +228,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 					blocks.add(te);
 				}
 			}
-			check.remove(index);
+			check.remove(b[0], b[1], b[2]);
 			if (check.isEmpty()) {
 				loading = false;
 				canLoad = false;

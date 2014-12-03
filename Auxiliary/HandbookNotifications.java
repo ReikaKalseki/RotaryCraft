@@ -92,6 +92,7 @@ public class HandbookNotifications {
 			this.addEntry(ConfigRegistry.VOIDHOLE, Level.WARNING, "The bedrock breaker has been made able to open holes to the Void.");
 			this.addEntry(ConfigRegistry.NOMINERS, Level.SEVERE, "All automining machines have been disabled.");
 			this.addEntry(ConfigRegistry.BORERMAINTAIN, Level.SEVERE, "The Borer has been set to require maintenance.");
+			this.addEntry(ConfigRegistry.JETFUELPACK, Level.WARNING, "The jetpack requires jet fuel to operate.");
 		}
 
 		private void addEntry(ConfigRegistry cfg, Level lvl, String sg) {
