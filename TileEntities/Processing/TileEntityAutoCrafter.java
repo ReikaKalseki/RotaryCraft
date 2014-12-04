@@ -25,7 +25,6 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Data.MENetwork;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -87,7 +86,6 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	}
 
 	public void triggerCraftingCycle(int slot) {
-		ReikaJavaLibrary.pConsole(slot);
 		if (power >= MINPOWER) {
 			ItemStack out = this.getSlotRecipeOutput(slot);
 			if (out != null)

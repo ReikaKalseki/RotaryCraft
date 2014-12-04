@@ -37,7 +37,7 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 
 	@Override
 	protected void internalizeFuel() {
-		if (water.isEmpty()) {
+		if (water.isEmpty() && temperature >= 100) {
 			dryTicks++;
 		}
 		else {
