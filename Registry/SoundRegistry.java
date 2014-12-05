@@ -16,7 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Interfaces.SoundEnum;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -65,7 +65,8 @@ public enum SoundRegistry implements SoundEnum {
 	JETSTART("#jetstart"),
 	SONIC("#sonic"),
 	SHORTJET("shortjet"),
-	AFTERBURN("afterburner");
+	AFTERBURN("afterburner"),
+	RUMBLE("rumble2");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
@@ -115,7 +116,7 @@ public enum SoundRegistry implements SoundEnum {
 			return;
 		//Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
 		//PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
-		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, this, world, x, y, z, vol*this.getModVolume(), pitch);
+		ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, world, x, y, z, vol*this.getModVolume(), pitch);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {

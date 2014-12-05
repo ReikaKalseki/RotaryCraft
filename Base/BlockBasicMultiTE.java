@@ -744,7 +744,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tr = (TileEntityReservoir)tile;
-			if (!tr.isEmpty()) {
+			if (!tr.isEmpty() && e instanceof EntityLivingBase) {
 				if (tr.getFluid().equals(FluidRegistry.LAVA) || tr.getFluid().getTemperature(world, x, y, z) > 500) {
 					e.attackEntityFrom(DamageSource.lava, 4);
 					e.setFire(12);
@@ -753,25 +753,29 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					e.extinguish();
 				}
 				else if (tr.getFluid().equals(FluidRegistry.getFluid("rc ethanol"))) {
-					if (e instanceof EntityLivingBase) {
-						EntityLivingBase eb = (EntityLivingBase)e;
-						PotionEffect eff = eb.getActivePotionEffect(Potion.confusion);
-						int dura = 1;
-						if (eff != null) {
-							dura = eff.getDuration()+1;
-						}
-						if (dura > 600)
-							dura = 600;
-						eb.addPotionEffect(new PotionEffect(Potion.confusion.id, dura, 3));
+					EntityLivingBase eb = (EntityLivingBase)e;
+					PotionEffect eff = eb.getActivePotionEffect(Potion.confusion);
+					int dura = 1;
+					if (eff != null) {
+						dura = eff.getDuration()+1;
 					}
+					if (dura > 600)
+						dura = 600;
+					eb.addPotionEffect(new PotionEffect(Potion.confusion.id, dura, 3));
 				}
-				else if (tr.getFluid().getName().toLowerCase().contains("ammonia")) {
+				else if (tr.getFluid().equals(FluidRegistry.getFluid("jet fuel"))) {
 					if (e instanceof EntityLivingBase) {
 						EntityLivingBase eb = (EntityLivingBase)e;
 						PotionEffect eff = eb.getActivePotionEffect(Potion.poison);
 						if (eff == null)
 							eb.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
 					}
+				}
+				else if (tr.getFluid().getName().toLowerCase().contains("ammonia")) {
+					EntityLivingBase eb = (EntityLivingBase)e;
+					PotionEffect eff = eb.getActivePotionEffect(Potion.poison);
+					if (eff == null)
+						eb.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
 				}
 				else {
 					Fluid f = tr.getFluid();

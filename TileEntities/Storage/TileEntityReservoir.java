@@ -158,10 +158,6 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		return false;
 	}
 
-
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

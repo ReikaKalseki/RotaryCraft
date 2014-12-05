@@ -38,6 +38,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -59,6 +60,7 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController, DiscreteFunction {
 
@@ -87,6 +89,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private int notifiedPlayer = 0;
 
 	private int durability = ConfigRegistry.BORERMAINTAIN.getState() ? 256 : Integer.MAX_VALUE;
+
+	private int soundtick = 0;
 
 	@Override
 	public int getTextureStateForSide(int s) {
@@ -161,7 +165,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					String sg = "Your "+this+" has hit a protected area at "+hx+", "+hz+" and has jammed.";
 					ReikaChatHelper.sendChatToPlayer(ep, sg);
 				}
-
 			}
 		}
 
@@ -211,7 +214,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 		//ReikaJavaLibrary.pConsole(isMiningAir+":"+tickcount+"/"+this.getOperationTime(), Side.SERVER);
 
-		if ((tickcount >= this.getOperationTime()) || (isMiningAir && tickcount%5 == 0)) {
+		if (soundtick > 0)
+			soundtick--;
+
+		if (tickcount >= this.getOperationTime() || (isMiningAir && tickcount%5 == 0)) {
 			this.skipMiningPipes(world, x, y, z, meta, 0, 16);
 			this.calcReqPower(world, x, y, z, meta);
 			if (power >= reqpow && reqpow != -1) {
@@ -219,8 +225,13 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				if (!world.isRemote) {
 					ReikaWorldHelper.forceGenAndPopulate(world, x+step*xstep, y, z+step*zstep, meta);
 					this.dig(world, x, y, z, meta);
-					if (!isMiningAir)
+					if (!isMiningAir) {
+						if (soundtick == 0) {
+							SoundRegistry.RUMBLE.playSoundAtBlock(this);
+							soundtick = 5;
+						}
 						durability--;
+					}
 				}
 			}
 			else {
@@ -594,8 +605,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					xread = x+step*xstep+a*(i-3);
 					yread = y+step*ystep+(4-j);
 					zread = z+step*zstep+b*(i-3);
-					if (this.dropBlocks(xread, yread, zread, world, x, y, z, world.getBlock(xread, yread, zread), world.getBlockMetadata(xread, yread, zread)))
+					Block bk = world.getBlock(xread, yread, zread);
+					if (this.dropBlocks(xread, yread, zread, world, x, y, z, bk, world.getBlockMetadata(xread, yread, zread))) {
+						ReikaSoundHelper.playBreakSound(world, xread, yread, zread, bk);
 						world.setBlock(xread, yread, zread, BlockRegistry.MININGPIPE.getBlockInstance(), pipemeta, 3);
+					}
 					else {
 						step--;
 					}
