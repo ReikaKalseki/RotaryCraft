@@ -20,8 +20,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFireballLauncher extends ItemChargedTool {
 
@@ -60,9 +58,9 @@ public class ItemFireballLauncher extends ItemChargedTool {
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack is, World world, EntityPlayer ep, int par4) {
+	public void onPlayerStoppedUsing(ItemStack is, World world, EntityPlayer ep, int ticksUsed) {
 		texture = defaulttex;
-		float power = (is.getMaxItemUseDuration()-par4)/20F;
+		float power = (is.getMaxItemUseDuration()-ticksUsed)/20F;
 		float charge = 0;
 		if (ep.capabilities.isCreativeMode) {
 			power *= 2;
@@ -145,7 +143,6 @@ public class ItemFireballLauncher extends ItemChargedTool {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void onUsingTick(ItemStack is, EntityPlayer ep, int count) {
 		float power = (is.getMaxItemUseDuration()-count)/20F;
 		if (ep.capabilities.isCreativeMode) {
