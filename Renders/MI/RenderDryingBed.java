@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
@@ -97,6 +98,7 @@ public class RenderDryingBed extends RotaryTERenderer {
 			//GL11.glDisable(GL11.GL_ALPHA_TEST);
 			//GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glColor4f(1, 1, 1, 1.2F*te.progress/400F);
+			GL11.glColor4f(1, 1, 1, 1);
 
 			IItemRenderer iir = MinecraftForgeClient.getItemRenderer(is, ItemRenderType.INVENTORY);
 			Item item = is.getItem();
@@ -131,7 +133,16 @@ public class RenderDryingBed extends RotaryTERenderer {
 				GL11.glRotatef(-90, 1, 0, 0);
 				//GL11.glTranslated(0, -b, 0);
 				GL11.glScaled(s, s, s);
-				ItemRenderer.renderItemIn2D(v5, 0.0625F+0.0625F*col, 0.0625F*row, 0.0625F*col, 0.0625F+0.0625F*row, 256, 256, thick);
+				if (Minecraft.getMinecraft().gameSettings.fancyGraphics)
+					ItemRenderer.renderItemIn2D(v5, 0.0625F*col, 0.0625F*row, 0.0625F+0.0625F*col, 0.0625F+0.0625F*row, 256, 256, thick);
+				else {
+					v5.startDrawingQuads();
+					v5.addVertexWithUV(0, 0, 0, 0.0625F*col, 0.0625F+0.0625F*row);
+					v5.addVertexWithUV(1, 0, 0, 0.0625F+0.0625F*col, 0.0625F+0.0625F*row);
+					v5.addVertexWithUV(1, 1, 0, 0.0625F+0.0625F*col, 0.0625F*row);
+					v5.addVertexWithUV(0, 1, 0, 0.0625F*col, 0.0625F*row);
+					v5.draw();
+				}
 				GL11.glPopMatrix();
 			}
 			else if (iir != null) {
@@ -162,7 +173,16 @@ public class RenderDryingBed extends RotaryTERenderer {
 				GL11.glRotatef(90, 1, 0, 0);
 				//GL11.glTranslated(0, -b, 0);
 				GL11.glScaled(s, s, s);
-				ItemRenderer.renderItemIn2D(v5, u, v, du, dv, 256, 256, thick);
+				if (Minecraft.getMinecraft().gameSettings.fancyGraphics)
+					ItemRenderer.renderItemIn2D(v5, u, v, du, dv, 256, 256, thick);
+				else {
+					v5.startDrawingQuads();
+					v5.addVertexWithUV(0, 1, 0, u, v);
+					v5.addVertexWithUV(1, 1, 0, du, v);
+					v5.addVertexWithUV(1, 0, 0, du, dv);
+					v5.addVertexWithUV(0, 0, 0, u, dv);
+					v5.draw();
+				}
 				GL11.glPopMatrix();
 			}
 			GL11.glDisable(GL11.GL_BLEND);
