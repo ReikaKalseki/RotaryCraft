@@ -78,7 +78,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		int oldpage = page;
 		if (button.id == 0 && page < scale.getMaxPage()-1)

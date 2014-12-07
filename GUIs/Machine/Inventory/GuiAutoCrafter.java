@@ -54,7 +54,7 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id < 1000)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue(), crafter, button.id);

@@ -25,7 +25,7 @@ public class GuiHandbookPage extends GuiHandbook {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		if (button.id == 12) {
 			mc.thePlayer.closeScreen();
 			return;

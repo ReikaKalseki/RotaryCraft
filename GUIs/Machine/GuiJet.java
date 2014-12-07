@@ -53,7 +53,7 @@ public class GuiJet extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton b) {
+	protected void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 
 		if (b.id == 0 && jet != null && jet.canAfterBurn) {

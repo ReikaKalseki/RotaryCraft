@@ -55,7 +55,7 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id == 0)
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.VACUUM.getMinValue(), vac);

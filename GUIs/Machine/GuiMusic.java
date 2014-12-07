@@ -132,7 +132,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		boolean flag = true;
 		if (button.id < 24000) {

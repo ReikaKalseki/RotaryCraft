@@ -49,7 +49,7 @@ public class GuiWinder extends GuiOneSlotInv
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id != 0)
 			return;

@@ -100,7 +100,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (buttontimer > 0)
 			return;

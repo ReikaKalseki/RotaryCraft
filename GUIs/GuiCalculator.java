@@ -51,7 +51,7 @@ public class GuiCalculator extends GuiScreen {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 
 	}
 

@@ -58,7 +58,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton b) {
+	protected void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 		if (b.id == 4) {
 			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+2, engine);

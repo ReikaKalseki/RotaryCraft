@@ -80,7 +80,7 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton b) {
+	protected void actionPerformed(GuiButton b) {
 		if (b.id == 24000 || b.id == 24001) {
 			ep.closeScreen();
 			if (ReikaInventoryHelper.checkForItem(ItemRegistry.HANDBOOK.getItemInstance(), ep.inventory.mainInventory))

@@ -81,7 +81,7 @@ public class GuiSafePlayerList extends GuiScreen {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		if (buttontimer > 0)
 			return;
 		buttontimer = 20;

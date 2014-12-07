@@ -59,7 +59,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton b) {
+	protected void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 		this.initGui();
 

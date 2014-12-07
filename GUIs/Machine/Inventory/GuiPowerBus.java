@@ -57,7 +57,7 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id < 24000) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[button.id+2];

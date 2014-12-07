@@ -94,7 +94,7 @@ public class GuiBorer extends GuiMachine
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id == 7) {
 			this.toggleDrops();

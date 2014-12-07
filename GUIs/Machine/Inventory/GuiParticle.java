@@ -104,7 +104,7 @@ public class GuiParticle extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		this.initGui();
 		if (button.id < 24000) {
