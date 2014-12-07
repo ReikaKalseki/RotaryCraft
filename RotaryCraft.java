@@ -11,6 +11,7 @@ package Reika.RotaryCraft;
 
 import java.net.URL;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -53,6 +54,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.RouterHelper;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications.HandbookConfigVerifier;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
@@ -78,6 +80,7 @@ import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -440,6 +443,10 @@ public class RotaryCraft extends DragonAPIMod {
 
 		if (!this.isLocked())
 			RotaryRecipes.addPostLoadRecipes();
+
+		if (ModList.ROUTER.isLoaded()) {
+			RouterHelper.blacklistTileEntity(TileEntityExtractor.class, "Extractor", "BlockMIMachine:10"); //Extractor
+		}
 	}
 
 	@EventHandler

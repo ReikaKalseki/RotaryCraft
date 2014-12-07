@@ -61,11 +61,12 @@ public class ContainerBlastFurnace extends CoreContainer
 	}
 
 	@Override
-	protected void onShiftClickSlot(EntityPlayer ep, int ID, ItemStack is) {
+	protected ItemStack onShiftClickSlot(EntityPlayer ep, int ID, ItemStack is) {
 		if (ID < blast.getSizeInventory() && (ID == 10 || ID == 13 || ID == 12)) {
 			if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, is)) {
 				RotaryAchievements.MAKESTEEL.triggerAchievement(ep);
 			}
 		}
+		return null;
 	}
 }

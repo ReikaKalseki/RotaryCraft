@@ -55,8 +55,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	public boolean idle = false;
 
-	public boolean[] extractableSlots = new boolean[4];
-
 	public boolean upgrade() {
 		if (bedrock)
 			return false;
@@ -95,7 +93,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		if (i >= 9)
 			return false;
-		return i == 7 || i == 8 || extractableSlots[i/2];
+		return i == 7 || i == 8;
 	}
 
 	@Override
@@ -160,10 +158,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		extractorCookTime = NBT.getIntArray("CookTime");
 		drillTime = NBT.getInteger("drill");
 		bedrock = NBT.getBoolean("bedrock");
-
-		for (int i = 0; i < 4; i++) {
-			extractableSlots[i] = NBT.getBoolean("extractable"+i);
-		}
 	}
 
 	@Override
@@ -173,10 +167,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		NBT.setIntArray("CookTime", extractorCookTime);
 		NBT.setInteger("drill", drillTime);
 		NBT.setBoolean("bedrock", bedrock);
-
-		for (int i = 0; i < 4; i++) {
-			NBT.setBoolean("extractable"+i, extractableSlots[i]);
-		}
 	}
 
 	public int getCookProgressScaled(int par1, int i)
