@@ -41,8 +41,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	public boolean failed;
 	private boolean bedrock;
 
-	private int cheatCount = 0;
-	private int cheatTick = 0;
+	private int overloadTick = 0;
 
 	private int pow2;
 
@@ -383,7 +382,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			}
 
 			if (!this.canCombine(in1, in2, torquein, torquein2)) {
-				this.fail();
+				overloadTick++;
+				if (overloadTick > 5) {
+					this.fail();
+					overloadTick = 0;
+				}
 			}
 			else if (omegain == omegain2) {
 				omega = omegain;

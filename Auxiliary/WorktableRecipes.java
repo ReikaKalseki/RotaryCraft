@@ -28,28 +28,21 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
 public class WorktableRecipes
 {
-	/** The static instance of this class */
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
-	/** A list of all the recipes added */
 	private ImmutableList<IRecipe> recipes = new ImmutableList();
 
-	/**
-	 * Returns the static instance of this class
-	 */
 	public static final WorktableRecipes getInstance()
 	{
 		return instance;
 	}
 
-	public static void addRecipe(IRecipe recipe)
-	{
+	public static void addRecipe(IRecipe recipe) {
 		getInstance().recipes.add(recipe);
 	}
 
 	private WorktableRecipes()
 	{
-
 		Collections.sort(recipes, new RecipeSorter(this));
 	}
 

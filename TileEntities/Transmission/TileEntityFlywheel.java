@@ -476,7 +476,10 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	@Override
 	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
-		return new PowerSourceList().addSource(this);
+		/*return new PowerSourceList().addSource(this);*/
+		PowerSourceList pwr = new PowerSourceList();
+		pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller));
+		return pwr;
 	}
 
 	@Override
