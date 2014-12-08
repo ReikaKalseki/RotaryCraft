@@ -10,8 +10,8 @@
 package Reika.RotaryCraft.API.Event;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 
 public class WorktableCraftEvent extends TileEntityEvent {
 
@@ -19,7 +19,7 @@ public class WorktableCraftEvent extends TileEntityEvent {
 	public final String playerName;
 	private final ItemStack item;
 
-	public WorktableCraftEvent(TileEntityWorktable te, String ep, boolean wasAuto, ItemStack is) {
+	public WorktableCraftEvent(TileEntity te, String ep, boolean wasAuto, ItemStack is) {
 		super(te);
 		automated = wasAuto;
 		playerName = ep;

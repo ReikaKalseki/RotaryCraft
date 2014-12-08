@@ -9,15 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 
 public class VDGAttackEvent extends TileEntityEvent {
 
 	public final int attackDamage;
 	public final int tileCharge;
 
-	public VDGAttackEvent(TileEntityVanDeGraff te, int chg, int dmg) {
+	public VDGAttackEvent(TileEntity te, int chg, int dmg) {
 		super(te);
 
 		attackDamage = dmg;

@@ -9,14 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 
 public class VacuumXPAbsorbEvent extends TileEntityEvent {
 
 	public final int amount;
 
-	public VacuumXPAbsorbEvent(TileEntityVacuum te, int xp) {
+	public VacuumXPAbsorbEvent(TileEntity te, int xp) {
 		super(te);
 		amount = xp;
 	}

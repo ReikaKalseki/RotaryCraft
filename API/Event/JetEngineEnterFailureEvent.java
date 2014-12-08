@@ -9,12 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 
 public class JetEngineEnterFailureEvent extends TileEntityEvent {
 
-	public JetEngineEnterFailureEvent(TileEntityEngine te) {
+	public JetEngineEnterFailureEvent(TileEntity te) {
 		super(te);
 	}
 

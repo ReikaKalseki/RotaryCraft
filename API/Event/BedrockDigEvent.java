@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 
 public class BedrockDigEvent extends TileEntityEvent {
 
@@ -18,7 +18,7 @@ public class BedrockDigEvent extends TileEntityEvent {
 	public final int breakY;
 	public final int breakZ;
 
-	public BedrockDigEvent(TileEntityBedrockBreaker te, int x, int y, int z) {
+	public BedrockDigEvent(TileEntity te, int x, int y, int z) {
 		super(te);
 
 		breakX = x;

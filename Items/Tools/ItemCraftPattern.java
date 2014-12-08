@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Items.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -20,14 +21,21 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.oredict.OreDictionary;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Interfaces.SpriteRenderCallback;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 
-public class ItemCraftPattern extends ItemRotaryTool {
+public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCallback {
 
 	public ItemCraftPattern(int index) {
 		super(index);
@@ -157,6 +165,18 @@ public class ItemCraftPattern extends ItemRotaryTool {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean onRender(RenderItem ri, ItemStack is, ItemRenderType type) {
+		if (type == ItemRenderType.INVENTORY && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			ItemStack out = this.getRecipeOutput(is);
+			double s = 0.063;
+			GL11.glScaled(s, -s, s);
+			ReikaGuiAPI.instance.drawItemStack(ri, out, 0, -16);
+			return true;
+		}
+		return false;
 	}
 
 }

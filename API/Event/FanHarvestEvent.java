@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 
 public class FanHarvestEvent extends TileEntityEvent {
 
@@ -18,7 +18,7 @@ public class FanHarvestEvent extends TileEntityEvent {
 	public final int y;
 	public final int z;
 
-	public FanHarvestEvent(TileEntityFan te, int x, int y, int z) {
+	public FanHarvestEvent(TileEntity te, int x, int y, int z) {
 		super(te);
 
 		this.x = x;

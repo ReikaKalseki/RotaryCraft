@@ -9,14 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 
 public class FlywheelFailureEvent extends TileEntityEvent {
 
 	public final float explosivePower;
 
-	public FlywheelFailureEvent(TileEntityFlywheel te, float power) {
+	public FlywheelFailureEvent(TileEntity te, float power) {
 		super(te);
 
 		explosivePower = power;

@@ -9,16 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.Registry.MaterialRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
 public class ShaftFailureEvent extends TileEntityEvent {
 
 	public final boolean isSpeedFailure;
-	public final MaterialRegistry materialType;
+	public final int materialType;
 
-	public ShaftFailureEvent(TileEntityShaft te, boolean wasSpeed, MaterialRegistry type) {
+	public ShaftFailureEvent(TileEntity te, boolean wasSpeed, int type) {
 		super(te);
 
 		isSpeedFailure = wasSpeed;

@@ -190,7 +190,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}
 		playDelay[channel] = n.length.tickLength;
 		playIndex[channel]++;
-		NoteEvent e = new NoteEvent(this, n, channel);
+		NoteEvent e = new NoteEvent(this, n.pitch, n.getTickLength(), channel);
 		MinecraftForge.EVENT_BUS.post(e);
 	}
 

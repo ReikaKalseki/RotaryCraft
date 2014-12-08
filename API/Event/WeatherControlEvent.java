@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Decorative.TileEntityWeatherController;
 
 public class WeatherControlEvent extends TileEntityEvent {
 
@@ -18,7 +18,7 @@ public class WeatherControlEvent extends TileEntityEvent {
 	public final boolean setThunder;
 	public final boolean setSuperStorm;
 
-	public WeatherControlEvent(TileEntityWeatherController te, boolean rain, boolean thunder, boolean storm) {
+	public WeatherControlEvent(TileEntity te, boolean rain, boolean thunder, boolean storm) {
 		super(te);
 
 		setRain = rain;

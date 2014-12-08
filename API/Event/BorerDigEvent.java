@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Event;
 
+import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Event.TileEntityEvent;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 
 public class BorerDigEvent extends TileEntityEvent {
 
@@ -21,7 +21,7 @@ public class BorerDigEvent extends TileEntityEvent {
 
 	public final boolean isSilkTouch;
 
-	public BorerDigEvent(TileEntityBorer te, int distance, int x, int y, int z, boolean silk) {
+	public BorerDigEvent(TileEntity te, int distance, int x, int y, int z, boolean silk) {
 		super(te);
 
 		range = distance;

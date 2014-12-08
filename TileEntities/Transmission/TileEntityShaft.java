@@ -61,7 +61,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	public void fail(World world, int x, int y, int z, boolean speed) {
-		MinecraftForge.EVENT_BUS.post(new ShaftFailureEvent(this, speed, type));
+		MinecraftForge.EVENT_BUS.post(new ShaftFailureEvent(this, speed, type.ordinal()));
 		failed = true;
 		if (speed) {
 			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 1F, true);
