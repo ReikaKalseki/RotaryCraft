@@ -145,7 +145,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return true;
+		return RecipesCrystallizer.getRecipes().isValidFluid(f);
 	}
 
 	@Override

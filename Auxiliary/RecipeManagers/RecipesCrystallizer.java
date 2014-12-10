@@ -88,4 +88,8 @@ public class RecipesCrystallizer
 		}
 		return 0;
 	}
+
+	public boolean isValidFluid(Fluid f) {
+		return recipeList.containsKey(f);
+	}
 }

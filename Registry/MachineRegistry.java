@@ -1104,6 +1104,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 	public boolean allowsAcceleration() {
 		switch(this) {
 		case BLASTFURNACE:
+		case DRYING:
 			return true;
 		default:
 			return false;
