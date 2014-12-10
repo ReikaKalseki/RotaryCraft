@@ -171,4 +171,9 @@ public enum SoundRegistry implements SoundEnum {
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
 	}
+
+	@Override
+	public boolean canOverlap() {
+		return this == JETPACK || this == JETDAMAGE || this == RUMBLE;
+	}
 }

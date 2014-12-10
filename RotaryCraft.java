@@ -11,7 +11,6 @@ package Reika.RotaryCraft;
 
 import java.net.URL;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -55,6 +54,7 @@ import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.RouterHelper;
+import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications.HandbookConfigVerifier;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
@@ -93,6 +93,7 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -447,6 +448,11 @@ public class RotaryCraft extends DragonAPIMod {
 		if (ModList.ROUTER.isLoaded()) {
 			RouterHelper.blacklistTileEntity(TileEntityExtractor.class, "Extractor", "BlockMIMachine:10"); //Extractor
 		}
+	}
+
+	@EventHandler
+	public void registerCommands(FMLServerStartingEvent evt) {
+		evt.registerServerCommand(new FindMachinesCommand());
 	}
 
 	@EventHandler

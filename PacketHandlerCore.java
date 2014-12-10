@@ -194,6 +194,14 @@ public class PacketHandlerCore implements IPacketHandler {
 				break;
 			case NBT:
 				break;
+			case STRINGINT:
+				stringdata = packet.readString();
+				control = inputStream.readInt();
+				pack = PacketRegistry.getEnum(control);
+				data = new int[pack.getNumberDataInts()];
+				for (int i = 0; i < data.length; i++)
+					data[i] = inputStream.readInt();
+				break;
 			}
 			if (packetType.hasCoordinates()) {
 				x = inputStream.readInt();

@@ -29,17 +29,20 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine, IFluidHandler, PipeConnector {
+public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine,
+IFluidHandler, PipeConnector, TemperatureTE {
 
 	private static final int MINBASE = -1;
 
@@ -50,6 +53,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 	protected int baseomega = -1;
 
 	private ForgeDirection facingDir;
+
+	private int temperature;
 
 	private static final boolean reika = DragonAPICore.isReikasComputer();
 	private final HybridTank tank = new HybridTank("energytopower", 24000);
@@ -67,7 +72,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		super.updateTileEntity();
 		if (DragonAPICore.debugtest) {
 			storedEnergy = this.getMaxStorage();
-			tank.setContents(tank.getCapacity(), FluidRegistry.getFluid("lubricant"));
+			tank.setContents(tank.getCapacity(), FluidRegistry.getFluid("liquid nitrogen"));
 		}
 		if (storedEnergy < 0) {
 			storedEnergy = 0;
@@ -324,6 +329,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		NBT.setInteger("level", tier);
 
 		tank.writeToNBT(NBT);
+
+		temperature = NBT.getInteger("temp");
 	}
 
 	@Override
@@ -344,6 +351,8 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 		baseomega = NBT.getInteger("tiero");
 
 		tank.readFromNBT(NBT);
+
+		NBT.setInteger("temp", temperature);
 	}
 
 	@Override
@@ -409,7 +418,7 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("lubricant"));
+		return fluid.equals(FluidRegistry.getFluid("liquid nitrogen"));
 	}
 
 	@Override
@@ -447,6 +456,33 @@ public abstract class EnergyToPowerBase extends TileEntityIOMachine implements S
 
 	public final int getLubricantScaled(int a) {
 		return tank.getLevel() * a / tank.getCapacity();
+	}
+
+	@Override
+	public final void updateTemperature(World world, int x, int y, int z, int meta) {
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+
+		temperature = Tamb;
+	}
+
+	@Override
+	public final void addTemperature(int temp) {
+		temperature += temp;
+	}
+
+	@Override
+	public final int getTemperature() {
+		return temperature;
+	}
+
+	@Override
+	public final int getThermalDamage() {
+		return 0;
+	}
+
+	@Override
+	public final void overheat(World world, int x, int y, int z) {
+
 	}
 
 }
