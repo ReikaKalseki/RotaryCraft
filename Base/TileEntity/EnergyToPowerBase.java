@@ -30,6 +30,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -76,6 +77,9 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		}
 		if (storedEnergy < 0) {
 			storedEnergy = 0;
+		}
+		if (tank.isEmpty()) {
+			RotaryCraft.logger.debug("Empty tank in "+this);
 		}
 	}
 
