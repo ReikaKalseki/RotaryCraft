@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import Reika.DragonAPI.Auxiliary.PlayerHandler.PlayerTracker;
+import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler.PlayerTracker;
 import Reika.DragonAPI.Instantiable.Alert;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.RotaryCraft.RotaryCraft;

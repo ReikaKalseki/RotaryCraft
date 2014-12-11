@@ -717,9 +717,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		return MachineRegistry.createTEFromIDAndMetadata(this, meta);
 	}
 
-	/**
-	 * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
-	 */
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity e)
 	{

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.ModInterface;
 import java.awt.Color;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -159,8 +160,8 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 	}
 
 	@Override
-	public int getConsumedUnitsPerTick() {
-		return (int)Math.ceil(Math.sqrt(power));
+	protected int getIdealConsumedUnitsPerTick() {
+		return MathHelper.ceiling_double_int(Math.sqrt(power));
 	}
 
 	@Override

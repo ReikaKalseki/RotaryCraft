@@ -30,7 +30,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.research.ResearchCategories;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Auxiliary.ItemMaterialController;
+import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;

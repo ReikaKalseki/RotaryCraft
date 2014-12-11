@@ -13,6 +13,7 @@ import java.awt.Color;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
@@ -60,11 +61,11 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	}
 
 	@Override
-	public int getConsumedUnitsPerTick() {
-		return (int)Math.ceil(this.getMJPerTick());
+	protected int getIdealConsumedUnitsPerTick() {
+		return MathHelper.ceiling_double_int(this.getMJPerTick());
 	}
 
-	public float getMJPerTick() {
+	private float getMJPerTick() {
 		return (float)(this.getPowerLevel()/ReikaBuildCraftHelper.getWattsPerMJ());
 	}
 

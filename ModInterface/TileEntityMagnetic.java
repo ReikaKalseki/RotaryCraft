@@ -140,12 +140,12 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 	}
 
 	@Override
-	public int getConsumedUnitsPerTick() {
-		return MathHelper.ceiling_float_int(this.getRFPerTick());
+	protected int getIdealConsumedUnitsPerTick() {
+		return MathHelper.ceiling_double_int(this.getRFPerTick());
 	}
 
-	public float getRFPerTick() {
-		return (float)(this.getPowerLevel()*10/ReikaBuildCraftHelper.getWattsPerMJ());
+	private double getRFPerTick() {
+		return this.getPowerLevel()*10D/ReikaBuildCraftHelper.getWattsPerMJ();
 	}
 
 	@Override

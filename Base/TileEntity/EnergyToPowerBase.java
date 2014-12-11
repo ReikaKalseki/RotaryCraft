@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -27,10 +28,10 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -57,6 +58,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	private int temperature;
 
+	private StepTimer tempTimer = new StepTimer(20);
+
 	private static final boolean reika = DragonAPICore.isReikasComputer();
 	private final HybridTank tank = new HybridTank("energytopower", 24000);
 
@@ -66,6 +69,18 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
+	}
+
+	public final double getEfficiency() {
+		return 0.9-tier*0.08;
+	}
+
+	public final double getPowerLoss() {
+		return 1-this.getEfficiency();
+	}
+
+	public final double getConsumption() {
+		return 1+this.getPowerLoss();
 	}
 
 	@Override
@@ -78,8 +93,9 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		if (storedEnergy < 0) {
 			storedEnergy = 0;
 		}
-		if (tank.isEmpty()) {
-			RotaryCraft.logger.debug("Empty tank in "+this);
+		tempTimer.update();
+		if (tempTimer.checkCap()) {
+			this.updateTemperature(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata());
 		}
 	}
 
@@ -230,7 +246,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	protected final void updateSpeed() {
 		int maxspeed = this.getMaxSpeed();
-		boolean accel = omega <= maxspeed && this.hasEnoughEnergy() && !tank.isEmpty();
+		boolean accel = omega <= maxspeed && this.hasEnoughEnergy();
 		if (accel) {
 			omega += 4*ReikaMathLibrary.logbase(maxspeed+1, 2);
 			if (omega > maxspeed)
@@ -245,9 +261,9 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		power = (long)torque*(long)omega;
 		if (power > 0 && !worldObj.isRemote) {
 			this.usePower();
-			if (worldObj.getTotalWorldTime()%(21-4*tier) == 0) {
-				tank.removeLiquid(1);
-			}
+			//if (worldObj.getTotalWorldTime()%(21-4*tier) == 0) {
+			//	tank.removeLiquid(1);
+			//}
 		}
 	}
 
@@ -263,10 +279,14 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	public final boolean hasEnoughEnergy() {
 		float energy = this.getStoredPower();
-		return energy > this.getConsumedUnitsPerTick();
+		return energy >= this.getConsumedUnitsPerTick();
 	}
 
-	public abstract int getConsumedUnitsPerTick();
+	protected abstract int getIdealConsumedUnitsPerTick();
+
+	public final int getConsumedUnitsPerTick() {
+		return MathHelper.ceiling_double_int(this.getConsumedUnitsPerTick()*this.getConsumption());
+	}
 
 	public final void setTierFromItemTag(NBTTagCompound nbt) {
 		if (nbt != null) {
@@ -334,7 +354,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 		tank.writeToNBT(NBT);
 
-		temperature = NBT.getInteger("temp");
+		NBT.setInteger("temp", temperature);
 	}
 
 	@Override
@@ -356,7 +376,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 		tank.readFromNBT(NBT);
 
-		NBT.setInteger("temp", temperature);
+		temperature = NBT.getInteger("temp");
 	}
 
 	@Override
@@ -465,8 +485,30 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	@Override
 	public final void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-
-		temperature = Tamb;
+		if (power > 0) {
+			double d = tank.getLevel() >= 50 ? 0.00275 : 0.14;
+			double inc = d*Math.sqrt(power)+ReikaMathLibrary.logbase(tier+1, 2);
+			//ReikaJavaLibrary.pConsole(inc);
+			temperature += inc;
+			if (temperature > Tamb && !tank.isEmpty()) {
+				int drain = Math.max(2, 50*temperature/500);
+				tank.removeLiquid(drain);
+			}
+		}
+		if (temperature > Tamb) {
+			temperature -= (temperature-Tamb)/16;
+		}
+		else {
+			temperature += (temperature-Tamb)/16;
+		}
+		if (temperature - Tamb <= 16 && temperature > Tamb)
+			temperature--;
+		if (temperature > 500) {
+			temperature = 500;
+			this.overheat(world, x, y, z);
+		}
+		if (temperature < Tamb)
+			temperature = Tamb;
 	}
 
 	@Override
@@ -486,7 +528,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	@Override
 	public final void overheat(World world, int x, int y, int z) {
-
+		this.delete();
+		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3, true, true);
 	}
 
 }

@@ -87,6 +87,12 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer
 	}
 
 	@Override
+	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		return !(te instanceof RotaryCraftTileEntity || te instanceof Screwdriverable);
+	}
+
+	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
 		int damage = 0;
