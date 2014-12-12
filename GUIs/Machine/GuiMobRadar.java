@@ -96,7 +96,7 @@ public class GuiMobRadar extends GuiPowerOnlyMachine
 
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "mobradargui";
 	}
 }

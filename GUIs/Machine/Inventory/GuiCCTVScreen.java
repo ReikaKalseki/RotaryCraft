@@ -64,7 +64,7 @@ public class GuiCCTVScreen extends GuiMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "screengui";
 	}
 

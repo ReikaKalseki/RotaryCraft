@@ -356,7 +356,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "bevelgui2";
 	}
 }

@@ -64,6 +64,7 @@ import Reika.RotaryCraft.Containers.ContainerPulseFurnace;
 import Reika.RotaryCraft.Containers.ContainerPurifier;
 import Reika.RotaryCraft.Containers.ContainerRemoteControl;
 import Reika.RotaryCraft.Containers.ContainerReservoir;
+import Reika.RotaryCraft.Containers.ContainerRockMelter;
 import Reika.RotaryCraft.Containers.ContainerScaleChest;
 import Reika.RotaryCraft.Containers.ContainerScreen;
 import Reika.RotaryCraft.Containers.ContainerSorter;
@@ -127,6 +128,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPowerBus;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiProjector;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPulseFurnace;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPurifier;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiRockMelter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiScaleChest;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiSpyCam;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiTerraformer;
@@ -168,6 +170,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
@@ -349,6 +352,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityDryingBed) {
 			return new ContainerDryingBed(player, (TileEntityDryingBed) te);
+		}
+		if (te instanceof TileEntityLavaMaker) {
+			return new ContainerRockMelter(player, (TileEntityLavaMaker) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -571,6 +577,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityDryingBed) {
 			return new GuiDryer(player, (TileEntityDryingBed) te);
+		}
+		if (te instanceof TileEntityLavaMaker) {
+			return new GuiRockMelter(player, (TileEntityLavaMaker) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

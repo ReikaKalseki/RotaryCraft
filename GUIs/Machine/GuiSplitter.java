@@ -72,7 +72,7 @@ public class GuiSplitter extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "splittergui";
 	}
 }

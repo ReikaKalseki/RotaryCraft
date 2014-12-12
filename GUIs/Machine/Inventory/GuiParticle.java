@@ -115,7 +115,7 @@ public class GuiParticle extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "particlegui";
 	}
 

@@ -50,9 +50,6 @@ public class GuiObsidian extends GuiMachine
 		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -96,7 +93,7 @@ public class GuiObsidian extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "obsidiangui";
 	}
 }

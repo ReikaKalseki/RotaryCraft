@@ -22,7 +22,7 @@ public class GuiRemoteControl extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "cctvgui";
 	}
 }

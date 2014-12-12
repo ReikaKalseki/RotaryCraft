@@ -208,7 +208,7 @@ public class GuiSonic extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "sonicgui3";
 	}
 }

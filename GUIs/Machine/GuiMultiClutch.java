@@ -82,7 +82,7 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "multigui";
 	}
 

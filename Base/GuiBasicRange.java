@@ -106,7 +106,7 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "rangegui";
 	}
 }

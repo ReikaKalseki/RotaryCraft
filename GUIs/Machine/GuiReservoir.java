@@ -68,7 +68,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "reservoirgui";
 	}
 

@@ -53,7 +53,7 @@ public class GuiSteam extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "steamgui";
 	}
 

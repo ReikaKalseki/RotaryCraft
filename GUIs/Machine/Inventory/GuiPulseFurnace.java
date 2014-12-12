@@ -108,7 +108,7 @@ public class GuiPulseFurnace extends GuiMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "pulsejetgui";
 	}
 

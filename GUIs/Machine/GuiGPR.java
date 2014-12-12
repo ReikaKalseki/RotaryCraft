@@ -85,7 +85,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "gprgui";
 	}
 }

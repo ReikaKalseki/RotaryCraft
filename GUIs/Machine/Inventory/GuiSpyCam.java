@@ -100,7 +100,7 @@ public class GuiSpyCam extends GuiNonPoweredMachine
 
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "spycamgui";
 	}
 }

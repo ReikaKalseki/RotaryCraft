@@ -50,7 +50,7 @@ public abstract class GuiMachine extends GuiContainer {
 			recv = (TileEntityPowerReceiver)te;
 	}
 
-	public abstract String getGuiTexture();
+	protected abstract String getGuiTexture();
 
 	public final int getXSize() {
 		return xSize;

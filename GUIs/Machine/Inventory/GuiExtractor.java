@@ -136,7 +136,7 @@ public class GuiExtractor extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return ConfigRegistry.EXTRACTORMAINTAIN.getState() ? "extractorgui2" : "extractorgui";
 	}
 }

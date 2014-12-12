@@ -103,7 +103,7 @@ public class GuiBasicStorage extends GuiMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "/Reika/RotaryCraft/Textures/GUI/basicstorage.png";
 	}
 

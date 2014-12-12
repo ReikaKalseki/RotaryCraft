@@ -417,7 +417,7 @@ public class GuiCannon extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		if (targetMode)
 			return "targetgui";
 		else

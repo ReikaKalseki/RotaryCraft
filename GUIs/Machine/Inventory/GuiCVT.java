@@ -238,7 +238,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return redstone ? "cvtgui2" : "cvtgui";
 	}
 

@@ -96,7 +96,7 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "/Reika/RotaryCraft/Textures/GUI/craftergui2.png";
 	}
 }

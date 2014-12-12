@@ -208,7 +208,7 @@ public class GuiBorer extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "borergui2";
 	}
 

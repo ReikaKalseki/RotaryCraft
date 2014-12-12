@@ -22,7 +22,7 @@ public class GuiLandmine extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "landminegui";
 	}
 }

@@ -29,7 +29,7 @@ public class GuiOneSlotInv extends GuiMachine {
 	protected final void drawPowerTab(int j, int k) {}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "basic_gui_oneslot";
 	}
 

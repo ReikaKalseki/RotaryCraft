@@ -118,7 +118,7 @@ public class GuiCentrifuge extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "centrifugegui";
 	}
 }

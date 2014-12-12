@@ -60,7 +60,7 @@ public class GuiDefoliator extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "defoliatorgui";
 	}
 }

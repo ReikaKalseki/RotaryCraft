@@ -62,7 +62,7 @@ public class GuiEthanol extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "ethanolgui";
 	}
 }

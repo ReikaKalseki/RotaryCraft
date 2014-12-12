@@ -217,7 +217,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "musicgui";
 	}
 

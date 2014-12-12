@@ -26,7 +26,7 @@ public class GuiProjector extends GuiPowerOnlyMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "projectorgui";
 	}
 

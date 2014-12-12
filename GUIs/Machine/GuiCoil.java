@@ -175,7 +175,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "coilgui";
 	}
 

@@ -68,7 +68,7 @@ public class GuiFillingStation extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "fillingstationgui";
 	}
 

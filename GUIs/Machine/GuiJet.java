@@ -98,7 +98,7 @@ public class GuiJet extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "jetgui";
 	}
 }

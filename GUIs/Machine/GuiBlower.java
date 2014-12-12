@@ -100,7 +100,7 @@ public class GuiBlower extends GuiPowerOnlyMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "blowergui";
 	}
 

@@ -118,7 +118,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "terraformergui";
 	}
 

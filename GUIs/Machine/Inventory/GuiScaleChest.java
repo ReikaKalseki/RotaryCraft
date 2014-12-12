@@ -143,7 +143,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "/Reika/RotaryCraft/Textures/GUI/basicstorage.png";
 	}
 }

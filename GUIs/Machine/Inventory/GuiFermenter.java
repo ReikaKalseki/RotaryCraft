@@ -122,7 +122,7 @@ public class GuiFermenter extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "fermentergui";
 	}
 }

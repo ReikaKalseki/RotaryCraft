@@ -285,7 +285,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	protected abstract int getIdealConsumedUnitsPerTick();
 
 	public final int getConsumedUnitsPerTick() {
-		return MathHelper.ceiling_double_int(this.getConsumedUnitsPerTick()*this.getConsumption());
+		return MathHelper.ceiling_double_int(this.getIdealConsumedUnitsPerTick()*this.getConsumption());
 	}
 
 	public final void setTierFromItemTag(NBTTagCompound nbt) {

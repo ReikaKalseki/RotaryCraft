@@ -111,7 +111,7 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "worktablegui";
 	}
 }

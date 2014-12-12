@@ -100,7 +100,7 @@ public class GuiFractionator extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "fractiongui";
 	}
 }

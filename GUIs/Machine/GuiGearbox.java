@@ -89,7 +89,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "gearboxgui";
 	}
 }

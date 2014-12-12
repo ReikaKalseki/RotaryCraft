@@ -83,7 +83,7 @@ public class GuiCrystallizer extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "crystalgui";
 	}
 

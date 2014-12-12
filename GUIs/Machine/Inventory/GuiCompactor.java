@@ -101,7 +101,7 @@ public class GuiCompactor extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "compactorgui2";
 	}
 }

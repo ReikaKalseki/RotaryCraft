@@ -70,7 +70,7 @@ public class GuiPerformance extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "perfgui";
 	}
 }

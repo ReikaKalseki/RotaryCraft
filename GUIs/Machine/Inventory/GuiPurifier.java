@@ -74,7 +74,7 @@ public class GuiPurifier extends GuiMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "purifiergui";
 	}
 }

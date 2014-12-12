@@ -82,7 +82,7 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "bigfurngui";
 	}
 }

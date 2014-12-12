@@ -70,7 +70,7 @@ public class GuiDryer extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "drygui";
 	}
 }

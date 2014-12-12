@@ -59,7 +59,7 @@ public class GuiBlastFurnace extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "blastfurngui";
 	}
 }

@@ -38,7 +38,7 @@ public class GuiComposter extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "compostergui";
 	}
 }

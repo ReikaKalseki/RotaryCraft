@@ -108,7 +108,7 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "bus";
 	}
 

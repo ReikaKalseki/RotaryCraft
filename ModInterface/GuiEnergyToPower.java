@@ -136,7 +136,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public String getGuiTexture() {
+	protected String getGuiTexture() {
 		return "pneugui";
 	}
 
