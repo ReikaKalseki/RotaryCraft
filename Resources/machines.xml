@@ -243,7 +243,7 @@
 	</playerdetector>
 	<spawnercontroller>
 		<desc>
-			The spawner controller hacks into the functioning of a monster spawner, allowing you to either shut it down completely, or to adjust the spawn rate as you see fit. The minimum allowable spawn rate is determined by the power input.
+			The spawner controller hacks into the functioning of a monster spawner, allowing you to either shut it down completely, or to adjust the spawn rate as you see fit. The minimum allowable spawn rate is determined by the speed input.
 		</desc>
 		<note>
 			Required Power: %dW
