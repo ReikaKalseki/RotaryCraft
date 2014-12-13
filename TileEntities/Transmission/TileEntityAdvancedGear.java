@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -375,7 +376,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		if (this.getGearType() == GearType.CVT) {
 			if (controller != null && controller.isActive() && controller.getCVT().equals(this)) {
 				boolean torque = controller.isTorque();
-				int r = controller.getControlledRatio();
+				int r = MathHelper.clamp_int(controller.getControlledRatio(), 1, 32);
 				ratio = torque ? r : -r;
 			}
 		}

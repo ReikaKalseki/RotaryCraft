@@ -11,6 +11,8 @@ package Reika.RotaryCraft.API;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+/** Implementing this gives you extremely basic boolean sensitivity to RC power. Used for things like switches and detectors, and unsuitable
+ * for actual machines due to the total lack of sensitivity to the amount of power or its direction. */
 public interface SimpleShaftPowerReceiver {
 
 	public void setPowered(boolean power);

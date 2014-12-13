@@ -11,8 +11,10 @@ package Reika.RotaryCraft.API;
 
 import net.minecraft.world.World;
 
+/** An interface for entities to allow them to jam the mob radar. Typically used for Eldritch abominations and the like. */
 public interface RadarJammer {
 
+	/** As long as the entity is in range and this returns true, the GUI displays only static. */
 	public boolean jamRadar(World world, int radarX, int radarY, int radarZ);
 
 }

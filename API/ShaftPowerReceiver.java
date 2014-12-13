@@ -9,9 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-public interface ShaftPowerReceiver extends ShaftMachine {
+/** This is for basic RC power compatibility. Results with a machine that accepts power from multiple sides is undefined unless you specifically
+ * handle for it; for such cases the use of {@link AdvancedShaftPowerReceiver} is recommended instead. */
+public interface ShaftPowerReceiver extends PowerAcceptor {
 
 	/** RC machines set your machine's rotational speed with this. */
 	public void setOmega(int omega);
@@ -24,17 +24,7 @@ public interface ShaftPowerReceiver extends ShaftMachine {
 	 * RC code will do that for you. */
 	public void setPower(long power);
 
-	/** x,y,z to read from */
-	public boolean canReadFrom(ForgeDirection dir);
-
-	/** Whether your machine is able to receive power right now */
-	public boolean isReceiving();
-
 	/** When there is no input machine. Usually used to set power, speed, torque = 0 */
 	public void noInputMachine();
-
-	/** The minimum torque the machine requires to operate. Also controls flywheel deceleration.
-	 * Pick something reasonable, preferably as realistic as possible. */
-	public int getMinTorque(int available);
 
 }

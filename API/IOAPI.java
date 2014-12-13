@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 
 import net.minecraft.tileentity.TileEntity;
 
+/** Use this to have RC-style red and green IO boxes. */
 public class IOAPI {
 
 	private static Class io;

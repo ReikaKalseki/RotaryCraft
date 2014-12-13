@@ -12,7 +12,7 @@ package Reika.RotaryCraft.API;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-/** For items that use fuel and can be filled in the filling station. */
+/** For items that use fuel or some other fluid and can be filled in the filling station. */
 public interface Fillable {
 
 	/** Return true if the item can currently accept this fluid. */

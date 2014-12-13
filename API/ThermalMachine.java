@@ -11,6 +11,7 @@ package Reika.RotaryCraft.API;
 
 import net.minecraft.world.World;
 
+/** Implement this to allow the friction heater to heat your TileEntity. Temperatures can range anywhere from -100 or so to +2000. */
 public interface ThermalMachine {
 
 	/** For fetching the temperature for display */

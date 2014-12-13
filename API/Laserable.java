@@ -18,7 +18,7 @@ public interface Laserable {
 	 * Args: Heat Ray power input, distance from heat ray */
 	public void whenInBeam(World world, int x, int y, int z, long power, int range);
 
-	/** Whether the object blocks the beam. */
+	/** Whether the object blocks the beam. Returning true shields everything behind it. */
 	public boolean blockBeam(World world, int x, int y, int z, long power);
 
 }

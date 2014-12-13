@@ -18,10 +18,10 @@ public interface CVTController {
 	/** Fetch the CVT instance */
 	public TileEntity getCVT();
 
-	/** Whether the controls should be applied */
+	/** Whether the controls should be applied; if this returns false, the CVT behaves as normal */
 	public boolean isActive();
 
-	/** The ratio chosen */
+	/** The ratio chosen. It is clamped to [1,32]. */
 	public int getControlledRatio();
 
 	/** True for torque mode, false for speed mode */

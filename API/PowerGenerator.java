@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
-/** Implement this if your TE "spawns" power */
+/** Implement this if your TE "spawns" power. */
 public interface PowerGenerator {
 
 	/** The maximum amount of power your machine can ever generate, in watts.
@@ -19,6 +19,7 @@ public interface PowerGenerator {
 	/** The current power your machine is producing, in watts. */
 	public long getCurrentPower();
 
+	/* These three are again RC bridge methods. */
 	public int getEmittingX();
 	public int getEmittingY();
 	public int getEmittingZ();

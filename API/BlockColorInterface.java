@@ -16,6 +16,8 @@ import Reika.DragonAPI.Instantiable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.BlockMap;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 
+/** This is used to add block color codes to the GPR (Ground Penetrating Radar) map. Without doing this, your blocks will be the same
+ * shade of purple in the GUI as MCEdit uses for unknown blocks. */
 public class BlockColorInterface {
 
 	private static final BlockMap<Integer> map = new BlockMap();

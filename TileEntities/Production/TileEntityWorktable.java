@@ -283,14 +283,25 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inv);
 		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
 			Item coilid = inv[coilslot].getItem();
-			int toolmeta = inv[toolslot].getItemDamage();
 			int coilmeta = inv[coilslot].getItemDamage();
-			ItemStack newtool = new ItemStack(toolid, 1, coilmeta);
-			ItemStack newcoil = new ItemStack(coilid, 1, toolmeta);
-			inv[toolslot] = null;
-			inv[coilslot] = null;
-			inv[9] = newtool;
-			inv[10] = newcoil;
+			if (toolid instanceof ChargeableTool) {
+				ItemStack tool = inv[toolslot];
+				int newcoilcharge = ((ChargeableTool)toolid).setCharged(tool, coilmeta, coilid == ItemRegistry.STRONGCOIL.getItemInstance());
+				ItemStack newcoil = new ItemStack(coilid, 1, newcoilcharge);
+				inv[toolslot] = null;
+				inv[coilslot] = null;
+				inv[9] = tool.copy();
+				inv[10] = newcoil;
+			}
+			else {
+				int toolmeta = inv[toolslot].getItemDamage();
+				ItemStack newtool = new ItemStack(toolid, 1, coilmeta);
+				ItemStack newcoil = new ItemStack(coilid, 1, toolmeta);
+				inv[toolslot] = null;
+				inv[coilslot] = null;
+				inv[9] = newtool;
+				inv[10] = newcoil;
+			}
 		}
 	}
 

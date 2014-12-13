@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
+/** Use this to add custom compactor recipes. */
 public class CompactorAPI {
 
 	private static Class recipes;

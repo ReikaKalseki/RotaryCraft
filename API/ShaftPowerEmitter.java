@@ -11,9 +11,10 @@ package Reika.RotaryCraft.API;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+/** Implement this to make your block capable of generating RC power. */
 public interface ShaftPowerEmitter extends ShaftMachine, PowerGenerator {
 
-	/** x,y,z to write to */
+	/** Side to write to */
 	public boolean canWriteTo(ForgeDirection dir);
 
 	/** Whether your machine is emitting power right now */

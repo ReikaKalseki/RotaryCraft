@@ -11,7 +11,7 @@ package Reika.RotaryCraft.API;
 
 import net.minecraft.item.ItemStack;
 
-/** For alternate windsprings with custom stiffnesses. They MUST be set up so that metadata=charge. */
+/** For alternate windsprings with custom stiffnesses. They MUST be set up so that metadata = charge. */
 public interface TensionStorage {
 
 	/** This controls how much torque is required to charge the spring. At 1, max charge = input torque.

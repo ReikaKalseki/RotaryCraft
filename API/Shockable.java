@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API;
 
+/** Use this on TileEntities to make them have special behavior if hit with a discharge from the Van De Graff generator. */
 public interface Shockable {
 
 	/** Called when the VDG hits the TileEntity with a bolt. Args: Charge in the bolt, distance of hit */

@@ -14,6 +14,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 
+/** This class has some functions to aid in ensuring you are not the source of a power exploit by remaining powered even if the supplying machine
+ * is broken. Call this every tick you are powered, and if the return value is false, your power supply is gone. */
 public class PowerTransferHelper {
 
 	public static boolean checkPowerFrom(TileEntity tile, ForgeDirection dir) {

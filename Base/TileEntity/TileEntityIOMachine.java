@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
+import Reika.RotaryCraft.API.AdvancedShaftPowerReceiver;
 import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.API.ShaftPowerEmitter;
@@ -376,6 +377,18 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 					sp.setOmega(0);
 					sp.setTorque(0);
 					sp.setPower(0);
+				}
+			}
+		}
+		else if (te instanceof AdvancedShaftPowerReceiver) {
+			if (this.isBlacklistedReceiver(te)) {
+				if (omega > 0 && torque > 0)
+					this.affectBlacklistedReceiver(te);
+			}
+			else {
+				AdvancedShaftPowerReceiver sp = (AdvancedShaftPowerReceiver)te;
+				if (sp.canReadFrom(from.getOpposite())) {
+					sp.addPower(tq, om, (long)tq*(long)om, from.getOpposite());
 				}
 			}
 		}

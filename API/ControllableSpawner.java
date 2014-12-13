@@ -11,6 +11,9 @@ package Reika.RotaryCraft.API;
 
 import net.minecraft.entity.EntityLiving;
 
+/** Implement this to make the spawner controller able to take control of your spawner. This entails total control over the spawn cycle,
+ * including delay, timing, and total shutdown regardless of spawn conditions or player proximity. Contrary to what seems to be commonly
+ * believed, you do <b>NOT</b> need to extend TileEntityMobSpawner to use this. */
 public interface ControllableSpawner {
 
 	public int getCurrentSpawnDelay();

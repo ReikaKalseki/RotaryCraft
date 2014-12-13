@@ -12,6 +12,7 @@ package Reika.RotaryCraft.API;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+/** Implement this to make your block able to have the screwdriver used on it. Overrides normal IWrench behavior if your block also acts on that. */
 public interface Screwdriverable {
 
 	/** Return true to prevent further processing. */
