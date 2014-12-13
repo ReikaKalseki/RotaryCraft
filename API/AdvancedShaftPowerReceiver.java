@@ -4,7 +4,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /** Implement this instead of {@link ShaftPowerReceiver} for more advanced and dynamic control over the power reception capabilities
  * of your machine. To use this, you must implement the methods as you see fit but also set the power to zero at the end of the tick, allowing
- * for it to be set again if the machine remains powered or drop to zero if not. */
+ * for it to be set again if the machine remains powered or drop to zero if not. If your intent is purely to receive power for conversion
+ * purposes, you may be able to forgo this, instead just adding to the internal buffer each time addPower is called. */
 public interface AdvancedShaftPowerReceiver extends PowerAcceptor {
 
 	/** Called every tick to add power at a given torque and speed, to a given side. For a block receiving multiple inputs, standard RC
