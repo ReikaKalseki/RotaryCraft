@@ -34,6 +34,7 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
@@ -43,8 +44,6 @@ import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityHeater;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
-import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
-import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Instrument;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Note;
@@ -71,38 +70,6 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 
 
 public class PacketHandlerCore implements IPacketHandler {
-
-	private TileEntityBorer borer;
-	private TileEntityBevelGear gbevel;
-	private TileEntitySplitter splitter;
-	private TileEntitySpawnerController spawner;
-	private TileEntityPlayerDetector detector;
-	private TileEntityHeater heater;
-	private TileEntityAdvancedGear adv;
-	private TileEntityLaunchCannon cannon;
-	private TileEntitySonicWeapon sonic;
-	private TileEntityForceField force;
-	private TileEntityScaleableChest chest;
-	private TileEntityMusicBox music;
-	private TileEntityVacuum vac;
-	private TileEntityWinder winder;
-	private TileEntityProjector proj;
-	private TileEntityContainment cont;
-	private TileEntityScreen screen;
-	private TileEntityItemCannon icannon;
-	private TileEntityMirror mirror;
-	private TileEntityAimedCannon aimed;
-	private TileEntityJetEngine engine;
-	private TileEntityDisplay display;
-	private TileEntityMultiClutch redgear;
-	private TileEntityTerraformer terra;
-	private EnergyToPowerBase eng;
-	private TileEntityPowerBus bus;
-	private TileEntityParticleEmitter emitter;
-	private TileEntityBlower blower;
-	private TileEntityDefoliator defo;
-	private TileEntityGPR gpr;
-	private TileEntityAutoCrafter crafter;
 
 	protected PacketRegistry pack;
 
@@ -218,7 +185,7 @@ public class PacketHandlerCore implements IPacketHandler {
 			switch (pack) {
 			case BORER: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", control, data));
-				borer = (TileEntityBorer)te;
+				TileEntityBorer borer = (TileEntityBorer)te;
 				if (borer != null) {
 					if (control == PacketRegistry.BORER.getMinValue()+2) {
 						for (int i = 0; i < 5; i++) {
@@ -267,21 +234,19 @@ public class PacketHandlerCore implements IPacketHandler {
 			}
 			break;
 			case BEVEL: {
-				gbevel = (TileEntityBevelGear)te;
-				gbevel.direction = data[0];
+				((TileEntityBevelGear)te).direction = data[0];
 			}
 			break;
 			case SPLITTER: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				splitter = (TileEntitySplitter)te;
 				if (control == PacketRegistry.SPLITTER.getMinValue()) {
-					splitter.setMode(data[0]);
+					((TileEntitySplitter)te).setMode(data[0]);
 				}
 			}
 			break;
 			case SPAWNER: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				spawner = (TileEntitySpawnerController)te;
+				TileEntitySpawnerController spawner = (TileEntitySpawnerController)te;
 				if (data[0] == -1) {
 					spawner.disable = true;
 				}
@@ -293,19 +258,17 @@ public class PacketHandlerCore implements IPacketHandler {
 			break;
 			case DETECTOR: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				detector = (TileEntityPlayerDetector)te;
-				detector.selectedrange = data[0];
+				((TileEntityPlayerDetector)te).selectedrange = data[0];
 			}
 			break;
 			case HEATER: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				heater = (TileEntityHeater)te;
-				heater.setTemperature = data[0];
+				((TileEntityHeater)te).setTemperature = data[0];
 			}
 			break;
 			case CVT: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				adv = (TileEntityAdvancedGear)te;
+				TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 				if (control == PacketRegistry.CVT.getMinValue()) {
 					adv.isRedstoneControlled = !adv.isRedstoneControlled;
 				}
@@ -322,7 +285,7 @@ public class PacketHandlerCore implements IPacketHandler {
 			break;
 			case CANNON: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				cannon = (TileEntityLaunchCannon)te;
+				TileEntityLaunchCannon cannon = (TileEntityLaunchCannon)te;
 				if (data[0] == 0) {
 					if (control == PacketRegistry.CANNON.getMinValue()) {
 						cannon.phi = data[1];
@@ -365,7 +328,7 @@ public class PacketHandlerCore implements IPacketHandler {
 			}
 			break;
 			case SONIC: {
-				sonic = (TileEntitySonicWeapon)te;
+				TileEntitySonicWeapon sonic = (TileEntitySonicWeapon)te;
 				if (control == PacketRegistry.SONIC.getMinValue()) {
 					sonic.setpitch = longdata;
 				}
@@ -375,18 +338,17 @@ public class PacketHandlerCore implements IPacketHandler {
 			}
 			break;
 			case FORCE: {
-				force = (TileEntityForceField)te;
-				force.setRange = data[0];
+				((TileEntityForceField)te).setRange = data[0];
 			}
 			break;
 			case CHEST: {
-				chest = (TileEntityScaleableChest)te;
+				TileEntityScaleableChest chest = (TileEntityScaleableChest)te;
 				chest.page = data[0];
 				ep.openGui(RotaryCraft.instance, 24000+data[0], chest.worldObj, chest.xCoord, chest.yCoord, chest.zCoord);
 				break;
 			}
 			case COIL:
-				adv = (TileEntityAdvancedGear)te;
+				TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 				if (control == PacketRegistry.COIL.getMinValue()) {
 					adv.setReleaseOmega(data[0]);
 				}
@@ -395,7 +357,7 @@ public class PacketHandlerCore implements IPacketHandler {
 				}
 				break;
 			case MUSIC:
-				music = (TileEntityMusicBox)te;
+				TileEntityMusicBox music = (TileEntityMusicBox)te;
 				if (control == PacketRegistry.MUSIC.getMinValue()) {
 					Note n = new Note(NoteLength.values()[data[2]], data[0], Instrument.values()[data[3]]);
 					for (int i = 0; i < 3; i++)
@@ -426,11 +388,10 @@ public class PacketHandlerCore implements IPacketHandler {
 				}
 				break;
 			case VACUUM:
-				vac = (TileEntityVacuum)te;
-				vac.spawnXP();
+				((TileEntityVacuum)te).spawnXP();
 				break;
 			case WINDER:
-				winder = (TileEntityWinder)te;
+				TileEntityWinder winder = (TileEntityWinder)te;
 				if (winder.winding) {
 					winder.winding = false;
 				}
@@ -440,16 +401,14 @@ public class PacketHandlerCore implements IPacketHandler {
 				winder.iotick = 512;
 				break;
 			case PROJECTOR:
-				proj = (TileEntityProjector)te;
-				proj.cycleInv();
+				((TileEntityProjector)te).cycleInv();
 				break;
 			case CONTAINMENT:
-				cont = (TileEntityContainment)te;
-				cont.setRange = data[0];
+				((TileEntityContainment)te).setRange = data[0];
 				break;
 			case ITEMCANNON: {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-				icannon = (TileEntityItemCannon)te;
+				TileEntityItemCannon icannon = (TileEntityItemCannon)te;
 				if (control == PacketRegistry.ITEMCANNON.getMinValue()) {
 					icannon.target[0] = data[0];
 				}
@@ -462,32 +421,25 @@ public class PacketHandlerCore implements IPacketHandler {
 				break;
 			}
 			case MIRROR:
-				mirror = (TileEntityMirror)te;
-				mirror.breakMirror(world, x, y, z);
+				((TileEntityMirror)te).breakMirror(world, x, y, z);
 				break;
 			case SAFEPLAYER:
-				aimed = (TileEntityAimedCannon)te;
-				aimed.removePlayerFromWhiteList(stringdata);
+				((TileEntityAimedCannon)te).removePlayerFromWhiteList(stringdata);
 				break;
 			case ENGINEBACKFIRE:
-				engine = (TileEntityJetEngine)te;
-				if (engine != null)
-					engine.backFire(world, x, y, z);
+				((TileEntityJetEngine)te).backFire(world, x, y, z);
 				break;
 			case MUSICPARTICLE:
-				music = (TileEntityMusicBox)te;
 				world.spawnParticle("note", x+0.2+rand.nextDouble()*0.6, y+1.2, z+0.2+rand.nextDouble()*0.6, rand.nextDouble(), 0.0D, 0.0D); //activeNote/24D
 				break;
 			case REDGEAR:
-				redgear = (TileEntityMultiClutch)te;
-				redgear.setSideOfState(data[0], data[1]);
+				((TileEntityMultiClutch)te).setSideOfState(data[0], data[1]);
 				break;
 			case TERRAFORMER:
-				terra = (TileEntityTerraformer)te;
-				terra.setTarget(BiomeGenBase.biomeList[data[0]]);
+				((TileEntityTerraformer)te).setTarget(BiomeGenBase.biomeList[data[0]]);
 				break;
 			case PNEUMATIC:
-				eng = (EnergyToPowerBase)te;
+				EnergyToPowerBase eng = (EnergyToPowerBase)te;
 				if (control == PacketRegistry.PNEUMATIC.getMinValue())
 					eng.decrementOmega();
 				if (control == PacketRegistry.PNEUMATIC.getMinValue()+1)
@@ -546,16 +498,15 @@ public class PacketHandlerCore implements IPacketHandler {
 				is.stackTagCompound.setString("file", stringdata);
 				break;
 			case POWERBUS:
-				bus = (TileEntityPowerBus)te;
+				TileEntityPowerBus bus = (TileEntityPowerBus)te;
 				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[data[0]+2];
 				bus.setMode(dir, !bus.isSideSpeedMode(dir));
 				break;
 			case PARTICLES:
-				emitter = (TileEntityParticleEmitter)te;
-				emitter.particleType = ReikaParticleHelper.particleList[data[0]];
+				((TileEntityParticleEmitter)te).particleType = ReikaParticleHelper.particleList[data[0]];
 				break;
 			case BLOWER:
-				blower = (TileEntityBlower)te;
+				TileEntityBlower blower = (TileEntityBlower)te;
 				if (control == PacketRegistry.BLOWER.getMinValue()) {
 					blower.isWhitelist = !blower.isWhitelist;
 				}
@@ -570,17 +521,15 @@ public class PacketHandlerCore implements IPacketHandler {
 				}
 				break;
 			case DEFOLIATOR:
-				defo = (TileEntityDefoliator)te;
-				defo.onBlockBreak(world, data[0], data[1], data[2]);
+				((TileEntityDefoliator)te).onBlockBreak(world, data[0], data[1], data[2]);
 				break;
 			case GPR:
-				gpr = (TileEntityGPR)te;
+				TileEntityGPR gpr = (TileEntityGPR)te;
 				int direction = data[0];
 				gpr.shift(gpr.getGuiDirection(), direction);
 				break;
 			case CRAFTER:
-				crafter = (TileEntityAutoCrafter)te;
-				crafter.triggerCraftingCycle(data[0]);
+				((TileEntityAutoCrafter)te).triggerCraftingCycle(data[0]);
 				break;
 			case POWERSYNC:
 				TileEntityIOMachine io = (TileEntityIOMachine)te;
@@ -591,6 +540,9 @@ public class PacketHandlerCore implements IPacketHandler {
 				break;
 			case AFTERBURN:
 				((TileEntityJetEngine)te).burnerActive = data[0] > 0;
+				break;
+			case PIPEEXPLODE:
+				((TileEntityPiping)te).overpressure(world, x, y, z);
 				break;
 			}
 		}

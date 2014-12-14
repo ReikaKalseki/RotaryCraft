@@ -27,14 +27,17 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection {
 
@@ -62,7 +65,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		return MAXPRESSURE;
 	}
 
-	private void overpressure(World world, int x, int y, int z) {
+	public void overpressure(World world, int x, int y, int z) {
 		Fluid f = this.getFluidType();
 		if (!world.isRemote) {
 			if (f.canBePlacedInWorld()) {
@@ -140,7 +143,12 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		}
 
 		if (this.getPressure() > this.getMaxPressure()) {
-			this.overpressure(world, x, y, z);
+			if (world.isRemote) {
+				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PIPEEXPLODE.getMinValue(), this);
+			}
+			else {
+				this.overpressure(world, x, y, z);
+			}
 		}
 	}
 

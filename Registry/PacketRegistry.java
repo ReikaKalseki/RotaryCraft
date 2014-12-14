@@ -50,7 +50,8 @@ public enum PacketRegistry {
 	GPR(69),
 	CRAFTER(70),
 	POWERSYNC(71),
-	AFTERBURN(72);
+	AFTERBURN(72),
+	PIPEEXPLODE(73);
 
 	private int min;
 	private int max;

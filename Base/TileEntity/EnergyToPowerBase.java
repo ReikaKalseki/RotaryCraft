@@ -505,7 +505,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 			temperature--;
 		if (temperature > 500) {
 			temperature = 500;
-			this.overheat(world, x, y, z);
+			if (!world.isRemote)
+				this.overheat(world, x, y, z);
 		}
 		if (temperature < Tamb)
 			temperature = Tamb;
