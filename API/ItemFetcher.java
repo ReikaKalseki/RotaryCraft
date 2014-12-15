@@ -50,7 +50,7 @@ public class ItemFetcher {
 
 	/** For fetching items by enum ordinal */
 	public static Item getItemByOrdinal(int ordinal) {
-		return itemList[ordinal];
+		return itemList != null ? itemList[ordinal] : null;
 	}
 
 	public static Item getItemByUnlocalizedName(String name) {
