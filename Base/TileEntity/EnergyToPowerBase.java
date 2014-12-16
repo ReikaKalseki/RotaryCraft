@@ -457,12 +457,12 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.HOSE;
+		return m == MachineRegistry.PIPE;
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return p == MachineRegistry.HOSE;
+		return p == MachineRegistry.PIPE;
 	}
 
 	@Override

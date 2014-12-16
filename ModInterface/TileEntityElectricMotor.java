@@ -156,8 +156,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 		//	//ReikaJavaLibrary.pConsole(tier+":"+tier1);
 		//	return 0;
 		//}
-		double energy = amount*ReikaEUHelper.WATTS_PER_EU;
-		double add = Math.min(energy, this.getMaxStorage()-storedEnergy);
+		double add = Math.min(amount, this.getMaxStorage()-storedEnergy);
 		storedEnergy += add;
 		return add;
 	}

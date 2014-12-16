@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -24,6 +25,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -59,9 +61,9 @@ TemperatureTE {
 	private boolean canEmitPower(World world, int x, int y, int z) {
 		if (tank.isEmpty())
 			return false;
-		if (world.provider instanceof IGalacticraftWorldProvider) {
+		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			if (ig.getSoundVolReductionAmount() > 1)
+			if (!ig.hasBreathableAtmosphere() || !ig.isGasPresent(IAtmosphericGas.OXYGEN))
 				return false;
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
