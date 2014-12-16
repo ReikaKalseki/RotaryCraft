@@ -34,7 +34,6 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
@@ -540,9 +539,6 @@ public class PacketHandlerCore implements IPacketHandler {
 				break;
 			case AFTERBURN:
 				((TileEntityJetEngine)te).burnerActive = data[0] > 0;
-				break;
-			case PIPEEXPLODE:
-				((TileEntityPiping)te).overpressure(world, x, y, z);
 				break;
 			}
 		}

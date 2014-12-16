@@ -151,11 +151,11 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
 		int tier = ReikaEUHelper.getIC2TierFromEUVoltage(voltage);
 		int tier1 = this.getScaledTier();
-		if (tier != tier1) {
-			this.onWrongVoltage(tier, tier1);
-			//ReikaJavaLibrary.pConsole(tier+":"+tier1);
-			return 0;
-		}
+		//if (tier != tier1) {
+		//	this.onWrongVoltage(tier, tier1);
+		//	//ReikaJavaLibrary.pConsole(tier+":"+tier1);
+		//	return 0;
+		//}
 		double energy = amount*ReikaEUHelper.WATTS_PER_EU;
 		double add = Math.min(energy, this.getMaxStorage()-storedEnergy);
 		storedEnergy += add;

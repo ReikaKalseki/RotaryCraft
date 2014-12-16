@@ -279,7 +279,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	public final boolean hasEnoughEnergy() {
 		float energy = this.getStoredPower();
-		return energy >= this.getConsumedUnitsPerTick();
+		return energy > this.getConsumedUnitsPerTick();
 	}
 
 	protected abstract int getIdealConsumedUnitsPerTick();

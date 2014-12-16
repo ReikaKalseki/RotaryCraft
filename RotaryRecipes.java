@@ -1064,6 +1064,8 @@ public class RotaryRecipes {
 		}
 		if (item.getItem() == ItemRegistry.MODINGOTS.getItemInstance())
 			item = null;
+		if (ReikaItemHelper.matchStacks(item, ItemStacks.steelingot))
+			item = null;
 		return item != null ? item.copy() : ReikaItemHelper.stoneBricks.copy();
 	}
 }

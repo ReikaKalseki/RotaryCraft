@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Base;
 
 import java.util.List;
 
+import minechem.api.IDecomposerControl;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,14 +19,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ModInteract.RailcraftHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
-//@Strippable(value = {"minechem.api.IDecomposerControl"})
-public abstract class ItemBlockPlacer extends ItemBasic/* implements IDecomposerControl*/ {
+@Strippable(value = {"minechem.api.IDecomposerControl"})
+public abstract class ItemBlockPlacer extends ItemBasic implements IDecomposerControl {
 
 	public ItemBlockPlacer() {
 		super(0);
