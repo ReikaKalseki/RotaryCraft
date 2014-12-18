@@ -994,7 +994,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return this.getGearType().isLubricated() ? FluidRegistry.getFluid("lubricant").equals(fluid) : false;
+		return this.getGearType().consumesLubricant() ? FluidRegistry.getFluid("lubricant").equals(fluid) : false;
 	}
 
 	@Override
@@ -1004,17 +1004,17 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return this.getGearType().isLubricated() ? new FluidTankInfo[]{lubricant.getInfo()} : null;
+		return this.getGearType().consumesLubricant() ? new FluidTankInfo[]{lubricant.getInfo()} : null;
 	}
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return this.getGearType().isLubricated() ? m == MachineRegistry.HOSE : false;
+		return this.getGearType().consumesLubricant() ? m == MachineRegistry.HOSE : false;
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.getGearType().isLubricated() ? p == MachineRegistry.HOSE : false;
+		return this.getGearType().consumesLubricant() ? p == MachineRegistry.HOSE : false;
 	}
 
 	@Override

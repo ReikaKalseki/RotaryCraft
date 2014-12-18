@@ -37,9 +37,11 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
-		AxisAlignedBB box = this.getBox();
-		List<EntityItem> li = world.getEntitiesWithinAABB(EntityItem.class, box);
-		this.sortItems(world, x, y, z, li);
+		if (!world.isRemote) {
+			AxisAlignedBB box = this.getBox();
+			List<EntityItem> li = world.getEntitiesWithinAABB(EntityItem.class, box);
+			this.sortItems(world, x, y, z, li);
+		}
 		//ReikaJavaLibrary.pConsole(this.getSide()+": "+Arrays.deepToString(mappings));
 	}
 
@@ -63,26 +65,22 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 
 	private void sortItems(World world, int x, int y, int z, List<EntityItem> li) {
 		for (EntityItem ei : li) {
-			ItemStack eis = ei.getEntityItem();
-			ItemStack is = eis.copy();
-			if (eis.stackSize <= 1)
+			ItemStack is = ei.getEntityItem();
+			if (is.stackSize <= 1)
 				ei.setDead();
 			else {
-				ItemStack eis2 = eis.copy();
-				eis2.stackSize--;
-				ei.setEntityItemStack(eis2);
+				is.stackSize--;
 			}
 			ForgeDirection dir = this.getSideForItem(is);
 			double dx = x+0.5+dir.offsetX*0.75;
 			double dy = y+0.5+dir.offsetY*0.75;
 			double dz = z+0.5+dir.offsetZ*0.75;
-			EntityItem e = new EntityItem(world, dx, dy, dz, is);
+			EntityItem e = new EntityItem(world, dx, dy, dz, ReikaItemHelper.getSizedItemStack(is, 1));
 			double v = 0.1;
 			e.motionX = dir.offsetX*v;
 			e.motionY = dir.offsetY*v;
 			e.motionZ = dir.offsetZ*v;
-			if (!world.isRemote)
-				world.spawnEntityInWorld(e);
+			world.spawnEntityInWorld(e);
 		}
 	}
 

@@ -21,10 +21,7 @@ public class ExtractorModOres {
 
 	public static void registerRCIngots() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			String[] ingots = ModOreList.oreList[i].getOreDictIngots();
-			for (int j = 0; j < ingots.length; j++) {
-				OreDictionary.registerOre(ingots[j], ItemRegistry.MODINGOTS.getStackOfMetadata(i));
-			}
+			OreDictionary.registerOre(ModOreList.oreList[i].getProductOreDictName(), ItemRegistry.MODINGOTS.getStackOfMetadata(i));
 		}
 	}
 

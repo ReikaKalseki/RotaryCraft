@@ -94,16 +94,13 @@ public class RotaryRecipes {
 	private static void addCompat() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
-			String[] tags = ore.getOreDictIngots();
-			for (int k = 0; k < tags.length; k++) {
-				String tag = tags[k];
-				ArrayList<ItemStack> in = OreDictionary.getOres(tag);
-				for (int h = 0; h < in.size(); h++) {
-					ItemStack from = in.get(h);
-					ItemStack to = ItemStacks.getModOreIngot(ore);
-					if (!ItemRegistry.MODINGOTS.matchItem(from))
-						GameRegistry.addShapelessRecipe(to, from);
-				}
+			String tag = ore.getProductOreDictName();
+			ArrayList<ItemStack> in = OreDictionary.getOres(tag);
+			for (int h = 0; h < in.size(); h++) {
+				ItemStack from = in.get(h);
+				ItemStack to = ItemStacks.getModOreIngot(ore);
+				if (!ItemRegistry.MODINGOTS.matchItem(from))
+					GameRegistry.addShapelessRecipe(to, from);
 			}
 		}
 	}

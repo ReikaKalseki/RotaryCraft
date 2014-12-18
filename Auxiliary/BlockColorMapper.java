@@ -214,7 +214,7 @@ public class BlockColorMapper {
 		this.addBlockColor(Blocks.activator_rail, ReikaColorAPI.RGBtoHex(183, 12, 12));
 		this.addBlockMimic(Blocks.dropper, Blocks.dispenser);
 
-		this.addBlockColor(Blocks.stained_hardened_clay, ReikaColorAPI.RGBtoHex(183, 12, 12));
+		this.addBlockColor(Blocks.stained_hardened_clay, ReikaColorAPI.RGBtoHex(204, 172, 156));
 		this.addBlockColor(Blocks.hay_block, ReikaColorAPI.RGBtoHex(255, 209, 94));
 
 		/*
