@@ -24,6 +24,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHandler, PipeConnector {
@@ -61,8 +62,11 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 		tickcount++;
 		if (!tank.isEmpty()) {
 			if (blocks.isEmpty()) {
-				blocks.recursiveAddWithBounds(world, x, y-1, z, Blocks.air, x-16, 0, z-16, x+16, y-1, z+16);
-				blocks.recursiveAddWithBounds(world, x, y-1, z, this.getFluidID(), x-16, 0, z-16, x+16, y-1, z+16);
+				int r = ConfigRegistry.SPILLERRANGE.getValue();
+				if (r > 0) {
+					blocks.recursiveAddWithBounds(world, x, y-1, z, Blocks.air, x-r, 0, z-r, x+r, y-1, z+r);
+					blocks.recursiveAddWithBounds(world, x, y-1, z, this.getFluidID(), x-r, 0, z-r, x+r, y-1, z+r);
+				}
 				blocks.sortBlocksByHeight();
 			}
 			boolean drain = false;
@@ -96,9 +100,6 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 		return tank.getActualFluid().equals(f);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{

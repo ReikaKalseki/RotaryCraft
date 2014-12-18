@@ -89,7 +89,8 @@ public enum ConfigRegistry implements ConfigList {
 	HARDEU("Hard Mode EU Compatibility", ModList.GREGTECH.isLoaded()),
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
 	BLASTMAT("Blast Furnace Crafting Material", 0),
-	FRICTIONXP("Spawn XP from Friction Heater", true);
+	FRICTIONXP("Spawn XP from Friction Heater", true),
+	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16);
 
 	private String label;
 	private boolean defaultState;
