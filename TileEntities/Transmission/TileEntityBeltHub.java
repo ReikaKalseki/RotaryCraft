@@ -16,8 +16,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.Connectable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.PowerGenerator;
 import Reika.RotaryCraft.API.ShaftMerger;
@@ -31,7 +33,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider, TransmissionReceiver,
-Connectable {
+Connectable, BreakAction {
 
 	public boolean isEmitting;
 	private int wetTimer = 0;
@@ -448,4 +450,17 @@ Connectable {
 		return isEmitting;
 	}
 
+	@Override
+	public final void breakBlock() {
+		if (!worldObj.isRemote) {
+			int num = this.getDistanceToTarget()-1;
+			num = Math.min(num, ItemStacks.belt.getMaxStackSize());
+			if (!this.shouldRenderBelt())
+				num = 0;
+			for (int i = 0; i < num; i++) {
+				ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, this.getBeltItem());
+			}
+			this.resetOther();
+		}
+	}
 }

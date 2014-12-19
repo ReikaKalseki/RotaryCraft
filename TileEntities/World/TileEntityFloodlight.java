@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -23,7 +24,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFloodlight extends TileEntityBeamMachine implements RangedEffect {
+public class TileEntityFloodlight extends TileEntityBeamMachine implements RangedEffect, BreakAction {
 
 	public int distancelimit = Math.max(64, ConfigRegistry.FLOODLIGHTRANGE.getValue());
 	public boolean beammode = false;
@@ -165,5 +166,10 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public void breakBlock() {
+		this.lightsOut(worldObj, xCoord, yCoord, zCoord);
 	}
 }

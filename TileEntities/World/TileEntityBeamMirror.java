@@ -18,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -28,7 +29,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBeamMirror extends RotaryCraftTileEntity implements RangedEffect {
+public class TileEntityBeamMirror extends RotaryCraftTileEntity implements RangedEffect, BreakAction {
 
 	public float theta;
 
@@ -186,7 +187,7 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 		return Math.max(ConfigRegistry.FLOODLIGHTRANGE.getValue(), 64);
 	}
 
-	public void lightsOut() {
+	private void lightsOut() {
 		World world = worldObj;
 		for (int i = 0; i < light.getSize(); i++) {
 			int[] xyz = light.getNthBlock(i);
@@ -196,6 +197,11 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 				world.func_147479_m(xyz[0], xyz[1], xyz[2]);
 			}
 		}
+	}
+
+	@Override
+	public void breakBlock() {
+		this.lightsOut();
 	}
 
 }

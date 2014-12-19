@@ -179,4 +179,9 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		return false;
 	}
 
+	@Override
+	public boolean doPreGLTransforms(ItemStack is, ItemRenderType type) {
+		return true;
+	}
+
 }

@@ -37,6 +37,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	public boolean continuous = true;
 	private final ItemCollection ingredients = new ItemCollection();
 	public int[] crafting = new int[18];
+
 	@ModDependent(ModList.APPENG)
 	private MENetwork network;
 
@@ -250,9 +251,16 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 					}
 				}
 			}
+			this.addContainers(is, req, slot-18);
 		}
 		crafting[slot-18] = 5;
 		this.markDirty();
+	}
+
+	private void addContainers(ItemStack is, int req, int slot) {
+		ItemStack con = is.getItem().getContainerItem(is);
+		if (con != null)
+			inv[36+slot] = ReikaItemHelper.getSizedItemStack(con, req);
 	}
 
 	private boolean hasIngredient(ItemStack is) {
@@ -266,7 +274,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 
 	@Override
 	public int getSizeInventory() {
-		return 46;
+		return 18+18+18; //18 for patterns, 18 for output, additional 18 for container items; last 18 is hidden
 	}
 
 	@Override

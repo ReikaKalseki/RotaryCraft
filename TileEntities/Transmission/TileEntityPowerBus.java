@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -30,7 +31,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 
-public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv {
+public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv, BreakAction {
 
 	private HashMap<ForgeDirection, Boolean> modes = new HashMap();
 
@@ -307,7 +308,7 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 		hubZ = hub.zCoord;
 	}
 
-	public void removeFromBus() {
+	private void removeFromBus() {
 		if (bus != null)
 			bus.removeBlock(this);
 	}
@@ -331,5 +332,10 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	@Override
 	public boolean canProvidePower() {
 		return true;
+	}
+
+	@Override
+	public void breakBlock() {
+		this.removeFromBus();
 	}
 }

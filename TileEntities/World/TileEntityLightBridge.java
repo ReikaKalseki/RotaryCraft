@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Event.LightBridgePowerLossEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -23,7 +24,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 
-public class TileEntityLightBridge extends TileEntityBeamMachine implements RangedEffect {
+public class TileEntityLightBridge extends TileEntityBeamMachine implements RangedEffect, BreakAction {
 
 	private int animtick = 0;
 
@@ -94,7 +95,7 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 		}
 	}
 
-	public void lightsOut(World world, int x, int y, int z) {
+	private void lightsOut(World world, int x, int y, int z) {
 		//ReikaChatHelper.writeInt(44);
 		animtick = 0;
 		int dir = 0;
@@ -169,5 +170,10 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public void breakBlock() {
+		this.lightsOut(worldObj, xCoord, yCoord, zCoord);
 	}
 }

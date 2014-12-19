@@ -28,6 +28,7 @@ import Reika.DragonAPI.APIPacketHandler.PacketIDs;
 import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
@@ -37,7 +38,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection {
+public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection, BreakAction {
 
 	public static final int UPPRESSURE = 40;
 	public static final int HORIZPRESSURE = 20;
@@ -515,6 +516,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	@Override
 	public IIcon getOverlayIcon() {
 		return null;
+	}
+
+	public void breakBlock() {
+		this.deleteFromAdjacentConnections(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public static enum TransferAmount {

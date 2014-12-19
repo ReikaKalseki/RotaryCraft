@@ -24,6 +24,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -36,7 +37,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect/*, IFluidHandler*/ {
+public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction/*, IFluidHandler*/ {
 
 	private int experience = 0;
 	public boolean equidistant = true;
@@ -325,4 +326,9 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{};
 	}*/
+
+	@Override
+	public void breakBlock() {
+		ReikaWorldHelper.splitAndSpawnXP(worldObj, xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), experience);
+	}
 }

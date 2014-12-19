@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -40,7 +41,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController {
+public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController, BreakAction {
 
 	/** 16 channels, 7 voices, 64 pitch states */
 	private final ArrayList<Note>[] musicQueue;
@@ -392,7 +393,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}
 	}
 
-	public void deleteFiles(int x, int y, int z) {
+	private void deleteFiles(int x, int y, int z) {
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
@@ -585,6 +586,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		public String toString() {
 			return this.name();
 		}
+	}
+
+	@Override
+	public void breakBlock() {
+		this.deleteFiles(xCoord, yCoord, zCoord);
 	}
 
 }

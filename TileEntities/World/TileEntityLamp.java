@@ -15,13 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv, RangedEffect, OneSlotMachine {
+public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv, RangedEffect, OneSlotMachine, BreakAction {
 
 	private BlockArray light = new BlockArray();
 
@@ -159,7 +160,7 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 		return MAXRANGE;
 	}
 
-	public void clearAll() {
+	private void clearAll() {
 		for (int k = 0; k < light.getSize(); k++) {
 			int[] ijk = light.getNthBlock(k);
 			worldObj.setBlockToAir(ijk[0], ijk[1], ijk[2]);
@@ -169,6 +170,11 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 	@Override
 	public int getBaseDischargeTime() {
 		return 120;
+	}
+
+	@Override
+	public void breakBlock() {
+		this.clearAll();
 	}
 
 }

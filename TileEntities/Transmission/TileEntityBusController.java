@@ -16,13 +16,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBusController extends PoweredLiquidReceiver implements TransmissionReceiver {
+public class TileEntityBusController extends PoweredLiquidReceiver implements TransmissionReceiver, BreakAction {
 
 	private ShaftPowerBus bus = new ShaftPowerBus(this);
 
@@ -99,7 +100,7 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 		return bus;
 	}
 
-	public void clear() {
+	private void clear() {
 		bus.clear();
 		bus = null;
 	}
@@ -136,6 +137,11 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 	@Override
 	public int getCapacity() {
 		return 8000;
+	}
+
+	@Override
+	public void breakBlock() {
+		this.clear();
 	}
 
 }

@@ -35,6 +35,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -252,6 +253,9 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IInventory)
 			ReikaItemHelper.dropInventory(world, x, y, z);
+		if (te instanceof BreakAction) {
+			((BreakAction)te).breakBlock();
+		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 

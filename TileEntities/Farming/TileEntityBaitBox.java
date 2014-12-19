@@ -29,6 +29,7 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -38,7 +39,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
-public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
+public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation, BreakAction {
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
@@ -80,7 +81,8 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 		tickcount = 0;
 	}
 
-	public void onBreak() {
+	@Override
+	public void breakBlock() {
 		paths.clear();
 	}
 

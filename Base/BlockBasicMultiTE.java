@@ -53,6 +53,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -64,7 +65,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -93,12 +93,10 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
-import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
-import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
@@ -112,17 +110,11 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
-import Reika.RotaryCraft.TileEntities.World.TileEntityBeamMirror;
-import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
-import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
-import Reika.RotaryCraft.TileEntities.World.TileEntityLightBridge;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
@@ -661,54 +653,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IInventory && !(te instanceof TileEntityScaleableChest))
 			ReikaItemHelper.dropInventory(world, x, y, z);
-		if (te instanceof TileEntityVacuum) {
-			ReikaWorldHelper.splitAndSpawnXP(world, x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), ((TileEntityVacuum)(te)).getExperience());
+		if (te instanceof BreakAction) {
+			((BreakAction)te).breakBlock();
 		}
-		if (te instanceof TileEntityLightBridge) {
-			((TileEntityLightBridge)te).lightsOut(world, x, y, z);
-		}
-		if (te instanceof TileEntityFloodlight) {
-			((TileEntityFloodlight)te).lightsOut(world, x, y, z);
-		}
-		if (te instanceof TileEntityMusicBox) {
-			((TileEntityMusicBox)te).deleteFiles(x, y, z);
-		}
-		if (te instanceof TileEntityLamp) {
-			((TileEntityLamp)te).clearAll();
-		}
-		if (te instanceof TileEntityBaitBox) {
-			((TileEntityBaitBox)te).onBreak();
-		}
-		if (te instanceof TileEntityBeamMirror) {
-			((TileEntityBeamMirror)te).lightsOut();
-		}
-		if (te instanceof TileEntityPowerBus) {
-			((TileEntityPowerBus)te).removeFromBus();
-		}
-		if (te instanceof TileEntityBusController) {
-			((TileEntityBusController)te).clear();
-		}
-		if (te instanceof TileEntityPiping) {
-			((TileEntityPiping)te).deleteFromAdjacentConnections(world, x, y, z);
-		}
-		if (te instanceof TileEntityBeltHub) {
-			TileEntityBeltHub tile = (TileEntityBeltHub)te;
-			if (!world.isRemote) {
-				int num = tile.getDistanceToTarget()-1;
-				num = Math.min(num, ItemStacks.belt.getMaxStackSize());
-				if (!tile.shouldRenderBelt())
-					num = 0;
-				for (int i = 0; i < num; i++) {
-					ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, tile.getBeltItem());
-				}
-			}
-			tile.resetOther();
-		}/*
-		if (te instanceof TileEntityAutoCrafter) {
-			TileEntityAutoCrafter tile = (TileEntityAutoCrafter)te;
-			ArrayList<ItemStack> li = tile.getAllIngredients();
-			//ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-		}*/
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
