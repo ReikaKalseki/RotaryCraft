@@ -76,7 +76,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			for (int j = -3; j <= 3; j++) {
 				if (ConfigRegistry.BLOCKDAMAGE.getState()) {
 					ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, Math.min(temp, 1750));
-					if (temp >= 1900) {
+					if (temp >= 1800) {
 						this.delete();
 						world.setBlock(x, y, z, Blocks.flowing_lava);
 					}
