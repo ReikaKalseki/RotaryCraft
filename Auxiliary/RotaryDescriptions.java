@@ -15,7 +15,9 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import Reika.DragonAPI.Instantiable.Event.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -63,12 +65,13 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public final class RotaryDescriptions {
 
-	public static final String PARENT = getParent();
-	public static final String DESC_SUFFIX = ":desc";
-	public static final String NOTE_SUFFIX = ":note";
+	private static String PARENT = getParent();
+	private static final String DESC_SUFFIX = ":desc";
+	private static final String NOTE_SUFFIX = ":note";
 
 	private static HashMap<HandbookRegistry, String> data = new HashMap<HandbookRegistry, String>();
 	private static HashMap<HandbookRegistry, String> notes = new HashMap<HandbookRegistry, String>();
@@ -149,6 +152,8 @@ public final class RotaryDescriptions {
 
 	/** Call this from the SERVER side! */
 	public static void reload() {
+		PARENT = getParent();
+
 		loadNumericalData();
 
 		machines.reread();
@@ -296,6 +301,17 @@ public final class RotaryDescriptions {
 
 	static {
 		loadNumericalData();
+
+		MinecraftForge.EVENT_BUS.register(new ReloadListener());
+	}
+
+	private static class ReloadListener {
+
+		@SubscribeEvent
+		public void reload(ResourceReloadEvent evt) {
+			RotaryDescriptions.reload();
+		}
+
 	}
 
 	private static void loadNumericalData() {
@@ -457,5 +473,9 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.CENTRIFUGE, PowerReceivers.CENTRIFUGE.getMinPower(), PowerReceivers.CENTRIFUGE.getMinSpeed());
 
 		addData(HandbookRegistry.TUNGSTEN, RecipesFrictionHeater.getRecipes().getRecipeByInput(ItemStacks.tungstenflakes).requiredTemperature);
+	}
+
+	public static String getParentPage() {
+		return PARENT;
 	}
 }

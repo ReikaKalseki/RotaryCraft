@@ -179,7 +179,7 @@ public class RotaryRecipes {
 				CustomThaumResearch res = new CustomThaumResearch("BEDREVEAL", "rotarycraft", al, 0, 0, 0, out).setName(name);
 				res.setDescription("Combining the protection of bedrock with the power of a Thaumometer");
 				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-					String path = RotaryDescriptions.PARENT+"thaum.xml";
+					String path = RotaryDescriptions.getParentPage()+"thaum.xml";
 					XMLResearch xml = new XMLResearch("bedreveal", RotaryCraft.class, path, ir, 2);
 					res.setPages(xml.getPages());
 				}

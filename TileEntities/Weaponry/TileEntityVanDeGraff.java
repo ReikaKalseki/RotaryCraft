@@ -123,7 +123,8 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 
 	private void detonate(World world, int x, int y, int z) {
 		EntityLightningBolt b = new EntityLightningBolt(world, x+0.5, y, z+0.5);
-		world.spawnEntityInWorld(b);
+		//world.spawnEntityInWorld(b);
+		world.addWeatherEffect(b);
 		charge = 0;
 		world.setBlockToAir(x, y, z);
 		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4F, true, true);
