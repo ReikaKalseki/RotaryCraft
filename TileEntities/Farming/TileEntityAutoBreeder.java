@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -56,17 +57,13 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 	}
 
 	public void testIdle() {
-		boolean wheat = false;
-		boolean carrot = false;
-		boolean meat = false;
-		boolean fish = false;
-		boolean seed = false;
-		wheat = ReikaInventoryHelper.checkForItem(Items.wheat, inv);
-		carrot = ReikaInventoryHelper.checkForItem(Items.carrot, inv);
-		meat = ReikaInventoryHelper.checkForItem(Items.porkchop, inv);
-		fish = ReikaInventoryHelper.checkForItem(Items.fish, inv);
-		seed = ReikaInventoryHelper.checkForItem(Items.wheat_seeds, inv);
-		idle = (!wheat && !carrot && !meat && !fish && !seed);
+		boolean wheat = ReikaInventoryHelper.checkForItem(Items.wheat, inv);
+		boolean carrot = ReikaInventoryHelper.checkForItem(Items.carrot, inv);
+		boolean meat = ReikaInventoryHelper.checkForItem(Items.porkchop, inv);
+		boolean fish = ReikaInventoryHelper.checkForItem(Items.fish, inv);
+		boolean seed = ReikaInventoryHelper.checkForItem(Items.wheat_seeds, inv);
+		boolean emerald = ReikaInventoryHelper.checkForItem(Items.emerald, inv);
+		idle = !wheat && !carrot && !meat && !fish && !seed && !emerald;
 	}
 
 	@Override
@@ -80,6 +77,44 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		this.testIdle();
 		List<EntityAnimal> inrange = this.getEntities(world, x, y, z);
 		this.breed(world, x, y, z, inrange);
+		if (this.canBreedVillagers()) {
+			this.breedVillagers(world, x, y, z);
+		}
+	}
+
+	private void breedVillagers(World world, int x, int y, int z) {
+		AxisAlignedBB room = this.getBox(x, y, z, this.getRange());
+		List<EntityVillager> inroom = world.getEntitiesWithinAABB(EntityVillager.class, room);
+		boolean pathing = false;
+		if (tickcount >= 20) {
+			tickcount = 0;
+			pathing = true;
+		}
+		for (EntityVillager ent : inroom) {
+			if (!ent.isMating() && !ent.isChild() && pathing && ent.getGrowingAge() == 0) {
+				ent.getNavigator().clearPathEntity();
+				PathEntity path = ent.getNavigator().getPathToXYZ(x, y, z);
+				ent.getNavigator().setPath(path, 1F);
+			}
+			else if (pathing) {
+				ent.getNavigator().clearPathEntity();
+			}
+			if (!ent.isChild() && ent.getGrowingAge() <= 0 && ReikaMathLibrary.py3d(x-ent.posX, y-ent.posY, z-ent.posZ) <= 2.4) {
+				if (!ent.isMating())
+					ReikaInventoryHelper.decrStack(ReikaInventoryHelper.locateInInventory(Items.emerald, inv), inv);
+				ent.setMating(true);
+				for (int var3 = 0; var3 < 1; var3++) {
+					double var4 = rand.nextGaussian() * 0.02D;
+					double var6 = rand.nextGaussian() * 0.02D;
+					double var8 = rand.nextGaussian() * 0.02D;
+					ent.worldObj.spawnParticle("heart", ent.posX + rand.nextFloat() * ent.width * 2.0F - ent.width, ent.posY + 0.5D + rand.nextFloat() * ent.height, ent.posZ + rand.nextFloat() * ent.width * 2.0F - ent.width, var4, var6, var8);
+				}
+			}
+		}
+	}
+
+	private boolean canBreedVillagers() {
+		return ReikaInventoryHelper.checkForItem(Items.emerald, inv);
 	}
 
 	private boolean canBreed(EntityAnimal ent) {
@@ -134,8 +169,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 						if (!ent.isInLove())
 							this.useFeedItem(ent);
 						ent.inLove = 600;
-						for (int var3 = 0; var3 < 1; ++var3)
-						{
+						for (int var3 = 0; var3 < 1; var3++) {
 							double var4 = rand.nextGaussian() * 0.02D;
 							double var6 = rand.nextGaussian() * 0.02D;
 							double var8 = rand.nextGaussian() * 0.02D;
@@ -230,7 +264,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		Item i = is.getItem();
-		return (i == Items.wheat || i == Items.carrot || i == Items.fish || i == Items.wheat_seeds || i == Items.porkchop);
+		return i == Items.wheat || i == Items.carrot || i == Items.fish || i == Items.wheat_seeds || i == Items.porkchop || i == Items.emerald;
 	}
 
 	@Override

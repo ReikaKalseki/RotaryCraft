@@ -89,9 +89,7 @@ public class RecipesBlastFurnace
 		}
 
 		public ItemStack[] getArrayForDisplay() {
-			ItemStack[] iss = new ItemStack[9];
-			ReikaRecipeHelper.copyRecipeToItemStackArray(iss, recipe);
-			return iss;
+			return ReikaRecipeHelper.getPermutedRecipeArray(recipe);
 		}
 
 		@Override
@@ -104,9 +102,7 @@ public class RecipesBlastFurnace
 			}*/
 			if (slot == TileEntityBlastFurnace.SLOT_1 || slot > 9)
 				return false;
-			ItemStack[] items = new ItemStack[9];
-			ReikaRecipeHelper.copyRecipeToItemStackArray(items, recipe);
-			return ReikaItemHelper.matchStacks(is, items[slot-1]);
+			return ReikaRecipeHelper.getRecipeLocationIndex(recipe, is) == slot-1;
 		}
 
 		@Override

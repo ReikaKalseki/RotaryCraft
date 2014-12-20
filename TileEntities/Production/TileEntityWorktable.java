@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -189,15 +191,16 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 					if (ir == null)
 						return false;
 					else {
-						ItemStack[] in = new ItemStack[9];
-						ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
+						List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
 						boolean flag = true;
 						for (int k = 0; k < 9; k++) {
-							if (inv[k+9] != null) {
-								if (!ReikaItemHelper.matchStacks(inv[k+9], in[k]))
-									flag = false;
-								if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
-									flag = false;
+							if (in[k] != null && !in[k].isEmpty()) {
+								if (inv[k+9] != null) {
+									if (!ReikaItemHelper.listContainsItemStack(in[k], inv[k+9]))
+										flag = false;
+									if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
+										flag = false;
+								}
 							}
 						}
 						can = flag;
@@ -239,18 +242,19 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	private void uncraft() {
 		ItemStack is = inv[4];
 		IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
-		ItemStack[] in = new ItemStack[9];
-		ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
+		List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
 
 		for (int i = 0; i < ir.getRecipeOutput().stackSize; i++)
 			ReikaInventoryHelper.decrStack(4, inv);
 
 		for (int i = 0; i < 9; i++) {
-			if (inv[i+9] == null) {
-				inv[i+9] = in[i];
-			}
-			else {
-				inv[i+9] = ReikaItemHelper.getSizedItemStack(inv[i+9], inv[i+9].stackSize+1);
+			if (in[i] != null && !in[i].isEmpty()) {
+				if (inv[i+9] == null) {
+					inv[i+9] = in[i].get(0).copy();
+				}
+				else {
+					++inv[i+9].stackSize;
+				}
 			}
 		}
 	}

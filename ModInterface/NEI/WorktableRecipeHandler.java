@@ -48,8 +48,7 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 		public ArrayList<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			ItemStack[] in = new ItemStack[9];
-			ReikaRecipeHelper.copyRecipeToItemStackArray(in, recipe);
+			ItemStack[] in = ReikaRecipeHelper.getPermutedRecipeArray(recipe);
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					ItemStack is = in[i*3+j];
@@ -114,13 +113,8 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 		List<IRecipe> li = WorktableRecipes.getInstance().getRecipeListCopy();
 		for (int i = 0; i < li.size(); i++) {
 			IRecipe ir = li.get(i);
-			ItemStack[] in = new ItemStack[9];
-			ReikaRecipeHelper.copyRecipeToItemStackArray(in, ir);
-			for (int k = 0; k < 9; k++) {
-				if (ReikaItemHelper.matchStacks(ingredient, in[k])) {
-					arecipes.add(new WorktableRecipe(ir));
-					k = 9;
-				}
+			if (ReikaRecipeHelper.recipeContains(ir, ingredient)) {
+				arecipes.add(new WorktableRecipe(ir));
 			}
 		}
 	}
