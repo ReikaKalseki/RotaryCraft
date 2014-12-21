@@ -290,8 +290,6 @@ public class RotaryCraft extends DragonAPIMod {
 			logger.log(String.format("Extra iron ore gen enabled, with a scaling factor of %.1fx.", iron));
 		}
 
-		BlockRegistry.BLASTPANE.getBlockInstance().setHarvestLevel("pickaxe", 3);
-		BlockRegistry.BLASTGLASS.getBlockInstance().setHarvestLevel("pickaxe", 3);
 		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
 
 		//MinecraftForge.setToolClass(ItemRegistry.STEELAXE.getItemInstance(), "axe", 2);

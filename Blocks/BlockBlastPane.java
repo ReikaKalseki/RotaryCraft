@@ -37,6 +37,7 @@ public class BlockBlastPane extends BlockPane implements SidedTextureIndex {
 		////this.requiresSelfNotify[this.blockID] = true;
 		//this.blockIndexInTexture = 74;
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotary);
+		this.setHarvestLevel("pickaxe", 3);
 	}
 
 	@Override

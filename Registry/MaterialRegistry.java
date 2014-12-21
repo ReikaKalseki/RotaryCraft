@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -103,20 +104,21 @@ public enum MaterialRegistry {
 			return true;
 		if (tool == null)
 			return false;
-		if (tool.getItem() == ItemRegistry.BEDPICK.getItemInstance())
+		Item item = tool.getItem();
+		if (item == ItemRegistry.BEDPICK.getItemInstance())
 			return true;
-		if (tool.getItem() == ItemRegistry.STEELPICK.getItemInstance())
+		if (item == ItemRegistry.STEELPICK.getItemInstance())
 			return true;
-		if (tool.getItem() instanceof ItemPickaxe) {
+		if (item instanceof ItemPickaxe) {
 			switch(this) {
 			case STONE:
 				return true;
 			case STEEL:
-				return tool.getItem().canHarvestBlock(Blocks.iron_ore, tool);
+				return item.canHarvestBlock(Blocks.iron_ore, tool);
 			case DIAMOND:
-				return tool.getItem().canHarvestBlock(Blocks.diamond_ore, tool);
+				return item.canHarvestBlock(Blocks.diamond_ore, tool);
 			case BEDROCK:
-				return tool.getItem().canHarvestBlock(Blocks.obsidian, tool);
+				return item.canHarvestBlock(Blocks.obsidian, tool);
 			default:
 				return false;
 			}
@@ -140,17 +142,29 @@ public enum MaterialRegistry {
 			case STONE:
 				return true;
 			case STEEL:
-				return tool.getItem().canHarvestBlock(Blocks.iron_ore, tool);
+				return item.canHarvestBlock(Blocks.iron_ore, tool);
 			case DIAMOND:
-				return tool.getItem().canHarvestBlock(Blocks.diamond_ore, tool);
+				return item.canHarvestBlock(Blocks.diamond_ore, tool);
 			case BEDROCK:
-				return tool.getItem().canHarvestBlock(Blocks.obsidian, tool);
+				return item.canHarvestBlock(Blocks.obsidian, tool);
 			default:
 				return false;
 			}
 		}
-		if (tool.getItem() == RedstoneArsenalHandler.getInstance().pickID) {
+		if (item == RedstoneArsenalHandler.getInstance().pickID) {
 			return RedstoneArsenalHandler.getInstance().pickLevel >= this.ordinal()-1;
+		}
+		switch(this) {
+		case STONE:
+			return item.canHarvestBlock(Blocks.stone, tool);
+		case STEEL:
+			return item.canHarvestBlock(Blocks.iron_ore, tool);
+		case DIAMOND:
+			return item.canHarvestBlock(Blocks.diamond_ore, tool);
+		case BEDROCK:
+			return item.canHarvestBlock(Blocks.obsidian, tool);
+		default:
+			break;
 		}
 		return false;
 	}

@@ -16,7 +16,6 @@ import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -208,8 +207,8 @@ public class RotaryAux {
 		if (eitem.getItem() == RedstoneArsenalHandler.getInstance().pickID) {
 			return RedstoneArsenalHandler.getInstance().pickLevel > 0;
 		}
-		if (!(eitem.getItem() instanceof ItemPickaxe))
-			return false;
+		//if (!(eitem.getItem() instanceof ItemPickaxe))
+		//	return false;
 		if (eitem.getItem().canHarvestBlock(Blocks.iron_ore, eitem))
 			return true;
 		return false;

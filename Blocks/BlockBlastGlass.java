@@ -40,7 +40,7 @@ public class BlockBlastGlass extends BlockBasic implements ConnectedTextureGlass
 		this.setLightLevel(0F);
 		this.setStepSound(soundTypeGlass);
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotary);
-
+		this.setHarvestLevel("pickaxe", 3);
 		//this.blockIndexInTexture = 74;
 
 		for (int i = 1; i < 10; i++) {
