@@ -171,10 +171,12 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 	public boolean onRender(RenderItem ri, ItemStack is, ItemRenderType type) {
 		if (type == ItemRenderType.INVENTORY && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			ItemStack out = this.getRecipeOutput(is);
-			double s = 0.063;
-			GL11.glScaled(s, -s, s);
-			ReikaGuiAPI.instance.drawItemStack(ri, out, 0, -16);
-			return true;
+			if (out != null) {
+				double s = 0.063;
+				GL11.glScaled(s, -s, s);
+				ReikaGuiAPI.instance.drawItemStack(ri, out, 0, -16);
+				return true;
+			}
 		}
 		return false;
 	}

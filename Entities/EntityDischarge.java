@@ -104,4 +104,9 @@ public class EntityDischarge extends Entity implements IEntityAdditionalSpawnDat
 		charge = data.readInt();
 	}
 
+	@Override
+	public boolean canRenderOnFire() {
+		return false;
+	}
+
 }

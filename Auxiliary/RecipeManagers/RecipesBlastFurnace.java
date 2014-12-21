@@ -102,7 +102,7 @@ public class RecipesBlastFurnace
 			}*/
 			if (slot == TileEntityBlastFurnace.SLOT_1 || slot > 9)
 				return false;
-			return ReikaRecipeHelper.getRecipeLocationIndex(recipe, is) == slot-1;
+			return ReikaRecipeHelper.getRecipeLocationIndices(recipe, is).contains(slot-1);
 		}
 
 		@Override
