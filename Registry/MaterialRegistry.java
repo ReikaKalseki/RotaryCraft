@@ -108,7 +108,7 @@ public enum MaterialRegistry {
 		if (item == ItemRegistry.BEDPICK.getItemInstance())
 			return true;
 		if (item == ItemRegistry.STEELPICK.getItemInstance())
-			return true;
+			return this != BEDROCK;
 		if (item instanceof ItemPickaxe) {
 			switch(this) {
 			case STONE:
