@@ -48,7 +48,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	private float lightMultiplier = 0;
 
-	public static final int GENOMEGA = 1024;
+	public static final int GENOMEGA = 512;
 
 	private HybridTank tank = new HybridTank("solar", 4000);
 
@@ -76,7 +76,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			for (int j = -3; j <= 3; j++) {
 				if (ConfigRegistry.BLOCKDAMAGE.getState()) {
 					ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, Math.min(temp, 1750));
-					if (temp >= 1800) {
+					if (temp >= 1500) {
 						this.delete();
 						world.setBlock(x, y, z, Blocks.flowing_lava);
 					}
@@ -131,7 +131,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		write = ForgeDirection.DOWN;
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
 		omega = GENOMEGA;
-		torque = (int)(2*this.getArrayOverallBrightness()*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64, "min")*(this.getArraySize()+1));
+		torque = (int)(this.getArrayOverallBrightness()*Math.min(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64)*(this.getArraySize()+1));
 		if (this.getArraySize() <= 0 || torque == 0 || tank.isEmpty()) {
 			omega = 0;
 			torque = 0;
