@@ -172,6 +172,8 @@ public class ItemGravelGun extends ItemChargedTool {
 	}
 
 	private float getAttackDamage(int charge) {
+		if (charge <= 0)
+			return 0;
 		if (charge == 1)
 			return 1;
 		long pow = ReikaMathLibrary.longpow(charge/2, 3); //fits in long (^6 does not)
@@ -190,7 +192,8 @@ public class ItemGravelGun extends ItemChargedTool {
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean par4) {
 		float dmg = this.getAttackDamage(is.getItemDamage());
-		li.add(String.format("Dealing %.1f hearts of damage per shot", dmg/2F));
+		String s = dmg > 0 ? String.format("Dealing %.1f hearts of damage per shot", dmg/2F) : "Unable to fire - requires charging";
+		li.add(s);
 	}
 
 }
