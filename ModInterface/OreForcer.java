@@ -363,7 +363,7 @@ public final class OreForcer {
 	}
 
 	private void intercraftApatite() {
-		Item id = ForestryHandler.getInstance().apatiteID;
+		Item id = ForestryHandler.ItemEntry.APATITE.getItem();
 		if (id == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.FORESTRY, "Null Item for Apatite");
 		ItemStack apatite = new ItemStack(id, 1, 0);

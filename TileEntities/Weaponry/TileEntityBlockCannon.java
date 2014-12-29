@@ -69,7 +69,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		if (tickcount < this.getOperationTime())
 			return;
 		tickcount = 0;
-		if (this.fire(world, x, y, z)) {
+		if (this.fire(world, x, y, z, 0)) {
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode");
 			ReikaParticleHelper.EXPLODE.spawnAt(world, x+0.5, y+0.5, z+0.5);
 		}
@@ -85,38 +85,32 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		return base;
 	}
 
-	private ItemStack getNextToFire() {
+	private int getNextToFire() {
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
 				if (ReikaItemHelper.isBlock(inv[i])) {
 					ItemStack is = inv[i].copy();
 					if (torque >= this.getReqTorque(is)) {
-						ReikaInventoryHelper.decrStack(i, inv);
-						return ReikaItemHelper.getSizedItemStack(is, 1);
+						return i;
 					}
 				}
 				else if (ItemRegistry.SPAWNER.matchItem(inv[i])) {
 					ItemStack is = new ItemStack(Blocks.mob_spawner);
 					is.stackTagCompound = inv[i].stackTagCompound;
 					if (torque >= this.getReqTorque(is)) {
-						ReikaInventoryHelper.decrStack(i, inv);
-						return is;
+						return i;
 					}
 				}
 				else if (inv[i].getItem() == Items.water_bucket) {
 					ItemStack is = new ItemStack(Blocks.flowing_water);
 					if (torque >= this.getReqTorque(is)) {
-						ReikaInventoryHelper.decrStack(i, inv);
-						this.dropItem(new ItemStack(Items.bucket));
-						return is;
+						return i;
 					}
 				}
 				else if (inv[i].getItem() == Items.lava_bucket) {
 					ItemStack is = new ItemStack(Blocks.flowing_lava);
 					if (torque >= this.getReqTorque(is)) {
-						ReikaInventoryHelper.decrStack(i, inv);
-						this.dropItem(new ItemStack(Items.bucket));
-						return is;
+						return i;
 					}
 				}
 				else {
@@ -126,19 +120,14 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 						if (f.canBePlacedInWorld()) {
 							ItemStack is = new ItemStack(f.getBlock());
 							if (torque >= this.getReqTorque(is)) {
-								Item cont = inv[i].getItem().getContainerItem();
-								ReikaInventoryHelper.decrStack(i, inv);
-								if (cont != null) {
-									this.dropItem(new ItemStack(cont));
-								}
-								return is;
+								return i;
 							}
 						}
 					}
 				}
 			}
 		}
-		return null;
+		return -1;
 	}
 
 	private void dropItem(ItemStack is) {
@@ -184,13 +173,32 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	}
 
 	@Override
-	protected boolean fire(World world, int x, int y, int z) {
-		ItemStack next = this.getNextToFire();
+	protected boolean fire(World world, int x, int y, int z, int slot) {
+		slot = this.getNextToFire();
+		if (slot < 0)
+			return false;
+		ItemStack next = ReikaItemHelper.getSizedItemStack(inv[slot], 1);
 		if (next == null)
 			return false;
 		//ReikaJavaLibrary.pConsole(this.getReqTorque(next));
+		ReikaInventoryHelper.decrStack(slot, inv);
+		this.dropContainers(world, x, y, z, next);
 		this.fireBlock(next, world, x, y, z);
 		return true;
+	}
+
+	private void dropContainers(World world, int x, int y, int z, ItemStack next) {
+		if (next.getItem() == Items.water_bucket) {
+			this.dropItem(new ItemStack(Items.bucket));
+		}
+		else if (next.getItem() == Items.lava_bucket) {
+			this.dropItem(new ItemStack(Items.bucket));
+		}
+		else if (FluidContainerRegistry.isFilledContainer(next)) {
+			Item cont = next.getItem().getContainerItem();
+			if (cont != null)
+				this.dropItem(new ItemStack(cont));
+		}
 	}
 
 	@Override

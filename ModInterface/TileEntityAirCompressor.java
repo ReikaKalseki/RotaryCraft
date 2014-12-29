@@ -16,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
@@ -24,12 +23,8 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import buildcraft.api.power.IPowerEmitter;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-@Strippable(value = {"buildcraft.api.power.IPowerEmitter"})
-public class TileEntityAirCompressor extends TileEntityPowerReceiver implements IPowerEmitter, PressureTE {
+
+public class TileEntityAirCompressor extends TileEntityPowerReceiver implements PressureTE {
 
 	private int pressure;
 
@@ -102,7 +97,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private boolean hasOutputTile() {
 		TileEntity te = this.getAdjacentTileEntity(write);
-		return ModList.BCENERGY.isLoaded() && te instanceof IPowerReceptor;
+		return ModList.PNEUMATICRAFT.isLoaded() && false;//te instanceof RECEIVER;
 	}
 
 	@Override
@@ -127,9 +122,10 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 
-		if (power > 0 && ModList.BCENERGY.isLoaded()) {
+		if (power > 0 && ModList.PNEUMATICRAFT.isLoaded()) {
 			TileEntity tile = this.getAdjacentTileEntity(write);
-			if (tile instanceof IPowerReceptor) {
+			/*
+			if (tile instanceof RECEIVER) {
 				IPowerReceptor rc = (IPowerReceptor)tile;
 				PowerReceiver pp = rc.getPowerReceiver(facingDir);
 				if (pp == null)
@@ -137,6 +133,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 				float mj = (float)this.getGenMJ();
 				double used = pp.receiveEnergy(PowerHandler.Type.ENGINE, mj, facingDir);
 			}
+			 */
 		}
 
 		if (tickcount < 20)
@@ -238,7 +235,6 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		return this.isPipeConnected(with) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}*/
 
-	@Override
 	public boolean canEmitPowerFrom(ForgeDirection side) {
 		return this.isPipeConnected(side);
 	}

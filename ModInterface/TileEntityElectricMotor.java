@@ -15,9 +15,6 @@ import ic2.api.energy.tile.IEnergyConductor;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
-
-import java.awt.Color;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -26,6 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -123,8 +121,8 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	}
 
 	@Override
-	public Color getPowerColor() {
-		return new Color(255, 220, 0);
+	public int getPowerColor() {
+		return ReikaColorAPI.RGBtoHex(255, 220, 0);
 	}
 
 	@Override

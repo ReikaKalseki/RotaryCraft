@@ -288,8 +288,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
 			Item coilid = inv[coilslot].getItem();
 			int coilmeta = inv[coilslot].getItemDamage();
+			ItemStack tool = inv[toolslot];
 			if (toolid instanceof ChargeableTool) {
-				ItemStack tool = inv[toolslot];
 				int newcoilcharge = ((ChargeableTool)toolid).setCharged(tool, coilmeta, coilid == ItemRegistry.STRONGCOIL.getItemInstance());
 				ItemStack newcoil = new ItemStack(coilid, 1, newcoilcharge);
 				inv[toolslot] = null;
@@ -298,8 +298,10 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 				inv[10] = newcoil;
 			}
 			else {
-				int toolmeta = inv[toolslot].getItemDamage();
+				int toolmeta = tool.getItemDamage();
 				ItemStack newtool = new ItemStack(toolid, 1, coilmeta);
+				NBTTagCompound tag = tool.stackTagCompound != null ? (NBTTagCompound)tool.stackTagCompound.copy() : null;
+				newtool.stackTagCompound = tag;
 				ItemStack newcoil = new ItemStack(coilid, 1, toolmeta);
 				inv[toolslot] = null;
 				inv[coilslot] = null;

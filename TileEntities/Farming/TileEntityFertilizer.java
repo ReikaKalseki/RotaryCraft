@@ -180,7 +180,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 			return true;
 		if (ReikaItemHelper.matchStacks(is, ItemStacks.compost))
 			return true;
-		if (is.getItem() == ForestryHandler.getInstance().fertilizerID)
+		if (is.getItem() == ForestryHandler.ItemEntry.FERTILIZER.getItem())
 			return true;
 		return false;
 	}

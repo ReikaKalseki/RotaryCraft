@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.awt.Color;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -18,24 +16,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.ASM.APIStripper.Strippable;
-import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile.PipeType;
-@Strippable(value = {"buildcraft.api.power.IPowerReceptor", "buildcraft.api.transport.IPipeConnection"})
-public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPowerReceptor, IPipeConnection {
-
-	@ModDependent(ModList.BCENERGY)
-	private PowerHandler pp;
+public class TileEntityPneumaticEngine extends EnergyToPowerBase {
 
 	public static final int maxMJ = 36000;
 
@@ -43,10 +31,8 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	public TileEntityPneumaticEngine() {
 		super();
-		if (ModList.BCENERGY.isLoaded()) {
-			pp = new PowerHandler(this, PowerHandler.Type.MACHINE);
-			pp.configure(0, maxMJ, 0, maxMJ);
-			pp.configurePowerPerdition(0, 0);
+		if (ModList.PNEUMATICRAFT.isLoaded()) {
+
 		}
 		sound.setTick(sound.getCap());
 	}
@@ -55,7 +41,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	public boolean isValidSupplier(TileEntity te) {
 		if (te == null)
 			return false;
-		if (te.getClass().getSimpleName().contains("PipePower") || te.getClass().getSimpleName().equals("TileGenericPipe"))
+		if (te.getClass().getSimpleName().contains("class name"))
 			return true;
 		return false;
 	}
@@ -102,23 +88,20 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 
-		if (!ModList.BCENERGY.isLoaded())
+		if (!ModList.PNEUMATICRAFT.isLoaded())
 			return;
 
 		if (DragonAPICore.debugtest) {
-			pp.setEnergy(pp.getMaxEnergyStored());
+			//fill energy buffer
 		}
 		this.getIOSides(world, x, y, z, meta);
 
-		if (pp.getEnergyStored() > 0)
-			pp.addEnergy(0.01F); //To nullify the mandatory power loss... why the HELL was that added?
-
-		pp.configure(0, maxMJ, 0, maxMJ);
-
+		/*
 		if (!world.isRemote)
 			storedEnergy = (int)pp.getEnergyStored();
 		if (storedEnergy < 0)
 			storedEnergy = (int)pp.getMaxEnergyStored();
+		 */
 
 		this.updateSpeed();
 		if (!world.isRemote) {
@@ -136,14 +119,8 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 	@Override
 	protected void usePower() {
 		float amt = this.getMJPerTick();
-		if (ModList.BCENERGY.isLoaded())
-			pp.useEnergy(amt, amt, true);
-	}
-
-	@ModDependent(ModList.BCENERGY)
-	public int powerRequest(ForgeDirection from) {
-		double needed = pp.getMaxEnergyStored() - pp.getEnergyStored();
-		return (int) Math.ceil(Math.min(pp.getMaxEnergyReceived(), needed));
+		if (ModList.PNEUMATICRAFT.isLoaded())
+			;//drain amt energy
 	}
 
 	public boolean isPipeConnected(ForgeDirection with) {
@@ -162,56 +139,33 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPow
 
 	@Override
 	public long getMaxPower() {
-		return ModList.BCENERGY.isLoaded() ? (long)(ReikaBuildCraftHelper.getWattsPerMJ()*pp.getEnergyStored()) : 0;
+		return ModList.PNEUMATICRAFT.isLoaded() ? Long.MAX_VALUE : 0;
 	}
 
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
-		if (ModList.BCENERGY.isLoaded())
-			pp.writeToNBT(NBT);
+		if (ModList.PNEUMATICRAFT.isLoaded())
+			;//write to NBT
 	}
 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
-		if (ModList.BCENERGY.isLoaded())
-			pp.readFromNBT(NBT);
-	}
-
-	@Override
-	@ModDependent(ModList.BCTRANSPORT)
-	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
-		return type == PipeType.POWER && this.isPipeConnected(with) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
-	}
-
-	@Override
-	@ModDependent(ModList.BCENERGY)
-	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return this.isValidSupplier(this.getAdjacentTileEntity(side)) ? pp.getPowerReceiver() : null;
-	}
-
-	@Override
-	@ModDependent(ModList.BCENERGY)
-	public void doWork(PowerHandler workProvider) {
-
-	}
-
-	@Override
-	public World getWorld() {
-		return worldObj;
+		if (ModList.PNEUMATICRAFT.isLoaded())
+			;//read from NBT
 	}
 
 	@Override
 	public String getUnitDisplay() {
-		return "MJ";
+		return "atm";
 	}
 
 	@Override
-	public Color getPowerColor() {
-		return new Color(50, 170, 255);
+	public int getPowerColor() {
+		return ReikaColorAPI.RGBtoHex(50, 170, 255);
 	}
 
 	//@Override

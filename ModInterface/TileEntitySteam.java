@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.awt.Color;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -170,8 +168,8 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 	}
 
 	@Override
-	public Color getPowerColor() {
-		return new Color(255, 255, 255);
+	public int getPowerColor() {
+		return 0xffffff;
 	}
 
 }

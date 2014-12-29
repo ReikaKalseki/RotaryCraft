@@ -483,7 +483,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean areConditionsMet() {
-		return !tank.isEmpty() && !ReikaInventoryHelper.isEmpty(inv);
+		return !tank.isEmpty() && !ReikaInventoryHelper.isEmpty(inv, 0, 4);
 	}
 
 	@Override

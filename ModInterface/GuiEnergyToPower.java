@@ -9,13 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import java.awt.Color;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -126,8 +125,8 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 
 		int px = engine.getEnergyScaled(68);
-		Color c = engine.getPowerColor();
-		GL11.glColor3f(c.getRed()/255F, c.getGreen()/255F, c.getBlue()/255F);
+		int c = engine.getPowerColor();
+		GL11.glColor3f(ReikaColorAPI.getRedFromInteger(c)/255F, ReikaColorAPI.getGreenFromInteger(c)/255F, ReikaColorAPI.getBlueFromInteger(c)/255F);
 		this.drawTexturedModalRect(j+172, k+90-px, 208, 69-px, 16, px);
 
 		int px2 = engine.getLubricantScaled(68);

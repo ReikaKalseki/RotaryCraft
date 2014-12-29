@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Interfaces.IPacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -544,7 +545,8 @@ public class PacketHandlerCore implements IPacketHandler {
 		}
 		catch (NullPointerException e) {
 			ReikaJavaLibrary.pConsole("Machine/item was deleted before its packet "+pack+" could be received!");
-			ReikaChatHelper.writeString("Machine/item was deleted before its packet "+pack+" could be received!");
+			if (DragonOptions.CHATERRORS.getState())
+				ReikaChatHelper.writeString("Machine/item was deleted before its packet "+pack+" could be received!");
 			e.printStackTrace();
 		}
 		catch (Exception e) {

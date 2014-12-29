@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import java.awt.Color;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -396,7 +394,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	public abstract String getUnitDisplay();
 
-	public abstract Color getPowerColor();
+	public abstract int getPowerColor();
 
 	public final ForgeDirection getFacing() {
 		return facingDir != null ? facingDir : ForgeDirection.EAST;

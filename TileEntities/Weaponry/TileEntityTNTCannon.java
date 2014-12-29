@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,9 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.CannonExplosive;
+import Reika.RotaryCraft.API.CannonExplosive.ExplosiveEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -82,8 +86,9 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 		tickcount = 0;
 		if (targetMode)
 			this.calcTarget(world, x, y, z);
-		if (this.canFire())
-			this.fire(world, x, y, z);
+		int slot = this.canFire();
+		if (slot >= 0)
+			this.fire(world, x, y, z, slot);
 		//this.syncTNTData(world, x, y, z);
 		if (targetMode) {
 			AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(256, 256, 256);
@@ -148,28 +153,53 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 		}
 	}
 
-	private boolean canFire() {
-		boolean hasTNT = ReikaInventoryHelper.checkForItem(Blocks.tnt, inv);
-		return hasTNT;
+	protected int canFire() {
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack is = inv[i];
+			if (is != null) {
+				if (ReikaItemHelper.matchStackWithBlock(is, Blocks.tnt))
+					return i;
+				if (is.getItem() instanceof CannonExplosive)
+					return i;
+			}
+		}
+		return -1;
 	}
 
 	@Override
-	protected boolean fire(World world, int x, int y, int z) {
-		for (int i = 0; i < 1; i++) {
-			ReikaInventoryHelper.findAndDecrStack(Blocks.tnt, -1, inv);
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*rand.nextFloat()*12, 0.1F*rand.nextFloat());
-			world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
-			EntityCustomTNT tnt = new EntityCustomTNT(world, x+0.5, y+1.5-0.0625, z+0.5, null, this.getFuseTime());
-			double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
-			tnt.motionX = xyz[0];
-			tnt.motionY = xyz[1];
-			tnt.motionZ = xyz[2];
-			if (!world.isRemote) {
-				tnt.velocityChanged = true;
-				world.spawnEntityInWorld(tnt);
-			}
-			//fired.add(tnt);
+	protected boolean fire(World world, int x, int y, int z, int slot) {
+		ItemStack in = inv[slot];
+		ReikaInventoryHelper.decrStack(slot, inv);
+		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 0.7F+0.3F*rand.nextFloat()*12, 0.1F*rand.nextFloat());
+		world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 1.0D, 0.0D, 0.0D);
+		double dx = x+0.5;
+		double dy = y+1.5-0.0625;
+		double dz = z+0.5;
+		int fuse = this.getFuseTime();
+
+		Entity tnt = null;
+		if (ReikaItemHelper.matchStackWithBlock(in, Blocks.tnt)) {
+			tnt = new EntityCustomTNT(world, dx, dy, dz, null, fuse);
 		}
+		else if (in.getItem() instanceof CannonExplosive) {
+			tnt = ((CannonExplosive)in.getItem()).getExplosiveEntity(in);
+			tnt.setPosition(dx, dy, dz);
+			((ExplosiveEntity)tnt).setFuse(fuse);
+		}
+		if (tnt == null) {
+			RotaryCraft.logger.logError("Invalid item in TNT cannon yet firing was attempted!");
+			return false;
+		}
+
+		double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity/20D, theta, phi);
+		tnt.motionX = xyz[0];
+		tnt.motionY = xyz[1];
+		tnt.motionZ = xyz[2];
+		if (!world.isRemote) {
+			tnt.velocityChanged = true;
+			world.spawnEntityInWorld(tnt);
+		}
+		//fired.add(tnt);
 		return true;
 	}
 
@@ -220,7 +250,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.canFire())
+		if (this.canFire() == -1)
 			return 15;
 		return 0;
 	}

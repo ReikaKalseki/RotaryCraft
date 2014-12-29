@@ -98,8 +98,10 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			in.add(new ItemStack(ModCropList.ALGAE.blockID, 1, 0));
 		}
 		if (ModList.FORESTRY.isLoaded()) {
-			in.add(new ItemStack(ForestryHandler.getInstance().saplingItem));
-			in.add(new ItemStack(ForestryHandler.getInstance().leafID));
+			in.add(new ItemStack(ForestryHandler.ItemEntry.SAPLING.getItem()));
+			in.add(new ItemStack(ForestryHandler.BlockEntry.LEAF.getBlock()));
+			in.add(new ItemStack(ForestryHandler.ItemEntry.HONEY.getItem()));
+			in.add(new ItemStack(ForestryHandler.ItemEntry.HONEYDEW.getItem()));
 		}
 		return in;
 	}
@@ -141,10 +143,16 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (TreeGetter.isRainbowSapling(is))
 				return 16;
 		}
-		if (ModList.FORESTRY.isLoaded() && is.getItem() == ForestryHandler.getInstance().saplingItem) {
+		if (ModList.FORESTRY.isLoaded() && is.getItem() == ForestryHandler.ItemEntry.SAPLING.getItem()) {
 			return 2;
 		}
-		if (ModList.FORESTRY.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ForestryHandler.getInstance().leafID)) {
+		if (ModList.FORESTRY.isLoaded() && is.getItem() == ForestryHandler.ItemEntry.HONEY.getItem()) {
+			return 1;
+		}
+		if (ModList.FORESTRY.isLoaded() && is.getItem() == ForestryHandler.ItemEntry.HONEYDEW.getItem()) {
+			return 1;
+		}
+		if (ModList.FORESTRY.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ForestryHandler.BlockEntry.LEAF.getBlock())) {
 			return 4;
 		}
 		if (ModList.EMASHER.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, ModCropList.ALGAE.blockID)) {
