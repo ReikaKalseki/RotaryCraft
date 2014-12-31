@@ -18,13 +18,22 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityDistillery extends PoweredLiquidIO {
 
+	private int tickcount = 0;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
 		Conversion conv = this.getConversion();
-		if (this.canMake(conv))
-			this.make(conv);
+		if (tickcount >= 5) {
+			if (this.canMake(conv)) {
+				this.make(conv);
+			}
+			tickcount = 0;
+		}
+		else {
+			tickcount++;
+		}
 		//ReikaJavaLibrary.pConsole(input+":"+output, Side.SERVER);
 	}
 

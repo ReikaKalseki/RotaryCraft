@@ -22,6 +22,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelLavaMaker;
@@ -101,6 +102,10 @@ public class RenderRockMelter extends RotaryTERenderer
 
 		if (MinecraftForgeClient.getRenderPass() == 0) {
 			this.renderLiquid(tile, par2, par4, par6);
+		}
+
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			IORenderer.renderIO(tile, par2, par4, par6);
 		}
 	}
 

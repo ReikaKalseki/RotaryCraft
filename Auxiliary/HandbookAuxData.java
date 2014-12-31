@@ -538,6 +538,7 @@ public final class HandbookAuxData {
 				int k = (int)((System.nanoTime()/time)%transforms.size());
 				String tex = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
 				ReikaTextureHelper.bindTexture(RotaryCraft.class, tex);
+				GL11.glColor4f(1, 1, 1, 1);
 				BiomeTransform data = transforms.get(k);
 				BiomeGenBase from = data.change.start;
 				BiomeGenBase from_ = from;
@@ -559,13 +560,14 @@ public final class HandbookAuxData {
 				FluidStack liq = data.getFluid();
 				if (liq != null) {
 					GL11.glColor4f(1, 1, 1, 1);
+					ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, String.format("%d", liq.amount), posX+116+16, posY+38+5, 0);
 					ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
+					GL11.glColor4f(1, 1, 1, 1);
 					IIcon ico = liq.getFluid().getIcon();
 					ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(posX+116, posY+38, ico, 16, 16);
 					ReikaGuiAPI.instance.drawTexturedModelRectFromIcon(posX+116+16, posY+38, ico, 16, 16);
 					//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116, posY+38);
 					//ReikaGuiAPI.instance.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116+16, posY+38);
-					ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, String.format("%d", liq.amount), posX+116+16, posY+38+5, 0);
 				}
 				Collection<ItemReq> li = data.getItems();
 				int i = 0;

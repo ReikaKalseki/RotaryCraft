@@ -139,9 +139,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			if (TreeGetter.isDyeFlower(is))
 				return PlantMaterials.FLOWER.getPlantValue();
 			if (TreeGetter.isRainbowLeaf(is))
-				return 32;
-			if (TreeGetter.isRainbowSapling(is))
 				return 16;
+			if (TreeGetter.isRainbowSapling(is))
+				return 8;
 		}
 		if (ModList.FORESTRY.isLoaded() && is.getItem() == ForestryHandler.ItemEntry.SAPLING.getItem()) {
 			return 2;

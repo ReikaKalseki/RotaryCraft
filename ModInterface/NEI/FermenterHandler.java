@@ -54,7 +54,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 			ItemStack in = input != null ? input : this.getEntry(this.getBottomSlot());
 			int amt = TileEntityFermenter.getPlantValue(in);
 			if (amt <= 0)
-				amt = 41;
+				amt = 183; //very broken
 			ItemStack is = output.getItem() == ItemRegistry.YEAST.getItemInstance() ? output : ReikaItemHelper.getSizedItemStack(output, amt);
 			return new PositionedStack(is, 111, 36);
 		}

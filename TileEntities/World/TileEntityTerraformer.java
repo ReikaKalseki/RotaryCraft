@@ -249,9 +249,10 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	private static void addBiomeTransformation(BiomeGenBase from, BiomeGenBase to, int power, FluidStack liq, ItemReq... items) {
-		List<BiomeGenBase> li = ReikaBiomeHelper.getAllAssociatedBiomes(from);
-		for (int i = 0; i < li.size(); i++) {
-			BiomeGenBase from_ = li.get(i);
+		ArrayList<BiomeGenBase> li = new ArrayList();
+		li.add(from);
+		li.addAll(ReikaBiomeHelper.getChildBiomes(from));
+		for (BiomeGenBase from_ : li) {
 			BiomeStep step = new BiomeStep(from_, to);
 			transforms.addDirectionalConnection(from_, to);
 			itemReqs.put(step, ReikaJavaLibrary.makeListFromArray(items));
@@ -261,7 +262,8 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	static {
-		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.plains, 65536, FluidRegistry.getFluidStack("water", 30), new ItemReq(Blocks.tallgrass, 1, 0.8F));
+		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.savanna, 65536, FluidRegistry.getFluidStack("water", 30), new ItemReq(Blocks.tallgrass, 1, 0.5F), new ItemReq(Blocks.sapling, 4, 0.05F));
+		addBiomeTransformation(BiomeGenBase.savanna, BiomeGenBase.plains, 32768, FluidRegistry.getFluidStack("water", 20), new ItemReq(Blocks.tallgrass, 1, 0.3F));
 		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.forest, 131072, FluidRegistry.getFluidStack("water", 10), new ItemReq(Blocks.sapling, 0, 0.5F), new ItemReq(Blocks.sapling, 2, 0.2F));
 		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.jungle, 262144, FluidRegistry.getFluidStack("water", 50), new ItemReq(Blocks.sapling, 0, 0.4F), new ItemReq(Blocks.sapling, 0, 0.6F), new ItemReq(Blocks.tallgrass, 2, 0.3F));
 
@@ -278,12 +280,21 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 		addBiomeTransformation(BiomeGenBase.mushroomIsland, BiomeGenBase.extremeHills, 262144, null, new ItemReq(Blocks.grass, 0.125F), new ItemReq(Blocks.sapling, 0, 0.05F), new ItemReq(Blocks.tallgrass, 1, 0.25F)); //?
 
-		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.taiga, 131072, null, new ItemReq(Blocks.snow, 0.3F), new ItemReq(Blocks.sapling, 1, 0.25F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.taiga, 131072, null, new ItemReq(Blocks.sapling, 1, 0.25F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.coldTaiga, 131072, null, new ItemReq(Blocks.snow, 0.3F), new ItemReq(Blocks.sapling, 1, 0.25F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.roofedForest, 65536, FluidRegistry.getFluidStack("water", 40), new ItemReq(Blocks.sapling, 5, 0.5F));
+		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.birchForest, 32768, null, new ItemReq(Blocks.sapling, 2, 0.25F));
+
+		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.coldTaiga, 32768, null, new ItemReq(Blocks.snow, 0.3F));
 		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.icePlains, 65536, null, new ItemReq(Blocks.snow, 1), new ItemReq(Blocks.sapling, 0, 0.05F));
+		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.forest, 131072, null, new ItemReq(Blocks.sapling, 0, 0.4F), new ItemReq(Blocks.sapling, 2, 0.1F));
+		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.megaTaiga, 32768, FluidRegistry.getFluidStack("water", 20), new ItemReq(Blocks.sapling, 1, 0.1F));
+
 		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.frozenOcean, 32768, FluidRegistry.getFluidStack("water", 100), new ItemReq(Blocks.ice, 1));
 
 
-		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.desert, 131072, null, new ItemReq(Blocks.sand, 1), new ItemReq(Blocks.sandstone, 0.5F), new ItemReq(Blocks.cactus, 0.1F));
+		addBiomeTransformation(BiomeGenBase.plains, BiomeGenBase.savanna, 65536, null, new ItemReq(Blocks.sapling, 4, 0.05F));
+		addBiomeTransformation(BiomeGenBase.savanna, BiomeGenBase.desert, 65536, null, new ItemReq(Blocks.sand, 1), new ItemReq(Blocks.sandstone, 0.5F), new ItemReq(Blocks.cactus, 0.1F));
 		addBiomeTransformation(BiomeGenBase.forest, BiomeGenBase.plains, 262144, null, new ItemReq(Blocks.tallgrass, 1, 0.8F));
 		addBiomeTransformation(BiomeGenBase.jungle, BiomeGenBase.forest, 65536, null, new ItemReq(Blocks.sapling, 0, 0.5F), new ItemReq(Blocks.sapling, 2, 0.2F));
 
@@ -293,10 +304,14 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		addBiomeTransformation(BiomeGenBase.frozenOcean, BiomeGenBase.ocean, 524288, null);
 		addBiomeTransformation(BiomeGenBase.extremeHills, BiomeGenBase.plains, 262144, null, new ItemReq(Blocks.tallgrass, 1, 0.6F));
 
-		addBiomeTransformation(BiomeGenBase.taiga, BiomeGenBase.forest, 131072, null, new ItemReq(Blocks.sapling, 0, 0.4F), new ItemReq(Blocks.sapling, 2, 0.1F));
-
 		addBiomeTransformation(BiomeGenBase.icePlains, BiomeGenBase.taiga, 65536, null, new ItemReq(Blocks.sapling, 1, 0.4F));
 		addBiomeTransformation(BiomeGenBase.frozenOcean, BiomeGenBase.icePlains, 65536, null, new ItemReq(Blocks.sapling, 0, 0.05F), new ItemReq(Blocks.dirt, 1), new ItemReq(Blocks.grass, 0.125F));
+
+		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.mesa, 32768, null, new ItemReq(Blocks.clay, 0.2F));
+		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.deepOcean, 1024, FluidRegistry.getFluidStack("water", 200));
+
+		addBiomeTransformation(BiomeGenBase.roofedForest, BiomeGenBase.forest, 32768, null, new ItemReq(Blocks.sapling, 0, 0.5F), new ItemReq(Blocks.sapling, 2, 0.2F));
+		addBiomeTransformation(BiomeGenBase.birchForest, BiomeGenBase.forest, 32768, null, new ItemReq(Blocks.sapling, 0, 0.5F));
 	}
 
 	public BiomeGenBase getTarget() {
@@ -386,6 +401,20 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		private BiomeStep(BiomeGenBase in, BiomeGenBase out) {
 			start = in;
 			finish = out;
+		}
+
+		@Override
+		public int hashCode() {
+			return start.hashCode()^finish.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof BiomeStep) {
+				BiomeStep b = (BiomeStep)o;
+				return b.start == start && b.finish == finish;
+			}
+			return false;
 		}
 	}
 

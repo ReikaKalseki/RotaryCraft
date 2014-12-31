@@ -34,6 +34,8 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 public class GuiTerraformer extends GuiPowerOnlyMachine {
 
 	TileEntityTerraformer terra;
+	private List<BiomeGenBase> targets;
+	private int offset = 0;
 
 	public GuiTerraformer(EntityPlayer pl, TileEntityTerraformer te) {
 		super(new ContainerTerraformer(pl, te), te);
@@ -50,24 +52,38 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 		int k = (height - ySize) / 2;
 		String tex = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
 
-		List<BiomeGenBase> li = terra.getValidTargetBiomes(terra.getCentralBiome());
+		targets = terra.getValidTargetBiomes(terra.getCentralBiome());
 
-		for (int i = 0; i < li.size(); i++) {
-			BiomeGenBase b = li.get(i);
+		for (int i = 0; i < this.getNumberBiomesOnPage(); i++) {
+			BiomeGenBase b = targets.get(i+offset);
 			buttonList.add(new ImagedGuiButton(i, j+8, k+17+39*i, 32, 32, 32*(b.biomeID%8), 32*(b.biomeID/8), tex, b.biomeName, 0xffffff, false, RotaryCraft.class));
 		}
+
+		tex = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
+		buttonList.add(new ImagedGuiButton(100, j+11, k+6, 24, 12, 18, 110, tex, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(101, j+11, k+ySize-14, 24, 12, 42, 110, tex, RotaryCraft.class));
+	}
+
+	private int getNumberBiomesOnPage() {
+		return Math.min(targets.size(), 5);
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
-		this.initGui();
 
-		List<BiomeGenBase> li = terra.getValidTargetBiomes(terra.getCentralBiome());
-		if (b.id < li.size()) {
-			BiomeGenBase biome = li.get(b.id);
+		if (b.id == 100 && offset > 0) {
+			offset--;
+		}
+		else if (b.id == 101 && offset < targets.size()-5) {
+			offset++;
+		}
+		else if (b.id < targets.size()) {
+			BiomeGenBase biome = targets.get(b.id);
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.getMinValue(), terra, biome.biomeID);
 		}
+
+		this.initGui();
 	}
 
 	@Override
@@ -78,10 +94,9 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 		int k = (height - ySize) / 2;
 
 		BiomeGenBase from = terra.getCentralBiome();
-		List<BiomeGenBase> li = terra.getValidTargetBiomes(from);
 
-		for (int i = 0; i < li.size(); i++) {
-			BiomeGenBase to = li.get(i);
+		for (int i = 0; i < this.getNumberBiomesOnPage(); i++) {
+			BiomeGenBase to = targets.get(i+offset);
 			FluidStack liq = terra.getReqLiquidForTransform(from, to);
 			if (liq != null) {
 				GL11.glColor4f(1, 1, 1, 1);
