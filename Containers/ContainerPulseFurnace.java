@@ -61,6 +61,7 @@ public class ContainerPulseFurnace extends ContainerIOMachine {
 
 		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "water");
 		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "fuel");
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "accel");
 	}
 
 	@Override

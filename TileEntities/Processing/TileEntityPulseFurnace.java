@@ -91,6 +91,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 		water.readFromNBT(NBT);
 		fuel.readFromNBT(NBT);
+		accel.readFromNBT(NBT);
 
 		temperature = NBT.getInteger("temp");
 	}
@@ -103,6 +104,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 		water.writeToNBT(NBT);
 		fuel.writeToNBT(NBT);
+		accel.writeToNBT(NBT);
 
 		NBT.setInteger("temp", temperature);
 	}

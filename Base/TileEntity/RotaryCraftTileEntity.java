@@ -236,6 +236,10 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return id2 == id && meta2 == meta;
 	}
 
+	public void onRedirect() {
+
+	}
+
 	@Override
 	@ModDependent(ModList.OPENCOMPUTERS)
 	protected final Visibility getOCNetworkVisibility() {

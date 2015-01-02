@@ -63,23 +63,23 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 			break;
 		}
 		//Make punch thru snow, tall grass, etc!
-		//if (world.getBlock(x+xstep, y+ystep, z+zstep) == BlockRegistry.BRIDGE.getBlockInstance().blockID)
+		//if (world.getBlock(x+facing.offsetX, y+facing.offsetY, z+facing.offsetZ) == BlockRegistry.BRIDGE.getBlockInstance().blockID)
 		//	blocked = true;
 		int range = this.getRange();
 		//ReikaJavaLibrary.pConsole(power+":"+distancelimit+":"+(PowerReceivers.LIGHTBRIDGE.getMinPower()/distancelimit)+":"+range, Side.SERVER);
 		if (range > 0 && world.getBlockLightValue(x, y+1, z) >= 13) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
 			if (!world.isRemote) {
-				//if (!Blocks.opaqueCubeLookup[world.getBlock(x+xstep, y+ystep, z+zstep)]) {
-				for (int i = 1; (i <= range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlock(x+xstep, y+ystep, z+zstep)) || world.getBlock(x+xstep, y+ystep, z+zstep) == Blocks.air || world.getBlock(x+xstep, y+ystep, z+zstep) == BlockRegistry.BRIDGE.getBlockInstance()); i++) {//&& world.getBlock(x+xstep, y+ystep, z+zstep) != BlockRegistry.BRIDGE.getBlockInstance().blockID; i++) {
+				//if (!Blocks.opaqueCubeLookup[world.getBlock(x+facing.offsetX, y+facing.offsetY, z+facing.offsetZ)]) {
+				for (int i = 1; (i <= range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world.getBlock(x+facing.offsetX, y+facing.offsetY, z+facing.offsetZ)) || world.getBlock(x+facing.offsetX, y+facing.offsetY, z+facing.offsetZ) == Blocks.air || world.getBlock(x+facing.offsetX, y+facing.offsetY, z+facing.offsetZ) == BlockRegistry.BRIDGE.getBlockInstance()); i++) {//&& world.getBlock(x+facing.offsetX, y+facing.offsetY, z+facing.offsetZ) != BlockRegistry.BRIDGE.getBlockInstance().blockID; i++) {
 					//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", x, y, z));
-					Block idview = world.getBlock(x+xstep*i, y+ystep*i, z+zstep*i);
-					int metaview = world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i);
+					Block idview = world.getBlock(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);
+					int metaview = world.getBlockMetadata(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);
 					if (idview == Blocks.air || ReikaWorldHelper.softBlocks(idview) || idview == BlockRegistry.LIGHT.getBlockInstance() || idview == BlockRegistry.BEAM.getBlockInstance() || idview == BlockRegistry.BRIDGE.getBlockInstance()) { //Only overwrite air blocks
-						//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
-						world.setBlock(x+xstep*i, y+ystep*i, z+zstep*i, BlockRegistry.BRIDGE.getBlockInstance(), dir, 3);
-						//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d @ %d", idview, world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i)));
-						//world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
-						//world.notifyBlockOfNeighborChange(x+xstep*i, y+ystep*i, z+zstep*i, this.getTileEntityBlockID());
+						//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", idview, world.getBlockMetadata(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i)));
+						world.setBlock(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i, BlockRegistry.BRIDGE.getBlockInstance(), dir, 3);
+						//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d @ %d", idview, world.getBlockMetadata(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i)));
+						//world.markBlockForUpdate(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);
+						//world.notifyBlockOfNeighborChange(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i, this.getTileEntityBlockID());
 					}
 					if (idview != Blocks.air && !ReikaWorldHelper.softBlocks(idview) && idview != BlockRegistry.LIGHT.getBlockInstance() && idview != BlockRegistry.BEAM.getBlockInstance() && (idview != BlockRegistry.BRIDGE.getBlockInstance()) || animtick > range+1) {
 						animtick--;
@@ -114,11 +114,11 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 			break;
 		}
 		for (int i = 1; i < this.getMaxRange(); i++) {
-			Block idview = world.getBlock(x+xstep*i, y+ystep*i, z+zstep*i);
-			int metaview = world.getBlockMetadata(x+xstep*i, y+ystep*i, z+zstep*i);
+			Block idview = world.getBlock(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);
+			int metaview = world.getBlockMetadata(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);
 			if (idview == BlockRegistry.BRIDGE.getBlockInstance() && metaview == dir)
-				world.setBlockToAir(x+xstep*i, y+ystep*i, z+zstep*i);
-			world.markBlockForUpdate(x+xstep*i, y+ystep*i, z+zstep*i);
+				world.setBlockToAir(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);
+			world.markBlockForUpdate(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);
 		}
 	}
 

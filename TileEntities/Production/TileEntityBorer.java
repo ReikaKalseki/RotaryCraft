@@ -107,6 +107,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return 0;
 	}
 
+	@Override
+	public void onRedirect() {
+		this.reset();
+	}
+
 	public boolean repair() {
 		if (durability > 0)
 			return false;
@@ -123,11 +128,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	public int getHeadX() {
-		return xCoord+xstep*step;
+		return xCoord+facing.offsetX*step;
 	}
 
 	public int getHeadZ() {
-		return zCoord+zstep*step;
+		return zCoord+facing.offsetZ*step;
 	}
 
 	@Override
@@ -151,9 +156,18 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		tickcount++;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
+
+		if (this.hasEnchantments()) {
+			for (int i = 0; i < 6; i++) {
+				world.spawnParticle("portal", -0.5+x+2*rand.nextDouble(), y+rand.nextDouble(), -0.5+z+2*rand.nextDouble(), 0, 0, 0);
+			}
+		}
+
 		power = (long)omega*(long)torque;
-		if (power == 0)
+		if (power <= 0) {
 			this.setJammed(false);
+			return;
+		}
 
 		if (hitProtection && notifiedPlayer < 10) {
 			if (world.getTotalWorldTime()%100 == 0) {
@@ -197,12 +211,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 		}
 
-		if (this.hasEnchantments()) {
-			for (int i = 0; i < 6; i++) {
-				world.spawnParticle("portal", -0.5+x+2*rand.nextDouble(), y+rand.nextDouble(), -0.5+z+2*rand.nextDouble(), 0, 0, 0);
-			}
-		}
-
 		if (nodig)
 			return;
 		if (omega <= 0)
@@ -223,7 +231,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
 				if (!world.isRemote) {
-					ReikaWorldHelper.forceGenAndPopulate(world, x+step*xstep, y, z+step*zstep, meta);
+					ReikaWorldHelper.forceGenAndPopulate(world, x+step*facing.offsetX, y, z+step*facing.offsetZ, meta);
 					this.dig(world, x, y, z, meta);
 					if (!isMiningAir) {
 						if (soundtick == 0) {
@@ -252,9 +260,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					int xread = x+step*xstep+a*(i-3);
-					int yread = y+step*ystep+(4-j);
-					int zread = z+step*zstep+b*(i-3);
+					int xread = x+step*facing.offsetX+a*(i-3);
+					int yread = y+step*facing.offsetY+(4-j);
+					int zread = z+step*facing.offsetZ+b*(i-3);
 					if (world.getBlock(xread, yread, zread) != Blocks.air) {
 						return false;
 					}
@@ -276,15 +284,15 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					int xread = x+step*xstep+a*(i-3);
-					int yread = y+step*ystep+(4-j);
-					int zread = z+step*zstep+b*(i-3);
+					int xread = x+step*facing.offsetX+a*(i-3);
+					int yread = y+step*facing.offsetY+(4-j);
+					int zread = z+step*facing.offsetZ+b*(i-3);
 					//ReikaJavaLibrary.pConsole(xread+","+yread+","+zread);
 					if (world.getBlock(xread, yread, zread) == BlockRegistry.MININGPIPE.getBlockInstance()) {
 						haspipe = true;
 						int meta2 = world.getBlockMetadata(xread, yread, zread);
 						ForgeDirection dir = BlockMiningPipe.getDirectionFromMeta(meta2);
-						if (meta2 == 3 || Math.abs(dir.offsetX) == Math.abs(xstep) && Math.abs(dir.offsetZ) == Math.abs(zstep)) {
+						if (meta2 == 3 || Math.abs(dir.offsetX) == Math.abs(facing.offsetX) && Math.abs(dir.offsetZ) == Math.abs(facing.offsetZ)) {
 
 						}
 						else {
@@ -343,9 +351,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					int xread = x+step*xstep+a*(i-3);
-					int yread = y+step*ystep+(4-j);
-					int zread = z+step*zstep+b*(i-3);
+					int xread = x+step*facing.offsetX+a*(i-3);
+					int yread = y+step*facing.offsetY+(4-j);
+					int zread = z+step*facing.offsetZ+b*(i-3);
 					this.reqPowAdd(world, xread, yread, zread);
 				}
 			}
@@ -402,9 +410,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					xread = x+step*xstep+a*(i-3);
-					yread = y+step*ystep+(4-j);
-					zread = z+step*zstep+b*(i-3);
+					xread = x+step*facing.offsetX+a*(i-3);
+					yread = y+step*facing.offsetY+(4-j);
+					zread = z+step*facing.offsetZ+b*(i-3);
 					Block id = world.getBlock(xread, yread+1, zread);
 					if (id == Blocks.sand || id == Blocks.gravel)
 						if (this.checkTop(i, j)) {
@@ -602,9 +610,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j] || step == 1) {
-					xread = x+step*xstep+a*(i-3);
-					yread = y+step*ystep+(4-j);
-					zread = z+step*zstep+b*(i-3);
+					xread = x+step*facing.offsetX+a*(i-3);
+					yread = y+step*facing.offsetY+(4-j);
+					zread = z+step*facing.offsetZ+b*(i-3);
 					Block bk = world.getBlock(xread, yread, zread);
 					if (this.dropBlocks(xread, yread, zread, world, x, y, z, bk, world.getBlockMetadata(xread, yread, zread))) {
 						ReikaSoundHelper.playBreakSound(world, xread, yread, zread, bk);
@@ -616,7 +624,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 		}
-		MinecraftForge.EVENT_BUS.post(new BorerDigEvent(this, step, x+step*xstep, y+step*ystep, z+step*zstep, this.hasEnchantment(Enchantment.silkTouch)));
+		MinecraftForge.EVENT_BUS.post(new BorerDigEvent(this, step, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, this.hasEnchantment(Enchantment.silkTouch)));
 		step++;
 	}
 

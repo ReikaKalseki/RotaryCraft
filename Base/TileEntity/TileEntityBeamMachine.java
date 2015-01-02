@@ -14,9 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityBeamMachine extends TileEntityPowerReceiver {
 
-	protected int xstep;
-	protected int ystep;
-	protected int zstep;
+	protected ForgeDirection facing = ForgeDirection.UNKNOWN;
 	protected int pipemeta;
 
 	protected abstract void makeBeam(World world, int x, int y, int z, int meta);
@@ -25,57 +23,37 @@ public abstract class TileEntityBeamMachine extends TileEntityPowerReceiver {
 		switch(metadata) {
 		case 0:
 			read = ForgeDirection.EAST;
-			xstep = -1;
-			ystep = 0;
-			zstep = 0;
+			facing = read.getOpposite();
 			pipemeta = 0;
 			break;
 		case 1:
 			read = ForgeDirection.WEST;
-			xstep = 1;
-			ystep = 0;
-			zstep = 0;
+			facing = read.getOpposite();
 			pipemeta = 0;
 			break;
 		case 2:
 			read = ForgeDirection.NORTH;
-			xstep = 0;
-			ystep = 0;
-			zstep = 1;
+			facing = read.getOpposite();
 			pipemeta = 2;
 			break;
 		case 3:
 			read = ForgeDirection.SOUTH;
-			xstep = 0;
-			ystep = 0;
-			zstep = -1;
+			facing = read.getOpposite();
 			pipemeta = 2;
 			break;
 		case 4:	//moving up
 			read = ForgeDirection.DOWN;
-			xstep = 0;
-			ystep = 1;
-			zstep = 0;
+			facing = read.getOpposite();
 			break;
 		case 5:	//moving down
 			read = ForgeDirection.UP;
-			xstep = 0;
-			ystep = -1;
-			zstep = 0;
+			facing = read.getOpposite();
 			break;
 		}
 	}
 
-	public final int getXStep() {
-		return xstep;
-	}
-
-	public final int getYStep() {
-		return ystep;
-	}
-
-	public final int getZStep() {
-		return zstep;
+	public final ForgeDirection getFacing() {
+		return facing;
 	}
 
 }

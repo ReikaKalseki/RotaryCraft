@@ -24,11 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.InfusionRecipe;
-import thaumcraft.api.research.ResearchCategories;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
@@ -36,10 +33,10 @@ import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.CustomThaumResearch;
+import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ThermalRecipeHelper;
-import Reika.DragonAPI.ModInteract.XMLResearch;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -53,9 +50,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class RotaryRecipes {
 
@@ -146,48 +141,30 @@ public class RotaryRecipes {
 		}
 
 		if (ModList.THAUMCRAFT.isLoaded()) {
-			try {
-				ResourceLocation rl1 = new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png");
-				ResourceLocation rl2 = new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png");
-				ResearchCategories.registerCategory("rotarycraft", rl1, rl2);
+			ReikaThaumHelper.addBookCategory(new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png"), "rotarycraft");
 
-				ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
-				ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
-				ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
-				ItemStack resource = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemResource", 1);
-				int saltDmg = 14;
-				ItemStack salis = new ItemStack(resource.getItem(), 1, saltDmg);
-				AspectList al = new AspectList();
-				al.add(Aspect.MIND, 10);
-				al.add(Aspect.SENSES, 25);
-				al.add(Aspect.AURA, 10);
-				al.add(Aspect.ARMOR, 25);
-				al.add(Aspect.MAGIC, 25);
-				ItemStack[] recipe = {
-						meter,
-						new ItemStack(Items.gold_ingot),
-						salis,
-						ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
-						meter,
-						new ItemStack(Items.gold_ingot),
-						salis,
-						ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+			ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
+			ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
+			ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
+			AspectList al = new AspectList();
+			al.add(Aspect.MIND, 10);
+			al.add(Aspect.SENSES, 25);
+			al.add(Aspect.AURA, 10);
+			al.add(Aspect.ARMOR, 25);
+			al.add(Aspect.MAGIC, 25);
+			ItemStack[] recipe = {
+					meter,
+					new ItemStack(Items.gold_ingot),
+					ThaumItemHelper.ItemEntry.SALIS.getItem(),
+					ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+					meter,
+					new ItemStack(Items.gold_ingot),
+					ThaumItemHelper.ItemEntry.SALIS.getItem(),
+					ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
 
-				};
-				InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
-				String name = "Bedrock Helmet of Revealing";
-				CustomThaumResearch res = new CustomThaumResearch("BEDREVEAL", "rotarycraft", al, 0, 0, 0, out).setName(name);
-				res.setDescription("Combining the protection of bedrock with the power of a Thaumometer");
-				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-					String path = RotaryDescriptions.getParentPage()+"thaum.xml";
-					XMLResearch xml = new XMLResearch("bedreveal", RotaryCraft.class, path, ir, 2);
-					res.setPages(xml.getPages());
-				}
-				res.registerResearchItem();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+			};
+			String desc = "Combining the protection of bedrock with the power of a Thaumometer";
+			ReikaThaumHelper.addInfusionRecipeWithBookEntry("BEDREVEAL", "GOGGLES", desc, "rotarycraft", RotaryCraft.class, RotaryDescriptions.getParentPage()+"thaum.xml", in, out, al, 7, recipe);
 		}
 	}
 

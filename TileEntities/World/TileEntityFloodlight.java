@@ -64,7 +64,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			}
 			beam.clear();
 			if (r > 0)
-				beam.addLineOfClear(world, x, y, z, r, xstep, ystep, zstep);
+				beam.addLineOfClear(world, x, y, z, r, facing.offsetX, facing.offsetY, facing.offsetZ);
 			lastRange = r;
 		}
 
@@ -136,9 +136,9 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			return 0;
 		int ir = this.getMaxRange();
 		for (int i = 1; i <= ir; i++) {
-			int dx = xCoord+i*xstep;
-			int dy = yCoord+i*ystep;
-			int dz = zCoord+i*zstep;
+			int dx = xCoord+i*facing.offsetX;
+			int dy = yCoord+i*facing.offsetY;
+			int dz = zCoord+i*facing.offsetZ;
 			Block b = worldObj.getBlock(dx, dy, dz);
 			if (b != Blocks.air) {
 				if (b instanceof SemiTransparent) {

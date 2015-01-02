@@ -55,9 +55,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		if (step >= maxdist || blocked)
 			return ret;
 		//for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
-		int dx = x+xstep;
-		int dy = y+ystep;
-		int dz = z+zstep;
+		int dx = x+facing.offsetX;
+		int dy = y+facing.offsetY;
+		int dz = z+facing.offsetZ;
 		Block id = world.getBlock(dx, dy, dz);
 		int meta2 = world.getBlockMetadata(dx, dy, dz);
 		TileEntity te = this.getTileEntity(dx, dy, dz);
@@ -65,7 +65,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			SpaceRift sr = (SpaceRift)te;
 			WorldLocation loc = sr.getLinkTarget();
 			if (loc != null) {
-				ret = this.scorchTo(world, loc.xCoord+xstep, loc.yCoord+ystep, loc.zCoord+zstep, step);
+				ret = this.scorchTo(world, loc.xCoord+facing.offsetX, loc.yCoord+facing.offsetY, loc.zCoord+facing.offsetZ, step);
 			}
 		}
 		else {
@@ -226,9 +226,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		if (power >= MINPOWER) { //2MW+ (real military laser)
 			int maxdist = this.getRange();
 			for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
-				int dx = x+step*xstep;
-				int dy = y+step*ystep;
-				int dz = z+step*zstep;
+				int dx = x+step*facing.offsetX;
+				int dy = y+step*facing.offsetY;
+				int dz = z+step*facing.offsetZ;
 				Block id = world.getBlock(dx, dy, dz);
 				int meta2 = world.getBlockMetadata(dx, dy, dz);
 				if (id != Blocks.air && id.isFlammable(world, dx, dy, dz, ForgeDirection.UP))
@@ -357,10 +357,10 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		if (id == Blocks.air)
 			return false;
 		if (id.hasTileEntity(metadata)) {
-			TileEntity te = world.getTileEntity(x+step*xstep, y+step*ystep, z+step*zstep);
+			TileEntity te = world.getTileEntity(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
 			if (te instanceof Laserable) {
-				((Laserable)te).whenInBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power, step);
-				if (((Laserable)te).blockBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power))
+				((Laserable)te).whenInBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power, step);
+				if (((Laserable)te).blockBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power))
 					return true;
 			}
 		}
@@ -370,30 +370,30 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Blocks.flowing_lava);
-				world.spawnParticle("lava", x+step*xstep+rand.nextFloat(), y+step*ystep+rand.nextFloat(), z+step*zstep+rand.nextFloat(), 0, 0, 0);
+						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_lava);
+				world.spawnParticle("lava", x+step*facing.offsetX+rand.nextFloat(), y+step*facing.offsetY+rand.nextFloat(), z+step*facing.offsetZ+rand.nextFloat(), 0, 0, 0);
 			}
 			if (id == Blocks.sand) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Blocks.glass);
+						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.glass);
 			}
 			if (id == Blocks.gravel) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Blocks.cobblestone);
+						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.cobblestone);
 			}/*
     	if (id == Blocks.netherrack) {
-    		if (world.getBlock(x+step*xstep, 1+y+step*ystep, z+step*zstep) == 0) {
-    			world.setBlock(x+step*xstep, 1+y+step*ystep, z+step*zstep, Blocks.fire);
+    		if (world.getBlock(x+step*facing.offsetX, 1+y+step*facing.offsetY, z+step*facing.offsetZ) == 0) {
+    			world.setBlock(x+step*facing.offsetX, 1+y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.fire);
     		}
     	}*/
 			if (id == Blocks.netherrack && tickcount >= 6) {
-				world.newExplosion(null, x+step*xstep+0.5, y+step*ystep+0.5, z+step*zstep+0.5, 3F, true, true);
+				world.newExplosion(null, x+step*facing.offsetX+0.5, y+step*facing.offsetY+0.5, z+step*facing.offsetZ+0.5, 3F, true, true);
 				if (world.provider.dimensionId == -1 && step >= 500)
 					RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
 				step = maxdist;
@@ -404,21 +404,21 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Blocks.sand);
+						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.sand);
 			}
 			if (id == Blocks.grass || id == Blocks.mycelium) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Blocks.dirt);
+						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.dirt);
 			}
 			if (id == Blocks.ice || id == Blocks.snow) {
 				int chance = (int)((power-MINPOWER)/(1024 * step / 4));
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*xstep, y+step*ystep, z+step*zstep, Blocks.flowing_water);
+						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_water);
 			}
 			if (id == Blocks.tallgrass || id == Blocks.web || id == Blocks.yellow_flower || id == Blocks.snow ||
 					id == Blocks.red_flower || id == Blocks.red_mushroom || id == Blocks.brown_mushroom ||
@@ -428,9 +428,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x+step*xstep, y+step*ystep, z+step*zstep);
+						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
 						if (id == Blocks.snow)
-							world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+							world.playSoundEffect(x+step*facing.offsetX + 0.5D, y+step*facing.offsetY + 0.5D, z+step*facing.offsetZ + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
 					}
 			}
 			if (id == Blocks.flowing_water || id == Blocks.water) {
@@ -439,20 +439,20 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = ReikaMathLibrary.extrema(chance, 1, "max");
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x+step*xstep, y+step*ystep, z+step*zstep);
-						world.playSoundEffect(x+step*xstep + 0.5D, y+step*ystep + 0.5D, z+step*zstep + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
+						world.playSoundEffect(x+step*facing.offsetX + 0.5D, y+step*facing.offsetY + 0.5D, z+step*facing.offsetZ + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
 					}
 			}
 			if (id == Blocks.tnt) {
-				world.setBlockToAir(x+step*xstep, y+step*ystep, z+step*zstep);
-				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*xstep+0.5D, y+step*ystep+0.5D, z+step*zstep+0.5D, null);
+				world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
+				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*facing.offsetX+0.5D, y+step*facing.offsetY+0.5D, z+step*facing.offsetZ+0.5D, null);
 				world.spawnEntityInWorld(var6);
 				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-				world.spawnParticle("lava", x+step*xstep+rand.nextFloat(), y+step*ystep+rand.nextFloat(), z+step*zstep+rand.nextFloat(), 0, 0, 0);
+				world.spawnParticle("lava", x+step*facing.offsetX+rand.nextFloat(), y+step*facing.offsetY+rand.nextFloat(), z+step*facing.offsetZ+rand.nextFloat(), 0, 0, 0);
 			}
 			if (id instanceof Laserable) {
-				((Laserable)id).whenInBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power, step);
-				if (((Laserable)id).blockBeam(world, x+step*xstep, y+step*ystep, z+step*zstep, power))
+				((Laserable)id).whenInBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power, step);
+				if (((Laserable)id).blockBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power))
 					return true;
 			}
 

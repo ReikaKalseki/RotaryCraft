@@ -160,7 +160,7 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m == MachineRegistry.FAN) {
 			TileEntityFan tile = (TileEntityFan)te;
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%d %d %d", tile.getXStep(), tile.getYStep(), tile.getZStep()));
+				ReikaChatHelper.write(String.format("%s", tile.getFacing().toString()));
 			}
 		}
 		if (m == MachineRegistry.ENGINE) {

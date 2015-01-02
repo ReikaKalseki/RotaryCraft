@@ -25,6 +25,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.ChromatiCraft.API.RitualAPI;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
 import Reika.DragonAPI.Interfaces.MultiLayerItemSprite;
@@ -193,24 +195,26 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		}
 
 		if (ep.motionY < 0 && winged && floatmode && !ep.isPlayerSleeping()) {
-			boolean sneak = ep.isSneaking();
-			double ang = Math.cos(Math.toRadians(ep.rotationPitch));
-			double d = ep.motionY <= -2 ? 0.0625 : ep.motionY <= -1 ? 0.125 : ep.motionY <= -0.5 ? 0.25 : 0.5; //gives curve
-			if (sneak)
-				d *= 0.125; //was 0.25
-			double fac = 1-(d*ang);
-			ep.motionY *= fac;
-			fac *= sneak ? 0.999 : 0.9;
-			ep.fallDistance *= fac;
-			//double diff = 0.5*ang*ep.motionY;
-			//double maxdecel = jetbonus ? 0.0625 : 0.03125;
-			//ep.motionY -= Math.min(diff, maxdecel);
-			double dv = /*sneak ? 0.15 :*/ 0.05;
-			double vh = ep.onGround ? 0 : dv*ang;
-			double vx = Math.cos(Math.toRadians(ep.rotationYawHead + 90))*vh;
-			double vz = Math.sin(Math.toRadians(ep.rotationYawHead + 90))*vh;
-			ep.motionX += vx;
-			ep.motionZ += vz;
+			if (!ModList.CHROMATICRAFT.isLoaded() || !RitualAPI.isPlayerUndergoingRitual(ep)) {
+				boolean sneak = ep.isSneaking();
+				double ang = Math.cos(Math.toRadians(ep.rotationPitch));
+				double d = ep.motionY <= -2 ? 0.0625 : ep.motionY <= -1 ? 0.125 : ep.motionY <= -0.5 ? 0.25 : 0.5; //gives curve
+				if (sneak)
+					d *= 0.125; //was 0.25
+				double fac = 1-(d*ang);
+				ep.motionY *= fac;
+				fac *= sneak ? 0.999 : 0.9;
+				ep.fallDistance *= fac;
+				//double diff = 0.5*ang*ep.motionY;
+				//double maxdecel = jetbonus ? 0.0625 : 0.03125;
+				//ep.motionY -= Math.min(diff, maxdecel);
+				double dv = /*sneak ? 0.15 :*/ 0.05;
+				double vh = ep.onGround ? 0 : dv*ang;
+				double vx = Math.cos(Math.toRadians(ep.rotationYawHead + 90))*vh;
+				double vz = Math.sin(Math.toRadians(ep.rotationYawHead + 90))*vh;
+				ep.motionX += vx;
+				ep.motionZ += vz;
+			}
 		}
 		return isFlying;
 	}

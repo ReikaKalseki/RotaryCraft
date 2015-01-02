@@ -84,33 +84,33 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			int edity;
 			int editz;
 			for (int i = 1; i <= range; i++) {
-				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
+				editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Blocks.fire);
-				editx = -1*a+x+i*xstep; edity = y+i*ystep; editz = -1*b+z+i*zstep;
+				editx = -1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Blocks.fire);
-				editx = -1*a+x+i*xstep; edity = 1+y+i*ystep; editz = -1*b+z+i*zstep;
-				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Blocks.fire);
-
-				editx = -1*a+x+i*xstep; edity = 2+y+i*ystep; editz = -1*b+z+i*zstep;
-				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Blocks.fire);
-				editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
-				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
-					world.setBlock(editx, edity, editz, Blocks.fire);
-				editx = x+i*xstep; edity = 1+y+i*ystep; editz = z+i*zstep;
+				editx = -1*a+x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Blocks.fire);
 
-				editx = x+i*xstep; edity = 2+y+i*ystep; editz = z+i*zstep;
+				editx = -1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Blocks.fire);
-				editx = 1*a+x+i*xstep; edity = y+i*ystep; editz = 1*b+z+i*zstep;
+				editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Blocks.fire);
-				editx = 1*a+x+i*xstep; edity = 2+y+i*ystep; editz = 1*b+z+i*zstep;
+				editx = x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
+					world.setBlock(editx, edity, editz, Blocks.fire);
+
+				editx = x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
+					world.setBlock(editx, edity, editz, Blocks.fire);
+				editx = 1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
+				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
+					world.setBlock(editx, edity, editz, Blocks.fire);
+				editx = 1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
 				if (rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, editx, edity, editz))
 					world.setBlock(editx, edity, editz, Blocks.fire);
 			}
@@ -149,7 +149,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		int range = this.getRange();
 		boolean blocked = false;
 		for (int i = 1; i <= range && !blocked; i++) { //Limit range to line-of-sight
-			if (this.isStoppedBy(world, x+i*xstep, y+i*ystep, z+i*zstep)) {
+			if (this.isStoppedBy(world, x+i*facing.offsetX, y+i*facing.offsetY, z+i*facing.offsetZ)) {
 				blocked = true;
 				range = i;
 			}
@@ -159,7 +159,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", inzone.size()));
 		for (Entity caught : inzone) {
 			double mass = ReikaEntityHelper.getEntityMass(caught);
-			if (caught.motionX < AXISSPEEDCAP && xstep != 0) {
+			if (caught.motionX < AXISSPEEDCAP && facing.offsetX != 0) {
 				double d = caught.posX-x;
 				if (d == 0)
 					d = 1;
@@ -170,10 +170,10 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					multiplier = 1;
 				double base = power2*BASESPEED;
 				double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
-				double a = xstep > 0 ? 0.004 : 0;
-				caught.motionX = xstep*speedstep+a;
+				double a = facing.offsetX > 0 ? 0.004 : 0;
+				caught.motionX = facing.offsetX*speedstep+a;
 			}
-			if (caught.motionY < AXISSPEEDCAP && ystep != 0) {
+			if (caught.motionY < AXISSPEEDCAP && facing.offsetY != 0) {
 				double d = caught.posY-y;
 				if (d == 0)
 					d = 1;
@@ -183,9 +183,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 				if (multiplier > 1 || multiplier < 0)
 					multiplier = 1;
 				double base = multiplier*power2*BASESPEED;
-				caught.motionY = ystep*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+				caught.motionY = facing.offsetY*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
 			}
-			if (caught.motionZ < AXISSPEEDCAP && zstep != 0) {
+			if (caught.motionZ < AXISSPEEDCAP && facing.offsetZ != 0) {
 				double d = caught.posZ-z;
 				if (d == 0)
 					d = 1;
@@ -196,8 +196,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					multiplier = 1;
 				double base = multiplier*power2*BASESPEED;
 				double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
-				double a = zstep > 0 ? 0.004 : 0;
-				caught.motionZ = zstep*speedstep+a;
+				double a = facing.offsetZ > 0 ? 0.004 : 0;
+				caught.motionZ = facing.offsetZ*speedstep+a;
 			}
 		}
 		this.clearBlocks(world, x, y, z, meta, range);
@@ -213,26 +213,26 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		int edity;
 		int editz;
 		for (int i = 1; i <= range; i++) {
-			editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
+			editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
 			this.enhanceFinPower(world, editx, edity, editz);
-			editx = -1*a+x+i*xstep; edity = y+i*ystep; editz = -1*b+z+i*zstep;
+			editx = -1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
-			editx = -1*a+x+i*xstep; edity = 1+y+i*ystep; editz = -1*b+z+i*zstep;
-			this.rip2(world, editx, edity, editz);
-
-			editx = -1*a+x+i*xstep; edity = 2+y+i*ystep; editz = -1*b+z+i*zstep;
-			this.rip2(world, editx, edity, editz);
-			editx = x+i*xstep; edity = y+i*ystep; editz = z+i*zstep;
-			this.rip2(world, editx, edity, editz);
-			editx = x+i*xstep; edity = 1+y+i*ystep; editz = z+i*zstep;
+			editx = -1*a+x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
 
-			editx = x+i*xstep; edity = 2+y+i*ystep; editz = z+i*zstep;
+			editx = -1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
-			editx = 1*a+x+i*xstep; edity = y+i*ystep; editz = 1*b+z+i*zstep;
+			editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
-			editx = 1*a+x+i*xstep; edity = 2+y+i*ystep; editz = 1*b+z+i*zstep;
+			editx = x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+			this.rip2(world, editx, edity, editz);
+
+			editx = x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+			this.rip2(world, editx, edity, editz);
+			editx = 1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
+			this.rip2(world, editx, edity, editz);
+			editx = 1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
 		}
 	}

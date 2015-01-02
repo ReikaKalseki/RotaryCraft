@@ -329,6 +329,7 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer
 				t.setBlockMetadata(meta+1);
 			else
 				t.setBlockMetadata(0);
+			t.onRedirect();
 			world.markBlockForUpdate(x, y, z);
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 		}

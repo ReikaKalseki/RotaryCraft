@@ -137,9 +137,19 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			torque = 0;
 		}
 		power = (long)omega*(long)torque;
-		if (rand.nextInt(20) == 0)
-			if (tank.getLevel() > 0)
-				tank.removeLiquid(1000);
+		if (power > 0 && tank.getLevel() > 0) {
+			tank.removeLiquid(this.getConsumedWater());
+		}
+	}
+
+	public int getConsumedWater() {
+		int base = 10+16*ReikaMathLibrary.logbase2(power);
+		int rnd = 10;
+		if (base >= 1000)
+			rnd = 1000;
+		else if (base >= 100)
+			rnd = 100;
+		return ReikaMathLibrary.roundUpToX(rnd, base);
 	}
 
 	public int getTowerHeight() {
