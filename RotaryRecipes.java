@@ -50,6 +50,8 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import buildcraft.energy.fuels.CoolantManager;
+import buildcraft.energy.fuels.FuelManager;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RotaryRecipes {
@@ -68,6 +70,10 @@ public class RotaryRecipes {
 
 		if (ModList.THERMALEXPANSION.isLoaded())
 			addThermalExpansion();
+		if (ModList.BCENERGY.isLoaded()) {
+			FuelManager.INSTANCE.addFuel(FluidRegistry.getFluid("rc ethanol"), 9, 3000); //ethanol generates about 50% more power, but burns fast
+			CoolantManager.INSTANCE.addCoolant(FluidRegistry.getFluid("liquid nitrogen"), 0.01F);
+		}
 	}
 
 	private static void addProps() {

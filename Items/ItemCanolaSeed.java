@@ -16,14 +16,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 
@@ -50,29 +48,31 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 			if (side == 5)
 				++x;
 		}
-		int minx = spread ? x-1 : x;
-		int maxx = spread ? x+1 : x;
-		int minz = spread ? z-1 : z;
-		int maxz = spread ? z+1 : z;
 		boolean flag = false;
-		for (int xi = minx; xi <= maxx; xi++) {
-			for (int zi = minz; zi <= maxz; zi++) {
-				Block idbelow = world.getBlock(xi, y-1, zi);
-				ReikaJavaLibrary.pConsole(idbelow.getLocalizedName()+" @ "+xi+", "+y+", "+zi, Side.SERVER);
-				if ((!ReikaWorldHelper.softBlocks(world.getBlock(xi, y, zi))) || !BlockCanola.isValidFarmBlock(world, xi, y, zi, idbelow)) {
-					ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemRegistry.CANOLA.getStackOf());
-				}
-				else if (!player.canPlayerEdit(xi, y, zi, 0, items)) {
-					ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemRegistry.CANOLA.getStackOf());
-				}
-				else {
-					world.setBlock(xi, y, zi, BlockRegistry.CANOLA.getBlockInstance());
-					flag = true;
+		Block idbelow = world.getBlock(x, y-1, z);
+		if (ReikaWorldHelper.softBlocks(world.getBlock(x, y, z)) && BlockCanola.isValidFarmBlock(world, x, y, z, idbelow)) {
+			int minx = spread ? x-1 : x;
+			int maxx = spread ? x+1 : x;
+			int minz = spread ? z-1 : z;
+			int maxz = spread ? z+1 : z;
+			for (int xi = minx; xi <= maxx; xi++) {
+				for (int zi = minz; zi <= maxz; zi++) {
+					idbelow = world.getBlock(xi, y-1, zi);
+					if ((!ReikaWorldHelper.softBlocks(world.getBlock(xi, y, zi))) || !BlockCanola.isValidFarmBlock(world, xi, y, zi, idbelow)) {
+						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemRegistry.CANOLA.getStackOf());
+					}
+					else if (!player.canPlayerEdit(xi, y, zi, 0, items)) {
+						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemRegistry.CANOLA.getStackOf());
+					}
+					else {
+						world.setBlock(xi, y, zi, BlockRegistry.CANOLA.getBlockInstance());
+						flag = true;
+					}
 				}
 			}
-		}
-		if (!player.capabilities.isCreativeMode) {
-			--items.stackSize;
+			if (!player.capabilities.isCreativeMode) {
+				--items.stackSize;
+			}
 		}
 		return flag;
 	}
