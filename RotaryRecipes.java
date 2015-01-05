@@ -24,8 +24,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.InfusionRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
@@ -53,7 +55,9 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class RotaryRecipes {
 
@@ -172,7 +176,9 @@ public class RotaryRecipes {
 
 			};
 			String desc = "Combining the protection of bedrock with the power of a Thaumometer";
-			ReikaThaumHelper.addInfusionRecipeWithBookEntry("BEDREVEAL", "GOGGLES", desc, "rotarycraft", RotaryCraft.class, RotaryDescriptions.getParentPage()+"thaum.xml", in, out, al, 7, recipe);
+			InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+				ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, RotaryCraft.class, RotaryDescriptions.getParentPage()+"thaum.xml");
 		}
 	}
 
