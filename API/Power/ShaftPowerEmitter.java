@@ -7,16 +7,17 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.API;
+package Reika.RotaryCraft.API.Power;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-/** Implementing this gives you extremely basic boolean sensitivity to RC power. Used for things like switches and detectors, and unsuitable
- * for actual machines due to the total lack of sensitivity to the amount of power or its direction. */
-public interface SimpleShaftPowerReceiver {
+/** Implement this to make your block capable of generating RC power. */
+public interface ShaftPowerEmitter extends ShaftMachine, PowerGenerator {
 
-	public void setPowered(boolean power);
+	/** Side to write to */
+	public boolean canWriteTo(ForgeDirection dir);
 
-	public boolean canReadFrom(ForgeDirection dir);
+	/** Whether your machine is emitting power right now */
+	public boolean isEmitting();
 
 }

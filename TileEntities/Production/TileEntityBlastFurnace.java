@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.ArrayList;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +23,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
@@ -290,8 +290,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 
-		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-		if (waterside != null) {
+		if (RotaryAux.isNextToWater(world, x, y, z)) {
 			Tamb /= 2;
 		}
 		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
@@ -300,12 +299,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				Tamb /= 4;
 			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
-		if (fireside != null) {
+		if (RotaryAux.isNextToFire(world, x, y, z)) {
 			Tamb += Tamb >= 300 ? 100 : 200;
 		}
-		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
-		if (lavaside != null) {
+		if (RotaryAux.isNextToLava(world, x, y, z)) {
 			Tamb += Tamb >= 300 ? 400 : 600;
 		}
 

@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.RotaryCraft.API.ShaftMerger;
+import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;

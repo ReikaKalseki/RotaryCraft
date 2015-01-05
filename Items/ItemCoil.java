@@ -16,7 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.TensionStorage;
+import Reika.RotaryCraft.API.Interfaces.TensionStorage;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;

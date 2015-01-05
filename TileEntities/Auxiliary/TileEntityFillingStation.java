@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.API.Fillable;
+import Reika.RotaryCraft.API.Interfaces.Fillable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidInOut;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;

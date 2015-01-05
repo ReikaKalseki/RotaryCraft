@@ -16,9 +16,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
-import Reika.RotaryCraft.API.PowerGenerator;
-import Reika.RotaryCraft.API.ShaftMerger;
-import Reika.RotaryCraft.API.ShaftPowerEmitter;
+import Reika.RotaryCraft.API.Power.PowerGenerator;
+import Reika.RotaryCraft.API.Power.ShaftMerger;
+import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
 public class PowerSourceList {

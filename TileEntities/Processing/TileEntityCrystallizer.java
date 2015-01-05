@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -189,9 +188,9 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow) != null)
 			Tamb -= 5;
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water) != null)
+		if (RotaryAux.isNextToWater(world, x, y, z))
 			Tamb -= 15;
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.ice) != null)
+		if (RotaryAux.isNextToIce(world, x, y, z))
 			Tamb -= 30;
 
 		ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);

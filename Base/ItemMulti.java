@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -93,6 +94,8 @@ public class ItemMulti extends ItemBasic {
 		int rx = is.stackTagCompound.getInteger("rx");
 		int ry = is.stackTagCompound.getInteger("ry");
 		int rz = is.stackTagCompound.getInteger("rz");
+
+		ReikaJavaLibrary.pConsole(is.stackTagCompound);
 
 		int dl = Math.abs(ex-rx+ey-ry+ez-rz)-1;
 

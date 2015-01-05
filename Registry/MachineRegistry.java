@@ -1103,6 +1103,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		switch(this) {
 		case BLASTFURNACE:
 		case DRYING:
+		case COMPOSTER:
 			return true;
 		default:
 			return false;

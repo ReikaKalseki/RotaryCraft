@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Processing;
 
 import java.util.List;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -22,6 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -168,8 +168,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 
-		ForgeDirection waterside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water);
-		if (waterside != null) {
+		if (RotaryAux.isNextToWater(world, x, y, z)) {
 			Tamb /= 2;
 		}
 		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
@@ -178,14 +177,15 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 				Tamb /= 4;
 			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
-		ForgeDirection fireside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire);
-		if (fireside != null) {
+
+		if (RotaryAux.isNextToFire(world, x, y, z)) {
 			Tamb += 200;
 		}
-		ForgeDirection lavaside = ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava);
-		if (lavaside != null) {
+
+		if (RotaryAux.isNextToLava(world, x, y, z)) {
 			Tamb += 600;
 		}
+
 		if (temperature > Tamb)
 			temperature--;
 		if (temperature > Tamb*2)

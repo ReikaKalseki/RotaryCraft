@@ -21,6 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.ImmovableBlock;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -180,6 +181,11 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 			id = worldObj.getBlock(rx, ry, rz);
 			if (id == Blocks.bedrock)
 				return Integer.MIN_VALUE;
+			if (id instanceof ImmovableBlock) {
+				ImmovableBlock im = (ImmovableBlock)id;
+				if (!im.canBePushed(worldObj, rx, ry, rz, i, torque, power))
+					return Integer.MIN_VALUE;
+			}
 			if (!worldObj.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, rx, ry, rz, this.getPlacer()))
 				return Integer.MIN_VALUE;
 			TileEntity tile = worldObj.getTileEntity(rx, ry, rz);

@@ -13,7 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.RotaryCraft.API.TensionStorage;
+import Reika.RotaryCraft.API.Interfaces.TensionStorage;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 
 public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity implements ConditionalOperation {

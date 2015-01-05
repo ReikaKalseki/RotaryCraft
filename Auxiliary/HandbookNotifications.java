@@ -86,6 +86,7 @@ public class HandbookNotifications {
 			this.addEntry(ConfigRegistry.HSLADICT, Level.INFO, "HSLA has been made usable in other mods' recipes.");
 			this.addEntry(ConfigRegistry.INSTACUT, Level.WARNING, "The Woodcutter has been changed to not cut trees as cleanly or effectively.");
 			this.addEntry(ConfigRegistry.MODORES, Level.SEVERE, "Forced mod ore compatibility has been disabled.");
+			this.addEntry(ConfigRegistry.GREGORES, Level.SEVERE, "GregTech ore compatibility has been disabled.");
 			this.addEntry(ConfigRegistry.SPAWNERLEAK, Level.WARNING, "Mob spawn when breaking monster spawners has been disabled.");
 			this.addEntry(ConfigRegistry.TABLEMACHINES, Level.INFO, "Machines can be crafted in tables other than the Worktable.");
 			this.addEntry(ConfigRegistry.TURRETPLAYERS, Level.WARNING, "Turrets' ability to target players has been disabled.");

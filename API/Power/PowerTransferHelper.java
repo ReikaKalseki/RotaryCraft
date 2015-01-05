@@ -7,12 +7,13 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.API;
+package Reika.RotaryCraft.API.Power;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.WorldLocation;
+import Reika.RotaryCraft.API.IOMachine;
 
 /** This class has some functions to aid in ensuring you are not the source of a power exploit by remaining powered even if the supplying machine
  * is broken. Call this every tick you are powered, and if the return value is false, your power supply is gone. */

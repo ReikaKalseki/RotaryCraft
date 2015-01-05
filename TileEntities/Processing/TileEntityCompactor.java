@@ -24,8 +24,9 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.ThermalMachine;
+import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
@@ -253,9 +254,9 @@ DiscreteFunction,ConditionalOperation
 
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", 0));
 
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null)
+		if (RotaryAux.isNextToLava(world, x, y, z))
 			temperature += 4;
-		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null)
+		if (RotaryAux.isNextToFire(world, x, y, z))
 			temperature += 2;
 		if (Tamb == 300)	//Fire is 50% hotter in the nether
 			temperature++;

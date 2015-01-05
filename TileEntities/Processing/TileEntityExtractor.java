@@ -274,8 +274,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 			}
 		}
-		ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 		if (ItemRegistry.MODEXTRACTS.matchItem(inv[i]) || ModOreList.isModOre(inv[i])) {
+			ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 			switch (i) {
 			case 0:
 				if (ModOreList.isModOre(inv[i])) {

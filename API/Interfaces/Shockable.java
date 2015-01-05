@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.API;
+package Reika.RotaryCraft.API.Interfaces;
 
 /** Use this on TileEntities to make them have special behavior if hit with a discharge from the Van De Graff generator. */
 public interface Shockable {

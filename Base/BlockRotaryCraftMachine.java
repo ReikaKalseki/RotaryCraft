@@ -13,9 +13,15 @@ import java.util.Random;
 
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.BlockTEBase;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
@@ -52,6 +58,12 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWa
 	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face)
 	{
 		return 0;
+	}
+
+	@Override
+	@ModDependent(ModList.WAILA)
+	public final NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
+		return tag;
 	}
 
 }

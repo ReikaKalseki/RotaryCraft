@@ -9,14 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -83,17 +82,17 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 
 		if (biome == BiomeGenBase.hell)
 			Tamb = 101;	//boils water, so 101C
-		if (world.getBlock(x, y-1, z) == Blocks.fire)
+		if (RotaryAux.isAboveFire(world, x, y, z))
 			temperature++;
-		if (world.getBlock(x, y-1, z) == Blocks.fire && biome == BiomeGenBase.hell)
+		if (RotaryAux.isAboveFire(world, x, y, z) && biome == BiomeGenBase.hell)
 			temperature++; //Nether has 50% hotter fire
-		if (ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.lava)
+		if (RotaryAux.isAboveLava(world, x, y, z))
 			temperature += 2;
-		if (Tamb < 0 && world.getBlock(x, y-1, z) == Blocks.fire)
+		if (Tamb < 0 && RotaryAux.isAboveFire(world, x, y, z))
 			Tamb += 30;
 		if (temperature < Tamb)
 			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
-		if (world.getBlock(x, y-1, z) != Blocks.fire && ReikaWorldHelper.getMaterial(world, x, y-1, z) != Material.lava && temperature > Tamb)
+		if (!RotaryAux.isAboveFire(world, x, y, z) && !RotaryAux.isAboveLava(world, x, y, z) && temperature > Tamb)
 			temperature--;
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/96;

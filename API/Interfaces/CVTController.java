@@ -7,11 +7,11 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.API;
+package Reika.RotaryCraft.API.Interfaces;
 
 import net.minecraft.tileentity.TileEntity;
 
-/** If you have an object that wishes to control a CVT, use this interface. You are responsible for getting the TE instance yourself.
+/** If you have an object that wishes to control a CVT, use this interface. You are responsible for getting the TileEntity instance yourself.
  * The TileEntityAdvancedGear has a setController method. Only one controller per CVT, or you may get strange behavior. */
 public interface CVTController {
 

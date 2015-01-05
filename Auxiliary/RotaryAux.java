@@ -13,6 +13,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -28,6 +30,8 @@ import Reika.DragonAPI.ModInteract.RedstoneArsenalHandler;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource;
+import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -239,6 +243,84 @@ public class RotaryAux {
 		int z = te.zCoord;
 		if (world.getBlock(x, y+1, z) == Blocks.wool && world.getBlock(x, y-1, z) == Blocks.wool) {
 			return true;
+		}
+		return false;
+	}
+
+	public static boolean isNextToIce(World world, int x, int y, int z) {
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.ice) != null)
+			return true;
+		Block b = world.getBlock(x, y-1, z);
+		if (b instanceof EnvironmentalHeatSource) {
+			EnvironmentalHeatSource ehs = (EnvironmentalHeatSource)b;
+			return ehs.isActive(world, x, y, z) && ehs.getSourceType(world, x, y, z) == SourceType.ICY;
+		}
+		return false;
+	}
+
+	public static boolean isNextToWater(World world, int x, int y, int z) {
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.water) != null)
+			return true;
+		for (int i = 1; i <= 2; i++) {
+			Block b = world.getBlock(x, y-i, z);
+			if (b instanceof EnvironmentalHeatSource) {
+				EnvironmentalHeatSource ehs = (EnvironmentalHeatSource)b;
+				return ehs.isActive(world, x, y-i, z) && ehs.getSourceType(world, x, y-i, z) == SourceType.WATER;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isNextToFire(World world, int x, int y, int z) {
+		if (ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.fire) != null)
+			return true;
+		for (int i = 1; i <= 2; i++) {
+			Block b = world.getBlock(x, y-i, z);
+			if (b instanceof EnvironmentalHeatSource) {
+				EnvironmentalHeatSource ehs = (EnvironmentalHeatSource)b;
+				return ehs.isActive(world, x, y-i, z) && ehs.getSourceType(world, x, y-i, z) == SourceType.FIRE;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isNextToLava(World world, int x, int y, int z) {
+		if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null)
+			return true;
+		for (int i = 1; i <= 2; i++) {
+			Block b = world.getBlock(x, y-i, z);
+			if (b instanceof EnvironmentalHeatSource) {
+				EnvironmentalHeatSource ehs = (EnvironmentalHeatSource)b;
+				return ehs.isActive(world, x, y-i, z) && ehs.getSourceType(world, x, y-i, z) == SourceType.LAVA;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isAboveFire(World world, int x, int y, int z) {
+		Block b = world.getBlock(x, y-1, z);
+		if (b == Blocks.fire)
+			return true;
+		for (int i = 1; i <= 2; i++) {
+			b = world.getBlock(x, y-i, z);
+			if (b instanceof EnvironmentalHeatSource) {
+				EnvironmentalHeatSource ehs = (EnvironmentalHeatSource)b;
+				return ehs.isActive(world, x, y-i, z) && ehs.getSourceType(world, x, y-i, z) == SourceType.FIRE;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isAboveLava(World world, int x, int y, int z) {
+		Block b = world.getBlock(x, y-1, z);
+		if (b.getMaterial() == Material.lava)
+			return true;
+		for (int i = 1; i <= 2; i++) {
+			b = world.getBlock(x, y-i, z);
+			if (b instanceof EnvironmentalHeatSource) {
+				EnvironmentalHeatSource ehs = (EnvironmentalHeatSource)b;
+				return ehs.isActive(world, x, y-i, z) && ehs.getSourceType(world, x, y-i, z) == SourceType.LAVA;
+			}
 		}
 		return false;
 	}
