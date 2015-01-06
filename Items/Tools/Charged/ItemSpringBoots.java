@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2014
+ * Copyright 2015
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -68,7 +68,7 @@ public class ItemSpringBoots extends ItemChargedArmor {
 			if (pot == null || pot.getAmplifier() < SPEED_LEVEL) {
 				ep.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 1, SPEED_LEVEL));
 			}
-			ep.stepHeight = 1.25F;
+			ep.stepHeight = 1.45F; //1.25F
 			if (itemRand.nextInt(160) == 0) {
 				if (is.getItem() != ItemRegistry.BEDJUMP.getItemInstance()) {
 					ep.setCurrentItemOrArmor(1, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1));

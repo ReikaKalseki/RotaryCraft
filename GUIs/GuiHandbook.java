@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2014
+ * Copyright 2015
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -30,6 +31,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -50,6 +52,8 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import codechicken.nei.NEIClientConfig;
+import codechicken.nei.recipe.GuiCraftingRecipe;
 
 public class GuiHandbook extends GuiScreen
 {
@@ -481,6 +485,24 @@ public class GuiHandbook extends GuiScreen
 				page = HandbookRegistry.ALERTS.getPage();
 				this.initGui();
 				HandbookNotifications.clearAlert();
+			}
+		}
+	}
+
+	@Override
+	public final void keyTyped(char c, int key) {
+		super.keyTyped(c, key);
+
+		if (ModList.NEI.isLoaded() && key == NEIClientConfig.getKeyBinding("gui.recipe")) {
+			int x = ReikaGuiAPI.instance.getMouseRealX();
+			int y = ReikaGuiAPI.instance.getMouseRealY();
+			int j = (width - xSize) / 2-2;
+			int k = (height - ySize) / 2-8;
+			if (x >= j && y >= k && x < j+xSize && y < k+ySize) {
+				ItemStack is = ReikaGuiAPI.instance.getItemRenderAt(x, y);
+				if (is != null) {
+					GuiCraftingRecipe.openRecipeGui("item", is);
+				}
 			}
 		}
 	}
