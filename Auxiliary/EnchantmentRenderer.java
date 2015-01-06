@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2014
+ * Copyright 2015
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -106,6 +106,7 @@ public abstract class EnchantmentRenderer {
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
+	@Deprecated
 	public static void renderShine(double p2, double p4, double p6, double dx, double dy, double dz) {
 		boolean textured = true;
 		par2 = p2;
