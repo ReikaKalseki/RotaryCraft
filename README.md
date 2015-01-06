@@ -23,5 +23,5 @@ Two, the code is not written by me and thus I do not have a full understanding o
 
 Three, because of the complexity of much of RC code, I do not fully trust potential code submitters to understand all of the implications of their changes. Several times fixes for real issues have been suggested, including as PRs, that cause auxiliary problems, some cripplingly severe, because the author was not aware of the effects of their changes.
 
-However, you can still suggest code - even in the form of a pull request if you like; I will simply add it manually.
+However, you can still suggest code, even in the form of a pull request if you like; I will simply add it manually.
 Because of the license on this repository, the rights to any code submitted - this would apply even to PRs - is released to me under an unrestricted license.
