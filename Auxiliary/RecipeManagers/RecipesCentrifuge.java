@@ -74,7 +74,7 @@ public class RecipesCentrifuge
 		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {
 			ItemStack lead = OreDictionary.getOres("dustLead").get(0);
 			ItemStack silver = OreDictionary.getOres("dustSilver").get(0);
-			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, lead, silver);
+			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, lead, 100, silver, 100);
 		}
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));

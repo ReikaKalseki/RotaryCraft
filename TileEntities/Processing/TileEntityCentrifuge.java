@@ -9,10 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -22,10 +21,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.TemporaryInventory;
 import Reika.DragonAPI.Instantiable.Data.ChancedOutputList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -99,19 +98,17 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 	}
 
 	private boolean canMakeAllOf(Collection<ItemStack> out) {
-		List<ItemStack> copy = new ArrayList(out);
-		for (ItemStack is : copy) {
-			for (int k = 1; k < inv.length; k++) {
-				ItemStack is2 = inv[k];
-				if (ReikaItemHelper.matchStacks(is, is2)) {
-					int sum = is2.stackSize+is.stackSize;
-					if (sum <= is.getMaxStackSize() && sum <= this.getInventoryStackLimit()) {
-						copy.remove(is);
-					}
-				}
-			}
+		IInventory temp = new TemporaryInventory(9);
+		for (int i = 0; i < 9; i++) {
+			ItemStack in = inv[i+1];
+			if (in != null)
+				temp.setInventorySlotContents(i, in.copy());
 		}
-		return ReikaInventoryHelper.countEmptySlots(inv) >= copy.size();
+		for (ItemStack is : out) {
+			if (!ReikaInventoryHelper.addToIInv(is, temp))
+				return false;
+		}
+		return true;
 	}
 
 	public int getLevel() {

@@ -234,7 +234,7 @@ ConditionalOperation, DamagingContact {
 		is.stackSize--;
 
 		if (is.stackSize <= 0)
-			is = null;
+			inv[0] = null;
 	}
 
 	@Override
