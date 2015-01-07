@@ -54,6 +54,11 @@ public class GrinderAPI {
 		}
 	}
 
+	/** Legacy for those using old APIs. */
+	public static void addGrindableSeed(ItemStack seed) {
+		addGrindableSeed(seed, 0.5F);
+	}
+
 	/** Adds a grindable seed, so that it may be used to make lubricant.
 	 * Args: Item in, output scaling (clamps to 0-1). Call this in your postLoad method. */
 	public static void addGrindableSeed(ItemStack seed, float factor) {
