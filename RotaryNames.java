@@ -42,6 +42,10 @@ public class RotaryNames {
 		"fluid.lubricant", "fluid.jet fuel", "fluid.rc ethanol", "fluid.liquid nitrogen"
 	};
 
+	private static final String[] canolaNames = {
+		"canola.seed", "canola.dense", "canola.husk"
+	};
+
 	//Never presented directly, not in .lang
 	private static final String[] gearboxItemNames = {
 		"Wooden 2:1 Gearbox", "Stone 2:1 Gearbox", "Steel 2:1 Gearbox", "Diamond 2:1 Gearbox", "Bedrock 2:1 Gearbox",
@@ -224,5 +228,9 @@ public class RotaryNames {
 
 	public static String getModIngotName(int dmg) {
 		return ModOreList.oreList[dmg].displayName+" "+ModOreList.oreList[dmg].getTypeName();
+	}
+
+	public static String getCanolaName(int dmg) {
+		return getName(canolaNames, dmg);
 	}
 }

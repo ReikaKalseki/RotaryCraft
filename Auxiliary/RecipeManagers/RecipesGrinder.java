@@ -39,9 +39,6 @@ public class RecipesGrinder {
 	private ArrayList<ItemStack> products = new ArrayList();
 	private ArrayList<ItemStack> ingredients = new ArrayList();
 
-	/**
-	 * Used to call methods addSmelting and getSmeltingResult.
-	 */
 	public static final RecipesGrinder getRecipes()
 	{
 		return GrinderBase;
@@ -105,6 +102,8 @@ public class RecipesGrinder {
 		 */
 
 		this.addRecipe(Items.coal, ItemStacks.coaldust, 0);
+
+		this.addRecipe(ItemRegistry.CANOLA.getStackOf(), ItemRegistry.CANOLA.getStackOfMetadata(2), 0);
 	}
 
 	private ItemStack getSizedSawdust(int size) {

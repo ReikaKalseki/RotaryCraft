@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -26,6 +27,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -60,17 +62,33 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		}
 	}
 
-	public class CanolaRecipe extends CachedRecipe {
+	public class SeedRecipe extends CachedRecipe {
+
+		private ArrayList<ItemStack> inputs = new ArrayList();
+
+		private SeedRecipe() {
+			inputs.addAll(TileEntityGrinder.getGrindableSeeds());
+		}
+
+		private SeedRecipe(ItemStack seed) {
+			inputs.add(seed);
+		}
 
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(ItemRegistry.CANOLA.getStackOf(), 71, 24);
+			return new PositionedStack(this.getInput(), 71, 24);
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			return null;
+			ItemStack is = RecipesGrinder.getRecipes().getGrindingResult(this.getInput());
+			return is != null ? new PositionedStack(is, 131, 24) : null;
+		}
+
+		private ItemStack getInput() {
+			ItemStack is = inputs.get((int)(System.nanoTime()/1000000000)%inputs.size());
+			return ReikaItemHelper.getSizedItemStack(is, 1);
 		}
 
 	}
@@ -110,7 +128,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (ReikaItemHelper.matchStacks(result, ItemStacks.lubebucket)) {
-			arecipes.add(new CanolaRecipe());
+			arecipes.add(new SeedRecipe());
 		}
 		else if (RecipesGrinder.getRecipes().isProduct(result)) {
 			List<ItemStack> is = RecipesGrinder.getRecipes().getSources(result);
@@ -121,8 +139,8 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (ingredient.getItem() == ItemRegistry.CANOLA.getItemInstance()) {
-			arecipes.add(new CanolaRecipe());
+		if (TileEntityGrinder.isGrindableSeed(ingredient)) {
+			arecipes.add(new SeedRecipe(ingredient));
 		}
 		else if (ReikaBlockHelper.isOre(ingredient)) {
 			arecipes.add(new GrinderRecipe(ReikaJavaLibrary.makeListFrom(ingredient)));

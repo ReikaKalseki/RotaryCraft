@@ -9,13 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -24,8 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -43,7 +43,6 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction,
 ConditionalOperation, DamagingContact {
 
-	/** The number of ticks that the current item has been cooking for */
 	public int grinderCookTime;
 
 	public boolean idle = false;
@@ -52,14 +51,23 @@ ConditionalOperation, DamagingContact {
 
 	private HybridTank tank = new HybridTank("grinder", MAXLUBE);
 
-	private static final List<ItemStack> grindableSeeds = new ArrayList();
+	private static final ItemHashMap<Float> grindableSeeds = new ItemHashMap();
 
 	static {
-		addGrindableSeed(ItemRegistry.CANOLA.getStackOf());
+		addGrindableSeed(ItemRegistry.CANOLA.getStackOf(), 1F);
+		//addGrindableSeed(ItemRegistry.CANOLA.getStackOfMetadata(2), 0.65F);
 	}
 
-	public static void addGrindableSeed(ItemStack seed) {
-		grindableSeeds.add(seed);
+	public static void addGrindableSeed(ItemStack seed, float factor) {
+		grindableSeeds.put(seed, MathHelper.clamp_float(factor, 0, 1));
+	}
+
+	public static boolean isGrindableSeed(ItemStack seed) {
+		return grindableSeeds.containsKey(seed);
+	}
+
+	public static Collection<ItemStack> getGrindableSeeds() {
+		return grindableSeeds.keySet();
 	}
 
 	@Override
@@ -68,7 +76,7 @@ ConditionalOperation, DamagingContact {
 	}
 
 	public void testIdle() {
-		idle = (!this.canSmelt());
+		idle = (!this.canGrind());
 	}
 
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {
@@ -151,12 +159,12 @@ ConditionalOperation, DamagingContact {
 			grinderCookTime = 0;
 			return;
 		}
-		if (this.canSmelt()) {
+		if (this.canGrind()) {
 			grinderCookTime++;
 			if (grinderCookTime >= this.getOperationTime()) {
 				grinderCookTime = 0;
 				tickcount = 0;
-				this.smeltItem();
+				this.grind();
 				flag1 = true;
 			}
 		}
@@ -172,81 +180,61 @@ ConditionalOperation, DamagingContact {
 		}
 	}
 
-	private boolean canSmelt()
-	{
+	private boolean canGrind() {
 		if (inv[0] == null)
-		{
 			return false;
-		}
 
-		if (ReikaItemHelper.listContainsItemStack(grindableSeeds, inv[0])) {
-			return (!tank.isFull());
+		boolean flag = false;
+		if (isGrindableSeed(inv[0])) {
+			flag = true;
+			if (tank.isFull()) {
+				return false;
+			}
 		}
 
 		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
 
+		if (flag && itemstack == null)
+			return true;
 		if (itemstack == null)
-		{
 			return false;
-		}
 
 		if (inv[1] == null)
-		{
 			return true;
-		}
 
 		if (!inv[1].isItemEqual(itemstack))
-		{
 			return false;
-		}
 
 		if (inv[1].stackSize < this.getInventoryStackLimit() && inv[1].stackSize < inv[1].getMaxStackSize())
-		{
 			return true;
-		}
 
 		return inv[1].stackSize < itemstack.getMaxStackSize();
 	}
 
-	public int getLubricantScaled(int par1)
-	{
+	public int getLubricantScaled(int par1) {
 		return tank.getLevel()*par1/MAXLUBE;
 	}
 
-	/**
-	 * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
-	 */
-	public void smeltItem()
-	{
-		if (!this.canSmelt())
-		{
-			return;
-		}
-		if (inv[0] != null && ReikaItemHelper.listContainsItemStack(grindableSeeds, inv[0])) {
-			int num = 1;
-			inv[0].stackSize -= num;
-			tank.addLiquid(DifficultyEffects.CANOLA.getInt()*num, FluidRegistry.getFluid("lubricant"));
-			if (inv[0].stackSize <= 0)
-				inv[0] = null;
-			return;
+	private void grind() {
+		ItemStack is = inv[0];
+
+		if (is != null && isGrindableSeed(is)) {
+			float num = grindableSeeds.get(is);
+			tank.addLiquid((int)(DifficultyEffects.CANOLA.getInt()*num), FluidRegistry.getFluid("lubricant"));
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
-		if (inv[1] == null)
-		{
-			inv[1] = itemstack.copy();
-		}
-		else if (inv[1].getItem() == itemstack.getItem())
-		{
-			inv[1].stackSize += itemstack.stackSize;
+		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(is);
+		if (itemstack != null) {
+			if (inv[1] == null)
+				inv[1] = itemstack.copy();
+			else if (inv[1].getItem() == itemstack.getItem())
+				inv[1].stackSize += itemstack.stackSize;
 		}
 
-		inv[0].stackSize--;
+		is.stackSize--;
 
-		if (inv[0].stackSize <= 0)
-		{
-			inv[0] = null;
-		}
+		if (is.stackSize <= 0)
+			is = null;
 	}
 
 	@Override
@@ -281,7 +269,7 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.canSmelt())
+		if (!this.canGrind())
 			return 15;
 		return 0;
 	}
@@ -357,7 +345,7 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public boolean areConditionsMet() {
-		return this.canSmelt();
+		return this.canGrind();
 	}
 
 	@Override

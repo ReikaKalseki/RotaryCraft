@@ -186,4 +186,31 @@ public enum DifficultyEffects {
 		}
 	}
 
+	public int getAverageAmount() {
+		if (isRandom) {
+			switch(getDifficulty()) {
+			case EASY:
+				return (easyMaximum+easyMinimum)/2;
+			case MEDIUM:
+				return (mediumMaximum+mediumMinimum)/2;
+			case HARD:
+				return (hardMaximum+hardMinimum)/2;
+			default:
+				return (mediumMaximum+mediumMinimum)/2;
+			}
+		}
+		else {
+			switch(getDifficulty()) {
+			case EASY:
+				return easyInt;
+			case MEDIUM:
+				return mediumInt;
+			case HARD:
+				return hardInt;
+			default:
+				return mediumInt;
+			}
+		}
+	}
+
 }

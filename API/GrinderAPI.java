@@ -29,6 +29,10 @@ public class GrinderAPI {
 	/** Adds a grinder recipe. Args: Item in, Item out. Neither may be null.
 	 * Call this in your postLoad method. */
 	public static void addRecipe(ItemStack in, ItemStack out) {
+		if (!isValid(out)) {
+			ReikaJavaLibrary.pConsole("You cannot add alternate recipes for native RotaryCraft items!");
+			return;
+		}
 		try {
 			add.invoke(instance, in, out, 0);
 		}
@@ -51,10 +55,10 @@ public class GrinderAPI {
 	}
 
 	/** Adds a grindable seed, so that it may be used to make lubricant.
-	 * Will make 1 unit/seed. Args: Item in. Call this in your postLoad method. */
-	public static void addGrindableSeed(ItemStack seed) {
+	 * Args: Item in, output scaling (clamps to 0-1). Call this in your postLoad method. */
+	public static void addGrindableSeed(ItemStack seed, float factor) {
 		try {
-			addseed.invoke(null, seed);
+			addseed.invoke(null, seed, factor);
 		}
 		catch (IllegalAccessException e) {
 			ReikaJavaLibrary.pConsole("Error adding grindable seed recipe for "+seed);
@@ -74,6 +78,10 @@ public class GrinderAPI {
 		}
 	}
 
+	private static boolean isValid(ItemStack out) {
+		return !out.getItem().getClass().getName().startsWith("Reika.RotaryCraft.Items");
+	}
+
 	static {
 		try {
 			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder");
@@ -82,7 +90,7 @@ public class GrinderAPI {
 			add = recipes.getMethod("addRecipe", ItemStack.class, ItemStack.class, float.class);
 
 			grinder = Class.forName("Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder");
-			addseed = grinder.getMethod("addGrindableSeed", ItemStack.class);
+			addseed = grinder.getMethod("addGrindableSeed", ItemStack.class, float.class);
 		}
 		catch (ClassNotFoundException e) {
 			ReikaJavaLibrary.pConsole("Could not load RotaryCraft class!");

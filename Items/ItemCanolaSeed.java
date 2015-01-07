@@ -32,7 +32,9 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack items, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack items, EntityPlayer player, World world, int x, int y, int z, int side, float a, float b, float c) {
+		if (items.getItemDamage() > 1)
+			return false;
 		boolean spread = items.getItemDamage() == 1;
 		if (!ReikaWorldHelper.softBlocks(world.getBlock(x, y, z))) {
 			if (side == 0)

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Processing;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -21,8 +22,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.Data.ChancedOutputList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -69,13 +71,15 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 				progressTime++;
 
 				if (progressTime >= this.getOperationTime()) {
-					ArrayList<ItemStack> out = RecipesCentrifuge.recipes().getRecipeResult(in);
-					if (this.canMakeAllOf(out)) {
+					ChancedOutputList out = RecipesCentrifuge.recipes().getRecipeResult(in);
+					Collection<ItemStack> items = out.keySet();
+					if (this.canMakeAllOf(items)) {
 						FluidStack fs = RecipesCentrifuge.recipes().getFluidResult(in);
 						if (fs == null || tank.canTakeIn(fs)) {
-							for (int i = 0; i < out.size(); i++) {
+							for (ItemStack is : items) {
 								//ReikaInventoryHelper.addOrSetStack(out.get(i).copy(), inv, i+1);
-								ReikaInventoryHelper.putStackInInventory(out.get(i), this, true);
+								if (ReikaRandomHelper.doWithChance(out.getItemChance(is)))
+									ReikaInventoryHelper.putStackInInventory(is, this, true);
 							}
 							if (fs != null)
 								tank.addLiquid(fs.amount, fs.getFluid());
@@ -94,10 +98,9 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 		}
 	}
 
-	private boolean canMakeAllOf(ArrayList<ItemStack> out) {
-		List<ItemStack> copy = ReikaJavaLibrary.copyList(out);
-		for (int i = 0; i < out.size(); i++) {
-			ItemStack is = out.get(i);
+	private boolean canMakeAllOf(Collection<ItemStack> out) {
+		List<ItemStack> copy = new ArrayList(out);
+		for (ItemStack is : copy) {
 			for (int k = 1; k < inv.length; k++) {
 				ItemStack is2 = inv[k];
 				if (ReikaItemHelper.matchStacks(is, is2)) {

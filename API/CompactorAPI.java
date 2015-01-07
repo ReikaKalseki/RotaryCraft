@@ -26,6 +26,10 @@ public class CompactorAPI {
 	/** Adds a compactor recipe. Note that it will follow the general rules of
 	 * 4 items in, one item out, producing 1 or 2 of the product. 'Pressure' is required pressure. */
 	public static void addCompactorRecipe(ItemStack in, ItemStack out, int pressure, int temperature) {
+		if (!isValid(out)) {
+			ReikaJavaLibrary.pConsole("You cannot add alternate recipes for native RotaryCraft items!");
+			return;
+		}
 		try {
 			add.invoke(instance, in.getItem(), in.getItemDamage(), out, 0, pressure, temperature);
 		}
@@ -41,6 +45,10 @@ public class CompactorAPI {
 			ReikaJavaLibrary.pConsole("Error adding compactor recipe for "+in);
 			e.printStackTrace();
 		}
+	}
+
+	private static boolean isValid(ItemStack out) {
+		return !out.getItem().getClass().getName().startsWith("Reika.RotaryCraft.Items");
 	}
 
 	static {

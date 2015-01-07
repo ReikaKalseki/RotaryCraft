@@ -438,6 +438,8 @@ public enum ItemRegistry implements ItemEnum {
 			return RotaryNames.getAdvGearName(dmg);
 		case MACHINE:
 			return MachineRegistry.machineList.get(dmg).getName();
+		case CANOLA:
+			return RotaryNames.getCanolaName(dmg);
 		default:
 			break;
 		}
@@ -503,8 +505,6 @@ public enum ItemRegistry implements ItemEnum {
 			return true;
 		if (this.isTool() || this.isArmor())
 			return false;
-		if (this == CANOLA)
-			return false;
 		return this.getNumberMetadatas() > 1;
 	}
 
@@ -560,7 +560,7 @@ public enum ItemRegistry implements ItemEnum {
 		switch(this) {
 		case WORLDEDIT:
 		case CANOLA:
-			return 2;
+			return 3;
 			//case NVH:
 			//	return Items.diamond_helmet.getMaxDamage();
 		case SPRING:
