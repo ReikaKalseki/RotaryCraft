@@ -209,7 +209,7 @@ public class WorktableRecipes
 		return null;
 	}
 
-	private static class WorktableRecipe {
+	private static final class WorktableRecipe {
 
 		private final IRecipe recipe;
 		private final ItemStack output;
