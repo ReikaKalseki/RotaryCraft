@@ -30,8 +30,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
@@ -799,7 +799,7 @@ public enum ItemRegistry implements ItemEnum {
 	public void addRecipe(IRecipe ir) {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(ir);
-			WorktableRecipes.addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir);
 		}
 	}
 
@@ -808,7 +808,7 @@ public enum ItemRegistry implements ItemEnum {
 			ItemStack out = this.getStackOf();
 			boolean added = ReikaRecipeHelper.addOreRecipe(out, in);
 			if (added)
-				WorktableRecipes.addRecipe(new ShapedOreRecipe(out, in));
+				WorktableRecipes.getInstance().addRecipe(new ShapedOreRecipe(out, in));
 		}
 	}
 

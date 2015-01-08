@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary;
+package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,20 +30,22 @@ public class WorktableRecipes
 {
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
-	private ImmutableList<IRecipe> recipes = new ImmutableList();
+	private ImmutableList<WorktableRecipe> recipes = new ImmutableList();
+
+	private final RecipeSorter sorter = new RecipeSorter();
 
 	public static final WorktableRecipes getInstance()
 	{
 		return instance;
 	}
 
-	public static void addRecipe(IRecipe recipe) {
-		getInstance().recipes.add(recipe);
+	public void addRecipe(IRecipe recipe) {
+		recipes.add(new WorktableRecipe(recipe));
 	}
 
 	private WorktableRecipes()
 	{
-		Collections.sort(recipes, new RecipeSorter(this));
+		//Collections.sort(recipes, sorter);
 	}
 
 	public ShapedRecipes addRecipe(ItemStack par1ItemStack, Object ... par2ArrayOfObj)
@@ -118,7 +120,7 @@ public class WorktableRecipes
 		}
 
 		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, aitemstack, par1ItemStack);
-		recipes.add(shapedrecipes);
+		this.addRecipe(shapedrecipes);
 		return shapedrecipes;
 	}
 
@@ -151,7 +153,7 @@ public class WorktableRecipes
 			}
 		}
 
-		recipes.add(new ShapelessRecipes(par1ItemStack, arraylist));
+		this.addRecipe(new ShapelessRecipes(par1ItemStack, arraylist));
 	}
 
 	public ItemStack findMatchingRecipe(InventoryCrafting ic, World par2World)
@@ -181,35 +183,14 @@ public class WorktableRecipes
 			}
 		}
 
-		if (i == 2 && itemstack.getItem() == itemstack1.getItem() && itemstack.stackSize == 1 && itemstack1.stackSize == 1 && itemstack.getItem().isRepairable())
-		{
-			Item item = itemstack.getItem();
-			int k = item.getMaxDamage() - itemstack.getItemDamageForDisplay();
-			int l = item.getMaxDamage() - itemstack1.getItemDamageForDisplay();
-			int i1 = k + l + item.getMaxDamage() * 5 / 100;
-			int j1 = item.getMaxDamage() - i1;
+		for (WorktableRecipe wr : recipes) {
+			IRecipe ir = wr.recipe;
 
-			if (j1 < 0)
-			{
-				j1 = 0;
-			}
-
-			return new ItemStack(itemstack.getItem(), 1, j1);
+			if (ir.matches(ic, par2World))
+				return wr.output.copy();//ir.getCraftingResult(ic);
 		}
-		else
-		{
-			for (j = 0; j < recipes.size(); ++j)
-			{
-				IRecipe irecipe = recipes.get(j);
 
-				if (irecipe.matches(ic, par2World))
-				{
-					return irecipe.getCraftingResult(ic);
-				}
-			}
-
-			return null;
-		}
+		return null;
 	}
 
 	public List getRecipeListCopy()
@@ -218,8 +199,8 @@ public class WorktableRecipes
 	}
 
 	public IRecipe getInputRecipe(ItemStack is) {
-		for (int i = 0; i < recipes.size(); i++) {
-			IRecipe ir = recipes.get(i);
+		for (WorktableRecipe wr : recipes) {
+			IRecipe ir = wr.recipe;
 			ItemStack is2 = ir.getRecipeOutput();
 			if (ReikaItemHelper.matchStacks(is, is2) && is.stackSize >= is2.stackSize) {
 				return ir;
@@ -227,24 +208,33 @@ public class WorktableRecipes
 		}
 		return null;
 	}
-}
 
-class RecipeSorter implements Comparator
-{
-	final WorktableRecipes worktableRecipes;
+	private static class WorktableRecipe {
 
-	RecipeSorter(WorktableRecipes par1WorktableRecipes)
-	{
-		worktableRecipes = par1WorktableRecipes;
+		private final IRecipe recipe;
+		private final ItemStack output;
+
+		private WorktableRecipe(IRecipe ir) {
+			if (ir == null)
+				throw new IllegalArgumentException("Invalid worktable recipe: Null!");
+			if (ir.getRecipeOutput() == null)
+				throw new IllegalArgumentException("Invalid worktable recipe: No output!");
+			recipe = ir;
+			output = ir.getRecipeOutput();
+		}
+
 	}
 
-	public int compareRecipes(IRecipe ir, IRecipe ir2)
-	{
-		return ir instanceof ShapelessRecipes && ir2 instanceof ShapedRecipes ? 1 : (ir2 instanceof ShapelessRecipes && ir instanceof ShapedRecipes ? -1 : (ir2.getRecipeSize() < ir.getRecipeSize() ? -1 : (ir2.getRecipeSize() > ir.getRecipeSize() ? 1 : 0)));
-	}
+	private static class RecipeSorter implements Comparator<WorktableRecipe> {
 
-	public int compare(Object obj1, Object obj2)
-	{
-		return this.compareRecipes((IRecipe)obj1, (IRecipe)obj2);
+		private RecipeSorter()
+		{
+
+		}
+
+		public int compare(WorktableRecipe ir, WorktableRecipe ir2)
+		{
+			return ir.recipe instanceof ShapelessRecipes && ir2.recipe instanceof ShapedRecipes ? 1 : (ir2.recipe instanceof ShapelessRecipes && ir.recipe instanceof ShapedRecipes ? -1 : (ir2.recipe.getRecipeSize() < ir.recipe.getRecipeSize() ? -1 : (ir2.recipe.getRecipeSize() > ir.recipe.getRecipeSize() ? 1 : 0)));
+		}
 	}
 }

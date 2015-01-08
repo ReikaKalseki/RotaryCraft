@@ -19,7 +19,6 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
@@ -40,9 +39,6 @@ public class GuiCVT extends GuiNonPoweredMachine
 	private boolean redstone;
 	private int buttontimer = 0;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-
-	int x;
-	int y;
 	private GuiTextField input;
 
 	//Make gui look cool (like connecting spindles with belts)
@@ -132,17 +128,12 @@ public class GuiCVT extends GuiNonPoweredMachine
 		}
 
 		super.updateScreen();
-		x = Mouse.getX();
-		y = Mouse.getY();
 		this.initGui();
 	}
 
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		x = Mouse.getX();
-		y = Mouse.getY();
-
 		if (redstone) {
 
 		}
@@ -163,9 +154,6 @@ public class GuiCVT extends GuiNonPoweredMachine
 		}
 	}
 
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
@@ -188,7 +176,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 		if (api.isMouseInBox(j+185, j+202, k+88, k+149)) {
 			String s = "Lubricant";
-			api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-45-fontRendererObj.getStringWidth(s), api.getMouseRealY());
+			api.drawTooltipAt(fontRendererObj, s, -j+api.getMouseRealX()+55-fontRendererObj.getStringWidth(s), -k+api.getMouseRealY());
 		}
 
 		api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Items.redstone), xSize/2+94, 7);
@@ -212,9 +200,6 @@ public class GuiCVT extends GuiNonPoweredMachine
 		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
