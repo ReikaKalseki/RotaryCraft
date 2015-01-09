@@ -49,8 +49,8 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
@@ -73,7 +73,7 @@ public final class HandbookAuxData {
 	private static final ReikaGuiAPI api = ReikaGuiAPI.instance;
 
 	public static List<IRecipe> getWorktable() {
-		return WorktableRecipes.getInstance().getRecipeListCopy();
+		return WorktableRecipes.getInstance().getDisplayList();
 	}
 
 	private static final ArrayList<Object[][]> extracts = new ArrayList();

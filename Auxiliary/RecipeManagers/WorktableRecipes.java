@@ -24,13 +24,17 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.ImmutableList;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class WorktableRecipes
 {
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
 	private ImmutableList<WorktableRecipe> recipes = new ImmutableList();
+	private ImmutableList<IRecipe> display = new ImmutableList();
 
 	private final RecipeSorter sorter = new RecipeSorter();
 
@@ -41,6 +45,7 @@ public class WorktableRecipes
 
 	public void addRecipe(IRecipe recipe) {
 		recipes.add(new WorktableRecipe(recipe));
+		display.add(recipe);
 	}
 
 	private WorktableRecipes()
@@ -193,9 +198,16 @@ public class WorktableRecipes
 		return null;
 	}
 
-	public List getRecipeListCopy()
+	@SideOnly(Side.CLIENT)
+	public List<WorktableRecipe> getRecipeListCopy()
 	{
 		return Collections.unmodifiableList(recipes);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public List<IRecipe> getDisplayList()
+	{
+		return Collections.unmodifiableList(display);
 	}
 
 	public IRecipe getInputRecipe(ItemStack is) {
@@ -209,7 +221,7 @@ public class WorktableRecipes
 		return null;
 	}
 
-	private static final class WorktableRecipe {
+	public static final class WorktableRecipe {
 
 		private final IRecipe recipe;
 		private final ItemStack output;
@@ -221,6 +233,19 @@ public class WorktableRecipes
 				throw new IllegalArgumentException("Invalid worktable recipe: No output!");
 			recipe = ir;
 			output = ir.getRecipeOutput();
+		}
+
+		public ItemStack getOutput() {
+			return output.copy();
+		}
+
+		public boolean containsItem(ItemStack is) {
+			return ReikaRecipeHelper.recipeContains(recipe, is);
+		}
+
+		@SideOnly(Side.CLIENT)
+		public ItemStack[] getDisplayArray() {
+			return ReikaRecipeHelper.getPermutedRecipeArray(recipe);
 		}
 
 	}

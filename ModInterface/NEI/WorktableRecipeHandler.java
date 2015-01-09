@@ -14,16 +14,15 @@ import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IOverlayHandler;
@@ -31,24 +30,24 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class WorktableRecipeHandler extends TemplateRecipeHandler {
 
-	public class WorktableRecipe extends CachedRecipe {
+	public class WorktableNEIRecipe extends CachedRecipe {
 
-		private IRecipe recipe;
+		private final WorktableRecipe recipe;
 
-		public WorktableRecipe(IRecipe rec) {
+		public WorktableNEIRecipe(WorktableRecipe rec) {
 			recipe = rec;
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(recipe.getRecipeOutput(), 111, 24);
+			return new PositionedStack(recipe.getOutput(), 111, 24);
 		}
 
 		@Override
 		public ArrayList<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			ItemStack[] in = ReikaRecipeHelper.getPermutedRecipeArray(recipe);
+			ItemStack[] in = recipe.getDisplayArray();
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					ItemStack is = in[i*3+j];
@@ -100,21 +99,19 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		List<IRecipe> li = WorktableRecipes.getInstance().getRecipeListCopy();
-		for (int i = 0; i < li.size(); i++) {
-			IRecipe ir = li.get(i);
-			if (ReikaItemHelper.matchStacks(result, ir.getRecipeOutput()))
-				arecipes.add(new WorktableRecipe(ir));
+		List<WorktableRecipe> li = WorktableRecipes.getInstance().getRecipeListCopy();
+		for (WorktableRecipe wr : li) {
+			if (ReikaItemHelper.matchStacks(result, wr.getOutput()))
+				arecipes.add(new WorktableNEIRecipe(wr));
 		}
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		List<IRecipe> li = WorktableRecipes.getInstance().getRecipeListCopy();
-		for (int i = 0; i < li.size(); i++) {
-			IRecipe ir = li.get(i);
-			if (ReikaRecipeHelper.recipeContains(ir, ingredient)) {
-				arecipes.add(new WorktableRecipe(ir));
+		List<WorktableRecipe> li = WorktableRecipes.getInstance().getRecipeListCopy();
+		for (WorktableRecipe wr : li) {
+			if (wr.containsItem(ingredient)) {
+				arecipes.add(new WorktableNEIRecipe(wr));
 			}
 		}
 	}
