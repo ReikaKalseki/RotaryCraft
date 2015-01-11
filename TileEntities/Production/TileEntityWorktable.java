@@ -71,9 +71,9 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDHELM.getItemInstance(), inv);
 		int visslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.NVG.getItemInstance(), inv);
 		if (visslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
+			ItemStack is = inv[armorslot].copy();
 			inv[visslot] = null;
 			inv[armorslot] = null;
-			ItemStack is = inv[armorslot].copy();
 			HelmetUpgrades.NIGHTVISION.enable(is, true);
 			inv[9] = is;
 		}

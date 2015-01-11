@@ -80,19 +80,21 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 
+		boolean fire = RotaryAux.isAboveFire(world, x, y, z);
+		boolean lava = RotaryAux.isAboveLava(world, x, y, z);
 		if (biome == BiomeGenBase.hell)
 			Tamb = 101;	//boils water, so 101C
-		if (RotaryAux.isAboveFire(world, x, y, z))
+		if (fire)
 			temperature++;
-		if (RotaryAux.isAboveFire(world, x, y, z) && biome == BiomeGenBase.hell)
+		if (fire && biome == BiomeGenBase.hell)
 			temperature++; //Nether has 50% hotter fire
-		if (RotaryAux.isAboveLava(world, x, y, z))
+		if (lava)
 			temperature += 2;
-		if (Tamb < 0 && RotaryAux.isAboveFire(world, x, y, z))
+		if (Tamb < 0 && fire)
 			Tamb += 30;
 		if (temperature < Tamb)
 			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
-		if (!RotaryAux.isAboveFire(world, x, y, z) && !RotaryAux.isAboveLava(world, x, y, z) && temperature > Tamb)
+		if (!fire && !lava && temperature > Tamb)
 			temperature--;
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/96;

@@ -42,6 +42,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
@@ -207,6 +208,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
+		this.startTiming(LoadPhase.PRELOAD);
 		this.verifyVersions();
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
@@ -259,11 +261,14 @@ public class RotaryCraft extends DragonAPIMod {
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.GREGTECH, CompatibilityTracker.Severity.GLITCH, "The GT unifier registers HSLA steel as standard OreDict steel. This breaks the techtrees of mods like RailCraft and TConstruct.");
 
 		this.basicSetup(evt);
+		this.finishTiming();
 	}
 
 	@Override
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		this.startTiming(LoadPhase.LOAD);
+
 		if (this.isLocked())
 			PlayerHandler.instance.registerTracker(LockNotification.instance);
 
@@ -365,11 +370,15 @@ public class RotaryCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.FORESTRY, "Access to Canola bees to speed canola growth and produce some lubricant");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.RAILCRAFT, "Access to steam power generation and consumption");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Special integration with TF mobs and structures");
+
+		this.finishTiming();
 	}
 
 	@Override
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
+		this.startTiming(LoadPhase.POSTLOAD);
+
 		OreForcer.instance.forceCompatibility();
 
 		//RotaryRecipes.addModInterface();
@@ -450,6 +459,8 @@ public class RotaryCraft extends DragonAPIMod {
 		if (ModList.ROUTER.isLoaded()) {
 			RouterHelper.blacklistTileEntity(TileEntityExtractor.class, "Extractor", "BlockMIMachine:10"); //Extractor
 		}
+
+		this.finishTiming();
 	}
 
 	@EventHandler

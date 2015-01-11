@@ -112,7 +112,7 @@ public class RotaryEventManager {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void bedrockSave(LivingHurtEvent evt) {
 		EntityLivingBase e = evt.entityLiving;
 		if (evt.ammount < 1000) {
@@ -127,7 +127,7 @@ public class RotaryEventManager {
 						Entity attacker = evt.source.getSourceOfDamage();
 						if (attacker instanceof EntityPlayer) {
 							ItemStack held = ((EntityPlayer)attacker).getCurrentEquippedItem();
-							if (held != null && "rapier".equals(held.getItem().getClass().getSimpleName().toLowerCase())) {
+							if (held != null && held.getItem().getClass().getSimpleName().toLowerCase().contains("rapier")) {
 								evt.ammount = 0;
 								int dmg = held.getItem().getDamage(held);
 								held.getItem().setDamage(held, dmg+120);
@@ -180,7 +180,7 @@ public class RotaryEventManager {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void disallowDespawn(AllowDespawn ad) {
 		EntityLivingBase e = ad.entityLiving;
 		PotionEffect pe = e.getActivePotionEffect(RotaryCraft.freeze);

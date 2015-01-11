@@ -116,7 +116,7 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 	}
 
 	public boolean isVulnerableTo(DamageSource src) {
-		return !src.isUnblockable();
+		return !(src.isUnblockable() || src.isDamageAbsolute());
 	}
 
 	public Class getTextureReferenceClass() {

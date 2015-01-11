@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cofh.api.energy.IEnergyContainerItem;
@@ -94,26 +95,30 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		for (int i = 1; i < 5; i++) {
 			ItemStack arm = target.getEquipmentInSlot(i);
 			if (arm != null && this.canDamageArmorOf(target)) {
-				if (InterfaceCache.MUSEELECTRICITEM.instanceOf(arm.getItem())) {
-					MuseElectricItem ms = (MuseElectricItem)arm.getItem();
+				Item item = is.getItem();
+				if (InterfaceCache.MUSEELECTRICITEM.instanceOf(item)) {
+					MuseElectricItem ms = (MuseElectricItem)item;
 					ms.extractEnergy(arm, 5000, false);
 				}
-				else if (InterfaceCache.RFENERGYITEM.instanceOf(arm.getItem())) {
-					IEnergyContainerItem ie = (IEnergyContainerItem)arm.getItem();
+				else if (InterfaceCache.RFENERGYITEM.instanceOf(item)) {
+					IEnergyContainerItem ie = (IEnergyContainerItem)item;
 					ie.extractEnergy(arm, 5000, false);
 				}
-				else if (InterfaceCache.IELECTRICITEM.instanceOf(arm.getItem())) {
-					IElectricItem ie = (IElectricItem)arm.getItem();
+				else if (InterfaceCache.IELECTRICITEM.instanceOf(item)) {
+					IElectricItem ie = (IElectricItem)item;
 					///???
 					Item id = ie.getEmptyItem(arm);
 					ItemStack newarm = new ItemStack(id, 1, 0);
 					target.setCurrentItemOrArmor(i, newarm);
 				}
-				else if (InterfaceCache.UEENERGYITEM.instanceOf(arm.getItem())) {
-					IEnergyItem ie = (IEnergyItem)arm.getItem();
+				else if (InterfaceCache.UEENERGYITEM.instanceOf(item)) {
+					IEnergyItem ie = (IEnergyItem)item;
 					ie.discharge(arm, 5000, true);
 				}
-				else if (arm.getItem() instanceof ItemBedrockArmor) {
+				else if (item instanceof ItemBedrockArmor) {
+					//do nothing
+				}
+				else if (item instanceof ItemRotaryArmor && !((ItemRotaryArmor)item).canBeDamaged()) {
 					//do nothing
 				}
 				else {
@@ -145,36 +150,24 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		return true;
 	}
 
-	/**
-	 * Return the enchantability factor of the item, most of the time is based on material.
-	 */
 	@Override
 	public int getItemEnchantability()
 	{
 		return ConfigRegistry.PREENCHANT.getState() ? 0 : ToolMaterial.IRON.getEnchantability();
 	}
 
-	/**
-	 * Return the name for this tool's material.
-	 */
 	@Override
 	public String getToolMaterialName()
 	{
 		return "Bedrock";
 	}
 
-	/**
-	 * Return whether this item is repairable in an anvil.
-	 */
 	@Override
 	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
 	{
 		return false;
 	}
 
-	/**
-	 * Gets a map of item attribute modifiers, used by ItemSword to increase hit damage.
-	 */
 	@Override
 	public Multimap getItemAttributeModifiers()
 	{

@@ -273,7 +273,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 		if (ep.capabilities.isCreativeMode)
 			return false;
 		if (ep.inventory.armorInventory[3] != null) {
-			//if (ep.inventory.armorInventory[0].getItem == RotaryCraft.earmuff.itemID)
+			//if (ep.inventory.armorInventory[3].getItem == RotaryCraft.earmuff.itemID)
 			return false;
 		}
 		return true;
