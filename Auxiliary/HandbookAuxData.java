@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Alert;
 import Reika.DragonAPI.Instantiable.ItemReq;
-import Reika.DragonAPI.Instantiable.Data.ArrayMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.ArrayMap;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;

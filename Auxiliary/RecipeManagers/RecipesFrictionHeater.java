@@ -10,7 +10,7 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public class RecipesFrictionHeater {

@@ -27,7 +27,7 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.APIPacketHandler.PacketIDs;
 import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;

@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Interfaces.GradientBlend;
 import Reika.DragonAPI.Interfaces.MultisheetItem;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -25,7 +26,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemModOre extends ItemBasic implements MultisheetItem {
+public class ItemModOre extends ItemBasic implements MultisheetItem, GradientBlend {
 
 	public ItemModOre() {
 		super(0);
@@ -110,6 +111,26 @@ public class ItemModOre extends ItemBasic implements MultisheetItem {
 		else {
 			return ore.displayName+" "+ore.getTypeName();
 		}
+	}
+
+	@Override
+	public int getColorOne(ItemStack is) {
+		return 0xffffff;
+	}
+
+	@Override
+	public int getColorTwo(ItemStack is) {
+		return 0xffffff;
+	}
+
+	@Override
+	public int getColorThree(ItemStack is) {
+		return 0xffffff;
+	}
+
+	@Override
+	public int getColorFour(ItemStack is) {
+		return 0xffffff;
 	}
 
 }

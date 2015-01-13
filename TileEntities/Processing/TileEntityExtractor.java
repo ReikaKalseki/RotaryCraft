@@ -225,8 +225,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			boolean flag1 = false;
 			if (this.canProcess(i)) {
 				flag1 = true;
-			}
-			if (this.canProcess(i)) {
 				extractorCookTime[i]++;
 				if (extractorCookTime[i] >= this.getOperationTime(i+1)) {
 					extractorCookTime[i] = 0;
@@ -242,11 +240,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		}
 	}
 
-	/**
-	 * Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc.
-	 */
-	private boolean canProcess(int i)
-	{
+	private boolean canProcess(int i) {
 		if (power < machine.getMinPower(i) || omega < machine.getMinSpeed(i) || torque < machine.getMinTorque(i))
 			return false;
 
@@ -322,13 +316,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return inv[i+4].stackSize < itemstack.getMaxStackSize();
 	}
 
-	/**
-	 * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
-	 */
-	public void processItem(int i)
-	{
-		if (!this.canProcess(i))
-			return;
+	private void processItem(int i) {
 		ItemStack itemstack = RecipesExtractor.recipes().getSmeltingResult(inv[i]);
 		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
 		ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].getItem()) : this.getVanillaOreByItem(inv[i]);

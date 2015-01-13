@@ -109,9 +109,13 @@ public class RotaryRegistration {
 
 			OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
 			OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
+
+			if (ConfigRegistry.HSLADICT.getState())
+				OreDictionary.registerOre("ingotSteel", ItemStacks.steelingot);
 		}
-		if (ConfigRegistry.HSLADICT.getState())
-			OreDictionary.registerOre("ingotSteel", ItemStacks.steelingot);
+		else {
+			RotaryCraft.logger.log("Gregtech is installed, a few OreDict entries are not being added to prevent interchangeability");
+		}
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);
 

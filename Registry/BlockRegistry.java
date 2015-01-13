@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Instantiable.Data.PluralMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.PluralMap;
 import Reika.DragonAPI.Interfaces.BlockEnum;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;

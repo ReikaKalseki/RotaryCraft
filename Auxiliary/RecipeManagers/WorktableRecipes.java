@@ -23,7 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Instantiable.Data.ImmutableList;
+import Reika.DragonAPI.Instantiable.Data.Collections.ImmutableList;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import cpw.mods.fml.relauncher.Side;

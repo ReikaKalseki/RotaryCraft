@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;

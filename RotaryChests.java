@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import Reika.DragonAPI.Instantiable.LootController;
-import Reika.DragonAPI.Instantiable.LootController.Location;
+import Reika.DragonAPI.Instantiable.Worldgen.LootController;
+import Reika.DragonAPI.Instantiable.Worldgen.LootController.Location;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;

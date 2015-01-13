@@ -32,7 +32,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeType;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;

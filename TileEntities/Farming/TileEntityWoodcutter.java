@@ -27,7 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.TreeGetter;
-import Reika.DragonAPI.Instantiable.Data.TreeReader;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;

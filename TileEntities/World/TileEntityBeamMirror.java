@@ -17,7 +17,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;

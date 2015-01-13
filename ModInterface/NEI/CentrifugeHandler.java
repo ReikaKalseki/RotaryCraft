@@ -25,7 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Instantiable.Data.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;

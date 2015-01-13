@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Instantiable.Data.ItemHashMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;

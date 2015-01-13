@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.TemporaryInventory;
-import Reika.DragonAPI.Instantiable.Data.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;

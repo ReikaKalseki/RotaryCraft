@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;

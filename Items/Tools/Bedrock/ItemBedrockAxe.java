@@ -28,7 +28,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
-import Reika.DragonAPI.Instantiable.Data.TreeReader;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;

@@ -12,8 +12,8 @@ package Reika.RotaryCraft.API;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import Reika.DragonAPI.Instantiable.BlockKey;
-import Reika.DragonAPI.Instantiable.Data.BlockMap;
+import Reika.DragonAPI.Instantiable.Data.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 
 /** This is used to add block color codes to the GPR (Ground Penetrating Radar) map. Without doing this, your blocks will be the same

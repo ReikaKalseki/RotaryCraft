@@ -12,7 +12,7 @@ package Reika.RotaryCraft.API.Power;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
-import Reika.DragonAPI.Instantiable.Data.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.RotaryCraft.API.IOMachine;
 
 /** This class has some functions to aid in ensuring you are not the source of a power exploit by remaining powered even if the supplying machine

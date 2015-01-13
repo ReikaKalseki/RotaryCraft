@@ -13,7 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.RotaryCraft.RotaryCraft;
