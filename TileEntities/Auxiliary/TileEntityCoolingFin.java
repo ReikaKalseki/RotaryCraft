@@ -132,7 +132,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 
 	@Override
 	public void addTemperature(int temp) {
-
+		temperature += temp;
 	}
 
 	@Override
@@ -145,9 +145,6 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -155,9 +152,6 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 		NBT.setInteger("tick", ticks);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

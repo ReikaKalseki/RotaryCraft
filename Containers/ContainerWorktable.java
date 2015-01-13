@@ -128,7 +128,7 @@ public class ContainerWorktable extends CoreContainer {
 			}
 		}
 		SoundRegistry.CRAFT.playSoundAtBlock(world, tile.xCoord, tile.yCoord, tile.zCoord, 0.3F, 1.5F);
-		MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(tile, ep.getCommandSenderName(), false, is));
+		MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(tile, ep, false, is));
 		this.updateCraftMatrix();
 		tile.craftable = false;
 	}

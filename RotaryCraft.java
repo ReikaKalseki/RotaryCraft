@@ -381,6 +381,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		OreForcer.instance.forceCompatibility();
 
+		CustomExtractLoader.instance.loadFile();
+
 		//RotaryRecipes.addModInterface();
 		proxy.initClasses();
 

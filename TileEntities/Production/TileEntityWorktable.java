@@ -162,7 +162,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			is.onCrafting(worldObj, ep, is.stackSize);
 			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
 			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
-			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep.getCommandSenderName(), true, is));
+			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, is));
 			return true;
 		}
 		return false;
