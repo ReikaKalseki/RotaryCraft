@@ -59,6 +59,7 @@ import Reika.DragonAPI.ModInteract.RouterHelper;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications.HandbookConfigVerifier;
+import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;

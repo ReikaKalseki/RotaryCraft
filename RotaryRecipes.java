@@ -1045,6 +1045,16 @@ public class RotaryRecipes {
 			if (!ores.isEmpty())
 				item = ores.get(0);
 			break;
+		case 10:
+			ores = OreDictionary.getOres("ingotTitanium");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
+		case 11:
+			ores = OreDictionary.getOres("ingotDarkSteel");
+			if (!ores.isEmpty())
+				item = ores.get(0);
+			break;
 		default:
 			item = ReikaItemHelper.stoneBricks;
 			break;

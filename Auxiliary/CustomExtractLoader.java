@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft;
+package Reika.RotaryCraft.Auxiliary;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,6 +24,7 @@ import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.RotaryCraft.RotaryCraft;
 
 public class CustomExtractLoader {
 
@@ -49,7 +50,7 @@ public class CustomExtractLoader {
 				oreNames.add(s);
 				oreItems.addAll(OreDictionary.getOres(s));
 				if (oreItems.isEmpty())
-					;//throw new IllegalStateException("Cannot have entries with no corresponding ores!");
+					throw new IllegalStateException("Cannot have entries with no corresponding ores!");
 			}
 			rarity = r;
 			color1 = c1;
