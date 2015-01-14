@@ -35,7 +35,13 @@ public class SlotExtractor2 extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack is)
 	{
-		return (ItemRegistry.EXTRACTS.matchItem(is) && is.getItemDamage() < 8) || (ExtractorModOres.isModOreIngredient(is) && ExtractorModOres.isDust(ModOreList.getEntryFromDamage(is.getItemDamage()/4), is.getItemDamage()));
+		if (ItemRegistry.EXTRACTS.matchItem(is) && is.getItemDamage() < 8)
+			return true;
+		if (ExtractorModOres.isModOreIngredient(is) && ExtractorModOres.isDust(ModOreList.getEntryFromDamage(is.getItemDamage()/4), is.getItemDamage()))
+			return true;
+		if (ItemRegistry.CUSTOMEXTRACT.matchItem(is) && is.getItemDamage()%4 == 0)
+			return true;
+		return false;
 	}
 
 	/**

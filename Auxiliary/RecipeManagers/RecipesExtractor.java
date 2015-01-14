@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -21,40 +22,41 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
+import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.CustomExtractLoader;
+import Reika.RotaryCraft.CustomExtractLoader.CustomExtractEntry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
+import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesExtractor
 {
-	private static final RecipesExtractor ExtractorBase = new RecipesExtractor();
+	private static final RecipesExtractor instance = new RecipesExtractor();
 
-	/** The list of smelting results. */
 	private ItemHashMap<ItemStack> recipeList = new ItemHashMap();
 	private final MultiMap<ReikaOreHelper, String> modOres = new MultiMap();
 
-	/**
-	 * Used to call methods addSmelting and getSmeltingResult.
-	 */
 	public static final RecipesExtractor recipes()
 	{
-		return ExtractorBase;
+		return instance;
 	}
 
 	private RecipesExtractor()
 	{
 		for (int i = 0; i < 24; i++)
-			this.addRecipe(ItemRegistry.EXTRACTS.getStackOfMetadata(i), ItemRegistry.EXTRACTS.getStackOfMetadata(i+8), 0.7F);
+			this.addRecipe(ItemRegistry.EXTRACTS.getStackOfMetadata(i), ItemRegistry.EXTRACTS.getStackOfMetadata(i+8));
 
-		this.addRecipe(Blocks.coal_ore, 0, getFlake(ReikaOreHelper.COAL), 0F);
-		this.addRecipe(Blocks.iron_ore, 0, getFlake(ReikaOreHelper.IRON), 0F);
-		this.addRecipe(Blocks.gold_ore, 0, getFlake(ReikaOreHelper.GOLD), 0F);
-		this.addRecipe(Blocks.redstone_ore, 0, getFlake(ReikaOreHelper.REDSTONE), 0F);
-		this.addRecipe(Blocks.lapis_ore, 0, getFlake(ReikaOreHelper.LAPIS), 0F);
-		this.addRecipe(Blocks.diamond_ore, 0, getFlake(ReikaOreHelper.DIAMOND), 0F);
-		this.addRecipe(Blocks.emerald_ore, 0, getFlake(ReikaOreHelper.EMERALD), 0F);
-		this.addRecipe(Blocks.quartz_ore, 0, getFlake(ReikaOreHelper.QUARTZ), 0F);
+		this.addRecipe(Blocks.coal_ore, 0, getFlake(ReikaOreHelper.COAL));
+		this.addRecipe(Blocks.iron_ore, 0, getFlake(ReikaOreHelper.IRON));
+		this.addRecipe(Blocks.gold_ore, 0, getFlake(ReikaOreHelper.GOLD));
+		this.addRecipe(Blocks.redstone_ore, 0, getFlake(ReikaOreHelper.REDSTONE));
+		this.addRecipe(Blocks.lapis_ore, 0, getFlake(ReikaOreHelper.LAPIS));
+		this.addRecipe(Blocks.diamond_ore, 0, getFlake(ReikaOreHelper.DIAMOND));
+		this.addRecipe(Blocks.emerald_ore, 0, getFlake(ReikaOreHelper.EMERALD));
+		this.addRecipe(Blocks.quartz_ore, 0, getFlake(ReikaOreHelper.QUARTZ));
 
 		if (ConfigRegistry.GREGORES.getState()) {
 			modOres.addValue(ReikaOreHelper.IRON, "oreBandedIron");
@@ -74,53 +76,72 @@ public class RecipesExtractor
 			modOres.addValue(ReikaOreHelper.IRON, "oreBlackgraniteBandedIron");
 			modOres.addValue(ReikaOreHelper.IRON, "oreRedgraniteBandedIron");
 		}
+
+		this.addModRecipes();
 	}
 
-	public void addModRecipes() {
+	private void addModRecipes() {
 		for (ReikaOreHelper ore : modOres.keySet()) {
 			Collection<String> c = modOres.get(ore);
 			for (String s : c) {
 				ArrayList<ItemStack> li = OreDictionary.getOres(s);
 				for (ItemStack is : li) {
-					this.addRecipe(is, getFlake(ore), 0);
+					this.addRecipe(is, getFlake(ore));
 					RotaryCraft.logger.log("Adding mod ore "+is+" as "+ore+" because its ore type "+s+" is a subcategory of "+ore);
 				}
 			}
 		}
+
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			ModOreList ore = ModOreList.oreList[i];
+			Collection<ItemStack> c = ore.getAllOreBlocks();
+			for (ItemStack is : c) {
+				this.addRecipe(is, ExtractorModOres.getDustProduct(ore));
+			}
+			this.addRecipe(ExtractorModOres.getDustProduct(ore), ExtractorModOres.getSlurryProduct(ore));
+			this.addRecipe(ExtractorModOres.getSlurryProduct(ore), ExtractorModOres.getSolutionProduct(ore));
+			this.addRecipe(ExtractorModOres.getSolutionProduct(ore), ExtractorModOres.getFlakeProduct(ore));
+		}
+
+		List<CustomExtractEntry> li = CustomExtractLoader.instance.getEntries();
+		for (int i = 0; i < li.size(); i++) {
+			CustomExtractEntry e = li.get(i);
+			Collection<ItemStack> c = e.getAllOreBlocks();
+			for (ItemStack is : c) {
+				this.addRecipe(is, ItemCustomModOre.getItem(i, ExtractorStage.DUST));
+			}
+			this.addRecipe(ItemCustomModOre.getItem(i, ExtractorStage.DUST), ItemCustomModOre.getItem(i, ExtractorStage.SLURRY));
+			this.addRecipe(ItemCustomModOre.getItem(i, ExtractorStage.SLURRY), ItemCustomModOre.getItem(i, ExtractorStage.SOLUTION));
+			this.addRecipe(ItemCustomModOre.getItem(i, ExtractorStage.SOLUTION), ItemCustomModOre.getItem(i, ExtractorStage.FLAKES));
+		}
 	}
 
-	private void addRecipe(Block in, ItemStack out, float xp)
+	private void addRecipe(Block in, ItemStack out)
 	{
-		this.addRecipe(new ItemStack(in), out, xp);
+		this.addRecipe(new ItemStack(in), out);
 	}
 
-	private void addRecipe(Block in, int meta, ItemStack out, float xp)
+	private void addRecipe(Block in, int meta, ItemStack out)
 	{
-		this.addRecipe(new ItemStack(in, 1, meta), out, xp);
+		this.addRecipe(new ItemStack(in, 1, meta), out);
 	}
 
-	private void addRecipe(Item in, ItemStack out, float xp)
+	private void addRecipe(Item in, ItemStack out)
 	{
-		this.addRecipe(new ItemStack(in), out, xp);
+		this.addRecipe(new ItemStack(in), out);
 	}
 
-	private void addRecipe(Item in, int dmg, ItemStack out, float xp)
+	private void addRecipe(Item in, int dmg, ItemStack out)
 	{
-		this.addRecipe(new ItemStack(in, 1, dmg), out, xp);
+		this.addRecipe(new ItemStack(in, 1, dmg), out);
 	}
 
-	private void addRecipe(ItemStack in, ItemStack out, float xp)
+	private void addRecipe(ItemStack in, ItemStack out)
 	{
 		recipeList.put(in, out);
-		//this.ExtractorExperience.put(Integer.valueOf(itemstack.getItem), Float.valueOf(xp));
 	}
 
-	/**
-	 * Used to get the resulting ItemStack form a source ItemStack
-	 * @param item The Source ItemStack
-	 * @return The result ItemStack
-	 */
-	public ItemStack getSmeltingResult(ItemStack item)
+	public ItemStack getExtractionResult(ItemStack item)
 	{
 		if (item == null)
 			return null;

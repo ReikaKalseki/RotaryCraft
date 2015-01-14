@@ -27,7 +27,9 @@ public class ExtractorModOres {
 
 	public static void addSmelting() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			ReikaRecipeHelper.addSmelting(ItemRegistry.MODEXTRACTS.getStackOfMetadata(getFlakesIndex(ModOreList.oreList[i])), ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount()), 0.7F);
+			ItemStack in = ItemRegistry.MODEXTRACTS.getStackOfMetadata(getFlakesIndex(ModOreList.oreList[i]));
+			ItemStack out = ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount());
+			ReikaRecipeHelper.addSmelting(in, out, 0.7F);
 		}
 	}
 
@@ -44,9 +46,7 @@ public class ExtractorModOres {
 	}
 
 	public static ExtractorStage getStageFromMetadata(ItemStack is) {
-		if (ModOreList.isModOre(is))
-			return null;
-		return ExtractorStage.values()[is.getItemDamage()%4];
+		return ExtractorStage.list[is.getItemDamage()%4];
 	}
 
 	public static int getIndexOffsetForIngot(ItemStack is) {
@@ -162,5 +162,7 @@ public class ExtractorModOres {
 		SLURRY(),
 		SOLUTION(),
 		FLAKES();
+
+		private static final ExtractorStage[] list = values();
 	}
 }

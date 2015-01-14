@@ -44,7 +44,6 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -131,7 +130,7 @@ public class RotaryRecipes {
 
 		addProps();
 		RecipesGrinder.getRecipes().addModRecipes();
-		RecipesExtractor.recipes().addModRecipes();
+		//RecipesExtractor.recipes().addModRecipes();
 
 		ItemStack coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1) : ItemStacks.power;
 		MachineRegistry.DYNAMO.addOreRecipe(" C ", "GIG", "IRI", 'C', coil, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Items.redstone);

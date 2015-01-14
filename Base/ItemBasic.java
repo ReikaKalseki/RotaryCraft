@@ -65,6 +65,10 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 		return index;
 	}
 
+	protected final int getRootIndex() {
+		return index;
+	}
+
 	public void setIndex(int a) {
 		index = a;
 	}

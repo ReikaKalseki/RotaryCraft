@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 public class CustomExtractLoader {
 
@@ -38,21 +39,23 @@ public class CustomExtractLoader {
 		private final ArrayList<String> oreNames = new ArrayList();
 		public final int color1;
 		public final int color2;
+		public final ProductType type;
 		public final String productName;
 
-		private CustomExtractEntry(String name, OreRarity r, String prod, int c1, int c2, String... ores) {
+		private CustomExtractEntry(String name, OreRarity r, ProductType t, String prod, int c1, int c2, String... ores) {
 			displayName = name;
 			for (int i = 0; i < ores.length; i++) {
 				String s = ores[i];
 				oreNames.add(s);
 				oreItems.addAll(OreDictionary.getOres(s));
 				if (oreItems.isEmpty())
-					throw new IllegalStateException("Cannot have entries with no corresponding ores!");
+					;//throw new IllegalStateException("Cannot have entries with no corresponding ores!");
 			}
 			rarity = r;
 			color1 = c1;
 			color2 = c2;
 			productName = prod;
+			type = t;
 		}
 
 		@Override
@@ -105,7 +108,7 @@ public class CustomExtractLoader {
 	}
 
 	public void loadFile() {
-		RotaryCraft.logger.log("Loading custom ore config.");
+		RotaryCraft.logger.log("Loading custom extract config.");
 		File f = new File(this.getFullSavePath());
 		if (!f.exists())
 			if (!this.createOreFile(f))
@@ -127,7 +130,7 @@ public class CustomExtractLoader {
 						}
 					}
 					catch (Exception e) {
-						RotaryCraft.logger.logError("Malformed custom extract entry: "+line);
+						RotaryCraft.logger.logError("Malformed custom extract entry ["+e.getLocalizedMessage()+"]: '"+line+"'");
 						e.printStackTrace();
 					}
 				}
@@ -149,7 +152,7 @@ public class CustomExtractLoader {
 			this.writeCommentLine(p, "-------------------------------");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Use this file to add custom ores and extracts to the extractor.");
-			this.writeCommentLine(p, "Specify one per line, and format them as 'Name, Rarity, Product Name, Color 1, Color 2, OreDictionary Name(s)'");
+			this.writeCommentLine(p, "Specify one per line, and format them as 'Name, Rarity, Product Type, Product Ore Name, Color 1, Color 2, OreDictionary Name(s)'");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Ore rarity is the rarity of the ore blocks in the world, and affects the multiplication rates.");
 			this.writeCommentLine(p, "Valid Rarity Values:");
@@ -157,19 +160,24 @@ public class CustomExtractLoader {
 				this.writeCommentLine(p, "\t"+o.name()+" - "+o.desc+", like "+o.examples+"");
 			}
 			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Capitalization for the ore dictionary names matters, but is ignored for rarities.");
+			this.writeCommentLine(p, "Valid Product Types:");
+			for (ProductType o : ProductType.values()) {
+				this.writeCommentLine(p, "\t"+o.displayName+" - "+o.desc);
+			}
+			this.writeCommentLine(p, "");
+			this.writeCommentLine(p, "Capitalization for the ore dictionary names matters, but is ignored for rarities and types.");
 			this.writeCommentLine(p, "Ensure your OreDict names are correct; not all mods follow the 'oreName' and 'productName' convention.");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Colors must be hex codes; try to avoid conflicts with existing ores, including those natively handled by RC.");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Sample Lines:");
-			this.writeCommentLine(p, "\tSample Ore 1, SCARCE, ingotSample, 0xffffff, 0x73cc12, oreSample");
-			this.writeCommentLine(p, "\tSample Ore 2, Common, dustMetal, 0x77003b, 0xb1a700, oreNotSample, oreSecondName, oreHasLotsOfVariants");
-			this.writeCommentLine(p, "\tSample Ore 3, EVerYwHEre, ImproperIngot, 0x1487a6, 0x27c61a, PoorlyNamedOre");
+			this.writeCommentLine(p, "\tSample Ore 1, SCARCE, INGOT, ingotSample, 0xffffff, 0x73cc12, oreSample");
+			this.writeCommentLine(p, "\tSample Ore 2, Common, dust, dustMetal, 0x77003b, 0xb1a700, oreNotSample, oreSecondName, oreHasLotsOfVariants");
+			this.writeCommentLine(p, "\tSample Ore 3, EVerYwHEre, gEm, ImproperIngot, 0x1487a6, 0x27c61a, PoorlyNamedOre");
 			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Entries missing names, rarities, products, or colors, or having less than one Ore Dictionary name, are incorrect.");
+			this.writeCommentLine(p, "Entries missing names, rarities, types, products, or colors, or having less than one Ore Dictionary name, are incorrect.");
 			this.writeCommentLine(p, "Incorrectly formatted lines will be ignored and will log an error in the console.");
-			this.writeCommentLine(p, "Lines beginning with '//' are comments and will be ignored, as will empty lines.");
+			this.writeCommentLine(p, "Lines beginning with '//' are comments and will be ignored, as will empty lines. Spaces are stripped.");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "NOTE WELL: It is your responsibility to choose the ore blocks appropriately.");
 			this.writeCommentLine(p, "\tWhile you can theoretically make anything processable in the Extractor,");
@@ -187,28 +195,50 @@ public class CustomExtractLoader {
 		}
 	}
 
-	private void writeCommentLine(PrintWriter p, String line) {
+	private static void writeCommentLine(PrintWriter p, String line) {
 		p.append("// "+line+"\n");
 	}
 
 	private CustomExtractEntry parseString(String s) throws Exception {
 		String[] parts = s.split(",");
-		if (parts.length < 6)
+		for (int i = 1; i < parts.length; i++)
+			parts[i] = ReikaStringParser.stripSpaces(parts[i]);
+		if (parts.length < 7)
 			throw new IllegalArgumentException("Invalid parameter count.");
 		String name = parts[0];
 		if (name.isEmpty())
 			throw new IllegalArgumentException("Empty name is invalid.");
 		OreRarity rarity = OreRarity.valueOf(parts[1].toUpperCase());
-		String prod = parts[2];
-		int c1 = Integer.parseInt(parts[3], 16);
-		int c2 = Integer.parseInt(parts[4], 16);
-		String[] ores = new String[parts.length-5];
-		System.arraycopy(parts, 5, ores, 0, ores.length);
-		return new CustomExtractEntry(name, rarity, prod, c1, c2, ores);
+		ProductType type = ProductType.valueOf(parts[2].toUpperCase());
+		String prod = parts[3];
+		if (parts[4].startsWith("0x"))
+			parts[4] = parts[4].substring(2);
+		if (parts[5].startsWith("0x"))
+			parts[5] = parts[4].substring(2);
+		int c1 = Integer.parseInt(parts[4], 16);
+		int c2 = Integer.parseInt(parts[5], 16);
+		String[] ores = new String[parts.length-6];
+		System.arraycopy(parts, 6, ores, 0, ores.length);
+		return new CustomExtractEntry(name, rarity, type, prod, c1, c2, ores);
 	}
 
 	public List<CustomExtractEntry> getEntries() {
 		return Collections.unmodifiableList(data);
+	}
+
+	public static enum ProductType {
+		INGOT("Ingots like Iron and Copper"),
+		DUST("Dusts like Redstone and Sulfur"),
+		GEM("Gems like Diamonds and Amethyst"),
+		ITEM("Anything else, like ThaumCraft shards");
+
+		public final String displayName;
+		private final String desc;
+
+		private ProductType(String d) {
+			displayName = ReikaStringParser.capFirstChar(this.name());
+			desc = d;
+		}
 	}
 
 }

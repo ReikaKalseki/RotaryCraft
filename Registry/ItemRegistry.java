@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.CustomExtractLoader;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -96,6 +97,7 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShears;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShovel;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSickle;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
+import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ItemRegistry implements ItemEnum {
@@ -182,7 +184,9 @@ public enum ItemRegistry implements ItemEnum {
 	MODEXTRACTS(-1, true,			"item.modextracts",			ItemModOre.class),
 	MODINGOTS(-1, true,				"item.modingots",			ItemModOre.class),
 	SPAWNER(0, false,				"item.spawner",				ItemSpawner.class),
-	STEELPACK(44, 1, false,			"item.steelpack",			ItemJetPack.class);
+	STEELPACK(44, 1, false,			"item.steelpack",			ItemJetPack.class),
+	CUSTOMEXTRACT(240, true,		"item.customextract",		ItemCustomModOre.class),
+	CUSTOMINGOT(244, true,			"item.customingot",			ItemCustomModOre.class);
 	;//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
 
 	private final int index;
@@ -578,6 +582,10 @@ public enum ItemRegistry implements ItemEnum {
 			return 4*ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
 		case MODINGOTS:
 			return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
+		case CUSTOMEXTRACT:
+			return 4*CustomExtractLoader.instance.getEntries().size();
+		case CUSTOMINGOT:
+			return CustomExtractLoader.instance.getEntries().size();
 		case SHAFTCRAFT:
 			return RotaryNames.shaftPartNames.length;
 		case MISCCRAFT:

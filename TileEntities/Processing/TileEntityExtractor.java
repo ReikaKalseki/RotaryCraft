@@ -31,6 +31,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
@@ -228,8 +229,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				extractorCookTime[i]++;
 				if (extractorCookTime[i] >= this.getOperationTime(i+1)) {
 					extractorCookTime[i] = 0;
-					if (!this.processModOre(i))
-						this.processItem(i);
+					//if (!this.processModOre(i))
+					this.processItem(i);
 					flag1 = true;
 				}
 			}
@@ -268,6 +269,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 			}
 		}
+		/*
 		if (ItemRegistry.MODEXTRACTS.matchItem(inv[i]) || ModOreList.isModOre(inv[i])) {
 			ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
 			switch (i) {
@@ -301,9 +303,12 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				break;
 			}
-		}
+		}*/
+		OreType ore = this.getOreType(inv[i]);
+		if (ore == null)
+			return false;
 
-		ItemStack itemstack = RecipesExtractor.recipes().getSmeltingResult(inv[i]);
+		ItemStack itemstack = RecipesExtractor.recipes().getExtractionResult(inv[i]);
 		if (itemstack == null) {
 			return false;
 		}
@@ -317,9 +322,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	private void processItem(int i) {
-		ItemStack itemstack = RecipesExtractor.recipes().getSmeltingResult(inv[i]);
+		ItemStack itemstack = RecipesExtractor.recipes().getExtractionResult(inv[i]);
 		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
-		ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].getItem()) : this.getVanillaOreByItem(inv[i]);
+		//ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].getItem()) : this.getVanillaOreByItem(inv[i]);
+		OreType ore = this.getOreType(inv[i]);
 		//ReikaJavaLibrary.pConsole(ore, Side.SERVER);
 		int num = this.getSmeltNumber(i, ore, inv[i]);
 		if (inv[i+4] == null) {
@@ -335,21 +341,48 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (i == 3) {
 			this.bonusItems(inv[i]);
 			RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());
+			if (ore.getRarity() == OreRarity.RARE)
+				RotaryAchievements.RAREEXTRACT.triggerAchievement(this.getPlacer());
 		}
 
 		inv[i].stackSize--;
 		if (i == 1 || i == 2)
-			tank.removeLiquid(1000/8); //millis
+			tank.removeLiquid(125);
 
 		if (inv[i].stackSize <= 0)
 			inv[i] = null;
 
 	}
 
+	private OreType getOreType(ItemStack is) {
+		if (is.getItem() == ItemRegistry.EXTRACTS.getItemInstance()) {
+			return ReikaOreHelper.oreList[is.getItemDamage()%ReikaOreHelper.oreList.length];
+		}
+		else if (is.getItem() == ItemRegistry.MODEXTRACTS.getItemInstance()) {
+			return ExtractorModOres.getOreFromExtract(is);
+		}
+		else if (is.getItem() == ItemRegistry.CUSTOMEXTRACT.getItemInstance()) {
+			return ItemCustomModOre.getExtractType(is);
+		}
+		else {
+			OreType ore = ReikaOreHelper.getFromVanillaOre(is);
+			if (ore != null)
+				return ore;
+			ore = ReikaOreHelper.getEntryByOreDict(is);
+			if (ore != null)
+				return ore;
+			ore = ModOreList.getModOreFromOre(is);
+			if (ore != null)
+				return ore;
+		}
+		return null;
+	}
+
+	/*
 	private ReikaOreHelper getVanillaOreByItem(ItemStack is) {
 		return ReikaOreHelper.oreList[is.getItemDamage()%ReikaOreHelper.oreList.length];
 	}
-
+	 */
 	private void bonusItems(ItemStack is) {
 		ExtractorBonus e = ExtractorBonus.getBonusForIngredient(is);
 		if (e != null) {
@@ -359,7 +392,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 		}
 	}
-
+	/*
 	private boolean isValidModOre(ItemStack is) {
 		return ExtractorModOres.isModOreIngredient(is) || ModOreList.isModOre(is);
 	}
@@ -407,7 +440,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		}
 		return false;
 	}
-
+	 */
 	@Override
 	public boolean hasModelTransparency() {
 		return true;
