@@ -108,6 +108,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	}
 
 	public final boolean canUpgradeWith(ItemStack item) {
+		if (tier >= 5)
+			return false;
 		if (item.getItemDamage() == 2) {
 			if (item.stackTagCompound == null)
 				return false;
