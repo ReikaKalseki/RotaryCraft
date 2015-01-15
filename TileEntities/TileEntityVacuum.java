@@ -24,12 +24,17 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
 import Reika.RotaryCraft.API.Event.VacuumItemAbsorbEvent;
 import Reika.RotaryCraft.API.Event.VacuumXPAbsorbEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -37,7 +42,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction/*, IFluidHandler*/ {
+public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction, IFluidHandler {
 
 	private int experience = 0;
 	public boolean equidistant = true;
@@ -67,7 +72,6 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		this.suck(world, x, y, z);
 		this.absorb(world, x, y, z);
 		this.transfer(world, x, y, z);
-		//ReikaChatHelper.writeInt(this.experience);
 	}
 
 	private void transfer(World world, int x, int y, int z) {
@@ -295,7 +299,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	@Override
-	public void onEMP() {}/*
+	public void onEMP() {}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
@@ -304,12 +308,19 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
+		return resource.fluidID == ReikaXPFluidHelper.getFluid().fluidID ? this.drain(from, resource.amount, doDrain) : null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
+		FluidStack fs = experience > 0 ? ReikaXPFluidHelper.getFluid(experience) : null;
+		if (fs != null) {
+			if (fs.amount > maxDrain)
+				fs.amount = maxDrain;
+			if (doDrain)
+				experience -= ReikaXPFluidHelper.getXPForAmount(fs.amount);
+		}
+		return fs;
 	}
 
 	@Override
@@ -319,13 +330,13 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return experience > 0 && fluid.equals(FluidRegistry.getFluid("xpjuice"));
+		return ReikaXPFluidHelper.fluidsExist() && experience > 0 && fluid.equals(ReikaXPFluidHelper.getFluidType());
 	}
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[]{};
-	}*/
+	}
 
 	@Override
 	public void breakBlock() {
