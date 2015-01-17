@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockWorkbench;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -26,21 +28,27 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
+import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.TinkerToolHandler;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -187,6 +195,51 @@ public class RotaryEventManager {
 		if (pe == null)
 			return;
 		ad.setResult(Result.DENY);
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void buildWorktables(PlayerPlaceBlockEvent evt) {
+		if (evt.block == Blocks.crafting_table || evt.block instanceof BlockWorkbench || TinkerToolHandler.getInstance().isWorkbench(evt.block)) {
+			this.checkAndBuildWorktable(evt.world, evt.x, evt.y, evt.z);
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void buildWorktables(PlayerInteractEvent evt) {
+		if (evt.action == Action.RIGHT_CLICK_BLOCK) {
+			Block b = evt.world.getBlock(evt.x, evt.y, evt.z);
+			if (b == Blocks.crafting_table || b instanceof BlockWorkbench || TinkerToolHandler.getInstance().isWorkbench(b)) {
+				if (this.checkAndBuildWorktable(evt.world, evt.x, evt.y, evt.z))
+					evt.setCanceled(true);
+			}
+		}
+	}
+
+	private boolean checkAndBuildWorktable(World world, int x, int y, int z) {
+		if (!ReikaWorldHelper.matchWithItemStack(world, x, y-1, z, ItemStacks.steelblock))
+			return false;
+		if (world.getBlock(x, y-2, z) != Blocks.redstone_block)
+			return false;
+		for (int i = -1; i <= 1; i++) {
+			for (int k = -1; k <= 1; k++) {
+				if (i != 0 || k != 0) {
+					if (world.getBlock(x+i, y-1, z+k) != Blocks.brick_block)
+						return false;
+					if (!ReikaWorldHelper.matchWithItemStack(world, x+i, y-2, z+k, ReikaItemHelper.stoneDoubleSlab))
+						return false;
+				}
+			}
+		}
+		for (int i = -1; i <= 1; i++) {
+			for (int k = -1; k <= 1; k++) {
+				world.setBlock(x+i, y-1, z+k, Blocks.air);
+				world.setBlock(x+i, y-2, z+k, Blocks.air);
+			}
+		}
+		world.setBlock(x, y, z, Blocks.air);
+		SoundRegistry.CRAFT.playSoundAtBlock(world, x, y, z);
+		world.setBlock(x, y-2, z, MachineRegistry.WORKTABLE.getBlock(), MachineRegistry.WORKTABLE.getMachineMetadata(), 3);
+		return true;
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)

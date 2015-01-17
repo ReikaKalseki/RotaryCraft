@@ -33,14 +33,15 @@ import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ThermalRecipeHelper;
-import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.Auxiliary.BlastGate;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
@@ -129,6 +130,11 @@ public class RotaryRecipes {
 		if (RotaryCraft.instance.isLocked())
 			return;
 
+		ItemStack bgt = getBlastFurnaceGatingMaterial();
+		if (!ReikaItemHelper.matchStacks(bgt, ReikaItemHelper.stoneBricks))
+			RotaryCraft.logger.log("Blast Furnace gating material set to "+bgt.getDisplayName()+": "+bgt.toString());
+		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 't', bgt, 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks);
+
 		addProps();
 		RecipesGrinder.getRecipes().addModRecipes();
 		//RecipesExtractor.recipes().addModRecipes();
@@ -197,11 +203,6 @@ public class RotaryRecipes {
 			MachineRegistry.FLOODLIGHT.addOreRecipe("ISO", "Ggd", "I#O", '#', ItemStacks.basepanel, 'I', "ingotSilver", 'd', "ingotCopper", 'S', ItemStacks.steelingot, 'G', Blocks.glass, 'g', Blocks.glowstone, 'O', Blocks.obsidian);
 
 		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.getNumberShaftTypes()-1, " S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem); //Shaft cross
-
-		ItemStack bgt = getBlastFurnaceGatingMaterial();
-		if (!ReikaItemHelper.matchStacks(bgt, ReikaItemHelper.stoneBricks))
-			RotaryCraft.logger.log("Blast Furnace gating material set to "+bgt.getDisplayName()+": "+bgt.toString());
-		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 't', bgt, 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks);
 
 		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);
 
@@ -1005,71 +1006,18 @@ public class RotaryRecipes {
 
 	public static ItemStack getBlastFurnaceGatingMaterial() {
 		int index = ConfigRegistry.BLASTMAT.getValue();
-		ItemStack item = null;
-		ArrayList<ItemStack> ores = null;
-		switch (index) {
-		case 1:
-			ores = OreDictionary.getOres("ingotAlumite");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 2:
-			ores = OreDictionary.getOres("ingotObsidian");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 3:
-			item = new ItemStack(Blocks.obsidian);
-			break;
-		case 4:
-			ores = OreDictionary.getOres("ingotSteel");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 5:
-			ores = OreDictionary.getOres("ingotCopper");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 6:
-			item = new ItemStack(Items.gold_ingot);
-			break;
-		case 7:
-			ores = OreDictionary.getOres("ingotSilver");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 8:
-			ores = OreDictionary.getOres("ingotBrass");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 9:
-			ores = OreDictionary.getOres("ingotBronze");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 10:
-			ores = OreDictionary.getOres("ingotTitanium");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 11:
-			ores = OreDictionary.getOres("ingotDarkSteel");
-			if (!ores.isEmpty())
-				item = ores.get(0);
-			break;
-		case 12:
-			item = ModList.TWILIGHT.isLoaded() ? new ItemStack(TwilightForestHandler.getInstance().steelleaf) : null;
-			break;
-		default:
-			item = ReikaItemHelper.stoneBricks;
-			break;
+		if (index >= 0 && index < BlastGate.matList.length) {
+			BlastGate mat = BlastGate.matList[index];
+			ItemStack item = mat.getItem();
+			if (item == null)
+				RotaryCraft.logger.logError("Selected gating material "+mat+" could not be found; either the item does not exist or its mod has not yet loaded.");
+			return item != null ? item.copy() : ReikaItemHelper.stoneBricks.copy();
 		}
-		if (item.getItem() == ItemRegistry.MODINGOTS.getItemInstance())
-			item = null;
-		if (ReikaItemHelper.matchStacks(item, ItemStacks.steelingot))
-			item = null;
-		return item != null ? item.copy() : ReikaItemHelper.stoneBricks.copy();
+		else {
+			RotaryCraft.logger.logError("Gating material index "+index+" is invalid. Valid indices:");
+			for (BlastGate g : BlastGate.values())
+				ReikaJavaLibrary.pConsole("\t"+g.ordinal()+" = "+g.name());
+			return ReikaItemHelper.stoneBricks.copy();
+		}
 	}
 }
