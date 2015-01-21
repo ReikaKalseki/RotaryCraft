@@ -327,6 +327,10 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	private void damageEngine() {
 		FOD++;
+		if (DifficultyEffects.JETINGESTFAIL.testChance()) {
+			isJetFailing = true;
+			temperature = 800;
+		}
 		//SoundRegistry.JETDAMAGE.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord);
 	}
 

@@ -161,6 +161,14 @@ public class PacketHandlerCore implements IPacketHandler {
 				else
 					longdata = inputStream.readLong();
 				break;
+			case PREFIXED:
+				control = inputStream.readInt();
+				pack = PacketRegistry.getEnum(control);
+				len = inputStream.readInt();
+				data = new int[len];
+				for (int i = 0; i < len; i++)
+					data[i] = inputStream.readInt();
+				break;
 			case NBT:
 				break;
 			case STRINGINT:

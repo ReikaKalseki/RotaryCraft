@@ -20,7 +20,7 @@ public class RotaryChests {
 	private static final LootController data = new LootController();
 
 	public static void addToChests() {
-		data.addItem(1, Location.BONUS, ItemStacks.steelingot, 1, 5, 12);
+		data.addItem(1, Location.BONUS, ItemStacks.steelingot, 1, 5, 6);
 
 		data.addItem(2, Location.DUNGEON, ItemStacks.scrap, 6, 18, 20);
 		data.addItem(2, Location.DUNGEON, ItemStacks.ironscrap, 1, 12, 40);
@@ -44,14 +44,14 @@ public class RotaryChests {
 		//data.addItem(2, Location.MINESHAFT, ItemRegistry.ETHANOL.getStackOf(), 1, 4, 5);
 
 		//data.addItem(4, Location.STRONGHOLD_HALLWAY, ItemStacks.lens, 1, 1, 5);
-		data.addItem(1, Location.STRONGHOLD_HALLWAY, ItemStacks.steelingot, 1, 3, 25);
+		//data.addItem(1, Location.STRONGHOLD_HALLWAY, ItemStacks.steelingot, 1, 3, 25);
 		data.addItem(2, Location.STRONGHOLD_HALLWAY, ItemStacks.scrap, 4, 16, 20);
 		data.addItem(2, Location.STRONGHOLD_HALLWAY, ItemStacks.ironscrap, 1, 8, 20);
 		data.addItem(3, Location.STRONGHOLD_HALLWAY, ItemStacks.lonsda, 1, 2, 10);
 		//data.addItem(2, Location.STRONGHOLD_HALLWAY, BlockRegistry.BLASTGLASS.getStackOf(), 1, 6, 15);
 
 		//data.addItem(4, Location.STRONGHOLD_CROSSING, ItemStacks.lens, 1, 1, 5);
-		data.addItem(1, Location.STRONGHOLD_CROSSING, ItemStacks.steelingot, 1, 3, 25);
+		//data.addItem(1, Location.STRONGHOLD_CROSSING, ItemStacks.steelingot, 1, 3, 25);
 		data.addItem(2, Location.STRONGHOLD_CROSSING, ItemStacks.scrap, 8, 24, 20);
 		data.addItem(2, Location.STRONGHOLD_CROSSING, ItemStacks.ironscrap, 1, 8, 20);
 		data.addItem(3, Location.STRONGHOLD_CROSSING, ItemStacks.lonsda, 1, 2, 10);
