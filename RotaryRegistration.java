@@ -104,9 +104,9 @@ public class RotaryRegistration {
 	}
 
 	public static void loadOreDictionary() {
-		if (!ModList.GREGTECH.isLoaded()) {//GT unificator causes an exploit, and no mods even use this anyways
-			OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot);
+		OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot); //though he has an entry, he does not add an alternative manufacture
 
+		if (!ModList.GREGTECH.isLoaded()) {//GT unificator causes an exploit, and no mods even use this anyways
 			OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
 			OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
 

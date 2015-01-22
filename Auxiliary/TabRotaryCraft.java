@@ -9,33 +9,21 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Instantiable.GUI.EnumCreativeTab;
 import Reika.RotaryCraft.Registry.EngineType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TabRotaryCraft extends CreativeTabs {
+public class TabRotaryCraft extends EnumCreativeTab {
 
-	public TabRotaryCraft(int position, String label) {
-		super(position, label); //The constructor for your tab
+	public TabRotaryCraft() {
+		super("RotaryCraft");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack() {
 		return EngineType.JET.getCraftedProduct();
-	}
-
-	@Override
-	public String getTranslatedTabLabel() {
-		return "RotaryCraft"; //The name of the tab ingame
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getTabIconItem() {
-		return null;
 	}
 }

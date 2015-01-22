@@ -110,11 +110,11 @@ import forestry.api.recipes.RecipeManagers;
 public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
 
-	public static final CreativeTabs tabRotary = new TabRotaryCraft(CreativeTabs.getNextID(), "RotaryCraft");
-	public static final CreativeTabs tabRotaryItems = new TabRotaryItems(CreativeTabs.getNextID(), "RotaryItems");
-	public static final CreativeTabs tabRotaryTools = new TabRotaryTools(CreativeTabs.getNextID(), "RotaryTools");
-	public static final CreativeTabs tabModOres = new TabModOre(CreativeTabs.getNextID(), "RotaryModOres");
-	public static final CreativeTabs tabSpawner = new TabSpawner(CreativeTabs.getNextID(), "Spawners");
+	public static final CreativeTabs tabRotary = new TabRotaryCraft();
+	public static final CreativeTabs tabRotaryItems = new TabRotaryItems();
+	public static final CreativeTabs tabRotaryTools = new TabRotaryTools();
+	public static final CreativeTabs tabModOres = new TabModOre();
+	public static final CreativeTabs tabSpawner = new TabSpawner();
 
 	private static final int[] dmgs = {
 		ArmorMaterial.DIAMOND.getDamageReductionAmount(0),
@@ -210,7 +210,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
 		this.startTiming(LoadPhase.PRELOAD);
-		this.verifyVersions();
+		this.verifyInstallation();
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);

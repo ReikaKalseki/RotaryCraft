@@ -95,8 +95,12 @@ public class ItemCustomModOre extends AutoOreItem implements GradientBlend {
 	}
 
 	public static CustomExtractEntry getExtractType(ItemStack is) {
-		int idx = is.getItem() == ItemRegistry.CUSTOMEXTRACT.getItemInstance() ? is.getItemDamage()/4 : is.getItemDamage();
+		int idx = getEntryIndex(is);
 		return CustomExtractLoader.instance.getEntries().get(idx);
+	}
+
+	public static int getEntryIndex(ItemStack is) {
+		return is.getItem() == ItemRegistry.CUSTOMEXTRACT.getItemInstance() ? is.getItemDamage()/4 : is.getItemDamage();
 	}
 
 	public static ItemStack getItem(int idx, ExtractorStage s) {

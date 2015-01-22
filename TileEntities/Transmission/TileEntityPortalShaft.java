@@ -112,6 +112,8 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	}
 
 	private int[] getScaledCoordinates(int x, int y, int z, World source, World target) {
+		if (source == null || target == null)
+			return new int[]{0, 0, 0};
 		int tg = target.provider.dimensionId;
 		int src = source.provider.dimensionId;
 		if (src != -1 && tg == -1) { //to nether
