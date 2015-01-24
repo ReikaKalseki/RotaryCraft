@@ -260,9 +260,9 @@ public class RotaryCraft extends DragonAPIMod {
 		//version = evt.getModMetadata().version;
 
 		CreativeTabSorter.instance.registerCreativeTabAfter(tabRotaryItems, tabRotary);
-		CreativeTabSorter.instance.registerCreativeTabAfter(tabRotaryTools, tabRotaryItems);
-		CreativeTabSorter.instance.registerCreativeTabAfter(tabModOres, tabRotaryTools);
-		CreativeTabSorter.instance.registerCreativeTabAfter(tabSpawner, tabModOres);
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabRotaryTools, tabRotary);
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabModOres, tabRotary);
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabSpawner, tabRotary);
 
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.OPTIFINE, CompatibilityTracker.Severity.GLITCH, "Optifine is known to break some rendering and cause framerate drops.");
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.GREGTECH, CompatibilityTracker.Severity.GLITCH, "The GT unifier registers HSLA steel as standard OreDict steel. This breaks the techtrees of mods like RailCraft and TConstruct.");
