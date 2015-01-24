@@ -33,6 +33,7 @@ import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiBlockMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -253,7 +254,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	public void onEMP() {}
 
 	@Override
-	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
 		return new PowerSourceList().addSource(this);
 	}
 

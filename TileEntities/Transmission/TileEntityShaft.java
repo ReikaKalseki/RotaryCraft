@@ -28,6 +28,7 @@ import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -609,7 +610,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	public void onEMP() {}
 
 	@Override
-	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
 		if (this.isCross()) {
 			boolean read1 = this.isWritingTo(io);
 			if (read1) {

@@ -21,6 +21,7 @@ import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
@@ -747,7 +748,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	}
 
 	@Override
-	public PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
 		if (read != null) {
 			pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX+this.getPointingOffsetX(), yCoord+read.offsetY+this.getPointingOffsetY(), zCoord+read.offsetZ+this.getPointingOffsetZ(), this, caller));

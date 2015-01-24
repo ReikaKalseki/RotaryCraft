@@ -10,12 +10,12 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Instantiable.GUI.EnumCreativeTab;
+import Reika.DragonAPI.Instantiable.GUI.RegistryEnumCreativeTab;
 import Reika.RotaryCraft.Registry.EngineType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TabRotaryCraft extends EnumCreativeTab {
+public class TabRotaryCraft extends RegistryEnumCreativeTab {
 
 	public TabRotaryCraft() {
 		super("RotaryCraft");

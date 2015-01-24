@@ -11,19 +11,19 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.Power.AdvancedShaftPowerReceiver;
-import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.Power.SimpleShaftPowerReceiver;
-import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
-public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implements IOMachine {
+public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implements IOMachine, PowerSourceTracker {
 
 	public int iotick = 512;
 
@@ -294,13 +294,13 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return wx && wy && wz;
 	}
 
-	private boolean matchTile(TileEntityIOMachine te, ForgeDirection dir) {
+	private boolean matchTile(PowerSourceTracker te, ForgeDirection dir) {
 		if (dir == null)
 			return false;
-		int dim = te.worldObj.provider.dimensionId;
-		int tx = te.xCoord+te.pointoffsetx;
-		int ty = te.yCoord+te.pointoffsety;
-		int tz = te.zCoord+te.pointoffsetz;
+		int dim = te.getWorld().provider.dimensionId;
+		int tx = te.getX()+te.getIoOffsetX();
+		int ty = te.getY()+te.getIoOffsetY();
+		int tz = te.getZ()+te.getIoOffsetZ();
 		TileEntity out = this.getAdjacentTileEntity(dir);
 		while (out instanceof WorldRift) {
 			out = ((WorldRift)out).getTileEntityFrom(dir);
@@ -310,27 +310,27 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return !out.isInvalid() && out.worldObj.provider.dimensionId == dim && out.xCoord == tx && out.yCoord == ty && out.zCoord == tz;
 	}
 
-	public final boolean isWritingTo(TileEntityIOMachine te) {
+	public final boolean isWritingTo(PowerSourceTracker te) {
 		return this.matchTile(te, write);
 	}
 
-	public final boolean isWritingTo2(TileEntityIOMachine te) {
+	public final boolean isWritingTo2(PowerSourceTracker te) {
 		return this.matchTile(te, write2);
 	}
 
-	public final boolean isReadingFrom(TileEntityIOMachine te) {
+	public final boolean isReadingFrom(PowerSourceTracker te) {
 		return this.matchTile(te, read);
 	}
 
-	public final boolean isReadingFrom2(TileEntityIOMachine te) {
+	public final boolean isReadingFrom2(PowerSourceTracker te) {
 		return this.matchTile(te, read2);
 	}
 
-	public final boolean isReadingFrom3(TileEntityIOMachine te) {
+	public final boolean isReadingFrom3(PowerSourceTracker te) {
 		return this.matchTile(te, read3);
 	}
 
-	public final boolean isReadingFrom4(TileEntityIOMachine te) {
+	public final boolean isReadingFrom4(PowerSourceTracker te) {
 		return this.matchTile(te, read4);
 	}
 
@@ -453,8 +453,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		te.worldObj.createExplosion(null, te.xCoord, te.yCoord, te.zCoord, 3, true);
 	}
 
-	public abstract PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller);
-
 	public final ForgeDirection getInputForgeDirection() {
 		return read;
 	}
@@ -487,5 +485,40 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	@Override
 	public int getWriteZ2() {
 		return write2 != null ? zCoord+write2.offsetZ : Integer.MIN_VALUE;
+	}
+
+	@Override
+	public final World getWorld() {
+		return worldObj;
+	}
+
+	@Override
+	public final int getX() {
+		return xCoord;
+	}
+
+	@Override
+	public final int getY() {
+		return yCoord;
+	}
+
+	@Override
+	public final int getZ() {
+		return zCoord;
+	}
+
+	@Override
+	public final int getIoOffsetX() {
+		return pointoffsetx;
+	}
+
+	@Override
+	public final int getIoOffsetY() {
+		return pointoffsety;
+	}
+
+	@Override
+	public final int getIoOffsetZ() {
+		return pointoffsetz;
 	}
 }

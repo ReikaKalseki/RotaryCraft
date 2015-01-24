@@ -31,6 +31,7 @@ import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Variables;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -189,6 +190,9 @@ public class ItemMeter extends ItemRotaryTool
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
 			ReikaChatHelper.writeString(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+			if (tile instanceof PowerSourceTracker) {
+				ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
+			}
 			return true;
 		}
 		if (!flag1 && tile instanceof ShaftPowerReceiver) {
@@ -197,6 +201,9 @@ public class ItemMeter extends ItemRotaryTool
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
 			ReikaChatHelper.writeString(String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+			if (tile instanceof PowerSourceTracker) {
+				ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
+			}
 			return true;
 		}
 		if (tile instanceof TileEntityIOMachine) {
@@ -584,8 +591,9 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntityFuelConverter clicked = (TileEntityFuelConverter)tile;
 				ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel and %.3f m^3 of jet fuel.", clicked.getName(), clicked.getBCFuel()/1000D, clicked.getJetFuel()/1000D));
 			}
-
-			ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((TileEntityIOMachine)tile).getPowerSources((TileEntityIOMachine) tile, null)));
+		}
+		if (tile instanceof PowerSourceTracker) {
+			ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
 		}
 
 		if (tile instanceof TemperatureTE) {

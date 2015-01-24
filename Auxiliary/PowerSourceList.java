@@ -18,12 +18,11 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
-import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
 public class PowerSourceList {
 
-	//but what about ShaftPowerEmitters?
 	private ArrayList<PowerGenerator> engines = new ArrayList<PowerGenerator>();
 	private ShaftMerger caller;
 	private ArrayList<ShaftMerger> mergers = new ArrayList();
@@ -52,7 +51,7 @@ public class PowerSourceList {
 		return this;
 	}
 
-	public static PowerSourceList getAllFrom(World world, ForgeDirection dir, int x, int y, int z, TileEntityIOMachine io, ShaftMerger caller) {
+	public static PowerSourceList getAllFrom(World world, ForgeDirection dir, int x, int y, int z, PowerSourceTracker io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
 
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -89,11 +88,11 @@ public class PowerSourceList {
 				//ReikaJavaLibrary.pConsole(4+": "+te, Side.SERVER, io.xCoord == -1011);
 				pwr.addAll(te.getPowerSources(io, caller));
 			}
+			else if (tile instanceof PowerSourceTracker) {
+				pwr.addAll(((PowerSourceTracker)tile).getPowerSources(io, caller));
+			}
 			else if (tile instanceof PowerGenerator) {
 				pwr.addSource((PowerGenerator)tile);
-			}
-			else if (tile instanceof ShaftPowerEmitter) {
-				//return pwr; //for now
 			}
 			else if (tile instanceof WorldRift) {
 				WorldLocation loc = ((WorldRift)tile).getLinkTarget();

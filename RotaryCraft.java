@@ -32,6 +32,7 @@ import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
@@ -257,6 +258,11 @@ public class RotaryCraft extends DragonAPIMod {
 		//deafness = (PotionDeafness)new PotionDeafness(id).setPotionName("Deafness");
 
 		//version = evt.getModMetadata().version;
+
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabRotaryItems, tabRotary);
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabRotaryTools, tabRotaryItems);
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabModOres, tabRotaryTools);
+		CreativeTabSorter.instance.registerCreativeTabAfter(tabSpawner, tabModOres);
 
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.OPTIFINE, CompatibilityTracker.Severity.GLITCH, "Optifine is known to break some rendering and cause framerate drops.");
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.GREGTECH, CompatibilityTracker.Severity.GLITCH, "The GT unifier registers HSLA steel as standard OreDict steel. This breaks the techtrees of mods like RailCraft and TConstruct.");

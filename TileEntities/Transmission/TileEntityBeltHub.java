@@ -25,9 +25,9 @@ import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -315,7 +315,7 @@ Connectable, BreakAction {
 	}
 
 	@Override
-	public final PowerSourceList getPowerSources(TileEntityIOMachine io, ShaftMerger caller) {
+	public final PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
 		if (isEmitting) {
 			TileEntityBeltHub tile = (TileEntityBeltHub)worldObj.getTileEntity(source[0], source[1], source[2]);
 			return tile != null ? tile.getPowerSources(io, caller) : new PowerSourceList();
