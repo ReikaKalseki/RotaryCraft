@@ -63,7 +63,7 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 			int irx = MathHelper.floor_double(rx);
 			int iry = MathHelper.floor_double(ry);
 			int irz = MathHelper.floor_double(rz);
-			if (ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, irx, iry, irz, this.getPlacer()))
+			if (ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, irx, iry, irz, this.getServerPlacer()))
 				world.createExplosion(null, rx, ry, rz, 3F, true);
 			for (int i = 0; i < 32; i++)
 				world.spawnParticle("lava", rx+rand.nextInt(7)-3, ry+rand.nextInt(7)-3, rz+rand.nextInt(7)-3, 0, 0, 0);

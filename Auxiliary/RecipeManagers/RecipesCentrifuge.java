@@ -56,7 +56,7 @@ public class RecipesCentrifuge
 		this.addRecipe(Blocks.pumpkin, null, new ItemStack(Items.pumpkin_seeds, 12), 100);
 		this.addRecipe(Items.wheat, null, new ItemStack(Items.wheat_seeds, 4), 100);
 		this.addRecipe(Blocks.gravel, null, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
-		this.addRecipe(ItemStacks.netherrackdust, null, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80);
+		this.addRecipe(ItemStacks.netherrackdust, null, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 40);
 		this.addRecipe(Blocks.dirt, null, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
 
 		if (ModList.FORESTRY.isLoaded()) {

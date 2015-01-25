@@ -485,7 +485,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	@Override
 	public final void updateTemperature(World world, int x, int y, int z, int meta) {
-		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		int Tamb = tank.isEmpty() ? ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z) : 25;
 		if (power > 0) {
 			double d = tank.getLevel() >= 50 ? 0.00275 : 0.14;
 			double inc = d*Math.sqrt(power)+ReikaMathLibrary.logbase(tier+1, 2);

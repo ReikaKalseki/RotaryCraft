@@ -440,7 +440,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
 		if (id == Blocks.bedrock || id == Blocks.end_portal_frame)
 			return false;
-		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, xread, yread, zread, id, meta, this.getPlacer())) {
+		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, xread, yread, zread, id, meta, this.getServerPlacer())) {
 			hitProtection = true;
 			return false;
 		}

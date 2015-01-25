@@ -167,7 +167,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		Block id = worldObj.getBlock(rx, ry, rz);
 		if (id == Blocks.bedrock)
 			return Integer.MIN_VALUE;
-		if (!worldObj.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, rx, ry, rz, this.getPlacer()))
+		if (!worldObj.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, rx, ry, rz, this.getServerPlacer()))
 			return Integer.MIN_VALUE;
 		int maxr = this.getMaxRange();
 		TileEntity te = worldObj.getTileEntity(rx, ry, rz);
@@ -186,7 +186,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 				if (!im.canBePushed(worldObj, rx, ry, rz, i, torque, power))
 					return Integer.MIN_VALUE;
 			}
-			if (!worldObj.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, rx, ry, rz, this.getPlacer()))
+			if (!worldObj.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, rx, ry, rz, this.getServerPlacer()))
 				return Integer.MIN_VALUE;
 			TileEntity tile = worldObj.getTileEntity(rx, ry, rz);
 			if (tile != null)

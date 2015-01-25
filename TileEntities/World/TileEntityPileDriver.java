@@ -387,7 +387,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			for (int j = -2; j < 3; j++) {
 				Block id = world.getBlock(x+i, y, z+j);
 				int meta = world.getBlockMetadata(x+i, y, z+j);
-				if (!world.isRemote && ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x+i, y, z+j, id, meta, this.getPlacer())) {
+				if (!world.isRemote && ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x+i, y, z+j, id, meta, this.getServerPlacer())) {
 					if (id != Blocks.air && i*j != 4 && i*j != -4) {
 						if (id == Blocks.mob_spawner) {
 							TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getTileEntity(x+i, y, z+j);

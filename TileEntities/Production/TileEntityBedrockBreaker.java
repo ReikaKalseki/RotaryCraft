@@ -95,7 +95,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			return false;
 		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return false;
-		return world.isRemote || ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x, y, z, this.getPlacer());
+		return world.isRemote || ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x, y, z, this.getServerPlacer());
 	}
 
 	private boolean processBlock(World world, int x, int y, int z) {

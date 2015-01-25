@@ -246,6 +246,9 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
+				else {
+					torquein = omegain = 0;
+				}
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", this.torquein, this.omegain));
 			powerin[0][0] = torquein*omegain;
@@ -327,6 +330,9 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
+				}
+				else {
+					torquein = omegain = 0;
 				}
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", torquein, omegain));
@@ -434,6 +440,9 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
+				else {
+					torquein = omegain = 0;
+				}
 			}
 		}
 		else if (te1 instanceof WorldRift) {
@@ -497,6 +506,9 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
+				}
+				else {
+					torquein = omegain = 0;
 				}
 			}
 		}
@@ -563,6 +575,9 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
+				else {
+					torquein = omegain = 0;
+				}
 			}
 		}
 		else if (te3 instanceof WorldRift) {
@@ -627,6 +642,9 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
+				}
+				else {
+					torquein = omegain = 0;
 				}
 			}
 		}

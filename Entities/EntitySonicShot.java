@@ -186,7 +186,7 @@ public class EntitySonicShot extends EntityFireball {
 		if (b == Blocks.air)
 			return;
 		int meta = world.getBlockMetadata(x, y, z);
-		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x, y, z, b, meta, te.getPlacer()))
+		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x, y, z, b, meta, te.getServerPlacer()))
 			return;
 		if (!TileEntitySonicBorer.canDrop(world, x, y, z) && !(b instanceof BlockLiquid))
 			return;

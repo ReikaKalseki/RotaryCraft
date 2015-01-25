@@ -160,7 +160,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	private boolean setBiome(World world, int x, int z) {
-		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x, yCoord, z, this.getPlacer()))
+		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)world, x, yCoord, z, this.getServerPlacer()))
 			return false;
 		BiomeGenBase from = world.getBiomeGenForCoords(x, z);
 		if (!this.isValidTarget(from)) {

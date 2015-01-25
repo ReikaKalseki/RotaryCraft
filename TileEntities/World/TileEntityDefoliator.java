@@ -101,7 +101,7 @@ public class TileEntityDefoliator extends InventoriedPowerLiquidReceiver impleme
 	private void decay(World world, int x, int y, int z) {
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, x, y, z, id, meta, this.getPlacer()))
+		if (!world.isRemote && !ReikaPlayerAPI.playerCanBreakAt((WorldServer)worldObj, x, y, z, id, meta, this.getServerPlacer()))
 			return;
 		boolean flag = false;
 		if (id != Blocks.air) {
