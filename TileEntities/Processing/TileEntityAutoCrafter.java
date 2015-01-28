@@ -43,6 +43,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 
 	private final StepTimer updateTimer = new StepTimer(50);
 
+	private static final int OUTPUT_OFFSET = 18;
+	private static final int CONTAINER_OFFSET = 36;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -98,7 +101,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		if (power >= MINPOWER) {
 			ItemStack out = this.getSlotRecipeOutput(slot);
 			if (out != null) {
-				int space = inv[slot+18].getMaxStackSize()-inv[slot+18].stackSize;
+				int space = inv[slot+OUTPUT_OFFSET].getMaxStackSize()-inv[slot+OUTPUT_OFFSET].stackSize;
 				int tocraft = ReikaMathLibrary.multiMin(amt, this.getInventoryStackLimit(), out.getMaxStackSize(), space);
 				int cycles = tocraft/out.stackSize;
 				for (int i = 0; i < cycles; i++) {
@@ -138,33 +141,35 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	}
 
 	private boolean tryCrafting(int i, ItemStack out, ArrayList<ItemStack>[] items) {
-		int slot = i+18;
+		int slot = i+OUTPUT_OFFSET;
 		int size = inv[slot] != null ? inv[slot].stackSize : 0;
 		if (inv[slot] == null || (ReikaItemHelper.matchStacks(out, inv[slot]) && size+out.stackSize <= out.getMaxStackSize())) {
-			ItemHashMap<Integer> counts = new ItemHashMap(); //ingredient requirements
-			ItemHashMap<ArrayList<ItemStack>> options = new ItemHashMap();
-			for (int k = 0; k < 9; k++) {
-				if (items[k] != null && !items[k].isEmpty()) {
-					Integer req = counts.get(items[k].get(0));
-					int val = req != null ? req.intValue() : 0;
-					counts.put(items[k].get(0), val+1); // items[k].stackSize ?
-					options.put(items[k].get(0), items[k]);
-				}
-			}
-			for (ItemStack is : counts.keySet()) {
-				int req = counts.get(is);
-				int has = this.getAvailableIngredients(options.get(is));
-				int missing = req-has;
-				if (missing > 0) {
-					//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
-					if (!this.tryCraftIntermediates(missing, options.get(is))) {
-						//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
-						return false;
+			if (inv[i+CONTAINER_OFFSET] == null) {
+				ItemHashMap<Integer> counts = new ItemHashMap(); //ingredient requirements
+				ItemHashMap<ArrayList<ItemStack>> options = new ItemHashMap();
+				for (int k = 0; k < 9; k++) {
+					if (items[k] != null && !items[k].isEmpty()) {
+						Integer req = counts.get(items[k].get(0));
+						int val = req != null ? req.intValue() : 0;
+						counts.put(items[k].get(0), val+1); // items[k].stackSize ?
+						options.put(items[k].get(0), items[k]);
 					}
 				}
+				for (ItemStack is : counts.keySet()) {
+					int req = counts.get(is);
+					int has = this.getAvailableIngredients(options.get(is));
+					int missing = req-has;
+					if (missing > 0) {
+						//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
+						if (!this.tryCraftIntermediates(missing, options.get(is))) {
+							//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
+							return false;
+						}
+					}
+				}
+				this.craft(slot, size, out, counts);
+				return true;
 			}
-			this.craft(slot, size, out, counts);
-			return true;
 		}
 		return false;
 	}
@@ -207,9 +212,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		}
 		if (run >= num) {
 			for (int slot : ranSlots.keySet()) {
-				inv[slot+18].stackSize -= ranSlots.get(slot);
-				if (inv[slot+18].stackSize <= 0)
-					inv[slot+18] = null;
+				inv[slot+OUTPUT_OFFSET].stackSize -= ranSlots.get(slot);
+				if (inv[slot+OUTPUT_OFFSET].stackSize <= 0)
+					inv[slot+OUTPUT_OFFSET] = null;
 			}
 			//ReikaJavaLibrary.pConsole(ranSlots+"/"+num+" for "+is);
 			return true;
@@ -251,9 +256,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 					}
 				}
 			}
-			this.addContainers(is, req, slot-18);
+			this.addContainers(is, req, slot-OUTPUT_OFFSET);
 		}
-		crafting[slot-18] = 5;
+		crafting[slot-OUTPUT_OFFSET] = 5;
 		this.markDirty();
 	}
 

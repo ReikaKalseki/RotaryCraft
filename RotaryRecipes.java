@@ -1006,17 +1006,20 @@ public class RotaryRecipes {
 
 	public static ItemStack getBlastFurnaceGatingMaterial() {
 		int index = ConfigRegistry.BLASTMAT.getValue();
-		if (index >= 0 && index < BlastGate.matList.length) {
-			BlastGate mat = BlastGate.matList[index];
+		BlastGate mat = BlastGate.getSelected();
+		if (mat != null) {
 			ItemStack item = mat.getItem();
 			if (item == null)
 				RotaryCraft.logger.logError("Selected gating material "+mat+" could not be found; either the item does not exist or its mod has not yet loaded.");
 			return item != null ? item.copy() : ReikaItemHelper.stoneBricks.copy();
 		}
-		else {
+		else if (index != 0) {
 			RotaryCraft.logger.logError("Gating material index "+index+" is invalid. Valid indices:");
 			for (BlastGate g : BlastGate.values())
-				ReikaJavaLibrary.pConsole("\t"+g.ordinal()+" = "+g.name());
+				ReikaJavaLibrary.pConsole("\t"+(1+g.ordinal())+" = "+g.name());
+			return ReikaItemHelper.stoneBricks.copy();
+		}
+		else {
 			return ReikaItemHelper.stoneBricks.copy();
 		}
 	}

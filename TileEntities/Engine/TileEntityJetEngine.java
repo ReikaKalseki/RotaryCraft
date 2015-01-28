@@ -31,6 +31,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import thaumcraft.common.entities.monster.EntityWisp;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -344,6 +346,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		if (caught instanceof EntityItem)
 			return false;
 		if (caught instanceof EntityXPOrb)
+			return false;
+		if (ModList.THAUMCRAFT.isLoaded() && caught instanceof EntityWisp)
 			return false;
 		String name = caught.getCommandSenderName().toLowerCase();
 		if (name.contains("bird"))

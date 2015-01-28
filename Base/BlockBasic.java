@@ -24,7 +24,10 @@ public abstract class BlockBasic extends Block implements SidedTextureIndex {
 
 	public BlockBasic(Material par3Material) {
 		super(par3Material);
-		this.setCreativeTab(DragonAPICore.isReikasComputer() || this.isAvailableInCreativeMode() ? RotaryCraft.tabRotary : null);
+		if (RotaryCraft.instance.isLocked())
+			this.setCreativeTab(null);
+		else
+			this.setCreativeTab(DragonAPICore.isReikasComputer() || this.isAvailableInCreativeMode() ? RotaryCraft.tabRotary : null);
 	}
 
 	protected boolean isAvailableInCreativeMode() {

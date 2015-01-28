@@ -33,6 +33,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.ItemMachineRenderer;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.TutorialTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
@@ -42,6 +43,7 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
@@ -94,6 +96,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
 		te.setPlacer(ep);
+		if (ConfigRegistry.TUTORIAL.getState())
+			TutorialTracker.instance.placeMachine(m, ep);
 		if (te instanceof TemperatureTE) {
 			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 			((TemperatureTE)te).addTemperature(Tb);

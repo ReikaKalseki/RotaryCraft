@@ -106,7 +106,6 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityFireworkMachine;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
-import Reika.RotaryCraft.TileEntities.Decorative.TileEntityWeatherController;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityAutoBreeder;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
@@ -198,6 +197,7 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityLineBuilder;
 import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
 import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
+import Reika.RotaryCraft.TileEntities.World.TileEntityWeatherController;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */

@@ -31,6 +31,8 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -39,9 +41,11 @@ import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.TinkerToolHandler;
+import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -49,6 +53,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -75,6 +80,15 @@ public class RotaryEventManager {
 			}
 		}
 	}*/
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@ModDependent(ModList.BLOODMAGIC)
+	public void noTelepose(TeleposeEvent evt) {
+		if (evt.getInitialTile() instanceof TileEntityIOMachine || evt.getFinalTile() instanceof TileEntityIOMachine)
+			evt.setCanceled(true);
+		if (evt.getInitialTile() instanceof ShaftMachine || evt.getFinalTile() instanceof ShaftMachine)
+			evt.setCanceled(true);
+	}
 
 	@SubscribeEvent
 	public void bonemealEvent(BonemealEvent event)

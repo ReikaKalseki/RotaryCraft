@@ -86,7 +86,13 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	private int getUpdatesPerTick() {
 		if (power < MINPOWER)
 			return 0;
-		return 4*(int)ReikaMathLibrary.logbase(omega, 2);
+		return 4*ReikaMathLibrary.logbase2(omega);
+	}
+
+	private int getConsecutiveUpdates() {
+		if (omega < 1048576)
+			return 0;
+		return 1+ReikaMathLibrary.logbase2(omega/1048576);
 	}
 
 	private void tickBlock(World world, int x, int y, int z) {
@@ -101,7 +107,9 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		int ddz = dz-z;
 		double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
 		if (id != Blocks.air && dd <= this.getRange()) {
-			id.updateTick(world, dx, dy, dz, rand);
+			int n = this.getConsecutiveUpdates();
+			for (int i = 0; i < n; i++)
+				id.updateTick(world, dx, dy, dz, rand);
 			world.markBlockForUpdate(dx, dy, dz);
 			if (this.didSomething(world, dx, dy, dz)) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.FERTILIZER.getMinValue(), world, dx, dy, dz);

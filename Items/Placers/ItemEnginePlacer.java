@@ -33,9 +33,11 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.TutorialTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -94,6 +96,8 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 			if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 				eng.isFlipped = true;
 			}
+			if (ConfigRegistry.TUTORIAL.getState())
+				TutorialTracker.instance.placeEngine(eng.getEngineType(), ep);
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 			//}
 		}

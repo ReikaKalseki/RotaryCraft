@@ -65,7 +65,7 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 				int r = ConfigRegistry.SPILLERRANGE.getValue();
 				if (r > 0) {
 					blocks.recursiveAddWithBounds(world, x, y-1, z, Blocks.air, x-r, 0, z-r, x+r, y-1, z+r);
-					blocks.recursiveAddWithBounds(world, x, y-1, z, this.getFluidID(), x-r, 0, z-r, x+r, y-1, z+r);
+					blocks.recursiveAddWithBoundsNoFluidSource(world, x, y-1, z, this.getFluidID(), x-r, 0, z-r, x+r, y-1, z+r);
 				}
 				blocks.sortBlocksByHeight();
 			}

@@ -12,12 +12,14 @@ package Reika.RotaryCraft.GUIs.Machine;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
-import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -35,14 +37,11 @@ public class GuiCoil extends GuiNonPoweredMachine
 	private TileEntityAdvancedGear coil;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
-	int x;
-	int y;
-
 	public GuiCoil(EntityPlayer p5ep, TileEntityAdvancedGear AdvancedGear)
 	{
 		super(new CoreContainer(p5ep, AdvancedGear), AdvancedGear);
 		coil = AdvancedGear;
-		ySize = 72;
+		ySize = coil.isCreative() ? 72 : 105;
 		xSize = 176;
 		ep = p5ep;
 	}
@@ -79,8 +78,6 @@ public class GuiCoil extends GuiNonPoweredMachine
 		super.updateScreen();
 		boolean valid1 = true;
 		boolean valid2 = true;
-		x = Mouse.getX();
-		y = Mouse.getY();
 		if (input.getText().isEmpty() && input2.getText().isEmpty()) {
 			return;
 		}
@@ -154,6 +151,24 @@ public class GuiCoil extends GuiNonPoweredMachine
 		fontRendererObj.drawString("rad/s", xSize/2+53, 22, 4210752);
 		fontRendererObj.drawString("Nm", xSize/2+53, 52, 4210752);
 
+		if (!coil.isCreative()) {
+			long e = coil.getEnergy();
+			String s = String.format("Stored Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
+			fontRendererObj.drawString(s, xSize/2-82, 80-8, 4210752);
+
+			long max = coil.getMaxStorageCapacity();
+			s = String.format("Max Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max));
+			fontRendererObj.drawString(s, xSize/2-82, 80-8+14, 4210752);
+
+			String i = "/Reika/RotaryCraft/Textures/GUI/"+this.getGuiTexture()+".png";
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			ReikaTextureHelper.bindTexture(RotaryCraft.class, i);
+			int h = (int)(e*40/max);
+			if (e > 0 && h == 0)
+				h = 1;
+			this.drawTexturedModalRect(128, 57, 178, 2, h, 40);
+		}
+
 		if (!input.isFocused())
 			fontRendererObj.drawString(String.format("%d", coil.getReleaseOmega()), xSize/2-3, 22, 0xffffffff);
 		if (!input2.isFocused())
@@ -176,7 +191,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "coilgui";
+		return coil.isCreative() ? "coilgui" : "coilgui2";
 	}
 
 }

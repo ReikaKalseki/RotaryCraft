@@ -21,6 +21,7 @@ import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.TwilightForestHandler;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;
@@ -44,7 +45,12 @@ public enum BlastGate {
 
 	private ItemStack item;
 
-	public static final BlastGate[] matList = values();
+	private static final BlastGate[] matList = values();
+
+	public static BlastGate getSelected() {
+		int index = ConfigRegistry.BLASTMAT.getValue();
+		return index > 0 && index <= matList.length ? matList[index-1] : null;
+	}
 
 	private BlastGate(Block b) {
 		this(b != null ? new ItemStack(b) : null);

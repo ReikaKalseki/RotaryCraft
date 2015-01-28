@@ -92,7 +92,8 @@ public enum ConfigRegistry implements ConfigList {
 	BLASTMAT("Blast Furnace Crafting Material", 0),
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
-	POWERCLIENT("Run power transfer code on client", false);
+	POWERCLIENT("Run power transfer code on client", false),
+	TUTORIAL("Tutorial Mode", false);
 
 	private String label;
 	private boolean defaultState;

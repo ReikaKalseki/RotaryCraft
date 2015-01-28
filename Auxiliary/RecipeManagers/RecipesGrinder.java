@@ -114,8 +114,17 @@ public class RecipesGrinder {
 		if (ModList.APPENG.isLoaded()) {
 			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
 			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();
-			this.addRecipe(cry, dust, 0);
+			if (cry != null && dust != null) {
+				this.addRecipe(cry, dust, 0);
+			}
+			else {
+				RotaryCraft.logger.logError("Could not add certus quartz grinding; null itemstack "+cry+", "+dust);
+			}
 		}
+
+		ArrayList<ItemStack> obsididust = OreDictionary.getOres("dustObsidian");
+		if (!obsididust.isEmpty())
+			this.addRecipe(Blocks.obsidian, ReikaItemHelper.getSizedItemStack(obsididust.get(0), 6), 0.5F);
 	}
 
 	public boolean isGrindable(ItemStack item) {

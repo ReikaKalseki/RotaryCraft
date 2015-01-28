@@ -219,10 +219,12 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 					WorldLocation loc = ((WorldRift)te).getLinkTarget();
 					if (loc != null) {
 						te = ((WorldRift)te).getTileEntityFrom(dir);
-						dx = loc.xCoord;
-						dy = loc.yCoord;
-						dz = loc.zCoord;
-						world = loc.getWorld();
+						if (te == null)
+							continue;
+						dx = te.xCoord;
+						dy = te.yCoord;
+						dz = te.zCoord;
+						world = te.worldObj;
 					}
 				}
 
@@ -235,8 +237,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 							int dL = level-otherlevel;
 							int toadd = this.getPipeOutput(dL);
 							if (toadd > 0) {
-								this.addFluid(toadd);
-								tp.removeLiquid(toadd);
+								tp.addFluid(toadd);
+								this.removeLiquid(toadd);
 							}
 						}
 					}
@@ -295,10 +297,12 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 					WorldLocation loc = ((WorldRift)te).getLinkTarget();
 					if (loc != null) {
 						te = ((WorldRift)te).getTileEntityFrom(dir);
-						dx = loc.xCoord;
-						dy = loc.yCoord;
-						dz = loc.zCoord;
-						world = loc.getWorld();
+						if (te == null)
+							continue;
+						dx = te.xCoord;
+						dy = te.yCoord;
+						dz = te.zCoord;
+						world = te.worldObj;
 					}
 				}
 
