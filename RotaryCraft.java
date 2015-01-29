@@ -179,16 +179,18 @@ public class RotaryCraft extends DragonAPIMod {
 			ItemRegistry r = ItemRegistry.itemList[i];
 			if (!r.isDummiedOut()) {
 				Item id = r.getItemInstance();
-				if (BannedItemReader.instance.containsID(id))
+				if (BannedItemReader.instance.containsID(id)) {
 					return true;
+				}
 			}
 		}
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			BlockRegistry r = BlockRegistry.blockList[i];
 			if (!r.isDummiedOut()) {
 				Block id = r.getBlockInstance();
-				if (BannedItemReader.instance.containsID(id))
+				if (BannedItemReader.instance.containsID(id)) {
 					return true;
+				}
 			}
 		}/*
 		for (int i = 0; i < ExtraConfigIDs.idList.length; i++) {

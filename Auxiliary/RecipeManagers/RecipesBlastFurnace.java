@@ -18,7 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import Reika.DragonAPI.Instantiable.Data.Collections.ImmutableList;
+import Reika.DragonAPI.Instantiable.Data.Collections.ImmutableCollections.ImmutableList;
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;

@@ -25,6 +25,7 @@ import Reika.DragonAPI.ModInteract.ForestryHandler;
 import Reika.DragonAPI.ModInteract.GalacticCraftHandler;
 import Reika.DragonAPI.ModInteract.IC2Handler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
+import Reika.DragonAPI.ModInteract.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.MagicaOreHandler;
 import Reika.DragonAPI.ModInteract.MekanismHandler;
 import Reika.DragonAPI.ModInteract.MimicryHandler;
@@ -208,7 +209,7 @@ public final class OreForcer {
 	}
 
 	private void intercraftEssence() {
-		ItemStack ore = MagicCropHandler.getInstance().getWeakEssence();
+		ItemStack ore = EssenceType.ESSENCE.getEssence();
 		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
 		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
 	}
