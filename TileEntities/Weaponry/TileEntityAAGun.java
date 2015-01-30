@@ -21,11 +21,13 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.FlyingMob;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoriedCannon;
 import Reika.RotaryCraft.Entities.EntityFlakShot;
@@ -153,8 +155,15 @@ public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISid
 	protected boolean isValidTarget(EntityLivingBase ent) {
 		if (ent.onGround || ent.isInWater() || ent.isInsideOfMaterial(Material.lava))
 			return false;
-		if (ent instanceof EntityFlying || ent instanceof EntityBlaze || ent instanceof EntityWither || ent instanceof EntityDragon) {
+		if (ent instanceof EntityFlying && ReikaEntityHelper.isHostile(ent)) {
 			return ReikaMathLibrary.py3d(ent.posX-xCoord-0.5, ent.posY-yCoord-0.5, ent.posZ-zCoord-0.5) > 2;
+		}
+		if (ent instanceof EntityBlaze || ent instanceof EntityWither || ent instanceof EntityDragon) {
+			return ReikaMathLibrary.py3d(ent.posX-xCoord-0.5, ent.posY-yCoord-0.5, ent.posZ-zCoord-0.5) > 2;
+		}
+		if (ent instanceof FlyingMob) {
+			FlyingMob fm = (FlyingMob)ent;
+			return fm.isCurrentlyFlying() && fm.isHostile() && ReikaMathLibrary.py3d(ent.posX-xCoord-0.5, ent.posY-yCoord-0.5, ent.posZ-zCoord-0.5) > 2;
 		}
 		return false;
 	}

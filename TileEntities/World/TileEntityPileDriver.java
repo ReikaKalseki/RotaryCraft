@@ -403,11 +403,11 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 							world.markBlockForUpdate(x+i, y-2, z+j);
 							//this.step++;
 						}
-						ItemStack blockTo = this.getBlockProduct(world, x+i, y, z+j, id, meta);
+						BlockKey blockTo = this.getBlockProduct(world, x+i, y, z+j, id, meta);
 						ArrayList<ItemStack> li = this.getDrops(world, x+i, y, z+j);
 						if (!world.isRemote)
-							ReikaWorldHelper.setBlock(world, x+i, y, z+j, blockTo);
-						if (ReikaItemHelper.isAirItem(blockTo)) {
+							blockTo.place(world, x+i, y, z+j);
+						if (blockTo.blockID == Blocks.air) {
 							//Blocks.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
 							ReikaItemHelper.dropItems(world, x+i, y, z+j, li);
 						}
