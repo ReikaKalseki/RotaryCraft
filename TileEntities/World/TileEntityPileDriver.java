@@ -35,6 +35,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.BlockKey;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -230,31 +231,28 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		return b != null ? b.getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
 	}
 
-	public ItemStack getBlockProduct(World world, int x, int y, int z, Block id, int meta) {
-		ItemStack to = new ItemStack(Blocks.air);
+	public BlockKey getBlockProduct(World world, int x, int y, int z, Block id, int meta) {
+		BlockKey to = new BlockKey(Blocks.air);
 		if (id == Blocks.bedrock/* && !TileEntityBorer.isMineableBedrock(world, x, y, z)*/) //does not break bedrock unless TF
-			to = new ItemStack(id);
+			to = new BlockKey(id);
 		if (id == BlockRegistry.DECO.getBlockInstance() && meta == ItemStacks.shieldblock.getItemDamage()) {
-			to = new ItemStack(id);
-			to.setItemDamage(meta);
+			to = new BlockKey(id, meta);
 		}
 		if (id == Blocks.stone)
-			to = new ItemStack(Blocks.cobblestone);
+			to = new BlockKey(Blocks.cobblestone);
 		if (ModList.GEOSTRATA.isLoaded()) {
 			RockShapes s = RockShapes.getShape(id, meta);
 			RockTypes r = RockTypes.getTypeFromID(id);
 			if (s == RockShapes.SMOOTH) {
-				to = r.getItem(RockShapes.COBBLE);
+				to = new BlockKey(r.getID(RockShapes.COBBLE), s.metadata);
 			}
 		}
 		if (id == Blocks.stonebrick && meta == 0) {
-			to = new ItemStack(id);
-			to.setItemDamage(2);
+			to = new BlockKey(id, 2);
 		}
 		if (id == Blocks.obsidian) {
 			if (meta < 4) {
-				to = new ItemStack(id);
-				to.setItemDamage(meta+1);
+				to = new BlockKey(id, meta+1);
 			}
 			else {
 
@@ -262,12 +260,10 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 		if (id == Blocks.flowing_water || id == Blocks.water ||
 				id == Blocks.flowing_lava || id == Blocks.lava) {
-			to = new ItemStack(id);
-			to.setItemDamage(meta);
+			to = new BlockKey(id, meta);
 		}
 		if (id == BlockRegistry.MININGPIPE.getBlockInstance() && meta == 3) {
-			to = new ItemStack(id);
-			to.setItemDamage(meta);
+			to = new BlockKey(id, meta);
 		}
 		return to;
 	}
@@ -443,9 +439,6 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		world.spawnEntityInWorld(ent);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -457,9 +450,6 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		NBT.setBoolean("smashed", smashed);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
