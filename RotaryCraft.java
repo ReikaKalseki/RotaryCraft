@@ -410,6 +410,7 @@ public class RotaryCraft extends DragonAPIMod {
 		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelblock);
 		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelingot);
 		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.redgoldingot);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.tungstenflakes);
 		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.tungsteningot);
 		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedrockdust);
 		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingot);
