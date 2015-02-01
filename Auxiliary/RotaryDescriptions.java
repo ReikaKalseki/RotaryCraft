@@ -305,7 +305,7 @@ public final class RotaryDescriptions {
 		MinecraftForge.EVENT_BUS.register(new ReloadListener());
 	}
 
-	private static class ReloadListener {
+	public static class ReloadListener {
 
 		@SubscribeEvent
 		public void reload(ResourceReloadEvent evt) {
