@@ -10,6 +10,7 @@
 package Reika.RotaryCraft;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -53,6 +54,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
+import Reika.DragonAPI.ModInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
@@ -382,6 +384,37 @@ public class RotaryCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.RAILCRAFT, "Access to steam power generation and consumption");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Special integration with TF mobs and structures");
 
+		MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTGLASS.getBlockInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTPANE.getBlockInstance());
+
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ETHANOL.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CANOLA.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.EXTRACTS.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MODEXTRACTS.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CUSTOMEXTRACT.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ENGINE.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.SHAFT.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.FLYWHEEL.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.GEARBOX.getItemInstance());
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MACHINE.getItemInstance());
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+			ItemRegistry ir = ItemRegistry.itemList[i];
+			if (!ir.isDummiedOut()) {
+				if (ir.isBedrockArmor() || ir.isBedrockTypeArmor() || ir.isBedrockTool())
+					MTInteractionManager.instance.blacklistNewRecipesFor(ir.getItemInstance());
+			}
+		}
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.sludge);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.springingot);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingotblock);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelblock);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelingot);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.redgoldingot);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.tungsteningot);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedrockdust);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingot);
+		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.UPGRADE.getItemInstance());
+
 		this.finishTiming();
 	}
 
@@ -485,7 +518,9 @@ public class RotaryCraft extends DragonAPIMod {
 	public void overrideRecipes(FMLServerStartedEvent evt) {
 		if (!this.isLocked()) {
 			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.BLASTFURNACE.getCraftedProduct())) {
-				GameRegistry.addRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks, RotaryRecipes.getBlastFurnaceGatingMaterial());
+				Collection<ItemStack> c = RotaryRecipes.getBlastFurnaceGatingMaterials();
+				for (ItemStack is : c)
+					GameRegistry.addRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks, is);
 			}
 			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.WORKTABLE.getCraftedProduct())) {
 				GameRegistry.addRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);
