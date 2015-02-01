@@ -529,7 +529,7 @@ public enum ItemRegistry implements ItemEnum {
 	}
 
 	public boolean isBedrockTool() {
-		return this == BEDPICK || this == BEDAXE || this == BEDSHOVEL || this == BEDSWORD || this == BEDSHEARS || this == BEDHOE || this == BEDSICKLE;
+		return this == BEDPICK || this == BEDAXE || this == BEDSHOVEL || this == BEDSWORD || this == BEDSHEARS || this == BEDHOE || this == BEDSICKLE || this == BEDGRAFTER || this == BEDSAW;
 	}
 
 	public boolean isCreativeOnly() {

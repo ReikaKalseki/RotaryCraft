@@ -10,6 +10,7 @@
 package Reika.RotaryCraft;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -33,7 +34,6 @@ import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
@@ -41,7 +41,6 @@ import Reika.DragonAPI.ModInteract.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ThermalRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.Auxiliary.BlastGate;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
@@ -130,10 +129,12 @@ public class RotaryRecipes {
 		if (RotaryCraft.instance.isLocked())
 			return;
 
-		ItemStack bgt = getBlastFurnaceGatingMaterial();
-		if (!ReikaItemHelper.matchStacks(bgt, ReikaItemHelper.stoneBricks))
-			RotaryCraft.logger.log("Blast Furnace gating material set to "+bgt.getDisplayName()+": "+bgt.toString());
-		addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 't', bgt, 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks);
+		Collection<ItemStack> c = RotaryRecipes.getBlastFurnaceGatingMaterials();
+		for (ItemStack bgt : c) {
+			addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 't', bgt, 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks);
+			if (!ReikaItemHelper.matchStacks(bgt, ReikaItemHelper.stoneBricks))
+				RotaryCraft.logger.log("Blast Furnace gating material set to "+bgt.getDisplayName()+": "+bgt.toString());
+		}
 
 		addProps();
 		RecipesGrinder.getRecipes().addModRecipes();
@@ -1004,23 +1005,10 @@ public class RotaryRecipes {
 		WorktableRecipes.getInstance().addRecipe(out, in);
 	}
 
-	public static ItemStack getBlastFurnaceGatingMaterial() {
-		int index = ConfigRegistry.BLASTMAT.getValue();
-		BlastGate mat = BlastGate.getSelected();
-		if (mat != null) {
-			ItemStack item = mat.getItem();
-			if (item == null)
-				RotaryCraft.logger.logError("Selected gating material "+mat+" could not be found; either the item does not exist or its mod has not yet loaded.");
-			return item != null ? item.copy() : ReikaItemHelper.stoneBricks.copy();
-		}
-		else if (index != 0) {
-			RotaryCraft.logger.logError("Gating material index "+index+" is invalid. Valid indices:");
-			for (BlastGate g : BlastGate.values())
-				ReikaJavaLibrary.pConsole("\t"+(1+g.ordinal())+" = "+g.name());
-			return ReikaItemHelper.stoneBricks.copy();
-		}
-		else {
-			return ReikaItemHelper.stoneBricks.copy();
-		}
+	public static Collection<ItemStack> getBlastFurnaceGatingMaterials() {
+		Collection<ItemStack> c = RotaryCraft.config.getBlastFurnaceGatingMaterials();
+		if (c.isEmpty())
+			c.add(ReikaItemHelper.stoneBricks.copy());
+		return c;
 	}
 }

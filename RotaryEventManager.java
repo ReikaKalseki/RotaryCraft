@@ -32,6 +32,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
@@ -83,6 +84,7 @@ public class RotaryEventManager {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@ModDependent(ModList.BLOODMAGIC)
+	@ClassDependent("WayofTime.alchemicalWizardry.api.event.TeleposeEvent")
 	public void noTelepose(TeleposeEvent evt) {
 		if (evt.getInitialTile() instanceof TileEntityIOMachine || evt.getFinalTile() instanceof TileEntityIOMachine)
 			evt.setCanceled(true);

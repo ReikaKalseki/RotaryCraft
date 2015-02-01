@@ -23,7 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Instantiable.Data.Collections.ImmutableCollections.ImmutableList;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -33,8 +33,8 @@ public class WorktableRecipes
 {
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
-	private ImmutableList<WorktableRecipe> recipes = new ImmutableList();
-	private ImmutableList<IRecipe> display = new ImmutableList();
+	private OneWayList<WorktableRecipe> recipes = new OneWayList();
+	private OneWayList<IRecipe> display = new OneWayList();
 
 	private final RecipeSorter sorter = new RecipeSorter();
 

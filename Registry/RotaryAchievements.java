@@ -122,7 +122,7 @@ public enum RotaryAchievements {
 		//ReikaJavaLibrary.pConsole(Arrays.toString(RotaryCraft.config.achievementIDs));
 		for (int i = 0; i < list.length; i++) {
 			RotaryAchievements a = list[i];
-			int id = RotaryCraft.config.achievementIDs[i];
+			int id = RotaryCraft.config.getAchievementID(i);
 			Achievement dep = a.hasDependency() ? a.dependency.get() : null;
 			Achievement ach = new Achievement(a.name().toLowerCase(), a.name().toLowerCase(), a.xPosition, a.yPosition, a.iconItem, dep);
 			//ReikaJavaLibrary.pConsole(a+":"+id+":"+StatList.getOneShotStat(id));

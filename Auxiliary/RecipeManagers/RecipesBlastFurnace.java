@@ -18,7 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import Reika.DragonAPI.Instantiable.Data.Collections.ImmutableCollections.ImmutableList;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -29,8 +29,8 @@ public class RecipesBlastFurnace
 {
 	private static final RecipesBlastFurnace BlastFurnaceBase = new RecipesBlastFurnace();
 
-	private ImmutableList<BlastRecipe> recipeList = new ImmutableList();
-	private ImmutableList<BlastCrafting> craftingList = new ImmutableList();
+	private OneWayList<BlastRecipe> recipeList = new OneWayList();
+	private OneWayList<BlastCrafting> craftingList = new OneWayList();
 
 	public static final RecipesBlastFurnace getRecipes()
 	{

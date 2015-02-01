@@ -89,7 +89,6 @@ public enum ConfigRegistry implements ConfigList {
 	NOMINERS("Disable Automining Machines", false),
 	HARDEU("Hard Mode EU Compatibility", ModList.GREGTECH.isLoaded()),
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
-	BLASTMAT("Blast Furnace Crafting Material", 0),
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
 	POWERCLIENT("Run power transfer code on client", false),
