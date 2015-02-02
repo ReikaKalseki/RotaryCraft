@@ -64,7 +64,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void keyTyped(char c, int i){
+	protected void keyTyped(char c, int i){
 		super.keyTyped(c, i);
 		if (hasPower)
 			input.textboxKeyTyped(c, i);

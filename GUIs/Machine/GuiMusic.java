@@ -103,7 +103,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void keyTyped(char c, int i) {
+	protected void keyTyped(char c, int i) {
 		super.keyTyped(c, i);
 
 	}

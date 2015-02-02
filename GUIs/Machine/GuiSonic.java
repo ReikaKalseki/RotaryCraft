@@ -78,7 +78,7 @@ public class GuiSonic extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void keyTyped(char c, int i){
+	protected void keyTyped(char c, int i){
 		super.keyTyped(c, i);
 		if (sonic.ENABLEFREQ)
 			input.textboxKeyTyped(c, i);

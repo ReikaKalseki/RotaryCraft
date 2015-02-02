@@ -348,6 +348,7 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "SemicolonDash", 50.00F);
 		DonatorController.instance.addDonation(instance, "Choco218", 50.00F);
 		DonatorController.instance.addDonation(instance, "Dragonsummoner", 5.00F);
+		DonatorController.instance.addDonation(instance, "StoneRhino", 100.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
