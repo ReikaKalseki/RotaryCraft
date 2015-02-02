@@ -41,7 +41,7 @@ public class GuiPulseFurnace extends GuiMachine {
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		if (api.isMouseInBox(j+90, j+96, k+17, k+68)) {
+		if (api.isMouseInBox(j+90, j+96, k+15, k+68)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
 			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", puls.getFuel(), puls.MAXFUEL), mx-j, my-k);
@@ -51,11 +51,13 @@ public class GuiPulseFurnace extends GuiMachine {
 			int my = api.getMouseRealY();
 			api.drawTooltipAt(fontRendererObj, String.format("%dC", puls.temperature), mx-j, my-k);
 		}
+		if (api.isMouseInBox(j+159, j+165, k+15, k+68)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", puls.getAccelerant(), puls.getAccelerantCapacity()), mx-j, my-k);
+		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -71,12 +73,14 @@ public class GuiPulseFurnace extends GuiMachine {
 		if (i4 < 9)
 			i4 = 9;
 		int i5 = puls.getFireScaled(38);
-		this.drawTexturedModalRect(j + 131, k + 36, 215, 55, 4, 1*(i1));
-		this.drawTexturedModalRect(j + 91, k + 68-i2, 248, 53-i2, 5, 1*(i2));
-		this.drawTexturedModalRect(j + 59, k + 68-i3, 199, 53-i3, 5, 1*(i3));
-		this.drawTexturedModalRect(j + 20, k + 70-i4, 176, 55-i4, 11, 1*(i4));
-		this.drawTexturedModalRect(j + 115, k + 61-i5, 177, 95-i5, 9, 1*(i5));
-		this.drawTexturedModalRect(j + 142, k + 61-i5, 204, 95-i5, 9, 1*(i5));
+		int i6 = puls.getAccelerantScaled(52);
+		this.drawTexturedModalRect(j + 131, k + 36, 215, 55, 4, i1);
+		this.drawTexturedModalRect(j + 91, k + 68-i2, 248, 53-i2, 5, i2);
+		this.drawTexturedModalRect(j + 59, k + 68-i3, 199, 53-i3, 5, i3);
+		this.drawTexturedModalRect(j + 20, k + 70-i4, 176, 55-i4, 11, i4);
+		this.drawTexturedModalRect(j + 115, k + 61-i5, 177, 95-i5, 9, i5);
+		this.drawTexturedModalRect(j + 142, k + 61-i5, 204, 95-i5, 9, i5);
+		this.drawTexturedModalRect(j + 160, k + 68-i6, 227, 53-i6, 5, i6);
 	}
 
 	@Override

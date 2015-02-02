@@ -138,6 +138,10 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		return (smelttick * par1) / SMELTTICKS;
 	}
 
+	public int getAccelerantScaled(int a) {
+		return accel.getLevel() * a / accel.getCapacity();
+	}
+
 	private void getFuel(World world, int x, int y, int z, int meta) {
 		if (tickcount2 >= 100) {
 			fuel.removeLiquid(100);
@@ -404,6 +408,10 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	public Fluid getAccelerantType() {
 		return accel.getActualFluid();
+	}
+
+	public int getAccelerantCapacity() {
+		return accel.getCapacity();
 	}
 
 	@Override
