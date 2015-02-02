@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -80,11 +78,8 @@ DiscreteFunction,ConditionalOperation
 			}
 		}
 		if (!invalid) {
-			List li = RecipesCompactor.getRecipes().getCompactables();
-			for (int i = 0; i < li.size() && !ingred; i++) {
-				if (ReikaItemHelper.listContainsItemStack(li, inv[0]))
-					ingred = true;
-			}
+			if (RecipesCompactor.getRecipes().isCompactable(inv[0]))
+				ingred = true;
 		}
 		boolean full = true;
 		if (inv[4] == null)

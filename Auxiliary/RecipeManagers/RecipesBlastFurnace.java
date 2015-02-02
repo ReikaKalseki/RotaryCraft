@@ -32,6 +32,45 @@ public class RecipesBlastFurnace
 	private OneWayList<BlastRecipe> recipeList = new OneWayList();
 	private OneWayList<BlastCrafting> craftingList = new OneWayList();
 
+	private RecipesBlastFurnace() {
+
+		BlastInput in1 = new BlastInput(Items.coal, 100, 1);
+		BlastInput in2 = new BlastInput(Items.gunpowder, 3.6F, 1);
+		BlastInput in3 = new BlastInput(Blocks.sand, 0.2F, 1);
+		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		recipeList.add(hsla);
+
+		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
+		in2 = new BlastInput((ItemStack)null, 0, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe bedrock = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, 1, ItemStacks.bedingot, false, 0, TileEntityBlastFurnace.BEDROCKTEMP);
+		recipeList.add(bedrock);
+
+		in1 = new BlastInput((ItemStack)null, 0, 1);
+		in2 = new BlastInput((ItemStack)null, 0, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, false, 0, TileEntityBlastFurnace.SMELTTEMP);
+		recipeList.add(scrap);
+
+		in1 = new BlastInput(ItemStacks.coke, 100, 1);
+		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
+		in3 = new BlastInput(Blocks.sand, 0.1F, 1);
+		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		recipeList.add(hsla2);
+
+		in1 = new BlastInput((ItemStack)null, 0, 1);
+		in2 = new BlastInput((ItemStack)null, 0, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Items.coal, ItemStacks.coke, false, 0, 400);
+		recipeList.add(coke);
+
+		in1 = new BlastInput(ItemStacks.aluminumpowder, 25F, 1);
+		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 500);
+		recipeList.add(sili);
+	}
+
 	public static final RecipesBlastFurnace getRecipes()
 	{
 		return BlastFurnaceBase;
@@ -85,7 +124,7 @@ public class RecipesBlastFurnace
 		}
 
 		public boolean usesItem(ItemStack is) {
-			return ReikaItemHelper.listContainsItemStack(ReikaRecipeHelper.getAllItemsInRecipe(recipe), is);
+			return ReikaItemHelper.collectionContainsItemStack(ReikaRecipeHelper.getAllItemsInRecipe(recipe), is);
 		}
 
 		public ItemStack[] getArrayForDisplay() {
@@ -250,40 +289,6 @@ public class RecipesBlastFurnace
 			return xp;
 		}
 	}
-
-	private RecipesBlastFurnace()
-	{
-		BlastInput in1 = new BlastInput(Items.coal, 100, 1);
-		BlastInput in2 = new BlastInput(Items.gunpowder, 3.6F, 1);
-		BlastInput in3 = new BlastInput(Blocks.sand, 0.2F, 1);
-		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
-		recipeList.add(hsla);
-
-		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe bedrock = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, 1, ItemStacks.bedingot, false, 0, TileEntityBlastFurnace.BEDROCKTEMP);
-		recipeList.add(bedrock);
-
-		in1 = new BlastInput((ItemStack)null, 0, 1);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, false, 0, TileEntityBlastFurnace.SMELTTEMP);
-		recipeList.add(scrap);
-
-		in1 = new BlastInput(ItemStacks.coke, 100, 1);
-		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
-		in3 = new BlastInput(Blocks.sand, 0.1F, 1);
-		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
-		recipeList.add(hsla2);
-
-		in1 = new BlastInput((ItemStack)null, 0, 1);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Items.coal, ItemStacks.coke, false, 0, 400);
-		recipeList.add(coke);
-	}
-
 	public BlastCrafting getCrafting(ItemStack[] main, int temp) {
 		RecipePattern ic = new RecipePattern(main);
 		for (int i = 0; i < craftingList.size(); i++) {

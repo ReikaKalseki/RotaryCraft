@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -38,11 +39,10 @@ public class RecipesCentrifuge
 {
 	private static final RecipesCentrifuge CentrifugeBase = new RecipesCentrifuge();
 
-	private ItemHashMap<ChancedOutputList> recipeList = new ItemHashMap();
-	private ItemHashMap<FluidOut> fluidList = new ItemHashMap();
+	private ItemHashMap<ChancedOutputList> recipeList = new ItemHashMap().setOneWay();
+	private ItemHashMap<FluidOut> fluidList = new ItemHashMap().setOneWay();
 
-	private Collection<ItemStack> outputs = new ArrayList();
-	private Collection<ItemStack> inputs = new ArrayList();
+	private OneWayList<ItemStack> outputs = new OneWayList();
 
 	public static final RecipesCentrifuge recipes()
 	{
@@ -83,10 +83,10 @@ public class RecipesCentrifuge
 
 	private void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs)
 	{
+		out.lock();
 		recipeList.put(in, out);
-		inputs.add(in);
 		for (ItemStack isout : out.keySet())
-			if (!ReikaItemHelper.listContainsItemStack(outputs, isout))
+			if (!ReikaItemHelper.collectionContainsItemStack(outputs, isout))
 				outputs.add(isout);
 		if (fs != null)
 			fluidList.put(in, fs);
@@ -138,7 +138,7 @@ public class RecipesCentrifuge
 		return item != null ? recipeList.get(item) : null;
 	}
 
-	public Collection<ItemStack> getRecipeOutputs(ItemStack item) {
+	private Collection<ItemStack> getRecipeOutputs(ItemStack item) {
 		return item != null ? recipeList.get(item).keySet() : null;
 	}
 
@@ -165,10 +165,10 @@ public class RecipesCentrifuge
 
 	public ArrayList<ItemStack> getSources(ItemStack result) {
 		ArrayList<ItemStack> li = new ArrayList();
-		for (ItemStack in : inputs) {
+		for (ItemStack in : recipeList.keySet()) {
 			Collection<ItemStack> out = this.getRecipeOutputs(in);
-			if (ReikaItemHelper.listContainsItemStack(out, result))
-				li.add(in);
+			if (ReikaItemHelper.collectionContainsItemStack(out, result))
+				li.add(in.copy());
 		}
 		return li;
 	}
@@ -178,13 +178,13 @@ public class RecipesCentrifuge
 		for (ItemStack in : fluidList.keySet()) {
 			FluidStack fs = this.getFluidResult(in);
 			if (fs != null && fs.getFluid().equals(result))
-				li.add(in);
+				li.add(in.copy());
 		}
 		return li;
 	}
 
 	public boolean isProduct(ItemStack result) {
-		return ReikaItemHelper.listContainsItemStack(outputs, result);
+		return ReikaItemHelper.collectionContainsItemStack(outputs, result);
 	}
 
 	public boolean isCentrifugable(ItemStack ingredient) {

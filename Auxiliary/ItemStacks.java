@@ -39,6 +39,7 @@ public final class ItemStacks {
 	public static final ItemStack dryice 			= ItemRegistry.POWDERS.getStackOfMetadata(11);
 	public static final ItemStack redgolddust 		= ItemRegistry.POWDERS.getStackOfMetadata(12);
 	public static final ItemStack compost 			= ItemRegistry.POWDERS.getStackOfMetadata(13);
+	public static final ItemStack silicondust 			= ItemRegistry.POWDERS.getStackOfMetadata(14);
 
 	public static final ItemStack lubebucket 		= ItemRegistry.BUCKET.getStackOfMetadata(0);
 	public static final ItemStack fuelbucket 		= ItemRegistry.BUCKET.getStackOfMetadata(1);
@@ -52,6 +53,7 @@ public final class ItemStacks {
 	public static final ItemStack silveringot 		= ItemRegistry.COMPACTS.getStackOfMetadata(7);
 	public static final ItemStack coke 				= ItemRegistry.COMPACTS.getStackOfMetadata(8);
 	public static final ItemStack springingot		= ItemRegistry.COMPACTS.getStackOfMetadata(9);
+	public static final ItemStack silicon			= ItemRegistry.COMPACTS.getStackOfMetadata(10);
 
 	public static final ItemStack basepanel 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(0);
 	public static final ItemStack steelingot 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(1);

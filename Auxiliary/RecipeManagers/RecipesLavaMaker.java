@@ -35,9 +35,7 @@ public class RecipesLavaMaker {
 		return recipes;
 	}
 
-	private final ItemHashMap<FluidStack> list = new ItemHashMap();
-	private final ItemHashMap<Integer> temperatures = new ItemHashMap();
-	private final ItemHashMap<Long> energies = new ItemHashMap();
+	private final ItemHashMap<MeltingRecipe> recipeList = new ItemHashMap().setOneWay();
 
 	private RecipesLavaMaker() {
 		this.addRecipe(Blocks.stone, FluidRegistry.LAVA, 1000, 1000, 5200000);
@@ -70,6 +68,21 @@ public class RecipesLavaMaker {
 			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000);
 	}
 
+	private static class MeltingRecipe {
+
+		private final ItemStack input;
+		private final FluidStack output;
+		private final int temperature;
+		private final long requiredEnergy;
+
+		private MeltingRecipe(ItemStack is, FluidStack fs, int t, long e) {
+			input = is;
+			output = fs;
+			temperature = t;
+			requiredEnergy = e;
+		}
+	}
+
 	private void addRecipe(String in, String out, int amt, int temperature, long energy) {
 		if (this.validateFluid(out)) {
 			ArrayList<ItemStack> li = OreDictionary.getOres(in);
@@ -80,8 +93,10 @@ public class RecipesLavaMaker {
 
 	private void addRecipe(String in, Fluid out, int amt, int temperature, long energy) {
 		ArrayList<ItemStack> li = OreDictionary.getOres(in);
-		for (int i = 0; i < li.size(); i++)
-			this.addRecipe(li.get(i), new FluidStack(out, amt), temperature, energy);
+		for (ItemStack sin : li) {
+			if (!recipeList.containsKey(sin))
+				this.addRecipe(sin, new FluidStack(out, amt), temperature, energy);
+		}
 	}
 
 	private void addRecipe(ItemStack in, String out, int amt, int temperature, long energy) {
@@ -109,9 +124,7 @@ public class RecipesLavaMaker {
 
 	private void addRecipe(ItemStack in, FluidStack out, int temperature, long energy) {
 		if (in != null) {
-			list.put(in, out);
-			temperatures.put(in, temperature);
-			energies.put(in, energy);
+			recipeList.put(in, new MeltingRecipe(in, out, temperature, energy));
 		}
 		else {
 			RotaryCraft.logger.logError("Null itemstack for recipe for "+out+"!");
@@ -123,26 +136,29 @@ public class RecipesLavaMaker {
 	}
 
 	public FluidStack getMelting(ItemStack is) {
-		return list.get(is);
+		MeltingRecipe r = recipeList.get(is);
+		return r != null ? r.output.copy() : null;
 	}
 
 	public int getMeltTemperature(ItemStack is) {
-		return temperatures.containsKey(is) ? temperatures.get(is) : Integer.MIN_VALUE;
+		MeltingRecipe r = recipeList.get(is);
+		return r != null ? r.temperature : Integer.MIN_VALUE;
 	}
 
 	public long getMeltingEnergy(ItemStack is) {
-		return energies.containsKey(is) ? energies.get(is) : Integer.MIN_VALUE;
+		MeltingRecipe r = recipeList.get(is);
+		return r != null ? r.requiredEnergy : Integer.MIN_VALUE;
 	}
 
 	public boolean isValidFuel(ItemStack is) {
-		return list.containsKey(is);
+		return recipeList.containsKey(is);
 	}
 
 	public ArrayList<ItemStack> getSourceItems(Fluid f) {
 		ArrayList<ItemStack> li = new ArrayList();
-		for (ItemStack key : list.keySet()) {
-			FluidStack fs = list.get(key);
-			if (fs.getFluid().equals(f))
+		for (ItemStack key : recipeList.keySet()) {
+			MeltingRecipe r = recipeList.get(key);
+			if (r.output.getFluid().equals(f))
 				li.add(key.copy());
 		}
 		return li;

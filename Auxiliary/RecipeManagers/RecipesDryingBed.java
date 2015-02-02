@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
@@ -25,8 +25,8 @@ public class RecipesDryingBed
 {
 	private static final RecipesDryingBed DryingBase = new RecipesDryingBed();
 
-	private HashMap<Fluid, ItemStack> recipeList = new HashMap();
-	private HashMap<Fluid, Integer> amounts = new HashMap();
+	private OneWayMap<Fluid, ItemStack> recipeList = new OneWayMap();
+	private OneWayMap<Fluid, Integer> amounts = new OneWayMap();
 
 	public static final RecipesDryingBed getRecipes()
 	{
@@ -70,7 +70,7 @@ public class RecipesDryingBed
 			int req = amounts.get(f);
 			if (req > liquid.amount)
 				return null;
-			return recipeList.get(f);
+			return recipeList.get(f).copy();
 		}
 		else
 			return null;

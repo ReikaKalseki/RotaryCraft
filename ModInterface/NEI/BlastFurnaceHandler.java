@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastInput;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 import codechicken.nei.PositionedStack;
@@ -184,6 +185,11 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 	}
 
 	@Override
+	public int recipiesPerPage() {
+		return 1;
+	}
+
+	@Override
 	public void drawExtras(int recipe)
 	{
 		ReikaGuiAPI.instance.drawTexturedModalRect(6, 17, 176, 44, 11, 43);
@@ -191,6 +197,33 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		String s = String.format("%dC", r.getRecipeTemperature());
 		FontRenderer f = Minecraft.getMinecraft().fontRenderer;
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(f, s, f.getStringWidth(s)/2-2*(s.length()/5), 61, 0);
+
+		int dy = 0;
+		if (r instanceof BlastFurnRecipe) {
+			BlastRecipe br = ((BlastFurnRecipe)r).recipe;
+			BlastInput in1 = br.primary;
+			if (in1.getItem() != null) {
+				String sg = String.format("%s: x%d (%.1f%%)", in1.getItem().getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
+				f.drawString(sg, 21, 72, 0);
+				dy += f.FONT_HEIGHT+2;
+			}
+
+			BlastInput in2 = br.secondary;
+			if (in2.getItem() != null) {
+				String sg = String.format("%s: x%d (%.1f%%)", in2.getItem().getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
+				f.drawString(sg, 21, 72+dy, 0);
+				dy += f.FONT_HEIGHT+2;
+			}
+
+			BlastInput in3 = br.tertiary;
+			if (in3.getItem() != null) {
+				String sg = String.format("%s: x%d (%.1f%%)", in3.getItem().getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
+				f.drawString(sg, 21, 72+dy, 0);
+				dy += f.FONT_HEIGHT+2;
+			}
+
+			f.drawString("Bonus output: "+(br.hasBonus ? "Yes" : "No"), 21, 72+dy, 0);
+		}
 	}
 
 }

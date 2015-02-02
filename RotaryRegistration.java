@@ -134,6 +134,9 @@ public class RotaryRegistration {
 
 		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
 		OreDictionary.registerOre("pulpWood", ItemStacks.sawdust);
+
+		OreDictionary.registerOre("silicon", ItemStacks.silicon);
+		OreDictionary.registerOre("itemSilicon", ItemStacks.silicon);
 		/*
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];

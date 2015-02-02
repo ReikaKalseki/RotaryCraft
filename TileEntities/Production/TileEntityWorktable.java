@@ -196,7 +196,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 						for (int k = 0; k < 9; k++) {
 							if (in[k] != null && !in[k].isEmpty()) {
 								if (inv[k+9] != null) {
-									if (!ReikaItemHelper.listContainsItemStack(in[k], inv[k+9]))
+									if (!ReikaItemHelper.collectionContainsItemStack(in[k], inv[k+9]))
 										flag = false;
 									if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
 										flag = false;

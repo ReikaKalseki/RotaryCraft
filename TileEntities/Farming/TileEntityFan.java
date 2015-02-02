@@ -164,11 +164,13 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 				double d = caught.posX-x;
 				if (d == 0)
 					d = 1;
+				/*
 				double multiplier = 1/(d-this.getMaxRange());
 				if (d-this.getMaxRange() > 12)
 					multiplier = 0;
 				if (multiplier > 1 || multiplier < 0)
 					multiplier = 1;
+				 */
 				double base = power2*BASESPEED;
 				double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
 				double a = facing.offsetX > 0 ? 0.004 : 0;

@@ -17,8 +17,8 @@ public class RecipesFrictionHeater {
 
 	private static final RecipesFrictionHeater instance = new RecipesFrictionHeater();
 
-	private final ItemHashMap<FrictionRecipe> recipes = new ItemHashMap();
-	private final ItemHashMap<FrictionRecipe> outputs = new ItemHashMap();
+	private final ItemHashMap<FrictionRecipe> recipes = new ItemHashMap().setOneWay();
+	private final ItemHashMap<FrictionRecipe> outputs = new ItemHashMap().setOneWay();
 
 	public static RecipesFrictionHeater getRecipes() {
 		return instance;
@@ -26,6 +26,7 @@ public class RecipesFrictionHeater {
 
 	private RecipesFrictionHeater() {
 		this.addRecipe(ItemStacks.tungstenflakes, ItemStacks.tungsteningot, 1350);
+		this.addRecipe(ItemStacks.silicondust, ItemStacks.silicon, 900);
 	}
 
 	private void addRecipe(ItemStack in, ItemStack out, int temp) {
@@ -49,7 +50,7 @@ public class RecipesFrictionHeater {
 		return recipes.get(in);
 	}
 
-	public static class FrictionRecipe {
+	public static final class FrictionRecipe {
 
 		public final int requiredTemperature;
 		private final ItemStack input;

@@ -20,7 +20,7 @@ public class GrinderAPI {
 
 	private static Class recipes;
 	private static Method get;
-	private static Method add;
+	private static Method addRecipe;
 	private static Object instance;
 
 	private static Class grinder;
@@ -34,7 +34,7 @@ public class GrinderAPI {
 			return;
 		}
 		try {
-			add.invoke(instance, in, out, 0);
+			addRecipe.invoke(instance, in, out);
 		}
 		catch (IllegalAccessException e) {
 			ReikaJavaLibrary.pConsole("Error adding grinder recipe for "+in);
@@ -92,7 +92,7 @@ public class GrinderAPI {
 			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder");
 			get = recipes.getMethod("getRecipes");
 			instance = get.invoke(null);
-			add = recipes.getMethod("addRecipe", ItemStack.class, ItemStack.class, float.class);
+			addRecipe = recipes.getMethod("addRecipe", ItemStack.class, ItemStack.class);
 
 			grinder = Class.forName("Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder");
 			addseed = grinder.getMethod("addGrindableSeed", ItemStack.class, float.class);

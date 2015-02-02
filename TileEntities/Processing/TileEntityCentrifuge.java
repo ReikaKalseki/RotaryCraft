@@ -77,8 +77,10 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 						if (fs == null || tank.canTakeIn(fs)) {
 							for (ItemStack is : items) {
 								//ReikaInventoryHelper.addOrSetStack(out.get(i).copy(), inv, i+1);
-								if (ReikaRandomHelper.doWithChance(out.getItemChance(is)))
-									ReikaInventoryHelper.putStackInInventory(is, this, true);
+								double ch = out.getItemChance(is);
+								if (ReikaRandomHelper.doWithChance(ch)) {
+									ReikaInventoryHelper.addToIInv(is, this, true, 1, this.getSizeInventory());
+								}
 							}
 							if (fs != null)
 								tank.addLiquid(fs.amount, fs.getFluid());
@@ -105,7 +107,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 				temp.setInventorySlotContents(i, in.copy());
 		}
 		for (ItemStack is : out) {
-			if (!ReikaInventoryHelper.addToIInv(is, temp))
+			if (!ReikaInventoryHelper.addToIInv(is.copy(), temp))
 				return false;
 		}
 		return true;

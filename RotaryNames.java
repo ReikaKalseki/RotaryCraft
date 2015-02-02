@@ -102,7 +102,7 @@ public class RotaryNames {
 
 	public static final String[] powderNames = {
 		"misc.netherdust", "misc.tar", "misc.sludge", "misc.sawdust", "misc.beddust", "misc.salt", "misc.nh4" , "misc.agi",
-		"misc.alum", "misc.flour", "misc.coaldust", "misc.dryice", "misc.redgolddust", "misc.compost"
+		"misc.alum", "misc.flour", "misc.coaldust", "misc.dryice", "misc.redgolddust", "misc.compost", "misc.silicondust"
 	};
 
 	public static final String[] interfaceNames = {
@@ -127,7 +127,7 @@ public class RotaryNames {
 
 	public static final String[] compactNames = {
 		"misc.anthra", "misc.prisma", "misc.lonsda", "misc.bedingot", "misc.alingot", "misc.wingot", "misc.redgoldingot", "misc.agingot",
-		"misc.coke", "misc.springingot"
+		"misc.coke", "misc.springingot", "misc.silicon"
 	};
 
 	public static final String[] pipeNames = {

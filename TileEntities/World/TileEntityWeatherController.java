@@ -140,7 +140,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		for (int i = 0; i < inv.length; i++) {
 			ItemStack is = inv[i];
 			if (is != null) {
-				if (ReikaItemHelper.listContainsItemStack(li, is))
+				if (ReikaItemHelper.collectionContainsItemStack(li, is))
 					return true;
 			}
 		}
@@ -217,7 +217,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		if (is.getItem() == Items.glowstone_dust)
 			return true;
 		ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
-		if (ReikaItemHelper.listContainsItemStack(li, is))
+		if (ReikaItemHelper.collectionContainsItemStack(li, is))
 			return true;
 		return false;
 	}

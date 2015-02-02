@@ -80,7 +80,7 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		public static CompostMatter getMatterType(ItemStack is) {
 			for (int i = 0; i < list.length; i++) {
 				CompostMatter c = list[i];
-				if (ReikaItemHelper.listContainsItemStack(c.items, is))
+				if (ReikaItemHelper.collectionContainsItemStack(c.items, is))
 					return c;
 			}
 			return null;

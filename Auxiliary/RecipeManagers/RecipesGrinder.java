@@ -34,10 +34,7 @@ public class RecipesGrinder {
 
 	public static final int ore_rate = 3;
 
-	private ItemHashMap<ItemStack> recipes = new ItemHashMap();
-
-	private ArrayList<ItemStack> products = new ArrayList();
-	private ArrayList<ItemStack> ingredients = new ArrayList();
+	private final ItemHashMap<ItemStack> recipes = new ItemHashMap().setOneWay();
 
 	public static final RecipesGrinder getRecipes()
 	{
@@ -46,64 +43,63 @@ public class RecipesGrinder {
 
 	private RecipesGrinder()
 	{
-		this.addRecipe(Blocks.stone, new ItemStack(Blocks.cobblestone, 1, 0), 0.2F);
-		this.addRecipe(Blocks.cobblestone, new ItemStack(Blocks.gravel, 1, 0), 0.2F);
-		this.addRecipe(Blocks.gravel, new ItemStack(Blocks.sand, 1, 0), 0.2F);
-		this.addRecipe(Blocks.glass, new ItemStack(Blocks.sand, 1, 0), 0.2F);
-		this.addRecipe(Blocks.sandstone, new ItemStack(Blocks.sand, 1, 0), 0.2F);
-		this.addRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sand, 6, 0), 0.2F);
-		this.addRecipe(Blocks.stone, new ItemStack(Blocks.cobblestone, 1, 0), 0.2F);
-		this.addRecipe(Blocks.glowstone, new ItemStack(Items.glowstone_dust, 4, 0), 0F);
-		this.addRecipe(Blocks.stonebrick, new ItemStack(Blocks.cobblestone, 1, 0), 0.2F);
-		this.addRecipe(Blocks.furnace, new ItemStack(Blocks.cobblestone, 8, 0), 0.2F);
-		this.addRecipe(Blocks.brick_block, new ItemStack(Items.clay_ball, 4, 0), 0.2F);
-		this.addRecipe(Blocks.brick_stairs, new ItemStack(Items.clay_ball, 6, 0), 0.2F);
-		this.addRecipe(Items.brick, new ItemStack(Items.clay_ball, 1, 0), 0.2F);
-		this.addRecipe(Blocks.stone_stairs, new ItemStack(Blocks.gravel, 2, 0), 0.2F);
-		this.addRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.cobblestone, 2, 0), 0.2F);
-		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, 0.2F); //create a netherrack powder
-		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, 0.3F); //create a tar
-		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 4), 0.1F);
-		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), 0.5F);
-		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), 0.2F);
+		this.addRecipe(Blocks.stone, new ItemStack(Blocks.cobblestone));
+		this.addRecipe(Blocks.cobblestone, new ItemStack(Blocks.gravel));
+		this.addRecipe(Blocks.gravel, new ItemStack(Blocks.sand));
+		this.addRecipe(Blocks.glass, new ItemStack(Blocks.sand));
+		this.addRecipe(Blocks.sandstone, new ItemStack(Blocks.sand));
+		this.addRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sand, 6, 0));
+		this.addRecipe(Blocks.glowstone, new ItemStack(Items.glowstone_dust, 4, 0));
+		this.addRecipe(Blocks.stonebrick, new ItemStack(Blocks.cobblestone));
+		this.addRecipe(Blocks.furnace, new ItemStack(Blocks.cobblestone, 8, 0));
+		this.addRecipe(Blocks.brick_block, new ItemStack(Items.clay_ball, 4, 0));
+		this.addRecipe(Blocks.brick_stairs, new ItemStack(Items.clay_ball, 6, 0));
+		this.addRecipe(Items.brick, new ItemStack(Items.clay_ball));
+		this.addRecipe(Blocks.stone_stairs, new ItemStack(Blocks.gravel, 2, 0));
+		this.addRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.cobblestone, 2, 0));
+		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust); //create a netherrack powder
+		this.addRecipe(Blocks.soul_sand, ItemStacks.tar); //create a tar
+		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 4));
+		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4));
+		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3));
 
-		this.addRecipe(Blocks.log, this.getSizedSawdust(16), 0.3F); //sawdust
-		this.addRecipe(Blocks.planks, this.getSizedSawdust(4), 0.3F);
-		this.addRecipe(Blocks.noteblock, this.getSizedSawdust(32), 0.3F);
-		this.addRecipe(Blocks.jukebox, this.getSizedSawdust(32), 0.3F);
-		this.addRecipe(Blocks.fence, this.getSizedSawdust(4), 0.3F);
-		this.addRecipe(Blocks.oak_stairs, this.getSizedSawdust(6), 0.3F);
-		this.addRecipe(Blocks.birch_stairs, this.getSizedSawdust(6), 0.3F);
-		this.addRecipe(Blocks.spruce_stairs, this.getSizedSawdust(6), 0.3F);
-		this.addRecipe(Blocks.jungle_stairs, this.getSizedSawdust(6), 0.3F);
-		this.addRecipe(Blocks.chest, this.getSizedSawdust(32), 0.3F);
-		this.addRecipe(Blocks.crafting_table, this.getSizedSawdust(16), 0.3F);
-		this.addRecipe(Blocks.ladder, this.getSizedSawdust(4), 0.3F);
-		this.addRecipe(Blocks.wooden_pressure_plate, this.getSizedSawdust(8), 0.3F);
-		this.addRecipe(Blocks.stone_pressure_plate, new ItemStack(Blocks.cobblestone, 2, ItemStacks.sawdust.getItemDamage()), 0.3F);
-		this.addRecipe(Items.bowl, this.getSizedSawdust(ModList.GREGTECH.isLoaded() ? 4 : 12), 0.3F);
-		this.addRecipe(Items.wooden_door, this.getSizedSawdust(24), 0.3F);
-		this.addRecipe(Items.sign, this.getSizedSawdust(24), 0.3F);
-		this.addRecipe(Items.stick, this.getSizedSawdust(2), 0.3F);
-		this.addRecipe(Blocks.trapdoor, this.getSizedSawdust(24), 0.3F);
-		this.addRecipe(Blocks.fence_gate, this.getSizedSawdust(16), 0.3F);
-		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15), 0.3F);
-		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0), 0.6F);
+		this.addRecipe(Blocks.log, this.getSizedSawdust(16)); //sawdust
+		this.addRecipe(Blocks.planks, this.getSizedSawdust(4));
+		this.addRecipe(Blocks.noteblock, this.getSizedSawdust(32));
+		this.addRecipe(Blocks.jukebox, this.getSizedSawdust(32));
+		this.addRecipe(Blocks.fence, this.getSizedSawdust(4));
+		this.addRecipe(Blocks.oak_stairs, this.getSizedSawdust(6));
+		this.addRecipe(Blocks.birch_stairs, this.getSizedSawdust(6));
+		this.addRecipe(Blocks.spruce_stairs, this.getSizedSawdust(6));
+		this.addRecipe(Blocks.jungle_stairs, this.getSizedSawdust(6));
+		this.addRecipe(Blocks.chest, this.getSizedSawdust(32));
+		this.addRecipe(Blocks.crafting_table, this.getSizedSawdust(16));
+		this.addRecipe(Blocks.ladder, this.getSizedSawdust(4));
+		this.addRecipe(Blocks.wooden_pressure_plate, this.getSizedSawdust(8));
+		this.addRecipe(Blocks.stone_pressure_plate, new ItemStack(Blocks.cobblestone, 2, ItemStacks.sawdust.getItemDamage()));
+		this.addRecipe(Items.bowl, this.getSizedSawdust(ModList.GREGTECH.isLoaded() ? 4 : 12));
+		this.addRecipe(Items.wooden_door, this.getSizedSawdust(24));
+		this.addRecipe(Items.sign, this.getSizedSawdust(24));
+		this.addRecipe(Items.stick, this.getSizedSawdust(2));
+		this.addRecipe(Blocks.trapdoor, this.getSizedSawdust(24));
+		this.addRecipe(Blocks.fence_gate, this.getSizedSawdust(16));
+		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15));
+		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0));
 
 		/*
-		this.addRecipe(Blocks.coal_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24), 0F);
-		this.addRecipe(Blocks.iron_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 25), 0F);
-		this.addRecipe(Blocks.gold_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 26), 0F);
-		this.addRecipe(Blocks.redstone_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 27), 0F);
-		this.addRecipe(Blocks.lapis_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 28), 0F);
-		this.addRecipe(Blocks.diamond_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 29), 0F);
-		this.addRecipe(Blocks.emerald_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 30), 0F);
+		this.addRecipe(Blocks.coal_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24));
+		this.addRecipe(Blocks.iron_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 25));
+		this.addRecipe(Blocks.gold_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 26));
+		this.addRecipe(Blocks.redstone_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 27));
+		this.addRecipe(Blocks.lapis_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 28));
+		this.addRecipe(Blocks.diamond_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 29));
+		this.addRecipe(Blocks.emerald_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 30));
 		this.addRecipe(Blocks.quartz_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 31), 0.7F);
 		 */
 
-		this.addRecipe(Items.coal, ItemStacks.coaldust, 0);
+		this.addRecipe(Items.coal, ItemStacks.coaldust);
 
-		this.addRecipe(ItemRegistry.CANOLA.getStackOf(), ItemRegistry.CANOLA.getStackOfMetadata(2), 0);
+		this.addRecipe(ItemRegistry.CANOLA.getStackOf(), ItemRegistry.CANOLA.getStackOfMetadata(2));
 	}
 
 	private ItemStack getSizedSawdust(int size) {
@@ -115,7 +111,7 @@ public class RecipesGrinder {
 			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
 			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();
 			if (cry != null && dust != null) {
-				this.addRecipe(cry, dust, 0);
+				this.addRecipe(cry, dust);
 			}
 			else {
 				RotaryCraft.logger.logError("Could not add certus quartz grinding; null itemstack "+cry+", "+dust);
@@ -124,7 +120,7 @@ public class RecipesGrinder {
 
 		ArrayList<ItemStack> obsididust = OreDictionary.getOres("dustObsidian");
 		if (!obsididust.isEmpty())
-			this.addRecipe(Blocks.obsidian, ReikaItemHelper.getSizedItemStack(obsididust.get(0), 6), 0.5F);
+			this.addRecipe(Blocks.obsidian, ReikaItemHelper.getSizedItemStack(obsididust.get(0), 6));
 	}
 
 	public boolean isGrindable(ItemStack item) {
@@ -132,50 +128,48 @@ public class RecipesGrinder {
 	}
 
 	public boolean isProduct(ItemStack item) {
-		return ReikaItemHelper.listContainsItemStack(products, item);
+		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item);
 	}
 
 	public List<ItemStack> getSources(ItemStack out) {
 		List<ItemStack> in = new ArrayList();
-		for (int i = 0; i < ingredients.size(); i++) {
-			ItemStack is = this.getGrindingResult(ingredients.get(i));
+		for (ItemStack input : recipes.keySet()) {
+			ItemStack is = this.getGrindingResult(input);
 			if (is != null) {
 				if (ReikaItemHelper.matchStacks(is, out))
-					in.add(ingredients.get(i));
+					in.add(input.copy());
 			}
 		}
 		return in;
 	}
 
-	public void addRecipe(Block b, ItemStack out, float xp) {
-		this.addRecipe(new ItemStack(b), out, xp);
+	public void addRecipe(Block b, ItemStack out) {
+		this.addRecipe(new ItemStack(b), out);
 	}
 
-	public void addRecipe(Item i, ItemStack out, float xp) {
-		this.addRecipe(new ItemStack(i), out, xp);
+	public void addRecipe(Item i, ItemStack out) {
+		this.addRecipe(new ItemStack(i), out);
 	}
 
-	public void addOreDictRecipe(String in, ItemStack out, float xp) {
+	public void addOreDictRecipe(String in, ItemStack out) {
 		ArrayList<ItemStack> li = OreDictionary.getOres(in);
-		for (int i = 0; i < li.size(); i++)
-			this.addRecipe(li.get(i), out, xp);
+		for (ItemStack sin : li) {
+			if (!recipes.containsKey(sin))
+				this.addRecipe(sin, out);
+		}
 	}
 
-	public void addRecipe(ItemStack in, ItemStack out, float xp)
-	{
+	public void addRecipe(ItemStack in, ItemStack out) {
 		recipes.put(in, out);
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack), Float.valueOf(xp));
-
-		products.add(out);
-		ingredients.add(in);
 	}
 
-	public ItemStack getGrindingResult(ItemStack item)
-	{
+	public ItemStack getGrindingResult(ItemStack item) {
 		if (item == null)
 			return null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", Items, item.getItemDamage()));
-		return recipes.get(item);
+		ItemStack ret = recipes.get(item);
+		return ret != null ? ret.copy() : null;
 	}
 
 	public void addOreRecipes() {
@@ -184,7 +178,7 @@ public class RecipesGrinder {
 			Collection<ItemStack> li = ore.getAllOreBlocks();
 			for (ItemStack is : li) {
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 0.25F);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}
@@ -194,7 +188,7 @@ public class RecipesGrinder {
 			Collection<ItemStack> li = ore.getAllOreBlocks();
 			for (ItemStack is : li) {
 				ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), 0.25F);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}

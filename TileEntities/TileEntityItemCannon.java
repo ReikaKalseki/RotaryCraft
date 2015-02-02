@@ -69,7 +69,7 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 			//ReikaJavaLibrary.pConsole(this);
 			return;
 		}
-		if (!ReikaInventoryHelper.hasSpaceFor(is, this.getTargetTE()))
+		if (!ReikaInventoryHelper.hasSpaceFor(is, this.getTargetTE(), true))
 			return;
 		tickcount = 0;
 		//ReikaJavaLibrary.pConsole(target[0]+"   "+target[1]+"   "+target[2]);

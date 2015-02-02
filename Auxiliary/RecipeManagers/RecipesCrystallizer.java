@@ -9,14 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import java.util.HashMap;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -24,8 +23,8 @@ public class RecipesCrystallizer
 {
 	private static final RecipesCrystallizer CrystallizerBase = new RecipesCrystallizer();
 
-	private HashMap<Fluid, ItemStack> recipeList = new HashMap();
-	private HashMap<Fluid, Integer> amounts = new HashMap();
+	private OneWayMap<Fluid, ItemStack> recipeList = new OneWayMap();
+	private OneWayMap<Fluid, Integer> amounts = new OneWayMap();
 
 	public static final RecipesCrystallizer getRecipes()
 	{
@@ -65,7 +64,7 @@ public class RecipesCrystallizer
 			int req = amounts.get(f);
 			if (req > liquid.amount)
 				return null;
-			return recipeList.get(f);
+			return recipeList.get(f).copy();
 		}
 		else
 			return null;

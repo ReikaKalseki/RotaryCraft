@@ -14,6 +14,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater.FrictionRecipe;
 import codechicken.nei.PositionedStack;
@@ -42,7 +43,7 @@ public class FrictionHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getIngredient()
 		{
-			return new PositionedStack(input, 51, 6);
+			return new PositionedStack(ReikaItemHelper.getSizedItemStack(input, 1), 51, 6);
 		}
 	}
 

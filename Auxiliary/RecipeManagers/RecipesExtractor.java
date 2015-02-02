@@ -25,8 +25,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -36,7 +36,7 @@ public class RecipesExtractor
 {
 	private static final RecipesExtractor instance = new RecipesExtractor();
 
-	private ItemHashMap<ItemStack> recipeList = new ItemHashMap();
+	private final ItemHashMap<ItemStack> recipeList = new ItemHashMap().setOneWay();
 	private final MultiMap<ReikaOreHelper, String> modOres = new MultiMap();
 
 	public static final RecipesExtractor recipes()
@@ -150,7 +150,7 @@ public class RecipesExtractor
 			item = ore.getOreBlock();
 		}
 		ItemStack ret = recipeList.get(item);
-		return ret;
+		return ret != null ? ret.copy() : null;
 	}
 
 	public static boolean isDust(ItemStack is) {
