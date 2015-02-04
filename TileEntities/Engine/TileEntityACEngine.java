@@ -82,8 +82,8 @@ public class TileEntityACEngine extends TileEntityEngine {
 	}
 
 	public void magneticInterference(int mag, double dd) {
-		torque = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*this.getEngineType().getTorque()/dd);
-		omega = (int)(0.125*ReikaMathLibrary.logbase(mag, 2)*this.getEngineType().getSpeed()/dd/4D);
+		torque = (int)(0.0625*ReikaMathLibrary.logbase(mag, 2)*this.getEngineType().getTorque()/dd);
+		omega = (int)(0.0625*ReikaMathLibrary.logbase(mag, 2)*this.getEngineType().getSpeed()/dd/4D);
 		power = (long)omega*(long)torque;
 	}
 

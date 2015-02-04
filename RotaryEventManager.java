@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -41,7 +42,8 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.TinkerToolHandler;
+import Reika.DragonAPI.ModInteract.FrameBlacklist.FrameUsageEvent;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
@@ -67,6 +69,13 @@ public class RotaryEventManager {
 	private RotaryEventManager() {
 
 	}
+
+	@SubscribeEvent
+	public void cancelFramez(FrameUsageEvent evt) {
+		if (!this.isMovable(evt.tile)) {
+			evt.setCanceled(true);
+		}
+	}
 	/*
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -86,10 +95,16 @@ public class RotaryEventManager {
 	@ModDependent(ModList.BLOODMAGIC)
 	@ClassDependent("WayofTime.alchemicalWizardry.api.event.TeleposeEvent")
 	public void noTelepose(TeleposeEvent evt) {
-		if (evt.getInitialTile() instanceof TileEntityIOMachine || evt.getFinalTile() instanceof TileEntityIOMachine)
+		if (!this.isMovable(evt.getInitialTile()) || !this.isMovable(evt.getFinalTile()))
 			evt.setCanceled(true);
-		if (evt.getInitialTile() instanceof ShaftMachine || evt.getFinalTile() instanceof ShaftMachine)
-			evt.setCanceled(true);
+	}
+
+	private boolean isMovable(TileEntity te) {
+		if (te instanceof ShaftMachine)
+			return false;
+		if (te instanceof TileEntityIOMachine)
+			return false;
+		return true;
 	}
 
 	@SubscribeEvent

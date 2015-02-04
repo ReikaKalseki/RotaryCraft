@@ -26,7 +26,7 @@ public class RecipesFrictionHeater {
 
 	private RecipesFrictionHeater() {
 		this.addRecipe(ItemStacks.tungstenflakes, ItemStacks.tungsteningot, 1350);
-		this.addRecipe(ItemStacks.silicondust, ItemStacks.silicon, 900);
+		this.addRecipe(ItemStacks.silicondust, ItemStacks.silicon, 800);
 	}
 
 	private void addRecipe(ItemStack in, ItemStack out, int temp) {

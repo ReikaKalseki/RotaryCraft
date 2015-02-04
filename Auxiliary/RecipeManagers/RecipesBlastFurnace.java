@@ -67,7 +67,7 @@ public class RecipesBlastFurnace
 		in1 = new BlastInput(ItemStacks.aluminumpowder, 25F, 1);
 		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 500);
+		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 700);
 		recipeList.add(sili);
 	}
 

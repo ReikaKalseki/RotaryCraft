@@ -18,9 +18,9 @@ import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.MekToolHandler;
-import Reika.DragonAPI.ModInteract.RedstoneArsenalHandler;
-import Reika.DragonAPI.ModInteract.TinkerToolHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public enum MaterialRegistry {

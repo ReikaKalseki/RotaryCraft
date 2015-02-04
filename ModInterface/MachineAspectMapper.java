@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class MachineAspectMapper {

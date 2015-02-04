@@ -37,9 +37,11 @@ import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
+import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
+import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
 import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
@@ -56,10 +58,11 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
-import Reika.DragonAPI.ModInteract.ReikaMystcraftHelper;
-import Reika.DragonAPI.ModInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.RouterHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
+import Reika.RotaryCraft.Auxiliary.DonatorGearRender;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications.HandbookConfigVerifier;
@@ -348,7 +351,8 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "SemicolonDash", 50.00F);
 		DonatorController.instance.addDonation(instance, "Choco218", 50.00F);
 		DonatorController.instance.addDonation(instance, "Dragonsummoner", 5.00F);
-		DonatorController.instance.addDonation(instance, "StoneRhino", 100.00F);
+		DonatorController.instance.addDonation(instance, "StoneRhino", "Stone_Rhino", 100.00F);
+		DonatorController.instance.addDonation(instance, "Jason Saffle", "chippewaguy13", 20.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
@@ -385,36 +389,38 @@ public class RotaryCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.RAILCRAFT, "Access to steam power generation and consumption");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Special integration with TF mobs and structures");
 
-		MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTGLASS.getBlockInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTPANE.getBlockInstance());
+		if (MTInteractionManager.isMTLoaded()) {
+			MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTGLASS.getBlockInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTPANE.getBlockInstance());
 
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ETHANOL.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CANOLA.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.EXTRACTS.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MODEXTRACTS.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CUSTOMEXTRACT.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ENGINE.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.SHAFT.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.FLYWHEEL.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.GEARBOX.getItemInstance());
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MACHINE.getItemInstance());
-		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-			ItemRegistry ir = ItemRegistry.itemList[i];
-			if (!ir.isDummiedOut()) {
-				if (ir.isBedrockArmor() || ir.isBedrockTypeArmor() || ir.isBedrockTool())
-					MTInteractionManager.instance.blacklistNewRecipesFor(ir.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ETHANOL.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CANOLA.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.EXTRACTS.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MODEXTRACTS.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CUSTOMEXTRACT.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ENGINE.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.SHAFT.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.FLYWHEEL.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.GEARBOX.getItemInstance());
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MACHINE.getItemInstance());
+			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+				ItemRegistry ir = ItemRegistry.itemList[i];
+				if (!ir.isDummiedOut()) {
+					if (ir.isBedrockArmor() || ir.isBedrockTypeArmor() || ir.isBedrockTool())
+						MTInteractionManager.instance.blacklistNewRecipesFor(ir.getItemInstance());
+				}
 			}
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.sludge);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.springingot);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingotblock);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelblock);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelingot);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.redgoldingot);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.tungsteningot);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedrockdust);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingot);
+			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.UPGRADE.getItemInstance());
 		}
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.sludge);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.springingot);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingotblock);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelblock);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelingot);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.redgoldingot);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.tungsteningot);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedrockdust);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingot);
-		MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.UPGRADE.getItemInstance());
 
 		this.finishTiming();
 	}
@@ -430,6 +436,10 @@ public class RotaryCraft extends DragonAPIMod {
 
 		//RotaryRecipes.addModInterface();
 		proxy.initClasses();
+
+		for (Donator s : DonatorController.instance.getReikasDonators()) {
+			PlayerSpecificRenderer.instance.registerRenderer(s.ingameName, DonatorGearRender.instance);
+		}
 
 		TileEntityReservoir.initCreativeFluids();
 		TileEntityFluidCompressor.initCreativeFluids();
