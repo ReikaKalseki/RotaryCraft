@@ -13,11 +13,13 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -98,7 +100,13 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 			int z2 = (int)Math.floor(e.posZ);
 			int y2 = (int)e.posY-1;
 			Block b = world.getBlock(x2, y2, z2);
-			if (!e.getCommandSenderName().equals(placer) && !e.getCommandSenderName().equals("Reika_Kalseki") && b != Blocks.air) {
+			boolean immune = false;
+			if (e instanceof EntityPlayer) {
+				EntityPlayer ep = (EntityPlayer)e;
+				if (this.isPlacer(ep) || ReikaPlayerAPI.isReika(ep))
+					immune = true;
+			}
+			if (!immune && b != Blocks.air) {
 				e.motionX = vx;
 				e.motionZ = vz;
 				e.motionY = 0.5;

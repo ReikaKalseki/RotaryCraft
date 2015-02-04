@@ -27,6 +27,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -72,7 +73,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		EntityLivingBase e = li.get(0);
 		if (!(e instanceof EntityPlayer))
 			return false;
-		if (e.getCommandSenderName().equals("Reika_Kalseki")) {
+		if (ReikaPlayerAPI.isReika((EntityPlayer)e)) {
 			return !((EntityPlayer)e).capabilities.isCreativeMode;
 		}
 		return false;

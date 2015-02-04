@@ -28,7 +28,7 @@ public class DonatorGearRender implements PlayerRenderObj {
 	@Override
 	public void render(EntityPlayer ep, float ptick, PlayerRotationData dat) {
 		GL11.glPushMatrix();
-		GL11.glTranslated(0, 2.1875+0.5, 0);
+		GL11.glTranslated(0, 2.1875, 0);
 		//GL11.glRotated(-dat.getRenderYaw(), 0, 1, 0);
 		//GL11.glRotated(45, 1, 0, 0);
 		//GL11.glRotated(dat.getRenderPitch(), 1, 0, 0);

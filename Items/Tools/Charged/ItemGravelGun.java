@@ -137,7 +137,7 @@ public class ItemGravelGun extends ItemChargedTool {
 	}
 
 	private boolean isEntityAttackable(EntityLivingBase ent) {
-		if ("Reika_Kalseki".equals(ent.getCommandSenderName()))
+		if (ent instanceof EntityPlayer && ReikaPlayerAPI.isReika((EntityPlayer)ent))
 			return false;
 		return ConfigRegistry.GRAVELPLAYER.getState() || !(ent instanceof EntityPlayer);
 	}
