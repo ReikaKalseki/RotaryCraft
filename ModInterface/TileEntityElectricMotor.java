@@ -27,7 +27,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.ModInteract.ReikaEUHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;

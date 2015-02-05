@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
-import Reika.DragonAPI.ModInteract.ReikaEUHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;

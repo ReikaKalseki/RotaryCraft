@@ -42,7 +42,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.FrameBlacklist.FrameUsageEvent;
+import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;

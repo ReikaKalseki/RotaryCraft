@@ -15,9 +15,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import pneumaticCraft.api.tileentity.IAirHandler;
+import pneumaticCraft.api.tileentity.IPneumaticMachine;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaPneumaticHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -97,7 +99,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private boolean hasOutputTile() {
 		TileEntity te = this.getAdjacentTileEntity(write);
-		return ModList.PNEUMATICRAFT.isLoaded() && false;//te instanceof RECEIVER;
+		return ModList.PNEUMATICRAFT.isLoaded() && te instanceof IPneumaticMachine;
 	}
 
 	@Override
@@ -124,16 +126,14 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 		if (power > 0 && ModList.PNEUMATICRAFT.isLoaded()) {
 			TileEntity tile = this.getAdjacentTileEntity(write);
-			/*
-			if (tile instanceof RECEIVER) {
-				IPowerReceptor rc = (IPowerReceptor)tile;
-				PowerReceiver pp = rc.getPowerReceiver(facingDir);
-				if (pp == null)
+			if (tile instanceof IPneumaticMachine) {
+				IPneumaticMachine rc = (IPneumaticMachine)tile;
+				IAirHandler a = rc.getAirHandler();
+				if (a == null)
 					return;
-				float mj = (float)this.getGenMJ();
-				double used = pp.receiveEnergy(PowerHandler.Type.ENGINE, mj, facingDir);
+				int air = this.getGenAir();
+				a.addAir(air, write.getOpposite());
 			}
-			 */
 		}
 
 		if (tickcount < 20)
@@ -239,8 +239,8 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		return this.isPipeConnected(side);
 	}
 
-	public double getGenMJ() {
-		return power/ReikaBuildCraftHelper.getWattsPerMJ();
+	public int getGenAir() {
+		return (int)(power/ReikaPneumaticHelper.getWattsPerAir());
 	}
 
 }

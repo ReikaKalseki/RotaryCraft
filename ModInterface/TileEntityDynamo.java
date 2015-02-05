@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaBuildCraftHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cofh.api.energy.IEnergyHandler;

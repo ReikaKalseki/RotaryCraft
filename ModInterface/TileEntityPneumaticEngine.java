@@ -11,28 +11,35 @@ package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import pneumaticCraft.api.tileentity.AirHandlerSupplier;
+import pneumaticCraft.api.tileentity.IAirHandler;
+import pneumaticCraft.api.tileentity.IPneumaticMachine;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.ModInteract.ReikaBuildCraftHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaPneumaticHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-public class TileEntityPneumaticEngine extends EnergyToPowerBase {
 
-	public static final int maxMJ = 36000;
+@Strippable(value={"pneumaticCraft.api.tileentity.IPneumaticMachine"})
+public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPneumaticMachine {
+
+	private IAirHandler air;
+	private static final int maxAir = 30000;
 
 	private StepTimer sound = new StepTimer(72);
 
 	public TileEntityPneumaticEngine() {
 		super();
 		if (ModList.PNEUMATICRAFT.isLoaded()) {
-
+			air = AirHandlerSupplier.getAirHandler(10, 12, maxAir);
 		}
 		sound.setTick(sound.getCap());
 	}
@@ -41,23 +48,23 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase {
 	public boolean isValidSupplier(TileEntity te) {
 		if (te == null)
 			return false;
-		if (te.getClass().getSimpleName().contains("class name"))
+		if (te.getClass().getSimpleName().startsWith("pneumaticCraft.common.tileentity"))
 			return true;
 		return false;
 	}
 
 	@Override
 	protected int getIdealConsumedUnitsPerTick() {
-		return MathHelper.ceiling_double_int(this.getMJPerTick());
+		return this.getAirPerTick();
 	}
 
-	private float getMJPerTick() {
-		return (float)(this.getPowerLevel()/ReikaBuildCraftHelper.getWattsPerMJ());
+	private int getAirPerTick() {
+		return ReikaPneumaticHelper.getWattsPerAir();
 	}
 
 	@Override
 	public int getMaxStorage() {
-		return maxMJ;
+		return maxAir;
 	}
 
 	@Override
@@ -92,16 +99,16 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase {
 			return;
 
 		if (DragonAPICore.debugtest) {
-			//fill energy buffer
+			air.addAir(5, this.getConnection());
 		}
 		this.getIOSides(world, x, y, z, meta);
 
-		/*
-		if (!world.isRemote)
-			storedEnergy = (int)pp.getEnergyStored();
-		if (storedEnergy < 0)
-			storedEnergy = (int)pp.getMaxEnergyStored();
-		 */
+		air.updateEntityI();
+
+		storedEnergy = air.getCurrentAir(this.getConnection());
+		if (storedEnergy < 0) {
+			storedEnergy = 0;
+		}
 
 		this.updateSpeed();
 		if (!world.isRemote) {
@@ -118,23 +125,28 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase {
 
 	@Override
 	protected void usePower() {
-		float amt = this.getMJPerTick();
+		int amt = this.getAirPerTick();
 		if (ModList.PNEUMATICRAFT.isLoaded())
-			;//drain amt energy
+			air.addAir(-amt, this.getConnection());//drain amt energy
 	}
 
-	public boolean isPipeConnected(ForgeDirection with) {
+	public boolean isConnectedTo(ForgeDirection with) {
+		return with == this.getConnection();
+	}
+
+	private ForgeDirection getConnection() {
 		switch(this.getBlockMetadata()) {
 		case 0:
-			return with == ForgeDirection.NORTH;
+			return ForgeDirection.NORTH;
 		case 1:
-			return with == ForgeDirection.WEST;
+			return ForgeDirection.WEST;
 		case 2:
-			return with == ForgeDirection.SOUTH;
+			return ForgeDirection.SOUTH;
 		case 3:
-			return with == ForgeDirection.EAST;
+			return ForgeDirection.EAST;
+		default:
+			return ForgeDirection.UNKNOWN;
 		}
-		return false;
 	}
 
 	@Override
@@ -147,7 +159,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase {
 	{
 		super.writeSyncTag(NBT);
 		if (ModList.PNEUMATICRAFT.isLoaded())
-			;//write to NBT
+			air.writeToNBTI(NBT);
 	}
 
 	@Override
@@ -155,17 +167,30 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase {
 	{
 		super.readSyncTag(NBT);
 		if (ModList.PNEUMATICRAFT.isLoaded())
-			;//read from NBT
+			air.readFromNBTI(NBT);
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+		if (ModList.PNEUMATICRAFT.isLoaded())
+			air.validateI(this);
 	}
 
 	@Override
 	public String getUnitDisplay() {
-		return "atm";
+		return "mL";
 	}
 
 	@Override
 	public int getPowerColor() {
 		return ReikaColorAPI.RGBtoHex(50, 170, 255);
+	}
+
+	@Override
+	@ModDependent(ModList.PNEUMATICRAFT)
+	public IAirHandler getAirHandler() {
+		return air;
 	}
 
 	//@Override

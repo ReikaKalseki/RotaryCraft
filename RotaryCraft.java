@@ -61,9 +61,9 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
-import Reika.DragonAPI.ModInteract.RouterHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.DonatorGearRender;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
@@ -329,7 +329,7 @@ public class RotaryCraft extends DragonAPIMod {
 		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", BlockRegistry.BLASTGLASS.getStackOf());
 
 		DonatorController.instance.addDonation(instance, "sys64738", 25.00F);
-		DonatorController.instance.addDonation(instance, "Zerotheliger", 50.00F);
+		DonatorController.instance.addDonation(instance, "Zerotheliger", "bc7dc757-b92a-457e-98b9-351ce7a317a3", 50.00F);
 		DonatorController.instance.addDonation(instance, "EverRunes", 75.00F);
 		DonatorController.instance.addDonation(instance, "AnotherDeadBard", 25.00F);
 		DonatorController.instance.addDonation(instance, "hyper1on", 25.00F);
@@ -346,7 +346,7 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "Karapol", 25.00F);
 		DonatorController.instance.addDonation(instance, "RiComikka", 15.00F);
 		DonatorController.instance.addDonation(instance, "Spork", 10.00F);
-		DonatorController.instance.addDonation(instance, "Demosthenex", 50.00F);
+		DonatorController.instance.addDonation(instance, "Demosthenex", "2249847d-1992-45e8-8c10-8d17f467ca96", 50.00F);
 		DonatorController.instance.addDonation(instance, "Lavious", 15.00F);
 		DonatorController.instance.addDonation(instance, "Paul17041993", 20.00F);
 		DonatorController.instance.addDonation(instance, "Mattabase", 40.00F);
@@ -354,8 +354,8 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "SemicolonDash", 50.00F);
 		DonatorController.instance.addDonation(instance, "Choco218", 50.00F);
 		DonatorController.instance.addDonation(instance, "Dragonsummoner", 5.00F);
-		DonatorController.instance.addDonation(instance, "StoneRhino", "Stone_Rhino", 100.00F);
-		DonatorController.instance.addDonation(instance, "Jason Saffle", "chippewaguy13", 20.00F);
+		DonatorController.instance.addDonation(instance, "StoneRhino", "a94d96b9-23c9-4458-b394-fcc63db67584", 100.00F);
+		DonatorController.instance.addDonation(instance, "Jason Saffle", "2b9a2791-3465-4332-8013-4015dc9cc120", 20.00F);
 
 		ReikaMystcraftHelper.disableFluidPage("jet fuel");
 		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
