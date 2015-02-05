@@ -100,10 +100,12 @@ public class RotaryEventManager {
 	}
 
 	private boolean isMovable(TileEntity te) {
-		if (te instanceof ShaftMachine)
-			return false;
-		if (te instanceof TileEntityIOMachine)
-			return false;
+		if (!ConfigRegistry.FRAMES.getState()) {
+			if (te instanceof ShaftMachine)
+				return false;
+			if (te instanceof TileEntityIOMachine)
+				return false;
+		}
 		return true;
 	}
 

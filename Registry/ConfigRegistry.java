@@ -92,7 +92,8 @@ public enum ConfigRegistry implements ConfigList {
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
 	POWERCLIENT("Run power transfer code on client", false),
-	TUTORIAL("Tutorial Mode", false);
+	TUTORIAL("Tutorial Mode", false),
+	FRAMES("Allow Frames to move Machines (May cause corruption)", false);
 
 	private String label;
 	private boolean defaultState;
