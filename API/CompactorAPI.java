@@ -53,7 +53,7 @@ public class CompactorAPI {
 
 	static {
 		try {
-			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipesCompactor");
+			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor");
 			get = recipes.getMethod("getRecipes");
 			instance = get.invoke(null);
 			addRecipe = recipes.getMethod("addCompacting", int.class, int.class, ItemStack.class, int.class, int.class);
