@@ -17,7 +17,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -71,7 +70,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void mouseClicked(int i, int j, int k){
+	protected void mouseClicked(int i, int j, int k){
 		super.mouseClicked(i, j, k);
 		if (hasPower)
 			input.mouseClicked(i, j, k);
@@ -174,10 +173,10 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 				color = 0xff0000;
 			if (disabled) {
 				color = 0xaaaaaa;
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, "Infinity", j+xSize/2+28, k+51, color);
+				api.drawCenteredStringNoShadow(fontRendererObj, "Infinity", j+xSize/2+28, k+51, color);
 			}
 			else
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", spawnercontroller.getDelay()), j+xSize/2+58, k+51, color);
+				api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", spawnercontroller.getDelay()), j+xSize/2+58, k+51, color);
 		}
 	}
 

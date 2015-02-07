@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Base;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -52,7 +51,7 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void mouseClicked(int i, int j, int k){
+	protected void mouseClicked(int i, int j, int k){
 		super.mouseClicked(i, j, k);
 		input.mouseClicked(i, j, k);
 	}
@@ -102,7 +101,7 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 		int color = 4210752;
 		if (range > ((RangedEffect)pwr).getMaxRange())
 			color = 0xff0000;
-		ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", ((RangedEffect)pwr).getRange()), j+xSize/2+58, k+25, color);
+		api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", ((RangedEffect)pwr).getRange()), j+xSize/2+58, k+25, color);
 	}
 
 	@Override

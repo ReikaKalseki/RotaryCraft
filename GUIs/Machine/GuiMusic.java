@@ -109,7 +109,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void mouseClicked(int i, int j, int k) { //delete note on right-click
+	protected void mouseClicked(int i, int j, int k) { //delete note on right-click
 		/*
 		if (k == 0) {
 			for (int l = 0; l < buttonList.size(); l++) {
@@ -294,7 +294,7 @@ public class GuiMusic extends GuiNonPoweredMachine
 			return shapeList[i%shapeList.length];
 		}
 
-		public void mouseClicked(int x, int y, int button)
+		protected void mouseClicked(int x, int y, int button)
 		{
 			for (int i = 0; i < keyList.size(); i++) {
 				PianoKey key = keyList.get(i);

@@ -21,7 +21,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -89,7 +88,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void mouseClicked(int i, int j, int k){
+	protected void mouseClicked(int i, int j, int k){
 		super.mouseClicked(i, j, k);
 		if (!redstone)
 			input.mouseClicked(i, j, k);
@@ -214,11 +213,11 @@ public class GuiCVT extends GuiNonPoweredMachine
 		else {
 			input.drawTextBox();
 			if (ratio > cvt.getMaxRatio())
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
+				api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
 			else if (ratio == 0)
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, "(1)", j+xSize/2+88, k+31, 0xff0000);
+				api.drawCenteredStringNoShadow(fontRendererObj, "(1)", j+xSize/2+88, k+31, 0xff0000);
 			else
-				ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", Math.abs(cvt.getRatio())), j+xSize/2+88, k+31, 4210752);
+				api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", Math.abs(cvt.getRatio())), j+xSize/2+88, k+31, 4210752);
 		}
 	}
 

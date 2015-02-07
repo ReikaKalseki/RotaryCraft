@@ -67,7 +67,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void mouseClicked(int i, int j, int k){
+	protected void mouseClicked(int i, int j, int k){
 		super.mouseClicked(i, j, k);
 		input.mouseClicked(i, j, k);
 		input2.mouseClicked(i, j, k);

@@ -86,7 +86,7 @@ public class GuiSonic extends GuiPowerOnlyMachine
 	}
 
 	@Override
-	public void mouseClicked(int i, int j, int k){
+	protected void mouseClicked(int i, int j, int k){
 		super.mouseClicked(i, j, k);
 		if (sonic.ENABLEFREQ)
 			input.mouseClicked(i, j, k);

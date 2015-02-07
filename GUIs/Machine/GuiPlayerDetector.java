@@ -15,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -60,7 +59,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 	}
 
 	@Override
-	public void mouseClicked(int i, int j, int k){
+	protected void mouseClicked(int i, int j, int k){
 		super.mouseClicked(i, j, k);
 		input.mouseClicked(i, j, k);
 	}
@@ -84,9 +83,6 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, range);
 	}
 
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
@@ -98,9 +94,6 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		}
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -112,7 +105,7 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		int color = 4210752;
 		if (range > playerdetector.getMaxRange())
 			color = 0xff0000;
-		ImagedGuiButton.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", playerdetector.getRange()), j+xSize/2+58, k+25, color);
+		api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", playerdetector.getRange()), j+xSize/2+58, k+25, color);
 	}
 
 	@Override

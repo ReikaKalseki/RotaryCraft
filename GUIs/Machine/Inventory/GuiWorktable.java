@@ -59,7 +59,7 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 	}
 
 	@Override
-	public void mouseClicked(int x, int y, int button) {
+	protected void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
