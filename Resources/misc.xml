@@ -15,8 +15,7 @@
 	<modinterface>
 		These are the conversion ratios and behaviors between shaft-powered machines and other mods' machines and items.
 
-		MJ/t to Watts: 1 MJ/t = %.3f %sW
-		Fuel Bucket Energy: %.3f %sJ
+		RF/t to Watts: 1 RF/t = %.3f %sW
 
 		Extractor Duplication Rates:
 		Normal Ores: %d percent chance per step

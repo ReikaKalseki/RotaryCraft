@@ -112,7 +112,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 
 	@Override
 	protected int getIdealConsumedUnitsPerTick() {
-		return MathHelper.ceiling_double_int(power/ReikaEUHelper.WATTS_PER_EU);
+		return MathHelper.ceiling_double_int(power/ReikaEUHelper.getWattsPerEU());
 	}
 
 	@Override

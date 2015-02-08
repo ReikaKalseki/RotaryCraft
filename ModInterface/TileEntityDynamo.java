@@ -17,10 +17,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.Power.ReikaBuildCraftHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cofh.api.energy.IEnergyHandler;
+
 @Strippable(value = {"cofh.api.energy.IEnergyHandler"})
 public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergyHandler {
 
@@ -87,7 +88,7 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		int tq = Math.min(torque, MAXTORQUE);
 		int om = Math.min(omega, MAXOMEGA);
 		long pwr = (long)tq*(long)om;
-		return (int)(pwr*10/ReikaBuildCraftHelper.getWattsPerMJ());
+		return (int)(pwr/ReikaRFHelper.getWattsPerRF());
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -123,7 +124,7 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
 		if (this.canConnectEnergy(from)) {
-			int rf = (int)((float)(power*10/ReikaBuildCraftHelper.getWattsPerMJ()));
+			int rf = (int)(power/ReikaRFHelper.getWattsPerRF());
 			//return rf;
 		}
 		return 0;

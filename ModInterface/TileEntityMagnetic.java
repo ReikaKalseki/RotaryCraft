@@ -10,13 +10,12 @@
 package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.Power.ReikaBuildCraftHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -27,7 +26,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	@Override
 	public long getMaxPower() {
-		return (long)(ReikaBuildCraftHelper.getWattsPerMJ()/10D*this.getStoredPower());
+		return ReikaRFHelper.getWattsPerRF()/this.getStoredPower();
 	}
 
 	@Override
@@ -139,11 +138,11 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	@Override
 	protected int getIdealConsumedUnitsPerTick() {
-		return MathHelper.ceiling_double_int(this.getRFPerTick());
+		return this.getRFPerTick();
 	}
 
-	private double getRFPerTick() {
-		return this.getPowerLevel()*10D/ReikaBuildCraftHelper.getWattsPerMJ();
+	private int getRFPerTick() {
+		return (int)(this.getPowerLevel()/ReikaRFHelper.getWattsPerRF());
 	}
 
 	@Override

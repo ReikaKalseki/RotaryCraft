@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -89,7 +88,6 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 	}
 
 	private void emptyBuckets() {
-		ItemStack is = new ItemStack(Items.bucket);
 		for (int i = 0; i < inv.length; i++) {
 			ItemStack slot = inv[i];
 			if (slot != null) {
@@ -97,9 +95,11 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 				if (fluid != null) {
 					if (this.canAccept(fluid.getFluid())) {
 						if (tank.getCapacity() >= fluid.amount+tank.getLevel()) {
+							ItemStack is = FluidContainerRegistry.drainFluidContainer(slot);
 							ReikaInventoryHelper.decrStack(i, inv);
-							if (!ReikaInventoryHelper.addToIInv(is, this))
-								ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
+							if (is != null)
+								if (!ReikaInventoryHelper.addToIInv(is, this))
+									ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 							tank.addLiquid(fluid.amount, fluid.getFluid());
 							return; //uncomment to only allow 1 bucket at a time
 						}

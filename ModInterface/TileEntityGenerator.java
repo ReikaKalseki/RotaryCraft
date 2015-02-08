@@ -123,7 +123,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 
 	@Override
 	public double getOfferedEnergy() {
-		return power/ReikaEUHelper.WATTS_PER_EU;
+		return power/ReikaEUHelper.getWattsPerEU();
 	}
 
 	@Override

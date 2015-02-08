@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -38,10 +39,10 @@ public class RecipesLavaMaker {
 	private final ItemHashMap<MeltingRecipe> recipeList = new ItemHashMap().setOneWay();
 
 	private RecipesLavaMaker() {
-		this.addRecipe(Blocks.stone, FluidRegistry.LAVA, 1000, 1000, 5200000);
-		this.addRecipe(Blocks.cobblestone, FluidRegistry.LAVA, 500, 1000, 2820000);
+		this.addRecipe(Blocks.stone, FluidRegistry.LAVA, 1000, 1000, ReikaThermoHelper.ROCK_MELT_ENERGY);
+		this.addRecipe(Blocks.cobblestone, FluidRegistry.LAVA, 500, 1000, 3120000);
 		this.addRecipe(Blocks.netherrack, FluidRegistry.LAVA, 2000, 600, 480000);
-		this.addRecipe(Blocks.stonebrick, FluidRegistry.LAVA, 1000, 1200, 4000000);
+		this.addRecipe(Blocks.stonebrick, FluidRegistry.LAVA, 1000, 1200, 4160000);
 
 		this.addRecipe("stone", FluidRegistry.LAVA, 1000, 1000, 5200000);
 		this.addRecipe("cobblestone", FluidRegistry.LAVA, 500, 1000, 2820000);

@@ -22,8 +22,8 @@ import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.ModInteract.Power.ReikaBuildCraftHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
+import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
@@ -357,11 +357,11 @@ public final class RotaryDescriptions {
 		addData(HandbookRegistry.FLYWHEELS, TileEntityFlywheel.getLimitLoads());
 
 		addData(HandbookRegistry.MODINTERFACE,
-				ReikaMathLibrary.getThousandBase(ReikaBuildCraftHelper.getWattsPerMJ()),
-				ReikaEngLibrary.getSIPrefix(ReikaBuildCraftHelper.getWattsPerMJ()),
+				ReikaMathLibrary.getThousandBase(ReikaRFHelper.getWattsPerRF()),
+				ReikaEngLibrary.getSIPrefix(ReikaRFHelper.getWattsPerRF()),
 
-				ReikaMathLibrary.getThousandBase(ReikaBuildCraftHelper.getFuelBucketEnergy()),
-				ReikaEngLibrary.getSIPrefix(ReikaBuildCraftHelper.getFuelBucketEnergy()),
+				//ReikaMathLibrary.getThousandBase(ReikaBuildCraftHelper.getFuelBucketEnergy()),
+				//ReikaEngLibrary.getSIPrefix(ReikaBuildCraftHelper.getFuelBucketEnergy()),
 
 				TileEntityExtractor.oreCopy,
 				TileEntityExtractor.oreCopyNether,
@@ -386,7 +386,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.BLASTFURNACE, TileEntityBlastFurnace.SMELTTEMP, TileEntityBlastFurnace.BEDROCKTEMP);
 		addData(MachineRegistry.SCALECHEST, TileEntityScaleableChest.MAXSIZE);
 		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
-		addData(MachineRegistry.GENERATOR, ReikaEUHelper.WATTS_PER_EU);
+		addData(MachineRegistry.GENERATOR, ReikaEUHelper.getWattsPerEU());
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXOMEGA);
 
