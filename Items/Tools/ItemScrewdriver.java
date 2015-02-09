@@ -55,9 +55,10 @@ import buildcraft.api.tools.IToolWrench;
 
 import com.carpentersblocks.api.ICarpentersHammer;
 @Strippable(value = {"buildcraft.api.tools.IToolWrench", "mrtjp.projectred.api.IScrewdriver", "binnie.extratrees.api.IToolHammer",
-		"powercrystals.minefactoryreloaded.api.IToolHammer", "santa.api.interfaces.wrench.IWrench", "com.carpentersblocks.api.ICarpentersHammer"})
+		"powercrystals.minefactoryreloaded.api.IToolHammer", "santa.api.interfaces.wrench.IWrench", "com.carpentersblocks.api.ICarpentersHammer",
+"com.bluepowermod.api.misc.IScrewdriver"})
 public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer,
-powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer
+powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 {
 	public static HashMap<Block, Integer> maxdamage = new HashMap(); //Max damage values (or tileentity datas) for the block ids associated
 
@@ -406,6 +407,11 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer
 
 	@Override
 	public boolean canUseHammer(World world, EntityPlayer player) {
+		return true;
+	}
+
+	@Override
+	public boolean damage(ItemStack stack, int damage, EntityPlayer player, boolean simulated) {
 		return true;
 	}
 }
