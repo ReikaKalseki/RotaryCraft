@@ -768,6 +768,8 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 244), ItemStacks.gearunit16);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 27/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.shaftitem);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 27/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.basepanel);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 45/DifficultyEffects.PARTCRAFT.getInt()+2*27/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.wormgear);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.ballbearing, ItemStacks.ballbearing, ItemStacks.ballbearing, ItemStacks.ballbearing);
 		//GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 45), ItemStacks.mount);
 
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);
