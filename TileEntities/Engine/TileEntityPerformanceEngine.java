@@ -32,6 +32,11 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	private boolean starvedengine;
 
 	@Override
+	protected int getMaxTemperature() {
+		return 240;
+	}
+
+	@Override
 	protected void consumeFuel() {
 		fuel.removeLiquid(this.getConsumedFuel());
 		if (rand.nextInt(30) == 0)

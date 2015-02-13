@@ -23,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -40,6 +39,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.LegacyCraft.LegacyOptions;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.BlowableCrop;
 import Reika.RotaryCraft.Base.BlockBasic;
@@ -142,17 +142,19 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int par5, float f1, float f2, float f3) {
-		if (par5EntityPlayer.getCurrentEquippedItem() != null) {
-			if (par5EntityPlayer.getCurrentEquippedItem().getItem() instanceof ItemDye && par5EntityPlayer.getCurrentEquippedItem().getItemDamage() == 15) {
-				if (world.getBlockMetadata(x, y, z) < GROWN) {
-					world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z)+1, 3);
-					for (int i = 0; i < 16; i++)
-						world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
-					if (!par5EntityPlayer.capabilities.isCreativeMode)
-						par5EntityPlayer.getCurrentEquippedItem().stackSize--;
-					return true;
-				}
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int s, float f1, float f2, float f3) {
+		ItemStack is = ep.getCurrentEquippedItem();
+		if (!world.isRemote && ReikaItemHelper.matchStacks(is, ReikaItemHelper.bonemeal)) {
+			if (world.getBlockMetadata(x, y, z) < GROWN) {
+				int to = Math.min(GROWN, world.getBlockMetadata(x, y, z)+1+rand.nextInt(4));
+				if (ModList.LEGACYCRAFT.isLoaded() && LegacyOptions.BONEMEAL.getState())
+					to = GROWN;
+				world.setBlockMetadataWithNotify(x, y, z, to, 3);
+				for (int i = 0; i < 16; i++)
+					world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
+				if (!ep.capabilities.isCreativeMode)
+					ep.getCurrentEquippedItem().stackSize--;
+				return true;
 			}
 		}
 		return false;

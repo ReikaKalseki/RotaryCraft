@@ -27,7 +27,7 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 
 	private ForgeDirection facingDir;
 
-	public static final int MAXTORQUE = 8192;
+	public static final int MAXTORQUE = 1024;
 	public static final int MAXOMEGA = 8192;
 
 	@Override

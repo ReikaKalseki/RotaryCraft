@@ -335,7 +335,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		world.setBlockToAir(x, y, z);
 	}
 
-	public AxisAlignedBB getBlowZone(int meta, int step) {
+	public AxisAlignedBB getBlowZone(int meta, int range) {
 		int minx = 0;
 		int miny = 0;
 		int minz = 0;
@@ -345,7 +345,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 		switch (meta) {
 		case 0:
-			minx = xCoord-step-1;
+			minx = xCoord-range-1;
 			maxx = xCoord;
 			miny = yCoord;
 			maxy = yCoord+1;
@@ -354,14 +354,14 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			break;
 		case 1:
 			minx = xCoord+1;
-			maxx = xCoord+step+1;
+			maxx = xCoord+range+1;
 			miny = yCoord;
 			maxy = yCoord+1;
 			minz = zCoord;
 			maxz = zCoord+1;
 			break;
 		case 2:
-			maxz = zCoord+step+1;
+			maxz = zCoord+range+1;
 			minz = zCoord+1;
 			miny = yCoord;
 			maxy = yCoord+1;
@@ -370,7 +370,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			break;
 		case 3:
 			maxz = zCoord;
-			minz = zCoord-step-1;
+			minz = zCoord-range-1;
 			miny = yCoord;
 			maxy = yCoord+1;
 			minx = xCoord;
@@ -380,7 +380,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			minz = zCoord;
 			maxz = zCoord+1;
 			miny = yCoord+1;
-			maxy = yCoord+step+1;
+			maxy = yCoord+range+1;
 			minx = xCoord;
 			maxx = xCoord+1;
 			break;
@@ -388,7 +388,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			minz = zCoord;
 			maxz = zCoord+1;
 			maxy = yCoord;
-			miny = yCoord-step;
+			miny = yCoord-range;
 			minx = xCoord;
 			maxx = xCoord+1;
 			break;

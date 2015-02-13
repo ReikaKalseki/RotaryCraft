@@ -11,17 +11,14 @@ package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Containers.ContainerSteam;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;
 
 public class GuiSteam extends GuiNonPoweredMachine
 {
-	private TileEntityEngine Steam;
+	private TileEntitySteamEngine Steam;
 
-	int x;
-	int y;
-
-	public GuiSteam(EntityPlayer p5ep, TileEntityEngine te)
+	public GuiSteam(EntityPlayer p5ep, TileEntitySteamEngine te)
 	{
 		super(new ContainerSteam(p5ep, te), te);
 		Steam = te;
@@ -30,9 +27,6 @@ public class GuiSteam extends GuiNonPoweredMachine
 		ep = p5ep;
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{

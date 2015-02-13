@@ -14,20 +14,20 @@ import net.minecraft.inventory.Slot;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ContainerIOMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityGasEngine;
 
 public class ContainerEthanol extends ContainerIOMachine
 {
-	private TileEntityEngine Engine;
+	private TileEntityGasEngine Engine;
 
-	public ContainerEthanol(EntityPlayer player, TileEntityEngine par2TileEntityEngine)
+	public ContainerEthanol(EntityPlayer player, TileEntityGasEngine te)
 	{
-		super(player, par2TileEntityEngine);
-		Engine = par2TileEntityEngine;
+		super(player, te);
+		Engine = te;
 		int posX = Engine.xCoord;
 		int posY = Engine.yCoord;
 		int posZ = Engine.zCoord;
-		this.addSlotToContainer(new Slot(par2TileEntityEngine, 0, 61, 36));
+		this.addSlotToContainer(new Slot(te, 0, 61, 36));
 
 		this.addPlayerInventory(player);
 	}

@@ -10,7 +10,6 @@
 package Reika.RotaryCraft;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
@@ -33,18 +32,14 @@ import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
-import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
-import Reika.DragonAPI.Auxiliary.Trackers.PatreonController;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
-import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
 import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
@@ -65,7 +60,6 @@ import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
-import Reika.RotaryCraft.Auxiliary.DonatorGearRender;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications.HandbookConfigVerifier;
@@ -100,6 +94,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -177,6 +172,11 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@SidedProxy(clientSide="Reika.RotaryCraft.ClientProxy", serverSide="Reika.RotaryCraft.CommonProxy")
 	public static CommonProxy proxy;
+
+	@EventHandler
+	public void invalidSignature(FMLFingerprintViolationEvent evt) {
+
+	}
 
 	public final boolean isLocked() {
 		return isLocked;
@@ -274,7 +274,7 @@ public class RotaryCraft extends DragonAPIMod {
 		CreativeTabSorter.instance.registerCreativeTabAfter(tabModOres, tabRotary);
 		CreativeTabSorter.instance.registerCreativeTabAfter(tabSpawner, tabRotary);
 
-		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.OPTIFINE, CompatibilityTracker.Severity.GLITCH, "Optifine is known to break some rendering and cause framerate drops.");
+		//CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.OPTIFINE, CompatibilityTracker.Severity.GLITCH, "Optifine is known to break some rendering and cause framerate drops.");
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.GREGTECH, CompatibilityTracker.Severity.GLITCH, "The GT unifier registers HSLA steel as standard OreDict steel. This breaks the techtrees of mods like RailCraft and TConstruct.");
 
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
@@ -442,15 +442,7 @@ public class RotaryCraft extends DragonAPIMod {
 		//RotaryRecipes.addModInterface();
 		proxy.initClasses();
 
-		Collection<Donator> donators = new ArrayList();
-		donators.addAll(DonatorController.instance.getReikasDonators());
-		donators.addAll(PatreonController.instance.getModPatrons(DragonAPIInit.instance));
-		for (Donator s : donators) {
-			if (s.ingameName != null)
-				PlayerSpecificRenderer.instance.registerRenderer(s.ingameName, DonatorGearRender.instance);
-			else
-				logger.logError("Donator "+s.displayName+" UUID could not be found! Cannot give special render!");
-		}
+		proxy.loadDonatorRender();
 
 		TileEntityReservoir.initCreativeFluids();
 		TileEntityFluidCompressor.initCreativeFluids();

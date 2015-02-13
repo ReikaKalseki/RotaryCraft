@@ -14,16 +14,16 @@ import net.minecraft.inventory.ICrafting;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ContainerIOMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;
 
 public class ContainerSteam extends ContainerIOMachine
 {
-	private TileEntityEngine Steam;
+	private TileEntitySteamEngine Steam;
 
-	public ContainerSteam(EntityPlayer player, TileEntityEngine par2TileEntitySteam)
+	public ContainerSteam(EntityPlayer player, TileEntitySteamEngine te)
 	{
-		super(player, par2TileEntitySteam);
-		Steam = par2TileEntitySteam;
+		super(player, te);
+		Steam = te;
 		int posX = Steam.xCoord;
 		int posY = Steam.yCoord;
 		int posZ = Steam.zCoord;

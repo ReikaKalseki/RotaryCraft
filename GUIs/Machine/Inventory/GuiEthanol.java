@@ -12,17 +12,17 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Containers.ContainerEthanol;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityGasEngine;
 
 public class GuiEthanol extends GuiNonPoweredMachine
 {
-	private TileEntityEngine engine;
+	private TileEntityGasEngine engine;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 	int x;
 	int y;
 
-	public GuiEthanol(EntityPlayer p5ep, TileEntityEngine te)
+	public GuiEthanol(EntityPlayer p5ep, TileEntityGasEngine te)
 	{
 		super(new ContainerEthanol(p5ep, te), te);
 		engine = te;

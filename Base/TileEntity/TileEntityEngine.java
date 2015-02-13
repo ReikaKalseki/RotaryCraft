@@ -57,7 +57,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	/** Water capacity */
 	public static final int CAPACITY = 60*1000;
-	public int MAXTEMP = 1000;
+	public final int MAXTEMP = this.getMaxTemperature();
 
 	/** Fuel capacity */
 	public static final int FUELCAP = 240*1000;
@@ -84,6 +84,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	protected long lastpower = 0;
 
 	protected ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
+
+	protected int getMaxTemperature() {
+		return 1000;
+	}
 
 	public final EngineType getEngineType() {
 		return type != null ? type : EngineType.DC;
@@ -219,17 +223,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	private void initialize(World world, int x, int y, int z, int meta) {
-		switch (type) {
-		case STEAM:
-			MAXTEMP = 150;
-			break;
-		case SPORT:
-			MAXTEMP = 240;
-			break;
-		default:
-			break;
-		}
-
 		timer.setCap("sound", this.getSoundLength());
 
 		if (timer.checkCap("temperature")) {

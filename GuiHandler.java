@@ -153,7 +153,9 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityGasEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
@@ -230,9 +232,9 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).getEngineType()) {
 			case STEAM:
-				return new ContainerSteam(player, (TileEntityEngine) te);
+				return new ContainerSteam(player, (TileEntitySteamEngine) te);
 			case GAS:
-				return new ContainerEthanol(player, (TileEntityEngine) te);
+				return new ContainerEthanol(player, (TileEntityGasEngine) te);
 			case AC:
 				return new OneSlotContainer(player, te);
 			case SPORT:
@@ -416,9 +418,9 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).getEngineType()) {
 			case STEAM:
-				return new GuiSteam(player, (TileEntityEngine) te);
+				return new GuiSteam(player, (TileEntitySteamEngine) te);
 			case GAS:
-				return new GuiEthanol(player, (TileEntityEngine) te);
+				return new GuiEthanol(player, (TileEntityGasEngine) te);
 			case AC:
 				return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
 			case SPORT:

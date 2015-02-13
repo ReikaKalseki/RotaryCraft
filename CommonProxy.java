@@ -66,4 +66,8 @@ public class CommonProxy
 		ReikaJavaLibrary.initClass(LuaMethods.class);
 	}
 
+	public void loadDonatorRender() {
+
+	}
+
 }// End class CommonProxy

@@ -30,6 +30,11 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	}
 
 	@Override
+	protected int getMaxTemperature() {
+		return 150;
+	}
+
+	@Override
 	protected void consumeFuel() {
 		water.removeLiquid(this.getConsumedFuel());
 	}
