@@ -23,7 +23,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -302,8 +301,6 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		ModCropList mod = ModCropList.getModCrop(id, meta);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		int metato = 0;
-		if (!world.isRemote)
-			ReikaJavaLibrary.spamConsole(mod+":"+mod.isRipe(world, x, y, z));
 		if (mod != null && mod.isRipe(world, x, y, z)) {
 			if (mod.destroyOnHarvest()) {
 				ArrayList<ItemStack> li = id.getDrops(world, x, y, z, meta, 0);

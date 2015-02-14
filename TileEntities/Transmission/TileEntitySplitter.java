@@ -384,7 +384,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 			if (!this.canCombine(in1, in2, torquein, torquein2)) {
 				overloadTick++;
-				if (overloadTick > 5) {
+				if (overloadTick > 20) {
 					this.fail();
 					overloadTick = 0;
 				}
