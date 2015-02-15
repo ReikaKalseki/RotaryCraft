@@ -35,7 +35,7 @@ public class GuiJet extends GuiNonPoweredMachine
 		ySize = 166;
 		ep = p5ep;
 		jet = eng instanceof TileEntityJetEngine ? (TileEntityJetEngine)eng : null;
-		burn = jet != null && jet.canAfterBurn && jet.burnerActive;
+		burn = jet != null && jet.canAfterBurn() && jet.burnerActive();
 	}
 
 	@Override
@@ -46,8 +46,8 @@ public class GuiJet extends GuiNonPoweredMachine
 		int k = (height - ySize) / 2;
 
 		if (jet != null) {
-			int u = jet.burnerActive ? 36 : 0;
-			int v = jet.canAfterBurn ? 72 : 90;
+			int u = jet.burnerActive() ? 36 : 0;
+			int v = jet.canAfterBurn() ? 72 : 90;
 			buttonList.add(new ImagedGuiButton(0, j+32, k+36, 36, 18, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
 		}
 	}
@@ -56,10 +56,10 @@ public class GuiJet extends GuiNonPoweredMachine
 	protected void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
 
-		if (b.id == 0 && jet != null && jet.canAfterBurn) {
+		if (b.id == 0 && jet != null && jet.canAfterBurn()) {
 			burn = !burn;
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.getMinValue(), eng, burn ? 1 : 0);
-			jet.burnerActive = burn;
+			jet.setBurnerActive(burn);
 			this.initGui();
 		}
 	}

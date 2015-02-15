@@ -104,7 +104,7 @@ public class RenderSEngine extends RotaryTERenderer
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
 			break;
 		case JET:
-			String s = ((TileEntityJetEngine)tile).canAfterBurn ? "_b": "";
+			String s = ((TileEntityJetEngine)tile).canAfterBurn() ? "_b": "";
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex"+s+".png");
 			break;
 		}

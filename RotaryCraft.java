@@ -74,6 +74,7 @@ import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
 import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
@@ -381,8 +382,15 @@ public class RotaryCraft extends DragonAPIMod {
 			PlayerFirstTimeTracker.addTracker(new HandbookTracker());
 		PlayerHandler.instance.registerTracker(HandbookConfigVerifier.instance);
 
-		ReikaEEHelper.blacklistRegistry(BlockRegistry.blockList);
-		ReikaEEHelper.blacklistRegistry(ItemRegistry.itemList);
+		//ReikaEEHelper.blacklistRegistry(BlockRegistry.blockList);
+		//ReikaEEHelper.blacklistRegistry(ItemRegistry.itemList);
+
+		ReikaEEHelper.blacklistItemStack(ItemStacks.steelingot);
+		ReikaEEHelper.blacklistItemStack(ItemStacks.bedingot);
+		ReikaEEHelper.blacklistItemStack(ItemStacks.springingot);
+		ReikaEEHelper.blacklistItemStack(ItemStacks.redgoldingot);
+		ReikaEEHelper.blacklistEntry(ItemRegistry.ETHANOL);
+		ReikaEEHelper.blacklistEntry(BlockRegistry.BLASTGLASS);
 
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.REACTORCRAFT, "Endgame power generation of multiple gigawatts");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.ELECTRICRAFT, "Easier and lower-CPU-load power transmission and distribution");
@@ -438,6 +446,7 @@ public class RotaryCraft extends DragonAPIMod {
 		OreForcer.instance.forceCompatibility();
 
 		CustomExtractLoader.instance.loadFile();
+		ExtractorModOres.addCustomSmelting();
 
 		//RotaryRecipes.addModInterface();
 		proxy.initClasses();

@@ -78,8 +78,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	private boolean isChoking = false;
 
-	public boolean canAfterBurn;
-	public boolean burnerActive;
+	private boolean canAfterBurn;
+	private boolean burnerActive;
 
 	@Override
 	public int getFuelLevel() {
@@ -474,23 +474,27 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		}
 
 		if (temperature > 1000) {
-			MinecraftForge.EVENT_BUS.post(new JetEngineExplosionEvent(this));
-			int r = 6;
-			for (int i = -r; i <= r; i++) {
-				for (int j = -r; j <= r; j++) {
-					for (int k = -r; k <= r; k++) {
-						if (ConfigRegistry.BLOCKDAMAGE.getState())
-							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, 1000);
-						world.spawnParticle("lava", x+i, y+j, z+k, 0, 0, 0);
-						world.spawnParticle("lava", x+i, y+j, z+k, rand.nextDouble()-0.5, rand.nextDouble()-0.5, rand.nextDouble()-0.5);
-					}
+			this.fail(world, x, y, z);
+		}
+	}
+
+	private void fail(World world, int x, int y, int z) {
+		MinecraftForge.EVENT_BUS.post(new JetEngineExplosionEvent(this));
+		int r = 6;
+		for (int i = -r; i <= r; i++) {
+			for (int j = -r; j <= r; j++) {
+				for (int k = -r; k <= r; k++) {
+					if (ConfigRegistry.BLOCKDAMAGE.getState())
+						ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, 1000);
+					world.spawnParticle("lava", x+i, y+j, z+k, 0, 0, 0);
+					world.spawnParticle("lava", x+i, y+j, z+k, rand.nextDouble()-0.5, rand.nextDouble()-0.5, rand.nextDouble()-0.5);
 				}
 			}
-			if (!world.isRemote) {
-				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, true);
-				for (int m = 0; m < 6; m++)
-					world.newExplosion(null, x-4+rand.nextInt(11), y-4+rand.nextInt(11), z-4+rand.nextInt(11), 4F+rand.nextFloat()*2, true, true);
-			}
+		}
+		if (!world.isRemote) {
+			world.newExplosion(null, x+0.5, y+0.5, z+0.5, 12F, true, true);
+			for (int m = 0; m < 6; m++)
+				world.newExplosion(null, x-4+rand.nextInt(11), y-4+rand.nextInt(11), z-4+rand.nextInt(11), 4F+rand.nextFloat()*2, true, true);
 		}
 	}
 
@@ -620,12 +624,17 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	@Override
 	public boolean hasTemperature() {
-		return isJetFailing;
+		return isJetFailing || this.isAfterburning();
 	}
 
 	@Override
 	public int getMaxSpeed(World world, int x, int y, int z, int meta) {
 		return (int)(EngineType.JET.getSpeed()*this.getChokedFraction(world, x, y, z, meta));
+	}
+
+	@Override
+	protected boolean canStart() {
+		return true; //JumpStart code goes here
 	}
 
 	@Override
@@ -649,6 +658,16 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		jetstarttimer.update();
 		if (this.isAfterburning()) {
 			this.afterBurnParticles(world, x, y, z);
+			if (this.getTicksExisted()%40 == 0) {
+				temperature += 1;
+				if (temperature > 1000) {
+					this.fail(world, x, y, z);
+				}
+				else if (temperature >= 600) {
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+					ReikaParticleHelper.SMOKE.spawnAroundBlock(world, x, y, z, 8);
+				}
+			}
 		}
 	}
 
@@ -758,6 +777,21 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	@Override
 	public boolean canUpgradeWith(ItemStack item) {
 		return !canAfterBurn && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.AFTERBURNER.ordinal();
+	}
+
+	public boolean canAfterBurn() {
+		return canAfterBurn;
+	}
+
+	public boolean burnerActive() {
+		return burnerActive;
+	}
+
+	public void setBurnerActive(boolean burn) {
+		burnerActive = burn;
+		if (!burn && !isJetFailing) {
+			temperature = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
+		}
 	}
 
 }

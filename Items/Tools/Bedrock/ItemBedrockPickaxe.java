@@ -46,7 +46,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OpenBlockHandler;
-import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumBlockHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThermalHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TransitionalOreHandler;
@@ -147,7 +147,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			}
 		}
 
-		if (ModList.THAUMCRAFT.isLoaded() && ThaumBlockHandler.getInstance().isCrystalCluster(block)) {
+		if (ModList.THAUMCRAFT.isLoaded() && ThaumItemHelper.isCrystalCluster(id)) {
 			this.dropDirectBlock(block, world, x, y, z);
 			return true;
 		}
@@ -235,7 +235,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (b == Blocks.iron_door)
 			return 18F;
 
-		if (b == ThaumBlockHandler.getInstance().totemID)
+		if (ThaumItemHelper.isTotemBlock(b, meta))
 			return 48F;
 		if (b == MekanismHandler.getInstance().cableID)
 			return 20F;

@@ -388,6 +388,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					this.fail();
 					overloadTick = 0;
 				}
+				else {
+					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+				}
 			}
 			else if (omegain == omegain2) {
 				omega = omegain;

@@ -62,7 +62,7 @@ public class ItemCustomModOre extends AutoOreItem implements GradientBlend {
 
 	@Override
 	public int getColorTwo(ItemStack is) {
-		return this.getOreType(is).color2;
+		return this.getOreType(is).color1;
 	}
 
 	@Override
@@ -105,5 +105,9 @@ public class ItemCustomModOre extends AutoOreItem implements GradientBlend {
 
 	public static ItemStack getItem(int idx, ExtractorStage s) {
 		return ItemRegistry.CUSTOMEXTRACT.getStackOfMetadata(idx*4+s.ordinal());
+	}
+
+	public static ItemStack getSmeltedItem(int idx) {
+		return ItemRegistry.CUSTOMINGOT.getStackOfMetadata(idx);
 	}
 }

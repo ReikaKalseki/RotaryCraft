@@ -556,7 +556,7 @@ public class PacketHandlerCore implements IPacketHandler {
 				io.power = pwr;
 				break;
 			case AFTERBURN:
-				((TileEntityJetEngine)te).burnerActive = data[0] > 0;
+				((TileEntityJetEngine)te).setBurnerActive(data[0] > 0);
 				break;
 			}
 		}

@@ -192,8 +192,12 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	private void setPowerData(World world, int x, int y, int z, int meta) {
 		int speed = this.getMaxSpeed(world, x, y, z, meta);
-		this.updateSpeed(speed, speed >= omega);
+		this.updateSpeed(speed, speed >= omega && (omega > 0 || this.canStart()));
 		torque = this.getGenTorque(world, x, y, z, meta);
+	}
+
+	protected boolean canStart() {
+		return true;
 	}
 
 	protected int getMaxSpeed(World world, int x, int y, int z, int meta) {

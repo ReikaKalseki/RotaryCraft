@@ -9,12 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.util.List;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
+import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
+import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ExtractorModOres {
@@ -27,9 +33,20 @@ public class ExtractorModOres {
 
 	public static void addSmelting() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			ItemStack in = ItemRegistry.MODEXTRACTS.getStackOfMetadata(getFlakesIndex(ModOreList.oreList[i]));
-			ItemStack out = ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ModOreList.oreList[i]), ModOreList.oreList[i].getDropCount());
-			ReikaRecipeHelper.addSmelting(in, out, 0.7F);
+			ModOreList ore = ModOreList.oreList[i];
+			ItemStack in = ItemRegistry.MODEXTRACTS.getStackOfMetadata(getFlakesIndex(ore));
+			ItemStack out = ReikaItemHelper.getSizedItemStack(getSmeltedIngot(ore), ore.getDropCount());
+			ReikaRecipeHelper.addSmelting(in, out, ore.rarity == OreRarity.RARE ? 1 : ore.rarity == OreRarity.EVERYWHERE ? 0.5F : 0.7F);
+		}
+	}
+
+	public static void addCustomSmelting() {
+		List<CustomExtractEntry> li = CustomExtractLoader.instance.getEntries();
+		for (int i = 0; i < li.size(); i++) {
+			CustomExtractEntry e = li.get(i);
+			ItemStack in = ItemCustomModOre.getItem(i, ExtractorStage.FLAKES);
+			ItemStack out = e.nativeOre == null ? ItemCustomModOre.getSmeltedItem(i) : getSmeltedIngot(e.nativeOre);
+			ReikaRecipeHelper.addSmelting(in, out, e.rarity == OreRarity.RARE ? 1 : e.rarity == OreRarity.EVERYWHERE ? 0.5F : 0.7F);
 		}
 	}
 
@@ -148,6 +165,8 @@ public class ExtractorModOres {
 			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.TITANIUM.ordinal());
 		case NETHEROSMIUM:
 			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.OSMIUM.ordinal());
+		case NETHERSALTPETER:
+			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.SALTPETER.ordinal());
 		default:
 			return ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal());
 		}
