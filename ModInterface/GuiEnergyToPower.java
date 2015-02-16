@@ -126,7 +126,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 
 		int px = engine.getEnergyScaled(68);
 		int c = engine.getPowerColor();
-		GL11.glColor3f(ReikaColorAPI.getRedFromInteger(c)/255F, ReikaColorAPI.getGreenFromInteger(c)/255F, ReikaColorAPI.getBlueFromInteger(c)/255F);
+		GL11.glColor3f(ReikaColorAPI.getRed(c)/255F, ReikaColorAPI.getGreen(c)/255F, ReikaColorAPI.getBlue(c)/255F);
 		this.drawTexturedModalRect(j+172, k+90-px, 208, 69-px, 16, px);
 
 		int px2 = engine.getLubricantScaled(68);

@@ -38,8 +38,7 @@ public class WorktableRecipes
 
 	private final RecipeSorter sorter = new RecipeSorter();
 
-	public static final WorktableRecipes getInstance()
-	{
+	public static final WorktableRecipes getInstance() {
 		return instance;
 	}
 
@@ -48,59 +47,56 @@ public class WorktableRecipes
 		display.add(recipe);
 	}
 
-	private WorktableRecipes()
-	{
+	private WorktableRecipes() {
 		//Collections.sort(recipes, sorter);
 	}
 
-	public ShapedRecipes addRecipe(ItemStack par1ItemStack, Object ... par2ArrayOfObj)
-	{
+	public ShapedRecipes addRecipe(ItemStack output, Object ... items) {
 		String s = "";
 		int i = 0;
 		int j = 0;
 		int k = 0;
 		//ReikaJavaLibrary.spamConsole(Arrays.toString(par2ArrayOfObj));
-		if (par2ArrayOfObj[i] instanceof String[])
-		{
-			String[] astring = ((String[])par2ArrayOfObj[i++]);
+		if (items[i] == null || ((items[i] instanceof ItemStack && ((ItemStack)items[i]).getItem() == null))) {
+			throw new IllegalArgumentException("Null item in recipe! Possible mod conflict?");
+		}
+		else if (items[i] instanceof String[]) {
+			String[] astring = ((String[])items[i++]);
 
 			for (int l = 0; l < astring.length; ++l)
 			{
 				String s1 = astring[l];
 				++k;
 				j = s1.length();
-				s = s + s1;
+				s = s+s1;
 			}
 		}
-		else
-		{
-			while (par2ArrayOfObj[i] instanceof String)
-			{
-				String s2 = (String)par2ArrayOfObj[i++];
+		else {
+			while (items[i] instanceof String) {
+				String s2 = (String)items[i++];
 				++k;
 				j = s2.length();
-				s = s + s2;
+				s = s+s2;
 			}
 		}
 
 		HashMap hashmap;
 
-		for (hashmap = new HashMap(); i < par2ArrayOfObj.length; i += 2)
-		{
-			Character character = (Character)par2ArrayOfObj[i];
+		for (hashmap = new HashMap(); i < items.length; i += 2) {
+			Character character = (Character)items[i];
 			ItemStack itemstack1 = null;
 
-			if (par2ArrayOfObj[i + 1] instanceof Item)
-			{
-				itemstack1 = new ItemStack((Item)par2ArrayOfObj[i + 1]);
+			if (items[i+1] instanceof Item) {
+				itemstack1 = new ItemStack((Item)items[i+1]);
 			}
-			else if (par2ArrayOfObj[i + 1] instanceof Block)
-			{
-				itemstack1 = new ItemStack((Block)par2ArrayOfObj[i + 1], 1, 32767);
+			else if (items[i+1] instanceof Block) {
+				itemstack1 = new ItemStack((Block)items[i+1], 1, 32767);
 			}
-			else if (par2ArrayOfObj[i + 1] instanceof ItemStack)
-			{
-				itemstack1 = (ItemStack)par2ArrayOfObj[i + 1];
+			else if (items[i+1] instanceof ItemStack) {
+				itemstack1 = (ItemStack)items[i+1];
+			}
+			else if (items[i+1] == null || ((items[i+1] instanceof ItemStack && ((ItemStack)items[i+1]).getItem() == null))) {
+				throw new IllegalArgumentException("Null item in recipe! Possible mod conflict?");
 			}
 
 			//ReikaJavaLibrary.pConsole(character+" -> "+itemstack1);
@@ -109,79 +105,69 @@ public class WorktableRecipes
 
 		ItemStack[] aitemstack = new ItemStack[j * k];
 
-		for (int i1 = 0; i1 < j * k; ++i1)
-		{
+		for (int i1 = 0; i1 < j * k; ++i1) {
 			char c0 = s.charAt(i1);
 
-			if (hashmap.containsKey(Character.valueOf(c0)))
-			{
+			if (hashmap.containsKey(c0)) {
 				//ReikaJavaLibrary.spamConsole(c0+":   "+(hashmap.get(Character.valueOf(c0))));
 				aitemstack[i1] = ((ItemStack)hashmap.get(Character.valueOf(c0))).copy();
 			}
-			else
-			{
+			else {
 				aitemstack[i1] = null;
 			}
 		}
 
-		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, aitemstack, par1ItemStack);
+		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, aitemstack, output);
 		this.addRecipe(shapedrecipes);
 		return shapedrecipes;
 	}
 
-	public void addShapelessRecipe(ItemStack par1ItemStack, Object ... par2ArrayOfObj)
-	{
-		ArrayList arraylist = new ArrayList();
-		Object[] aobject = par2ArrayOfObj;
-		int i = par2ArrayOfObj.length;
+	public void addShapelessRecipe(ItemStack output, Object ... items) {
+		ArrayList li = new ArrayList();
+		Object[] aobject = items;
+		int i = items.length;
 
-		for (int j = 0; j < i; ++j)
-		{
+		for (int j = 0; j < i; ++j) {
 			Object object1 = aobject[j];
 
-			if (object1 instanceof ItemStack)
-			{
-				arraylist.add(((ItemStack)object1).copy());
+			if (object1 == null)
+				throw new IllegalArgumentException("Null item in recipe! Possible mod conflict?");
+			else if (object1 instanceof ItemStack) {
+				if (((ItemStack)object1).getItem() == null)
+					throw new IllegalArgumentException("Null item in recipe! Possible mod conflict?");
+				li.add(((ItemStack)object1).copy());
 			}
-			else if (object1 instanceof Item)
-			{
-				arraylist.add(new ItemStack((Item)object1));
+			else if (object1 instanceof Item) {
+				li.add(new ItemStack((Item)object1));
 			}
-			else
-			{
-				if (!(object1 instanceof Block))
-				{
+			else {
+				if (!(object1 instanceof Block)) {
 					throw new RuntimeException("Invalid shapeless recipe!");
 				}
 
-				arraylist.add(new ItemStack((Block)object1));
+				li.add(new ItemStack((Block)object1));
 			}
 		}
 
-		this.addRecipe(new ShapelessRecipes(par1ItemStack, arraylist));
+		this.addRecipe(new ShapelessRecipes(output, li));
 	}
 
-	public ItemStack findMatchingRecipe(InventoryCrafting ic, World par2World)
-	{
+	public ItemStack findMatchingRecipe(InventoryCrafting ic, World world) {
 		int i = 0;
-		ItemStack itemstack = null;
-		ItemStack itemstack1 = null;
+		ItemStack is = null;
+		ItemStack is1 = null;
 		int j;
 
-		for (j = 0; j < ic.getSizeInventory(); ++j)
-		{
-			ItemStack itemstack2 = ic.getStackInSlot(j);
+		for (j = 0; j < ic.getSizeInventory(); ++j) {
+			ItemStack is2 = ic.getStackInSlot(j);
 
-			if (itemstack2 != null)
-			{
-				if (i == 0)
-				{
-					itemstack = itemstack2;
+			if (is2 != null) {
+				if (i == 0) {
+					is = is2;
 				}
 
-				if (i == 1)
-				{
-					itemstack1 = itemstack2;
+				if (i == 1) {
+					is1 = is2;
 				}
 
 				++i;
@@ -191,7 +177,7 @@ public class WorktableRecipes
 		for (WorktableRecipe wr : recipes) {
 			IRecipe ir = wr.recipe;
 
-			if (ir.matches(ic, par2World))
+			if (ir.matches(ic, world))
 				return wr.output.copy();//ir.getCraftingResult(ic);
 		}
 
