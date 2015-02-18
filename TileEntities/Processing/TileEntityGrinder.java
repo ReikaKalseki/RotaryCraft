@@ -52,14 +52,23 @@ ConditionalOperation, DamagingContact {
 	private HybridTank tank = new HybridTank("grinder", MAXLUBE);
 
 	private static final ItemHashMap<Float> grindableSeeds = new ItemHashMap();
+	private static final List<ItemStack> protectedEntries = new ArrayList<ItemStack>();
 
 	static {
 		addGrindableSeed(ItemRegistry.CANOLA.getStackOf(), 1F);
+		protectedEntries.add(ItemRegistry.CANOLA.getStackOf());
 		//addGrindableSeed(ItemRegistry.CANOLA.getStackOfMetadata(2), 0.65F);
 	}
 
 	public static void addGrindableSeed(ItemStack seed, float factor) {
 		grindableSeeds.put(seed, MathHelper.clamp_float(factor, 0, 1));
+	}
+	
+	public static void removeGrindableSeed(ItemStack seed) {
+		for (ItemStack entry : protectedEntries) {
+			if (entry.isItemEqual(seed)) return;
+		}
+		grindableSeeds.remove(seed);
 	}
 
 	public static boolean isGrindableSeed(ItemStack seed) {
