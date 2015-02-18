@@ -94,6 +94,7 @@ public class HandbookNotifications {
 			this.addEntry(ConfigRegistry.NOMINERS, Level.SEVERE, "All automining machines have been disabled.");
 			this.addEntry(ConfigRegistry.BORERMAINTAIN, Level.SEVERE, "The Borer has been set to require maintenance.");
 			this.addEntry(ConfigRegistry.JETFUELPACK, Level.WARNING, "The jetpack requires jet fuel to operate.");
+			this.addEntry(ConfigRegistry.CONVERTERLOSS, Level.SEVERE, ConfigRegistry.enableConverters() ? "RC to Mod Power Converter Losses Added." : "RC to Mod Power Converters Disabled.");
 		}
 
 		private void addEntry(ConfigRegistry cfg, Level lvl, String sg) {

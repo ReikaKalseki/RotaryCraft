@@ -22,11 +22,13 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRailCraftHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
+public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, RCToModConverter {
 
 	private int temperature;
 	private long storedEnergy;
@@ -73,7 +75,7 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE {
 		if (timer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
 		if (temperature > 100)
-			storedEnergy += power*200;
+			storedEnergy += power*200*ConfigRegistry.getConverterEfficiency();
 
 		//ReikaJavaLibrary.pConsole(storedEnergy/ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()), Side.SERVER);
 

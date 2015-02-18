@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import net.minecraft.util.MathHelper;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Interfaces.ConfigList;
@@ -93,7 +94,8 @@ public enum ConfigRegistry implements ConfigList {
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
 	POWERCLIENT("Run power transfer code on client", false),
 	TUTORIAL("Tutorial Mode", false),
-	FRAMES("Allow Frames to move Machines (May cause corruption)", false);
+	FRAMES("Allow Frames to move Machines (May cause corruption)", false),
+	CONVERTERLOSS("Power Converter Loss Percent", 0);
 
 	private String label;
 	private boolean defaultState;
@@ -189,6 +191,14 @@ public enum ConfigRegistry implements ConfigList {
 	@Override
 	public boolean shouldLoad() {
 		return true;
+	}
+
+	public static double getConverterEfficiency() {
+		return MathHelper.clamp_double(1-CONVERTERLOSS.getValue()/100D, 0, 1);
+	}
+
+	public static boolean enableConverters() {
+		return getConverterEfficiency() > 0;
 	}
 
 }

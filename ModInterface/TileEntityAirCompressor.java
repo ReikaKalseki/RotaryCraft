@@ -21,12 +21,13 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.Power.ReikaPneumaticHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityAirCompressor extends TileEntityPowerReceiver implements PressureTE {
+public class TileEntityAirCompressor extends TileEntityPowerReceiver implements PressureTE, RCToModConverter {
 
 	private int pressure;
 
@@ -240,7 +241,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	}
 
 	public int getGenAir() {
-		return (int)(power/ReikaPneumaticHelper.getWattsPerAir());
+		return (int)(power/ReikaPneumaticHelper.getWattsPerAir()*ConfigRegistry.getConverterEfficiency());
 	}
 
 }

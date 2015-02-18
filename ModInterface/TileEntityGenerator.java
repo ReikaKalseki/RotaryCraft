@@ -22,13 +22,14 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 //@Strippable(value = {"universalelectricity.api.electricity.IVoltageOutput", "universalelectricity.api.energy.IEnergyInterface"})
 @Strippable(value = {"ic2.api.energy.tile.IEnergySource"})
-public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnergySource {
+public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnergySource, RCToModConverter {
 
 	//public static final int OUTPUT_VOLTAGE = 24000;
 	//public static final float POWER_FACTOR = 0.875F;
@@ -79,22 +80,6 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 		}
 
 		this.getPower(false);
-
-		//ReikaJavaLibrary.pConsole(this.getOfferedEnergy(), Side.SERVER);
-		/*
-		if (power > 0) {
-			int dx = x+facingDir.offsetX;
-			int dy = y+facingDir.offsetY;
-			int dz = z+facingDir.offsetZ;
-			Block b = world.getBlock(dx, dy, dz);
-			if (b != Blocks.air) {
-				int metadata = world.getBlockMetadata(dx, dy, dz);
-				if (b.hasTileEntity(metadata)) {
-					TileEntity te = world.getTileEntity(dx, dy, dz);
-
-				}
-			}
-		}*/
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
@@ -123,7 +108,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 
 	@Override
 	public double getOfferedEnergy() {
-		return power/ReikaEUHelper.getWattsPerEU();
+		return power/ReikaEUHelper.getWattsPerEU()*ConfigRegistry.getConverterEfficiency();
 	}
 
 	@Override

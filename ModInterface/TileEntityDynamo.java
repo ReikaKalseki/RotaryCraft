@@ -18,12 +18,14 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cofh.api.energy.IEnergyHandler;
 
 @Strippable(value = {"cofh.api.energy.IEnergyHandler"})
-public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergyHandler {
+public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergyHandler, RCToModConverter {
 
 	private ForgeDirection facingDir;
 
@@ -88,7 +90,7 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		int tq = Math.min(torque, MAXTORQUE);
 		int om = Math.min(omega, MAXOMEGA);
 		long pwr = (long)tq*(long)om;
-		return (int)(pwr/ReikaRFHelper.getWattsPerRF());
+		return (int)(pwr/ReikaRFHelper.getWattsPerRF()*ConfigRegistry.getConverterEfficiency());
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
