@@ -35,6 +35,7 @@ public class RecipesGrinder {
 	public static final int ore_rate = 3;
 
 	private final ItemHashMap<ItemStack> recipes = new ItemHashMap().setOneWay();
+	private final ItemHashMap<ItemStack> extraRecipes = new ItemHashMap();
 
 	public static final RecipesGrinder getRecipes()
 	{
@@ -128,12 +129,19 @@ public class RecipesGrinder {
 	}
 
 	public boolean isProduct(ItemStack item) {
-		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item);
+		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item) || ReikaItemHelper.collectionContainsItemStack(extraRecipes.values(), item);
 	}
 
 	public List<ItemStack> getSources(ItemStack out) {
 		List<ItemStack> in = new ArrayList();
 		for (ItemStack input : recipes.keySet()) {
+			ItemStack is = this.getGrindingResult(input);
+			if (is != null) {
+				if (ReikaItemHelper.matchStacks(is, out))
+					in.add(input.copy());
+			}
+		}
+		for (ItemStack input : extraRecipes.keySet()) {
 			ItemStack is = this.getGrindingResult(input);
 			if (is != null) {
 				if (ReikaItemHelper.matchStacks(is, out))
@@ -164,11 +172,20 @@ public class RecipesGrinder {
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack), Float.valueOf(xp));
 	}
 
+	public void addExtraRecipe(ItemStack in, ItemStack out) {
+		extraRecipes.put(in, out);
+	}
+	
+	public void removeExtraRecipe(ItemStack in) {
+		extraRecipes.remove(in);
+	}
+	
 	public ItemStack getGrindingResult(ItemStack item) {
 		if (item == null)
 			return null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", Items, item.getItemDamage()));
 		ItemStack ret = recipes.get(item);
+		if (ret == null) ret = extraRecipes.get(item);
 		return ret != null ? ret.copy() : null;
 	}
 
