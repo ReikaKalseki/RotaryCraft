@@ -45,7 +45,7 @@ public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidH
 TemperatureTE {
 
 	public static final int GEN_OMEGA = 256;
-	public static final int GEN_TORQUE = 1024;
+	public static final int GEN_TORQUE = 2048;
 
 	private int temperature;
 
@@ -139,7 +139,7 @@ TemperatureTE {
 			if (soundTick.checkCap()) {
 				SoundRegistry.DIESEL.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.3F : 1F, 0.4F);
 			}
-			if (world.getTotalWorldTime()%8 == 0)
+			if (world.getTotalWorldTime()%32 == 0)
 				lubetank.removeLiquid(1);
 		}
 	}

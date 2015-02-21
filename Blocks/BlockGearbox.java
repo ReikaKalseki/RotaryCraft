@@ -164,13 +164,17 @@ public class BlockGearbox extends BlockModelledMachine {
 	{
 		if (RotaryCraft.instance.isLocked())
 			return false;
-		if (ep.isSneaking())
+		TileEntityGearbox tile = (TileEntityGearbox)world.getTileEntity(x, y, z);
+		if (ep.isSneaking()) {
+			if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().getItem() == Items.bucket) {
+				tile.clearLubricant();
+			}
 			return true;
+		}
 
 		if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver || ep.getCurrentEquippedItem().getItem() instanceof ItemMeter || ep.getCurrentEquippedItem().getItem() instanceof ItemDebug)) {
 			return false;
 		}
-		TileEntityGearbox tile = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (tile != null) {
 			ItemStack fix;
 			switch(tile.getGearboxType()) {

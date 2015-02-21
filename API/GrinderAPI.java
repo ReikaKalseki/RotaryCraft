@@ -92,7 +92,7 @@ public class GrinderAPI {
 			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder");
 			get = recipes.getMethod("getRecipes");
 			instance = get.invoke(null);
-			addRecipe = recipes.getMethod("addRecipe", ItemStack.class, ItemStack.class);
+			addRecipe = recipes.getMethod("addCustomRecipe", ItemStack.class, ItemStack.class);
 
 			grinder = Class.forName("Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder");
 			addseed = grinder.getMethod("addGrindableSeed", ItemStack.class, float.class);

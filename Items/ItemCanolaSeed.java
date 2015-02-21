@@ -36,7 +36,7 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 		if (items.getItemDamage() > 1)
 			return false;
 		boolean spread = items.getItemDamage() == 1;
-		if (!ReikaWorldHelper.softBlocks(world.getBlock(x, y, z))) {
+		if (!ReikaWorldHelper.softBlocks(world, x, y, z)) {
 			if (side == 0)
 				--y;
 			if (side == 1)
@@ -52,7 +52,7 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 		}
 		boolean flag = false;
 		Block idbelow = world.getBlock(x, y-1, z);
-		if (ReikaWorldHelper.softBlocks(world.getBlock(x, y, z)) && BlockCanola.isValidFarmBlock(world, x, y, z, idbelow)) {
+		if (ReikaWorldHelper.softBlocks(world, x, y, z) && BlockCanola.isValidFarmBlock(world, x, y, z, idbelow)) {
 			int minx = spread ? x-1 : x;
 			int maxx = spread ? x+1 : x;
 			int minz = spread ? z-1 : z;

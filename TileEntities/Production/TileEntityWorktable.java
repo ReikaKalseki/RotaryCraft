@@ -49,19 +49,22 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote) {
-			this.chargeTools();
-			this.makeJetplate();
-			this.makeJetPropel();
-			this.coolJetpacks();
-			this.wingJetpacks();
-			this.makeBedjump();
-			this.makeNightHelmet();
+			if (this.getTicksExisted()%4 == 0) {
+				this.chargeTools();
+				this.makeJetplate();
+				this.makeJetPropel();
+				this.coolJetpacks();
+				this.wingJetpacks();
+				this.makeBedjump();
+				this.makeNightHelmet();
+			}
 
 			if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
 				if (!this.craft()) {
 					if (this.canUncraft())
 						this.uncraft();
 				}
+				this.uncraftJetplate();
 			}
 			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		}
@@ -331,7 +334,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 			bed = true;
 		//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
-		if (jetslot != -1 && plateslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
+		if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
 			ItemStack jet = inv[jetslot];
 			NBTTagCompound tag = jet.stackTagCompound != null ? (NBTTagCompound)jet.stackTagCompound.copy() : null;
 			inv[jetslot] = null;
@@ -341,6 +344,23 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 				is.stackTagCompound = new NBTTagCompound();
 			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag);
 			inv[9] = is;
+		}
+	}
+
+	private void uncraftJetplate() {
+		ItemStack combine = inv[4];
+		boolean bed = ItemRegistry.BEDPACK.matchItem(combine);
+		if (combine != null && (ItemRegistry.BEDPACK.matchItem(combine) || ItemRegistry.STEELPACK.matchItem(combine))) {
+			ItemJetPack pack = (ItemJetPack)combine.getItem();
+			//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
+			if (ReikaInventoryHelper.hasNEmptyStacks(inv, 26)) {
+				ItemStack jet = ItemRegistry.JETPACK.getStackOf();
+				((ItemJetPack)jet.getItem()).addFluid(jet, pack.getCurrentFluid(combine), pack.getFuel(combine));
+				inv[4] = null;
+				ItemStack plate = bed ? ItemRegistry.BEDCHEST.getEnchantedStack() : ItemRegistry.STEELCHEST.getStackOf();
+				inv[9] = plate;
+				inv[10] = jet;
+			}
 		}
 	}
 

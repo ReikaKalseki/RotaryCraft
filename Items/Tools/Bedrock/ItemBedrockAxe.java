@@ -31,6 +31,7 @@ import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -38,6 +39,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -105,6 +107,9 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	{
 		if (ep.isSneaking())
 			return false;
+		if (!ConfigRegistry.FAKEBEDROCK.getState() && ReikaPlayerAPI.isFake(ep))
+			return false;
+
 		World world = ep.worldObj;
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);

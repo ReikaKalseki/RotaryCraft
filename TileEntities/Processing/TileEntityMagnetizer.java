@@ -101,12 +101,17 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		}
 		else if (is.stackTagCompound.hasKey("magnet")){
 			int m = is.stackTagCompound.getInteger("magnet");
-			m++;
+			if (m < this.getMaxCharge())
+				m++;
 			is.stackTagCompound.setInteger("magnet", m);
 		}
 		else {
 			is.stackTagCompound.setInteger("magnet", 1);
 		}
+	}
+
+	private int getMaxCharge() {
+		return omega/2;
 	}
 
 	@Override

@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
@@ -26,9 +25,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemBedrockShears extends ItemShears implements IndexedItemSprites {
@@ -147,9 +148,10 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 				int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, itemstack);
 				ArrayList<ItemStack> drops = target.onSheared(itemstack, entity.worldObj, x, y, z, fortune);
 
-				Random rand = new Random();
-				for (ItemStack stack : drops) {
-					stack.stackSize *= 2;
+				if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(player)) {
+					for (ItemStack stack : drops) {
+						stack.stackSize *= 2;
+					}
 				}
 				ReikaItemHelper.dropItems(entity.worldObj, x+0.5, y+0.8, z+0.5, drops);
 			}

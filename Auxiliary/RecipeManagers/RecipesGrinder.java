@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
@@ -35,6 +36,7 @@ public class RecipesGrinder {
 	public static final int ore_rate = 3;
 
 	private final ItemHashMap<ItemStack> recipes = new ItemHashMap().setOneWay();
+	private final ItemHashMap<ItemStack> customRecipes = new ItemHashMap();
 
 	public static final RecipesGrinder getRecipes()
 	{
@@ -128,12 +130,19 @@ public class RecipesGrinder {
 	}
 
 	public boolean isProduct(ItemStack item) {
-		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item);
+		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item) || ReikaItemHelper.collectionContainsItemStack(customRecipes.values(), item);
 	}
 
 	public List<ItemStack> getSources(ItemStack out) {
 		List<ItemStack> in = new ArrayList();
 		for (ItemStack input : recipes.keySet()) {
+			ItemStack is = this.getGrindingResult(input);
+			if (is != null) {
+				if (ReikaItemHelper.matchStacks(is, out))
+					in.add(input.copy());
+			}
+		}
+		for (ItemStack input : customRecipes.keySet()) {
 			ItemStack is = this.getGrindingResult(input);
 			if (is != null) {
 				if (ReikaItemHelper.matchStacks(is, out))
@@ -164,11 +173,21 @@ public class RecipesGrinder {
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack), Float.valueOf(xp));
 	}
 
+	public void addCustomRecipe(ItemStack in, ItemStack out) {
+		customRecipes.put(in, out);
+	}
+
+	public void removeCustomRecipe(ItemStack in) {
+		customRecipes.remove(in);
+	}
+
 	public ItemStack getGrindingResult(ItemStack item) {
 		if (item == null)
 			return null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", Items, item.getItemDamage()));
 		ItemStack ret = recipes.get(item);
+		if (ret == null)
+			ret = customRecipes.get(item);
 		return ret != null ? ret.copy() : null;
 	}
 
@@ -176,6 +195,7 @@ public class RecipesGrinder {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
 			Collection<ItemStack> li = ore.getAllOreBlocks();
+			ReikaJavaLibrary.pConsole(ore+":"+li);
 			for (ItemStack is : li) {
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
 				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));
@@ -186,6 +206,7 @@ public class RecipesGrinder {
 		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
 			ReikaOreHelper ore = ReikaOreHelper.oreList[i];
 			Collection<ItemStack> li = ore.getAllOreBlocks();
+			ReikaJavaLibrary.pConsole(ore+":"+li);
 			for (ItemStack is : li) {
 				ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
 				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));

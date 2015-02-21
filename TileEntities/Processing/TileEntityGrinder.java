@@ -24,6 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
@@ -52,14 +54,18 @@ ConditionalOperation, DamagingContact {
 	private HybridTank tank = new HybridTank("grinder", MAXLUBE);
 
 	private static final ItemHashMap<Float> grindableSeeds = new ItemHashMap();
+	private static final OneWaySet<KeyedItemStack> lockedSeeds = new OneWaySet();
 
 	static {
-		addGrindableSeed(ItemRegistry.CANOLA.getStackOf(), 1F);
+		//addGrindableSeed(ItemRegistry.CANOLA.getStackOf(), 1F);
+		grindableSeeds.put(ItemRegistry.CANOLA.getStackOf(), 1F);
+		lockedSeeds.add(new KeyedItemStack(ItemRegistry.CANOLA.getStackOf()).setIgnoreNBT(true).setSimpleHash(true).lock());
 		//addGrindableSeed(ItemRegistry.CANOLA.getStackOfMetadata(2), 0.65F);
 	}
 
 	public static void addGrindableSeed(ItemStack seed, float factor) {
-		grindableSeeds.put(seed, MathHelper.clamp_float(factor, 0, 1));
+		if (!lockedSeeds.contains(seed))
+			grindableSeeds.put(seed, MathHelper.clamp_float(factor, 0, 0.75F));
 	}
 
 	public static boolean isGrindableSeed(ItemStack seed) {
@@ -70,13 +76,18 @@ ConditionalOperation, DamagingContact {
 		return grindableSeeds.keySet();
 	}
 
+	public static void removeGrindableSeed(ItemStack seed) {
+		if (!lockedSeeds.contains(seed))
+			grindableSeeds.remove(seed);
+	}
+
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return i == 1;
 	}
 
 	public void testIdle() {
-		idle = (!this.canGrind());
+		idle = !this.canGrind();
 	}
 
 	public boolean getReceptor(World world, int x, int y, int z, int metadata) {

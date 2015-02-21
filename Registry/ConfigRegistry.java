@@ -95,7 +95,8 @@ public enum ConfigRegistry implements ConfigList {
 	POWERCLIENT("Run power transfer code on client", false),
 	TUTORIAL("Tutorial Mode", false),
 	FRAMES("Allow Frames to move Machines (May cause corruption)", false),
-	CONVERTERLOSS("Power Converter Loss Percent", 0);
+	CONVERTERLOSS("Power Converter Loss Percent", 0),
+	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true);
 
 	private String label;
 	private boolean defaultState;

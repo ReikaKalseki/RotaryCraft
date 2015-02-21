@@ -9,22 +9,34 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
+
+	private static final BlockMap<ChancedOutputList> extraDrops = new BlockMap();
 
 	private int index;
 
@@ -55,6 +67,20 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	public int getItemEnchantability()
 	{
 		return Items.iron_shovel.getItemEnchantability();
+	}
+
+	@Override
+	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep) {
+		if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
+			ChancedOutputList co = extraDrops.get(ep.worldObj.getBlock(x, y, z), ep.worldObj.getBlockMetadata(x, y, z));
+			if (co != null) {
+				Collection<ItemStack> c = co.calculate();
+				for (ItemStack drop : c) {
+					ReikaItemHelper.dropItem(ep, drop);
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -111,5 +137,46 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
 		return ItemRegistry.getEntry(is).getBasicName();
+	}
+
+	static {
+		addDrop(Blocks.grass, 0, Items.wheat_seeds, 10);
+		addDrop(Blocks.grass, 0, Items.clay_ball, 5);
+		addDrop(Blocks.grass, 0, Blocks.mycelium, 0.5F);
+		addDrop(Blocks.grass, 0, Items.pumpkin_seeds, 5);
+		addDrop(Blocks.grass, 0, Items.melon_seeds, 5);
+
+		addDrop(Blocks.dirt, 0, Items.wheat_seeds, 10);
+		addDrop(Blocks.dirt, 0, Items.glowstone_dust, 2);
+		addDrop(Blocks.dirt, 0, Items.nether_wart, 0.5F);
+		addDrop(Blocks.dirt, 0, Items.emerald, 0.05F);
+		addDrop(Blocks.dirt, 0, Items.diamond, 0.05F);
+
+		addDrop(Blocks.sand, 0, Items.gunpowder, 2);
+
+		addDrop(Blocks.clay, 0, Items.bone, 5);
+		addDrop(Blocks.clay, 0, Blocks.soul_sand, 2);
+		addDrop(Blocks.clay, 0, Items.gold_nugget, 4);
+
+		addDrop(Blocks.soul_sand, 0, Items.blaze_powder, 4);
+		addDrop(Blocks.soul_sand, 0, Items.nether_wart, 5);
+		addDrop(Blocks.soul_sand, 0, Items.quartz, 2);
+	}
+
+	private static void addDrop(Block b, int meta, Block i, float chance) {
+		addDrop(b, meta, new ItemStack(i), chance);
+	}
+
+	private static void addDrop(Block b, int meta, Item i, float chance) {
+		addDrop(b, meta, new ItemStack(i), chance);
+	}
+
+	private static void addDrop(Block b, int meta, ItemStack is, float chance) {
+		ChancedOutputList co = extraDrops.get(b, meta);
+		if (co == null) {
+			co = new ChancedOutputList();
+			extraDrops.put(b, meta, co);
+		}
+		co.addItem(is, chance);
 	}
 }

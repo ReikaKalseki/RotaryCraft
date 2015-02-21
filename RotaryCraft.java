@@ -433,6 +433,8 @@ public class RotaryCraft extends DragonAPIMod {
 			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedrockdust);
 			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingot);
 			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.UPGRADE.getItemInstance());
+
+			;//MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
 		}
 
 		this.finishTiming();

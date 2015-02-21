@@ -35,6 +35,7 @@ import universalelectricity.api.item.IEnergyItem;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
@@ -131,9 +132,11 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 				}
 			}
 		}
-		if (target.isDead || target.getHealth() <= 0) {
-			if (itemRand.nextInt(5) == 0) {
-				ReikaEntityHelper.dropHead(target);
+		if (player instanceof EntityPlayer && (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake((EntityPlayer)player))) {
+			if (target.isDead || target.getHealth() <= 0) {
+				if (itemRand.nextInt(5) == 0) {
+					ReikaEntityHelper.dropHead(target);
+				}
 			}
 		}
 		return true;

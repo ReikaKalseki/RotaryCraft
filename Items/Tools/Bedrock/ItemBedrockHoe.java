@@ -18,8 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
@@ -83,25 +85,27 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 					//ReikaJavaLibrary.pConsole((dx)+", "+y+", "+(dz);
 				}
 				else {
-					int slot = ReikaInventoryHelper.locateIDInInventory(Items.wheat_seeds, ep.inventory);
-					if (slot != -1 || ep.capabilities.isCreativeMode) {
-						Block id = world.getBlock(dx, y, dz);
-						Block id2 = world.getBlock(dx, y+1, dz);
-						boolean top = id2 == Blocks.air || id2.isOpaqueCube() == false;
-						if (top) {
-							if (id != Blocks.air) {
-								if (id == Blocks.dirt || id == Blocks.farmland || id.isFertile(world, dx, y, dz)) {
-									flag = true;
-									world.setBlock(dx, y, dz, Blocks.grass);
-									if (slot != -1 && !ep.capabilities.isCreativeMode) {
-										ItemStack seed = ep.inventory.getStackInSlot(slot);
-										seed.stackSize--;
-										if (seed.stackSize <= 0) {
-											ep.inventory.setInventorySlotContents(slot, null);
-											return flag;
+					if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
+						int slot = ReikaInventoryHelper.locateIDInInventory(Items.wheat_seeds, ep.inventory);
+						if (slot != -1 || ep.capabilities.isCreativeMode) {
+							Block id = world.getBlock(dx, y, dz);
+							Block id2 = world.getBlock(dx, y+1, dz);
+							boolean top = id2 == Blocks.air || id2.isOpaqueCube() == false;
+							if (top) {
+								if (id != Blocks.air) {
+									if (id == Blocks.dirt || id == Blocks.farmland || id.isFertile(world, dx, y, dz)) {
+										flag = true;
+										world.setBlock(dx, y, dz, Blocks.grass);
+										if (slot != -1 && !ep.capabilities.isCreativeMode) {
+											ItemStack seed = ep.inventory.getStackInSlot(slot);
+											seed.stackSize--;
+											if (seed.stackSize <= 0) {
+												ep.inventory.setInventorySlotContents(slot, null);
+												return flag;
+											}
 										}
+										ReikaSoundHelper.playStepSound(world, dx, y, dz, Blocks.grass, 0.4F, 1);
 									}
-									ReikaSoundHelper.playStepSound(world, dx, y, dz, Blocks.grass, 0.4F, 1);
 								}
 							}
 						}

@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -152,20 +153,23 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return true;
 		}
 
-		if (ConfigRegistry.BEDPICKSPAWNERS.getState() && id == Blocks.mob_spawner) {
-			TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getTileEntity(x, y, z);
-			if (ConfigRegistry.SPAWNERLEAK.getState())
-				ReikaSpawnerHelper.forceSpawn(spw, 12+itemRand.nextInt(25));
-			ItemStack item = ItemRegistry.SPAWNER.getStackOf();
-			ReikaSpawnerHelper.addMobNBTToItem(item, spw);
-			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);
-			//world.setBlockToAir(x, y, z);
-			//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 1.25F);
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				;//ReikaRenderHelper.spawnDropParticles(world, x, y, z, Blocks.mob_spawner, meta);
+		if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
+			if (ConfigRegistry.BEDPICKSPAWNERS.getState() && id == Blocks.mob_spawner) {
+				TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getTileEntity(x, y, z);
+				if (ConfigRegistry.SPAWNERLEAK.getState())
+					ReikaSpawnerHelper.forceSpawn(spw, 12+itemRand.nextInt(25));
+				ItemStack item = ItemRegistry.SPAWNER.getStackOf();
+				ReikaSpawnerHelper.addMobNBTToItem(item, spw);
+				ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);
+				//world.setBlockToAir(x, y, z);
+				//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 1.25F);
+				if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+					;//ReikaRenderHelper.spawnDropParticles(world, x, y, z, Blocks.mob_spawner, meta);
+				}
+				return false;
 			}
-			return false;
 		}
+
 		if (id != Blocks.monster_egg)
 			return false;
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);

@@ -158,7 +158,7 @@ ConditionalOperation, DamagingContact {
 			}
 		}
 
-		RotaryCraft.logger.debug(tree);
+		//RotaryCraft.logger.debug(tree);
 
 		if (tree.isEmpty())
 			return;
@@ -301,7 +301,12 @@ ConditionalOperation, DamagingContact {
 			ItemStack todrop = drops.get(i);
 
 			if (ReikaItemHelper.matchStacks(todrop, sapling)) {
-				ReikaInventoryHelper.addOrSetStack(todrop, inv, 0);
+				if (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize()) {
+					if (!this.chestCheck(todrop))
+						ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
+				}
+				else
+					ReikaInventoryHelper.addOrSetStack(todrop, inv, 0);
 			}
 			else {
 				if (!this.chestCheck(todrop))
@@ -446,7 +451,7 @@ ConditionalOperation, DamagingContact {
 				if (id == Blocks.log || id == Blocks.log2)
 					return true;
 				ModWoodList wood = ModWoodList.getModWood(id, meta);
-				RotaryCraft.logger.debug("Retrieved wood "+wood+" from "+id+":"+meta);
+				//RotaryCraft.logger.debug("Retrieved wood "+wood+" from "+id+":"+meta);
 				if (wood != null)
 					return true;
 			}

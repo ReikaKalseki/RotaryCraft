@@ -549,6 +549,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		tank.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
 	}
 
+	public void clearLubricant() {
+		tank.empty();
+	}
+
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side != ForgeDirection.UP ? Flow.INPUT : Flow.NONE;

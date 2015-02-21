@@ -185,7 +185,7 @@ public class RotaryRecipes {
 			String desc = "Combining the protection of bedrock with the power of a Thaumometer";
 			InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-				ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, RotaryCraft.class, RotaryDescriptions.getParentPage()+"thaum.xml");
+				ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, 0, 0, RotaryCraft.class, RotaryDescriptions.getParentPage()+"thaum.xml");
 		}
 	}
 
@@ -382,7 +382,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.AIRGUN.addCrafting("sps", "I S", "sps", 'I', ItemStacks.impeller, 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'S', ItemStacks.sonar);
 
-		MachineRegistry.FUELENGINE.addCrafting("CGC", "fgs", "bIb", 'g', ItemStacks.gearunit8, 'C', ItemStacks.cylinder, 'G', Items.gold_ingot, 'f', ItemStacks.gearunit, 'b', ItemStacks.basepanel, 'I', ItemStacks.impeller, 's', ItemStacks.shaftcore);
+		MachineRegistry.FUELENGINE.addCrafting("CGC", "fgs", "bIb", 'g', ItemStacks.gearunit8, 'C', ItemStacks.cylinder, 'G', ItemStacks.tungsteningot, 'f', ItemStacks.gearunit, 'b', ItemStacks.basepanel, 'I', ItemStacks.impeller, 's', ItemStacks.shaftcore);
 
 		MachineRegistry.AGGREGATOR.addCrafting("SPS", "GCG", "SsS", 's', ItemStacks.shaftitem, 'G', Blocks.glass_pane, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor);
 
@@ -771,6 +771,8 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 45/DifficultyEffects.PARTCRAFT.getInt()+2*27/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.wormgear);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.ballbearing, ItemStacks.ballbearing, ItemStacks.ballbearing, ItemStacks.ballbearing);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.mount);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 15), ItemStacks.shaftcore);
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 81), ItemStacks.waterplate);
 
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);
 
