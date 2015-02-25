@@ -152,7 +152,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 		fontRendererObj.drawString("Nm", xSize/2+53, 52, 4210752);
 
 		if (!coil.isCreative()) {
-			long e = coil.getEnergy();
+			double e = coil.getEnergy()/20D;
 			String s = String.format("Stored Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
 			fontRendererObj.drawString(s, xSize/2-82, 80-8, 4210752);
 

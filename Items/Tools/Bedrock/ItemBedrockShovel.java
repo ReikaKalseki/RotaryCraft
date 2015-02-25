@@ -76,7 +76,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 			if (co != null) {
 				Collection<ItemStack> c = co.calculate();
 				for (ItemStack drop : c) {
-					ReikaItemHelper.dropItem(ep, drop);
+					ReikaItemHelper.dropItem(ep.worldObj, x+0.5, y+0.5, z+0.5, drop);
 				}
 			}
 		}

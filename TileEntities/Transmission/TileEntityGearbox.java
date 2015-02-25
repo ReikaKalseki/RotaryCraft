@@ -43,6 +43,8 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE {
 
@@ -74,6 +76,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	public MaterialRegistry getGearboxType() {
 		return type != null ? type : MaterialRegistry.WOOD;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void setType(MaterialRegistry type) {
+		this.type = type;
 	}
 
 	public int getMaxLubricant() {

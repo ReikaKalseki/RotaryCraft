@@ -31,6 +31,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -91,6 +92,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
+			gbx.setType(MaterialRegistry.matList[item.getItemDamage()%5]);
+			int amt = item.stackTagCompound != null ? item.stackTagCompound.getInteger("lube") : 0;
+			gbx.setLubricant(amt);
 			TileEntityRendererDispatcher.instance.renderTileEntityAt(gbx, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (ItemRegistry.ADVGEAR.matchItem(item)) {

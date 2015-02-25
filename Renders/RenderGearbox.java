@@ -210,6 +210,9 @@ public class RenderGearbox extends RotaryTERenderer
 			this.renderLiquid(tile, par2, par4, par6);
 			//this.renderMode((TileEntityGearbox)tile, par2, par4, par6);
 		}
+		if (!tile.hasWorldObj()) {
+			this.renderLiquid(tile, par2, par4, par6);
+		}
 	}
 
 	private void renderMode(TileEntityGearbox tile, double par2, double par4, double par6) {
@@ -245,7 +248,7 @@ public class RenderGearbox extends RotaryTERenderer
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityGearbox tr = (TileEntityGearbox)tile;
-		if (tr.getLubricant() > 0 && tr.isInWorld()) {
+		if (tr.getLubricant() > 0) {
 			Fluid f = FluidRegistry.getFluid("lubricant");
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			GL11.glEnable(GL11.GL_BLEND);

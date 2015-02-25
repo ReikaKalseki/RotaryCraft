@@ -175,7 +175,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe() || m == MachineRegistry.HOSE;
 	}
 
 	@Override
