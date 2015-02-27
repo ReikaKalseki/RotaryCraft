@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -154,5 +156,9 @@ public class RecipesPulseFurnace
 
 	public boolean isSmeltable(ItemStack ingredient) {
 		return this.getSmeltingResult(ingredient) != null;
+	}
+
+	public Collection<ItemStack> getAllSmeltables() {
+		return Collections.unmodifiableCollection(recipes.keySet());
 	}
 }

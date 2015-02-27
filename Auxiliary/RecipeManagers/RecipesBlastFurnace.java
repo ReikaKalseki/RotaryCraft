@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -44,7 +45,7 @@ public class RecipesBlastFurnace
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe bedrock = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, 1, ItemStacks.bedingot, false, 0, TileEntityBlastFurnace.BEDROCKTEMP);
-		recipeList.add(bedrock);
+		recipeList.add(bedrock.setAlloy());
 
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
@@ -81,6 +82,17 @@ public class RecipesBlastFurnace
 		craftingList.add(c);
 	}
 
+	public void addAlloyingRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
+		BlastCrafting c = new BlastCrafting(out, temperature, speed, in, xp).setAlloying();
+		craftingList.add(c);
+	}
+
+	public void add3x3AlloyingRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
+		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
+		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp).setAlloying();
+		craftingList.add(c);
+	}
+
 	public void add3x3Crafting(ItemStack out, int temperature, int speed, float xp, Object... in) {
 		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp);
@@ -94,6 +106,7 @@ public class RecipesBlastFurnace
 		private final ItemStack output;
 		public final int speed;
 		public final float xp;
+		private boolean alloy;
 
 		/*
 		public BlastCrafting(int width, int height, ItemStack[] input, ItemStack out, int temp) {
@@ -110,13 +123,20 @@ public class RecipesBlastFurnace
 			this.xp = xp;
 		}
 
+		private BlastCrafting setAlloying() {
+			alloy = true;
+			return this;
+		}
+
 		public final ItemStack outputItem() {
 			return output.copy();
 		}
 
 		public BlastCrafting copy() {
 			//return new BlastCrafting(recipeWidth, recipeHeight, recipeItems, output, temperature);
-			return new BlastCrafting(output, temperature, speed, recipe, xp);
+			BlastCrafting bc = new BlastCrafting(output, temperature, speed, recipe, xp);
+			bc.alloy = alloy;
+			return bc;
 		}
 
 		public boolean matches(RecipePattern ic, int temperature) {
@@ -148,6 +168,14 @@ public class RecipesBlastFurnace
 		public float getXPPerProduct() {
 			return xp;
 		}
+
+		public boolean isAlloying() {
+			return alloy;
+		}
+
+		public int getRequiredTemperature() {
+			return temperature;
+		}
 	}
 
 	public static interface BlastFurnacePattern {
@@ -157,6 +185,10 @@ public class RecipesBlastFurnace
 		public boolean isValidInputForSlot(int slot, ItemStack is);
 
 		public float getXPPerProduct();
+
+		public boolean isAlloying();
+
+		public int getRequiredTemperature();
 	}
 
 	public static final class BlastInput {
@@ -203,6 +235,7 @@ public class RecipesBlastFurnace
 		public final boolean hasBonus;
 		public final float xp;
 		public final int temperature;
+		private boolean alloy;
 
 		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Item main, ItemStack out, boolean bonus, float xp, int temp) {
 			this(in1, in2, in3, new ItemStack(main), out, bonus, xp, temp);
@@ -228,6 +261,11 @@ public class RecipesBlastFurnace
 			output = out;
 			matchNumberExactly = true;
 			temperature = temp;
+		}
+
+		private BlastRecipe setAlloy() {
+			alloy = true;
+			return this;
 		}
 
 		public ItemStack mainItem() {
@@ -287,6 +325,14 @@ public class RecipesBlastFurnace
 		@Override
 		public float getXPPerProduct() {
 			return xp;
+		}
+
+		public boolean isAlloying() {
+			return alloy;
+		}
+
+		public int getRequiredTemperature() {
+			return temperature;
 		}
 	}
 	public BlastCrafting getCrafting(ItemStack[] main, int temp) {
@@ -415,5 +461,27 @@ public class RecipesBlastFurnace
 			}
 		}
 		return li;
+	}
+
+	public ArrayList<BlastFurnacePattern> getAllAlloyingRecipes() {
+		ArrayList<BlastFurnacePattern> li = new ArrayList();
+		for (BlastRecipe br : recipeList) {
+			if (br.isAlloying()) {
+				li.add(br);
+			}
+		}
+		for (BlastCrafting bc : craftingList) {
+			if (bc.isAlloying()) {
+				li.add(bc);
+			}
+		}
+		return li;
+	}
+
+	public Collection<BlastFurnacePattern> getAllRecipes() {
+		Collection<BlastFurnacePattern> c = new ArrayList();
+		c.addAll(recipeList);
+		c.addAll(craftingList);
+		return c;
 	}
 }

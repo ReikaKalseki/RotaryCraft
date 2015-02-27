@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -40,12 +42,12 @@ public class FermenterHandler extends TemplateRecipeHandler {
 		private ItemStack output;
 		private ItemStack input;
 
-		public FermenterRecipe(ItemStack in, ItemStack out) {
+		private FermenterRecipe(ItemStack in, ItemStack out) {
 			this(out);
 			input = ReikaItemHelper.getSizedItemStack(in, 1);
 		}
 
-		public FermenterRecipe(ItemStack out) {
+		private FermenterRecipe(ItemStack out) {
 			output = out;
 		}
 
@@ -116,6 +118,30 @@ public class FermenterHandler extends TemplateRecipeHandler {
 		this.drawExtras(recipe);
 		ReikaLiquidRenderer.bindFluidTexture(FluidRegistry.WATER);
 		//ReikaGuiAPI.instance.drawTexturedModalRect(0, 0, (int)(ico.getMinU()*16), (int)(ico.getMinV()*16), 16, 16);
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(74, 35, 23, 17), "rcferment"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rcferment")) {
+			arecipes.add(new FermenterRecipe(ItemRegistry.YEAST.getStackOf()));
+			Collection<ItemStack> li = TileEntityFermenter.getAllValidPlants();
+			for (ItemStack is : li)
+				arecipes.add(new FermenterRecipe(is, ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, TileEntityFermenter.getPlantValue(is))));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rcferment")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

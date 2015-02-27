@@ -24,6 +24,7 @@ import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 
@@ -47,9 +48,10 @@ public class CustomExtractLoader {
 		public final int color2;
 		public final ProductType type;
 		public final String productName;
-		public final ModOreList nativeOre;
+		public final OreType nativeOre;
+		public final int numberSmelted;
 
-		private CustomExtractEntry(String name, OreRarity r, ProductType t, String prod, int c1, int c2, ModOreList mod, String... ores) {
+		private CustomExtractEntry(String name, OreRarity r, ProductType t, String prod, int n, int c1, int c2, OreType mod, String... ores) {
 			displayName = name;
 			for (int i = 0; i < ores.length; i++) {
 				String s = ores[i];
@@ -64,6 +66,7 @@ public class CustomExtractLoader {
 			productName = prod;
 			type = t;
 			nativeOre = mod;
+			numberSmelted = n;
 		}
 
 		@Override
@@ -160,7 +163,7 @@ public class CustomExtractLoader {
 			this.writeCommentLine(p, "-------------------------------");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Use this file to add custom ores and extracts to the extractor.");
-			this.writeCommentLine(p, "Specify one per line, and format them as 'Name, Rarity, Product Type, Product Ore Name, Color 1, Color 2, Native Ore, OreDictionary Name(s)'");
+			this.writeCommentLine(p, "Specify one per line, and format them as 'Name, Rarity, Product Type, Product Ore Name, Number, Color 1, Color 2, Native Ore, OreDictionary Name(s)'");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Ore rarity is the rarity of the ore blocks in the world, and affects the multiplication rates.");
 			this.writeCommentLine(p, "Valid Rarity Values:");
@@ -176,6 +179,9 @@ public class CustomExtractLoader {
 			this.writeCommentLine(p, "Native ore is the native ore type of the output if you wish for the custom ore to produce the same smelted products as a native ore.");
 			this.writeCommentLine(p, "Use 'null' for none to have the custom ore produce a unique smelted product.");
 			this.writeCommentLine(p, "Valid Native Ores:");
+			for (ReikaOreHelper o : ReikaOreHelper.values()) {
+				this.writeCommentLine(p, "\t"+o.name()+" - "+o.getName());
+			}
 			for (ModOreList o : ModOreList.values()) {
 				if (!o.isNetherOres())
 					this.writeCommentLine(p, "\t"+o.name()+" - "+o.displayName+" "+o.getTypeName());
@@ -186,11 +192,14 @@ public class CustomExtractLoader {
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Colors must be hex codes; try to avoid conflicts with existing ores, including those natively handled by RC.");
 			this.writeCommentLine(p, "");
+			this.writeCommentLine(p, "'Number' is the number of items normally obtained from the ore block, such as 1 for coal and 4 for redstone,");
+			this.writeCommentLine(p, "and controls the number of items produced when smelting the flake. Use direct harvesting/smelting, not other processing.");
+			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Sample Lines:");
-			this.writeCommentLine(p, "\tSample Ore 1, SCARCE, INGOT, ingotSample, 0xffffff, 0x73cc12, null, oreSample");
-			this.writeCommentLine(p, "\tSample Ore 2, Common, dust, dustMetal, 0x77003b, 0xb1a700, null, oreNotSample, oreSecondName, oreHasLotsOfVariants");
-			this.writeCommentLine(p, "\tSample Ore 3, EVerYwHEre, gEm, ImproperIngot, 0x1487a6, 0x27c61a, null, PoorlyNamedOre");
-			this.writeCommentLine(p, "\tSample Ore 4, rare, Ingot, ingotEndCopper, 0x16723d, 0xcb6faa, COPPER, oreEndCopper");
+			this.writeCommentLine(p, "\tSample Ore 1, SCARCE, INGOT, ingotSample, 1, 0xffffff, 0x73cc12, null, oreSample");
+			this.writeCommentLine(p, "\tSample Ore 2, Common, dust, dustMetal, 4, 0x77003b, 0xb1a700, null, oreNotSample, oreSecondName, oreHasLotsOfVariants");
+			this.writeCommentLine(p, "\tSample Ore 3, EVerYwHEre, gEm, ImproperIngot, 3, 0x1487a6, 0x27c61a, null, PoorlyNamedOre");
+			this.writeCommentLine(p, "\tSample Ore 4, rare, Ingot, ingotEndCopper, 1, 0x16723d, 0xcb6faa, COPPER, oreEndCopper");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Entries missing names, rarities, types, products, or colors, or having less than one Ore Dictionary name, are incorrect.");
 			this.writeCommentLine(p, "Incorrectly formatted lines will be ignored and will log an error in the console.");
@@ -228,16 +237,40 @@ public class CustomExtractLoader {
 		OreRarity rarity = OreRarity.valueOf(parts[1].toUpperCase());
 		ProductType type = ProductType.valueOf(parts[2].toUpperCase());
 		String prod = parts[3];
-		if (parts[4].startsWith("0x"))
-			parts[4] = parts[4].substring(2);
+		int smelt = Integer.parseInt(parts[4]);
 		if (parts[5].startsWith("0x"))
-			parts[5] = parts[4].substring(2);
-		int c1 = Integer.parseInt(parts[4], 16);
-		int c2 = Integer.parseInt(parts[5], 16);
-		ModOreList mod = parts[6].equals("null") ? null : ModOreList.valueOf(parts[6].toUpperCase());
-		String[] ores = new String[parts.length-7];
-		System.arraycopy(parts, 7, ores, 0, ores.length);
-		return new CustomExtractEntry(name, rarity, type, prod, c1, c2, mod, ores);
+			parts[5] = parts[5].substring(2);
+		if (parts[6].startsWith("0x"))
+			parts[6] = parts[6].substring(2);
+		int c1 = Integer.parseInt(parts[5], 16);
+		int c2 = Integer.parseInt(parts[6], 16);
+		OreType ore = this.parseOreType(parts[7]);
+		String[] ores = new String[parts.length-8];
+		System.arraycopy(parts, 8, ores, 0, ores.length);
+		return new CustomExtractEntry(name, rarity, type, prod, smelt, c1, c2, ore, ores);
+	}
+
+	private OreType parseOreType(String tag) {
+		if (tag.equals("null"))
+			return null;
+		OreType type = null;
+		try {
+			type = ModOreList.valueOf(tag.toUpperCase());
+		}
+		catch (IllegalArgumentException e) {
+
+		}
+		if (type == null) {
+			try {
+				type = ReikaOreHelper.valueOf(tag.toUpperCase());
+			}
+			catch (IllegalArgumentException e) {
+
+			}
+		}
+		if (type == null)
+			throw new IllegalArgumentException("Native ore type '"+tag+"' is invalid.");
+		return type;
 	}
 
 	public List<CustomExtractEntry> getEntries() {

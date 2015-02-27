@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -109,5 +112,9 @@ public class RecipesCompactor
 	public int getReqTemperature(ItemStack item) {
 		CompactingRecipe ret = recipes.get(item);
 		return ret != null ? ret.temperature : 0;
+	}
+
+	public Collection<ItemStack> getAllCompactables() {
+		return Collections.unmodifiableCollection(recipes.keySet());
 	}
 }

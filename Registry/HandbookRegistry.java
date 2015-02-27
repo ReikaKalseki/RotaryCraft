@@ -26,6 +26,8 @@ import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 
@@ -268,7 +270,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	SPAWNERS("Monster Spawners"),
 	YEAST("Yeast"),
 	ETHANOL("Ethanol"),
-	BEDINGOT("Bedrock Alloy Ingot"),
+	//BEDINGOT("Bedrock Alloy Ingot"),
+	ALLOYING("Alloying"),
 	SILVERINGOT("Silver Ingot"),
 	SALT("Salt"),
 	AMMONIUM("Ammonium Nitrate"),
@@ -743,7 +746,9 @@ public enum HandbookRegistry implements HandbookEntry {
 			return false;
 		if (this == STRONGSPRING)
 			return false;
-		if (this == BEDINGOT)
+		//if (this == BEDINGOT)
+		//	return false;
+		if (this == ALLOYING)
 			return false;
 		return true;
 	}
@@ -883,8 +888,16 @@ public enum HandbookRegistry implements HandbookEntry {
 				li.add(ItemRegistry.SLIDE.getStackOfMetadata(i));
 			return li;
 		}
-		if (this == BEDINGOT)
-			return ReikaJavaLibrary.makeListFrom(ItemStacks.bedingot);
+		//if (this == BEDINGOT)
+		//	return ReikaJavaLibrary.makeListFrom(ItemStacks.bedingot);
+		if (this == ALLOYING) {
+			ArrayList<ItemStack> is = new ArrayList();
+			ArrayList<BlastFurnacePattern> li = RecipesBlastFurnace.getRecipes().getAllAlloyingRecipes();
+			for (BlastFurnacePattern p : li) {
+				is.add(p.outputItem());
+			}
+			return is;
+		}
 		if (this == AMMONIUM)
 			return ReikaJavaLibrary.makeListFrom(ItemStacks.nitrate);
 		if (this == SALT)
@@ -1047,7 +1060,9 @@ public enum HandbookRegistry implements HandbookEntry {
 			return ItemStacks.silveringot;
 		if (this == STRONGSPRING)
 			return ItemRegistry.STRONGCOIL.getStackOf();
-		if (this == BEDINGOT)
+		//if (this == BEDINGOT)
+		//	return ItemStacks.bedingot;
+		if (this == ALLOYING)
 			return ItemStacks.bedingot;
 		return null;
 	}

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
 
@@ -25,6 +26,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceExponentiator;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -58,12 +61,14 @@ public class RecipesCentrifuge
 		this.addRecipe(Blocks.gravel, null, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
 		this.addRecipe(ItemStacks.netherrackdust, null, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 40);
 		this.addRecipe(Blocks.dirt, null, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
+		this.addRecipe(Items.blaze_powder, null, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 75);
 
 		if (ModList.FORESTRY.isLoaded()) {
 			Map<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
 			for (ItemStack in : centrifuge.keySet()) {
 				ChancedOutputList out = centrifuge.get(in).copy();
-				out.powerChances(3);
+				out.manipulateChances(new ChanceExponentiator(3));
+				out.manipulateChances(new ChanceRounder());
 				this.addRecipe(in, out, null);
 			}
 		}
@@ -79,6 +84,20 @@ public class RecipesCentrifuge
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));
 		this.addRecipe(ItemRegistry.CANOLA.getStackOfMetadata(2), new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100);
+	}
+
+	private static class ChanceRounder implements ChanceManipulator {
+
+		private ChanceRounder() {
+
+		}
+
+		@Override
+		public float getChance(float original) { //round up to nearest 0.5F
+			return Math.round(2D*original)/2F;
+		}
+
+
 	}
 
 	private void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs)
@@ -209,5 +228,9 @@ public class RecipesCentrifuge
 			return fluid.amount;
 		}
 
+	}
+
+	public Collection<ItemStack> getAllCentrifugables() {
+		return Collections.unmodifiableCollection(recipeList.keySet());
 	}
 }

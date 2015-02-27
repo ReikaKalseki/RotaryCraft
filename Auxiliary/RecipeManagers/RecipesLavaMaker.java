@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -163,6 +165,10 @@ public class RecipesLavaMaker {
 				li.add(key.copy());
 		}
 		return li;
+	}
+
+	public Collection<ItemStack> getAllRecipes() {
+		return Collections.unmodifiableCollection(recipeList.keySet());
 	}
 
 }

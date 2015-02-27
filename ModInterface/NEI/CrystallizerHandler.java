@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
+import java.util.Collection;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -86,6 +89,29 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(23, 23, 46, 18), "rccrystall"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rccrystall")) {
+			Collection<Fluid> li = RecipesCrystallizer.getRecipes().getAllRecipes();
+			for (Fluid f : li)
+				arecipes.add(new CrystallizerRecipe(f));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rccrystall")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

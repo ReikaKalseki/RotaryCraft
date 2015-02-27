@@ -382,7 +382,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 
 	@Override
 	public boolean canBeDamaged() {
-		return false;
+		return this.isSteel();
 	}
 
 	@Override

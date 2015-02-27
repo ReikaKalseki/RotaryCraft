@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
@@ -34,11 +36,11 @@ public class ComposterHandler extends TemplateRecipeHandler {
 
 		private ArrayList<ItemStack> input;
 
-		public ComposterRecipe() {
+		private ComposterRecipe() {
 			input = TileEntityComposter.getAllCompostables();
 		}
 
-		public ComposterRecipe(ItemStack in) {
+		private ComposterRecipe(ItemStack in) {
 			input = ReikaJavaLibrary.makeListFrom(in);
 		}
 
@@ -92,6 +94,29 @@ public class ComposterHandler extends TemplateRecipeHandler {
 	}
 
 	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(74, 35, 23, 17), "rccompost"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rccompost")) {
+			Collection<ItemStack> li = TileEntityComposter.getAllCompostables();
+			for (ItemStack is : li)
+				arecipes.add(new ComposterRecipe(is));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rccompost")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
+	}
+
+	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (ReikaItemHelper.matchStacks(result, ItemStacks.compost))
 			arecipes.add(new ComposterRecipe());
@@ -101,6 +126,9 @@ public class ComposterHandler extends TemplateRecipeHandler {
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (TileEntityComposter.getCompostValue(ingredient) > 0) {
 			arecipes.add(new ComposterRecipe(ingredient));
+		}
+		else if (ItemRegistry.YEAST.matchItem(ingredient)) {
+			arecipes.add(new ComposterRecipe());
 		}
 	}
 

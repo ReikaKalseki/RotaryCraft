@@ -74,11 +74,11 @@ public class MachineRecipeRenderer {
 			for (int j = 0; j < 3; j++) {
 				ItemStack is = items[i+j*3];
 				if (is != null) {
-					gui.drawItemStack(itemRender, is, x+18*i, y+18*j-8);
+					gui.drawItemStackWithTooltip(itemRender, font, is, x+18*i, y+18*j-8);
 				}
 			}
 		}
-		gui.drawItemStack(itemRender, r.outputItem(), x2+4, y2-4);
+		gui.drawItemStackWithTooltip(itemRender, font, r.outputItem(), x2+4, y2-4);
 	}
 
 	public void drawBlastFurnace(int x, int y, int x2, int y2, BlastRecipe r) {

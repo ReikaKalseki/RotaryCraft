@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -37,11 +39,11 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 
 		private ArrayList<ItemStack> input;
 
-		public LavaMakerRecipe(ArrayList<ItemStack> in) {
+		private LavaMakerRecipe(ArrayList<ItemStack> in) {
 			input = in;
 		}
 
-		public LavaMakerRecipe(ItemStack in) {
+		private LavaMakerRecipe(ItemStack in) {
 			input = new ArrayList();
 			input.add(in);
 		}
@@ -89,6 +91,34 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
+	}
+
+	@Override
+	public int recipiesPerPage() {
+		return 1;
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(2, 25, 145, 45), "rcrockmelt"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rcrockmelt")) {
+			Collection<ItemStack> li = RecipesLavaMaker.getRecipes().getAllRecipes();
+			for (ItemStack is : li)
+				arecipes.add(new LavaMakerRecipe(is));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rcrockmelt")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

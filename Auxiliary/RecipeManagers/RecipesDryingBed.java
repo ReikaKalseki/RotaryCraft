@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -96,5 +98,9 @@ public class RecipesDryingBed
 
 	public boolean isRecipeFluid(Fluid f) {
 		return recipeList.containsKey(f);
+	}
+
+	public Collection<Fluid> getAllRecipes() {
+		return Collections.unmodifiableCollection(recipeList.keySet());
 	}
 }

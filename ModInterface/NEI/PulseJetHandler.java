@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -32,11 +34,11 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 		private ItemStack input;
 		private List<ItemStack> inputs;
 
-		public PulseJetRecipe(ItemStack in) {
+		private PulseJetRecipe(ItemStack in) {
 			input = ReikaItemHelper.getSizedItemStack(in, 1);
 		}
 
-		public PulseJetRecipe(List<ItemStack> in) {
+		private PulseJetRecipe(List<ItemStack> in) {
 			inputs = in;
 		}
 
@@ -88,6 +90,29 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(119, 22, 18, 17), "rcpulsej"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rcpulsej")) {
+			Collection<ItemStack> li = RecipesPulseFurnace.smelting().getAllSmeltables();
+			for (ItemStack is : li)
+				arecipes.add(new PulseJetRecipe(is));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rcpulsejet")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

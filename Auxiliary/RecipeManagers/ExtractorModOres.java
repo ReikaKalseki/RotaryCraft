@@ -14,9 +14,11 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
@@ -45,7 +47,17 @@ public class ExtractorModOres {
 		for (int i = 0; i < li.size(); i++) {
 			CustomExtractEntry e = li.get(i);
 			ItemStack in = ItemCustomModOre.getItem(i, ExtractorStage.FLAKES);
-			ItemStack out = e.nativeOre == null ? ItemCustomModOre.getSmeltedItem(i) : getSmeltedIngot(e.nativeOre);
+			OreType nat = e.nativeOre;
+			ItemStack out = ItemCustomModOre.getSmeltedItem(i);
+			out.stackSize = e.numberSmelted;
+			if (nat instanceof ReikaOreHelper) {
+				out = ((ReikaOreHelper)nat).getDrop();
+				out.stackSize = ((ReikaOreHelper)nat).blockDrops;
+			}
+			else if (nat instanceof ModOreList) {
+				out = getSmeltedIngot((ModOreList)nat);
+				out.stackSize = ((ModOreList)nat).dropCount;
+			}
 			ReikaRecipeHelper.addSmelting(in, out, e.rarity == OreRarity.RARE ? 1 : e.rarity == OreRarity.EVERYWHERE ? 0.5F : 0.7F);
 		}
 	}

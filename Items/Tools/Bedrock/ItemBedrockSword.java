@@ -96,7 +96,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		for (int i = 1; i < 5; i++) {
 			ItemStack arm = target.getEquipmentInSlot(i);
 			if (arm != null && this.canDamageArmorOf(target)) {
-				Item item = is.getItem();
+				Item item = arm.getItem();
 				if (InterfaceCache.MUSEELECTRICITEM.instanceOf(item)) {
 					MuseElectricItem ms = (MuseElectricItem)item;
 					ms.extractEnergy(arm, 5000, false);

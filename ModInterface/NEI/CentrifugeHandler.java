@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,7 +44,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 
 		private ItemStack input;
 
-		public CentrifugeRecipe(ItemStack in) {
+		private CentrifugeRecipe(ItemStack in) {
 			input = in;
 		}
 
@@ -116,6 +117,29 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(39, 16, 40, 40), "rccentri"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rccentri")) {
+			Collection<ItemStack> li = RecipesCentrifuge.recipes().getAllCentrifugables();
+			for (ItemStack is : li)
+				arecipes.add(new CentrifugeRecipe(is));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rccentri")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

@@ -327,7 +327,9 @@ public class GuiHandbook extends GuiScreen
 		}
 		if (h == HandbookRegistry.BEDTOOLS || h == HandbookRegistry.BEDARMOR)
 			return PageType.BLASTFURNACE;
-		if (h == HandbookRegistry.BEDINGOT)
+		//if (h == HandbookRegistry.BEDINGOT)
+		//	return PageType.BLASTFURNACE;
+		if (h == HandbookRegistry.ALLOYING)
 			return PageType.BLASTFURNACE;
 		if (h == HandbookRegistry.STRONGSPRING)
 			return PageType.BLASTFURNACE;

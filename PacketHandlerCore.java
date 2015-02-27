@@ -87,6 +87,9 @@ public class PacketHandlerCore implements IPacketHandler {
 		int x = 0;
 		int y = 0;
 		int z = 0;
+		double dx = 0;
+		double dy = 0;
+		double dz = 0;
 		boolean readinglong = false;
 		String stringdata = null;
 		UUID id = null;
@@ -122,6 +125,19 @@ public class PacketHandlerCore implements IPacketHandler {
 				}
 				else
 					longdata = inputStream.readLong();
+				break;
+			case POS:
+				control = inputStream.readInt();
+				pack = PacketRegistry.getEnum(control);
+				dx = inputStream.readDouble();
+				dy = inputStream.readDouble();
+				dz = inputStream.readDouble();
+				len = pack.getNumberDataInts();
+				if (len > 0) {
+					data = new int[len];
+					for (int i = 0; i < len; i++)
+						data[i] = inputStream.readInt();
+				}
 				break;
 			case UPDATE:
 				control = inputStream.readInt();
@@ -330,9 +346,9 @@ public class PacketHandlerCore implements IPacketHandler {
 					if (control == PacketRegistry.CANNON.getMinValue()+2) {
 						cannon.target[2] = data[1];
 					}
-					double dx = cannon.target[0]-cannon.xCoord;
-					double dz = cannon.target[2]-cannon.zCoord;
-					double dd = ReikaMathLibrary.py3d(dx, 0, dz);
+					double ddx = cannon.target[0]-cannon.xCoord;
+					double ddz = cannon.target[2]-cannon.zCoord;
+					double dd = ReikaMathLibrary.py3d(ddx, 0, ddz);
 					if (dd > cannon.getMaxLaunchDistance()) {
 						cannon.target[0] = cannon.xCoord;
 						cannon.target[1] = 512;

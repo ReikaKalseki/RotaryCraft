@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -213,5 +214,9 @@ public class RecipesGrinder {
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}
+	}
+
+	public Collection<ItemStack> getAllGrindables() {
+		return Collections.unmodifiableCollection(recipes.keySet());
 	}
 }

@@ -184,8 +184,8 @@ public class RotaryRecipes {
 			};
 			String desc = "Combining the protection of bedrock with the power of a Thaumometer";
 			InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-				ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, 0, 0, RotaryCraft.class, RotaryDescriptions.getParentPage()+"thaum.xml");
+			String page = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? RotaryDescriptions.getParentPage()+"thaum.xml" : "";
+			ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, 0, 0, RotaryCraft.class, page);
 		}
 	}
 
@@ -1001,7 +1001,7 @@ public class RotaryRecipes {
 		ReikaRecipeHelper.addSmelting(ItemStacks.ironscrap, new ItemStack(Items.iron_ingot), 0.4F);
 
 		IRecipe ir = ReikaRecipeHelper.getShapelessRecipeFor(ItemStacks.springingot, ItemStacks.steelingot, new ItemStack(Items.redstone), ItemStacks.coke);
-		RecipesBlastFurnace.getRecipes().addRecipe(ItemStacks.springingot, 950, ir, 1, 0.4F);
+		RecipesBlastFurnace.getRecipes().addAlloyingRecipe(ItemStacks.springingot, 950, ir, 1, 0.4F);
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

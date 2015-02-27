@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -34,8 +36,7 @@ public class CompactorHandler extends TemplateRecipeHandler {
 		private ItemStack input;
 		private ItemStack output;
 
-
-		public CompactorRecipe(ItemStack in) {
+		private CompactorRecipe(ItemStack in) {
 			input = in;
 			output = RecipesCompactor.getRecipes().getCompactingResult(in);
 		}
@@ -91,6 +92,34 @@ public class CompactorHandler extends TemplateRecipeHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
+	}
+
+	@Override
+	public int recipiesPerPage() {
+		return 1;
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(40, 13, 33, 60), "rccompactor"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rccompactor")) {
+			Collection<ItemStack> li = RecipesCompactor.getRecipes().getAllCompactables();
+			for (ItemStack is : li)
+				arecipes.add(new CompactorRecipe(is));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rccompactor")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

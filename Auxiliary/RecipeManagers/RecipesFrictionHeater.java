@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -69,6 +72,10 @@ public class RecipesFrictionHeater {
 		public ItemStack getOutput() {
 			return output.copy();
 		}
+	}
+
+	public Collection<ItemStack> getAllSmeltables() {
+		return Collections.unmodifiableCollection(recipes.keySet());
 	}
 
 }

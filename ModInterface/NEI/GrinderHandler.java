@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -38,7 +40,11 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		private List<ItemStack> input;
 		private ItemStack output;
 
-		public GrinderRecipe(List<ItemStack> in) {
+		private GrinderRecipe(ItemStack in) {
+			this(ReikaJavaLibrary.makeListFrom(in));
+		}
+
+		private GrinderRecipe(List<ItemStack> in) {
 			input = in;
 			output = RecipesGrinder.getRecipes().getGrindingResult(in.get(0));
 		}
@@ -123,6 +129,29 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		if (c.getIngredient() != null && c.getIngredient().item.getItem() == ItemRegistry.CANOLA.getItemInstance()) {
 			ReikaGuiAPI.instance.drawTexturedModalRect(19, 10, 176, 71, 8, 55);
 		}
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(95, 23, 23, 18), "rcgrinder"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rcgrinder")) {
+			Collection<ItemStack> li = RecipesGrinder.getRecipes().getAllGrindables();
+			for (ItemStack is : li)
+				arecipes.add(new GrinderRecipe(is));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rcgrinder")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

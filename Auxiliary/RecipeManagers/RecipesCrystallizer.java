@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -90,5 +93,9 @@ public class RecipesCrystallizer
 
 	public boolean isValidFluid(Fluid f) {
 		return recipeList.containsKey(f);
+	}
+
+	public Collection<Fluid> getAllRecipes() {
+		return Collections.unmodifiableCollection(recipeList.keySet());
 	}
 }

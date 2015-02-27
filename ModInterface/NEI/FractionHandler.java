@@ -32,7 +32,7 @@ public class FractionHandler extends TemplateRecipeHandler {
 
 	public class FractionatorRecipe extends CachedRecipe {
 
-		public FractionatorRecipe() {
+		private FractionatorRecipe() {
 
 		}
 

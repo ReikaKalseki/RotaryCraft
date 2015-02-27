@@ -49,6 +49,8 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
@@ -462,10 +464,22 @@ public final class HandbookAuxData {
 			ItemStack is = ItemRegistry.STRONGCOIL.getStackOf();
 			MachineRecipeRenderer.instance.drawBlastFurnaceCrafting(dx+99, dy+18, dx+181, dy+32, is);
 		}
-		else if (h == HandbookRegistry.BEDINGOT) {
-			ItemStack is = ItemStacks.bedingot;
-			List<BlastRecipe> c = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(is);
-			MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, c.get(0));
+		//else if (h == HandbookRegistry.BEDINGOT) {
+		//	ItemStack is = ItemStacks.bedingot;
+		//	List<BlastRecipe> c = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(is);
+		//	MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, c.get(0));
+		//}
+		else if (h == HandbookRegistry.ALLOYING) {
+			List<BlastFurnacePattern> c = RecipesBlastFurnace.getRecipes().getAllAlloyingRecipes();
+			int index = (int)((System.currentTimeMillis()/2000)%c.size());
+			BlastFurnacePattern p = c.get(index);
+			if (p instanceof BlastRecipe)
+				MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, (BlastRecipe)p);
+			else if (p instanceof BlastCrafting)
+				MachineRecipeRenderer.instance.drawBlastFurnaceCrafting(dx+99, dy+18, dx+181, dy+32, (BlastCrafting)p);
+			else
+				ReikaJavaLibrary.pConsole(p+" to make "+p.outputItem()+" is an invalid (unrenderable) recipe!");
+			api.drawCenteredStringNoShadow(f, p.getRequiredTemperature()+"C", dx+54, dy+66, 0);
 		}
 		else if (h == HandbookRegistry.STEELINGOT) {
 			ItemStack is = ItemStacks.steelingot;

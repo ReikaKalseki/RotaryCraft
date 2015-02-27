@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
+import java.util.Collection;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiFurnace;
@@ -28,7 +31,7 @@ public class FrictionHandler extends TemplateRecipeHandler {
 		private final ItemStack output;
 		public final int temperature;
 
-		public FrictionHeaterRecipe(ItemStack in) {
+		private FrictionHeaterRecipe(ItemStack in) {
 			input = in;
 			FrictionRecipe rec = RecipesFrictionHeater.getRecipes().getRecipeByInput(in);
 			output = rec != null ? rec.getOutput() : null;
@@ -55,6 +58,34 @@ public class FrictionHandler extends TemplateRecipeHandler {
 	@Override
 	public String getGuiTexture() {
 		return "textures/gui/container/furnace.png";
+	}
+
+	@Override
+	public int recipiesPerPage() {
+		return 1;
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(74, 23, 23, 18), "rcfriction"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rcfriction")) {
+			Collection<ItemStack> li = RecipesFrictionHeater.getRecipes().getAllSmeltables();
+			for (ItemStack is : li)
+				arecipes.add(new FrictionHeaterRecipe(is));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rcfriction")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override

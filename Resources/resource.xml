@@ -48,6 +48,9 @@
 	<bedingot>
 		A bedrock ingot is used in the crafting of bedrock tools, armor, and some machines.
 	</bedingot>
+	<alloys>
+		Some items and machines need special metal alloys, which are usually made in the Blast Furnace by adding the constituent ingredients into the main grid, and reaching the necessary temperature.
+	</alloys>
 	<silveringot>
 		Silver ingots are used to make silver compounds. Silver is an occasional bonus from the extractor when processing gold.
 	</silveringot>

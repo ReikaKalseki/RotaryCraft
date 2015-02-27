@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
+import java.util.Collection;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
@@ -33,7 +36,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 
 		private Fluid input;
 
-		public DryingBedRecipe(Fluid in) {
+		private DryingBedRecipe(Fluid in) {
 			input = in;
 		}
 
@@ -83,6 +86,29 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(23, 15, 94, 22), "rcdrying"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("rcdrying")) {
+			Collection<Fluid> li = RecipesDryingBed.getRecipes().getAllRecipes();
+			for (Fluid f : li)
+				arecipes.add(new DryingBedRecipe(f));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("rcdrying")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override
