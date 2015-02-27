@@ -189,6 +189,7 @@ public class RotaryCraft extends DragonAPIMod {
 			if (!r.isDummiedOut()) {
 				Item id = r.getItemInstance();
 				if (BannedItemReader.instance.containsID(id)) {
+					ReikaJavaLibrary.pConsole("ROTARYCRAFT: Found Banned RotaryCraft Item Id "+id);
 					return true;
 				}
 			}
