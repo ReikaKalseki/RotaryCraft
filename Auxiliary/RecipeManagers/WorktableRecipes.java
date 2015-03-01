@@ -23,6 +23,10 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
+import Reika.ChromatiCraft.Magic.ElementTagCompound;
+import Reika.ChromatiCraft.Registry.ItemElementCalculator;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -184,9 +188,7 @@ public class WorktableRecipes
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public List<WorktableRecipe> getRecipeListCopy()
-	{
+	public List<WorktableRecipe> getRecipeListCopy() {
 		return Collections.unmodifiableList(recipes);
 	}
 
@@ -232,6 +234,11 @@ public class WorktableRecipes
 		@SideOnly(Side.CLIENT)
 		public ItemStack[] getDisplayArray() {
 			return ReikaRecipeHelper.getPermutedRecipeArray(recipe);
+		}
+
+		@ModDependent(ModList.CHROMATICRAFT)
+		public ElementTagCompound getElements() {
+			return ItemElementCalculator.instance.getIRecipeTotal(recipe);
 		}
 
 	}
