@@ -40,6 +40,7 @@ public final class ItemStacks {
 	public static final ItemStack redgolddust 		= ItemRegistry.POWDERS.getStackOfMetadata(12);
 	public static final ItemStack compost 			= ItemRegistry.POWDERS.getStackOfMetadata(13);
 	public static final ItemStack silicondust 		= ItemRegistry.POWDERS.getStackOfMetadata(14);
+	public static final ItemStack mulch 			= ItemRegistry.POWDERS.getStackOfMetadata(15);
 
 	public static final ItemStack lubebucket 		= ItemRegistry.BUCKET.getStackOfMetadata(0);
 	public static final ItemStack fuelbucket 		= ItemRegistry.BUCKET.getStackOfMetadata(1);
@@ -126,6 +127,7 @@ public final class ItemStacks {
 	public static final ItemStack shaftcore 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(14);
 	public static final ItemStack igniter 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(15);
 	public static final ItemStack diamondshaftcore 	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(16);
+	public static final ItemStack compoundcompress	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(17);
 
 	public static final ItemStack woodgear 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(9);
 	public static final ItemStack stonegear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(10);

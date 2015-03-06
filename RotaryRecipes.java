@@ -454,6 +454,8 @@ public class RotaryRecipes {
 			"SSS", "S S", "SSS", 'S', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.compoundturb, new Object[]{
 				" tS", "tst", "St ", 'S', ItemStacks.turbine, 's', ItemStacks.shaftcore, 't', ItemStacks.tungsteningot});
+		GameRegistry.addRecipe(ItemStacks.compoundcompress, new Object[]{
+				" tS", "tst", "St ", 'S', ItemStacks.compressor, 's', ItemStacks.shaftcore, 't', ItemStacks.tungsteningot});
 
 		GameRegistry.addRecipe(ItemStacks.shaftcore, new Object[]{
 				"  s", " S ", "s  ", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
@@ -919,7 +921,7 @@ public class RotaryRecipes {
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.SPORT.ordinal(), "CrC", "SGs", "PIP", 'C', ItemStacks.cylinder, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit);
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.HYDRO.ordinal(), "PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.diamondshaftcore);
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.MICRO.ordinal(), "CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
-		MachineRegistry.ENGINE.addMetaCrafting(EngineType.JET.ordinal(), "DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compressor, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.JET.ordinal(), "DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compoundcompress, 'c', ItemStacks.combustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
 
 		if (ConfigRegistry.ROTATEHOSE.getState()) {
 			MachineRegistry.HOSE.addSizedOreRecipe(DifficultyEffects.PIPECRAFT.getInt(), "WWW", "GGG", "WWW", 'G', Blocks.glass, 'W', "plankWood");

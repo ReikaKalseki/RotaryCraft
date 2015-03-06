@@ -22,13 +22,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.MulchMaterials;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesGrinder {
@@ -192,11 +192,22 @@ public class RecipesGrinder {
 		return ret != null ? ret.copy() : null;
 	}
 
-	public void addOreRecipes() {
+	public void addPostLoadRecipes() {
+		this.addOreRecipes();
+		this.addMulchRecipes();
+	}
+
+	private void addMulchRecipes() {
+		Collection<ItemStack> mulches = MulchMaterials.instance.getAllValidPlants();
+		for (ItemStack is : mulches) {
+			this.addRecipe(is, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, MulchMaterials.instance.getPlantValue(is)));
+		}
+	}
+
+	private void addOreRecipes() {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
 			Collection<ItemStack> li = ore.getAllOreBlocks();
-			ReikaJavaLibrary.pConsole(ore+":"+li);
 			for (ItemStack is : li) {
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
 				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));
@@ -207,7 +218,6 @@ public class RecipesGrinder {
 		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
 			ReikaOreHelper ore = ReikaOreHelper.oreList[i];
 			Collection<ItemStack> li = ore.getAllOreBlocks();
-			ReikaJavaLibrary.pConsole(ore+":"+li);
 			for (ItemStack is : li) {
 				ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
 				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));

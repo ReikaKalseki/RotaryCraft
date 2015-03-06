@@ -55,6 +55,11 @@ public class ItemBedrockSickle extends ItemSickleBase {
 	}
 
 	@Override
+	public boolean isBreakable() {
+		return false;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
 	{

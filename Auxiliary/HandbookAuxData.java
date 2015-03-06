@@ -62,7 +62,6 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 import Reika.RotaryCraft.Registry.PowerReceivers;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer.BiomeTransform;
 
@@ -209,10 +208,10 @@ public final class HandbookAuxData {
 		args = new ItemStack[]{out, in[0], in[1]};
 		fermenter.add(args);
 
-		List<ItemStack> li = TileEntityFermenter.getAllValidPlants();
+		Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 		for (ItemStack plant : li) {
-			int num = TileEntityFermenter.getPlantValue(plant);
-			out = ReikaItemHelper.getSizedItemStack(ItemRegistry.ETHANOL.getStackOf(), num);
+			int num = MulchMaterials.instance.getPlantValue(plant);
+			out = ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, num);
 			fermenter.add(new ItemStack[]{out, ItemRegistry.YEAST.getStackOf(), plant});
 		}
 	}

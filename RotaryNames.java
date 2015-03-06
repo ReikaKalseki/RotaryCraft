@@ -67,7 +67,7 @@ public class RotaryNames {
 	public static final String[] enginePartNames = {
 		"crafting.impeller", "crafting.compressor", "crafting.turbine", "crafting.diffuser", "crafting.combustor", "crafting.cylinder",
 		"crafting.radiator", "crafting.condenser", "crafting.goldcoil", "crafting.woodgear", "crafting.stonegear", "crafting.diamondgear",
-		"crafting.bedrockgear", "crafting.paddle", "crafting.shaftcore", "crafting.ignition", "crafting.diamondcore"
+		"crafting.bedrockgear", "crafting.paddle", "crafting.shaftcore", "crafting.ignition", "crafting.diamondcore", "crafting.compoundcompress"
 	};
 
 	public static final String[] shaftPartNames = {
@@ -102,7 +102,7 @@ public class RotaryNames {
 
 	public static final String[] powderNames = {
 		"misc.netherdust", "misc.tar", "misc.sludge", "misc.sawdust", "misc.beddust", "misc.salt", "misc.nh4" , "misc.agi",
-		"misc.alum", "misc.flour", "misc.coaldust", "misc.dryice", "misc.redgolddust", "misc.compost", "misc.silicondust"
+		"misc.alum", "misc.flour", "misc.coaldust", "misc.dryice", "misc.redgolddust", "misc.compost", "misc.silicondust", "misc.mulch"
 	};
 
 	public static final String[] interfaceNames = {

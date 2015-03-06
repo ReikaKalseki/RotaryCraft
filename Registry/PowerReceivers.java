@@ -20,7 +20,7 @@ public enum PowerReceivers {
 	AEROSOLIZER(16384),
 	AUTOBREEDER(16384),
 	BAITBOX(32768),
-	BEDROCKBREAKER(16384, 1, 4194304),
+	BEDROCKBREAKER(/*16384*/65536, 1, /*4194304*/16777216), //cannot need more torque w/o breaking diamond gearboxes
 	BORER(),
 	LIGHTBRIDGE(33554432),
 	CAVESCANNER(131072),

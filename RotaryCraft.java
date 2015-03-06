@@ -54,11 +54,11 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
-import Reika.DragonAPI.ModInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
@@ -317,6 +317,7 @@ public class RotaryCraft extends DragonAPIMod {
 		}
 
 		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
+		//ModCropList.addCustomCropType(new SimpleCropHandler(BlockRegistry.CANOLA.getBlockInstance(), 9, ItemRegistry.CANOLA.getStackOf()));
 
 		//MinecraftForge.setToolClass(ItemRegistry.STEELAXE.getItemInstance(), "axe", 2);
 		//MinecraftForge.setToolClass(ItemRegistry.STEELPICK.getItemInstance(), "pickaxe", 2);
@@ -400,42 +401,40 @@ public class RotaryCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.RAILCRAFT, "Access to steam power generation and consumption");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Special integration with TF mobs and structures");
 
-		if (MTInteractionManager.isMTLoaded()) {
-			MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTGLASS.getBlockInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(BlockRegistry.BLASTPANE.getBlockInstance());
+		SensitiveItemRegistry.registerItem(BlockRegistry.BLASTGLASS.getBlockInstance());
+		SensitiveItemRegistry.registerItem(BlockRegistry.BLASTPANE.getBlockInstance());
 
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ETHANOL.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CANOLA.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.EXTRACTS.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MODEXTRACTS.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.CUSTOMEXTRACT.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.ENGINE.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.SHAFT.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.FLYWHEEL.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.GEARBOX.getItemInstance());
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.MACHINE.getItemInstance());
-			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-				ItemRegistry ir = ItemRegistry.itemList[i];
-				if (!ir.isDummiedOut()) {
-					if (ir.isBedrockArmor() || ir.isBedrockTypeArmor() || ir.isBedrockTool())
-						MTInteractionManager.instance.blacklistNewRecipesFor(ir.getItemInstance());
-				}
+		SensitiveItemRegistry.registerItem(ItemRegistry.ETHANOL.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.CANOLA.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.EXTRACTS.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.MODEXTRACTS.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.CUSTOMEXTRACT.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.ENGINE.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.SHAFT.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.FLYWHEEL.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.GEARBOX.getItemInstance());
+		SensitiveItemRegistry.registerItem(ItemRegistry.MACHINE.getItemInstance());
+		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
+			ItemRegistry ir = ItemRegistry.itemList[i];
+			if (!ir.isDummiedOut()) {
+				if (ir.isBedrockArmor() || ir.isBedrockTypeArmor() || ir.isBedrockTool())
+					SensitiveItemRegistry.registerItem(ir.getItemInstance());
 			}
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.sludge);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.springingot);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingotblock);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelblock);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.steelingot);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.netherrackdust);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.tar);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.redgoldingot);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.tungsteningot);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedrockdust);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemStacks.bedingot);
-			MTInteractionManager.instance.blacklistNewRecipesFor(ItemRegistry.UPGRADE.getItemInstance());
-
-			;//MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
 		}
+		SensitiveItemRegistry.registerItem(ItemStacks.sludge);
+		SensitiveItemRegistry.registerItem(ItemStacks.springingot);
+		SensitiveItemRegistry.registerItem(ItemStacks.bedingotblock);
+		SensitiveItemRegistry.registerItem(ItemStacks.steelblock);
+		SensitiveItemRegistry.registerItem(ItemStacks.steelingot);
+		SensitiveItemRegistry.registerItem(ItemStacks.netherrackdust);
+		SensitiveItemRegistry.registerItem(ItemStacks.tar);
+		SensitiveItemRegistry.registerItem(ItemStacks.redgoldingot);
+		SensitiveItemRegistry.registerItem(ItemStacks.tungsteningot);
+		SensitiveItemRegistry.registerItem(ItemStacks.bedrockdust);
+		SensitiveItemRegistry.registerItem(ItemStacks.bedingot);
+		SensitiveItemRegistry.registerItem(ItemRegistry.UPGRADE.getItemInstance());
+
+		;//MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
 
 		this.finishTiming();
 	}
@@ -460,7 +459,7 @@ public class RotaryCraft extends DragonAPIMod {
 		ItemFuelTank.initCreativeFluids();
 
 		if (!this.isLocked())
-			RecipesGrinder.getRecipes().addOreRecipes();
+			RecipesGrinder.getRecipes().addPostLoadRecipes();
 
 		if (!this.isLocked())
 			if (ModList.FORESTRY.isLoaded()) {
@@ -502,11 +501,34 @@ public class RotaryCraft extends DragonAPIMod {
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDSWORD.getStackOf(), Aspect.TOOL, 80);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHEARS.getStackOf(), Aspect.TOOL, 80);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), Aspect.TOOL, 72);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDSICKLE.getStackOf(), Aspect.TOOL, 96);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.TOOL, 80);
+				if (ModList.MULTIPART.isLoaded())
+					ReikaThaumHelper.addAspects(ItemRegistry.BEDSAW.getStackOf(), Aspect.TOOL, 80);
+				if (ModList.FORESTRY.isLoaded())
+					ReikaThaumHelper.addAspects(ItemRegistry.BEDGRAFTER.getStackOf(), Aspect.TOOL, 72);
+
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELAXE.getStackOf(), Aspect.TOOL, 18);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELPICK.getStackOf(), Aspect.TOOL, 18);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELHOE.getStackOf(), Aspect.TOOL, 16);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELSWORD.getStackOf(), Aspect.TOOL, 14);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELSHEARS.getStackOf(), Aspect.TOOL, 14);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELSHOVEL.getStackOf(), Aspect.TOOL, 12);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELSICKLE.getStackOf(), Aspect.TOOL, 18);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELHOE.getStackOf(), Aspect.TOOL, 14);
 
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDLEGS.getStackOf(), Aspect.ARMOR, 140);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDHELM.getStackOf(), Aspect.ARMOR, 100);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDBOOTS.getStackOf(), Aspect.ARMOR, 80);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDCHEST.getStackOf(), Aspect.ARMOR, 160);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDREVEAL.getStackOf(), Aspect.ARMOR, 140, Aspect.SENSES, 20, Aspect.AURA, 20, Aspect.MAGIC, 20);
+
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDPACK.getStackOf(), Aspect.ARMOR, 160, Aspect.FLIGHT, 40);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELPACK.getStackOf(), Aspect.ARMOR, 40, Aspect.FLIGHT, 40);
+				ReikaThaumHelper.addAspects(ItemRegistry.JETPACK.getStackOf(), Aspect.TOOL, 40, Aspect.FLIGHT, 40);
+
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDJUMP.getStackOf(), Aspect.ARMOR, 120, Aspect.TRAVEL, 20);
+				ReikaThaumHelper.addAspects(ItemRegistry.JUMP.getStackOf(), Aspect.TOOL, 20, Aspect.TRAVEL, 20);
 
 				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.MOTION, 2, Aspect.MECHANISM, 2);
 				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.FIRE, 3, Aspect.ENERGY, 12);

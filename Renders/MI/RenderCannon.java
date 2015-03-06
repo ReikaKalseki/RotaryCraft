@@ -31,9 +31,6 @@ public class RenderCannon extends RotaryTERenderer
 
 	private ModelCannon CannonModel = new ModelCannon();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
 	public void renderTileEntityLaunchCannonAt(TileEntityLaunchCannon tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;

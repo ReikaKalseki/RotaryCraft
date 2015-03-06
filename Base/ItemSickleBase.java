@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 
@@ -62,6 +63,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		else if (ModList.CHROMATICRAFT.isLoaded() && (id == TreeGetter.getNaturalDyeLeafID() || id == TreeGetter.getHeldDyeLeafID())) {
@@ -81,6 +84,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		else if (ModList.CHROMATICRAFT.isLoaded() && id == TreeGetter.getRainbowLeafID()) {
@@ -103,6 +108,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			ReikaItemHelper.dropItems(world, x, y, z, items);
 			return true;
 		}
@@ -124,6 +131,29 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
+			return true;
+		}
+		else if (ModList.BOP.isLoaded() && BoPBlockHandler.getInstance().isCoral(id)) {
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			int r = this.getPlantRange();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						Block id2 = world.getBlock(x+i, y+j, z+k);
+						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+						if (BoPBlockHandler.getInstance().isCoral(id2)) {
+							Block b2 = id2;
+							b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);
+							world.setBlockToAir(x+i, y+j, z+k);
+						}
+					}
+				}
+			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		else if (crop != null) {
@@ -145,6 +175,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		else if (mod != null) {
@@ -166,6 +198,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		else if (plant != null) {
@@ -196,6 +230,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		else if (id instanceof IPlantable) {
@@ -215,6 +251,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
+			if (this.isDamageable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		return false;
@@ -225,5 +263,6 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 	public abstract int getCropRange();
 
 	public abstract boolean canActAsShears();
+	public abstract boolean isBreakable();
 
 }

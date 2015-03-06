@@ -274,8 +274,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		if (fluid.equals(FluidRegistry.LAVA))
-			return true;
+		//if (fluid.equals(FluidRegistry.LAVA)) Why was THIS here???
+		//	return true;
 		if (fluid.equals(FluidRegistry.getFluid("jet fuel")))
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))

@@ -690,6 +690,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	}
 
 	protected final void getSummativeSidedPower() {
+		isOmniSided = true;
 		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
 			return;
 		int x = xCoord;
@@ -731,7 +732,6 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			powers[1][5] = torque;
 		}
 		read = null;
-		isOmniSided = true;
 		torque = 0;
 		omega = 0;
 		power = 0;

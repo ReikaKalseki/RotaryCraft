@@ -37,4 +37,9 @@ public class ItemSteelSickle extends ItemSickleBase {
 		return false;
 	}
 
+	@Override
+	public boolean isBreakable() {
+		return true;
+	}
+
 }

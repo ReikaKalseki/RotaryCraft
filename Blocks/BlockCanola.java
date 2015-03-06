@@ -41,12 +41,11 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.LegacyCraft.LegacyOptions;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.Interfaces.BlowableCrop;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
-public final class BlockCanola extends BlockBasic implements IPlantable, BlowableCrop, IWailaDataProvider {
+public final class BlockCanola extends BlockBasic implements IPlantable, IWailaDataProvider {
 
 	private final Random rand = new Random();
 
@@ -270,7 +269,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 		if (!farmBlocks.contains(id))
 			farmBlocks.add(id);
 	}
-
+	/*
 	@Override
 	public boolean isReadyToHarvest(World world, int x, int y, int z) {
 		Block b = world.getBlock(x, y, z);
@@ -293,7 +292,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, Blowabl
 	@Override
 	public float getHarvestingSpeed() {
 		return 2F;
-	}
+	}*/
 
 	@Override
 	@ModDependent(ModList.WAILA)

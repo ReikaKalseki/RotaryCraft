@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+
 /** Implement this to make your crop have special compatibility with fans that goes beyond the raw harvesting already implemented. */
+@Deprecated
 public interface BlowableCrop {
 
 	public boolean isReadyToHarvest(World world, int x, int y, int z);

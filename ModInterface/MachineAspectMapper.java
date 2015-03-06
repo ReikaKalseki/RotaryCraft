@@ -293,6 +293,10 @@ public class MachineAspectMapper {
 		this.addAspect(MachineRegistry.RAILGUN, Aspect.WEAPON, 8);
 
 		this.addAspect(MachineRegistry.CENTRIFUGE, Aspect.CRAFT, 4);
+
+		this.addAspect(MachineRegistry.DRYING, Aspect.AIR, 2);
+		this.addAspect(MachineRegistry.DRYING, Aspect.WATER, 2);
+		this.addAspect(MachineRegistry.DRYING, Aspect.MINE, 1);
 	}
 
 	private void addAspect(MachineRegistry m, Aspect a, int amt) {

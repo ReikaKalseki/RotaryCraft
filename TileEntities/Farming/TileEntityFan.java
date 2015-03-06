@@ -22,15 +22,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.CropType.CropMethods;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
-import Reika.RotaryCraft.API.Interfaces.BlowableCrop;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -254,12 +253,14 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public void rip2(World world, int x, int y, int z) {
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		/*
 		if (id instanceof BlowableCrop && omega >= HARVESTSPEED) {
 			float sp = ((BlowableCrop)id).getHarvestingSpeed();
 			if (ReikaRandomHelper.doWithChance(0.015*sp))
 				this.harvest(world, x, y, z, (BlowableCrop)id);
 			return;
 		}
+		 */
 		//ReikaJavaLibrary.pConsole(id+":"+ModCropList.getModCrop(id, meta), id != Blocks.air);
 		boolean crop = ReikaCropHelper.isCrop(id) || ModCropList.isModCrop(id, meta);
 		if (id != Blocks.snow && id != Blocks.web && id != Blocks.leaves && id != Blocks.leaves2 && id != Blocks.tallgrass &&
@@ -286,7 +287,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.dropBlocks(world, x, y, z, id, meta);
 		world.setBlockToAir(x, y, z);
 	}
-
+	/*
 	private void harvest(World world, int x, int y, int z, BlowableCrop b) {
 		if (b.isReadyToHarvest(world, x, y, z)) {
 			ArrayList<ItemStack> li = b.getHarvestProducts(world, x, y, z);
@@ -296,11 +297,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 		}
 	}
+	 */
 	//Meta is block meta, not fan meta
 	private void harvest(World world, int x, int y, int z, int meta, Block id) {
 		ModCropList mod = ModCropList.getModCrop(id, meta);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
-		int metato = 0;
 		if (mod != null && mod.isRipe(world, x, y, z)) {
 			if (mod.destroyOnHarvest()) {
 				ArrayList<ItemStack> li = id.getDrops(world, x, y, z, meta, 0);
@@ -309,19 +310,16 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			}
 			else {
 				ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
-				mod.removeOneSeed(li);
+				CropMethods.removeOneSeed(mod, li);
 				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-				metato = mod.getHarvestedMetadata(world, x, y, z);
-				if (mod.isTileEntity())
-					mod.runTEHarvestCode(world, x, y, z);
-				else
-					world.setBlockMetadataWithNotify(x, y, z, metato, 3);
+				mod.setHarvested(world, x, y, z);
 			}
 		}
 		if (crop != null && crop.isRipe(meta)) {
-			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, crop.getDrops(world, x, y, z, 0));
-			metato = crop.getHarvestedMeta(meta);
-			world.setBlockMetadataWithNotify(x, y, z, metato, 3);
+			ArrayList<ItemStack> li = crop.getDrops(world, x, y, z, 0);
+			CropMethods.removeOneSeed(crop, li);
+			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
+			crop.setHarvested(world, x, y, z);
 		}
 		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 	}
