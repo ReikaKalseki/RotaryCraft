@@ -399,4 +399,9 @@ TemperatureTE {
 		}
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

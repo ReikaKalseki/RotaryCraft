@@ -167,4 +167,9 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 	public void overheat(World world, int x, int y, int z) {
 
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
 }

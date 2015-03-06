@@ -504,4 +504,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public void removeFuel(int amt) {
 		fuel.removeLiquid(amt);
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
 }

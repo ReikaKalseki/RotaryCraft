@@ -623,4 +623,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	public static int getDamagePercent(int val) {
 		return (int)(100*(1-Math.pow(0.99, val)));
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
 }

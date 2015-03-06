@@ -273,4 +273,9 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
+
 }

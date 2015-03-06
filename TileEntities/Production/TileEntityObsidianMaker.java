@@ -341,4 +341,9 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	public String getOperationalStatus() {
 		return lava.isEmpty() ? "No Lava" : water.isEmpty() ? "No Water" : "Operational";
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
 }

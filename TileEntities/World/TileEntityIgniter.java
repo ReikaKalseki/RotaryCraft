@@ -300,4 +300,9 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "No Fuel";
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
 }

@@ -442,4 +442,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "Insufficient Temperature or Invalid or Missing Items";
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
 }

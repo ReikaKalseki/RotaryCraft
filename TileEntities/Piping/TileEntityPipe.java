@@ -243,4 +243,9 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		liquid = ((TileEntityPipe)from).liquid;
 		liquidLevel += amt;
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
 }

@@ -253,4 +253,9 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		return this.areConditionsMet() ? "Operational" : "No Liquid";
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
+
 }

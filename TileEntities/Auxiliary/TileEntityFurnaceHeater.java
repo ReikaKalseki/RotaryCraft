@@ -357,4 +357,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		return this.areConditionsMet() ? "Operational" : "No Heatable Machine";
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

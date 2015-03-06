@@ -448,4 +448,9 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	public int getOperationTime() {
 		return DurationRegistry.HEATER.getOperationTime(omega);
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
 }

@@ -400,4 +400,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
 }

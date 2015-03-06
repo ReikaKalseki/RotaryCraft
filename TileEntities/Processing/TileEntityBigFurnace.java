@@ -272,4 +272,9 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		return this.areConditionsMet() ? "Operational" : "No Smeltable Items";
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

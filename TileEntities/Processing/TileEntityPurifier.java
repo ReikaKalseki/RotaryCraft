@@ -260,4 +260,9 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

@@ -23,4 +23,6 @@ public interface TemperatureTE {
 
 	public abstract void overheat(World world, int x, int y, int z);
 
+	public abstract boolean canBeCooledWithFins();
+
 }

@@ -261,4 +261,9 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		NBT.setInteger("timer", composterCookTime);
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
+
 }

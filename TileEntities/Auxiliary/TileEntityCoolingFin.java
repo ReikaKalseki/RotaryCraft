@@ -77,10 +77,12 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 		TileEntity te = world.getTileEntity(targetx, targety, targetz);
 		if (te instanceof TemperatureTE) {
 			TemperatureTE tr = (TemperatureTE)te;
-			int temp = tr.getTemperature();
-			if (temp > temperature) {
-				temperature++;
-				tr.addTemperature(-1);
+			if (tr.canBeCooledWithFins()) {
+				int temp = tr.getTemperature();
+				if (temp > temperature) {
+					temperature++;
+					tr.addTemperature(-1);
+				}
 			}
 		}
 	}
@@ -161,4 +163,9 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
 }

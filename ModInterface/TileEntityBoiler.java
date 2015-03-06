@@ -218,4 +218,9 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 		return p == MachineRegistry.PIPE;
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

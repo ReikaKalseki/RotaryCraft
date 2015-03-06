@@ -534,4 +534,9 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3, true, true);
 	}
 
+	@Override
+	public final boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

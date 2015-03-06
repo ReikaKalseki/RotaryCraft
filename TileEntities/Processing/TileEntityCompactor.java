@@ -535,4 +535,9 @@ DiscreteFunction,ConditionalOperation
 	public boolean canBeFrictionHeated() {
 		return true;
 	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
 }
