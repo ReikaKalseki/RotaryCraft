@@ -125,7 +125,7 @@ ConditionalOperation, DamagingContact {
 	 */
 	public int getSizeInventory()
 	{
-		return 3;
+		return 4;
 	}
 
 	public static boolean func_52005_b(ItemStack par0ItemStack)
@@ -183,9 +183,9 @@ ConditionalOperation, DamagingContact {
 			grinderCookTime = 0;
 		if (flag1)
 			this.markDirty();
-		if (inv[2] != null && tank.getLevel() >= 1000 && !world.isRemote) {
-			if (inv[2].getItem() == Items.bucket && inv[2].stackSize == 1) {
-				inv[2] = ItemStacks.lubebucket.copy();
+		if (inv[1] != null && tank.getLevel() >= 1000 && !world.isRemote) {
+			if (inv[1].getItem() == Items.bucket && inv[1].stackSize == 1) {
+				inv[1] = ItemStacks.lubebucket.copy();
 				tank.removeLiquid(1000);
 			}
 		}
@@ -203,23 +203,40 @@ ConditionalOperation, DamagingContact {
 			}
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
+		ItemStack[] outputs = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
 
-		if (flag && itemstack == null)
-			return true;
-		if (itemstack == null)
-			return false;
+		if (outputs == null)
+			return flag;
 
-		if (inv[1] == null)
-			return true;
+		return this.canFit(outputs);
+	}
 
-		if (!inv[1].isItemEqual(itemstack))
-			return false;
+	private boolean canFit(ItemStack[] outputs) {
+		int fit = 0;
+		for (int i = 0; i < outputs.length; i++) {
+			ItemStack put = outputs[i];
+			if (put != null) {
+				int slot = 2+i;
+				if (inv[slot] == null) {
+					fit++;
+					continue;
+				}
 
-		if (inv[1].stackSize < this.getInventoryStackLimit() && inv[1].stackSize < inv[1].getMaxStackSize())
-			return true;
+				if (!inv[slot].isItemEqual(put))
+					return false;
 
-		return inv[1].stackSize < itemstack.getMaxStackSize();
+				if (inv[slot].stackSize < this.getInventoryStackLimit() && inv[slot].stackSize < inv[slot].getMaxStackSize()) {
+					fit++;
+					continue;
+				}
+
+				if (inv[slot].stackSize < put.getMaxStackSize()) {
+					fit++;
+					continue;
+				}
+			}
+		}
+		return fit == outputs.length;
 	}
 
 	public int getLubricantScaled(int par1) {
@@ -234,18 +251,30 @@ ConditionalOperation, DamagingContact {
 			tank.addLiquid((int)(DifficultyEffects.CANOLA.getInt()*num), FluidRegistry.getFluid("lubricant"));
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(is);
-		if (itemstack != null) {
-			if (inv[1] == null)
-				inv[1] = itemstack.copy();
-			else if (inv[1].getItem() == itemstack.getItem())
-				inv[1].stackSize += itemstack.stackSize;
-		}
+		ItemStack[] output = RecipesGrinder.getRecipes().getGrindingResult(is);
+		this.addOutputs(output);
 
 		is.stackSize--;
 
 		if (is.stackSize <= 0)
 			inv[0] = null;
+	}
+
+	private void addOutputs(ItemStack[] out) {
+		if (out == null)
+			return;
+		for (int i = 0; i < out.length; i++) {
+			ItemStack put = out[i];
+			if (put != null) {
+				int slot = 2+i;
+				if (inv[slot] == null) {
+					inv[slot] = put.copy();
+				}
+				else {
+					inv[slot].stackSize += put.stackSize;
+				}
+			}
+		}
 	}
 
 	@Override

@@ -101,6 +101,6 @@ public class GuiGrinder extends GuiMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "grindergui";
+		return "grindergui3";
 	}
 }

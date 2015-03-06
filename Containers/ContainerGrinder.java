@@ -22,15 +22,17 @@ public class ContainerGrinder extends ContainerIOMachine
 	private int lastGrinderCookTime;
 	private int lastGrinderItemBurnTime;
 
-	public ContainerGrinder(EntityPlayer player, TileEntityGrinder par2TileEntityGrinder)
+	public ContainerGrinder(EntityPlayer player, TileEntityGrinder te)
 	{
-		super(player, par2TileEntityGrinder);
+		super(player, te);
 		lastGrinderCookTime = 0;
 		lastGrinderItemBurnTime = 0;
-		grinder = par2TileEntityGrinder;
-		this.addSlotToContainer(new Slot(par2TileEntityGrinder, 0, 76, 35));
-		this.addSlotToContainer(new SlotFurnace(player, par2TileEntityGrinder, 1, 136, 35));
-		this.addSlotToContainer(new Slot(par2TileEntityGrinder, 2, 35, 60));
+		grinder = te;
+		this.addSlotToContainer(new Slot(te, 0, 76, 35));
+		this.addSlotToContainer(new Slot(te, 1, 35, 60));
+
+		this.addSlotToContainer(new SlotFurnace(player, te, 2, 136, 21));
+		this.addSlotToContainer(new SlotFurnace(player, te, 3, 136, 47));
 
 		this.addPlayerInventory(player);
 	}

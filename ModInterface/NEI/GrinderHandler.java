@@ -38,7 +38,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 	public class GrinderRecipe extends CachedRecipe {
 
 		private List<ItemStack> input;
-		private ItemStack output;
+		private ItemStack[] output;
 
 		private GrinderRecipe(ItemStack in) {
 			this(ReikaJavaLibrary.makeListFrom(in));
@@ -51,15 +51,27 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack result = RecipesGrinder.getRecipes().getGrindingResult(this.getEntry());
-			ItemStack is = result;
-			return is != null ? new PositionedStack(is, 131, 24) : null;
+			ItemStack[] result = RecipesGrinder.getRecipes().getGrindingResult(this.getEntry());
+			ItemStack is = result[0];
+			return is != null ? new PositionedStack(is, 131, 10) : null;
 		}
 
 		@Override
 		public PositionedStack getIngredient()
 		{
 			return new PositionedStack(this.getEntry(), 71, 24);
+		}
+
+		@Override
+		public List<PositionedStack> getOtherStacks()
+		{
+			ArrayList<PositionedStack> li = new ArrayList();
+			if (output.length > 1) {
+				for (int i = 1; i < output.length; i++) {
+					li.add(new PositionedStack(output[i], 131, 10+i*26));
+				}
+			}
+			return li;
 		}
 
 		public ItemStack getEntry() {
@@ -88,8 +100,21 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack is = RecipesGrinder.getRecipes().getGrindingResult(this.getInput());
-			return is != null ? new PositionedStack(is, 131, 24) : null;
+			ItemStack[] is = RecipesGrinder.getRecipes().getGrindingResult(this.getInput());
+			return new PositionedStack(is[0], 131, 10);
+		}
+
+		@Override
+		public List<PositionedStack> getOtherStacks()
+		{
+			ArrayList<PositionedStack> li = new ArrayList();
+			ItemStack[] output = RecipesGrinder.getRecipes().getGrindingResult(this.getInput());
+			if (output.length > 1) {
+				for (int i = 1; i < output.length; i++) {
+					li.add(new PositionedStack(output[i], 131, 10+i*26));
+				}
+			}
+			return li;
 		}
 
 		private ItemStack getInput() {
@@ -106,7 +131,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 
 	@Override
 	public String getGuiTexture() {
-		return "/Reika/RotaryCraft/Textures/GUI/grindergui.png";
+		return "/Reika/RotaryCraft/Textures/GUI/grindergui3.png";
 	}
 
 	@Override
@@ -159,7 +184,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		if (ReikaItemHelper.matchStacks(result, ItemStacks.lubebucket)) {
 			arecipes.add(new SeedRecipe());
 		}
-		else if (RecipesGrinder.getRecipes().isProduct(result)) {
+		else {
 			List<ItemStack> is = RecipesGrinder.getRecipes().getSources(result);
 			if (is != null && !is.isEmpty())
 				arecipes.add(new GrinderRecipe(is));

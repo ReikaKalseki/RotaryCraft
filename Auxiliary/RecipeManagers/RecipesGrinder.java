@@ -30,22 +30,23 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.MulchMaterials;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.PlantMaterials;
 
 public class RecipesGrinder {
 	private static final RecipesGrinder GrinderBase = new RecipesGrinder();
 
 	public static final int ore_rate = 3;
 
-	private final ItemHashMap<ItemStack> recipes = new ItemHashMap().setOneWay();
-	private final ItemHashMap<ItemStack> customRecipes = new ItemHashMap();
+	private final ItemHashMap<GrinderRecipe> recipes = new ItemHashMap().setOneWay();
+	private final ItemHashMap<GrinderRecipe> customRecipes = new ItemHashMap();
 
 	public static final RecipesGrinder getRecipes()
 	{
 		return GrinderBase;
 	}
 
-	private RecipesGrinder()
-	{
+	private RecipesGrinder() {
+
 		this.addRecipe(Blocks.stone, new ItemStack(Blocks.cobblestone));
 		this.addRecipe(Blocks.cobblestone, new ItemStack(Blocks.gravel));
 		this.addRecipe(Blocks.gravel, new ItemStack(Blocks.sand));
@@ -64,7 +65,8 @@ public class RecipesGrinder {
 		this.addRecipe(Blocks.soul_sand, ItemStacks.tar); //create a tar
 		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 4));
 		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4));
-		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3));
+
+		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));
 
 		this.addRecipe(Blocks.log, this.getSizedSawdust(16)); //sawdust
 		this.addRecipe(Blocks.planks, this.getSizedSawdust(4));
@@ -105,6 +107,28 @@ public class RecipesGrinder {
 		this.addRecipe(ItemRegistry.CANOLA.getStackOf(), ItemRegistry.CANOLA.getStackOfMetadata(2));
 	}
 
+	private static class GrinderRecipe {
+
+		private final ItemStack input;
+		private final ItemStack output1;
+		private final ItemStack output2;
+
+		private GrinderRecipe(ItemStack in, ItemStack out1, ItemStack out2) {
+			input = in;
+			output1 = out1;
+			output2 = out2;
+		}
+
+		public ItemStack[] getOutputs() {
+			return output2 != null ? new ItemStack[]{output1.copy(), output2.copy()} : new ItemStack[]{output1.copy()};
+		}
+
+		public boolean makesItem(ItemStack is) {
+			return ReikaItemHelper.matchStacks(is, output1) || (output2 != null && ReikaItemHelper.matchStacks(is, output2));
+		}
+
+	}
+
 	private ItemStack getSizedSawdust(int size) {
 		return ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust, size);
 	}
@@ -129,36 +153,41 @@ public class RecipesGrinder {
 	public boolean isGrindable(ItemStack item) {
 		return this.getGrindingResult(item) != null;
 	}
-
+	/*
 	public boolean isProduct(ItemStack item) {
-		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item) || ReikaItemHelper.collectionContainsItemStack(customRecipes.values(), item);
+		//return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item) || ReikaItemHelper.collectionContainsItemStack(customRecipes.values(), item);
+		return ReikaItemHelper.collectionContainsItemStack(recipeOuts, item) || ReikaItemHelper.collectionContainsItemStack(customRecipeOuts, item);
 	}
-
+	 */
 	public List<ItemStack> getSources(ItemStack out) {
 		List<ItemStack> in = new ArrayList();
 		for (ItemStack input : recipes.keySet()) {
-			ItemStack is = this.getGrindingResult(input);
-			if (is != null) {
-				if (ReikaItemHelper.matchStacks(is, out))
-					in.add(input.copy());
-			}
+			GrinderRecipe gr = recipes.get(input);
+			if (gr.makesItem(out))
+				in.add(input.copy());
 		}
 		for (ItemStack input : customRecipes.keySet()) {
-			ItemStack is = this.getGrindingResult(input);
-			if (is != null) {
-				if (ReikaItemHelper.matchStacks(is, out))
-					in.add(input.copy());
-			}
+			GrinderRecipe gr = customRecipes.get(input);
+			if (gr.makesItem(out))
+				in.add(input.copy());
 		}
 		return in;
 	}
 
 	public void addRecipe(Block b, ItemStack out) {
-		this.addRecipe(new ItemStack(b), out);
+		this.addRecipe(b, out, null);
+	}
+
+	public void addRecipe(Block b, ItemStack out, ItemStack out2) {
+		this.addRecipe(new ItemStack(b), out, out2);
 	}
 
 	public void addRecipe(Item i, ItemStack out) {
-		this.addRecipe(new ItemStack(i), out);
+		this.addRecipe(i, out, null);
+	}
+
+	public void addRecipe(Item i, ItemStack out, ItemStack out2) {
+		this.addRecipe(new ItemStack(i), out, out2);
 	}
 
 	public void addOreDictRecipe(String in, ItemStack out) {
@@ -170,26 +199,34 @@ public class RecipesGrinder {
 	}
 
 	public void addRecipe(ItemStack in, ItemStack out) {
-		recipes.put(in, out);
+		this.addRecipe(in, out, null);
+	}
+
+	public void addRecipe(ItemStack in, ItemStack out, ItemStack out2) {
+		recipes.put(in, new GrinderRecipe(in, out, out2));
 		//this.ExtractorExperience.put(Integer.valueOf(itemStack), Float.valueOf(xp));
 	}
 
 	public void addCustomRecipe(ItemStack in, ItemStack out) {
-		customRecipes.put(in, out);
+		this.addCustomRecipe(in, out, null);
+	}
+
+	public void addCustomRecipe(ItemStack in, ItemStack out, ItemStack out2) {
+		customRecipes.put(in, new GrinderRecipe(in, out, out2));
 	}
 
 	public void removeCustomRecipe(ItemStack in) {
 		customRecipes.remove(in);
 	}
 
-	public ItemStack getGrindingResult(ItemStack item) {
+	public ItemStack[] getGrindingResult(ItemStack item) {
 		if (item == null)
 			return null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", Items, item.getItemDamage()));
-		ItemStack ret = recipes.get(item);
+		GrinderRecipe ret = recipes.get(item);
 		if (ret == null)
 			ret = customRecipes.get(item);
-		return ret != null ? ret.copy() : null;
+		return ret != null ? ret.getOutputs() : null;
 	}
 
 	public void addPostLoadRecipes() {
@@ -200,7 +237,11 @@ public class RecipesGrinder {
 	private void addMulchRecipes() {
 		Collection<ItemStack> mulches = MulchMaterials.instance.getAllValidPlants();
 		for (ItemStack is : mulches) {
-			this.addRecipe(is, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, MulchMaterials.instance.getPlantValue(is)));
+			if (is.getItem() != Items.reeds) {
+				int num = MulchMaterials.instance.getPlantValue(is);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, num));
+				RotaryCraft.logger.log("Adding grinder mulching recipe for "+is+", makes "+num);
+			}
 		}
 	}
 

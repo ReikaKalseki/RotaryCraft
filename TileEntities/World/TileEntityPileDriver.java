@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSand;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
@@ -189,8 +189,8 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
             world.spawnEntityInWorld(var6);
             world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
     	}*/
-		if (id == Blocks.sand || id == Blocks.gravel)
-			this.makeFall(world, x, y, z, id);
+		if (id instanceof BlockFalling)
+			this.makeFall(world, x, y, z, (BlockFalling)id);
 		/*if (id == RotaryCraft.miningpipe.blockID && dropmeta != 4)
 			world.setBlockToAir(x, y, z);*/
 		if (drop == null)
@@ -201,8 +201,8 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		world.spawnEntityInWorld(ent);
 	}
 
-	public void makeFall(World world, int x, int y, int z, Block id) {
-		BlockSand tofall = (BlockSand)id;
+	public void makeFall(World world, int x, int y, int z, BlockFalling id) {
+		BlockFalling tofall = id;
 		if (tofall.func_149831_e(world, x, y-1, z)) {
 			byte var8 = 32;
 			if (!tofall.fallInstantly && world.checkChunksExist(x - var8, y - var8, z - var8, x + var8, y + var8, z + var8)) {
