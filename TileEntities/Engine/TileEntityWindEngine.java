@@ -79,9 +79,9 @@ public class TileEntityWindEngine extends TileEntityEngine {
 			return f;
 		}
 		else {
-			if (y < 62)
+			if (y < 64)
 				return 0;
-			float f = (y-62)/62F;
+			float f = (y-64)/16F;
 			if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 				IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 				f *= ig.getWindLevel();
