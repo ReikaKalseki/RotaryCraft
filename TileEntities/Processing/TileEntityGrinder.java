@@ -83,7 +83,7 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return i == 1;
+		return i >= 2;
 	}
 
 	public void testIdle() {
@@ -300,9 +300,9 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		if (slot == 1)
+		if (slot >= 2)
 			return false;
-		if (slot == 2)
+		if (slot == 1)
 			return is.getItem() == Items.bucket;
 		return is.getItem() == ItemRegistry.CANOLA.getItemInstance() || RecipesGrinder.getRecipes().isGrindable(is);
 	}

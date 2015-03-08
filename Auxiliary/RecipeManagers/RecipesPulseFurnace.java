@@ -19,6 +19,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -44,48 +45,7 @@ public class RecipesPulseFurnace
 		this.addSmelting(Blocks.obsidian, BlockRegistry.BLASTGLASS.getCraftedProduct(1));
 		this.addSmelting(Items.iron_ingot, ItemStacks.steelingot);
 
-		//RECYCLING
-		this.addSmelting(Items.chainmail_helmet, new ItemStack(Items.iron_ingot, 3, 0));
-		this.addSmelting(Items.iron_helmet, new ItemStack(Items.iron_ingot, 5, 0));
-		this.addSmelting(Items.chainmail_boots, new ItemStack(Items.iron_ingot, 2, 0));
-		this.addSmelting(Items.iron_boots, new ItemStack(Items.iron_ingot, 4, 0));
-		this.addSmelting(Items.chainmail_leggings, new ItemStack(Items.iron_ingot, 4, 0));
-		this.addSmelting(Items.iron_leggings, new ItemStack(Items.iron_ingot, 7, 0));
-		this.addSmelting(Items.chainmail_chestplate, new ItemStack(Items.iron_ingot, 5, 0));
-		this.addSmelting(Items.iron_chestplate, new ItemStack(Items.iron_ingot, 8, 0));
-
-		this.addSmelting(Items.iron_axe, new ItemStack(Items.iron_ingot, 3, 0));
-		this.addSmelting(Items.golden_axe, new ItemStack(Items.gold_ingot, 3, 0));
-		this.addSmelting(Items.iron_sword, new ItemStack(Items.iron_ingot, 2, 0));
-		this.addSmelting(Items.golden_sword, new ItemStack(Items.gold_ingot, 2, 0));
-		this.addSmelting(Items.iron_shovel, new ItemStack(Items.iron_ingot, 1, 0));
-		this.addSmelting(Items.golden_shovel, new ItemStack(Items.gold_ingot, 1, 0));
-		this.addSmelting(Items.iron_pickaxe, new ItemStack(Items.iron_ingot, 3, 0));
-		this.addSmelting(Items.golden_pickaxe, new ItemStack(Items.gold_ingot, 3, 0));
-		this.addSmelting(Items.golden_hoe, new ItemStack(Items.gold_ingot, 2, 0));
-		this.addSmelting(Items.iron_hoe, new ItemStack(Items.iron_ingot, 2, 0));
-
-		this.addSmelting(Items.flint_and_steel, new ItemStack(Items.iron_ingot, 1, 0));
-		this.addSmelting(Items.bucket, new ItemStack(Items.iron_ingot, 3, 0));
-		this.addSmelting(Items.water_bucket, new ItemStack(Items.iron_ingot, 3, 0));
-		this.addSmelting(Items.lava_bucket, new ItemStack(Items.iron_ingot, 3, 0));
-		this.addSmelting(Items.milk_bucket, new ItemStack(Items.iron_ingot, 3, 0));
-		this.addSmelting(Items.minecart, new ItemStack(Items.iron_ingot, 5, 0));
-		this.addSmelting(Items.iron_door, new ItemStack(Items.iron_ingot, 6, 0));
-		this.addSmelting(Items.cauldron, new ItemStack(Items.iron_ingot, 7, 0));
-		this.addSmelting(Items.iron_horse_armor, new ItemStack(Items.iron_ingot, 7));
-		this.addSmelting(Items.diamond_horse_armor, new ItemStack(Items.diamond, 7));
-		this.addSmelting(Items.golden_horse_armor, new ItemStack(Items.gold_ingot, 7));
-		this.addSmelting(ItemRegistry.STEELHELMET.getItemInstance(), this.getSizedSteel(5));
-		this.addSmelting(ItemRegistry.STEELBOOTS.getItemInstance(), this.getSizedSteel(4));
-		this.addSmelting(ItemRegistry.STEELCHEST.getItemInstance(), this.getSizedSteel(8));
-		this.addSmelting(ItemRegistry.STEELLEGS.getItemInstance(), this.getSizedSteel(7));
-		this.addSmelting(ItemRegistry.STEELAXE.getItemInstance(), this.getSizedSteel(3));
-		this.addSmelting(ItemRegistry.STEELPICK.getItemInstance(), this.getSizedSteel(3));
-		this.addSmelting(ItemRegistry.STEELSHOVEL.getItemInstance(), this.getSizedSteel(1));
-		this.addSmelting(ItemRegistry.STEELHOE.getItemInstance(), this.getSizedSteel(2));
-		this.addSmelting(ItemRegistry.STEELSHEARS.getItemInstance(), this.getSizedSteel(2));
-		this.addSmelting(ItemRegistry.STEELSICKLE.getItemInstance(), this.getSizedSteel(3));
+		this.addRecycling();
 
 		this.addSmelting(ItemStacks.redgolddust, ItemStacks.redgoldingot);
 
@@ -104,6 +64,70 @@ public class RecipesPulseFurnace
 		}
 	}
 
+	private void addRecycling() {
+		this.addSmelting(Items.chainmail_helmet, new ItemStack(Items.iron_ingot, 3, 0));
+		this.addSmelting(Items.chainmail_boots, new ItemStack(Items.iron_ingot, 2, 0));
+		this.addSmelting(Items.chainmail_leggings, new ItemStack(Items.iron_ingot, 4, 0));
+		this.addSmelting(Items.chainmail_chestplate, new ItemStack(Items.iron_ingot, 5, 0));
+
+		this.addSmelting(Items.iron_helmet, new ItemStack(Items.iron_ingot, 5, 0));
+		this.addSmelting(Items.iron_chestplate, new ItemStack(Items.iron_ingot, 8, 0));
+		this.addSmelting(Items.iron_leggings, new ItemStack(Items.iron_ingot, 7, 0));
+		this.addSmelting(Items.iron_boots, new ItemStack(Items.iron_ingot, 4, 0));
+
+		this.addSmelting(Items.iron_hoe, new ItemStack(Items.iron_ingot, 2, 0));
+		this.addSmelting(Items.iron_shovel, new ItemStack(Items.iron_ingot, 1, 0));
+		this.addSmelting(Items.iron_axe, new ItemStack(Items.iron_ingot, 3, 0));
+		this.addSmelting(Items.iron_pickaxe, new ItemStack(Items.iron_ingot, 3, 0));
+		this.addSmelting(Items.iron_sword, new ItemStack(Items.iron_ingot, 2, 0));
+
+		this.addSmelting(Items.golden_helmet, new ItemStack(Items.gold_ingot, 5, 0));
+		this.addSmelting(Items.golden_chestplate, new ItemStack(Items.gold_ingot, 8, 0));
+		this.addSmelting(Items.golden_leggings, new ItemStack(Items.gold_ingot, 7, 0));
+		this.addSmelting(Items.golden_boots, new ItemStack(Items.gold_ingot, 4, 0));
+
+		this.addSmelting(Items.golden_axe, new ItemStack(Items.gold_ingot, 3, 0));
+		this.addSmelting(Items.golden_sword, new ItemStack(Items.gold_ingot, 2, 0));
+		this.addSmelting(Items.golden_shovel, new ItemStack(Items.gold_ingot, 1, 0));
+		this.addSmelting(Items.golden_pickaxe, new ItemStack(Items.gold_ingot, 3, 0));
+		this.addSmelting(Items.golden_hoe, new ItemStack(Items.gold_ingot, 2, 0));
+
+		this.addSmelting(Items.diamond_helmet, new ItemStack(Items.diamond, 5, 0));
+		this.addSmelting(Items.diamond_chestplate, new ItemStack(Items.diamond, 8, 0));
+		this.addSmelting(Items.diamond_leggings, new ItemStack(Items.diamond, 7, 0));
+		this.addSmelting(Items.diamond_boots, new ItemStack(Items.diamond, 4, 0));
+
+		this.addSmelting(Items.diamond_axe, new ItemStack(Items.diamond, 3, 0));
+		this.addSmelting(Items.diamond_sword, new ItemStack(Items.diamond, 2, 0));
+		this.addSmelting(Items.diamond_shovel, new ItemStack(Items.diamond, 1, 0));
+		this.addSmelting(Items.diamond_pickaxe, new ItemStack(Items.diamond, 3, 0));
+		this.addSmelting(Items.diamond_hoe, new ItemStack(Items.diamond, 2, 0));
+
+		this.addSmelting(Items.iron_horse_armor, new ItemStack(Items.iron_ingot, 7));
+		this.addSmelting(Items.diamond_horse_armor, new ItemStack(Items.diamond, 7));
+		this.addSmelting(Items.golden_horse_armor, new ItemStack(Items.gold_ingot, 7));
+
+		this.addSmelting(Items.flint_and_steel, new ItemStack(Items.iron_ingot, 1, 0));
+		this.addSmelting(Items.bucket, new ItemStack(Items.iron_ingot, 3, 0));
+		this.addSmelting(Items.water_bucket, new ItemStack(Items.iron_ingot, 3, 0));
+		this.addSmelting(Items.lava_bucket, new ItemStack(Items.iron_ingot, 3, 0));
+		this.addSmelting(Items.milk_bucket, new ItemStack(Items.iron_ingot, 3, 0));
+		this.addSmelting(Items.minecart, new ItemStack(Items.iron_ingot, 5, 0));
+		this.addSmelting(Items.iron_door, new ItemStack(Items.iron_ingot, 6, 0));
+		this.addSmelting(Items.cauldron, new ItemStack(Items.iron_ingot, 7, 0));
+
+		this.addSmelting(ItemRegistry.STEELHELMET.getItemInstance(), this.getSizedSteel(5));
+		this.addSmelting(ItemRegistry.STEELBOOTS.getItemInstance(), this.getSizedSteel(4));
+		this.addSmelting(ItemRegistry.STEELCHEST.getItemInstance(), this.getSizedSteel(8));
+		this.addSmelting(ItemRegistry.STEELLEGS.getItemInstance(), this.getSizedSteel(7));
+		this.addSmelting(ItemRegistry.STEELAXE.getItemInstance(), this.getSizedSteel(3));
+		this.addSmelting(ItemRegistry.STEELPICK.getItemInstance(), this.getSizedSteel(3));
+		this.addSmelting(ItemRegistry.STEELSHOVEL.getItemInstance(), this.getSizedSteel(1));
+		this.addSmelting(ItemRegistry.STEELHOE.getItemInstance(), this.getSizedSteel(2));
+		this.addSmelting(ItemRegistry.STEELSHEARS.getItemInstance(), this.getSizedSteel(2));
+		this.addSmelting(ItemRegistry.STEELSICKLE.getItemInstance(), this.getSizedSteel(3));
+	}
+
 	private ItemStack getSizedSteel(int size) {
 		return ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, size);
 	}
@@ -112,28 +136,15 @@ public class RecipesPulseFurnace
 		recipes.put(in, itemstack);
 	}
 
-	private void addSmelting(Block b, ItemStack itemstack)
-	{
-		this.addSmelting(b, 0, itemstack);
+	private void addSmelting(Block b, ItemStack itemstack) {
+		this.addSmelting(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE), itemstack);
 	}
 
-	private void addSmelting(Block b, int metadata, ItemStack itemstack)
-	{
-		this.addSmelting(new ItemStack(b, metadata), itemstack);
+	private void addSmelting(Item i, ItemStack itemstack) {
+		this.addSmelting(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE), itemstack);
 	}
 
-	private void addSmelting(Item i, ItemStack itemstack)
-	{
-		this.addSmelting(i, 0, itemstack);
-	}
-
-	private void addSmelting(Item i, int metadata, ItemStack itemstack)
-	{
-		this.addSmelting(new ItemStack(i, metadata), itemstack);
-	}
-
-	public ItemStack getSmeltingResult(ItemStack item)
-	{
+	public ItemStack getSmeltingResult(ItemStack item) {
 		if (item == null)
 			return null;
 		ItemStack ret = recipes.get(item);

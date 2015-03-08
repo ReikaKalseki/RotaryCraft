@@ -55,6 +55,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.MTInteractionManager;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
@@ -433,6 +434,11 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.registerItem(ItemStacks.bedrockdust);
 		SensitiveItemRegistry.registerItem(ItemStacks.bedingot);
 		SensitiveItemRegistry.registerItem(ItemRegistry.UPGRADE.getItemInstance());
+
+		if (MTInteractionManager.isMTLoaded()) {
+			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.BLASTFURNACE.getCraftedProduct());
+			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.WORKTABLE.getCraftedProduct());
+		}
 
 		;//MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
 

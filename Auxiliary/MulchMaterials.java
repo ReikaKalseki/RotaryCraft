@@ -2,13 +2,17 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.Collection;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Exception.MisuseException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.PlantMaterials;
 
 public class MulchMaterials {
@@ -20,34 +24,54 @@ public class MulchMaterials {
 	private MulchMaterials() {
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < 16; i++) {
-				values.put(TreeGetter.getDyeSapling(i), PlantMaterials.SAPLING.getPlantValue());
-				values.put(TreeGetter.getHeldDyeLeaf(i), PlantMaterials.SAPLING.getPlantValue());
-				values.put(TreeGetter.getDyeFlower(i), PlantMaterials.SAPLING.getPlantValue());
+				this.addValue(TreeGetter.getDyeSapling(i), PlantMaterials.SAPLING.getPlantValue());
+				this.addValue(TreeGetter.getHeldDyeLeaf(i), PlantMaterials.SAPLING.getPlantValue());
+				this.addValue(TreeGetter.getDyeFlower(i), PlantMaterials.SAPLING.getPlantValue());
 			}
 
-			values.put(TreeGetter.getRainbowLeaf(), 16);
-			values.put(TreeGetter.getRainbowSapling(), 8);
+			this.addValue(TreeGetter.getRainbowLeaf(), 16);
+			this.addValue(TreeGetter.getRainbowSapling(), 8);
 		}
 		if (ModList.FORESTRY.isLoaded()) {
-			values.put(ForestryHandler.ItemEntry.SAPLING.getItem(), 2);
-			values.put(ForestryHandler.ItemEntry.HONEY.getItem(), 1);
-			values.put(ForestryHandler.ItemEntry.HONEYDEW.getItem(), 1);
-			values.put(ForestryHandler.BlockEntry.LEAF.getBlock(), 4);
+			this.addValue(ForestryHandler.ItemEntry.SAPLING.getItem(), 2);
+			this.addValue(ForestryHandler.ItemEntry.HONEY.getItem(), 1);
+			this.addValue(ForestryHandler.ItemEntry.HONEYDEW.getItem(), 1);
+			this.addValue(ForestryHandler.BlockEntry.LEAF.getBlock(), 4);
 		}
 		if (ModList.EMASHER.isLoaded()) {
-			values.put(ModCropList.ALGAE.blockID, 3);
+			this.addValue(ModCropList.ALGAE.blockID, 3);
 		}
 		for (int i = 0; i < ModWoodList.woodList.length; i++) {
 			ModWoodList wood = ModWoodList.woodList[i];
 			if (wood.exists()) {
-				values.put(wood.getCorrespondingSapling(), PlantMaterials.SAPLING.getPlantValue()*this.getModWoodValue(wood));
-				for (ItemStack leaf : wood.getAllLeaves())
-					values.put(leaf, PlantMaterials.LEAVES.getPlantValue()*this.getModWoodValue(wood));
+				this.addValue(wood.getCorrespondingSapling(), PlantMaterials.SAPLING.getPlantValue()*this.getModWoodValue(wood));
+				for (ItemStack leaf : wood.getAllLeaves()) {
+					if (!values.containsKey(leaf))
+						this.addValue(leaf, PlantMaterials.LEAVES.getPlantValue()*this.getModWoodValue(wood));
+				}
 			}
 		}
 		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
 			PlantMaterials plant = PlantMaterials.plantList[i];
-			values.put(plant.getPlantItem(), plant.getPlantValue());
+			this.addValue(plant.getPlantItem(), plant.getPlantValue());
+		}
+	}
+
+	private void addValue(Item i, int amt) {
+		this.addValue(new ItemStack(i), amt);
+	}
+
+	private void addValue(Block i, int amt) {
+		this.addValue(new ItemStack(i), amt);
+	}
+
+	private void addValue(ItemStack is, int amt) {
+		try {
+			values.put(is, amt);
+		}
+		catch (MisuseException e) {
+			RotaryCraft.logger.logError("Tried to add mulch recipe for a stack which does not exist!");
+			e.printStackTrace();
 		}
 	}
 
