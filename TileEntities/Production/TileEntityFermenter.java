@@ -22,6 +22,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.MulchMaterials;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -53,7 +54,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	protected int getActiveTexture() {
-		return (power >= MINPOWER && omega >= MINSPEED && this.canMake() ? 1 : 0);
+		return power >= MINPOWER && omega >= MINSPEED && this.canMake() ? 1 : 0;
 	}
 
 	@Override
@@ -72,9 +73,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 					return new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
 		}
 		if (inv[0].getItem() == ItemRegistry.YEAST.getItemInstance()) {
-			if (ReikaItemHelper.matchStacks(inv[1], ItemStacks.mulch))
+			if (MulchMaterials.instance.isMulchable(inv[1]))
 				if (this.hasWater())
-					return ItemStacks.sludge.copy();;
+					return ItemStacks.sludge.copy();
 		}
 		return null;
 	}
@@ -202,11 +203,12 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				ReikaInventoryHelper.decrStack(1, inv);
 		}
 		if (ReikaItemHelper.matchStacks(product, ItemStacks.sludge)) {
+			int num = MulchMaterials.instance.getPlantValue(inv[1]);
 			if (inv[2] == null)
-				inv[2] = ItemStacks.sludge.copy();
+				inv[2] = ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, num);
 			else if (ReikaItemHelper.matchStacks(inv[2], ItemStacks.sludge)) {
 				if (inv[2].stackSize < inv[2].getMaxStackSize())
-					inv[2].stackSize++;
+					inv[2].stackSize += num;
 				else
 					return;
 			}
@@ -320,7 +322,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			case 0:
 				return is.getItem() == ItemRegistry.YEAST.getItemInstance();
 			case 1:
-				return ReikaItemHelper.matchStacks(is, ItemStacks.mulch);
+				return MulchMaterials.instance.isMulchable(is);//ReikaItemHelper.matchStacks(is, ItemStacks.mulch);
 			}
 		}
 		else {

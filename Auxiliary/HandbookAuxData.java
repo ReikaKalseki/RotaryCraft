@@ -211,7 +211,7 @@ public final class HandbookAuxData {
 		Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 		for (ItemStack plant : li) {
 			int num = MulchMaterials.instance.getPlantValue(plant);
-			out = ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, num);
+			out = ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, num);
 			fermenter.add(new ItemStack[]{out, ItemRegistry.YEAST.getStackOf(), plant});
 		}
 	}

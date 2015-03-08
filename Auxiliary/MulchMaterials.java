@@ -25,8 +25,8 @@ public class MulchMaterials {
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < 16; i++) {
 				this.addValue(TreeGetter.getDyeSapling(i), PlantMaterials.SAPLING.getPlantValue());
-				this.addValue(TreeGetter.getHeldDyeLeaf(i), PlantMaterials.SAPLING.getPlantValue());
-				this.addValue(TreeGetter.getDyeFlower(i), PlantMaterials.SAPLING.getPlantValue());
+				this.addValue(TreeGetter.getHeldDyeLeaf(i), PlantMaterials.LEAVES.getPlantValue());
+				this.addValue(TreeGetter.getDyeFlower(i), PlantMaterials.FLOWER.getPlantValue());
 			}
 
 			this.addValue(TreeGetter.getRainbowLeaf(), 16);

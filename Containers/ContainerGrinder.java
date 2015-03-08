@@ -29,10 +29,8 @@ public class ContainerGrinder extends ContainerIOMachine
 		lastGrinderItemBurnTime = 0;
 		grinder = te;
 		this.addSlotToContainer(new Slot(te, 0, 76, 35));
-		this.addSlotToContainer(new Slot(te, 1, 35, 60));
-
-		this.addSlotToContainer(new SlotFurnace(player, te, 2, 136, 21));
-		this.addSlotToContainer(new SlotFurnace(player, te, 3, 136, 47));
+		this.addSlotToContainer(new SlotFurnace(player, te, 1, 136, 35));
+		this.addSlotToContainer(new Slot(te, 2, 35, 60));
 
 		this.addPlayerInventory(player);
 	}

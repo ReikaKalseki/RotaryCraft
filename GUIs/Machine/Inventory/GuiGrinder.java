@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2015
+ * Copyright 2014
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -101,6 +101,6 @@ public class GuiGrinder extends GuiMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "grindergui3";
+		return "grindergui";
 	}
 }
