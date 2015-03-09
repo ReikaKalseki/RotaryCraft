@@ -14,6 +14,7 @@ import java.util.Collection;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
@@ -148,6 +149,11 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 		if (fs != null) {
 			Fluid f = fs.getFluid();
 			IIcon ico = f.getIcon();
+			if (ico == null) {
+				RotaryCraft.logger.logError("Fluid "+f.getID()+" ("+f.getLocalizedName()+") exists (block ID "+f.getBlock()+") but has no icon! Registering bedrock texture as a placeholder!");
+				ico = Blocks.bedrock.getIcon(0, 0);
+				f.setIcons(ico);
+			}
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
