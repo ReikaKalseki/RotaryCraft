@@ -52,6 +52,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThermalHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TransitionalOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.GeoStrata.API.RockGetter;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
@@ -253,6 +254,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 20F;
 		if (TwilightForestHandler.getInstance().isMazeStone(b))
 			return 60F;
+		if (ModOreList.getModOreFromOre(b, meta) == ModOreList.MIMICHITE)
+			return 36F;
 
 		if (ReikaBlockHelper.isOre(b, meta))
 			return 24F;
