@@ -189,7 +189,7 @@ ConditionalOperation, DamagingContact {
 
 				if (xyz[1] == edity) {
 					Block idbelow = world.getBlock(xyz[0], xyz[1]-1, xyz[2]);
-					Block root = TwilightForestHandler.getInstance().rootID;
+					Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 					if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
 						ItemStack plant = this.getPlantedSapling();
 						if (plant != null) {
@@ -234,7 +234,7 @@ ConditionalOperation, DamagingContact {
 
 					if (xyz[1] == edity) {
 						Block idbelow = world.getBlock(xyz[0], xyz[1]-1, xyz[2]);
-						Block root = TwilightForestHandler.getInstance().rootID;
+						Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {

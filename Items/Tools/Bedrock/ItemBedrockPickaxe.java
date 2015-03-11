@@ -252,10 +252,12 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 48F;
 		if (b == MystCraftHandler.getInstance().crystalID)
 			return 20F;
-		if (TwilightForestHandler.getInstance().isMazeStone(b))
+		if (b == TwilightForestHandler.BlockEntry.MAZESTONE.getBlock())
+			return 60F;
+		if (b == TwilightForestHandler.BlockEntry.DEADROCK.getBlock())
 			return 60F;
 		if (ModOreList.getModOreFromOre(b, meta) == ModOreList.MIMICHITE)
-			return 36F;
+			return 48F;
 
 		if (ReikaBlockHelper.isOre(b, meta))
 			return 24F;

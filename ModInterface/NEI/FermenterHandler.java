@@ -29,7 +29,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.MulchMaterials;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.MulchMaterials;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import codechicken.nei.PositionedStack;

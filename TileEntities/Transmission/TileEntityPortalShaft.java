@@ -78,7 +78,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			type = PortalType.END;
 		if (ModList.MYSTCRAFT.isLoaded() && id == MystCraftHandler.getInstance().portalID)
 			type = PortalType.MYSTCRAFT;
-		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().portalID)
+		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.BlockEntry.PORTAL.getBlock())
 			type = PortalType.TWILIGHT;
 	}
 

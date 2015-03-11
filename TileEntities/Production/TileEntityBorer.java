@@ -324,23 +324,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		return false;
 	}
 
-	public static boolean isTwilightForestToughBlock(Block id) {
-		return id == TwilightForestHandler.getInstance().mazeStoneID || id == TwilightForestHandler.getInstance().shieldID;
-	}
-	/*
-	public static boolean isMineableBedrock(World world, int x, int y, int z) {
-		Block b = world.getBlock(x, y, z);
-		if (id != Blocks.bedrock.blockID && id != FactorizationHandler.getInstance().bedrockID)
-			return false;
-		/*
-		if (y > 4 && y < 40 && world.provider.dimensionId == ReikaTwilightHelper.getDimensionID())
-			return true;
-		if (y > 122 && world.provider.isHellWorld)
-			return true;
-	 *//*
-	return false;
-}*/
-
 	private void calcReqPower(World world, int x, int y, int z, int metadata) {
 		reqpow = 0;
 		int lowtorque = -1;
@@ -382,7 +365,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				mintorque += PowerReceivers.BEDROCKBREAKER.getMinTorque();
 				reqpow += PowerReceivers.BEDROCKBREAKER.getMinPower();
 			}
-			else */if (this.isTwilightForestToughBlock(id)) {
+			else */if (TwilightForestHandler.getInstance().isToughBlock(id)) {
 				mintorque += 2048;
 				reqpow += 65536;
 			}
@@ -436,7 +419,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	private boolean dropBlocks(int xread, int yread, int zread, World world, int x, int y, int z, Block id, int meta) {
-		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.getInstance().mazeStoneID)
+		if (ModList.TWILIGHT.isLoaded() && id == TwilightForestHandler.BlockEntry.MAZESTONE.getBlock())
 			RotaryAchievements.CUTKNOT.triggerAchievement(this.getPlacer());
 		if (id == Blocks.bedrock || id == Blocks.end_portal_frame)
 			return false;
