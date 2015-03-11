@@ -38,8 +38,8 @@ public enum BlastGate {
 	BRONZE("ingotBronze"),
 	TITANIUM("ingotTitanium"),
 	DARKSTEEL("ingotDarkSteel"),
-	STEELEAF(TwilightForestHandler.getInstance().steelleaf),
-	IRONWOOD(TwilightForestHandler.getInstance().ironwood),
+	STEELEAF(TwilightForestHandler.ItemEntry.STEELLEAF.getItem()),
+	IRONWOOD(TwilightForestHandler.ItemEntry.IRONWOOD.getItem()),
 	MANYULLYN("ingotManyullyn"),
 	;
 

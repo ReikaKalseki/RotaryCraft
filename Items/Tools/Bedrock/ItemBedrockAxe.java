@@ -93,8 +93,10 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	public float getDigSpeed(ItemStack is, Block b, int meta) {
 		if (b == null)
 			return 0;
-		if (TwilightForestHandler.getInstance().isTowerWood(b))
+		if (b == TwilightForestHandler.BlockEntry.TOWERWOOD.getBlock())
 			return 30F;
+		if (b == TwilightForestHandler.BlockEntry.TOWERMACHINE.getBlock())
+			return 24F;
 		if (b.getMaterial() == Material.wood)
 			return 20F;
 		if (field_150914_c.contains(b))
@@ -124,7 +126,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 				tree.clear();
 			tree.checkAndAddDyeTree(world, x, y, z);
 		}
-		if (id == TwilightForestHandler.getInstance().rootID) {
+		if (id == TwilightForestHandler.BlockEntry.ROOT.getBlock()) {
 			int r = 2;
 			for (int i = -r; i <= r; i++) {
 				for (int j = -r; j <= r; j++) {
