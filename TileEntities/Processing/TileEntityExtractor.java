@@ -458,6 +458,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
+		if (slot == 1 || slot == 3 || slot == 5 || slot == 7)
+			return false;
 		if (slot == 0)
 			return ReikaBlockHelper.isOre(is);
 		if (ItemRegistry.EXTRACTS.matchItem(is)) {
