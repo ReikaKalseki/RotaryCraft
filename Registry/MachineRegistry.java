@@ -504,6 +504,8 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return ENGINE;
 		if (id == BlockRegistry.GEARBOX.getBlockInstance())
 			return GEARBOX;
+		if (id == BlockRegistry.FLYWHEEL.getBlockInstance())
+			return FLYWHEEL;
 		return machineMappings.get(id, meta);
 	}
 
@@ -1452,6 +1454,22 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		default:
 			return true;
 		}
+	}
+
+	public static MachineRegistry getMachineByPlacerItem(ItemStack item) {
+		if (ItemRegistry.GEARBOX.matchItem(item))
+			return GEARBOX;
+		if (ItemRegistry.ENGINE.matchItem(item))
+			return ENGINE;
+		if (ItemRegistry.ADVGEAR.matchItem(item))
+			return ADVANCEDGEARS;
+		if (ItemRegistry.SHAFT.matchItem(item))
+			return SHAFT;
+		if (ItemRegistry.FLYWHEEL.matchItem(item))
+			return FLYWHEEL;
+		if (ItemRegistry.MACHINE.matchItem(item))
+			return machineList.get(item.getItemDamage());
+		return null;
 	}
 
 	static {

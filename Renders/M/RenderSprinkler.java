@@ -99,7 +99,7 @@ public class RenderSprinkler extends RotaryTERenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntitySprinklerAt((TileEntitySprinkler)tile, par2, par4, par6, par8);
 	}
 

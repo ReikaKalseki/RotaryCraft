@@ -185,7 +185,7 @@ Connectable, BreakAction {
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
-			;//return false;
+			return false;
 		if (!this.areInSamePlane((TileEntityBeltHub)worldObj.getTileEntity(x, y, z)))
 			return false;
 		target[0] = x;
@@ -199,7 +199,7 @@ Connectable, BreakAction {
 		if (!this.canConnect(x, y, z))
 			return false;
 		if (source[0] != Integer.MIN_VALUE && source[1] != Integer.MIN_VALUE && source[2] != Integer.MIN_VALUE)
-			;//return false;
+			return false;
 		if (!this.areInSamePlane((TileEntityBeltHub)worldObj.getTileEntity(x, y, z)))
 			return false;
 		source[0] = x;

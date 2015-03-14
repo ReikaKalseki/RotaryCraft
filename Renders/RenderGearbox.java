@@ -203,7 +203,7 @@ public class RenderGearbox extends RotaryTERenderer
 			par8 = 0F;
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
 		}
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityGearboxAt((TileEntityGearbox)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);

@@ -73,7 +73,7 @@ public class RenderDryingBed extends RotaryTERenderer {
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		TileEntityDryingBed te = (TileEntityDryingBed)tile;
-		if (this.isValidMachineRenderpass(te))
+		if (this.doRenderModel(te))
 			this.renderTileEntityDryingBedAt(te, par2, par4, par6, par8);
 		GL11.glPushMatrix();
 		GL11.glTranslated(par2, par4, par6);

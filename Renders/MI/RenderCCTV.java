@@ -96,7 +96,7 @@ public class RenderCCTV extends RotaryTERenderer {
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		TileEntityCCTV cc = (TileEntityCCTV)tile;
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityCCTVAt(cc, par2, par4, par6, par8);
 		if (cc.isInWorld())
 			this.renderColors((TileEntityCCTV)tile, par2, par4, par6);

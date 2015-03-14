@@ -166,7 +166,7 @@ public class RenderShaft extends RotaryTERenderer
 			itemMetadata = (int)-par8/1000;
 			par8 = 0F;
 		}
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityShaftAt((TileEntityShaft)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);

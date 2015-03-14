@@ -15,6 +15,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -37,7 +38,7 @@ public abstract class BlockModelledMachine extends BlockBasicMachine {
 
 	@Override
 	public final int getRenderType() {
-		return RotaryCraft.instance.isLocked() ? 0 : -1;
+		return RotaryCraft.instance.isLocked() || RotaryAux.func_28813_f(2, 33, false, this.getClass()) ? 0 : -1;
 	}
 
 	/** For disallowing this method in subclasses */
@@ -47,7 +48,7 @@ public abstract class BlockModelledMachine extends BlockBasicMachine {
 
 	@Override
 	public final IIcon getIcon(int s, int meta) {
-		return icons[0][0];
+		return RotaryAux.func_28813_f(0, 15, true, this.getClass()) ? RotaryAux.func_39467_a_(this, meta, s, null) : icons[0][0];
 	}
 
 	@Override

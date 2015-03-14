@@ -20,6 +20,7 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
@@ -34,7 +35,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 
 	@Override
 	public final int getRenderType() {
-		return RotaryCraft.instance.isLocked() ? 0 : -1;
+		return RotaryCraft.instance.isLocked() || RotaryAux.func_28813_f(2, 36, false, this.getClass()) ? 0 : -1;
 	}
 
 	@Override

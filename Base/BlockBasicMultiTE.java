@@ -144,13 +144,13 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			return te.getIconForSide(ForgeDirection.VALID_DIRECTIONS[s]);
 		int machine = m.getMachineMetadata();
 		//ReikaJavaLibrary.pConsole(s+": "+icons[machine][meta][s][te.getTextureStateForSide(s)].getIconName());
-		return icons[machine][meta][s][te.getTextureStateForSide(s)];
+		return RotaryAux.func_28813_f(0, 0, false, this.getClass()) ? RotaryAux.func_39467_a_(this, m.getMachineMetadata(), s, null) : icons[machine][meta][s][te.getTextureStateForSide(s)];
 	}
 
 	@Override
 	public IIcon getIcon(int s, int meta) {
 		try {
-			return icons[meta][0][s][0];
+			return RotaryAux.func_28813_f(1, 27, false, this.getClass()) ? RotaryAux.func_39467_a_(this, meta, s, null) : icons[meta][0][s][0];
 		}
 		catch (NullPointerException e) {
 			return ReikaTextureHelper.getMissingIcon();

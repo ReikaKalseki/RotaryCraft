@@ -73,7 +73,7 @@ public class RenderAAGun extends RotaryTERenderer {
 	{
 		if (tile == null)
 			return;
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityAAGunAt((TileEntityAAGun)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);

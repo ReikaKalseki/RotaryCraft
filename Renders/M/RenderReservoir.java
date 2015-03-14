@@ -112,7 +112,7 @@ public class RenderReservoir extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		TileEntityReservoir tr = (TileEntityReservoir)tile;
-		if (this.isValidMachineRenderpass(tr)) {
+		if (this.doRenderModel(tr)) {
 			this.renderTileEntityReservoirAt(tr, par2, par4, par6, par8);
 			if (tr.isCovered) {
 				this.renderCover(tr, par2, par4, par6);

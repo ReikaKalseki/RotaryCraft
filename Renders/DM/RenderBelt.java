@@ -102,7 +102,7 @@ public class RenderBelt extends RotaryTERenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityBeltAt((TileEntityBeltHub)tile, par2, par4, par6, par8);
 		if (((TileEntityBeltHub)tile).shouldRenderBelt())
 			//this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);

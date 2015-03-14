@@ -121,7 +121,7 @@ public class RenderFlywheel extends RotaryTERenderer
 			par8 = 0;
 		}
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.controlInt));
-		if (this.isValidMachineRenderpass((RotaryCraftTileEntity)tile))
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityFlywheelAt((TileEntityFlywheel)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);

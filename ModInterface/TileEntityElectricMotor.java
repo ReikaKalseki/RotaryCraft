@@ -156,7 +156,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 		//}
 		double add = Math.min(amount, this.getMaxStorage()-storedEnergy);
 		storedEnergy += add;
-		return add;
+		return amount-add;
 	}
 
 	private void onWrongVoltage(int tier, int correct) {
