@@ -230,7 +230,8 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	@Override
 	public boolean areConditionsMet() {
-		return ReikaInventoryHelper.countEmptySlots(inv) == 0;
+		int nslots = ReikaInventoryHelper.countEmptySlots(inv);
+		return nslots == 0 || (nslots == 1 && inv[7] == null);
 	}
 
 	@Override
