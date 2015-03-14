@@ -154,30 +154,47 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		//ReikaJavaLibrary.pConsole(tank);
 		if (tank.isEmpty())
 			return;
+
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.ENGINE)
-			this.transferToEngine((TileEntityEngine)world.getTileEntity(x, y+1, z));
+			if (this.transferToEngine((TileEntityEngine)world.getTileEntity(x, y+1, z), false))
+				return;
 		if (MachineRegistry.getMachine(world, x, y+1, z) == MachineRegistry.FUELENGINE)
-			this.transferToFuelEngine((TileEntityFuelEngine)world.getTileEntity(x, y+1, z));
+			if (this.transferToFuelEngine((TileEntityFuelEngine)world.getTileEntity(x, y+1, z), false))
+				return;
+
+		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ENGINE)
+			if (this.transferToEngine((TileEntityEngine)world.getTileEntity(x, y-1, z), true))
+				return;
+		if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.FUELENGINE)
+			if (this.transferToFuelEngine((TileEntityFuelEngine)world.getTileEntity(x, y-1, z), true))
+				return;
 	}
 
-	private void transferToFuelEngine(TileEntityFuelEngine te) {
+	private boolean transferToFuelEngine(TileEntityFuelEngine te, boolean flip) {
+		if (te.isFlipped != flip)
+			return false;
 		FluidStack liq = tank.getFluid();
 		int toadd = Math.min(liq.amount/4+1, te.CAPACITY-te.getFuelLevel());
 		if (toadd > 0) {
 			te.addFuel(toadd);
 			tank.removeLiquid(toadd);
+			return true;
 		}
+		return false;
 	}
 
-	private void transferToEngine(TileEntityEngine te) {
+	private boolean transferToEngine(TileEntityEngine te, boolean flip) {
+		if (te.isFlipped != flip)
+			return false;
 		FluidStack liq = tank.getFluid();
 		Fluid f = te.getEngineType().getFuelType();
 		if (f == null || liq == null || !f.equals(liq.getFluid()))
-			return;
+			return false;
 		if (te.getFuelLevel()+liq.amount > te.FUELCAP)
-			return;
+			return false;
 		te.addFuel(liq.amount/4+1);
 		tank.removeLiquid(liq.amount/4+1);
+		return true;
 	}
 
 	private boolean canIntakeFuel(Fluid f) {

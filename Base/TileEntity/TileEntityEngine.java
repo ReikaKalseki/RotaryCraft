@@ -257,8 +257,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	}
 
 	private void updateSpeed(int maxspeed, boolean revup) {
-		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord-1, zCoord) == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (this.hasECU()) {
+			TileEntityEngineController te = this.getECU();
 			if (te != null) {
 				maxspeed *= te.getSpeedMultiplier();
 			}
@@ -283,10 +283,18 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 		}
 	}
 
+	private boolean hasECU() {
+		return this.getMachine(isFlipped ? ForgeDirection.UP : ForgeDirection.DOWN) == MachineRegistry.ECU;
+	}
+
+	private TileEntityEngineController getECU() {
+		return (TileEntityEngineController)this.getAdjacentTileEntity(isFlipped ? ForgeDirection.UP : ForgeDirection.DOWN);
+	}
+
 	protected abstract void playSounds(World world, int x, int y, int z, float pitchMultiplier, float vol);
 
 	protected final boolean isMuffled(World world, int x, int y, int z) {
-		if (world.getBlock(x, y+1, z) == Blocks.wool) {
+		if (world.getBlock(x, y+1, z) == Blocks.wool || this.getMachine(ForgeDirection.UP) == MachineRegistry.ECU) {
 			if (world.getBlock(x, y-1, z) == Blocks.wool || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
 				return true;
 		}
@@ -329,34 +337,32 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 		float pitch = 1F;
 		float soundfactor = 1F;
-		if (type.isECUControllable()) {
-			if (MachineRegistry.getMachine(world, x, y-1, z) == MachineRegistry.ECU) {
-				TileEntityEngineController te = (TileEntityEngineController)this.getAdjacentTileEntity(ForgeDirection.DOWN);
-				if (te != null) {
-					if (te.canProducePower()) {
-						if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
-							//omega = (int)(omega*te.getSpeedMultiplier());
-							int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
-							//this.updateSpeed(max, omega < max);
-						}
-						timer.setCap("fuel", type.getFuelUnitDuration());
-						int fuelcap = timer.getCapOf("fuel");
-						fuelcap = fuelcap*te.getFuelMultiplier(type.type);
-						timer.setCap("fuel", fuelcap);
-						pitch = te.getSoundStretch();
-						soundfactor = 1F/te.getSoundStretch();
-						int soundcap = timer.getCapOf("sound");
-						soundcap = (int)(soundcap*soundfactor);
-						timer.setCap("sound", soundcap);
-						int tempcap = timer.getCapOf("temperature");
-						tempcap *= soundfactor;
-						timer.setCap("temperature", tempcap);
+		if (type.isECUControllable() && this.hasECU()) {
+			TileEntityEngineController te = this.getECU();
+			if (te != null) {
+				if (te.canProducePower()) {
+					if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
+						//omega = (int)(omega*te.getSpeedMultiplier());
+						int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
+						//this.updateSpeed(max, omega < max);
 					}
-					else {
-						//this.updateSpeed(0, false);
-						this.resetPower();
-						soundtick = 0;
-					}
+					timer.setCap("fuel", type.getFuelUnitDuration());
+					int fuelcap = timer.getCapOf("fuel");
+					fuelcap = fuelcap*te.getFuelMultiplier(type.type);
+					timer.setCap("fuel", fuelcap);
+					pitch = te.getSoundStretch();
+					soundfactor = 1F/te.getSoundStretch();
+					int soundcap = timer.getCapOf("sound");
+					soundcap = (int)(soundcap*soundfactor);
+					timer.setCap("sound", soundcap);
+					int tempcap = timer.getCapOf("temperature");
+					tempcap *= soundfactor;
+					timer.setCap("temperature", tempcap);
+				}
+				else {
+					//this.updateSpeed(0, false);
+					this.resetPower();
+					soundtick = 0;
 				}
 			}
 		}
@@ -724,15 +730,19 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 			return dx == backx && dy == yCoord && dz == backz;
 		}
 		else if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
-			return from == ForgeDirection.DOWN;
+			return from == this.getFuelInputDirection();
 		}
 		else if (fluid.equals(FluidRegistry.getFluid("rc ethanol"))) {
-			return from == ForgeDirection.DOWN;
+			return from == this.getFuelInputDirection();
 		}
 		else if (fluid.equals(FluidRegistry.getFluid("bioethanol"))) {
-			return from == ForgeDirection.DOWN;
+			return from == this.getFuelInputDirection();
 		}
 		return false;
+	}
+
+	private ForgeDirection getFuelInputDirection() {
+		return isFlipped ? ForgeDirection.UP : ForgeDirection.DOWN;
 	}
 
 	@Override

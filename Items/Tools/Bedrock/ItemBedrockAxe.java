@@ -60,6 +60,11 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 	}
 
 	@Override
+	public int getHarvestLevel(ItemStack stack, String toolClass) {
+		return toolClass.toLowerCase().contains("axe") && !toolClass.toLowerCase().contains("pick") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
+	}
+
+	@Override
 	public void onUpdate(ItemStack is, World world, Entity entity, int slot, boolean par5) {
 		this.forceNoSilkTouch(is, world, entity, slot);
 	}

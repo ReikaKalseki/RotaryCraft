@@ -67,14 +67,20 @@ TemperatureTE {
 			if (!ig.hasBreathableAtmosphere() || !ig.isGasPresent(IAtmosphericGas.OXYGEN))
 				return false;
 		}
-		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
-		if (m == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)world.getTileEntity(x, y-1, z);
+		if (this.hasECU()) {
+			TileEntityEngineController te = this.getECU();
 			return te.canProducePower();
 		}
 		return !lubetank.isEmpty();
 	}
 
+	private boolean hasECU() {
+		return this.getMachine(isFlipped ? ForgeDirection.UP : ForgeDirection.DOWN) == MachineRegistry.ECU;
+	}
+
+	private TileEntityEngineController getECU() {
+		return (TileEntityEngineController)this.getAdjacentTileEntity(isFlipped ? ForgeDirection.UP : ForgeDirection.DOWN);
+	}
 	private void updateSpeed(int maxspeed, boolean revup) {
 		if (revup) {
 			if (omega < maxspeed) {
@@ -95,9 +101,8 @@ TemperatureTE {
 	}
 
 	private int getFuelDuration(World world, int x, int y, int z) {
-		MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
-		if (m == MachineRegistry.ECU) {
-			TileEntityEngineController te = (TileEntityEngineController)world.getTileEntity(x, y-1, z);
+		if (this.hasECU()) {
+			TileEntityEngineController te = this.getECU();
 			return 36*te.getFuelMultiplier(EngineClass.PISTON);
 		}
 		return 36;
@@ -119,9 +124,8 @@ TemperatureTE {
 				tank.removeLiquid(1);
 			}
 			torque = GEN_TORQUE;
-			MachineRegistry m = MachineRegistry.getMachine(world, x, y-1, z);
-			if (m == MachineRegistry.ECU) {
-				TileEntityEngineController te = (TileEntityEngineController)world.getTileEntity(x, y-1, z);
+			if (this.hasECU()) {
+				TileEntityEngineController te = this.getECU();
 				genomega *= te.getSpeedMultiplier();
 			}
 		}
@@ -249,8 +253,10 @@ TemperatureTE {
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid f) {
 		switch(from) {
+		case UP:
+			return isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
 		case DOWN:
-			return f.equals(FluidRegistry.getFluid("fuel"));
+			return !isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
 		case EAST:
 		case NORTH:
 		case SOUTH:

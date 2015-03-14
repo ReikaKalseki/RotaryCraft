@@ -511,4 +511,10 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public int getEmittingZ() {
 		return zCoord+write.offsetZ;
 	}
+
+	@Override
+	public void onPowerLooped(PowerSourceList pwr) {
+		omega = torque = 0;
+		power = 0;
+	}
 }

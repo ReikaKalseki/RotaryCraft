@@ -768,17 +768,25 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	@Override
 	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
-		if (read != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX+this.getPointingOffsetX(), yCoord+read.offsetY+this.getPointingOffsetY(), zCoord+read.offsetZ+this.getPointingOffsetZ(), this, caller));
+		if (isOmniSided) {
+			for (int i = 0; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				pwr.addAll(pwr.getAllFrom(worldObj, dir, xCoord+dir.offsetX+this.getPointingOffsetX(), yCoord+dir.offsetY+this.getPointingOffsetY(), zCoord+dir.offsetZ+this.getPointingOffsetZ(), this, caller));
+			}
 		}
-		if (read2 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX+this.getPointingOffsetX(), yCoord+read2.offsetY+this.getPointingOffsetY(), zCoord+read2.offsetZ+this.getPointingOffsetZ(), this, caller));
-		}
-		if (read3 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read3, xCoord+read3.offsetX+this.getPointingOffsetX(), yCoord+read3.offsetY+this.getPointingOffsetY(), zCoord+read3.offsetZ+this.getPointingOffsetZ(), this, caller));
-		}
-		if (read4 != null) {
-			pwr.addAll(pwr.getAllFrom(worldObj, read4, xCoord+read4.offsetX+this.getPointingOffsetX(), yCoord+read4.offsetY+this.getPointingOffsetY(), zCoord+read4.offsetZ+this.getPointingOffsetZ(), this, caller));
+		else {
+			if (read != null) {
+				pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX+this.getPointingOffsetX(), yCoord+read.offsetY+this.getPointingOffsetY(), zCoord+read.offsetZ+this.getPointingOffsetZ(), this, caller));
+			}
+			if (read2 != null) {
+				pwr.addAll(pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX+this.getPointingOffsetX(), yCoord+read2.offsetY+this.getPointingOffsetY(), zCoord+read2.offsetZ+this.getPointingOffsetZ(), this, caller));
+			}
+			if (read3 != null) {
+				pwr.addAll(pwr.getAllFrom(worldObj, read3, xCoord+read3.offsetX+this.getPointingOffsetX(), yCoord+read3.offsetY+this.getPointingOffsetY(), zCoord+read3.offsetZ+this.getPointingOffsetZ(), this, caller));
+			}
+			if (read4 != null) {
+				pwr.addAll(pwr.getAllFrom(worldObj, read4, xCoord+read4.offsetX+this.getPointingOffsetX(), yCoord+read4.offsetY+this.getPointingOffsetY(), zCoord+read4.offsetZ+this.getPointingOffsetZ(), this, caller));
+			}
 		}
 		return pwr;
 	}

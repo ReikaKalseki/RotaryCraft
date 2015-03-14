@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
@@ -26,6 +27,7 @@ public class PowerSourceList {
 	private ArrayList<PowerGenerator> engines = new ArrayList<PowerGenerator>();
 	private ShaftMerger caller;
 	private ArrayList<ShaftMerger> mergers = new ArrayList();
+	private boolean isLooping = false;
 
 	public long getMaxGennablePower() {
 		long pwr = 0;
@@ -51,18 +53,28 @@ public class PowerSourceList {
 		return this;
 	}
 
+	public boolean isLooping() {
+		return isLooping;
+	}
+
 	public static PowerSourceList getAllFrom(World world, ForgeDirection dir, int x, int y, int z, PowerSourceTracker io, ShaftMerger caller) {
 		PowerSourceList pwr = new PowerSourceList();
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ShaftMerger) {
-			if (pwr.mergers.contains(tile)) {
-				pwr.engines.clear();
-				pwr.mergers.clear();
+		if (caller != null) {
+			if (pwr.passesThrough(caller) || (tile instanceof ShaftMerger && pwr.passesThrough((ShaftMerger)tile)) || tile == caller) {
+				pwr.isLooping = true;
+				caller.onPowerLooped(pwr);
 				return pwr;
 			}
+		}
+
+		if (tile instanceof ShaftMerger) {
 			pwr.mergers.add((ShaftMerger)tile);
+			if (tile == caller) {
+				pwr.isLooping = true;
+			}
 		}
 
 		try {
@@ -104,10 +116,16 @@ public class PowerSourceList {
 				}
 			}
 			pwr.caller = caller;
+
+			if (pwr.passesThrough(caller)) {
+				pwr.isLooping = true;
+			}
+
 			return pwr;
 		}
 		catch (StackOverflowError e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			ReikaJavaLibrary.pConsole("PowerSourceList SOE!");
 			return pwr;
 		}
 	}
@@ -175,7 +193,12 @@ public class PowerSourceList {
 		psl.mergers.addAll(in1.mergers);
 		psl.mergers.addAll(in2.mergers);
 
+		if (psl.mergers.contains(caller)) {
+			psl.isLooping = true;
+		}
+
 		psl.caller = caller;
+
 		return psl;
 	}
 

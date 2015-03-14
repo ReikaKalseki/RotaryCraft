@@ -117,8 +117,8 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		if (this.hasEnchantment(Enchantment.silkTouch))
 			return false;
 		int excess = (int)(power/MINPOWER);
-		int chance = rand.nextInt(excess/8);
-		return (chance == 0);
+		int chance = rand.nextInt(1+excess/8);
+		return chance == 0;
 	}
 
 	private boolean canCraftARocket() {

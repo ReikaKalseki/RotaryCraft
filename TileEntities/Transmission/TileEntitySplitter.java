@@ -491,36 +491,12 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	private boolean canCombine(PowerSourceList in1, PowerSourceList in2, int t1, int t2) {
-		if (bedrock)
-			return true;
-		//if (t1 == t2)
-		//	return true;
+		PowerSourceList combo = PowerSourceList.combine(in1, in2, this);
+		if (combo.isLooping())
+			return false;
 		if (t1 == 0 || t2 == 0)
 			return true;
-		/*
-		if (t1 / t2 >= 256)
-			return false;
-		if (t2 / t1 >= 256)
-			return false;
-
-		long power1 = in1.getMaxGennablePower();
-		long power2 = in2.getMaxGennablePower();
-		if (power1 == power2)
-			return true;
-		if (power1 == 0 || power2 == 0)
-			return true;
-		 */
-
-		PowerSourceList combo = PowerSourceList.combine(in1, in2, this);
-		if (combo.isEngineSpam())
-			return false;
-		/*
-		if (power1/power2 >= 16384)
-			return false;
-		if (power2/power1 >= 16384)
-			return false;
-		 */
-		return true;
+		return bedrock || !combo.isEngineSpam();
 	}
 
 	private void fail() {
@@ -788,5 +764,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	public void setBedrock() {
 		bedrock = true;
+	}
+
+	@Override
+	public void onPowerLooped(PowerSourceList pwr) {
+		if (power > 0)
+			this.fail();
 	}
 }
