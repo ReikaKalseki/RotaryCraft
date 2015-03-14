@@ -85,6 +85,7 @@ import Reika.RotaryCraft.Items.Tools.Charged.ItemGravelGun;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemMotionTracker;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemNightVisionGoggles;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemPump;
+import Reika.RotaryCraft.Items.Tools.Charged.ItemRangeFinder;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemStunGun;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemUltrasound;
@@ -186,7 +187,8 @@ public enum ItemRegistry implements ItemEnum {
 	SPAWNER(0, false,				"item.spawner",				ItemSpawner.class),
 	STEELPACK(44, 1, false,			"item.steelpack",			ItemJetPack.class),
 	CUSTOMEXTRACT(240, true,		"item.customextract",		ItemCustomModOre.class),
-	CUSTOMINGOT(244, true,			"item.customingot",			ItemCustomModOre.class);
+	CUSTOMINGOT(244, true,			"item.customingot",			ItemCustomModOre.class),
+	RANGEFINDER(42, 1, true,		"item.rangefinder",			ItemRangeFinder.class),
 	;//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
 
 	private final int index;

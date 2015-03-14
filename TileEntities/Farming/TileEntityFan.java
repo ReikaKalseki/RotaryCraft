@@ -340,7 +340,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 		switch (meta) {
 		case 0:
-			minx = xCoord-range-1;
+			minx = xCoord-range;
 			maxx = xCoord;
 			miny = yCoord;
 			maxy = yCoord+1;
@@ -365,7 +365,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			break;
 		case 3:
 			maxz = zCoord;
-			minz = zCoord-range-1;
+			minz = zCoord-range;
 			miny = yCoord;
 			maxy = yCoord+1;
 			minx = xCoord;

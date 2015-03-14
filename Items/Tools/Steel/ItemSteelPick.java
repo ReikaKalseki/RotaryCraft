@@ -17,7 +17,9 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -88,6 +90,11 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
 		return ItemRegistry.getEntry(is).getBasicName();
+	}
+
+	@Override
+	public boolean getIsRepairable(ItemStack tool, ItemStack item) {
+		return tool.getItem() == this && ReikaItemHelper.matchStacks(item, ItemStacks.steelingot);
 	}
 
 }

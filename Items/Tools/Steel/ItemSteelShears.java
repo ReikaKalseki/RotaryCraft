@@ -12,7 +12,9 @@ package Reika.RotaryCraft.Items.Tools.Steel;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemSteelShears extends ItemShears implements IndexedItemSprites {
@@ -49,6 +51,11 @@ public class ItemSteelShears extends ItemShears implements IndexedItemSprites {
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
 		return ItemRegistry.getEntry(is).getBasicName();
+	}
+
+	@Override
+	public boolean getIsRepairable(ItemStack tool, ItemStack item) {
+		return tool.getItem() == this && ReikaItemHelper.matchStacks(item, ItemStacks.steelingot);
 	}
 
 }
