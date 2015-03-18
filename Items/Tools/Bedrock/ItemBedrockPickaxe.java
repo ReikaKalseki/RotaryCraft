@@ -257,7 +257,9 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (b == TwilightForestHandler.BlockEntry.DEADROCK.getBlock())
 			return 60F;
 		if (ModOreList.getModOreFromOre(b, meta) == ModOreList.MIMICHITE)
-			return 48F;
+			return 64F;
+		if (b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitFacade"))
+			return 32F;
 
 		if (ReikaBlockHelper.isOre(b, meta))
 			return 24F;

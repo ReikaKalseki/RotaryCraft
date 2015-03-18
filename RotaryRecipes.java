@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ThermalRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -147,7 +148,7 @@ public class RotaryRecipes {
 		MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', ItemStacks.conductive.getItem(), 'C', coil, 'P', ItemStacks.basepanel, 'S', ItemStacks.diamondshaftcore, 'l', ps, 's', "ingotSilver");
 
 		if (ModList.TINKERER.isLoaded())
-			;//GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
+			GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
 
 		if (ModList.THERMALEXPANSION.isLoaded()) {
 			ItemStack hardGlass = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "hardenedGlass", 1);
@@ -157,6 +158,16 @@ public class RotaryRecipes {
 				//GameRegistry.addRecipe(new ShapedOreRecipe(hardGlass, " L ", "LGL", " L ", 'L', "nuggetLead", 'G', RotaryCraft.obsidianglass));
 				ReikaRecipeHelper.replaceIngredientInAllRecipes(hardGlass, BlockRegistry.BLASTGLASS.getStackOf(), true);
 			}
+		}
+
+		if (ModList.PROJRED.isLoaded()) {
+			ItemStack saw = ItemRegistry.BEDSAW.getStackOf();
+			ItemStack siliconWafer = GameRegistry.findItemStack(ModList.PROJRED.modLabel, "projectred.core.part", 1);
+			ItemStack siliconCylinder = GameRegistry.findItemStack(ModList.PROJRED.modLabel, "projectred.core.part", 1);
+			siliconWafer.setItemDamage(12);
+			siliconCylinder.setItemDamage(11);
+
+			GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(siliconWafer, 16), "S", "s", 'S', saw, 's', siliconCylinder);
 		}
 
 		if (ModList.THAUMCRAFT.isLoaded()) {
@@ -390,7 +401,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.BELT.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', ItemStacks.basepanel, 'G', ItemStacks.hub, 's', ItemStacks.steelingot);
 
-		MachineRegistry.VANDEGRAFF.addCrafting("shs", "bgb", "php", 'h', ItemStacks.hub, 'p', ItemStacks.basepanel, 'b', Items.brick, 'g', Blocks.glass_pane, 's', ItemStacks.steelingot);
+		MachineRegistry.VANDEGRAFF.addCrafting("shs", "gbg", "php", 'h', ItemStacks.hub, 'p', ItemStacks.basepanel, 'b', ItemStacks.belt, 'g', Blocks.glass_pane, 's', ItemStacks.steelingot);
 
 		MachineRegistry.DISTILLER.addCrafting("PGP", "gMg", "PGP", 'G', Blocks.glass_pane, 'M', ItemStacks.mixer, 'P', ItemStacks.basepanel, 'g', Items.iron_ingot);
 

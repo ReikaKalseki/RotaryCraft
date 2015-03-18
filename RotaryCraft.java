@@ -61,6 +61,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
+import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
@@ -489,8 +490,10 @@ public class RotaryCraft extends DragonAPIMod {
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 				MachineRegistry m = MachineRegistry.machineList.get(i);
-				if (!m.allowsAcceleration())
+				if (!m.allowsAcceleration()) {
 					AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+					TimeTorchHelper.blacklistTileEntity(m.getTEClass());
+				}
 			}
 			for (int i = 0; i < EngineType.engineList.length; i++) {
 				EngineType type = EngineType.engineList[i];

@@ -70,6 +70,13 @@ public class RotaryEventManager {
 
 	}
 
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void harvestSpawner(BlockEvent.BreakEvent evt) {
+		if (evt.block == Blocks.mob_spawner && ItemRegistry.BEDPICK.matchItem(evt.getPlayer().getCurrentEquippedItem())) {
+			evt.setExpToDrop(0);
+		}
+	}
+
 	@SubscribeEvent
 	public void cancelFramez(FrameUsageEvent evt) {
 		if (!this.isMovable(evt.tile)) {

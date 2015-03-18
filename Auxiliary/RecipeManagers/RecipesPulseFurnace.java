@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -57,10 +58,19 @@ public class RecipesPulseFurnace
 		if (ModList.THERMALFOUNDATION.isLoaded()) {
 			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustEnderium", 1);
 			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotEnderium", 1);
-			if (enderdust == null && enderingot == null)
+			if (enderdust == null || enderingot == null)
 				RotaryCraft.logger.logError("No item found for TE3 enderium crafting!");
 			else
 				this.addSmelting(enderdust, enderingot);
+		}
+
+		if (ModList.ARSENAL.isLoaded()) {
+			ItemStack fluxdust = RedstoneArsenalHandler.getInstance().getFluxDust();
+			ItemStack fluxingot = RedstoneArsenalHandler.getInstance().getFluxIngot();
+			if (fluxdust == null || fluxingot == null)
+				RotaryCraft.logger.logError("No item found for Redstone Arsenal fluxed ingot crafting!");
+			else
+				this.addSmelting(fluxdust, fluxingot);
 		}
 	}
 
@@ -132,7 +142,7 @@ public class RecipesPulseFurnace
 		return ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, size);
 	}
 
-	private void addSmelting(ItemStack in, ItemStack itemstack) {
+	public void addSmelting(ItemStack in, ItemStack itemstack) {
 		recipes.put(in, itemstack);
 	}
 

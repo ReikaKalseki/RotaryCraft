@@ -51,7 +51,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
 		this.tickCraftingDisplay();
-		if (power >= MINPOWER) {
+		if (power >= MINPOWER && false) {
 			updateTimer.update();
 			if (updateTimer.checkCap() && !world.isRemote) {
 				this.buildCache();

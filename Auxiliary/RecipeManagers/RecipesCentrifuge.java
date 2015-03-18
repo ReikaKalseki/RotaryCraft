@@ -32,6 +32,8 @@ import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayLis
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -80,6 +82,14 @@ public class RecipesCentrifuge
 			ItemStack lead = OreDictionary.getOres("dustLead").get(0);
 			ItemStack silver = OreDictionary.getOres("dustSilver").get(0);
 			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, lead, 100, silver, 100);
+		}
+
+		if (ModList.TINKERER.isLoaded()) {
+			ItemStack berry = OreBerryBushHandler.BerryTypes.XP.getStack();
+			if (berry != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
+				this.addRecipe(berry, fs, 100);
+			}
 		}
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));
