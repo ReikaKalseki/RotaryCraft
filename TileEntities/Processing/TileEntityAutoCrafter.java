@@ -55,7 +55,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	@ModDependent(ModList.APPENG)
 	private final IGridBlock aeGridBlock;
 	@ModDependent(ModList.APPENG)
-	private final IGridNode aeGridNode;
+	private IGridNode aeGridNode;
 
 	private final StepTimer updateTimer = new StepTimer(50);
 
@@ -86,9 +86,29 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		}
 	}
 
-	private void injectItems() {
-		if (ModList.APPENG.isLoaded()) {
+	@Override
+	protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalid) {
+		super.onInvalidateOrUnload(world, x, y, z, invalid);
+		aeGridNode.destroy();
+	}
 
+	private void injectItems() {
+		if (ModList.APPENG.isLoaded() && network != null) {
+			for (int i = 0; i < 18; i++) {
+				ItemStack in = inv[i+OUTPUT_OFFSET];
+				if (in != null) {
+					in.stackSize = (int)network.addItem(in, false);
+					if (in.stackSize <= 0)
+						inv[i+OUTPUT_OFFSET] = null;
+				}
+
+				in = inv[i+CONTAINER_OFFSET];
+				if (in != null) {
+					in.stackSize = (int)network.addItem(in, false);
+					if (in.stackSize <= 0)
+						inv[i+CONTAINER_OFFSET] = null;
+				}
+			}
 		}
 	}
 
@@ -106,7 +126,11 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		}
 
 		if (ModList.APPENG.isLoaded()) {
-			network = new MESystemReader(aeGridNode, SourceType.MACHINE);
+			if (aeGridNode == null) {
+				aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode(aeGridBlock) : null;
+			}
+			aeGridNode.updateState();
+			network = aeGridNode != null ? new MESystemReader(aeGridNode, SourceType.MACHINE) : null;
 		}
 	}
 
@@ -189,8 +213,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 						}
 					}
 				}
-				if (false)
-					this.craft(slot, size, out, counts);
+				this.craft(slot, size, out, counts);
 				return true;
 			}
 		}
@@ -362,7 +385,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 		@Override
 		public boolean isWorldAccessible() {
-			return false;
+			return true;
 		}
 
 		@Override
@@ -372,7 +395,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 		@Override
 		public AEColor getGridColor() {
-			return AEColor.LightBlue;
+			return AEColor.Transparent;
 		}
 
 		@Override
@@ -414,7 +437,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	@Override
 	public AECableType getCableConnectionType(ForgeDirection dir) {
-		return AECableType.GLASS;
+		return AECableType.COVERED;
 	}
 
 	@Override
