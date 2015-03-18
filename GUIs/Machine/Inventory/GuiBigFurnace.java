@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Containers.ContainerBigFurnace;
+import Reika.RotaryCraft.Containers.Machine.ContainerBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 
 public class GuiBigFurnace extends GuiPowerOnlyMachine

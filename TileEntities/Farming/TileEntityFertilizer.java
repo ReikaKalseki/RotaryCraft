@@ -91,7 +91,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 
 	private int getConsecutiveUpdates() {
 		if (omega < 1048576)
-			return 0;
+			return 1;
 		return 1+ReikaMathLibrary.logbase2(omega/1048576);
 	}
 

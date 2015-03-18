@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 
 import net.minecraft.inventory.IInventory;
@@ -24,34 +24,55 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
-import Reika.DragonAPI.Instantiable.ModInteract.MENetwork;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
+import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import appeng.api.AEApi;
+import appeng.api.networking.GridFlags;
+import appeng.api.networking.GridNotification;
+import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridBlock;
+import appeng.api.networking.IGridHost;
+import appeng.api.networking.IGridNode;
+import appeng.api.util.AECableType;
+import appeng.api.util.AEColor;
+import appeng.api.util.DimensionalCoord;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
+public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IGridHost {
 
 	public boolean continuous = true;
 	private final ItemCollection ingredients = new ItemCollection();
 	public int[] crafting = new int[18];
 
 	@ModDependent(ModList.APPENG)
-	private MENetwork network;
+	private MESystemReader network;
+	@ModDependent(ModList.APPENG)
+	private final IGridBlock aeGridBlock;
+	@ModDependent(ModList.APPENG)
+	private final IGridNode aeGridNode;
 
 	private final StepTimer updateTimer = new StepTimer(50);
 
 	private static final int OUTPUT_OFFSET = 18;
 	private static final int CONTAINER_OFFSET = 36;
 
+	public TileEntityAutoCrafter() {
+		aeGridBlock = new GridBlock();
+		aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode(aeGridBlock) : null;
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getSummativeSidedPower();
 		this.tickCraftingDisplay();
-		if (power >= MINPOWER && false) {
+		if (power >= MINPOWER) {
 			updateTimer.update();
 			if (updateTimer.checkCap() && !world.isRemote) {
 				this.buildCache();
@@ -85,7 +106,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		}
 
 		if (ModList.APPENG.isLoaded()) {
-			network = MENetwork.getConnectedTo(this);
+			network = new MESystemReader(aeGridNode, SourceType.MACHINE);
 		}
 	}
 
@@ -97,6 +118,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		}
 	}
 
+	/*
 	public void triggerCrafting(int slot, int amt) {
 		if (power >= MINPOWER) {
 			ItemStack out = this.getSlotRecipeOutput(slot);
@@ -112,6 +134,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 			}
 		}
 	}
+	 */
 
 	private ItemStack getSlotRecipeOutput(int slot) {
 		ItemStack is = inv[slot];
@@ -130,7 +153,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 	private boolean attemptSlotCrafting(int i) {
 		ItemStack is = inv[i];
 		if (is != null && is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null) {
-			ArrayList<ItemStack>[] items = ItemCraftPattern.getItems(is);
+			ItemStack[] items = ItemCraftPattern.getItems(is);
 			ItemStack out = ItemCraftPattern.getRecipeOutput(is);
 			if (out != null) {
 				//ReikaJavaLibrary.pConsole("crafting "+out+" from "+Arrays.toString(items));
@@ -140,76 +163,76 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		return false;
 	}
 
-	private boolean tryCrafting(int i, ItemStack out, ArrayList<ItemStack>[] items) {
+	private boolean tryCrafting(int i, ItemStack out, ItemStack[] items) {
 		int slot = i+OUTPUT_OFFSET;
 		int size = inv[slot] != null ? inv[slot].stackSize : 0;
 		if (inv[slot] == null || (ReikaItemHelper.matchStacks(out, inv[slot]) && size+out.stackSize <= out.getMaxStackSize())) {
 			if (inv[i+CONTAINER_OFFSET] == null) {
 				ItemHashMap<Integer> counts = new ItemHashMap(); //ingredient requirements
-				ItemHashMap<ArrayList<ItemStack>> options = new ItemHashMap();
 				for (int k = 0; k < 9; k++) {
-					if (items[k] != null && !items[k].isEmpty()) {
-						Integer req = counts.get(items[k].get(0));
+					if (items[k] != null) {
+						Integer req = counts.get(items[k]);
 						int val = req != null ? req.intValue() : 0;
-						counts.put(items[k].get(0), val+1); // items[k].stackSize ?
-						options.put(items[k].get(0), items[k]);
+						counts.put(items[k], val+1); // items[k].stackSize ? no, recipes take 1 per slot
 					}
 				}
 				for (ItemStack is : counts.keySet()) {
 					int req = counts.get(is);
-					int has = this.getAvailableIngredients(options.get(is));
+					int has = this.getAvailableIngredients(is);
 					int missing = req-has;
+					//ReikaJavaLibrary.pConsole("need "+req+" / have "+has+" '"+is+" ("+is.getDisplayName()+")'; making '"+out+" ("+out.getDisplayName()+")'");
 					if (missing > 0) {
 						//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
-						if (!this.tryCraftIntermediates(missing, options.get(is))) {
+						if (!this.tryCraftIntermediates(missing, is)) {
 							//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
 							return false;
 						}
 					}
 				}
-				this.craft(slot, size, out, counts);
+				if (false)
+					this.craft(slot, size, out, counts);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private int getAvailableIngredients(ArrayList<ItemStack> li) {
+	private int getAvailableIngredients(ItemStack is) {
 		int count = 0;
-		ItemHashMap<Long> map = ModList.APPENG.isLoaded() && network != null ? network.getMEContents() : null;
+		ItemHashMap<Long> map = ModList.APPENG.isLoaded() && network != null ? network.getMESystemContents() : null;
 		//ReikaJavaLibrary.pConsole(map);
-		for (ItemStack is : li) {
-			//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
-			count += ingredients.getItemCount(is);
-			if (map != null) {
-				Long me = map.get(is);
-				count += me != null ? me.intValue() : 0;
-			}
+		//for (ItemStack is : li) {
+		//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
+		count += ingredients.getItemCount(is);
+		if (map != null) {
+			Long me = map.get(is);
+			count += me != null ? me.intValue() : 0;
 		}
+		//}
 
 		return count;
 	}
 
-	private boolean tryCraftIntermediates(int num, ArrayList<ItemStack> li) {
+	private boolean tryCraftIntermediates(int num, ItemStack is) {
 		int run = 0;
 		HashMap<Integer, Integer> ranSlots = new HashMap();
-		for (ItemStack is : li) {
-			for (int i = 0; i < 18 && run < num; i++) {
-				ItemStack out = this.getSlotRecipeOutput(i);
-				//ReikaJavaLibrary.pConsole(i+":"+out+" & "+is);
-				if (out != null && ReikaItemHelper.matchStacks(is, out)) {
-					//ReikaJavaLibrary.pConsole("attempting slot "+i+", because "+out+" matches "+is);
-					while (run < num && this.attemptSlotCrafting(i)) {
-						run += out.stackSize;
-						Integer get = ranSlots.get(i);
-						int val = get != null ? get.intValue() : 0;
-						ranSlots.put(i, Math.min(num, val+out.stackSize));
-					}
+		//for (ItemStack is : li) {
+		for (int i = 0; i < 18 && run < num; i++) {
+			ItemStack out = this.getSlotRecipeOutput(i);
+			//ReikaJavaLibrary.pConsole(i+":"+out+" & "+is);
+			if (out != null && ReikaItemHelper.matchStacks(is, out)) {
+				//ReikaJavaLibrary.pConsole("attempting slot "+i+", because "+out+" matches "+is);
+				while (run < num && this.attemptSlotCrafting(i)) {
+					run += out.stackSize;
+					Integer get = ranSlots.get(i);
+					int val = get != null ? get.intValue() : 0;
+					ranSlots.put(i, Math.min(num, val+out.stackSize));
 				}
 			}
-			if (run >= num)
-				break;
 		}
+		//if (run >= num)
+		//	break;
+		//}
 		if (run >= num) {
 			for (int slot : ranSlots.keySet()) {
 				inv[slot+OUTPUT_OFFSET].stackSize -= ranSlots.get(slot);
@@ -239,7 +262,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 						int diff = req-rem;
 						if (ModList.APPENG.isLoaded()) {
 							if (diff > 0 && network != null) {
-								dec -= network.removeFromMESystem(is2, diff);
+								ItemStack is2c = is2.copy();
+								is2c.stackSize = diff;
+								dec -= network.removeItem(is2, false);//network.removeFromMESystem(is2, diff);
 							}
 						}
 					}
@@ -252,7 +277,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 				int diff = req-rem;
 				if (ModList.APPENG.isLoaded()) {
 					if (diff > 0 && network != null) {
-						network.removeFromMESystem(is, diff);
+						ItemStack isc = is.copy();
+						isc.stackSize = diff;
+						network.removeItem(isc, false);//network.removeFromMESystem(is, diff);
 					}
 				}
 			}
@@ -319,6 +346,80 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver {
 		super.readSyncTag(NBT);
 
 		continuous = NBT.getBoolean("cont");
+	}
+
+	private class GridBlock implements IGridBlock {
+
+		@Override
+		public double getIdlePowerUsage() {
+			return 1;
+		}
+
+		@Override
+		public EnumSet<GridFlags> getFlags() {
+			return EnumSet.of(GridFlags.REQUIRE_CHANNEL);
+		}
+
+		@Override
+		public boolean isWorldAccessible() {
+			return false;
+		}
+
+		@Override
+		public DimensionalCoord getLocation() {
+			return new DimensionalCoord(TileEntityAutoCrafter.this);
+		}
+
+		@Override
+		public AEColor getGridColor() {
+			return AEColor.LightBlue;
+		}
+
+		@Override
+		public void onGridNotification(GridNotification notification) {
+
+		}
+
+		@Override
+		public void setNetworkStatus(IGrid grid, int channelsInUse) {
+
+		}
+
+		@Override
+		public EnumSet<ForgeDirection> getConnectableSides() {
+			return EnumSet.allOf(ForgeDirection.class);
+		}
+
+		@Override
+		public IGridHost getMachine() {
+			return TileEntityAutoCrafter.this;
+		}
+
+		@Override
+		public void gridChanged() {
+
+		}
+
+		@Override
+		public ItemStack getMachineRepresentation() {
+			return TileEntityAutoCrafter.this.getMachine().getCraftedProduct();
+		}
+
+	}
+
+	@Override
+	public IGridNode getGridNode(ForgeDirection dir) {
+		return aeGridNode;
+	}
+
+	@Override
+	public AECableType getCableConnectionType(ForgeDirection dir) {
+		return AECableType.GLASS;
+	}
+
+	@Override
+	public void securityBreak() {
+
 	}
 
 }

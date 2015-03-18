@@ -11,7 +11,7 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Containers.ContainerAerosolizer;
+import Reika.RotaryCraft.Containers.Machine.ContainerAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 
 public class GuiAerosolizer extends GuiPowerOnlyMachine

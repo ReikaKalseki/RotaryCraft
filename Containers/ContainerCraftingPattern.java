@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Containers;
 
-import java.util.ArrayList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -55,9 +53,9 @@ public class ContainerCraftingPattern extends Container {
 			this.addSlotToContainer(new Slot(player.inventory, var6, 8 + var6 * 18, 142));
 
 		ItemStack tool = player.getCurrentEquippedItem();
-		ArrayList<ItemStack>[] items = ItemCraftPattern.getItems(tool);
+		ItemStack[] items = ItemCraftPattern.getItems(tool);
 		for (int i = 0; i < 9; i++) {
-			craftMatrix.setInventorySlotContents(i, items[i] != null && !items[i].isEmpty() ? items[i].get(0) : null);
+			craftMatrix.setInventorySlotContents(i, items[i] != null ? items[i] : null);
 		}
 
 		this.onCraftMatrixChanged(craftMatrix);

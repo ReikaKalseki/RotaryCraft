@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Containers.ContainerAutoCrafter;
+import Reika.RotaryCraft.Containers.Machine.ContainerAutoCrafter;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import cpw.mods.fml.relauncher.Side;

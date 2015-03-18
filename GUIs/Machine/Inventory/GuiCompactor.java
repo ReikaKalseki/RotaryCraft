@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.ContainerCompactor;
+import Reika.RotaryCraft.Containers.Machine.ContainerCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 
 public class GuiCompactor extends GuiMachine

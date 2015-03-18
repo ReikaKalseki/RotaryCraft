@@ -23,7 +23,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Containers.ContainerCannon;
+import Reika.RotaryCraft.Containers.Machine.ContainerCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;

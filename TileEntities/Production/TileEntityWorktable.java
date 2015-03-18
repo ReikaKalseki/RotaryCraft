@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
-import Reika.RotaryCraft.Containers.ContainerWorktable;
+import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;

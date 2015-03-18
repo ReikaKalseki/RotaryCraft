@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -19,17 +18,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.SpriteRenderCallback;
-import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
-import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
@@ -83,20 +78,17 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		return item != null ? item.copy() : null;
 	}
 
-	public static ArrayList<ItemStack>[] getItems(ItemStack is) {
-		ArrayList<ItemStack>[] items = new ArrayList[9];
+	public static ItemStack[] getItems(ItemStack is) {
+		ItemStack[] items = new ItemStack[9];
 		if (is.stackTagCompound != null) {
 			NBTTagCompound recipe = is.stackTagCompound.getCompoundTag("recipe");
 			for (int i = 0; i < 9; i++) {
-				NBTTagList tag = recipe.getTagList(String.valueOf(i), NBTTypes.COMPOUND.ID);
-				ArrayList<ItemStack> li = new ArrayList();
-				for (int k = 0; k < tag.tagCount(); k++) {
-					NBTTagCompound nbt = tag.getCompoundTagAt(k);
-					ItemStack in = ItemStack.loadItemStackFromNBT(nbt);
-					if (in != null)
-						li.add(in);
+				String s = "slot"+i;
+				if (recipe.hasKey(s)) {
+					NBTTagCompound tag = recipe.getCompoundTag(s);
+					ItemStack in = ItemStack.loadItemStackFromNBT(tag);
+					items[i] = in;
 				}
-				items[i] = li;
 			}
 		}
 		return items;
@@ -117,38 +109,15 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		if (ir == null)
 			return;
 		NBTTagCompound recipe = new NBTTagCompound();
-		ItemStack out = ir.getRecipeOutput();
-		ArrayList<Object> reqs = ReikaRecipeHelper.getAllInputsInRecipe(ir);
-		Object[] items = new Object[10];
-		for (int i = 0; i < reqs.size(); i++) {
-			Object in = reqs.get(i);
-			NBTTagList tag = new NBTTagList();
-			if (in instanceof ArrayList) {
-				ArrayList<ItemStack> li = (ArrayList<ItemStack>)in;
-				for (ItemStack item : li) {
-					NBTTagCompound nbt = new NBTTagCompound();
-					item.writeToNBT(nbt);
-					tag.appendTag(nbt);
-				}
+		for (int i = 0; i < 9; i++) {
+			ItemStack in = ic.getStackInSlot(i);
+			if (in != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				in.writeToNBT(tag);
+				recipe.setTag("slot"+i, tag);
 			}
-			else if (in instanceof ItemStack) {
-				ItemStack item = (ItemStack)in;
-				NBTTagCompound nbt = new NBTTagCompound();
-				item.writeToNBT(nbt);
-				tag.appendTag(nbt);
-				if (item.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-					nbt = new NBTTagCompound();
-					ItemStack is2 = item.copy();
-					is2.setItemDamage(0);
-					is2.writeToNBT(nbt);
-					tag.appendTag(nbt);
-				}
-			}
-			else {
-
-			}
-			recipe.setTag(String.valueOf(i), tag);
 		}
+		ItemStack out = ir.getRecipeOutput();
 		is.stackTagCompound.setTag("recipe", recipe);
 		NBTTagCompound outt = new NBTTagCompound();
 		if (out != null)
@@ -172,7 +141,7 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		if (type == ItemRenderType.INVENTORY && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			ItemStack out = this.getRecipeOutput(is);
 			if (out != null) {
-				double s = 0.063;
+				double s = 0.0625;
 				GL11.glScaled(s, -s, s);
 				ReikaGuiAPI.instance.drawItemStack(ri, out, 0, -16);
 				return true;

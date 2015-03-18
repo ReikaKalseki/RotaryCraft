@@ -25,7 +25,7 @@ import Reika.DragonAPI.Interfaces.MultiPageInventory;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Containers.ContainerScaleChest;
+import Reika.RotaryCraft.Containers.Machine.ContainerScaleChest;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

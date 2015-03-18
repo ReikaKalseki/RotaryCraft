@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Containers.ContainerDryingBed;
+import Reika.RotaryCraft.Containers.Machine.ContainerDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 
 public class GuiDryer extends GuiNonPoweredMachine
