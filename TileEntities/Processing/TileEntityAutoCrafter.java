@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.EnumSet;
 import java.util.HashMap;
 
 import net.minecraft.inventory.IInventory;
@@ -20,10 +19,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.SourceType;
@@ -32,18 +33,14 @@ import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import appeng.api.AEApi;
-import appeng.api.networking.GridFlags;
-import appeng.api.networking.GridNotification;
-import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridBlock;
 import appeng.api.networking.IGridHost;
 import appeng.api.networking.IGridNode;
 import appeng.api.util.AECableType;
-import appeng.api.util.AEColor;
-import appeng.api.util.DimensionalCoord;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
+@Strippable(value={"appeng.api.networking.IGridHost"})
 public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IGridHost {
 
 	public boolean continuous = true;
@@ -52,10 +49,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	@ModDependent(ModList.APPENG)
 	private MESystemReader network;
-	@ModDependent(ModList.APPENG)
-	private final IGridBlock aeGridBlock;
-	@ModDependent(ModList.APPENG)
-	private IGridNode aeGridNode;
+	private Object aeGridBlock;
+	private Object aeGridNode;
 
 	private final StepTimer updateTimer = new StepTimer(50);
 
@@ -63,8 +58,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	private static final int CONTAINER_OFFSET = 36;
 
 	public TileEntityAutoCrafter() {
-		aeGridBlock = new GridBlock();
-		aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode(aeGridBlock) : null;
+		if (ModList.APPENG.isLoaded()) {
+			aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
+			aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
+		}
 	}
 
 	@Override
@@ -89,7 +86,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	@Override
 	protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalid) {
 		super.onInvalidateOrUnload(world, x, y, z, invalid);
-		aeGridNode.destroy();
+		if (ModList.APPENG.isLoaded() && aeGridNode != null)
+			((IGridNode)aeGridNode).destroy();
 	}
 
 	private void injectItems() {
@@ -127,10 +125,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 		if (ModList.APPENG.isLoaded()) {
 			if (aeGridNode == null) {
-				aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode(aeGridBlock) : null;
+				aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 			}
-			aeGridNode.updateState();
-			network = aeGridNode != null ? new MESystemReader(aeGridNode, SourceType.MACHINE) : null;
+			((IGridNode)aeGridNode).updateState();
+			network = aeGridNode != null ? new MESystemReader((IGridNode)aeGridNode, SourceType.MACHINE) : null;
 		}
 	}
 
@@ -371,76 +369,20 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		continuous = NBT.getBoolean("cont");
 	}
 
-	private class GridBlock implements IGridBlock {
-
-		@Override
-		public double getIdlePowerUsage() {
-			return 1;
-		}
-
-		@Override
-		public EnumSet<GridFlags> getFlags() {
-			return EnumSet.of(GridFlags.REQUIRE_CHANNEL);
-		}
-
-		@Override
-		public boolean isWorldAccessible() {
-			return true;
-		}
-
-		@Override
-		public DimensionalCoord getLocation() {
-			return new DimensionalCoord(TileEntityAutoCrafter.this);
-		}
-
-		@Override
-		public AEColor getGridColor() {
-			return AEColor.Transparent;
-		}
-
-		@Override
-		public void onGridNotification(GridNotification notification) {
-
-		}
-
-		@Override
-		public void setNetworkStatus(IGrid grid, int channelsInUse) {
-
-		}
-
-		@Override
-		public EnumSet<ForgeDirection> getConnectableSides() {
-			return EnumSet.allOf(ForgeDirection.class);
-		}
-
-		@Override
-		public IGridHost getMachine() {
-			return TileEntityAutoCrafter.this;
-		}
-
-		@Override
-		public void gridChanged() {
-
-		}
-
-		@Override
-		public ItemStack getMachineRepresentation() {
-			return TileEntityAutoCrafter.this.getMachine().getCraftedProduct();
-		}
-
-	}
-
 	@Override
+	@ModDependent(ModList.APPENG)
 	public IGridNode getGridNode(ForgeDirection dir) {
-		return aeGridNode;
+		return (IGridNode)aeGridNode;
 	}
 
 	@Override
+	@ModDependent(ModList.APPENG)
 	public AECableType getCableConnectionType(ForgeDirection dir) {
 		return AECableType.COVERED;
 	}
 
 	@Override
+	@ModDependent(ModList.APPENG)
 	public void securityBreak() {
 
 	}

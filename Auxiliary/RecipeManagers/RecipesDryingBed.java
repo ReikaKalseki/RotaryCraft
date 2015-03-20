@@ -40,6 +40,7 @@ public class RecipesDryingBed
 		this.addRecipe(FluidRegistry.WATER, 250, ItemStacks.salt);
 		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Items.gold_nugget));
 		this.addRecipe("oil", 200, ItemStacks.tar);
+		this.addRecipe("for.honey", 400, new ItemStack(Items.slime_ball));
 		this.addRecipe("honey", 400, new ItemStack(Items.slime_ball));
 
 		ArrayList<ItemStack> li = OreDictionary.getOres("rubber");

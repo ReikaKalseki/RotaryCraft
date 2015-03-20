@@ -112,14 +112,15 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
 		int i = is.getItemDamage();
 		if (is.stackTagCompound != null)
 			li.add(this.getDisplayTag(is.stackTagCompound));
 	}
 
+	@SideOnly(Side.CLIENT)
 	private String getDisplayTag(NBTTagCompound nbt) {
 		Fluid f = ReikaNBTHelper.getFluidFromNBT(nbt);
 		String fluid = f != null ? f.getLocalizedName() : "Null Fluid";

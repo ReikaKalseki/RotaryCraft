@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Renders.MI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -31,6 +32,7 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
@@ -198,6 +200,11 @@ public class RenderDryingBed extends RotaryTERenderer {
 			ReikaTextureHelper.bindTerrainTexture();
 			Tessellator v5 = Tessellator.instance;
 			IIcon ico = f.getStillIcon();
+			if (ico == null) {
+				RotaryCraft.logger.logError("Fluid "+f.getID()+" ("+f.getLocalizedName()+") exists (block ID "+f.getBlock()+") but has no icon! Registering bedrock texture as a placeholder!");
+				f.setIcons(Blocks.bedrock.getIcon(0, 0));
+				ico = Blocks.bedrock.getIcon(0, 0);
+			}
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
