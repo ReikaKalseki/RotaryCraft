@@ -31,7 +31,7 @@ public class CompactorAPI {
 			return;
 		}
 		try {
-			addRecipe.invoke(instance, in.getItem(), in.getItemDamage(), out, pressure, temperature);
+			addRecipe.invoke(instance, in, out, pressure, temperature);
 		}
 		catch (IllegalAccessException e) {
 			ReikaJavaLibrary.pConsole("Error adding compactor recipe for "+in);
@@ -56,7 +56,7 @@ public class CompactorAPI {
 			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor");
 			get = recipes.getMethod("getRecipes");
 			instance = get.invoke(null);
-			addRecipe = recipes.getMethod("addCompacting", int.class, int.class, ItemStack.class, int.class, int.class);
+			addRecipe = recipes.getMethod("addCompacting", ItemStack.class, ItemStack.class, int.class, int.class);
 		}
 		catch (ClassNotFoundException e) {
 			ReikaJavaLibrary.pConsole("Could not load RotaryCraft class!");

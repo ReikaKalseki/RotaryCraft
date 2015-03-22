@@ -36,6 +36,8 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
@@ -525,11 +527,12 @@ public class PacketHandlerCore implements IPacketHandler {
 				ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, x, y, z, 1);
 				world.playSoundEffect(x, y, z, "random.explode", 1, 1F);
 				break;
-			case SLIDE:
+			case SLIDE: {
 				ItemStack is = ep.getCurrentEquippedItem();
 				is.stackTagCompound = new NBTTagCompound();
 				is.stackTagCompound.setString("file", stringdata);
 				break;
+			}
 			case POWERBUS:
 				TileEntityPowerBus bus = (TileEntityPowerBus)te;
 				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[data[0]+2];
@@ -573,6 +576,9 @@ public class PacketHandlerCore implements IPacketHandler {
 				break;
 			case AFTERBURN:
 				((TileEntityJetEngine)te).setBurnerActive(data[0] > 0);
+				break;
+			case CRAFTPATTERNMODE:
+				ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
 				break;
 			}
 		}

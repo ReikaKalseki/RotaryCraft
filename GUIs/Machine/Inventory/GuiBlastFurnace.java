@@ -16,7 +16,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 
 public class GuiBlastFurnace extends GuiNonPoweredMachine
 {
-	private TileEntityBlastFurnace blast;
+	private final TileEntityBlastFurnace blast;
 
 	public GuiBlastFurnace(EntityPlayer p5ep, TileEntityBlastFurnace BlastFurnace)
 	{
@@ -60,6 +60,6 @@ public class GuiBlastFurnace extends GuiNonPoweredMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "blastfurngui";
+		return "blastfurngui2";
 	}
 }

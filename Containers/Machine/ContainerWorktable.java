@@ -20,10 +20,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Base.CoreContainer;
-import Reika.DragonAPI.Instantiable.GUI.Slot.SlotXItems;
+import Reika.DragonAPI.Instantiable.GUI.Slot.SlotApprovedItems;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 
@@ -53,6 +54,9 @@ public class ContainerWorktable extends CoreContainer {
 			}
 		}
 
+		this.addSlotToContainer(new SlotApprovedItems(te, 18, 6, 53).addItem(ItemRegistry.CRAFTPATTERN.getItemInstance()));
+
+		/*
 		dx = 153;
 		int dy = 84;
 		for (int i = 0; i < 3; i++) {
@@ -61,6 +65,7 @@ public class ContainerWorktable extends CoreContainer {
 				this.addSlotToContainer(new SlotXItems(te, 18+i*3+j, dx+26+j*18, dy+i*18, 1));
 			}
 		}
+		 */
 
 		this.updateCraftMatrix();
 
@@ -86,8 +91,8 @@ public class ContainerWorktable extends CoreContainer {
 		}
 		 */
 
-		if (action == 4 && slot >= 18 && slot < tile.getSizeInventory())
-			action = 0;
+		//if (action == 4 && slot >= 18 && slot < tile.getSizeInventory())
+		//	action = 0;
 
 		ItemStack is = super.slotClick(slot, par2, action, ep);
 		this.updateCraftMatrix();

@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -27,8 +28,12 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Interfaces.SpriteRenderCallback;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCallback {
 
@@ -57,20 +62,14 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		}
 		else {
 			ItemStack item = this.getRecipeOutput(is);
-			if (item != null)
+			if (item != null) {
 				li.add("Crafts "+item.stackSize+" "+item.getDisplayName());//+" with:");
-			/*
-			for (int i = 0; i < 3; i++) {
-				StringBuilder sb = new StringBuilder();
-				for (int k = 0; k < 3; k++) {
-					String name = items[i*3+k] != null ? items[i].getDisplayName() : "-Nothing-";
-					sb.append(name);
-					if (k < 2)
-						sb.append(", ");
-				}
-				li.add("  "+sb.toString());
-			}*/
+			}
+			else {
+				li.add("No Output.");
+			}
 		}
+		li.add("Recipe Mode: "+this.getMode(is).displayName);
 	}
 
 	public static ItemStack getRecipeOutput(ItemStack is) {
@@ -101,12 +100,12 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		}
 	}
 
-	public static void setRecipe(ItemStack is, InventoryCrafting ic) {
+	public static void setRecipe(ItemStack is, InventoryCrafting ic, World world) {
 		resetNBT(is);
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
-		IRecipe ir = getRecipe(ic);
-		if (ir == null)
+		ItemStack out = getMode(is).getRecipe(ic, world);
+		if (out == null)
 			return;
 		NBTTagCompound recipe = new NBTTagCompound();
 		for (int i = 0; i < 9; i++) {
@@ -117,23 +116,12 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 				recipe.setTag("slot"+i, tag);
 			}
 		}
-		ItemStack out = ir.getRecipeOutput();
 		is.stackTagCompound.setTag("recipe", recipe);
 		NBTTagCompound outt = new NBTTagCompound();
 		if (out != null)
 			out.writeToNBT(outt);
 		is.stackTagCompound.setTag("output", outt);
 		//ReikaJavaLibrary.pConsole(Arrays.toString(items)+" -> "+out);
-	}
-
-	private static IRecipe getRecipe(InventoryCrafting ic) {
-		List<IRecipe> li = CraftingManager.getInstance().getRecipeList();
-		for (IRecipe ir : li)  {
-			if (ir.matches(ic, null)) {
-				return ir;
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -153,6 +141,63 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 	@Override
 	public boolean doPreGLTransforms(ItemStack is, ItemRenderType type) {
 		return true;
+	}
+
+	public static RecipeMode getMode(ItemStack is) {
+		return is.stackTagCompound != null ? RecipeMode.list[is.stackTagCompound.getInteger("mode")] : RecipeMode.CRAFTING;
+	}
+
+	public static void setMode(ItemStack is, RecipeMode md) {
+		if (is.stackTagCompound == null)
+			is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setInteger("mode", md.ordinal());
+	}
+
+	public static enum RecipeMode {
+		CRAFTING("Crafting Recipe", new ItemStack(Blocks.crafting_table)),
+		WORKTABLE("Worktable Recipe", MachineRegistry.WORKTABLE.getCraftedProduct()),
+		BLASTFURN("Blast Furnace Crafting", MachineRegistry.BLASTFURNACE.getCraftedProduct());
+
+		private final ItemStack item;
+		public final String displayName;
+
+		public static final RecipeMode[] list = values();
+
+		private RecipeMode(String s, ItemStack is) {
+			item = is;
+			displayName = s;
+		}
+
+		public ItemStack getIcon() {
+			return item.copy();
+		}
+
+		public RecipeMode next() {
+			return this.ordinal() == list.length-1 ? list[0] : list[this.ordinal()+1];
+		}
+
+		public ItemStack getRecipe(InventoryCrafting ic, World world) {
+			switch(this) {
+			case CRAFTING:
+				List<IRecipe> li = CraftingManager.getInstance().getRecipeList();
+				for (IRecipe ir : li)  {
+					if (ir.matches(ic, null)) {
+						return ir.getRecipeOutput();
+					}
+				}
+				return null;
+			case BLASTFURN:
+				for (BlastCrafting ir : RecipesBlastFurnace.getRecipes().getAllCraftingRecipes())  {
+					if (ir.matches(ic, Integer.MAX_VALUE)) {
+						return ir.outputItem();
+					}
+				}
+				return null;
+			case WORKTABLE:
+				return WorktableRecipes.getInstance().findMatchingRecipe(ic, null);
+			}
+			return null;
+		}
 	}
 
 }

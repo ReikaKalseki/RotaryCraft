@@ -30,6 +30,14 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 			return true;
 		if (f.equals(FluidRegistry.getFluid("rc ethanol")))
 			return true;
+		if (f.equals(FluidRegistry.getFluid("bioethanol")))
+			return true;
+		if (f.equals(FluidRegistry.getFluid("ethanol")))
+			return true;
+		if (f.equals(FluidRegistry.getFluid("fuel")))
+			return true;
+		if (f.equals(FluidRegistry.getFluid("rocket fuel")))
+			return true;
 		return false;
 	}
 
@@ -85,7 +93,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("jet fuel"));
+		return this.isAcceptableFuel(f);
 	}
 
 	@Override

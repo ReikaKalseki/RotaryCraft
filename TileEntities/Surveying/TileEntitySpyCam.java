@@ -83,7 +83,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 			int ex = (int)ent.posX-x;
 			int ey = (int)ent.posY-y;
 			int ez = (int)ent.posZ-z;
-			if (EntityList.getEntityID(ent) > 0 && Math.abs(ex) < range+1 && Math.abs(ez) < range+1 && ent.posY >= ReikaWorldHelper.findTopBlockBelowY(world, (int)ent.posX, (int)ent.posZ, y)) {
+			if (EntityList.getEntityID(ent) > 0 && Math.abs(ex) < range+1 && Math.abs(ez) < range+1 && ent.posY >= ReikaWorldHelper.findTopBlockBelowY(world, (int)ent.posX, y, (int)ent.posZ)) {
 				//ReikaJavaLibrary.pConsole(ent.getCommandSenderName()+" @ "+ex+", "+ez);
 				mobs[(ez+range)][ex+range] = EntityList.getEntityID(ent);
 				//ReikaJavaLibrary.pConsole(mobs[ex+range][ez+range]+String.format("@ %d,  %d  from  %d", ex+range, ez+range, EntityList.getEntityID(ent)));
@@ -97,7 +97,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 		int maxrange = this.getMaxRange();
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
-				int topy = ReikaWorldHelper.findTopBlockBelowY(world, x+i, z+j, y);
+				int topy = ReikaWorldHelper.findTopBlockBelowY(world, x+i, y, z+j);
 				topY[i+range][j+range] = topy;
 				Block b = world.getBlock(x+i, topy, z+j);
 				int meta = world.getBlockMetadata(x+i, topy, z+j);

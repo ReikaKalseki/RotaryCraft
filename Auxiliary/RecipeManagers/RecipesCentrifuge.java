@@ -33,6 +33,7 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -89,6 +90,14 @@ public class RecipesCentrifuge
 			if (berry != null && ReikaXPFluidHelper.fluidsExist()) {
 				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
 				this.addRecipe(berry, fs, 100);
+			}
+		}
+
+		if (ModList.MAGICCROPS.isLoaded()) {
+			Item drop = MagicCropHandler.getInstance().dropID;
+			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
+				this.addRecipe(drop, fs, 100);
 			}
 		}
 

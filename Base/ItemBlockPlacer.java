@@ -18,15 +18,25 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.ASM.InterfaceInjector.Injectable;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RailcraftHandler;
 import Reika.RotaryCraft.RotaryCraft;
+
+import com.bioxx.tfc.api.Enums.EnumItemReach;
+import com.bioxx.tfc.api.Enums.EnumSize;
+import com.bioxx.tfc.api.Enums.EnumWeight;
+import com.bioxx.tfc.api.Interfaces.ISize;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
 @Injectable(value = {"minechem.api.IDecomposerControl"})
-public abstract class ItemBlockPlacer extends ItemBasic {
+@Strippable(value = {"com.bioxx.tfc.api.Interfaces.ISize"})
+public abstract class ItemBlockPlacer extends ItemBasic implements ISize {
 
 	public ItemBlockPlacer() {
 		super(0);
@@ -67,11 +77,36 @@ public abstract class ItemBlockPlacer extends ItemBasic {
 			world.setBlockToAir(x, y, z);
 	}
 
+	@ModDependent(ModList.MINECHEM)
 	public double getDecomposerMultiplier(ItemStack is) {
 		return MathHelper.clamp_double(1-this.getBrokenFraction(is), 0, 1);
 	}
 
 	protected double getBrokenFraction(ItemStack is) {
 		return 0;
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public final EnumSize getSize(ItemStack is) {
+		return EnumSize.LARGE;
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public final EnumWeight getWeight(ItemStack is) {
+		return EnumWeight.HEAVY;
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public final EnumItemReach getReach(ItemStack is) {
+		return EnumItemReach.MEDIUM;
+	}
+
+	@Override
+	@ModDependent(ModList.TFC)
+	public final boolean canStack() {
+		return true;
 	}
 }

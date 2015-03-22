@@ -222,12 +222,16 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				inv[9] = null;
 			}
 		}
+		boolean tickPer = true;
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
 			if (this.canProcess(i)) {
 				flag1 = true;
 				extractorCookTime[i]++;
-				if (extractorCookTime[i] >= this.getOperationTime(i+1)) {
+				int time = this.getOperationTime(i);
+				if (time > 1)
+					tickPer = false;
+				if (extractorCookTime[i] >= time) {
 					extractorCookTime[i] = 0;
 					//if (!this.processModOre(i))
 					this.processItem(i);
@@ -239,6 +243,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			if (flag1)
 				this.markDirty();
 		}
+		if (tickPer)
+			RotaryAchievements.INSANITY.triggerAchievement(this.getPlacer());
 	}
 
 	private boolean canProcess(int i) {
@@ -501,7 +507,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	public int getOperationTime(int stage) {
-		return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage-1);
+		return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage);
 	}
 
 	@Override

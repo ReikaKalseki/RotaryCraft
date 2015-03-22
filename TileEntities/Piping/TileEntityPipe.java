@@ -146,6 +146,12 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 			return false;
 		if (f.equals(FluidRegistry.getFluid("rc ethanol")))
 			return false;
+		if (f.equals(FluidRegistry.getFluid("bioethanol")))
+			return false;
+		if (f.equals(FluidRegistry.getFluid("fuel")))
+			return false;
+		if (f.equals(FluidRegistry.getFluid("rocket fuel")))
+			return false;
 		if (f.equals(FluidRegistry.getFluid("rc co2")))
 			return false;
 		if (f.equals(FluidRegistry.getFluid("rc hot co2")))

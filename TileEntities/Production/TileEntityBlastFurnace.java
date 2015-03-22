@@ -33,7 +33,10 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCraft
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -49,6 +52,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public static final int SLOT_1 = 0;
 	public static final int SLOT_2 = 11;
 	public static final int SLOT_3 = 14;
+	public static final int PATTERN_SLOT = 15;
 
 	private float xp;
 
@@ -328,7 +332,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	public int getSizeInventory() {
-		return 15;
+		return 16;
 	}
 
 	@Override
@@ -360,6 +364,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	private boolean getSlotForItem(int slot, ItemStack is) {
+		ItemStack patt = inv[PATTERN_SLOT];
+		if (ItemRegistry.CRAFTPATTERN.matchItem(patt)) {
+			return slot >= 1 && slot <= 9 && this.patternMatches(slot-1, is, patt);
+		}
 		ArrayList<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
 		if (!slots.isEmpty()) {
 			return slots.contains(slot);
@@ -378,6 +386,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		default:
 			return false;
 		}
+	}
+
+	private boolean patternMatches(int slot, ItemStack is, ItemStack p) {
+		return ItemCraftPattern.getMode(p) == RecipeMode.BLASTFURN && ReikaItemHelper.matchStacks(is, ItemCraftPattern.getItems(p)[slot]);
 	}
 
 	@Override

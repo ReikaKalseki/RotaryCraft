@@ -31,11 +31,11 @@ public enum RotaryAchievements {
 	PCB(			0, 4,	ItemStacks.pcb,													MAKESTEEL,		false),
 	PUMP(			-6, 0,	MachineRegistry.PUMP,											MAKESTEEL,		false),
 	GPR(			-2, 4,	MachineRegistry.GPR,											PCB,			false),
-	BORER(			2, 4,	MachineRegistry.BORER, 											PCB,			false),
+	BORER(			2, 6,	MachineRegistry.BORER, 											PCB,			false),
 	JETFUEL(		4, -4,	ItemRegistry.BUCKET.getStackOfMetadata(1), 						MAKEYEAST,		false), //make
 	RECYCLE(		4, -8,	ItemStacks.scrap, 												JETFUEL,		false),
 	JETENGINE(		6, -4,	EngineType.JET.getCraftedProduct(), 							JETFUEL,		true),
-	MAKERAILGUN(	0, 6,	MachineRegistry.RAILGUN, 										PCB,			true),
+	MAKERAILGUN(	0, 8,	MachineRegistry.RAILGUN, 										PCB,			true),
 	SUCKEDINTOJET(	6, -8,	Items.rotten_flesh, 											JETENGINE,		false),
 	BEDROCKBREAKER(	-4, 2,	ItemStacks.bedrockdust, 										MAKESTEEL,		false), //break bedrock with
 	STEAMENGINE(	-8, 0,	EngineType.STEAM.getCraftedProduct(), 							PUMP,			false), //turn on
@@ -52,19 +52,20 @@ public enum RotaryAchievements {
 	DIAMONDGEARS(	-4, -4,	MaterialRegistry.DIAMOND.getGearItem(8), 						DAMAGEGEARS,	false), //make
 	MRADS32(		2, -6,	ItemRegistry.METER,												JETFUEL,		true), //transmit power at 32Mrad/s
 	GIGAWATT(		6, 0,	Blocks.redstone_block, 											JETENGINE,		true), //transmit 1GW of power in one shaft w/o breaking
-	RAILDRAGON(		2, 6,	Blocks.dragon_egg, 												MAKERAILGUN,	true), //kill dragon with railgun
-	RAILKILLED(		0, 8,	new ItemStack(Items.skull, 1, 0), 								MAKERAILGUN,	false), //kill self with railgun
+	RAILDRAGON(		2, 8,	Blocks.dragon_egg, 												MAKERAILGUN,	true), //kill dragon with railgun
+	RAILKILLED(		0, 10,	new ItemStack(Items.skull, 1, 0), 								MAKERAILGUN,	false), //kill self with railgun
 	GRAVELGUN(		0, -4,	ItemRegistry.GRAVELGUN,											MAKESTEEL,		false), //one hit kill with
 	LANDMINE(		2, 2,	MachineRegistry.LANDMINE, 										MAKESTEEL,		false), //step on
 	NETHERHEATRAY(	4, -2,	MachineRegistry.HEATRAY, 										JETFUEL,		true), //dig 500m with heat ray in nether
 	GPRSPAWNER(		-2, 6,	ItemRegistry.SPAWNER, 											GPR,			true),
 	GPRENDPORTAL(	-2, 8,	Blocks.end_portal_frame, 										GPRSPAWNER,		true), //gpr thru end portal
-	CUTKNOT(		4, 4,	ItemStacks.drill, 												BORER,			true),
+	CUTKNOT(		4, 6,	ItemStacks.drill, 												BORER,			true),
 	RAREEXTRACT(	4, 0,	ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM),			EXTRACTOR,		true),
 	MASSIVEHIT(		0, -8,	Items.flint,													GRAVELGUN,		true),
 	OVERPRESSURE(	-8, 2,	MachineRegistry.COOLINGFIN,										STEAMENGINE,	false),
-	DOUBLEKILL(		-2, -6, Items.arrow,													GRAVELGUN,		true);
-
+	DOUBLEKILL(		-2, -6, Items.arrow,													GRAVELGUN,		true),
+	INSANITY(		2, 2,	MachineRegistry.EXTRACTOR,										EXTRACTOR,		true);
+	;
 	public static final RotaryAchievements[] list = values();
 
 	public final RotaryAchievements dependency;

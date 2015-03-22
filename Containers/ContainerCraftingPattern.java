@@ -12,13 +12,12 @@ package Reika.RotaryCraft.Containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.BasicInventory;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -29,12 +28,14 @@ public class ContainerCraftingPattern extends Container {
 	private static final int height = 3;
 
 	private InventoryCrafting craftMatrix = new InventoryCrafting(this, width, height);
-	private InventoryCraftResult craftResult = new InventoryCraftResult();
+	private BasicInventory craftResult = new InventoryResult();
 	private World worldObj;
+	private final EntityPlayer player;
 
 	public ContainerCraftingPattern(EntityPlayer player, World par2World)
 	{
 		worldObj = par2World;
+		this.player = player;
 		int var6;
 		int var7;
 
@@ -44,7 +45,7 @@ public class ContainerCraftingPattern extends Container {
 			}
 		}
 
-		this.addSlotToContainer(new SlotFurnace(player, craftResult, width*height, 124, 35));
+		this.addSlotToContainer(new SlotFurnace(player, craftResult, 0, 124, 35));
 
 		for (var6 = 0; var6 < 3; ++var6)
 			for (var7 = 0; var7 < 9; ++var7)
@@ -61,12 +62,20 @@ public class ContainerCraftingPattern extends Container {
 		this.onCraftMatrixChanged(craftMatrix);
 	}
 
+	public void clearRecipe() {
+		for (int i = 0; i < 9; i++) {
+			craftMatrix.setInventorySlotContents(i, null);
+		}
+		craftResult.setInventorySlotContents(0, null);
+	}
+
 	@Override
 	public void onCraftMatrixChanged(IInventory ii)
 	{
 		super.onCraftMatrixChanged(ii);
 
-		ItemStack out = CraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj);
+		ItemStack is = player.getCurrentEquippedItem();
+		ItemStack out = ItemRegistry.CRAFTPATTERN.matchItem(is) ? ItemCraftPattern.getMode(is).getRecipe(craftMatrix, player.worldObj) : null;
 		craftResult.setInventorySlotContents(0, out);
 	}
 
@@ -93,7 +102,7 @@ public class ContainerCraftingPattern extends Container {
 
 		ItemStack is = ep.getCurrentEquippedItem();
 		if (ItemRegistry.CRAFTPATTERN.matchItem(is))
-			ItemCraftPattern.setRecipe(is, craftMatrix);
+			ItemCraftPattern.setRecipe(is, craftMatrix, ep.worldObj);
 	}
 
 	@Override
@@ -105,6 +114,19 @@ public class ContainerCraftingPattern extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
 	{
 		return this.getSlot(0).getStack();
+	}
+
+	private static class InventoryResult extends BasicInventory {
+
+		public InventoryResult() {
+			super("Result", 1);
+		}
+
+		@Override
+		public boolean isItemValidForSlot(int slot, ItemStack is) {
+			return true;
+		}
+
 	}
 
 }

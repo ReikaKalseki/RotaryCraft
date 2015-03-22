@@ -19,6 +19,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Interfaces.TriggerableAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -31,6 +32,8 @@ import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
@@ -39,12 +42,12 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityWorktable extends InventoriedRCTileEntity {
+public class TileEntityWorktable extends InventoriedRCTileEntity implements TriggerableAction {
 
 	public boolean craftable = false;
 	private ItemStack toCraft;
 	private boolean lastPower;
-	private boolean hasProgram;
+	//private boolean hasProgram;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -366,7 +369,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 
 	@Override
 	public int getSizeInventory() {
-		return 27;
+		return 19;
 	}
 
 	@Override
@@ -378,12 +381,17 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (i >= 9)
 			return false;
-		return hasProgram ? inv[i+18] != null && ReikaItemHelper.matchStacks(inv[i+18], itemstack) : true;
+		//return hasProgram ? inv[i+18] != null && ReikaItemHelper.matchStacks(inv[i+18], itemstack) : true;
+		return ItemRegistry.CRAFTPATTERN.matchItem(inv[18]) ? this.patternMatches(i, itemstack, inv[18]) : true;
+	}
+
+	private boolean patternMatches(int slot, ItemStack is, ItemStack p) {
+		return ItemCraftPattern.getMode(p) == RecipeMode.WORKTABLE && ReikaItemHelper.matchStacks(is, ItemCraftPattern.getItems(p)[slot]);
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return i >= 9 && i < 18;
+		return i >= 9 && i != 18;
 	}
 
 	public ItemStack getToCraft() {
@@ -405,7 +413,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("lastpwr", lastPower);
-		NBT.setBoolean("prog", hasProgram);
+		//NBT.setBoolean("prog", hasProgram);
 	}
 
 	@Override
@@ -414,14 +422,14 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 		super.readSyncTag(NBT);
 
 		lastPower = NBT.getBoolean("lastpwr");
-		hasProgram = NBT.getBoolean("prog");
+		//hasProgram = NBT.getBoolean("prog");
 	}
 
 	@Override
 	public void onEMP() {
 
 	}
-
+	/*
 	public ItemStack getProgrammedSlot(int i, int k) {
 		ItemStack is = inv[18+i*3+k];
 		return is != null ? is.copy() : null;
@@ -441,5 +449,10 @@ public class TileEntityWorktable extends InventoriedRCTileEntity {
 				hasProgram = true;
 			}
 		}
+	}
+	 */
+	@Override
+	public boolean trigger() {
+		return this.craft();
 	}
 }

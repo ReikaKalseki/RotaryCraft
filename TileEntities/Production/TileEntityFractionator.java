@@ -117,6 +117,8 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
+		if (DifficultyEffects.FRACTIONTEAR.testChance())
+			ReikaInventoryHelper.decrStack(ingredients.length, inv);
 		tank.addLiquid(DifficultyEffects.PRODUCEFRAC.getInt(), FluidRegistry.getFluid("jet fuel"));
 	}
 
@@ -158,9 +160,6 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		NBT.setInteger("mix", mixTime);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{

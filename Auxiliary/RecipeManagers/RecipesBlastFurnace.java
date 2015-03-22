@@ -11,10 +11,12 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -25,13 +27,15 @@ import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class RecipesBlastFurnace
 {
 	private static final RecipesBlastFurnace BlastFurnaceBase = new RecipesBlastFurnace();
 
-	private OneWayList<BlastRecipe> recipeList = new OneWayList();
-	private OneWayList<BlastCrafting> craftingList = new OneWayList();
+	private final OneWayList<BlastRecipe> recipeList = new OneWayList();
+	private final OneWayList<BlastCrafting> craftingList = new OneWayList();
 
 	private RecipesBlastFurnace() {
 
@@ -139,7 +143,7 @@ public class RecipesBlastFurnace
 			return bc;
 		}
 
-		public boolean matches(RecipePattern ic, int temperature) {
+		public boolean matches(InventoryCrafting ic, int temperature) {
 			return temperature >= this.temperature && recipe.matches(ic, null);
 		}
 
@@ -147,6 +151,7 @@ public class RecipesBlastFurnace
 			return ReikaItemHelper.collectionContainsItemStack(ReikaRecipeHelper.getAllItemsInRecipe(recipe), is);
 		}
 
+		@SideOnly(Side.CLIENT)
 		public ItemStack[] getArrayForDisplay() {
 			return ReikaRecipeHelper.getPermutedRecipeArray(recipe);
 		}
@@ -476,6 +481,14 @@ public class RecipesBlastFurnace
 			}
 		}
 		return li;
+	}
+
+	public Collection<BlastRecipe> getAllMainlineRecipes() {
+		return Collections.unmodifiableCollection(recipeList);
+	}
+
+	public Collection<BlastCrafting> getAllCraftingRecipes() {
+		return Collections.unmodifiableCollection(craftingList);
 	}
 
 	public Collection<BlastFurnacePattern> getAllRecipes() {
