@@ -76,7 +76,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	private void makeNightHelmet() {
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDHELM.getItemInstance(), inv);
 		int visslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.NVG.getItemInstance(), inv);
-		if (visslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
+		if (visslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 26)) {
 			ItemStack is = inv[armorslot].copy();
 			inv[visslot] = null;
 			inv[armorslot] = null;
@@ -177,7 +177,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	private void makeBedjump() {
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getItemInstance(), inv);
 		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getItemInstance(), inv);
-		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
+		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 26)) {
 			inv[jumpslot] = null;
 			inv[armorslot] = null;
 			ItemStack is = ItemRegistry.BEDJUMP.getEnchantedStack();
@@ -291,7 +291,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			coilslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.STRONGCOIL.getItemInstance(), inv);
 		Item toolid = this.getTool();
 		int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inv);
-		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
+		if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 26)) {
 			Item coilid = inv[coilslot].getItem();
 			int coilmeta = inv[coilslot].getItemDamage();
 			ItemStack tool = inv[toolslot];
@@ -337,7 +337,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			bed = true;
 		//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
-		if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 25)) {
+		if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 26)) {
 			ItemStack jet = inv[jetslot];
 			NBTTagCompound tag = jet.stackTagCompound != null ? (NBTTagCompound)jet.stackTagCompound.copy() : null;
 			inv[jetslot] = null;
@@ -356,7 +356,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		if (combine != null && (ItemRegistry.BEDPACK.matchItem(combine) || ItemRegistry.STEELPACK.matchItem(combine))) {
 			ItemJetPack pack = (ItemJetPack)combine.getItem();
 			//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
-			if (ReikaInventoryHelper.hasNEmptyStacks(inv, 26)) {
+			if (ReikaInventoryHelper.hasNEmptyStacks(inv, 27)) {
 				ItemStack jet = ItemRegistry.JETPACK.getStackOf();
 				((ItemJetPack)jet.getItem()).addFluid(jet, pack.getCurrentFluid(combine), pack.getFuel(combine));
 				inv[4] = null;

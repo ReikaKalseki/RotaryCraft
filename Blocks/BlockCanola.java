@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Blocks;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -38,6 +39,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.Data.BlockKey;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.LegacyCraft.LegacyOptions;
 import Reika.RotaryCraft.RotaryCraft;
@@ -49,7 +51,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 
 	private final Random rand = new Random();
 
-	private static final ArrayList<Integer> farmBlocks = new ArrayList();
+	private static final HashSet<BlockKey> farmBlocks = new HashSet();
 
 	public static final int GROWN = 9;
 
@@ -112,13 +114,14 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random par5Random) {
-		if (world.getBlockLightValue(x, y, z) < GROWN && !world.canBlockSeeTheSky(x, y, z)) {
+		int l = world.getBlockLightValue(x, y, z);
+		if (l < 9 && !world.canBlockSeeTheSky(x, y, z)) {
 			this.die(world, x, y, z);
 		}
 		if (!world.getBlock(x, y-1, z).canSustainPlant(world, x, y-1, z, ForgeDirection.UP, this)) {
 			this.die(world, x, y, z);
 		}
-		else if (world.getBlockLightValue(x, y, z) >= 9)  {
+		else if (l >= 9)  {
 			int metadata = world.getBlockMetadata(x, y, z);
 			if (metadata < GROWN && world.getBlockMetadata(x, y-1, z) > 0) {
 				if (par5Random.nextInt(3) == 0) {
@@ -265,9 +268,16 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 		//return farmBlocks.contains(id);
 	}
 
-	public static void addFarmBlock(int id) {
-		if (!farmBlocks.contains(id))
-			farmBlocks.add(id);
+	public static void addFarmBlock(Block b) {
+		addFarmBlock(new BlockKey(b));
+	}
+
+	public static void addFarmBlock(Block b, int meta) {
+		addFarmBlock(new BlockKey(b, meta));
+	}
+
+	private static void addFarmBlock(BlockKey bk) {
+		farmBlocks.add(bk);
 	}
 	/*
 	@Override

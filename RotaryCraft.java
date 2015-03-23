@@ -55,11 +55,12 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
+import Reika.DragonAPI.ModInteract.MinetweakerHooks;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MTInteractionManager;
-import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
@@ -84,6 +85,7 @@ import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.MachineAspectMapper;
 import Reika.RotaryCraft.ModInterface.OreForcer;
+import Reika.RotaryCraft.ModInterface.Minetweaker.GrinderTweaker;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -363,11 +365,6 @@ public class RotaryCraft extends DragonAPIMod {
 		DonatorController.instance.addDonation(instance, "StoneRhino", "a94d96b9-23c9-4458-b394-fcc63db67584", 100.00F);
 		DonatorController.instance.addDonation(instance, "Jason Saffle", "2b9a2791-3465-4332-8013-4015dc9cc120", 20.00F);
 
-		ReikaMystcraftHelper.disableFluidPage("jet fuel");
-		ReikaMystcraftHelper.disableFluidPage("rc ethanol");
-		ReikaMystcraftHelper.disableFluidPage("lubricant");
-		ReikaMystcraftHelper.disableFluidPage("liquid nitrogen");
-
 		if (!this.isLocked())
 			IntegrityChecker.instance.addMod(instance, BlockRegistry.blockList, ItemRegistry.itemList);
 
@@ -405,45 +402,50 @@ public class RotaryCraft extends DragonAPIMod {
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.RAILCRAFT, "Access to steam power generation and consumption");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Special integration with TF mobs and structures");
 
-		SensitiveItemRegistry.registerItem(BlockRegistry.BLASTGLASS.getBlockInstance());
-		SensitiveItemRegistry.registerItem(BlockRegistry.BLASTPANE.getBlockInstance());
+		SensitiveItemRegistry.instance.registerItem(BlockRegistry.BLASTGLASS.getBlockInstance());
+		SensitiveItemRegistry.instance.registerItem(BlockRegistry.BLASTPANE.getBlockInstance());
 
-		SensitiveItemRegistry.registerItem(ItemRegistry.ETHANOL.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.CANOLA.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.EXTRACTS.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.MODEXTRACTS.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.CUSTOMEXTRACT.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.ENGINE.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.SHAFT.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.FLYWHEEL.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.GEARBOX.getItemInstance());
-		SensitiveItemRegistry.registerItem(ItemRegistry.MACHINE.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.ETHANOL.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.CANOLA.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.EXTRACTS.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.MODEXTRACTS.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.CUSTOMEXTRACT.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.ENGINE.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.SHAFT.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.FLYWHEEL.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.GEARBOX.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.MACHINE.getItemInstance());
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (!ir.isDummiedOut()) {
 				if (ir.isBedrockArmor() || ir.isBedrockTypeArmor() || ir.isBedrockTool())
-					SensitiveItemRegistry.registerItem(ir.getItemInstance());
+					SensitiveItemRegistry.instance.registerItem(ir.getItemInstance());
 			}
 		}
-		SensitiveItemRegistry.registerItem(ItemStacks.sludge);
-		SensitiveItemRegistry.registerItem(ItemStacks.springingot);
-		SensitiveItemRegistry.registerItem(ItemStacks.bedingotblock);
-		SensitiveItemRegistry.registerItem(ItemStacks.steelblock);
-		SensitiveItemRegistry.registerItem(ItemStacks.steelingot);
-		SensitiveItemRegistry.registerItem(ItemStacks.netherrackdust);
-		SensitiveItemRegistry.registerItem(ItemStacks.tar);
-		SensitiveItemRegistry.registerItem(ItemStacks.redgoldingot);
-		SensitiveItemRegistry.registerItem(ItemStacks.tungsteningot);
-		SensitiveItemRegistry.registerItem(ItemStacks.bedrockdust);
-		SensitiveItemRegistry.registerItem(ItemStacks.bedingot);
-		SensitiveItemRegistry.registerItem(ItemRegistry.UPGRADE.getItemInstance());
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.sludge);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.springingot);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.bedingotblock);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.steelblock);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.steelingot);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.netherrackdust);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.tar);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.redgoldingot);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.tungsteningot);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.bedrockdust);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.bedingot);
+		SensitiveItemRegistry.instance.registerItem(ItemRegistry.UPGRADE.getItemInstance());
 
 		if (MTInteractionManager.isMTLoaded()) {
 			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.BLASTFURNACE.getCraftedProduct());
 			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.WORKTABLE.getCraftedProduct());
 		}
 
-		;//MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
+		SensitiveFluidRegistry.instance.registerFluid("jet fuel");
+		SensitiveFluidRegistry.instance.registerFluid("rc ethanol");
+		SensitiveFluidRegistry.instance.registerFluid("lubricant");
+		SensitiveFluidRegistry.instance.registerFluid("liquid nitrogen");
+
+		MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
 
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemRegistry.ETHANOL.getStackOf(), 2);
 

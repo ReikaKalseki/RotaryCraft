@@ -68,13 +68,8 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			return;
 		}
 		this.getOffsetPower4Sided(0, -1, 0); //The spawner itself is the power input
-		if (power < MINPOWER) {
-			//this.shutdownSpawner(world, x, y, z);
-			//disable = false;
-			//setDelay = 0;
-			return;
-		}
-		this.applyToSpawner(world, x, y, z);
+		if (power >= MINPOWER)
+			this.applyToSpawner(world, x, y, z);
 	}
 
 	private void shutdownSpawner(World world, int x, int y, int z) {

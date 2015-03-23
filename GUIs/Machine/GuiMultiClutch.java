@@ -15,12 +15,14 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -77,12 +79,15 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 		GL11.glColor4f(1, 1, 1, 1);
 		for (int i = 0; i < 16; i++) {
 			fontRendererObj.drawString(String.format("%d", i), 18+70*(i/8), 20+16*(i%8), 0);
-			Color color = RotaryAux.sideColors[multi.getSideOfState(i)];
+			int idx = multi.getSideOfState(i);
+			Color color = RotaryAux.sideColors[idx];
 			int border = 0xff000000;
 			if (color == Color.BLACK)
 				border = 0xffffffff;
 			this.drawRect(18+70*(i/8)+14, 20+16*(i%8)-2, 18+70*(i/8)+51, 20+16*(i%8)+9, border);
 			this.drawRect(18+70*(i/8)+15, 20+16*(i%8)-1, 18+70*(i/8)+50, 20+16*(i%8)+8, 0xff000000+color.getRGB());
+			String s = ReikaStringParser.capFirstChar(ForgeDirection.VALID_DIRECTIONS[idx].name());
+			fontRendererObj.drawString(s, 18+70*(i/8)+16, 20+16*(i%8), idx == 0 || idx == 2 ? 0x000000 : 0xffffff);
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}

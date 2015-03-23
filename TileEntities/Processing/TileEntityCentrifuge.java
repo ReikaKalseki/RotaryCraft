@@ -33,6 +33,8 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCentrifuge extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation, IFluidHandler, PipeConnector {
 
@@ -220,6 +222,15 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 
 	public int getLiquidScaled(int a) {
 		return a * tank.getLevel() / tank.getCapacity();
+	}
+
+	public int getProgress() {
+		return progressTime;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void syncProgress(int time) {
+		progressTime = time;
 	}
 
 }

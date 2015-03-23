@@ -86,8 +86,8 @@ public class ExtractAPI {
 			flist.setAccessible(true);
 			list = (ArrayList)flist.get(loaderInstance);
 
-			entry = Class.forName("Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry");
-			product = Class.forName("Reika.RotaryCraft.Auxiliary.CustomExtractLoader.ProductType");
+			entry = Class.forName("Reika.RotaryCraft.Auxiliary.CustomExtractLoader$CustomExtractEntry");
+			product = Class.forName("Reika.RotaryCraft.Auxiliary.CustomExtractLoader$ProductType");
 			construct = entry.getDeclaredConstructor(String.class, OreRarity.class, product, String.class, int.class, int.class, int.class, OreType.class, String[].class);
 			construct.setAccessible(true);
 

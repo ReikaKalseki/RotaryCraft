@@ -64,7 +64,7 @@ public class RecipesCentrifuge
 		this.addRecipe(Blocks.gravel, null, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
 		this.addRecipe(ItemStacks.netherrackdust, null, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 40);
 		this.addRecipe(Blocks.dirt, null, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
-		this.addRecipe(Items.blaze_powder, null, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 75);
+		this.addRecipe(Items.blaze_powder, null, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
 		if (ModList.FORESTRY.isLoaded()) {
 			Map<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();

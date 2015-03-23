@@ -31,6 +31,16 @@ public class ExtractorModOres {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			OreDictionary.registerOre(ModOreList.oreList[i].getProductOreDictName(), ItemRegistry.MODINGOTS.getStackOfMetadata(i));
 		}
+
+		List<CustomExtractEntry> li = CustomExtractLoader.instance.getEntries();
+		for (int i = 0; i < li.size(); i++) {
+			CustomExtractEntry e = li.get(i);
+			OreType nat = e.nativeOre;
+			if (nat == null) {
+				ItemStack out = ItemCustomModOre.getSmeltedItem(i);
+				OreDictionary.registerOre(e.productName, out);
+			}
+		}
 	}
 
 	public static void addSmelting() {

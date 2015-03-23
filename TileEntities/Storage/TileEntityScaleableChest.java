@@ -34,7 +34,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 
 	public static final int FALLOFF = 128;
 	public static final int MAXROWS = 6;
-	public static final int MAXSIZE = 594;
+	public static final int MAXSIZE = 972;
 
 	public static final int POWERCHANGEAGE = 20; //1s
 	private ArrayList<Integer> powerchanges = new ArrayList<Integer>();

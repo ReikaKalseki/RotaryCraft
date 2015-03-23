@@ -220,14 +220,13 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private int getAvailableIngredients(ItemStack is) {
 		int count = 0;
-		ItemHashMap<Long> map = ModList.APPENG.isLoaded() && network != null ? network.getMESystemContents() : null;
+		//ItemHashMap<Long> map = ModList.APPENG.isLoaded() && network != null ? network.getMESystemContents() : null;
 		//ReikaJavaLibrary.pConsole(map);
 		//for (ItemStack is : li) {
 		//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
 		count += ingredients.getItemCount(is);
-		if (map != null) {
-			Long me = map.get(is);
-			count += me != null ? me.intValue() : 0;
+		if (ModList.APPENG.isLoaded() && network != null) {
+			count += network.removeItem(ReikaItemHelper.getSizedItemStack(is, Integer.MAX_VALUE), true);
 		}
 		//}
 

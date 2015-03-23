@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
+import ic2.api.tile.IWrenchable;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import mrtjp.projectred.api.IScrewdriver;
@@ -22,11 +25,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import santa.api.interfaces.wrench.IWrench;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.Interfaces.Screwdriverable;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
@@ -92,6 +97,31 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
 		TileEntity te = world.getTileEntity(x, y, z);
 		return !(te instanceof RotaryCraftTileEntity || te instanceof Screwdriverable);
+	}
+
+	@Override
+	public boolean onItemUseFirst(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
+	{
+		if (ModList.IC2.isLoaded() && ep.isSneaking()) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			if (InterfaceCache.IC2WRENCH.instanceOf(te)) {
+				IWrenchable wr = (IWrenchable)te;
+				if (wr.wrenchCanRemove(ep)) {
+					ItemStack drop = wr.getWrenchDrop(ep);
+					if (!world.isRemote) {
+						if (drop != null) {
+							ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, drop);
+						}
+						else {
+							ArrayList<ItemStack> li = world.getBlock(x, y, z).getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+							ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
+						}
+					}
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

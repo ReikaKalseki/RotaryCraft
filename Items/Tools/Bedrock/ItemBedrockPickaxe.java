@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,11 +28,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
@@ -171,23 +174,40 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			}
 		}
 
-		if (id != Blocks.monster_egg)
-			return false;
-		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
-		world.setBlockToAir(x, y, z);
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			ReikaRenderHelper.spawnDropParticles(world, x, y, z, Blocks.monster_egg, meta);
+		if (id == Blocks.monster_egg) {
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
+			world.setBlockToAir(x, y, z);
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+				ReikaRenderHelper.spawnDropParticles(world, x, y, z, Blocks.monster_egg, meta);
+			}
+			ItemStack drop = new ItemStack(ReikaBlockHelper.getSilverfishImitatedBlock(meta), 1, 0);
+			ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), drop);
+			EntitySilverfish si = new EntitySilverfish(world);
+			si.setPosition(x+0.5, y, z+0.5);
+			si.setHealth(0);
+			if (world.isRemote)
+				world.spawnEntityInWorld(si);
+			world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
+			ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
+			return true;
 		}
-		ItemStack drop = new ItemStack(ReikaBlockHelper.getSilverfishImitatedBlock(meta), 1, 0);
-		ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), drop);
-		EntitySilverfish si = new EntitySilverfish(world);
-		si.setPosition(x+0.5, y, z+0.5);
-		si.setHealth(0);
-		if (world.isRemote)
-			world.spawnEntityInWorld(si);
-		world.playSoundAtEntity(si, "mob.silverfish.kill", 0.5F, 1);
-		ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, si.experienceValue);
-		return true;
+		else if (id.getClass().getSimpleName().equalsIgnoreCase("BlockHellfish")) {
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 0.85F);
+			world.setBlockToAir(x, y, z);
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+				ReikaRenderHelper.spawnDropParticles(world, x, y, z, Blocks.netherrack, meta);
+			}
+			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, new ItemStack(Blocks.netherrack));
+			AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z);
+			List<EntityLiving> li = world.getEntitiesWithinAABB(EntityLiving.class, box);
+			for (EntityLiving e : li) {
+				if (e instanceof EntitySilverfish) {
+					world.playSoundAtEntity(e, "mob.silverfish.kill", 0.5F, 1);
+					ReikaWorldHelper.splitAndSpawnXP(world, x+0.5F, y+0.125F, z+0.5F, e.experienceValue);
+				}
+			}
+		}
+		return false;
 	}
 
 	private void dropDirectBlock(ItemStack block, World world, int x, int y, int z) {
