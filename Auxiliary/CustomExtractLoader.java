@@ -24,6 +24,7 @@ import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
@@ -50,8 +51,9 @@ public class CustomExtractLoader {
 		public final String productName;
 		public final OreType nativeOre;
 		public final int numberSmelted;
+		public final int ordinal;
 
-		private CustomExtractEntry(String name, OreRarity r, ProductType t, String prod, int n, int c1, int c2, OreType mod, String... ores) {
+		private CustomExtractEntry(int idx, String name, OreRarity r, ProductType t, String prod, int n, int c1, int c2, OreType mod, String... ores) {
 			displayName = name;
 			for (int i = 0; i < ores.length; i++) {
 				String s = ores[i];
@@ -67,6 +69,7 @@ public class CustomExtractLoader {
 			type = t;
 			nativeOre = mod;
 			numberSmelted = n;
+			ordinal = idx;
 		}
 
 		@Override
@@ -107,6 +110,10 @@ public class CustomExtractLoader {
 		@Override
 		public boolean existsInGame() {
 			return true;
+		}
+
+		public int ordinal() {
+			return ordinal;
 		}
 	}
 
@@ -247,7 +254,7 @@ public class CustomExtractLoader {
 		OreType ore = this.parseOreType(parts[7]);
 		String[] ores = new String[parts.length-8];
 		System.arraycopy(parts, 8, ores, 0, ores.length);
-		return new CustomExtractEntry(name, rarity, type, prod, smelt, c1, c2, ore, ores);
+		return new CustomExtractEntry(data.size(), name, rarity, type, prod, smelt, c1, c2, ore, ores);
 	}
 
 	private OreType parseOreType(String tag) {
@@ -275,6 +282,14 @@ public class CustomExtractLoader {
 
 	public List<CustomExtractEntry> getEntries() {
 		return Collections.unmodifiableList(data);
+	}
+
+	public CustomExtractEntry getEntryFromOreBlock(ItemStack is) {
+		for (CustomExtractEntry e : data) {
+			if (ReikaItemHelper.collectionContainsItemStack(e.getAllOreBlocks(), is))
+				return e;
+		}
+		return null;
 	}
 
 	public static enum ProductType {

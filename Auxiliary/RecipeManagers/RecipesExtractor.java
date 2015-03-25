@@ -156,25 +156,31 @@ public class RecipesExtractor
 	public static boolean isDust(ItemStack is) {
 		if (!ItemRegistry.EXTRACTS.matchItem(is))
 			return false;
-		return is.getItemDamage() < 8;
+		int dmg = is.getItemDamage();
+		return dmg < ReikaOreHelper.oreList.length;
 	}
 
 	public static boolean isSlurry(ItemStack is) {
 		if (!ItemRegistry.EXTRACTS.matchItem(is))
 			return false;
-		return is.getItemDamage() < 16 && is.getItemDamage() >= 8;
+		int dmg = is.getItemDamage();
+		return dmg < ReikaOreHelper.oreList.length*2 && dmg >= ReikaOreHelper.oreList.length;
 	}
 
 	public static boolean isSolution(ItemStack is) {
 		if (!ItemRegistry.EXTRACTS.matchItem(is))
 			return false;
-		return is.getItemDamage() < 24 && is.getItemDamage() >= 16;
+		int dmg = is.getItemDamage();
+		return dmg < ReikaOreHelper.oreList.length*3 && dmg >= ReikaOreHelper.oreList.length*2;
 	}
 
 	public static boolean isFlakes(ItemStack is) {
 		if (!ItemRegistry.EXTRACTS.matchItem(is))
 			return false;
-		return is.getItemDamage() < 32 && is.getItemDamage() >= 24 || ReikaItemHelper.matchStacks(is, ItemStacks.silverflakes);
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.silverflakes) || ReikaItemHelper.matchStacks(is, ItemStacks.tungstenflakes))
+			return true;
+		int dmg = is.getItemDamage();
+		return dmg < ReikaOreHelper.oreList.length*4 && dmg >= ReikaOreHelper.oreList.length*3;
 	}
 
 	private static ItemStack getFlake(ReikaOreHelper ore) {
@@ -182,6 +188,6 @@ public class RecipesExtractor
 	}
 
 	public static ReikaOreHelper getOreFromExtract(ItemStack item) {
-		return ReikaOreHelper.oreList[item.getItemDamage()%8];
+		return ReikaOreHelper.oreList[item.getItemDamage()%ReikaOreHelper.oreList.length];
 	}
 }

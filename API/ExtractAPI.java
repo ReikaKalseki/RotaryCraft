@@ -62,7 +62,7 @@ public class ExtractAPI {
 		verify(oreDict);
 		try {
 			Enum prod = Enum.valueOf(product, productType.toUpperCase());
-			Object entry = construct.newInstance(name, rarity, prod, productName, number, c1, c2, nativeOre, oreDict);
+			Object entry = construct.newInstance(list.size(), name, rarity, prod, productName, number, c1, c2, nativeOre, oreDict);
 			list.add(entry);
 		}
 		catch (Exception e) {

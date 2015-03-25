@@ -29,7 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
-import Reika.RotaryCraft.Base.GuiBasicStorage;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiRockMelter;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -143,7 +143,7 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 	@Override
 	public Class<? extends GuiContainer> getGuiClass()
 	{
-		return GuiBasicStorage.class;
+		return GuiRockMelter.class;
 	}
 
 	@Override
