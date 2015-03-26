@@ -104,6 +104,10 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 					drop = true;
 					flag = true;
 				}
+				else if (b == Blocks.web) {
+					drop = true;
+					flag = true;
+				}
 				else
 					flag = super.onBlockStartBreak(is, x, y, z, player);
 			}

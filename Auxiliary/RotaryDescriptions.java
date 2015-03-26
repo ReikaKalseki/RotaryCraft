@@ -57,6 +57,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
@@ -229,7 +230,10 @@ public final class RotaryDescriptions {
 				desc = "There is no handbook data for this machine yet.";
 			//ReikaJavaLibrary.pConsole(h.name().toLowerCase()+":"+desc);
 
-			desc = String.format(desc, machineData.get(m));
+			if (machineData.containsKey(m))
+				desc = String.format(desc, machineData.get(m));
+			if (miscData.containsKey(h))
+				desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
@@ -389,6 +393,8 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.GENERATOR, ReikaEUHelper.getWattsPerEU());
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXOMEGA);
+
+		addData(HandbookRegistry.COIL, TileEntityAdvancedGear.CHARGETORQUE, TileEntityAdvancedGear.CHARGEPOWER);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

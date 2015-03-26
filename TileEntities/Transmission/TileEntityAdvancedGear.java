@@ -68,6 +68,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public static final int WORMRATIO = 16;
 
+	public static final int CHARGETORQUE = 128;
+	public static final int CHARGEPOWER = 65536;
+
 	private CVTController controller;
 
 	private ItemStack[] belts = new ItemStack[31];
@@ -415,7 +418,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				this.destroy(world, x, y, z);
 			}
 			else if (!isCreative) {
-				energy += ((long)torquein*(long)omegain);
+				long pwr = (long)torquein*(long)omegain;
+				if (torquein >= CHARGETORQUE && pwr >= CHARGEPOWER)
+					energy += pwr;
 			}
 		}
 		else if (energy > 0 && releaseTorque > 0 && releaseOmega > 0) {

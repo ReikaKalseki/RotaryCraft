@@ -28,18 +28,21 @@ public enum PlantMaterials {
 	LEAVES2(Blocks.leaves2, 2),
 	POTATO(Items.potato, 1);
 
-	private ItemStack item;
-	private int multiplier;
+	private final ItemStack item;
+	private final int multiplier;
 
 	public static final PlantMaterials[] plantList = PlantMaterials.values();
 
 	private PlantMaterials(Item i, int num) {
-		item = new ItemStack(i);
-		multiplier = num;
+		this(new ItemStack(i), num);
 	}
 
 	private PlantMaterials(Block i, int num) {
-		item = new ItemStack(i);
+		this(new ItemStack(i), num);
+	}
+
+	private PlantMaterials(ItemStack is, int num) {
+		item = is;
 		multiplier = num;
 	}
 

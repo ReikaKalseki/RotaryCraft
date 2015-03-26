@@ -65,7 +65,11 @@ public class MulchMaterials {
 		}
 		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
 			PlantMaterials plant = PlantMaterials.plantList[i];
-			this.addValue(plant.getPlantItem(), plant.getPlantValue());
+			for (int k = 0; k < 16; k++) {
+				ItemStack is = plant.getPlantItem();
+				is.setItemDamage(k);
+				this.addValue(is, plant.getPlantValue());
+			}
 		}
 	}
 

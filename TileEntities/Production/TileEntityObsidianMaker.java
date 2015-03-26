@@ -314,6 +314,14 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		return lava.getLevel();
 	}
 
+	public void addWater(int amt) {
+		water.addLiquid(amt, FluidRegistry.WATER);
+	}
+
+	public void addLava(int amt) {
+		lava.addLiquid(amt, FluidRegistry.LAVA);
+	}
+
 	public void setLava(int amt) {
 		lava.setContents(amt, FluidRegistry.LAVA);
 	}

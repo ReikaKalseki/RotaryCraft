@@ -106,6 +106,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
@@ -432,6 +433,25 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			TileEntityFermenter fm = (TileEntityFermenter)te;
 			if (fm.getLevel()+1000 <= fm.CAPACITY && is != null && is.getItem() == Items.water_bucket) {
 				fm.addLiquid(1000);
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+				}
+				((TileEntityBase)te).syncAllData(true);
+				return true;
+			}
+		}
+		if (m == MachineRegistry.OBSIDIAN) {
+			TileEntityObsidianMaker fm = (TileEntityObsidianMaker)te;
+			if (fm.getWater()+1000 <= fm.CAPACITY && is != null && is.getItem() == Items.water_bucket) {
+				fm.addWater(1000);
+				if (!ep.capabilities.isCreativeMode) {
+					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+				}
+				((TileEntityBase)te).syncAllData(true);
+				return true;
+			}
+			else if (fm.getLava()+1000 <= fm.CAPACITY && is != null && is.getItem() == Items.lava_bucket) {
+				fm.addLava(1000);
 				if (!ep.capabilities.isCreativeMode) {
 					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
 				}
