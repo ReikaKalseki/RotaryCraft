@@ -32,7 +32,7 @@ public enum DifficultyEffects {
 	RAILGUNCRAFT(16, 8, 2),
 	LUBEUSAGE(0.25F, 1F, 2.5F),
 	JETINGESTFAIL(0.05, 0.2, 0.5),
-	FRACTIONTEAR(0, 0, 0.05);
+	FRACTIONTEAR(0F, 0F, 0.05F);
 
 	private boolean isChance = false;
 

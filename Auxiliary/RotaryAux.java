@@ -10,12 +10,10 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -32,6 +30,7 @@ import net.minecraft.util.IntHashMap;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler;
@@ -62,7 +61,7 @@ public class RotaryAux {
 
 	public static final boolean getPowerOnClient = ConfigRegistry.POWERCLIENT.getState();
 
-	private static List<Class<? extends TileEntity>> shaftPowerBlacklist = new ArrayList<Class<? extends TileEntity>>();
+	private static Set<Class<? extends TileEntity>> shaftPowerBlacklist = new OneWaySet<Class<? extends TileEntity>>();
 
 	static {
 		//addShaftBlacklist("example.author.unauthorizedconverter.teclass");

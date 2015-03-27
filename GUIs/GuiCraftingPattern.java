@@ -26,6 +26,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Containers.ContainerCraftingPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -56,19 +57,23 @@ public class GuiCraftingPattern extends GuiContainer {
 
 	@Override
 	public void actionPerformed(GuiButton b) {
-		RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
-		ItemCraftPattern.setMode(this.getItem(), next);
-		((ContainerCraftingPattern)player.openContainer).clearRecipe();
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), new ServerTarget(), next.ordinal());
+		if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem())) {
+			RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
+			ItemCraftPattern.setMode(this.getItem(), next);
+			((ContainerCraftingPattern)player.openContainer).clearRecipe();
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), new ServerTarget(), next.ordinal());
+		}
 		this.initGui();
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, ItemCraftPattern.getMode(this.getItem()).displayName, xSize/2, 6, 4210752);
+		if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem()))
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, ItemCraftPattern.getMode(this.getItem()).displayName, xSize/2, 6, 4210752);
 		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		ReikaGuiAPI.instance.drawItemStack(itemRender, ItemCraftPattern.getMode(this.getItem()).getIcon(), 8, 8);
+		if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem()))
+			ReikaGuiAPI.instance.drawItemStack(itemRender, ItemCraftPattern.getMode(this.getItem()).getIcon(), 8, 8);
 	}
 
 	@Override
