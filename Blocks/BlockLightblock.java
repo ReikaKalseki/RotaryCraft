@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Blocks;
 import java.util.ArrayList;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
@@ -48,6 +49,21 @@ public class BlockLightblock extends BlockBasic {
 		return null;
 	}
 
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random r) {
+
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block n) {
+
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block old, int oldmeta) {
+
+
+	}
 
 	@Override
 	public int damageDropped(int par1)

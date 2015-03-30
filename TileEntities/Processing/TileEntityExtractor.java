@@ -19,6 +19,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -222,18 +223,17 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				inv[9] = null;
 			}
 		}
-		boolean tickPer = true;
+		boolean[] tickPer = new boolean[4];
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
 			if (this.canProcess(i)) {
 				flag1 = true;
 				extractorCookTime[i]++;
 				int time = this.getOperationTime(i);
-				if (time > 1)
-					tickPer = false;
+				if (time <= 1)
+					tickPer[i] = true;
 				if (extractorCookTime[i] >= time) {
 					extractorCookTime[i] = 0;
-					//if (!this.processModOre(i))
 					this.processItem(i);
 					flag1 = true;
 				}
@@ -243,7 +243,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			if (flag1)
 				this.markDirty();
 		}
-		if (tickPer)
+		if (ReikaArrayHelper.isAllTrue(tickPer))
 			RotaryAchievements.INSANITY.triggerAchievement(this.getPlacer());
 	}
 
@@ -275,41 +275,6 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 			}
 		}
-		/*
-		if (ItemRegistry.MODEXTRACTS.matchItem(inv[i]) || ModOreList.isModOre(inv[i])) {
-			ModOreList entry = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
-			switch (i) {
-			case 0:
-				if (ModOreList.isModOre(inv[i])) {
-					if (inv[i+4] == null)
-						return true;
-					ModOreList ore = ModOreList.getModOreFromOre(inv[i]);
-					return ExtractorModOres.isDust(ore, inv[i+4].getItemDamage());
-				}
-				break;
-			case 1:
-				if (ExtractorModOres.isDust(entry, inv[i].getItemDamage())) {
-					if (inv[i+4] == null)
-						return true;
-					return ExtractorModOres.isSlurry(entry, inv[i+4].getItemDamage());
-				}
-				break;
-			case 2:
-				if (ExtractorModOres.isSlurry(entry, inv[i].getItemDamage())) {
-					if (inv[i+4] == null)
-						return true;
-					return ExtractorModOres.isSolution(entry, inv[i+4].getItemDamage());
-				}
-				break;
-			case 3:
-				if (ExtractorModOres.isSolution(entry, inv[i].getItemDamage())) {
-					if (inv[i+4] == null)
-						return true;
-					return ExtractorModOres.isFlakes(entry, inv[i+4].getItemDamage());
-				}
-				break;
-			}
-		}*/
 		OreType ore = this.getOreType(inv[i]);
 		if (ore == null)
 			return false;
@@ -464,7 +429,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		if (slot%2 == 1 && slot <= 8)
+		if (slot > 3 && slot < 9)
 			return false;
 		if (slot == 0)
 			return ReikaBlockHelper.isOre(is);

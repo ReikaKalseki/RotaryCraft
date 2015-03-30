@@ -45,6 +45,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.BorerDigEvent;
 import Reika.RotaryCraft.API.Interfaces.IgnoredByBorer;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -232,7 +233,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				this.setJammed(false);
 				if (!world.isRemote) {
 					ReikaWorldHelper.forceGenAndPopulate(world, x+step*facing.offsetX, y, z+step*facing.offsetZ, meta);
-					this.dig(world, x, y, z, meta);
+					this.safeDig(world, x, y, z, meta);
 					if (!isMiningAir) {
 						if (soundtick == 0) {
 							SoundRegistry.RUMBLE.playSoundAtBlock(this);
@@ -249,6 +250,16 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			mintorque = 0;
 			reqpow = 0;
 			isMiningAir = false;
+		}
+	}
+
+	private void safeDig(World world, int x, int y, int z, int meta) {
+		try {
+			this.dig(world, x, y, z, meta);
+		}
+		catch (RuntimeException e) {
+			RotaryCraft.logger.logError(this+" triggered an exception mining a chunk, probably during worldgen!");
+			e.printStackTrace();
 		}
 	}
 

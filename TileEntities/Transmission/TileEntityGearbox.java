@@ -482,7 +482,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public int getRedstoneOverride() {
-		return 15*tank.getLevel()/this.getMaxLubricant();
+		return this.getMaxLubricant() > 0 ? 15*tank.getLevel()/this.getMaxLubricant() : 0;
 	}
 
 	@Override

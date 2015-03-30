@@ -133,7 +133,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	@Override
 	public int getMaxStorage() {
-		return 1+this.getMinimumCurrent()*20;//ReikaMathLibrary.intpow2(10, this.getTier());//TileEntityPneumaticEngine.maxMJ*10;
+		return 1+this.getMinimumCurrent()*200;//ReikaMathLibrary.intpow2(10, this.getTier());//TileEntityPneumaticEngine.maxMJ*10;
 	}
 
 	@Override

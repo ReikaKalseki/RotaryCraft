@@ -860,7 +860,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	@Override
 	public int getRedstoneOverride() {
 		if (this.getGearType().storesEnergy()) {
-			int level = (int)(15L*energy/*/20L*//this.getMaxStorageCapacity());
+			int level = (int)(15L*energy/20L/this.getMaxStorageCapacity());
 			return level;
 		}
 		return 0;

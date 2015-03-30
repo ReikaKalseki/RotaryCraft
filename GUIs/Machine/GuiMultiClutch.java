@@ -71,8 +71,11 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
+		int pwr = multi.worldObj.getBlockPowerInput(multi.xCoord, multi.yCoord, multi.zCoord);
 		for (int i = 0; i < 16; i++) {
-			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Items.redstone), 3+70*(i/8), 15+16*(i%8));
+			int x = 3+70*(i/8);
+			int y = 15+16*(i%8);
+			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(i == pwr ? Items.glowstone_dust : Items.redstone), x, y);
 		}
 
 		GL11.glDisable(GL11.GL_LIGHTING);
