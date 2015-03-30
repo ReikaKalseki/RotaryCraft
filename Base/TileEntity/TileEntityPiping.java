@@ -526,6 +526,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		this.deleteFromAdjacentConnections(worldObj, xCoord, yCoord, zCoord);
 	}
 
+	public final void setTemperature(int temp) {
+
+	}
+
 	public static enum TransferAmount {
 		UNITY(),
 		BUCKET(),

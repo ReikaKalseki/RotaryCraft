@@ -265,4 +265,8 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		return false;
 	}
 
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
+
 }

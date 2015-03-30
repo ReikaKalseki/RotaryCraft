@@ -576,6 +576,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	}
 
+	public final void setTemperature(int temp) {
+		temperature = temp;
+	}
+
 	public final int getFuelCapacity() {
 		if (type.isEthanolFueled())
 			return FUELCAP;

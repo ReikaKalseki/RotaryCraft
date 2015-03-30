@@ -258,4 +258,8 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		return true;
 	}
 
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
+
 }

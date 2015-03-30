@@ -362,4 +362,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		return false;
 	}
 
+	public void setTemperature(int temp) {
+
+	}
+
 }

@@ -278,4 +278,8 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 		return true;
 	}
 
+	public void setTemperature(int temp) {
+
+	}
+
 }

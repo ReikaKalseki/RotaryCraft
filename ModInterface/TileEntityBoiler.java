@@ -223,4 +223,8 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 		return false;
 	}
 
+	public void setTemperature(int temp) {
+
+	}
+
 }

@@ -453,4 +453,8 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	public boolean canBeCooledWithFins() {
 		return false;
 	}
+
+	public void setTemperature(int temp) {
+
+	}
 }

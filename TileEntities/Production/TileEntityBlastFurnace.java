@@ -459,4 +459,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public boolean canBeCooledWithFins() {
 		return false;
 	}
+
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 }

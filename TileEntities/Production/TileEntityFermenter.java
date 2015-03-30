@@ -407,4 +407,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public boolean canBeCooledWithFins() {
 		return true;
 	}
+
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 }

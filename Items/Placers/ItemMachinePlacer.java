@@ -100,7 +100,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			TutorialTracker.instance.placeMachine(m, ep);
 		if (te instanceof TemperatureTE) {
 			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-			((TemperatureTE)te).addTemperature(Tb);
+			((TemperatureTE)te).setTemperature(Tb);
 		}
 		if (te instanceof PressureTE) {
 			((PressureTE)te).addPressure(101);

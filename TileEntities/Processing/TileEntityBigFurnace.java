@@ -277,4 +277,8 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 		return false;
 	}
 
+	public void setTemperature(int temp) {
+
+	}
+
 }

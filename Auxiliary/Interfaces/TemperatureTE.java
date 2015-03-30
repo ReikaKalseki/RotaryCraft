@@ -10,14 +10,13 @@
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 import net.minecraft.world.World;
+import Reika.DragonAPI.Interfaces.ThermalTile;
 
-public interface TemperatureTE {
+public interface TemperatureTE extends ThermalTile {
 
 	public abstract void updateTemperature(World world, int x, int y, int z, int meta);
 
 	public abstract void addTemperature(int temp);
-
-	public abstract int getTemperature();
 
 	public abstract int getThermalDamage();
 

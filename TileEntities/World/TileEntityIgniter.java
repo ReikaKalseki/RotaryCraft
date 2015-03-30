@@ -305,4 +305,8 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 	public boolean canBeCooledWithFins() {
 		return false;
 	}
+
+	public void setTemperature(int temp) {
+
+	}
 }

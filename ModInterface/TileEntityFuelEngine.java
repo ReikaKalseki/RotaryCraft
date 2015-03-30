@@ -410,4 +410,8 @@ TemperatureTE {
 		return false;
 	}
 
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
+
 }

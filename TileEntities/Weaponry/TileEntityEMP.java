@@ -31,10 +31,12 @@ import net.minecraft.world.World;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
 import thaumcraft.api.nodes.NodeType;
+import Reika.ChromatiCraft.TileEntity.Networking.TileEntityCrystalPylon;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -240,8 +242,10 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		fired = true;
 		for (int i = 0; i < blocks.size(); i++) {
 			TileEntity te = blocks.get(i);
-			if (te instanceof INode)
+			if (InterfaceCache.NODE.instanceOf(te))
 				this.chargeNode((INode)te);
+			else if (ModList.CHROMATICRAFT.isLoaded() && te instanceof TileEntityCrystalPylon)
+				((TileEntityCrystalPylon)te).onEMP(this);
 			else
 				this.shutdownTE(te);
 		}

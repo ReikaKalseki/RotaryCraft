@@ -87,7 +87,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 				((TileEntityGearbox)tile).isFlipped = true;
 			}
 			int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-			((TemperatureTE)tile).addTemperature(Tb);
+			((TemperatureTE)tile).setTemperature(Tb);
 		}
 		return true;
 	}

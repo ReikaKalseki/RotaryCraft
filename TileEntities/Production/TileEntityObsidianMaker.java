@@ -354,4 +354,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	public boolean canBeCooledWithFins() {
 		return true;
 	}
+
+	public void setTemperature(int temp) {
+
+	}
 }

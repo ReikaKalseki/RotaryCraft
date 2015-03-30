@@ -266,4 +266,8 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		return true;
 	}
 
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
+
 }

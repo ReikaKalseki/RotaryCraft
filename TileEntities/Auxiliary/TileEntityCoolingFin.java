@@ -168,4 +168,8 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	public boolean canBeCooledWithFins() {
 		return false;
 	}
+
+	public void setTemperature(int temp) {
+
+	}
 }

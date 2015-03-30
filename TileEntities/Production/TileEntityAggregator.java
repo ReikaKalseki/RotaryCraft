@@ -172,4 +172,8 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 	public boolean canBeCooledWithFins() {
 		return true;
 	}
+
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 }

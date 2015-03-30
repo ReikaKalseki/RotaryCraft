@@ -628,4 +628,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	public boolean canBeCooledWithFins() {
 		return true;
 	}
+
+	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 }

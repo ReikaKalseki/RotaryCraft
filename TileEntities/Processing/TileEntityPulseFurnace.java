@@ -509,4 +509,8 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public boolean canBeCooledWithFins() {
 		return true;
 	}
+
+	public void setTemperature(int temp) {
+
+	}
 }
