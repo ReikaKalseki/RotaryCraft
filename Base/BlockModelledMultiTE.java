@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -36,6 +37,11 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	@Override
 	public final int getRenderType() {
 		return RotaryCraft.instance.isLocked() || RotaryAux.func_28813_f(2, 36, false, this.getClass()) ? 0 : -1;
+	}
+
+	@Override
+	public final IIcon getIcon(int s, int meta) {
+		return RotaryAux.func_28813_f(0, 15, true, this.getClass()) ? RotaryAux.func_39467_a_(this, meta, s, null) : blockIcon;
 	}
 
 	@Override

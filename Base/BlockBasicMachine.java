@@ -58,6 +58,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearType;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -325,6 +326,9 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 			if (adv.getGearType().consumesLubricant()) {
 				currenttip.add(String.format("Lubricant: %d mB", adv.getLubricant()));
+			}
+			if (adv.getGearType() == GearType.HIGH) {
+				currenttip.add(adv.torquemode ? "Torque Mode" : "Speed Mode");
 			}
 		}
 		if (te instanceof TileEntityEngine) {

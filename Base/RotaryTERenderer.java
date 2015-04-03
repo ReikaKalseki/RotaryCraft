@@ -211,6 +211,102 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 
 	@Override
 	protected final boolean doRenderModel(TileEntityBase te) {
-		return this.isValidMachineRenderPass(te) && !RotaryAux.func_28813_f(8, 16, false, this.getModClass());
+		if (RotaryAux.func_28813_f(8, 16, false, this.getModClass())) {/*
+			RotaryCraftTileEntity tile = (RotaryCraftTileEntity)te;
+			MachineRegistry m = tile.getMachine();
+			Tessellator v5 = Tessellator.instance;
+			ReikaTextureHelper.bindFinalTexture(RotaryCraft.class, "Textures/terrain/original.png");
+			GL11.glPushMatrix();
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glTranslated(te.xCoord-TileEntityRendererDispatcher.staticPlayerX, te.yCoord-TileEntityRendererDispatcher.staticPlayerY, te.zCoord-TileEntityRendererDispatcher.staticPlayerZ);
+			v5.startDrawingQuads();
+			v5.setBrightness(tile.getBlockType().getMixedBrightnessForBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord));
+			v5.setColorOpaque_I(0xffffff);
+			int n = RotaryAux.func_39467_b_(m.getBlock(), m.getMachineMetadata(), 0, null);
+			double u = (n%16)/16D;
+			double v = (n/16)/16D;
+			double du = u+0.0625;
+			double dv = v+0.0625;
+			double ox = m.getMinX(tile);
+			double oy = m.getMinY(tile);
+			double oz = m.getMinZ(tile);
+			double w = m.getMaxX(tile);
+			double h = m.getMaxY(tile);
+			double l = m.getMaxZ(tile);
+
+			v5.setColorOpaque_I(0x777777);
+
+			v5.addVertexWithUV(ox, oy, oz, u, v);
+			v5.addVertexWithUV(w, oy, oz, du, v);
+			v5.addVertexWithUV(w, oy, l, du, dv);
+			v5.addVertexWithUV(ox, oy, l, u, dv);
+
+			n = RotaryAux.func_39467_b_(m.getBlock(), m.getMachineMetadata(), 1, null);
+			u = (n%16)/16D;
+			v = (n/16)/16D;
+			du = u+0.0625;
+			dv = v+0.0625;
+
+			v5.setColorOpaque_I(0xffffff);
+
+			v5.addVertexWithUV(ox, h, l, u, dv);
+			v5.addVertexWithUV(w, h, l, du, dv);
+			v5.addVertexWithUV(w, h, oz, du, v);
+			v5.addVertexWithUV(ox, h, oz, u, v);
+
+			n = RotaryAux.func_39467_b_(m.getBlock(), m.getMachineMetadata(), 2, null);
+			u = (n%16)/16D;
+			v = (n/16)/16D;
+			du = u+0.0625;
+			dv = v+0.0625;
+
+			v5.setColorOpaque_I(0xcccccc);
+
+			v5.addVertexWithUV(ox, h, oz, du, v);
+			v5.addVertexWithUV(w, h, oz, u, v);
+			v5.addVertexWithUV(w, oy, oz, u, dv);
+			v5.addVertexWithUV(ox, oy, oz, du, dv);
+
+			n = RotaryAux.func_39467_b_(m.getBlock(), m.getMachineMetadata(), 3, null);
+			u = (n%16)/16D;
+			v = (n/16)/16D;
+			du = u+0.0625;
+			dv = v+0.0625;
+
+			v5.addVertexWithUV(ox, oy, l, u, dv);
+			v5.addVertexWithUV(w, oy, l, du, dv);
+			v5.addVertexWithUV(w, h, l, du, v);
+			v5.addVertexWithUV(ox, h, l, u, v);
+
+			n = RotaryAux.func_39467_b_(m.getBlock(), m.getMachineMetadata(), 4, null);
+			u = (n%16)/16D;
+			v = (n/16)/16D;
+			du = u+0.0625;
+			dv = v+0.0625;
+
+			v5.setColorOpaque_I(0xa2a2a2);
+
+			v5.addVertexWithUV(w, h, oz, du, v);
+			v5.addVertexWithUV(w, h, l, u, v);
+			v5.addVertexWithUV(w, oy, l, u, dv);
+			v5.addVertexWithUV(w, oy, oz, du, dv);
+
+			n = RotaryAux.func_39467_b_(m.getBlock(), m.getMachineMetadata(), 5, null);
+			u = (n%16)/16D;
+			v = (n/16)/16D;
+			du = u+0.0625;
+			dv = v+0.0625;
+
+			v5.addVertexWithUV(ox, oy, oz, u, dv);
+			v5.addVertexWithUV(ox, oy, l, du, dv);
+			v5.addVertexWithUV(ox, h, l, du, v);
+			v5.addVertexWithUV(ox, h, oz, u, v);
+			v5.draw();
+			GL11.glPopMatrix();*/
+			return false;
+		}
+		return this.isValidMachineRenderPass(te);
 	}
 }

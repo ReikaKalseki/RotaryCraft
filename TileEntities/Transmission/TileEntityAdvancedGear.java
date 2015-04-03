@@ -71,6 +71,9 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	public static final int CHARGETORQUE = 128;
 	public static final int CHARGEPOWER = 65536;
 
+	public static final int CHARGETORQUEBEDROCK = 1024;
+	public static final int CHARGEPOWERBEDROCK = 524288;
+
 	private CVTController controller;
 
 	private ItemStack[] belts = new ItemStack[31];
@@ -419,7 +422,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 			else if (!isCreative) {
 				long pwr = (long)torquein*(long)omegain;
-				if (torquein >= CHARGETORQUE && pwr >= CHARGEPOWER)
+				if (torquein >= this.getChargeTorque() && pwr >= this.getChargePower())
 					energy += pwr;
 			}
 		}
@@ -436,6 +439,14 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				power = 0;
 			}
 		}
+	}
+
+	private long getChargePower() {
+		return isBedrockCoil ? CHARGEPOWERBEDROCK : CHARGEPOWER;
+	}
+
+	private int getChargeTorque() {
+		return isBedrockCoil ? CHARGETORQUEBEDROCK : CHARGETORQUE;
 	}
 
 	private void overChargeExplosion(World world, int x, int y, int z) {

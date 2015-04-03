@@ -394,7 +394,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXOMEGA);
 
-		addData(HandbookRegistry.COIL, TileEntityAdvancedGear.CHARGETORQUE, TileEntityAdvancedGear.CHARGEPOWER);
+		addData(HandbookRegistry.COIL, TileEntityAdvancedGear.CHARGETORQUE, TileEntityAdvancedGear.CHARGEPOWER, TileEntityAdvancedGear.CHARGETORQUEBEDROCK, TileEntityAdvancedGear.CHARGEPOWERBEDROCK);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

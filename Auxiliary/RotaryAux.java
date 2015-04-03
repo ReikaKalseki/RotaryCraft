@@ -13,7 +13,6 @@ import java.awt.Color;
 import java.util.Calendar;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -367,27 +366,31 @@ public class RotaryAux {
 		}
 		par10 -= 38;
 
-		return par6.get(par11) == 3 && par6.get(par13) <= par10;
+		return par6.get(par11) == 3 && par6.get(par13) < par10;
 	}
 
 	private static EnumMap field_95695_gc_ = new EnumMap(MachineRegistry.class);
 	private static IntHashMap field_95696_r_ = new IntHashMap();
 
 	public static IIcon func_39467_a_(Block p_286117_1_, int p_286117_2_, final int p_286117_3_, WorldRenderer p_286117_4_) {
+		return func_39467_a_(func_39467_b_(p_286117_1_, p_286117_2_, p_286117_3_, p_286117_4_));
+	}
+
+	public static int func_39467_b_(Block p_286117_1_, int p_286117_2_, final int p_286117_3_, WorldRenderer p_286117_4_) {
 		MachineRegistry par1 = MachineRegistry.getMachineFromIDandMetadata(p_286117_1_, p_286117_2_);
 		boolean par2 = p_286117_4_ != null && p_286117_4_.isVisible && !p_286117_4_.skipAllRenderPasses();
 		boolean par3 = p_286117_4_ == null || p_286117_4_.tileEntityRenderers.isEmpty();
 		if (par2 && par3)
-			return null;
+			return -1;
 		IconSide par4 = (IconSide)field_95695_gc_.get(par1);
 		int par5 = par4 == null ? -1 : par4.field_118037_b.containsKey(p_286117_3_) && par3 ? par4.field_118037_b.get(p_286117_3_) : par4.field_118037_a;
 		if (p_286117_1_ instanceof BlockGearbox && par5 == 10) {
-			par5 += p_286117_2_/4;
+			par5 += p_286117_2_;
 		}
 		if (p_286117_1_ instanceof BlockFlywheel) {
 			par5 += 16*(p_286117_2_/4);
 		}
-		return func_39467_a_(par5);
+		return par5;
 	}
 
 	private static IIcon func_39467_a_(int p_603793_1_) {
@@ -403,7 +406,7 @@ public class RotaryAux {
 
 	private static class IconSide {
 
-		private final int field_118037_a;
+		public final int field_118037_a;
 		private HashMap<Integer, Integer> field_118037_b = new HashMap();
 
 		private IconSide(int f) {
@@ -415,16 +418,24 @@ public class RotaryAux {
 			return this;
 		}
 
+		public final int func_83577_c_(int p_254846_1_) {
+			return field_118037_b.containsKey(p_254846_1_) ? field_118037_b.get(p_254846_1_) : 255;
+		}
+
 	}
 
 	public static void func_72350_c_(TextureMap p_542354_1_) {
-		Set par1 = field_95695_gc_.keySet();
+		/*Set par1 = field_95695_gc_.keySet();
 		Iterator par2 = par1.iterator();
 		while (par2.hasNext()) {
 			IconSide par3 = (IconSide)field_95695_gc_.get(par2.next());
 			field_95696_r_.addKey(par3.field_118037_a, p_542354_1_.registerIcon(func_23890_f_(par3.field_118037_a)));
 			for (int par4 : par3.field_118037_b.keySet())
 				field_95696_r_.addKey(par3.field_118037_b.get(par4), p_542354_1_.registerIcon(func_23890_f_(par3.field_118037_b.get(par4))));
+		}*/
+
+		for (int i = 0; i < 256; i++) {
+			field_95696_r_.addKey(i, p_542354_1_.registerIcon(func_23890_f_(i)));
 		}
 
 		field_95696_r_.addKey(-1, p_542354_1_.registerIcon(func_23890_f_(255)));
@@ -433,7 +444,7 @@ public class RotaryAux {
 	private static String func_23890_f_(int p_345689_1_) {
 		int par1 = p_345689_1_ / 16;
 		int par2 = p_345689_1_ % 16;
-		return "rotarycraft:/old/tile"+par2+"_"+par1;
+		return "rotarycraft:old/tile"+par2+"_"+par1;
 	}
 
 	static {
