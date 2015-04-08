@@ -21,7 +21,7 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
@@ -36,12 +36,12 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 
 	@Override
 	public final int getRenderType() {
-		return RotaryCraft.instance.isLocked() || RotaryAux.func_28813_f(2, 36, false, this.getClass()) ? 0 : -1;
+		return RotaryCraft.instance.isLocked() || OldTextureLoader.instance.loadOldTextures() ? 0 : -1;
 	}
 
 	@Override
 	public final IIcon getIcon(int s, int meta) {
-		return RotaryAux.func_28813_f(0, 15, true, this.getClass()) ? RotaryAux.func_39467_a_(this, meta, s, null) : blockIcon;
+		return OldTextureLoader.instance.loadOldTextures() ? OldTextureLoader.instance.getOldTexture(this, meta, s) : blockIcon;
 	}
 
 	@Override

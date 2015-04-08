@@ -35,6 +35,10 @@ public class TileEntityFluidCompressor extends TileEntityPowerReceiver implement
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
+	public int getCapacity() {
+		return tank.isEmpty() ? 0 : this.getCapacity(tank.getActualFluid());
+	}
+
 	public int getCapacity(Fluid f) {
 		if (power < MINPOWER || torque < MINTORQUE)
 			return 0;

@@ -71,8 +71,8 @@ import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
@@ -610,8 +610,8 @@ public class RotaryCraft extends DragonAPIMod {
 	public void textureHook(TextureStitchEvent.Pre event) {
 		if (!this.isLocked())
 			RotaryRegistration.setupLiquidIcons(event);
-		if (RotaryAux.func_28813_f(-1, 0, true, event.getClass()))
-			RotaryAux.func_72350_c_(event.map);
+		if (OldTextureLoader.instance.loadOldTextures())
+			OldTextureLoader.instance.reloadOldTextures(event.map);
 	}
 
 	@Override

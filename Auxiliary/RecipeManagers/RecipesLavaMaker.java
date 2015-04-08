@@ -58,10 +58,10 @@ public class RecipesLavaMaker {
 
 		if (ModList.THERMALFOUNDATION.isLoaded()) {
 			ItemStack pyro = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustPyrotheum", 1);
-			this.addRecipe(pyro, "pyrotheum", 100, 1800, 9000000);
+			this.addRecipe(pyro, "pyrotheum", 250, 1800, 9000000);
 
 			ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
-			this.addRecipe(cryo, "cryotheum", 100, -200, 2000);
+			this.addRecipe(cryo, "cryotheum", 250, -200, 2000);
 		}
 
 		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000);

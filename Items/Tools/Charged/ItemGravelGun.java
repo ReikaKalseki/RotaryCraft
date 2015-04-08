@@ -32,6 +32,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.GravelGunDamage;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -161,7 +162,7 @@ public class ItemGravelGun extends ItemChargedTool {
 				ReikaParticleHelper.EXPLODE.spawnAt(world, ent.posX, ent.posY, ent.posZ);
 				world.playSoundAtEntity(ent, "random.explode", 1, 1);
 			}
-			ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is.getItemDamage()));
+			ent.attackEntityFrom(new GravelGunDamage(ep), this.getAttackDamage(is.getItemDamage()));
 			ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
 			//ent.setRevengeTarget(ep);
 		}

@@ -23,6 +23,7 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -211,7 +212,7 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 
 	@Override
 	protected final boolean doRenderModel(TileEntityBase te) {
-		if (RotaryAux.func_28813_f(8, 16, false, this.getModClass())) {/*
+		if (OldTextureLoader.instance.loadOldTextures()) {/*
 			RotaryCraftTileEntity tile = (RotaryCraftTileEntity)te;
 			MachineRegistry m = tile.getMachine();
 			Tessellator v5 = Tessellator.instance;

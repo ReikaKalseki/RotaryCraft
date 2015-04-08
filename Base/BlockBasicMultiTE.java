@@ -68,6 +68,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
@@ -109,6 +110,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
+import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
@@ -145,13 +147,13 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			return te.getIconForSide(ForgeDirection.VALID_DIRECTIONS[s]);
 		int machine = m.getMachineMetadata();
 		//ReikaJavaLibrary.pConsole(s+": "+icons[machine][meta][s][te.getTextureStateForSide(s)].getIconName());
-		return RotaryAux.func_28813_f(0, 0, false, this.getClass()) ? RotaryAux.func_39467_a_(this, m.getMachineMetadata(), s, null) : icons[machine][meta][s][te.getTextureStateForSide(s)];
+		return OldTextureLoader.instance.loadOldTextures() ? OldTextureLoader.instance.getOldTexture(this, m.getMachineMetadata(), s) : icons[machine][meta][s][te.getTextureStateForSide(s)];
 	}
 
 	@Override
 	public IIcon getIcon(int s, int meta) {
 		try {
-			return RotaryAux.func_28813_f(1, 27, false, this.getClass()) ? RotaryAux.func_39467_a_(this, meta, s, null) : icons[meta][0][s][0];
+			return OldTextureLoader.instance.loadOldTextures() ? OldTextureLoader.instance.getOldTexture(this, meta, s) : icons[meta][0][s][0];
 		}
 		catch (NullPointerException e) {
 			return ReikaTextureHelper.getMissingIcon();
@@ -1014,6 +1016,11 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			}
 			else
 				currenttip.add("Accelerant: Empty");
+		}
+		if (te instanceof TileEntityPulseFurnace) {
+			TileEntityFluidCompressor tfc = (TileEntityFluidCompressor)te;
+			if (!tfc.isEmpty())
+				currenttip.add(String.format("Capacity: %.3fB", tfc.getCapacity()));
 		}
 		return currenttip;
 	}

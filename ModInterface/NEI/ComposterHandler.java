@@ -55,8 +55,8 @@ public class ComposterHandler extends TemplateRecipeHandler {
 		public ArrayList<PositionedStack> getIngredients()
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			stacks.add(new PositionedStack(ItemRegistry.YEAST.getStackOf(), 50, 27));
-			stacks.add(new PositionedStack(this.getEntry(), 50, 45));
+			stacks.add(new PositionedStack(ItemRegistry.YEAST.getStackOf(), 50, 45));
+			stacks.add(new PositionedStack(this.getEntry(), 50, 27));
 			return stacks;
 		}
 

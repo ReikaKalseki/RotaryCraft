@@ -30,6 +30,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
+import Reika.RotaryCraft.API.Interfaces.CustomFanEntity;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -157,50 +158,65 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		List<Entity> inzone = world.getEntitiesWithinAABB(Entity.class, zone);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", inzone.size()));
 		for (Entity caught : inzone) {
-			double mass = ReikaEntityHelper.getEntityMass(caught);
-			if (caught.motionX < AXISSPEEDCAP && facing.offsetX != 0) {
-				double d = caught.posX-x;
-				if (d == 0)
-					d = 1;
-				double multiplier = 1/(d-this.getMaxRange());
-				if (d-this.getMaxRange() > 12)
-					multiplier = 0;
-				if (multiplier > 1 || multiplier < 0)
-					multiplier = 1;
-				double base = multiplier*power2*BASESPEED;
-				double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
-				double a = facing.offsetX > 0 ? 0.004 : 0;
-				caught.motionX = facing.offsetX*speedstep+a;
-			}
-			if (caught.motionY < AXISSPEEDCAP && facing.offsetY != 0) {
-				double d = caught.posY-y;
-				if (d == 0)
-					d = 1;
-				double multiplier = 1/(d-this.getMaxRange());
-				if (d-this.getMaxRange() > 12)
-					multiplier = 0;
-				if (multiplier > 1 || multiplier < 0)
-					multiplier = 1;
-				double base = multiplier*power2*BASESPEED;
-				caught.motionY = facing.offsetY*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
-			}
-			if (caught.motionZ < AXISSPEEDCAP && facing.offsetZ != 0) {
-				double d = caught.posZ-z;
-				if (d == 0)
-					d = 1;
-				double multiplier = 1/(d-this.getMaxRange());
-				if (d-this.getMaxRange() > 12)
-					multiplier = 0;
-				if (multiplier > 1 || multiplier < 0)
-					multiplier = 1;
-				double base = multiplier*power2*BASESPEED;
-				double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
-				double a = facing.offsetZ > 0 ? 0.004 : 0;
-				caught.motionZ = facing.offsetZ*speedstep+a;
+			if (this.canBlowEntity(caught)) {
+				double mass = ReikaEntityHelper.getEntityMass(caught);
+				if (caught.motionX < AXISSPEEDCAP && facing.offsetX != 0) {
+					double d = caught.posX-x;
+					if (d == 0)
+						d = 1;
+					double multiplier = 1/(d-this.getMaxRange());
+					if (d-this.getMaxRange() > 12)
+						multiplier = 0;
+					if (multiplier > 1 || multiplier < 0)
+						multiplier = 1;
+					double base = multiplier*power2*BASESPEED;
+					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					double a = facing.offsetX > 0 ? 0.004 : 0;
+					caught.motionX = facing.offsetX*speedstep+a;
+				}
+				if (caught.motionY < AXISSPEEDCAP && facing.offsetY != 0) {
+					double d = caught.posY-y;
+					if (d == 0)
+						d = 1;
+					double multiplier = 1/(d-this.getMaxRange());
+					if (d-this.getMaxRange() > 12)
+						multiplier = 0;
+					if (multiplier > 1 || multiplier < 0)
+						multiplier = 1;
+					double base = multiplier*power2*BASESPEED;
+					caught.motionY = facing.offsetY*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+				}
+				if (caught.motionZ < AXISSPEEDCAP && facing.offsetZ != 0) {
+					double d = caught.posZ-z;
+					if (d == 0)
+						d = 1;
+					double multiplier = 1/(d-this.getMaxRange());
+					if (d-this.getMaxRange() > 12)
+						multiplier = 0;
+					if (multiplier > 1 || multiplier < 0)
+						multiplier = 1;
+					double base = multiplier*power2*BASESPEED;
+					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					double a = facing.offsetZ > 0 ? 0.004 : 0;
+					caught.motionZ = facing.offsetZ*speedstep+a;
+				}
 			}
 		}
 		this.clearBlocks(world, x, y, z, meta, range);
 		this.spreadFire(world, x, y, z, meta, range);
+	}
+
+	private boolean canBlowEntity(Entity e) {
+		if (e instanceof CustomFanEntity) {
+			CustomFanEntity c = (CustomFanEntity)e;
+			if (c.getBlowPower() > power)
+				return false;
+			double ang = ReikaMathLibrary.py3d(Math.signum(e.motionX)-facing.offsetX, Math.signum(e.motionY)-facing.offsetY, Math.signum(e.motionZ)-facing.offsetZ);
+			if (ang > c.getMaxDeflection())
+				return false;
+			return true;
+		}
+		return true;
 	}
 
 	private void clearBlocks(World world, int x, int y, int z, int meta, int range) {

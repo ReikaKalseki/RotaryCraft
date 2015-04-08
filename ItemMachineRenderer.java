@@ -25,7 +25,7 @@ import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -76,7 +76,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 			rb.renderBlockAsItem(Blocks.stone, 0, 1);
 			return;
 		}
-		else if (RotaryAux.func_28813_f(0, 6, false, RotaryCraft.class)) {
+		else if (OldTextureLoader.instance.loadOldTextures()) {
 			MachineRegistry m = MachineRegistry.getMachineByPlacerItem(item);
 			if (m == null) {
 				ReikaTextureHelper.bindTerrainTexture();
