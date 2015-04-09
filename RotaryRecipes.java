@@ -150,6 +150,7 @@ public class RotaryRecipes {
 		if (ModList.TINKERER.isLoaded())
 			GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
 
+		/* No longer necessary
 		if (ModList.THERMALEXPANSION.isLoaded()) {
 			ItemStack hardGlass = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "hardenedGlass", 1);
 			if (hardGlass == null)
@@ -159,6 +160,7 @@ public class RotaryRecipes {
 				ReikaRecipeHelper.replaceIngredientInAllRecipes(hardGlass, BlockRegistry.BLASTGLASS.getStackOf(), true);
 			}
 		}
+		 */
 
 		if (ModList.PROJRED.isLoaded()) {
 			ItemStack saw = ItemRegistry.BEDSAW.getStackOf();

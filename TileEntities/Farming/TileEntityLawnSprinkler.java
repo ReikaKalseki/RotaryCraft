@@ -19,11 +19,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
+import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -69,10 +72,24 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				this.accelerateGrowth(world, x, y, z);
 				this.extinguishFire(world, x, y, z);
 			}
+			if (ModList.REACTORCRAFT.isLoaded() && rand.nextInt(2400) == 0)
+				this.clearRadiation(world, x, y, z);
 			if (this.getPressure() > 300000)
 				this.damageMobs(world, x, y, z);
 		}
 		this.spreadWater(world, x, y, z);
+	}
+
+	@ModDependent(ModList.REACTORCRAFT)
+	private void clearRadiation(World world, int x, int y, int z) {
+		int r = this.getRange();
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).offset(0, 2, 0).expand(r, 2, r);
+		List<EntityRadiation> li = world.getEntitiesWithinAABB(EntityRadiation.class, box);
+		for (EntityRadiation e : li) {
+			e.clean();
+			if (rand.nextBoolean())
+				break;
+		}
 	}
 
 	private void extinguishFire(World world, int x, int y, int z) {

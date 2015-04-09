@@ -9,12 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
+import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -27,6 +34,20 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		RotaryAchievements.SPRINKLER.triggerAchievement(this.getPlacer());
 		this.spawnParticles(world, x, y, z);
 		this.hydrate(world, x, y, z);
+		if (ModList.REACTORCRAFT.isLoaded() && rand.nextInt(2400) == 0)
+			this.clearRadiation(world, x, y, z);
+	}
+
+	@ModDependent(ModList.REACTORCRAFT)
+	private void clearRadiation(World world, int x, int y, int z) {
+		int r = this.getRange();
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).offset(0, -4, 0).expand(r, 4, r);
+		List<EntityRadiation> li = world.getEntitiesWithinAABB(EntityRadiation.class, box);
+		for (EntityRadiation e : li) {
+			e.clean();
+			if (rand.nextBoolean())
+				break;
+		}
 	}
 
 	public void hydrate(World world, int x, int y, int z) {
