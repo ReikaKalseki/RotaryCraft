@@ -492,7 +492,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side != (isFlipped ? ForgeDirection.UP : ForgeDirection.DOWN);
+		return side != (isFlipped ? ForgeDirection.DOWN : ForgeDirection.UP);
 	}
 
 	@Override
@@ -562,7 +562,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
-		return side != ForgeDirection.UP ? Flow.INPUT : Flow.NONE;
+		return side != (isFlipped ? ForgeDirection.DOWN : ForgeDirection.UP) ? Flow.INPUT : Flow.NONE;
 	}
 
 	@Override
