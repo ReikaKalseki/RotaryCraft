@@ -127,7 +127,7 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
-		if (ReikaPlayerAPI.isFake(ep))
+		if (ReikaPlayerAPI.isFakeOrNotInteractable(ep, x+0.5, y+0.5, z+0.5, 8))
 			return false;
 		int damage = 0;
 		TileEntity te = world.getTileEntity(x, y, z);
