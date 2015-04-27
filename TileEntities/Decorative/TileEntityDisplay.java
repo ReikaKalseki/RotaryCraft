@@ -11,9 +11,9 @@ package Reika.RotaryCraft.TileEntities.Decorative;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -148,7 +148,8 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 			else
 				a = j;
 			for (int i = 1; i <= 3; i++) {
-				if (world.getBlock(x+a, y+i, z+b) != Blocks.air)
+				Block bk = world.getBlock(x+a, y+i, z+b);
+				if (!bk.isAir(world, x+a, y+i, z+b))
 					return false;
 			}
 		}

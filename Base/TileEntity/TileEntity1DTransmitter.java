@@ -20,6 +20,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMachine implements SimpleProvider {
 
 	protected int ratio;
+	protected boolean performRatio = true;
 
 	public final int getRatio() {
 		return ratio;

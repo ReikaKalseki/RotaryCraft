@@ -68,12 +68,12 @@ public abstract class IORenderer {
 			if (teb instanceof TileEntitySplitter) {
 				TileEntitySplitter ts = (TileEntitySplitter)teb;
 				if (ts.isSplitting()) { //Splitting
-					double xdiff = ts.writeinline[0]-ts.xCoord;
-					double zdiff = ts.writeinline[1]-ts.zCoord;
+					double xdiff = ts.getWriteDirection().offsetX;
+					double zdiff = ts.getWriteDirection().offsetZ;
 					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
 
-					xdiff = ts.writebend[0]-ts.xCoord;
-					zdiff = ts.writebend[1]-ts.zCoord;
+					xdiff = ts.getWriteDirection2().offsetX;
+					zdiff = ts.getWriteDirection2().offsetZ;
 					renderOut(par2+xdiff, par4, par6+zdiff, ts.iotick);
 
 					if (ts.getReadDirection() != null) {

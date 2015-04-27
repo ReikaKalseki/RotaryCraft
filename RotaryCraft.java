@@ -85,7 +85,9 @@ import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.MachineAspectMapper;
 import Reika.RotaryCraft.ModInterface.OreForcer;
+import Reika.RotaryCraft.ModInterface.Minetweaker.FrictionTweaker;
 import Reika.RotaryCraft.ModInterface.Minetweaker.GrinderTweaker;
+import Reika.RotaryCraft.ModInterface.Minetweaker.PulseJetTweaker;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -446,8 +448,12 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveFluidRegistry.instance.registerFluid("liquid nitrogen");
 
 		MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
+		MinetweakerHooks.instance.registerClass(PulseJetTweaker.class);
+		MinetweakerHooks.instance.registerClass(FrictionTweaker.class);
 
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemRegistry.ETHANOL.getStackOf(), 2);
+		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.coke, 12);
+		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthracite, 24);
 
 		this.finishTiming();
 	}

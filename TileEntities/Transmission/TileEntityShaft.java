@@ -166,7 +166,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		super.readFromCross(cross);
 	}
 
-	private void crossReadFromSplitter(TileEntitySplitter spl, int dir) {
+	private void crossReadFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl, int dir) {
 		reading2Dir = true;
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
@@ -176,7 +176,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+		if (xCoord == x+spl.getWriteDirection().offsetX && zCoord == spl.getWriteDirection().offsetZ) { //We are the inline
 			readomega[dir] = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, sratio));
 			if (sratio == 1) { //Even split, favorbent irrelevant
@@ -191,7 +191,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				readtorque[dir] = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 		}
-		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+		else if (xCoord == x+spl.getWriteDirection2().offsetX && zCoord == spl.getWriteDirection2().offsetZ) { //We are the bend
 			readomega[dir] = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("BEND!");
 			if (sratio == 1) { //Even split, favorbent irrelevant
@@ -213,7 +213,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl) { //Complex enough to deserve its own function
 		reading2Dir = true;
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
@@ -223,29 +223,27 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+		if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 			omega = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, sratio));
 			if (sratio == 1) { //Even split, favorbent irrelevant
 				torque = spl.torque/2;
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", this.torque, this.omega));
-				return;
 			}
-			if (favorbent) {
+			else if (favorbent) {
 				torque = spl.torque/sratio;
 			}
 			else {
 				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 		}
-		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+		else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 			omega = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("BEND!");
 			if (sratio == 1) { //Even split, favorbent irrelevant
 				torque = spl.torque/2;
-				return;
 			}
-			if (favorbent) {
+			else if (favorbent) {
 				torque = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 			else {
@@ -387,7 +385,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				if (m == MachineRegistry.SPLITTER) {
 					TileEntitySplitter devicein = (TileEntitySplitter)te1;
 					if (devicein.isSplitting()) {
-						this.crossReadFromSplitter(devicein, 0);
+						this.crossReadFromSplitter(world, x, y, z, devicein, 0);
 						return;
 					}
 					else if (devicein.isWritingTo(this)) {
@@ -437,7 +435,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				if (m2 == MachineRegistry.SPLITTER) {
 					TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
 					if (devicein2.isSplitting()) {
-						this.crossReadFromSplitter(devicein2, 1);
+						this.crossReadFromSplitter(world, x, y, z, devicein2, 1);
 						return;
 					}
 					else if (devicein2.isWritingTo(this)) {
@@ -515,7 +513,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein);
+					this.readFromSplitter(world, x, y, z, devicein);
+					omegain = omega;
+					torquein = torque;
 					return;
 				}
 				else if (devicein.isWritingTo(this)) {

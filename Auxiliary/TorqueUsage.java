@@ -87,8 +87,8 @@ public class TorqueUsage {
 					}
 				}
 				else {
-					TileEntity di = world.getTileEntity(spl.writeinline[0], tile.yCoord, spl.writeinline[1]); //records both outputs
-					TileEntity di2 = world.getTileEntity(spl.writebend[0], tile.yCoord, spl.writebend[1]);
+					TileEntity di = spl.getAdjacentTileEntity(spl.getWriteDirection()); //records both outputs
+					TileEntity di2 = spl.getAdjacentTileEntity(spl.getWriteDirection2());
 					if (!TEMap.containsKey(di) && isPoweredFrom(world, di)) { //calls the recursion first with one output, then with the other
 						addToList(di, tile);
 					}

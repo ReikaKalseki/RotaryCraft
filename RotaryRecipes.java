@@ -764,6 +764,10 @@ public class RotaryRecipes {
 				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.WHITE.getStackOf()});
 		GameRegistry.addRecipe(ReikaItemHelper.jungleWood, new Object[]{
 				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.RED.getStackOf()});
+		GameRegistry.addRecipe(ReikaItemHelper.acaciaWood, new Object[]{
+				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.ORANGE.getStackOf()});
+		GameRegistry.addRecipe(ReikaItemHelper.darkOakWood, new Object[]{
+				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.BROWN.getStackOf()});
 
 		GameRegistry.addRecipe(new ItemStack(Items.paper, 8, 0), new Object[]{
 			" W ", "SSS", "RRR", 'R', Blocks.stone, 'S', ItemStacks.sawdust, 'W', Items.water_bucket});
@@ -1017,7 +1021,7 @@ public class RotaryRecipes {
 		ReikaRecipeHelper.addSmelting(ItemStacks.ironscrap, new ItemStack(Items.iron_ingot), 0.4F);
 
 		IRecipe ir = ReikaRecipeHelper.getShapelessRecipeFor(ItemStacks.springingot, ItemStacks.steelingot, new ItemStack(Items.redstone), ItemStacks.coke);
-		RecipesBlastFurnace.getRecipes().addAlloyingRecipe(ItemStacks.springingot, 950, ir, 1, 0.4F);
+		RecipesBlastFurnace.getRecipes().addAlloyingRecipe(ItemStacks.springingot, 1050, ir, 1, 0.4F);
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

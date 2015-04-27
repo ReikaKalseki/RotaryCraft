@@ -32,5 +32,9 @@ public class LuaMethods {
 	private static final LuaMethod setJunction = new LuaSetJunction();
 	private static final LuaMethod setParticle = new LuaSetParticle();
 	private static final LuaMethod setCannon = new LuaSetCannon();
+	private static final LuaMethod toggleOre = new LuaToggleOreDict();
+	private static final LuaMethod toggleMeta = new LuaToggleMetadata();
+	private static final LuaMethod toggleNBT = new LuaToggleNBT();
+	private static final LuaMethod toggleBlacklist = new LuaToggleBlacklist();
 
 }

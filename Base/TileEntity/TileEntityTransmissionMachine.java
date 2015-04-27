@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import net.minecraft.world.World;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public abstract class TileEntityTransmissionMachine extends TileEntityIOMachine {
 
-	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
 			return;
@@ -22,7 +23,7 @@ public abstract class TileEntityTransmissionMachine extends TileEntityIOMachine 
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+		if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 			omega = spl.omega; //omega always constant
 			if (sratio == 1) { //Even split, favorbent irrelevant
 				torque = spl.torque/2;
@@ -35,7 +36,7 @@ public abstract class TileEntityTransmissionMachine extends TileEntityIOMachine 
 				torque = (int)(spl.torque*((sratio-1D))/sratio);
 			}
 		}
-		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+		else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 			omega = spl.omega; //omega always constant
 			if (sratio == 1) { //Even split, favorbent irrelevant
 				torque = spl.torque/2;

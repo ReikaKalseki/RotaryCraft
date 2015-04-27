@@ -279,7 +279,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein);
+					this.readFromSplitter(world, x, y, z, devicein);
 					return;
 				}
 				else if (devicein.isWritingTo(this)) {

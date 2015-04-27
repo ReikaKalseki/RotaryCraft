@@ -27,7 +27,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
 public class TileEntityAggregator extends PoweredLiquidProducer implements TemperatureTE, DiscreteFunction {
 
-	public static final int CAPACITY = 64000;
+	public static final int CAPACITY = 128000;
 
 	private StepTimer timer = new StepTimer(20);
 
@@ -59,7 +59,7 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temperature < Tamb) {
 			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-			float h = biome.rainfall; //Not used by any biome
+			//float h = biome.rainfall; //Not used by any biome
 			int amt = this.getWaterProduced(biome);
 			tank.addLiquid(amt, FluidRegistry.WATER);
 		}

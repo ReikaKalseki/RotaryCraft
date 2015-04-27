@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -35,6 +34,8 @@ public class RecipesPulseFurnace
 	private static final RecipesPulseFurnace PulseFurnaceBase = new RecipesPulseFurnace();
 
 	private ItemHashMap<ItemStack> recipes = new ItemHashMap().setOneWay();
+
+	private ItemHashMap<ItemStack> customRecipes = new ItemHashMap();
 
 	public static final RecipesPulseFurnace smelting()
 	{
@@ -154,10 +155,20 @@ public class RecipesPulseFurnace
 		this.addSmelting(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE), itemstack);
 	}
 
+	public void addCustomRecipe(ItemStack in, ItemStack output) {
+		customRecipes.put(in, output);
+	}
+
+	public void removeCustomRecipe(ItemStack in) {
+		customRecipes.remove(in);
+	}
+
 	public ItemStack getSmeltingResult(ItemStack item) {
 		if (item == null)
 			return null;
 		ItemStack ret = recipes.get(item);
+		if (ret == null)
+			ret = customRecipes.get(item);
 		return ret != null ? ret.copy() : null;
 	}
 
@@ -168,11 +179,16 @@ public class RecipesPulseFurnace
 			if (ReikaItemHelper.matchStacks(result, out))
 				li.add(in.copy());
 		}
+		for (ItemStack in : customRecipes.keySet()) {
+			ItemStack out = this.getSmeltingResult(in);
+			if (ReikaItemHelper.matchStacks(result, out))
+				li.add(in.copy());
+		}
 		return li;
 	}
 
 	public boolean isProduct(ItemStack result) {
-		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), result);
+		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), result) || ReikaItemHelper.collectionContainsItemStack(customRecipes.values(), result);
 	}
 
 	public boolean isSmeltable(ItemStack ingredient) {
@@ -180,6 +196,8 @@ public class RecipesPulseFurnace
 	}
 
 	public Collection<ItemStack> getAllSmeltables() {
-		return Collections.unmodifiableCollection(recipes.keySet());
+		Collection<ItemStack> li = new ArrayList(recipes.keySet());
+		li.addAll(customRecipes.keySet());
+		return li;
 	}
 }

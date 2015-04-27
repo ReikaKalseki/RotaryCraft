@@ -144,7 +144,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			return; //not its output
 	}
 
-	protected void readFromSplitter(TileEntitySplitter spl, int slot) { //Complex enough to deserve its own function
+	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl, int slot) { //Complex enough to deserve its own function
 		int ratio = spl.getRatioFromMode();
 		if (ratio == 0)
 			return;
@@ -153,7 +153,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			favorbent = true;
 			ratio = -ratio;
 		}
-		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+		if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 			powerin[slot][2] = spl.omega; //omega always constant
 			if (ratio == 1) { //Even split, favorbent irrelevant
 				powerin[slot][1] = spl.torque/2;
@@ -168,7 +168,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			powerin[slot][0] = powerin[slot][1]*powerin[slot][2];
 		}
-		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+		else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 			powerin[slot][2] = spl.omega; //omega always constant
 			if (ratio == 1) { //Even split, favorbent irrelevant
 				powerin[slot][1] = spl.torque/2;
@@ -238,7 +238,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein, 0);
+					this.readFromSplitter(world, x, y, z, devicein, 0);
 					torquein = (int) powerin[0][1];
 					omegain = (int) powerin[0][2];
 				}
@@ -323,7 +323,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein, 1);
+					this.readFromSplitter(world, x, y, z, devicein, 1);
 					torquein = (int) powerin[1][1];
 					omegain = (int) powerin[1][2];
 				}
@@ -432,7 +432,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			if (id1 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te1;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein, 0);
+					this.readFromSplitter(world, x, y, z, devicein, 0);
 					torquein = (int) powerin[0][1];
 					omegain = (int) powerin[0][2];
 				}
@@ -499,7 +499,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			if (id2 == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te2;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein, 1);
+					this.readFromSplitter(world, x, y, z, devicein, 1);
 					torquein = (int) powerin[1][1];
 					omegain = (int) powerin[1][2];
 				}
@@ -567,7 +567,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				TileEntitySplitter devicein = (TileEntitySplitter)te3;
 				// ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(devicein));
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein, 2);
+					this.readFromSplitter(world, x, y, z, devicein, 2);
 					torquein = (int) powerin[2][1];
 					omegain = (int) powerin[2][2];
 				}
@@ -635,7 +635,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				TileEntitySplitter devicein = (TileEntitySplitter)te4;
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(devicein));
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein, 3);
+					this.readFromSplitter(world, x, y, z, devicein, 3);
 					torquein = (int) powerin[3][1];
 					omegain = (int) powerin[3][2];
 				}

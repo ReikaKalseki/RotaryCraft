@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -77,6 +78,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	/** Power required to break a block, per 0.1F hardness */
 	public static final int DIGPOWER = 64;
 	public static final int OBSIDIANTORQUE = 512;
+
+	private static final int genRange = ConfigRegistry.BORERGEN.getValue();
 
 	private int step = 1;
 
@@ -228,11 +231,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 		if (tickcount >= this.getOperationTime() || (isMiningAir && tickcount%5 == 0)) {
 			this.skipMiningPipes(world, x, y, z, meta, 0, 16);
-			this.calcReqPower(world, x, y, z, meta);
+			this.calcReqPowerSafe(world, x, y, z, meta);
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
 				if (!world.isRemote) {
-					ReikaWorldHelper.forceGenAndPopulate(world, x+step*facing.offsetX, y, z+step*facing.offsetZ, meta);
+					ReikaWorldHelper.forceGenAndPopulate(world, x+step*facing.offsetX, y, z+step*facing.offsetZ, meta, genRange);
 					this.safeDig(world, x, y, z, meta);
 					if (!isMiningAir) {
 						if (soundtick == 0) {
@@ -251,6 +254,16 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			reqpow = 0;
 			isMiningAir = false;
 		}
+	}
+
+	public String getCurrentRequiredPower() {
+		if (reqpow < 0)
+			return "Infinity - Blocked";
+		double d1 = ReikaMathLibrary.getThousandBase(reqpow);
+		double d2 = ReikaMathLibrary.getThousandBase(mintorque);
+		String s1 = ReikaEngLibrary.getSIPrefix(reqpow);
+		String s2 = ReikaEngLibrary.getSIPrefix(mintorque);
+		return String.format("Power: %.3f%sW; Torque: %.3f%sNm", d1, s1, d2, s2);
 	}
 
 	private void safeDig(World world, int x, int y, int z, int meta) {
@@ -333,6 +346,17 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (b instanceof IgnoredByBorer)
 			return ((IgnoredByBorer)b).ignoreHardness(world, world.provider.dimensionId, x, y, z, world.getBlockMetadata(x, y, z));
 		return false;
+	}
+
+	private void calcReqPowerSafe(World world, int x, int y, int z, int metadata) {
+		try {
+			this.calcReqPower(world, x, y, z, metadata);
+		}
+		catch (RuntimeException e) {
+			RotaryCraft.logger.logError(this+" triggered an exception mining a chunk, probably during worldgen!");
+			e.printStackTrace();
+			reqpow = -1;
+		}
 	}
 
 	private void calcReqPower(World world, int x, int y, int z, int metadata) {

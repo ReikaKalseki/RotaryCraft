@@ -980,6 +980,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				}
 			}
 		}
+		if (te instanceof TileEntityBorer) {
+			currenttip.add(((TileEntityBorer)te).getCurrentRequiredPower());
+		}
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();
 			if (bus != null) {

@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
@@ -22,6 +22,9 @@ public class RecipesFrictionHeater {
 
 	private final ItemHashMap<FrictionRecipe> recipes = new ItemHashMap().setOneWay();
 	private final ItemHashMap<FrictionRecipe> outputs = new ItemHashMap().setOneWay();
+
+	private final ItemHashMap<FrictionRecipe> customRecipes = new ItemHashMap().setOneWay();
+	private final ItemHashMap<FrictionRecipe> customOutputs = new ItemHashMap().setOneWay();
 
 	public static RecipesFrictionHeater getRecipes() {
 		return instance;
@@ -38,19 +41,38 @@ public class RecipesFrictionHeater {
 		outputs.put(out, rec);
 	}
 
+	public void addCustomRecipe(ItemStack in, ItemStack out, int temp) {
+		FrictionRecipe rec = new FrictionRecipe(in, out, temp);
+		customRecipes.put(in, rec);
+		customOutputs.put(out, rec);
+	}
+
+	public void removeCustomRecipe(ItemStack in) {
+		customOutputs.remove(customRecipes.get(in).output);
+		customRecipes.remove(in);
+	}
+
 	public ItemStack getSmelting(ItemStack in, int temperature) {
 		FrictionRecipe rec = recipes.get(in);
+		if (rec == null)
+			rec = customRecipes.get(in);
 		if (rec == null)
 			return null;
 		return temperature >= rec.requiredTemperature ? rec.getOutput() : null;
 	}
 
 	public FrictionRecipe getRecipeByOutput(ItemStack out) {
-		return outputs.get(out);
+		FrictionRecipe rec = outputs.get(out);
+		if (rec == null)
+			rec = customOutputs.get(out);
+		return rec;
 	}
 
 	public FrictionRecipe getRecipeByInput(ItemStack in) {
-		return recipes.get(in);
+		FrictionRecipe rec = recipes.get(in);
+		if (rec == null)
+			rec = customRecipes.get(in);
+		return rec;
 	}
 
 	public static final class FrictionRecipe {
@@ -75,7 +97,9 @@ public class RecipesFrictionHeater {
 	}
 
 	public Collection<ItemStack> getAllSmeltables() {
-		return Collections.unmodifiableCollection(recipes.keySet());
+		Collection<ItemStack> li = new ArrayList(recipes.keySet());
+		li.addAll(customRecipes.keySet());
+		return li;
 	}
 
 }

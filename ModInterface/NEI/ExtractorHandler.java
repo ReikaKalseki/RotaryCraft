@@ -147,7 +147,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 		}
 
 		private int getTick() {
-			return (int)((System.nanoTime()/1000000000)%oreBlock.size());
+			return (int)((System.currentTimeMillis()/1000000)%oreBlock.size());
 		}
 
 		private Object getItem(int x, int y) {
@@ -247,7 +247,9 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			arecipes.add(new ExtractorRecipe(RecipesExtractor.getOreFromExtract(result)));
 		}
 		else if (ItemRegistry.MODEXTRACTS.matchItem(result)) {
-			arecipes.add(new ExtractorRecipe(ModOreList.oreList[result.getItemDamage()/4]));
+			ModOreList mod = ModOreList.oreList[result.getItemDamage()/4];
+			if (mod.existsInGame())
+				arecipes.add(new ExtractorRecipe(mod));
 		}
 		else if (ItemRegistry.CUSTOMEXTRACT.matchItem(result)) {
 			arecipes.add(new ExtractorRecipe(ItemCustomModOre.getExtractType(result)));
@@ -269,7 +271,9 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			arecipes.add(new ExtractorRecipe(RecipesExtractor.getOreFromExtract(ingredient)));
 		}
 		else if (ItemRegistry.MODEXTRACTS.matchItem(ingredient) && dmg%4 != 3) {
-			arecipes.add(new ExtractorRecipe(ModOreList.oreList[dmg/4]));
+			ModOreList mod = ModOreList.oreList[dmg/4];
+			if (mod.existsInGame())
+				arecipes.add(new ExtractorRecipe(mod));
 		}
 		else if (ItemRegistry.CUSTOMEXTRACT.matchItem(ingredient) && dmg%4 != 3) {
 			arecipes.add(new ExtractorRecipe(ItemCustomModOre.getExtractType(ingredient)));

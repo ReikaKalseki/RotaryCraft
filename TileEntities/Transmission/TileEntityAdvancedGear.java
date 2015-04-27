@@ -184,7 +184,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	//-ve ratio is torque mode for cvt
 	@Override
-	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
 			return;
@@ -194,30 +194,30 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			sratio = -sratio;
 		}
 		if (this.getGearType() == GearType.WORM || this.getGearType() == GearType.CVT && this.getEffectiveRatio() < 0) {
-			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
-				omega = -(int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+			if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
+				omega = Math.abs((int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega))); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
-					torque = -(int)(spl.torque/2*this.getEffectiveRatio());
+					torque = Math.abs((int)(spl.torque/2*this.getEffectiveRatio()));
 					return;
 				}
 				if (favorbent) {
-					torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
+					torque = Math.abs((int)(spl.torque/sratio*this.getEffectiveRatio()));
 				}
 				else {
-					torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+					torque = Math.abs((int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio)))));
 				}
 			}
-			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
-				omega = -(int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
+			else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
+				omega = Math.abs((int)(spl.omega/this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega))); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
-					torque = -(int)(spl.torque/2*this.getEffectiveRatio());
+					torque = Math.abs((int)(spl.torque/2*this.getEffectiveRatio()));
 					return;
 				}
 				if (favorbent) {
-					torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+					torque = Math.abs((int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio)))));
 				}
 				else {
-					torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
+					torque = Math.abs((int)(spl.torque/sratio*this.getEffectiveRatio()));
 				}
 			}
 			else { //We are not one of its write-to blocks
@@ -230,28 +230,28 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		else if (this.getGearType() == GearType.HIGH) {
 			if (this.hasLubricant()) {
 				if (this.getEffectiveRatio() < 0) {
-					if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+					if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 						omega = -(int)(spl.omega/this.getEffectiveRatio()); //omega always constant
 						if (sratio == 1) { //Even split, favorbent irrelevant
-							torque = -(int)(spl.torque/2*this.getEffectiveRatio());
+							torque = Math.abs((int)(spl.torque/2*this.getEffectiveRatio()));
 						}
 						else if (favorbent) {
-							torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
+							torque = Math.abs((int)(spl.torque/sratio*this.getEffectiveRatio()));
 						}
 						else {
-							torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+							torque = Math.abs((int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio)))));
 						}
 					}
-					else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+					else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 						omega = -(int)(spl.omega/this.getEffectiveRatio()); //omega always constant
 						if (sratio == 1) { //Even split, favorbent irrelevant
-							torque = -(int)(spl.torque/2*this.getEffectiveRatio());
+							torque = Math.abs((int)(spl.torque/2*this.getEffectiveRatio()));
 						}
 						else if (favorbent) {
-							torque = -(int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio))));
+							torque = Math.abs((int)(this.getEffectiveRatio()*(int)(spl.torque*((sratio-1D)/(sratio)))));
 						}
 						else {
-							torque = -(int)(spl.torque/sratio*this.getEffectiveRatio());
+							torque = Math.abs((int)(spl.torque/sratio*this.getEffectiveRatio()));
 						}
 					}
 					else { //We are not one of its write-to blocks
@@ -262,7 +262,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 					}
 				}
 				else {
-					if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+					if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 						omega = (int)(spl.omega*this.getEffectiveRatio()); //omega always constant
 						if (sratio == 1) { //Even split, favorbent irrelevant
 							torque = (int)(spl.torque/2/this.getEffectiveRatio());
@@ -274,7 +274,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 							torque = (int)((spl.torque*((sratio-1D))/sratio)/(this.getEffectiveRatio()));
 						}
 					}
-					else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+					else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 						omega = (int)(spl.omega*this.getEffectiveRatio()); //omega always constant
 						if (sratio == 1) { //Even split, favorbent irrelevant
 							torque = (int)(spl.torque/2/this.getEffectiveRatio());
@@ -301,26 +301,24 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 		}
 		else {
-			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+			if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 				omega = (int)(spl.omega*this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
 					torque = (int)(spl.torque/2/this.getEffectiveRatio());
-					return;
 				}
-				if (favorbent) {
+				else if (favorbent) {
 					torque = (int)(spl.torque/sratio/this.getEffectiveRatio());
 				}
 				else {
 					torque = (int)((spl.torque*((sratio-1D))/sratio)/(this.getEffectiveRatio()));
 				}
 			}
-			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+			else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 				omega = (int)(spl.omega*this.getEffectiveRatio()*this.getPowerLossFraction(spl.omega)); //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
 					torque = (int)(spl.torque/2/this.getEffectiveRatio());
-					return;
 				}
-				if (favorbent) {
+				else if (favorbent) {
 					torque = (int)(spl.torque*((sratio-1D)/(sratio))/this.getEffectiveRatio());
 				}
 				else {
@@ -331,7 +329,6 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 				torque = 0;
 				omega = 0;
 				power = 0;
-				return;
 			}
 		}
 	}
@@ -573,6 +570,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		this.calculateRatio();
 		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
 			return;
+		performRatio = true;
 		omegain = torquein = 0;
 		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 		int dx = x+read.offsetX;
@@ -612,9 +610,10 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein);
-					omegain = omega;
+					this.readFromSplitter(world, x, y, z, devicein);
+					performRatio = false;
 					torquein = torque;
+					omegain = omega;
 					//ReikaJavaLibrary.pConsole(torque+" @ "+omega, Side.SERVER);
 					return;
 				}
@@ -637,78 +636,80 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			return;
 		}
 
-		switch(this.getGearType()) {
-		case WORM:
-			omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
-			if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
-				torque = torquein * WORMRATIO;
-			else {
-				torque = RotaryConfig.torquelimit;
-				world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
-			}
-			break;
-		case CVT:
-			int ratio = this.getCVTRatio();
-			if (this.hasLubricant()) {
-				boolean speed = true;
-				if (ratio > 0) {
-					if (omegain <= RotaryConfig.omegalimit/ratio)
-						omega = omegain * ratio;
-					else {
-						omega = RotaryConfig.omegalimit;
-						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+		if (performRatio) {
+			switch(this.getGearType()) {
+			case WORM:
+				omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
+				if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
+					torque = torquein * WORMRATIO;
+				else {
+					torque = RotaryConfig.torquelimit;
+					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+				}
+				break;
+			case CVT:
+				int ratio = this.getCVTRatio();
+				if (this.hasLubricant()) {
+					boolean speed = true;
+					if (ratio > 0) {
+						if (omegain <= RotaryConfig.omegalimit/ratio)
+							omega = omegain * ratio;
+						else {
+							omega = RotaryConfig.omegalimit;
+							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+						}
+						torque = torquein / ratio;
 					}
-					torque = torquein / ratio;
+					else {
+						if (torquein <= RotaryConfig.torquelimit/-ratio)
+							torque = torquein * -ratio;
+						else {
+							torque = RotaryConfig.torquelimit;
+							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+						}
+						omega = omegain / -ratio;
+					}
 				}
 				else {
-					if (torquein <= RotaryConfig.torquelimit/-ratio)
-						torque = torquein * -ratio;
-					else {
-						torque = RotaryConfig.torquelimit;
-						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
-					}
-					omega = omegain / -ratio;
+					omega = torque = 0;
 				}
-			}
-			else {
-				omega = torque = 0;
-			}
-			break;
-		case COIL:
+				break;
+			case COIL:
 
-			break;
-		case HIGH:
-			if (this.hasLubricant()) {
-				if (torquemode) {
-					if (torquein <= RotaryConfig.torquelimit/256)
-						torque = torquein*256;
-					else {
-						torque = RotaryConfig.torquelimit;
-						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+				break;
+			case HIGH:
+				if (this.hasLubricant()) {
+					if (torquemode) {
+						if (torquein <= RotaryConfig.torquelimit/256)
+							torque = torquein*256;
+						else {
+							torque = RotaryConfig.torquelimit;
+							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+						}
+						omega = omegain/256;
 					}
-					omega = omegain/256;
+					else {
+						torque = torquein/256;
+						if (omegain <= RotaryConfig.omegalimit/256)
+							omega = omegain*256;
+						else {
+							omega = RotaryConfig.omegalimit;
+							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+						}
+					}
+					if (omega > 0 && (world.getTotalWorldTime()&4) == 4)
+						lubricant.removeLiquid((int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(Math.max(omega, torque), 2)));
 				}
 				else {
-					torque = torquein/256;
-					if (omegain <= RotaryConfig.omegalimit/256)
-						omega = omegain*256;
-					else {
-						omega = RotaryConfig.omegalimit;
-						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
-					}
+					omega = torque = 0;
 				}
-				if (omega > 0 && (world.getTotalWorldTime()&4) == 4)
-					lubricant.removeLiquid((int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(Math.max(omega, torque), 2)));
+				break;
 			}
-			else {
-				omega = torque = 0;
-			}
-			break;
 		}
 	}
 

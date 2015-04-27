@@ -19,6 +19,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Interfaces.TriggerableAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
@@ -257,6 +258,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			if (in[i] != null && !in[i].isEmpty()) {
 				if (inv[i+9] == null) {
 					inv[i+9] = in[i].get(0).copy();
+					if (inv[i+9].getItemDamage() == OreDictionary.WILDCARD_VALUE)
+						inv[i+9].setItemDamage(0);
 				}
 				else {
 					++inv[i+9].stackSize;

@@ -113,7 +113,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	@Override
-	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();
 		if (sratio == 0)
 			return;
@@ -123,26 +123,24 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			sratio = -sratio;
 		}
 		if (reduction) {
-			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+			if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 				omega = spl.omega/ratio; //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
 					torque = spl.torque/2*ratio;
-					return;
 				}
-				if (favorbent) {
+				else if (favorbent) {
 					torque = spl.torque/sratio*ratio;
 				}
 				else {
 					torque = ratio*(int)(spl.torque*((sratio-1D)/(sratio)));
 				}
 			}
-			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+			else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 				omega = spl.omega/ratio; //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
 					torque = spl.torque/2*ratio;
-					return;
 				}
-				if (favorbent) {
+				else if (favorbent) {
 					torque = ratio*(int)(spl.torque*((sratio-1D)/(sratio)));
 				}
 				else {
@@ -153,30 +151,27 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				torque = 0;
 				omega = 0;
 				power = 0;
-				return;
 			}
 		}
 		else {
-			if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+			if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 				omega = spl.omega*ratio; //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
 					torque = spl.torque/2/ratio;
-					return;
 				}
-				if (favorbent) {
+				else if (favorbent) {
 					torque = spl.torque/sratio/ratio;
 				}
 				else {
 					torque = (int)(spl.torque*((sratio-1D))/sratio)/(ratio);
 				}
 			}
-			else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+			else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 				omega = spl.omega*ratio; //omega always constant
 				if (sratio == 1) { //Even split, favorbent irrelevant
 					torque = spl.torque/2/ratio;
-					return;
 				}
-				if (favorbent) {
+				else if (favorbent) {
 					torque = (int)(spl.torque*((sratio-1D)/(sratio)))/ratio;
 				}
 				else {
@@ -187,7 +182,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				torque = 0;
 				omega = 0;
 				power = 0;
-				return;
 			}
 		}
 	}
@@ -286,7 +280,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		this.calculateRatio();
 		if (worldObj.isRemote && !RotaryAux.getPowerOnClient)
 			return;
-		boolean flag = true;
+		performRatio = true;
 		omegain = torquein = 0;
 		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 		int dx = x+read.offsetX;
@@ -324,8 +318,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			else if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein);
-					flag = false;
+					this.readFromSplitter(world, x, y, z, devicein);
+					//omegain = reduction ? omega*ratio : omega/ratio;
+					//torquein = reduction ? torque/ratio : torque*ratio;
+					performRatio = false;
 				}
 				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
@@ -346,7 +342,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			return;
 		}
 
-		if (flag) {
+		if (performRatio) {
 			if (reduction) {
 				omega = omegain / ratio;
 				if (torquein <= RotaryConfig.torquelimit/ratio)

@@ -142,4 +142,9 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 		dryTicks = NBT.getInteger("dry");
 	}
 
+	@Override
+	public boolean canBeCooledWithFins() {
+		return true;
+	}
+
 }

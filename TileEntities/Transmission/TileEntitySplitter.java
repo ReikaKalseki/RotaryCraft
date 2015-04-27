@@ -32,8 +32,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySplitter extends TileEntityTransmissionMachine implements GuiController, ShaftMerger, NBTMachine {
 
-	public int[] writeinline = new int[2]; //xz coords
-	public int[] writebend = new int[2]; //xz coords
+	//public int[] writeinline = new int[2]; //xz coords
+	//public int[] writebend = new int[2]; //xz coords
 
 	private int torquein2;
 	private int omegain2;
@@ -168,6 +168,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			write2 = ForgeDirection.EAST;
 			break;
 		}
+		/*
 		if (write != null) {
 			writeinline[0] = xCoord+write.offsetX;
 			writeinline[1] = zCoord+write.offsetZ;
@@ -184,6 +185,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			writebend[0] = Integer.MIN_VALUE;
 			writebend[1] = Integer.MIN_VALUE;
 		}
+		 */
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.writex, this.yCoord, this.writez, 44);
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.writex2, this.yCoord, this.writez2, 79);
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.readx, this.yCoord, this.readz, 20);
@@ -263,6 +265,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 							torquein = devicein.torque;
 							omegain = devicein.omega;
 						}
+						else if (devicein.isWritingTo2(this)) {
+							torquein = devicein.torque;
+							omegain = devicein.omega;
+						}
 						else
 							torquein = omegain = 0;
 					}
@@ -284,7 +290,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					if (m == MachineRegistry.SPLITTER) {
 						TileEntitySplitter devicein = (TileEntitySplitter)te;
 						if (devicein.isSplitting()) {
-							this.readFromSplitter(devicein);
+							this.readFromSplitter(world, x, y, z, devicein);
 						}
 						else if (devicein.isWritingTo(this)) {
 							torquein = devicein.torque;
@@ -344,7 +350,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					if (m2 == MachineRegistry.SPLITTER) {
 						TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
 						if (devicein2.isSplitting()) {
-							this.readFromSplitter(devicein2);
+							this.readFromSplitter(world, x, y, z, devicein2);
 						}
 						else if (devicein2.isWritingTo(this)) {
 							torquein2 = devicein2.torque;
@@ -462,7 +468,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				if (m == MachineRegistry.SPLITTER) {
 					TileEntitySplitter devicein = (TileEntitySplitter)te;
 					if (devicein.isSplitting()) {
-						this.readFromSplitter(devicein);
+						this.readFromSplitter(world, x, y, z, devicein);
 						torque = torquein;
 						omega = omegain;
 					}
@@ -532,8 +538,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	private void writeToReceiver() {
-		int t1;
-		int t2;
+		int t1 = 0;
+		int t2 = 0;
 		int y = yCoord;
 		World world = worldObj;
 
@@ -547,9 +553,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		}
 		if (ratio == 1) { //Even split, favorbent irrelevant
 			t1 = torque/2;
-			return;
 		}
-		if (favorbent) {
+		else if (favorbent) {
 			t1 = torque/ratio;
 		}
 		else {
@@ -558,19 +563,18 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		if (ratio == 1) { //Even split, favorbent irrelevant
 			t2 = torque/2;
 		}
-		if (favorbent) {
+		else if (favorbent) {
 			t2 = (int)(torque*((ratio-1D)/(ratio)));
 		}
 		else {
 			t2 = torque/ratio;
 		}
-
 		this.writeToPowerReceiver(write, omega, t1);
 		this.writeToPowerReceiver(write2, omega, t2);
 	}
 
 	@Override
-	protected void readFromSplitter(TileEntitySplitter spl) { //Complex enough to deserve its own function
+	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl) { //Complex enough to deserve its own function
 		omegain = spl.omega; //omegain always constant
 		int ratio = spl.getRatioFromMode();
 		if (ratio == 0)
@@ -580,7 +584,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			favorbent = true;
 			ratio = -ratio;
 		}
-		if (xCoord == spl.writeinline[0] && zCoord == spl.writeinline[1]) { //We are the inline
+		if (xCoord == x+spl.getWriteDirection().offsetX && zCoord == spl.getWriteDirection().offsetZ) { //We are the inline
 			if (ratio == 1) { //Even split, favorbent irrelevant
 				torquein = spl.torque/2;
 				return;
@@ -592,7 +596,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				torquein = (int)(spl.torque*((ratio-1D)/(ratio)));
 			}
 		}
-		else if (xCoord == spl.writebend[0] && zCoord == spl.writebend[1]) { //We are the bend
+		else if (xCoord == x+spl.getWriteDirection2().offsetX && zCoord == spl.getWriteDirection2().offsetZ) { //We are the bend
 			omegain = spl.omega; //omegain always constant
 			if (ratio == 1) { //Even split, favorbent irrelevant
 				torquein = spl.torque/2;

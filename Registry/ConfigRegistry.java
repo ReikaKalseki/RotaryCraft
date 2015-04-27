@@ -96,7 +96,8 @@ public enum ConfigRegistry implements ConfigList {
 	TUTORIAL("Tutorial Mode", false),
 	FRAMES("Allow Frames to move Machines (May cause corruption)", false),
 	CONVERTERLOSS("Power Converter Loss Percent", 0),
-	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true);
+	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true),
+	BORERGEN("Borer Chunk Gen Radius", 0);
 
 	private String label;
 	private boolean defaultState;

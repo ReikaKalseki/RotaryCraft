@@ -46,7 +46,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public int smeltTime = 0;
 
 	public static final int SMELTTEMP = 600;
-	public static final int BEDROCKTEMP = 1000;
+	public static final int BEDROCKTEMP = 1150;
 	public static final int MAXTEMP = 2000;
 	public static final float SMELT_XP = 0.6F;
 	public static final int SLOT_1 = 0;
@@ -95,7 +95,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return true;
 		else {
 			ItemStack in = inv[slot];
-			if (!ReikaItemHelper.matchStacks(in, in))
+			if (!ReikaItemHelper.matchStacks(is, in))
 				return false;
 			int sum = in.stackSize+is.stackSize;
 			if (sum > in.getMaxStackSize() || sum > this.getInventoryStackLimit())

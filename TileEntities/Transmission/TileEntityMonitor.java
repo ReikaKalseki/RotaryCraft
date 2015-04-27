@@ -72,7 +72,9 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
-					this.readFromSplitter(devicein);
+					this.readFromSplitter(world, x, y, z, devicein);
+					torquein = torque;
+					omegain = omega;
 					return;
 				}
 				else if (devicein.isWritingToCoordinate(x, y, z)) {
