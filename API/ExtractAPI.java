@@ -92,10 +92,10 @@ public class ExtractAPI {
 			construct.setAccessible(true);
 
 			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor");
-			Field inst = loader.getDeclaredField("instance");
+			Field inst = recipes.getDeclaredField("instance");
 			inst.setAccessible(true);
 			recipeInstance = inst.get(null);
-			Field map = loader.getDeclaredField("modOres");
+			Field map = recipes.getDeclaredField("modOres");
 			map.setAccessible(true);
 			extras = (MultiMap<ReikaOreHelper, String>)map.get(recipeInstance);
 		}

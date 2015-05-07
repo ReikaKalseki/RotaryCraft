@@ -23,6 +23,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 
 @Strippable(value = {"cofh.api.energy.IEnergyHandler"})
 public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergyHandler, RCToModConverter {
@@ -76,6 +77,13 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 					TileEntity tile = world.getTileEntity(writex, writey, writez);
 					if (tile instanceof IEnergyHandler) {
 						IEnergyHandler rc = (IEnergyHandler)tile;
+						if (rc.canConnectEnergy(facingDir.getOpposite())) {
+							int rf = this.getGenRF();
+							float used = rc.receiveEnergy(facingDir.getOpposite(), rf, false);
+						}
+					}
+					else if (tile instanceof IEnergyReceiver) {
+						IEnergyReceiver rc = (IEnergyReceiver)tile;
 						if (rc.canConnectEnergy(facingDir.getOpposite())) {
 							int rf = this.getGenRF();
 							float used = rc.receiveEnergy(facingDir.getOpposite(), rf, false);

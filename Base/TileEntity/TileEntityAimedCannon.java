@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +45,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	public float theta;
 	protected double[] target = new double[4];
 
-	protected EntityLivingBase closestMob;
+	protected Entity closestMob;
 	protected double voffset = -0.125;
 
 	public static final int MAXLOWANGLE = -10;
@@ -240,7 +241,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		return INFINITE_EXTENT_AABB;
 	}
 
-	protected abstract boolean isValidTarget(EntityLivingBase ent);
+	protected abstract boolean isValidTarget(Entity ent);
 
 	protected final boolean isMobOrUnlistedPlayer(EntityLivingBase ent) {
 		return (ReikaEntityHelper.isHostile(ent) || (targetPlayers && ent instanceof EntityPlayer && !this.playerIsSafe(((EntityPlayer)ent))));

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.API.Power;
 
+/** A base class for the shaft power interfaces. Do not implement this directly; doing so is harmless but useless. */
 public interface ShaftMachine {
 
 	/** For fetching the current rotational speed. This can be called from

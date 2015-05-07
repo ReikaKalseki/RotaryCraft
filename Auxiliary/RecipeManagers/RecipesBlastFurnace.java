@@ -69,6 +69,12 @@ public class RecipesBlastFurnace
 		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Items.coal, ItemStacks.coke, false, 0, 400);
 		recipeList.add(coke);
 
+		in1 = new BlastInput((ItemStack)null, 0, 1);
+		in2 = new BlastInput((ItemStack)null, 0, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe coke2 = new BlastRecipe(in1, in2, in3, new ItemStack(Items.coal, 1, 1), ItemStacks.coke, false, 0, 500);
+		recipeList.add(coke2);
+
 		in1 = new BlastInput(ItemStacks.aluminumpowder, 25F, 1);
 		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);

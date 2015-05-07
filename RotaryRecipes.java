@@ -458,7 +458,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.diffuser, " SS", "S  ", " SS", 'S', ItemStacks.steelingot);
 		GameRegistry.addRecipe(ItemStacks.combustor, "SSS", "SRS", "SGS", 'S', ItemStacks.steelingot, 'G', ItemStacks.igniter, 'R', Items.redstone);
 		GameRegistry.addRecipe(ItemStacks.radiator, "GGG", "PPP", "SSS", 'G', Items.gold_ingot, 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe);
-		GameRegistry.addRecipe(ItemStacks.condenser, "SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe);
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.condenser, DifficultyEffects.SMALLERCRAFT.getInt()), "SPS", "PSP", "SPS", 'S', ItemStacks.steelingot, 'P', ItemStacks.pipe);
 		GameRegistry.addRecipe(ItemStacks.goldcoil, "GGG", "GSG", "GGG", 'S', ItemStacks.steelingot, 'G', Items.gold_ingot);
 
 		ReikaRecipeHelper.addOreRecipe(ItemStacks.goldcoil, "GGG", "GSG", "GGG", 'S', ItemStacks.steelingot, 'G', "ingotElectrum");

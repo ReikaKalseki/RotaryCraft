@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.RotaryCraft.ClientProxy;
@@ -26,6 +27,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class BlockPiping extends BlockBasicMultiTE {
 
@@ -36,6 +38,12 @@ public class BlockPiping extends BlockBasicMultiTE {
 		this.setHardness(MathHelper.clamp_float(ConfigRegistry.PIPEHARDNESS.getFloat(), 0, 1));
 		this.setResistance(1F);
 		this.setLightLevel(0F);
+	}
+
+	@Override
+	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face)
+	{
+		return MachineRegistry.getMachine(world, x, y, z) == MachineRegistry.HOSE ? 45 : 0;
 	}
 
 	@Override

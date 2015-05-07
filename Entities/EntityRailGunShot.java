@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Event.RailgunImpactEvent;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -301,37 +302,45 @@ public class EntityRailGunShot extends EntityTurretShot {
 	}
 
 	@Override
-	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {
-		double x = el.posX;
-		double y = el.posY;
-		double z = el.posZ;
-		el.clearActivePotions();
-		for (int h = 0; h < 5 && !(el instanceof EntityPlayer); h++) {
-			ItemStack held = el.getEquipmentInSlot(h);
-			el.setCurrentItemOrArmor(h, null);
-			if (!world.isRemote && held != null) {
-				EntityItem ei = new EntityItem(world, x, y, z, held);
-				ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
-				ei.delayBeforeCanPickup = 300;
-				world.spawnEntityInWorld(ei);
+	protected void applyAttackEffectsToEntity(World world, Entity ent) {
+		double x = ent.posX;
+		double y = ent.posY;
+		double z = ent.posZ;
+		int mass = ReikaMathLibrary.intpow2(2, power);
+		if (ent instanceof TargetEntity) {
+			((TargetEntity)ent).onRailgunImpact(gun, mass, false);
+		}
+		if (ent instanceof EntityLivingBase) {
+			EntityLivingBase el = (EntityLivingBase)ent;
+			el.clearActivePotions();
+			for (int h = 0; h < 5 && !(el instanceof EntityPlayer); h++) {
+				ItemStack held = el.getEquipmentInSlot(h);
+				el.setCurrentItemOrArmor(h, null);
+				if (!world.isRemote && held != null) {
+					EntityItem ei = new EntityItem(world, x, y, z, held);
+					ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
+					ei.delayBeforeCanPickup = 300;
+					world.spawnEntityInWorld(ei);
+				}
+			}
+			//ReikaChatHelper.writeEntity(world, el);
+			if (el instanceof EntityDragon) {
+				((EntityDragon) el).attackEntityFromPart(((EntityDragon) el).dragonPartHead, DamageSource.setExplosionSource(new Explosion(worldObj, this, x, y, z, 20)), this.getAttackDamage());
+				if (el.isDead || el.getHealth() <= 0) {
+					RotaryAchievements.RAILDRAGON.triggerAchievement(gun.getPlacer());
+				}
+			}
+			else
+				el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
+			if (el instanceof EntityPlayer) {
+				if (el.isDead || el.getHealth() <= 0)
+					RotaryAchievements.RAILKILLED.triggerAchievement((EntityPlayer) el);
 			}
 		}
-		//ReikaChatHelper.writeEntity(world, el);
-		if (el instanceof EntityDragon) {
-			((EntityDragon) el).attackEntityFromPart(((EntityDragon) el).dragonPartHead, DamageSource.setExplosionSource(new Explosion(worldObj, this, x, y, z, 20)), this.getAttackDamage());
-			if (el.isDead || el.getHealth() <= 0) {
-				RotaryAchievements.RAILDRAGON.triggerAchievement(gun.getPlacer());
-			}
-		}
-		else
-			el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
-		if (el instanceof EntityPlayer) {
-			if (el.isDead || el.getHealth() <= 0)
-				RotaryAchievements.RAILKILLED.triggerAchievement((EntityPlayer) el);
-		}
-		el.motionX = motionX*power/15F;
-		el.motionY = motionY*power/15F;
-		el.motionZ = motionZ*power/15F;
+		double p = ent instanceof TargetEntity ? ((TargetEntity)ent).getKnockbackMultiplier(gun, mass, false) : 1;
+		ent.motionX = motionX*p*power/15F;
+		ent.motionY = motionY*p*power/15F;
+		ent.motionZ = motionZ*p*power/15F;
 	}
 
 }

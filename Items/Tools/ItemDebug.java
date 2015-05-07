@@ -23,6 +23,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
@@ -174,6 +175,8 @@ public class ItemDebug extends ItemRotaryTool {
 				tile.addFuel(tile.FUELCAP);
 				if (tile instanceof TileEntityPerformanceEngine)
 					((TileEntityPerformanceEngine)tile).additives = tile.FUELCAP/1000;
+				if (tile instanceof TileEntityHydroEngine)
+					((TileEntityHydroEngine)tile).addLubricant(50000);
 				tile.addWater(tile.CAPACITY);
 				ReikaChatHelper.write("Filled to capacity.");
 				tile.omega = tile.getEngineType().getSpeed();

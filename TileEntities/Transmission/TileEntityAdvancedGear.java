@@ -42,10 +42,10 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.Interfaces.CVTController;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
-import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
@@ -347,7 +347,8 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	private int getCVTRatio() {
 		if (isRedstoneControlled) {
 			boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-			return this.getCVTState(red).gearRatio;
+			int ratio = this.getCVTState(red).gearRatio;
+			return (int)Math.signum(ratio)*Math.min(Math.abs(ratio), this.getMaxRatio());
 		}
 		else {
 			return ratio;

@@ -21,22 +21,27 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAAGun;
 
 public class EntityFlakShot extends EntityTurretShot {
+
+	private TileEntityAAGun source;
 
 	public EntityFlakShot(World world) {
 		super(world);
 	}
 
-	public EntityFlakShot(World world, double x, double y, double z, double vx, double vy, double vz) {
+	public EntityFlakShot(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityAAGun te) {
 		super(world, x, y, z, 0, 0, 0);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
+		source = te;
 	}
 
 	@Override
@@ -71,9 +76,14 @@ public class EntityFlakShot extends EntityTurretShot {
 	}
 
 	@Override
-	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {
-		el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
-		el.playSound("damage.hit", 2, 1);
+	protected void applyAttackEffectsToEntity(World world, Entity el) {
+		if (el instanceof TargetEntity) {
+			((TargetEntity)el).flakShot(source);
+		}
+		if (el instanceof EntityLivingBase) {
+			el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
+			el.playSound("damage.hit", 2, 1);
+		}
 	}
 
 	@Override

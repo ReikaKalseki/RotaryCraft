@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -35,6 +36,8 @@ import net.minecraftforge.event.world.BlockEvent;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
+import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -56,6 +59,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -68,6 +72,27 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent
+	public void burnLubricantHose(BlockConsumedByFireEvent evt) {
+		if (MachineRegistry.getMachine(evt.world, evt.x, evt.y, evt.z) == MachineRegistry.HOSE) {
+			((TileEntityHose)evt.world.getTileEntity(evt.x, evt.y, evt.z)).burn();
+		}
+	}
+
+	@SubscribeEvent
+	public void noItemEntityPush(EntityPushOutOfBlocksEvent evt) {
+		Entity e = evt.entity;
+		if (e instanceof EntityItem) {
+			int x = MathHelper.floor_double(e.posX);
+			int y = MathHelper.floor_double(e.posY);
+			int z = MathHelper.floor_double(e.posZ);
+			MachineRegistry m = MachineRegistry.getMachine(e.worldObj, x, y, z);
+			if (m == MachineRegistry.RESERVOIR) {
+				evt.setCanceled(true);
+			}
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

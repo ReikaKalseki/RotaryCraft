@@ -9,9 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import java.util.Collection;
+import java.util.List;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -63,6 +68,35 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	@Override
 	public final void registerBlockIcons(IIconRegister ico) {
 		blockIcon = ico.registerIcon("rotarycraft:steel");
+	}
+
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List li, Entity e) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == null) {
+			super.addCollisionBoxesToList(world, x, y, z, mask, li, e);
+			return;
+		}
+
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
+		if (m == MachineRegistry.RESERVOIR) {
+			if (e instanceof EntityItem) {
+				AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+0.0625, z+1);
+				if (box.intersectsWith(mask))
+					li.add(box);
+			}
+			else {
+				Collection<AxisAlignedBB> c = ((TileEntityReservoir)te).getComplexHitbox();
+				for (AxisAlignedBB box : c) {
+					box = box.offset(x, y, z);
+					if (box.intersectsWith(mask))
+						li.add(box);
+				}
+			}
+		}
+		else {
+			super.addCollisionBoxesToList(world, x, y, z, mask, li, e);
+		}
 	}
 
 	@Override

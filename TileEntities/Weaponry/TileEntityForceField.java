@@ -45,7 +45,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
-import Reika.MeteorCraft.Entity.EntityMeteor;
+import Reika.MeteorCraft.API.MeteorEntity;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
@@ -94,8 +94,8 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 		double y = threat.posY;
 		double z = threat.posZ;
 		if (ModList.METEORCRAFT.isLoaded()) {
-			if (threat instanceof EntityMeteor) {
-				((EntityMeteor)threat).destroy();
+			if (threat instanceof MeteorEntity) {
+				((MeteorEntity)threat).destroy();
 			}
 		}
 		if (this.isAtBorder(x, y, z) || threat instanceof EntityArrow) {

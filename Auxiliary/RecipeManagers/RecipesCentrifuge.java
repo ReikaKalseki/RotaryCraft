@@ -33,7 +33,7 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
-import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -94,12 +94,13 @@ public class RecipesCentrifuge
 		}
 
 		if (ModList.MAGICCROPS.isLoaded()) {
-			Item drop = MagicCropHandler.getInstance().dropID;
+			ItemStack drop = EssenceType.XP.getEssence();
 			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
-				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
+				FluidStack fs = ReikaXPFluidHelper.getFluid(5);
 				this.addRecipe(drop, fs, 100);
 			}
 		}
+
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));
 		this.addRecipe(ItemRegistry.CANOLA.getStackOfMetadata(2), new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100);

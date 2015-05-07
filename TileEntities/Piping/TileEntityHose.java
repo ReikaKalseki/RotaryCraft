@@ -13,9 +13,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -23,6 +25,19 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityHose extends TileEntityPiping implements PumpablePipe {
 
 	private int lubricant = 0;
+	private int burnIn = 0;
+
+	@Override
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateEntity(world, x, y, z, meta);
+
+		if (burnIn > 0) {
+			burnIn--;
+			if (burnIn == 0) {
+				this.doBurn();
+			}
+		}
+	}
 
 	@Override
 	public MachineRegistry getMachine() {
@@ -111,5 +126,35 @@ public class TileEntityHose extends TileEntityPiping implements PumpablePipe {
 	public void transferFrom(PumpablePipe from, int amt) {
 		((TileEntityHose)from).lubricant -= amt;
 		lubricant += amt;
+	}
+
+	public void burn() {
+		this.burn(true);
+	}
+
+	private void burn(boolean immediate) {
+		ReikaWorldHelper.ignite(worldObj, xCoord, yCoord, zCoord);
+		if (immediate) {
+			this.doBurn();
+		}
+		else {
+			int time = this.hasLiquid() ? 5+rand.nextInt(15) : 10+rand.nextInt(30);
+			if (burnIn <= 0)
+				burnIn = time;
+		}
+	}
+
+	private void doBurn() {
+		for (int i = 0; i < 6; i++) {
+			if (rand.nextInt(3) > 0) {
+				TileEntity te = this.getAdjacentTileEntity(dirs[i]);
+				if (te instanceof TileEntityHose) {
+					((TileEntityHose)te).burn(false);
+				}
+			}
+		}
+		worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.fire);
+		if (this.hasLiquid() && rand.nextInt(4) == 0)
+			worldObj.newExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 2, true, false);
 	}
 }

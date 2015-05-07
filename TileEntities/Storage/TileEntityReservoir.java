@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.TileEntities.Storage;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -30,6 +32,7 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.ReservoirAPI.TankHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -39,17 +42,19 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine {
 
-	public boolean isCreative;
-
 	public static final int CAPACITY = 64000;
-
-	public boolean isCovered = false;
-
-	private HybridTank tank = new HybridTank("reservoir", CAPACITY);
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
-	private StepTimer flowTimer = new StepTimer(TileEntityPiping.getTickDelay());
+	private static final Collection<TankHandler> tankHandlers = new HashSet();
+
+	private final StepTimer flowTimer = new StepTimer(TileEntityPiping.getTickDelay());
+
+	public boolean isCovered = false;
+
+	public boolean isCreative;
+
+	private HybridTank tank = new HybridTank("reservoir", CAPACITY);
 
 	public int getLiquidScaled(int par1) {
 		return (tank.getLevel()*par1)/CAPACITY;
@@ -57,6 +62,12 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		for (TankHandler th : tankHandlers) {
+			int amt = th.onTick(this, this.getFluid(), tank.getLevel());
+			if (amt > 0)
+				tank.removeLiquid(amt);
+		}
+
 		flowTimer.update();
 		if (flowTimer.checkCap())
 			this.transferBetween(world, x, y, z);
@@ -212,6 +223,27 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	@Override
 	public void onEMP() {}
+
+	public Collection<AxisAlignedBB> getComplexHitbox() {
+		Collection<AxisAlignedBB> li = new ArrayList();
+		li.add(AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.0625, 1));
+		if (isCovered) {
+			li.add(AxisAlignedBB.getBoundingBox(0.0625, 0.875, 0.0625, 0.9375, 0.9375, 0.9375));
+		}
+		if (!this.isConnectedOnSide(ForgeDirection.EAST)) {
+			li.add(AxisAlignedBB.getBoundingBox(0.9375, 0, 0, 1, 1, 1));
+		}
+		if (!this.isConnectedOnSide(ForgeDirection.WEST)) {
+			li.add(AxisAlignedBB.getBoundingBox(0, 0, 0, 0.0625, 1, 1));
+		}
+		if (!this.isConnectedOnSide(ForgeDirection.SOUTH)) {
+			li.add(AxisAlignedBB.getBoundingBox(0, 0, 0.9375, 1, 1, 1));
+		}
+		if (!this.isConnectedOnSide(ForgeDirection.NORTH)) {
+			li.add(AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 0.0625));
+		}
+		return li;
+	}
 
 	public AxisAlignedBB getHitbox() {
 		if (isCovered || this.isEdgePiece(worldObj, xCoord, yCoord, zCoord))

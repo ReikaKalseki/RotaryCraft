@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.Blocks;
@@ -20,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -48,21 +50,20 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 		double[] xyzb = new double[4];
 		int r = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
-		List<EntityLivingBase> inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		List<Entity> inrange = world.getEntitiesWithinAABB(Entity.class, box);
 		double mindist = this.getRange()+2;
-		EntityLivingBase i_at_min = null;
-		for (EntityLivingBase ent : inrange) {
+		Entity i_at_min = null;
+		for (Entity ent : inrange) {
 			double dist = ReikaMathLibrary.py3d(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5);
 			if (this.isValidTarget(ent)) {
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange())) {
-					if (!ent.isDead && ent.getHealth() > 0) {
-						double dy = -(ent.posY-y);
-						double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
-						if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1))
-							if (dist < mindist) {
-								mindist = dist;
-								i_at_min = ent;
-							}
+					double dy = -(ent.posY-y);
+					double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
+					if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1)) {
+						if (dist < mindist) {
+							mindist = dist;
+							i_at_min = ent;
+						}
 					}
 				}
 			}
@@ -87,10 +88,15 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 			double dz = i*Math.cos(Math.toRadians(theta))*Math.sin(Math.toRadians(-phi+90));
 			int r = 1;
 			AxisAlignedBB light = AxisAlignedBB.getBoundingBox(xCoord+dx, yCoord+dy, zCoord+dz, xCoord+dx, yCoord+dy, zCoord+dz).expand(r, r, r);
-			List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, light);
-			for (EntityLivingBase e : in) {
-				e.attackEntityFrom(DamageSource.lava, 4);
-				e.setFire(7);
+			List<Entity> in = world.getEntitiesWithinAABB(Entity.class, light);
+			for (Entity e : in) {
+				if (e instanceof TargetEntity) {
+					((TargetEntity)e).onLaserBeam(this);
+				}
+				if (e instanceof EntityLivingBase) {
+					e.attackEntityFrom(DamageSource.lava, 4);
+					e.setFire(7);
+				}
 			}
 			int x = xCoord+(int)dx;
 			int y = yCoord+(int)dy;
@@ -208,8 +214,15 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 	}
 
 	@Override
-	protected boolean isValidTarget(EntityLivingBase ent) {
-		return this.isMobOrUnlistedPlayer(ent);
+	protected boolean isValidTarget(Entity ent) {
+		if (ent.isDead)
+			return false;
+		if (ent instanceof TargetEntity)
+			return ((TargetEntity)ent).shouldTarget(this, placerUUID);
+		if (!(ent instanceof EntityLivingBase))
+			return false;
+		EntityLivingBase elb = (EntityLivingBase)ent;
+		return elb.getHealth() > 0 && this.isMobOrUnlistedPlayer(elb);
 	}
 
 }

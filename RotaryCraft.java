@@ -74,6 +74,7 @@ import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
+import Reika.RotaryCraft.Auxiliary.RotaryIntegrationManager;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
@@ -476,6 +477,8 @@ public class RotaryCraft extends DragonAPIMod {
 		TileEntityReservoir.initCreativeFluids();
 		TileEntityFluidCompressor.initCreativeFluids();
 		ItemFuelTank.initCreativeFluids();
+
+		RotaryIntegrationManager.verifyClassIntegrity();
 
 		if (!this.isLocked())
 			RecipesGrinder.getRecipes().addPostLoadRecipes();

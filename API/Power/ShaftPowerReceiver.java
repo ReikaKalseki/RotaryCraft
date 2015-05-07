@@ -11,7 +11,9 @@ package Reika.RotaryCraft.API.Power;
 
 
 /** This is for basic RC power compatibility. Results with a machine that accepts power from multiple sides is undefined unless you specifically
- * handle for it; for such cases the use of {@link AdvancedShaftPowerReceiver} is recommended instead. */
+ * handle for it; for such cases the use of {@link AdvancedShaftPowerReceiver} is recommended instead.
+ * 
+ * All "set" methods are called every tick. */
 public interface ShaftPowerReceiver extends PowerAcceptor {
 
 	/** RC machines set your machine's rotational speed with this. */

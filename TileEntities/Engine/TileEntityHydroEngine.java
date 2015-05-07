@@ -15,18 +15,17 @@ import java.util.List;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -69,7 +68,6 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	@Override
 	protected boolean getRequirements(World world, int x, int y, int z, int meta) {
-
 		boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("lubricant"));
 		if (hasLube)
 			this.distributeLubricant(world, x, y, z);
@@ -87,13 +85,17 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 		int[] pos = this.getWaterColumnPos();
 		Block id = world.getBlock(pos[0], y, pos[1]);
-		if (id == Blocks.flowing_lava || id == Blocks.lava) {
+		Fluid f = FluidRegistry.lookupFluidForBlock(id);
+		if (f == null)
+			return false;
+		if (f.getTemperature() >= 900) {
 			if (ReikaRandomHelper.doWithChance(2)) {
-				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 2, true);
 				world.setBlockToAir(x, y, z);
+				boolean lube = !lubricant.isEmpty();
+				world.newExplosion(null, x+0.5, y+0.5, z+0.5, lube ? 3 : 2, lube, true);
 			}
 		}
-		if (id != Blocks.water && id != Blocks.flowing_water)
+		if (f.isGaseous() || f.getDensity() <= 0)
 			return false;
 		if (!ReikaWorldHelper.isLiquidAColumn(world, pos[0], y, pos[1]))
 			return false;
@@ -168,20 +170,23 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		return pos;
 	}
 
-	private float getHydroFactor(World world, int x, int y, int z) {
+	private double getHydroFactor(World world, int x, int y, int z, boolean torque) {
+		int[] pos = this.getWaterColumnPos();
+		Fluid f = ReikaWorldHelper.getFluid(world, pos[0], y, pos[1]);
+		if (f == null || f.isGaseous() || f.getDensity() <= 0)
+			return 0;
 		double grav = ReikaPhysicsHelper.g;
 		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 			grav += ig.getGravity()*10;
 		}
-		int[] pos = this.getWaterColumnPos();
-		double dy = (ReikaWorldHelper.findWaterSurface(world, pos[0], y, pos[1])-y)-0.5;
+		double dy = (ReikaWorldHelper.findFluidSurface(world, pos[0], y, pos[1])-y)-0.5;
 		double v = Math.sqrt(2*grav*dy);
-		double mdot = ReikaEngLibrary.rhowater*v;
+		double mdot = f.getDensity()*v; //*1 since area is 1m^2
 		double P = 0.25*mdot*dy;
 		if (P >= type.getPower())
 			return 1;
-		return (float)(P/type.getPower());
+		return P/type.getPower();
 	}
 
 	private void dealPanelDamage(World world, int x, int y, int z, int meta) {
@@ -270,7 +275,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	@Override
 	protected int getMaxSpeed(World world, int x, int y, int z, int meta) {
-		return Math.max(1, (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(world, x, y, z)));
+		return Math.max(1, (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(world, x, y, z, false)));
 	}
 
 	@Override
@@ -278,7 +283,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		if (failed)
 			return 1;
 		int fac = this.getArrayTorqueMultiplier();
-		int torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z)*fac);
+		int torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z, true)*fac);
 		int r = bedrock ? 16 : 4;
 		double ratio = (double)torque/EngineType.HYDRO.getTorque();
 		if (ratio > r) {

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -18,6 +19,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoriedCannon;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
@@ -68,21 +70,20 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 		double[] xyzb = new double[4];
 		int r = this.getRange();
 		AxisAlignedBB range = AxisAlignedBB.getBoundingBox(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
-		List<EntityLivingBase> inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, range);
+		List<Entity> inrange = world.getEntitiesWithinAABB(Entity.class, range);
 		double mindist = this.getRange()+2;
-		EntityLivingBase i_at_min = null;
-		for (EntityLivingBase ent : inrange) {
+		Entity i_at_min = null;
+		for (Entity ent : inrange) {
 			double dist = ReikaMathLibrary.py3d(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5);
 			if (this.isValidTarget(ent)) {
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange())) {
-					if (!ent.isDead && ent.getHealth() > 0) {
-						double dy = -(ent.posY-y);
-						double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
-						if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1))
-							if (dist < mindist) {
-								mindist = dist;
-								i_at_min = ent;
-							}
+					double dy = -(ent.posY-y);
+					double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
+					if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1)) {
+						if (dist < mindist) {
+							mindist = dist;
+							i_at_min = ent;
+						}
 					}
 				}
 			}
@@ -145,7 +146,7 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 		return 164;
 	}
 
-	public EntityLivingBase getClosestMob() {
+	public Entity getClosestMob() {
 		return closestMob;
 	}
 
@@ -191,8 +192,15 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 	}
 
 	@Override
-	protected boolean isValidTarget(EntityLivingBase ent) {
-		return this.isMobOrUnlistedPlayer(ent);
+	protected boolean isValidTarget(Entity ent) {
+		if (ent.isDead)
+			return false;
+		if (ent instanceof TargetEntity)
+			return ((TargetEntity)ent).shouldTarget(this, placerUUID);
+		if (!(ent instanceof EntityLivingBase))
+			return false;
+		EntityLivingBase elb = (EntityLivingBase)ent;
+		return elb.getHealth() > 0 && this.isMobOrUnlistedPlayer(elb);
 	}
 
 }

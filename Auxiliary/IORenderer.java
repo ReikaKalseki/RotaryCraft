@@ -21,7 +21,6 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;

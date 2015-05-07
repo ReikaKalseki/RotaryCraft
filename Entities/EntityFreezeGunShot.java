@@ -21,23 +21,27 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityFreezeGun;
 
 public class EntityFreezeGunShot extends EntityTurretShot {
 
+	private TileEntityFreezeGun source;
+
 	public EntityFreezeGunShot(World world) {
 		super(world);
 	}
 
-	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz) {
+	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityFreezeGun te) {
 		super(world, x, y, z, 0, 0, 0);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
+		source = te;
 	}
 
 	@Override
@@ -62,20 +66,21 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 		List dmgd = world.getEntitiesWithinAABB(Entity.class, splash);
 		for (int l = 0; l < dmgd.size(); l++) {
 			ent = (Entity)dmgd.get(l);
-			if (ent instanceof EntityLivingBase) {
-				el = (EntityLivingBase)ent;
-				this.applyAttackEffectsToEntity(world, el);
-			}
+			this.applyAttackEffectsToEntity(world, ent);
 		}
 
 		this.setDead();
 	}
 
 	@Override
-	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {
+	protected void applyAttackEffectsToEntity(World world, Entity el) {
 		if (el instanceof EntityPlayer && ((EntityPlayer)el).capabilities.isCreativeMode)
 			return;
-		el.addPotionEffect(TileEntityFreezeGun.getFreezeEffect(60000));
+		if (el instanceof TargetEntity) {
+			((TargetEntity)el).onFreeze(source);
+		}
+		if (el instanceof EntityLivingBase)
+			((EntityLivingBase)el).addPotionEffect(TileEntityFreezeGun.getFreezeEffect(60000));
 	}
 
 	@Override

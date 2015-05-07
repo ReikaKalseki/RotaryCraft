@@ -127,6 +127,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	@SuppressWarnings("unused")
 	private void suck(World world, int x, int y, int z) {
 		AxisAlignedBB box = this.getBox(world, x, y, z);
+
+		///Do not merge these, they have slightly different code!
 		List<EntityItem> inbox = world.getEntitiesWithinAABB(EntityItem.class, box);
 		for (EntityItem ent : inbox) {
 			//Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.posX, ent.posY, ent.posZ, x+0.5, y+0.5, z+0.5);

@@ -54,6 +54,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private final StepTimer updateTimer = new StepTimer(50);
 
+	private static final int MAX_TICK_DELAY = 100; //5s
+	private int tickTimer = 1;
+	private int tick;
+
 	private static final int OUTPUT_OFFSET = 18;
 	private static final int CONTAINER_OFFSET = 36;
 
@@ -77,12 +81,33 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 		if (power >= MINPOWER) {
 
-			if (continuous) {
+			tick++;
+			if (continuous && (tick >= tickTimer)) {
+				tick = 0;
+				long time = System.nanoTime();
 				this.attemptAllSlotCrafting();
+				long duration = System.nanoTime()-time;
+				if (duration > 1000000*tickTimer && tickTimer < MAX_TICK_DELAY) {
+					tickTimer += this.getTickIncrement();
+				}
+				else {
+					tickTimer--;
+				}
 			}
 
 			this.injectItems();
 		}
+	}
+
+	private int getTickIncrement() {
+		if (tickTimer < 10)
+			return 1;
+		else if (tickTimer < 20)
+			return 2;
+		else if (tickTimer < 40)
+			return 5;
+		else
+			return 10;
 	}
 
 	@Override

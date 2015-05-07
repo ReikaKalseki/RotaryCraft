@@ -11,7 +11,7 @@ package Reika.RotaryCraft.API.Power;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-/** Anything that receives power implements this, usually indirectly. */
+/** Anything that receives power implements this, usually indirectly. Do not implement this directly. */
 public interface PowerAcceptor extends ShaftMachine {
 
 	/** Can the machine receive power from this side. Usually either "dir == facing" for 1D machines and "true" for omnidirectional machines. */

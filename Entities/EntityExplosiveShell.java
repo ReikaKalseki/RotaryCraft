@@ -21,6 +21,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
@@ -61,11 +62,13 @@ public class EntityExplosiveShell extends EntityTurretShot {
 		int x0 = (int)x;
 		int y0 = (int)y;
 		int z0 = (int)z;
-		EntityLivingBase el;
-		Entity ent;
 		//ReikaChatHelper.writeCoords(world, x, y, z);
 		//ReikaChatHelper.writeBlockAtCoords(world, x0, y0, z0);
 		world.newExplosion(this, x0, y0, z0, EXPLOSION, true, true);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(8, 8, 8);
+		for (Entity e : ((List<Entity>)worldObj.getEntitiesWithinAABB(Entity.class, box))) {
+			this.applyAttackEffectsToEntity(world, e);
+		}
 		this.setDead();
 		//ent.attackEntityFrom(DamageSource.outOfWorld, el.getHealth()*(1+el.getTotalArmorValue()));
 	}
@@ -76,8 +79,10 @@ public class EntityExplosiveShell extends EntityTurretShot {
 	}
 
 	@Override
-	protected void applyAttackEffectsToEntity(World world, EntityLivingBase el) {
-
+	protected void applyAttackEffectsToEntity(World world, Entity el) {
+		if (el instanceof TargetEntity) {
+			((TargetEntity)el).onRailgunImpact(gun, 4096, true);
+		}
 	}
 
 	@Override

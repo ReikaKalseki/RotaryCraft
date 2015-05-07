@@ -16,10 +16,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.Power.AdvancedShaftPowerReceiver;
-import Reika.RotaryCraft.API.Power.ShaftPowerEmitter;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.API.Power.SimpleShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 
@@ -358,7 +358,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 			}
 			else {
 				SimpleShaftPowerReceiver sp = (SimpleShaftPowerReceiver)te;
-				sp.setPowered(sp.canReadFrom(from.getOpposite()) && om > 0 && tq > 0);
+				sp.setPowered(sp.canReadFrom(from.getOpposite()) && tq > 0 && om > 0);
 			}
 		}
 		else if (te instanceof ShaftPowerReceiver) {

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -28,6 +29,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Interfaces.FlyingMob;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoriedCannon;
 import Reika.RotaryCraft.Entities.EntityFlakShot;
@@ -84,21 +86,20 @@ public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISid
 		double[] xyzb = new double[4];
 		int r = this.getRange();
 		AxisAlignedBB range = AxisAlignedBB.getBoundingBox(x-r, y-r, z-r, x+1+r, y+1+r, z+1+r);
-		List<EntityLivingBase> inrange = world.getEntitiesWithinAABB(EntityLivingBase.class, range);
+		List<Entity> inrange = world.getEntitiesWithinAABB(Entity.class, range);
 		double mindist = this.getRange()+2;
-		EntityLivingBase i_at_min = null;
-		for (EntityLivingBase ent : inrange) {
+		Entity i_at_min = null;
+		for (Entity ent : inrange) {
 			double dist = ReikaMathLibrary.py3d(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5);
 			if (this.isValidTarget(ent)) {
 				if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange())) {
-					if (!ent.isDead && ent.getHealth() > 0) {
-						double dy = -(ent.posY-y);
-						double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
-						if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1))
-							if (dist < mindist) {
-								mindist = dist;
-								i_at_min = ent;
-							}
+					double dy = -(ent.posY-y);
+					double reqtheta = -90+Math.toDegrees(Math.abs(Math.acos(dy/dist)));
+					if ((reqtheta <= dir*MAXLOWANGLE && dir == -1) || (reqtheta >= dir*MAXLOWANGLE && dir == 1)) {
+						if (dist < mindist) {
+							mindist = dist;
+							i_at_min = ent;
+						}
 					}
 				}
 			}
@@ -141,7 +142,7 @@ public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISid
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
 			double y = this.getFiringPositionY(dy);
-			EntityFlakShot flak = new EntityFlakShot(world, xCoord+0.5+dx, y, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2]);
+			EntityFlakShot flak = new EntityFlakShot(world, xCoord+0.5+dx, y, zCoord+0.5+dz, 3*v[0], 3*v[1], 3*v[2], this);
 			world.spawnEntityInWorld(flak);
 		}
 	}
@@ -152,10 +153,17 @@ public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISid
 	}
 
 	@Override
-	protected boolean isValidTarget(EntityLivingBase ent) {
+	protected boolean isValidTarget(Entity ent) {
+		if (ent instanceof TargetEntity)
+			return ((TargetEntity)ent).shouldTarget(this, placerUUID);
+		if (!(ent instanceof EntityLivingBase))
+			return false;
+		EntityLivingBase elb = (EntityLivingBase)ent;
+		if (elb.isDead || elb.getHealth() <= 0)
+			return false;
 		if (ent.onGround || ent.isInWater() || ent.isInsideOfMaterial(Material.lava))
 			return false;
-		if (ent instanceof EntityFlying && ReikaEntityHelper.isHostile(ent)) {
+		if (elb instanceof EntityFlying && ReikaEntityHelper.isHostile(elb)) {
 			return ReikaMathLibrary.py3d(ent.posX-xCoord-0.5, ent.posY-yCoord-0.5, ent.posZ-zCoord-0.5) > 2;
 		}
 		if (ent instanceof EntityBlaze || ent instanceof EntityWither || ent instanceof EntityDragon) {
