@@ -46,7 +46,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public int smeltTime = 0;
 
 	public static final int SMELTTEMP = 600;
-	public static final int BEDROCKTEMP = 1150;
+	public static final int BEDROCKTEMP = 1000;//1150;
 	public static final int MAXTEMP = 2000;
 	public static final float SMELT_XP = 0.6F;
 	public static final int SLOT_1 = 0;

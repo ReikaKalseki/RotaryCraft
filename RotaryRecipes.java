@@ -1021,7 +1021,7 @@ public class RotaryRecipes {
 		ReikaRecipeHelper.addSmelting(ItemStacks.ironscrap, new ItemStack(Items.iron_ingot), 0.4F);
 
 		IRecipe ir = ReikaRecipeHelper.getShapelessRecipeFor(ItemStacks.springingot, ItemStacks.steelingot, new ItemStack(Items.redstone), ItemStacks.coke);
-		RecipesBlastFurnace.getRecipes().addAlloyingRecipe(ItemStacks.springingot, 1050, ir, 1, 0.4F);
+		RecipesBlastFurnace.getRecipes().addAlloyingRecipe(ItemStacks.springingot, 1150, ir, 1, 0.4F);
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

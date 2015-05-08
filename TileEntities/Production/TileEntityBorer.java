@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Interfaces.SemiUnbreakable;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -408,6 +409,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				reqpow = -1;
 			}
 			else if (id == BlockRegistry.DECO.getBlockInstance() && meta == ItemStacks.shieldblock.getItemDamage()) {
+				reqpow = -1;
+			}
+			else if (id instanceof SemiUnbreakable && ((SemiUnbreakable)id).isUnbreakable(world, xread, yread, zread, meta)) {
 				reqpow = -1;
 			}
 			else {
