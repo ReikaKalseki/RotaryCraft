@@ -48,10 +48,10 @@ public enum PacketRegistry {
 	BLOWER(64, 67),
 	DEFOLIATOR(68),
 	GPR(69),
-	CRAFTER(70),
-	POWERSYNC(71),
-	AFTERBURN(72),
-	CRAFTPATTERNMODE(73);
+	CRAFTER(70, 72),
+	POWERSYNC(73),
+	AFTERBURN(74),
+	CRAFTPATTERNMODE(75);
 
 	private int min;
 	private int max;
@@ -93,6 +93,8 @@ public enum PacketRegistry {
 			return 3;
 		if (this == POWERSYNC)
 			return 4;
+		if (this == CRAFTER)
+			return 2;
 		return 1;
 	}
 

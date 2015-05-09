@@ -565,7 +565,12 @@ public class PacketHandlerCore implements IPacketHandler {
 				gpr.shift(gpr.getGuiDirection(), direction);
 				break;
 			case CRAFTER:
-				((TileEntityAutoCrafter)te).triggerCraftingCycle(data[0]);
+				if (control == PacketRegistry.CRAFTER.getMinValue())
+					((TileEntityAutoCrafter)te).triggerCraftingCycle(data[0]);
+				else if (control == PacketRegistry.CRAFTER.getMinValue()+1)
+					((TileEntityAutoCrafter)te).setThreshold(data[0], data[1]);
+				else if (control == PacketRegistry.CRAFTER.getMinValue()+2)
+					((TileEntityAutoCrafter)te).incrementMode();
 				break;
 			case POWERSYNC:
 				TileEntityIOMachine io = (TileEntityIOMachine)te;

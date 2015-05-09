@@ -207,7 +207,7 @@ public enum MaterialRegistry {
 		return MachineRegistry.SHAFT.getCraftedMetadataProduct(this.ordinal());
 	}
 
-	public ItemStack getGearItem(int ratio) {
+	public ItemStack getGearboxItem(int ratio) {
 		int type = this.ordinal();
 		ratio = (int)ReikaMathLibrary.logbase(ratio, 2)-1;
 		return MachineRegistry.GEARBOX.getCraftedMetadataProduct(5*ratio+type);
@@ -236,6 +236,42 @@ public enum MaterialRegistry {
 		}
 		else if (ReikaItemHelper.matchStacks(is, ItemStacks.bedrockshaft)) {
 			return BEDROCK;
+		}
+		return null;
+	}
+
+	public ItemStack getGearItem() {
+		switch(this) {
+		case BEDROCK:
+			return ItemStacks.bedrockgear;
+		case DIAMOND:
+			return ItemStacks.diamondgear;
+		case STEEL:
+			return ItemStacks.steelgear;
+		case STONE:
+			return ItemStacks.stonegear;
+		case WOOD:
+			return ItemStacks.woodgear;
+		}
+		return null;
+	}
+
+	public ItemStack getGearUnitItem(int ratio) {
+		return ItemRegistry.GEARUNITS.getStackOfMetadata(ReikaMathLibrary.logbase2(ratio)-1+this.ordinal()*4);
+	}
+
+	public ItemStack getShaftUnitItem() {
+		switch(this) {
+		case BEDROCK:
+			return ItemStacks.bedrockshaft;
+		case DIAMOND:
+			return ItemStacks.diamondshaft;
+		case STEEL:
+			return ItemStacks.shaftitem;
+		case STONE:
+			return ItemStacks.stonerod;
+		case WOOD:
+			return new ItemStack(Items.stick);
 		}
 		return null;
 	}

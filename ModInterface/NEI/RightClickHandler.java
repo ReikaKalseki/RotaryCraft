@@ -186,7 +186,7 @@ public class RightClickHandler extends TemplateRecipeHandler {
 		DISPLAYSET(MachineRegistry.DISPLAY, Items.written_book, "Sets Text"),
 		REPAIRMIRROR(MachineRegistry.MIRROR, ItemStacks.mirror, "Repairs Mirror"),
 		REPAIRSHAFT(MachineRegistry.SHAFT, MaterialRegistry.STEEL.getShaftItem(), ItemStacks.shaftitem, "Repairs Shaft"),
-		REPAIRGEAR(MachineRegistry.GEARBOX, MaterialRegistry.STEEL.getGearItem(4), ItemStacks.gearunit, "Repairs Gearbox"),
+		REPAIRGEAR(MachineRegistry.GEARBOX, MaterialRegistry.STEEL.getGearboxItem(4), ItemStacks.gearunit, "Repairs Gearbox"),
 		REPAIRJET(MachineRegistry.ENGINE, EngineType.JET.getCraftedProduct(), ItemStacks.compoundturb, "Repairs Engine"),
 		PNEU1(MachineRegistry.PNEUENGINE, ItemStacks.impeller, "Upgrades To Tier 1"),
 		PNEU2(MachineRegistry.PNEUENGINE, ItemStacks.turbine, "Upgrades To Tier 2"),

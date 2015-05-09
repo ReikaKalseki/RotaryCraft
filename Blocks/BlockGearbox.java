@@ -15,7 +15,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -176,27 +175,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return false;
 		}
 		if (tile != null) {
-			ItemStack fix;
-			switch(tile.getGearboxType()) {
-			case WOOD:
-				fix = ItemStacks.woodgear;
-				break;
-			case STONE:
-				fix = ItemStacks.stonegear;
-				break;
-			case STEEL:
-				fix = ItemStacks.steelgear;
-				break;
-			case DIAMOND:
-				fix = ItemStacks.diamondgear;
-				break;
-			case BEDROCK:
-				fix = ItemStacks.bedrockgear;
-				break;
-			default:
-				fix = new ItemStack(Blocks.stone);
-				break;
-			}
+			ItemStack fix = tile.getGearboxType().getGearItem();
 			ItemStack held = ep.getCurrentEquippedItem();
 			if (held != null) {
 				if ((ReikaItemHelper.matchStacks(fix, held))) {

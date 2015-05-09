@@ -316,7 +316,7 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 			if (m == MachineRegistry.CRAFTER) {
 				TileEntityAutoCrafter clicked = (TileEntityAutoCrafter)te;
 				if (ep.isSneaking())
-					clicked.continuous = !clicked.continuous;
+					clicked.incrementMode();
 				return true;
 			}
 			if (m == MachineRegistry.GEARBOX) {

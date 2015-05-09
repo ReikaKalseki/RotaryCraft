@@ -399,8 +399,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.REACTORCRAFT, "Endgame power generation of multiple gigawatts");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.ELECTRICRAFT, "Easier and lower-CPU-load power transmission and distribution");
-		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.BCENERGY, "Access to MJ power conversion and alternate lubricant production");
-		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.THERMALEXPANSION, "Access to RF power conversion and some interface recipes");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.BCENERGY, "Access to alternate lubricant production");
+		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.THERMALEXPANSION, "Access to some interface recipes");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.FORESTRY, "Access to Canola bees to speed canola growth and produce some lubricant");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.RAILCRAFT, "Access to steam power generation and consumption");
 		SuggestedModsTracker.instance.addSuggestedMod(instance, ModList.TWILIGHT, "Special integration with TF mobs and structures");

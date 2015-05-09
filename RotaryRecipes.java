@@ -54,6 +54,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -69,7 +70,7 @@ public class RotaryRecipes {
 		RotaryRegistration.loadOreDictionary();
 		addMachines();
 		addCraftItems();
-		addItemBlocks();
+		addMultiTypes();
 		addToolItems();
 		addMisc();
 		addFurnace();
@@ -96,6 +97,7 @@ public class RotaryRecipes {
 		ItemMaterialController.instance.addItem(ItemRegistry.STEELCHEST.getStackOf(), ItemMaterial.STEEL);
 		ItemMaterialController.instance.addItem(ItemRegistry.STEELSWORD.getStackOf(), ItemMaterial.STEEL);
 		ItemMaterialController.instance.addItem(ItemRegistry.STEELSICKLE.getStackOf(), ItemMaterial.STEEL);
+		ItemMaterialController.instance.addItem(ItemRegistry.STEELSHEARS.getStackOf(), ItemMaterial.STEEL);
 	}
 
 	private static void addCompat() {
@@ -794,6 +796,13 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 15), ItemStacks.shaftcore);
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 81), ItemStacks.waterplate);
 
+		for (int i = 0; i < MaterialRegistry.matList.length; i++) {
+			MaterialRegistry mat = MaterialRegistry.matList[i];
+			for (int k = 2; k < 16; k *= 2) {
+				GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(k), 2), mat.getGearUnitItem(k*2));
+			}
+		}
+
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
@@ -904,7 +913,7 @@ public class RotaryRecipes {
 		}
 	}
 
-	private static void addItemBlocks() {
+	private static void addMultiTypes() {
 
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(0, "SW ", " GS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'W', ItemStacks.wormgear, 'G', ItemStacks.steelgear); //Worm gear
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, "BSB", "BSB", "sMc", 'c', ItemStacks.screen, 's', ItemStacks.pcb, 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft, 'B', ItemStacks.bearing); //CVT
@@ -954,6 +963,10 @@ public class RotaryRecipes {
 			MachineRegistry.BEDPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "BGB", "BGB", "BGB", 'B', ItemStacks.bedingot, 'G', Blocks.glass);
 		}
 
+		addGearboxes();
+	}
+
+	private static void addGearboxes() {
 		ItemStack gear;
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(0));
 		MachineRegistry.GEARBOX.addRecipe(new ShapedOreRecipe(gear, new Object[]{"MGM", "MMM", 'M', "plankWood", 'G', ItemStacks.wood2x}));
