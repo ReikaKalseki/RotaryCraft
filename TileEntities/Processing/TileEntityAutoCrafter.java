@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 
@@ -27,7 +26,6 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.CraftCompleteCallback;
@@ -357,7 +355,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 			return false;
 		ItemStack[] items = this.getIngredients(is);
 		ItemStack out = this.getOutput(is);
-		ReikaJavaLibrary.pConsole(is+":"+Arrays.toString(items)+":"+out);
+		//ReikaJavaLibrary.pConsole(is+":"+Arrays.toString(items)+":"+out);
 		if (items != null && out != null) {
 			//ReikaJavaLibrary.pConsole("crafting "+out+" from "+Arrays.toString(items));
 			return this.tryCrafting(i, out, items);
