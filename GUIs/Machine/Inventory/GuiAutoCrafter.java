@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
@@ -66,7 +65,7 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 		}
 
 		if (crafter.getMode() == CraftingMode.SUSTAIN) {
-			text = new GuiTextField(fontRendererObj, var5+8, var6+64, 52, 15);
+			text = new GuiTextField(fontRendererObj, var5+8, var6+119, 52, 15);
 			text.setFocused(false);
 			text.setMaxStringLength(7);
 		}
@@ -75,6 +74,13 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 		}
 
 		//buttonList.add(new ImagedGuiButton(-1, var5+xSize-25, var6+4, 18, 9, 176, 25, this.getGuiTexture(), RotaryCraft.class));
+		if (crafter.getMode() == CraftingMode.SUSTAIN) {
+			for (int i = 0; i < crafter.SIZE; i++) {
+				int dx = var5+8+18*(i%9);
+				int dy = var6+37+62*(i/9);
+				buttonList.add(new ImagedGuiButton(40+i, dx, dy, 16, 16, 195, 41, this.getGuiTexture(), RotaryCraft.class));
+			}
+		}
 	}
 
 	@Override
@@ -82,8 +88,13 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 		super.actionPerformed(button);
 		if (button.id >= 0 && button.id < crafter.SIZE)
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue(), crafter, button.id, 0);
-		if (button.id == -1) {
+		else if (button.id == -1) {
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue()+2, crafter, button.id, 0);
+		}
+		else if (button.id >= 40 && button.id < 40+crafter.SIZE) {
+			selectedSlot = button.id-40;
+			text.setFocused(false);
+			text.setText("");
 		}
 	}
 
@@ -91,11 +102,11 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	protected void mouseClicked(int x, int y, int b) {
 		super.mouseClicked(x, y, b);
 		if (text != null) {
-			boolean flag = text.isFocused();
+			//boolean flag = text.isFocused();
 			text.mouseClicked(x, y, b);
-			flag |= text.isFocused();
-			if (!flag)
-				selectedSlot = this.getSlotClickPosition(x, y);
+			//flag |= text.isFocused();
+			//if (!flag)
+			//	selectedSlot = this.getSlotClickPosition(x, y);
 		}
 	}
 
@@ -103,12 +114,14 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	protected void keyTyped(char c, int k) {
 		super.keyTyped(c, k);
 		if (text != null) {
-			text.textboxKeyTyped(c, k);
-			if (k == Keyboard.KEY_SPACE) {
-				selectedSlot = this.getSlotClickPosition(api.getMouseRealX(), api.getMouseRealY());
-			}
-			if (selectedSlot >= 0) {
-				this.dispatch(selectedSlot, Math.max(0, ReikaJavaLibrary.safeIntParse(text.getText())));
+			//if (k == Keyboard.KEY_SPACE) {
+			//	selectedSlot = this.getSlotClickPosition(api.getMouseRealX(), api.getMouseRealY());
+			//}
+			if (text.isFocused()) {
+				text.textboxKeyTyped(c, k);
+				if (selectedSlot >= 0) {
+					this.dispatch(selectedSlot, Math.max(0, ReikaJavaLibrary.safeIntParse(text.getText())));
+				}
 			}
 		}
 	}
@@ -181,13 +194,17 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 			if (selectedSlot >= 0) {
 				ItemStack out = ReikaItemHelper.getSizedItemStack(crafter.getSlotRecipeOutput(selectedSlot), 1);
 				if (out != null) {
-					fontRendererObj.drawString("of", var5+65, var6+67, 4210752);
-					api.drawItemStack(itemRender, out, var5+80, var6+63);
+					if (!text.isFocused()) {
+						fontRendererObj.drawString(String.valueOf(crafter.getThreshold(selectedSlot)), var5+12, var6+122, 0xffffff);
+					}
+					fontRendererObj.drawString("of", var5+65, var6+122, 4210752);
+					api.drawItemStack(itemRender, out, var5+80, var6+118);
 					//fontRendererObj.drawString("("+out.getDisplayName()+")", var5+90, var6+67, 4210752);
 				}
 			}
 		}
 
+		GL11.glDisable(GL11.GL_LIGHTING);
 		this.drawRect(var5+5, var6+5, var5+16, var6+16, 0xff000000 | crafter.getMode().color);
 		this.drawRect(var5+5, var6+5, var5+6, var6+15, 0xff000000 | ReikaColorAPI.mixColors(crafter.getMode().color, 0xffffff, 0.5F));
 		this.drawRect(var5+5, var6+5, var5+15, var6+6, 0xff000000 | ReikaColorAPI.mixColors(crafter.getMode().color, 0xffffff, 0.5F));
@@ -201,6 +218,6 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "/Reika/RotaryCraft/Textures/GUI/craftergui2.png";
+		return "/Reika/RotaryCraft/Textures/GUI/craftergui"+crafter.getMode().imageSuffix+".png";
 	}
 }
