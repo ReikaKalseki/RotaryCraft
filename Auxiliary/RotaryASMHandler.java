@@ -81,7 +81,8 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 			classReader.accept(cn, 0);
 			if ((cn.name.contains(par1) || cn.name.contains(par2) || cn.name.contains(par3)) && !set.contains(cn.name)) {
 				if (cn.interfaces.contains(rf1) || cn.interfaces.contains(rf2)) {
-					ReikaJavaLibrary.spamConsole(cn.name);
+					cn.interfaces.remove(rf1);
+					cn.interfaces.remove(rf2);
 				}
 			}
 
