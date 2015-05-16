@@ -16,6 +16,7 @@ import java.util.Map;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.RotaryCraft.API.Power.PowerAcceptor;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -218,7 +219,7 @@ public class TorqueUsage {
 				torque += Math.max(TEMapR.get(tile)*((TileEntityPowerReceiver) tile).MINTORQUE, min);
 			}
 		}
-		if (tile instanceof ShaftPowerReceiver) {
+		if (tile instanceof PowerAcceptor) {
 			torque += Math.max(((ShaftPowerReceiver)tile).getMinTorque(reader.torque), 1);
 		}
 	}
