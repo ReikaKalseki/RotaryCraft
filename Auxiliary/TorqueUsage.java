@@ -279,85 +279,30 @@ public class TorqueUsage {
 		return isPoweredFrom;
 	}
 
-	public static int recursiveCount(World world, TileEntityIOMachine tile) {
-		return recursiveCount(world, tile, 0);
+	public static int recursiveCount(TileEntityIOMachine tile) {
+		return recursiveCount(tile, 0);
 	}
 
-	private static int recursiveCount(World world, TileEntity tile, int count) {
-		count++;
-		if (tile instanceof TileEntitySplitter) {
-			TileEntitySplitter spl = (TileEntitySplitter)tile;
-			TileEntity write = spl.getWriteTileEntity();
-			TileEntity write2 = spl.getWriteTileEntity2();
-			if (!spl.isSplitting()) {
-				TileEntity di = write;
-				if (di instanceof TileEntityIOMachine) {
-					TileEntityIOMachine io = ((TileEntityIOMachine)di);
-					TileEntity read = io.getReadTileEntity();
-					TileEntity read2 = io.getReadTileEntity2();
-					if (io.getInput() == tile || read == tile || read2 == tile) {
-						count = recursiveCount(world, di, count);
-					}
-				}
+	private static int recursiveCount(TileEntityIOMachine tile, int count) {
+		ForgeDirection out1 = tile.canTransmitPower() ? tile.getWriteDirection() : null;
+		ForgeDirection out2 = tile.canTransmitPower() ? tile.getWriteDirection2() : null;
+		count = parseDirection(out1, tile, count);
+		count = parseDirection(out2, tile, count);
+		return count;
+	}
+
+	private static int parseDirection(ForgeDirection dir, TileEntityIOMachine tile, int count) {
+		if (dir != null) {
+			TileEntity o1 = tile.getAdjacentTileEntity(dir);
+			if (o1 instanceof TileEntityIOMachine) {
+				TileEntityIOMachine io = (TileEntityIOMachine)o1;
+				count = recursiveCount(io, count);
+			}
+			else if (o1 instanceof PowerAcceptor) {
+				count++;
 			}
 			else {
-				TileEntity di = write;
-				TileEntity di2 = write2;
-				if (di instanceof TileEntityIOMachine) {
-					TileEntityIOMachine io = ((TileEntityIOMachine)di);
-					TileEntity read = io.getReadTileEntity();
-					TileEntity read2 = io.getReadTileEntity2();
-					if (io.getInput() == tile || read == tile || read2 == tile) {
-						count = recursiveCount(world, di, count);
-					}
-				}
-				if (di2 instanceof TileEntityIOMachine) {
-					TileEntityIOMachine io = ((TileEntityIOMachine)di2);
-					TileEntity read = io.getReadTileEntity();
-					TileEntity read2 = io.getReadTileEntity2();
-					if (io.getInput() == tile || read == tile || read == tile) {
-						count = recursiveCount(world, di2, count);
-					}
-				}
-			}
-		}
-		else if (tile instanceof TileEntityClutch) {
-			if (world.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord)) {
-				TileEntity di = ((TileEntityIOMachine) tile).getOutput();
-				if (di instanceof TileEntityIOMachine) {
-					if (((TileEntityIOMachine) di).getInput() == tile) {
-						count = recursiveCount(world, di, count);
-					}
-				}
-			}
-		}
-		else if (tile instanceof TileEntityBeltHub) {
-			TileEntityBeltHub hub = (TileEntityBeltHub)tile;
-			if (!((TileEntityBeltHub) tile).isEmitting) {
-				TileEntity di = world.getTileEntity(hub.getTargetX(), hub.getTargetY(),hub.getTargetZ());
-				if (di != null) {
-					TileEntityBeltHub h2 = (TileEntityBeltHub)di;
-					TileEntity write = h2.getWriteTileEntity();
-					TileEntity dii = write;
-					if (dii instanceof TileEntityIOMachine) {
-						if (((TileEntityIOMachine) dii).getInput() == di) {
-							count = recursiveCount(world, dii, count);
-						}
-					}
-				}
-			}
-		}
-		else if (tile instanceof TileEntityIOMachine) {
-			TileEntity di = ((TileEntityIOMachine) tile).getOutput();
-			if (di instanceof TileEntityIOMachine) {
-				if (((TileEntityIOMachine) di).getInput() == tile) {
-					count = recursiveCount(world, di, count);
-				}
-			}
-			if (di instanceof PowerAcceptor) {
-				if (((PowerAcceptor) di).isReceiving() && (((PowerAcceptor) di).canReadFrom(((TileEntityIOMachine)tile).getWriteDirection().getOpposite()) || ((PowerAcceptor) di).canReadFrom(((TileEntityIOMachine)tile).getWriteDirection2().getOpposite()))) {
-					count = recursiveCount(world, di, count);
-				}
+
 			}
 		}
 		return count;

@@ -521,4 +521,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	public final int getIoOffsetZ() {
 		return pointoffsetz;
 	}
+
+	public boolean canTransmitPower() {
+		return true;
+	}
 }

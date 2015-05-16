@@ -45,7 +45,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 		int dz = z+read.offsetZ;
 		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
 		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
-		if (world.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if (this.isOutputEnabled()) {
 			if (this.isProvider(te)) {
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft devicein = (TileEntityShaft)te;
@@ -130,5 +130,9 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	public boolean isOutputEnabled() {
+		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 }
