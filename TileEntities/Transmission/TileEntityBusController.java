@@ -9,7 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.Collection;
+
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -142,6 +145,14 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 	@Override
 	public void breakBlock() {
 		this.clear();
+	}
+
+	@Override
+	public void getOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		Collection<TileEntityPowerBus> c2 = bus.getBlocks();
+		for (TileEntityPowerBus te : c2) {
+			te.getAllOutputs(c, dir);
+		}
 	}
 
 }

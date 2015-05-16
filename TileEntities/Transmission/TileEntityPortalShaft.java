@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -129,6 +131,53 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	}
 
 	private void emitPower(World world, int x, int y, int z) {
+		Location c = this.getOutputLocation(world, x, y, z);
+		int dx = c.posX;
+		int dy = c.posY;
+		int dz = c.posZ;
+		int ax = c.posXA;
+		int ay = c.posYA;
+		int az = c.posZA;
+		World age = c.world;
+		MachineRegistry m = MachineRegistry.getMachine(age, dx, dy, dz);
+		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+age.getBlock(dx, dy, dz), Side.SERVER);
+		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
+		//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
+		//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, dim == 7);
+		if (m == MachineRegistry.SHAFT) {
+			TileEntityShaft te = (TileEntityShaft)age.getTileEntity(dx, dy, dz);
+			int terx = te.xCoord+te.getReadDirection().offsetX;
+			int tery = te.yCoord+te.getReadDirection().offsetY;
+			int terz = te.zCoord+te.getReadDirection().offsetZ;
+			//ReikaJavaLibrary.pConsole(terx+","+tery+","+terz, Side.SERVER);
+			if (terx == ax && tery == ay && terz == az) {
+				Block tid = MachineRegistry.PORTALSHAFT.getBlock();
+				int tmeta = MachineRegistry.PORTALSHAFT.getMachineMetadata();
+				//ReikaJavaLibrary.pConsole(tid+":"+tmeta);
+				age.setBlockToAir(dx, dy, dz);
+				age.setBlock(dx, dy, dz, tid, tmeta, 3);
+				TileEntityPortalShaft ps = (TileEntityPortalShaft)age.getTileEntity(dx, dy, dz);//new TileEntityPortalShaft();
+				ps.read = te.getReadDirection();
+				ps.setBlockMetadata(te.getBlockMetadata());
+				ps.setPortalType(age, ax, ay, az);
+				ps.material = material;
+				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.TILEDELETE.ordinal(), ps);
+			}
+		}
+		else if (m == MachineRegistry.PORTALSHAFT) {
+			TileEntityPortalShaft te = (TileEntityPortalShaft)age.getTileEntity(dx, dy, dz);
+			int terx = te.xCoord+te.getReadDirection().offsetX;
+			int tery = te.yCoord+te.getReadDirection().offsetY;
+			int terz = te.zCoord+te.getReadDirection().offsetZ;
+			if (terx == ax && tery == ay && terz == az) {
+				te.power = power;
+				te.omega = omega;
+				te.torque = torque;
+			}
+		}
+	}
+
+	private Location getOutputLocation(World world, int x, int y, int z) {
 		//use dimensionmanager to set power
 		int dim = this.getTargetDimID();
 		//ReikaJavaLibrary.pConsole(writex+":"+writey+":"+writez, Side.SERVER);
@@ -145,47 +194,10 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			if (tg == world.provider.dimensionId) {
 				//ReikaJavaLibrary.pConsole(writex+", "+writey+", "+writez+" >> "+Blocks.blocksList[id], Side.SERVER);
 				int[] c2 = this.getScaledCoordinates(x+write.offsetX*2, y+write.offsetY*2, z+write.offsetZ*2, world, age);
-				int dx = c2[0];
-				int dy = c2[1];
-				int dz = c2[2];
-				MachineRegistry m = MachineRegistry.getMachine(age, dx, dy, dz);
-				//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+age.getBlock(dx, dy, dz), Side.SERVER);
-				//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
-				//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
-				//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, dim == 7);
-				if (m == MachineRegistry.SHAFT) {
-					TileEntityShaft te = (TileEntityShaft)age.getTileEntity(dx, dy, dz);
-					int terx = te.xCoord+te.getReadDirection().offsetX;
-					int tery = te.yCoord+te.getReadDirection().offsetY;
-					int terz = te.zCoord+te.getReadDirection().offsetZ;
-					//ReikaJavaLibrary.pConsole(terx+","+tery+","+terz, Side.SERVER);
-					if (terx == ax && tery == ay && terz == az) {
-						Block tid = MachineRegistry.PORTALSHAFT.getBlock();
-						int tmeta = MachineRegistry.PORTALSHAFT.getMachineMetadata();
-						//ReikaJavaLibrary.pConsole(tid+":"+tmeta);
-						age.setBlockToAir(dx, dy, dz);
-						age.setBlock(dx, dy, dz, tid, tmeta, 3);
-						TileEntityPortalShaft ps = (TileEntityPortalShaft)age.getTileEntity(dx, dy, dz);//new TileEntityPortalShaft();
-						ps.read = te.getReadDirection();
-						ps.setBlockMetadata(te.getBlockMetadata());
-						ps.setPortalType(age, ax, ay, az);
-						ps.material = material;
-						ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.TILEDELETE.ordinal(), ps);
-					}
-				}
-				else if (m == MachineRegistry.PORTALSHAFT) {
-					TileEntityPortalShaft te = (TileEntityPortalShaft)age.getTileEntity(dx, dy, dz);
-					int terx = te.xCoord+te.getReadDirection().offsetX;
-					int tery = te.yCoord+te.getReadDirection().offsetY;
-					int terz = te.zCoord+te.getReadDirection().offsetZ;
-					if (terx == ax && tery == ay && terz == az) {
-						te.power = power;
-						te.omega = omega;
-						te.torque = torque;
-					}
-				}
+				return new Location(age, c2[0], c2[1], c2[2], ax, ay, az);
 			}
 		}
+		return null;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int meta) {
@@ -342,6 +354,34 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 		if (read == null)
 			return false;
 		return ReikaBlockHelper.isPortalBlock(worldObj, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ);
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		Location loc = this.getOutputLocation(worldObj, xCoord, yCoord, zCoord);
+		c.add(loc.world.getTileEntity(loc.posX, loc.posY, loc.posZ));
+	}
+
+	private static class Location {
+
+		private final World world;
+		private final int posX;
+		private final int posY;
+		private final int posZ;
+		private final int posXA;
+		private final int posYA;
+		private final int posZA;
+
+		private Location(World world, int x, int y, int z, int xa, int ya, int za) {
+			this.world = world;
+			posX = x;
+			posY = y;
+			posZ = z;
+			posXA = xa;
+			posYA = ya;
+			posZA = za;
+		}
+
 	}
 
 }

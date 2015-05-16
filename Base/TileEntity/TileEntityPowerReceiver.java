@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.Collection;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -23,6 +25,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
@@ -789,5 +792,12 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 		}
 		return pwr;
+	}
+
+	@Override
+	public final void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		if (this instanceof TransmissionReceiver) {
+			((TransmissionReceiver)this).getOutputs(c, dir);
+		}
 	}
 }

@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.Collection;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -525,4 +527,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	public boolean canTransmitPower() {
 		return true;
 	}
+
+	public abstract void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir);
 }

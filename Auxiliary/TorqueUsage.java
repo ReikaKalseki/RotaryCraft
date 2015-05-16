@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
@@ -280,29 +281,21 @@ public class TorqueUsage {
 	}
 
 	public static int recursiveCount(TileEntityIOMachine tile) {
-		return recursiveCount(tile, 0);
+		return recursiveCount(tile, tile.getWriteDirection(), 0);
 	}
 
-	private static int recursiveCount(TileEntityIOMachine tile, int count) {
-		ForgeDirection out1 = tile.canTransmitPower() ? tile.getWriteDirection() : null;
-		ForgeDirection out2 = tile.canTransmitPower() ? tile.getWriteDirection2() : null;
-		count = parseDirection(out1, tile, count);
-		count = parseDirection(out2, tile, count);
-		return count;
-	}
-
-	private static int parseDirection(ForgeDirection dir, TileEntityIOMachine tile, int count) {
-		if (dir != null) {
-			TileEntity o1 = tile.getAdjacentTileEntity(dir);
-			if (o1 instanceof TileEntityIOMachine) {
-				TileEntityIOMachine io = (TileEntityIOMachine)o1;
-				count = recursiveCount(io, count);
+	private static int recursiveCount(TileEntityIOMachine tile, ForgeDirection dir, int count) {
+		Collection<TileEntity> c = new HashSet();
+		tile.getAllOutputs(c, dir.getOpposite());
+		for (TileEntity te : c) {
+			if (te instanceof TileEntityIOMachine) {
+				TileEntityIOMachine io = (TileEntityIOMachine)te;
+				if (io.canTransmitPower()) {
+					count = recursiveCount(io, io.getWriteDirection(), count);
+				}
 			}
-			else if (o1 instanceof PowerAcceptor) {
+			else if (te instanceof PowerAcceptor) {
 				count++;
-			}
-			else {
-
 			}
 		}
 		return count;

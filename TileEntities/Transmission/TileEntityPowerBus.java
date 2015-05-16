@@ -9,11 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Interfaces.BreakAction;
@@ -337,5 +339,11 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	@Override
 	public void breakBlock() {
 		this.removeFromBus();
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		if (dir == read)
+			c.add(this.getAdjacentTileEntity(write));
 	}
 }

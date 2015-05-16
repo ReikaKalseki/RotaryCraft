@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Transmission;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -774,5 +775,13 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	public void onPowerLooped(PowerSourceList pwr) {
 		if (power > 0)
 			this.fail();
+	}
+
+	@Override
+	public final void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		c.add(this.getAdjacentTileEntity(write));
+		if (this.isSplitting()) {
+			c.add(this.getAdjacentTileEntity(write2));
+		}
 	}
 }

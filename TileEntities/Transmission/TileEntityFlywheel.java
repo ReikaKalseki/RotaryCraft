@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.Collection;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -516,5 +518,11 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public void onPowerLooped(PowerSourceList pwr) {
 		omega = torque = 0;
 		power = 0;
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		if (dir == read)
+			c.add(this.getAdjacentTileEntity(write));
 	}
 }

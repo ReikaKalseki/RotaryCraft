@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -316,6 +317,11 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	@Override
 	public int getEmittingZ() {
 		return zCoord+write.offsetZ;
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		c.add(this.getAdjacentTileEntity(write));
 	}
 
 }

@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.Collection;
+
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
@@ -18,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -818,5 +821,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	public boolean isBroken() {
 		return false;
+	}
+
+	@Override
+	public final void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		c.add(this.getAdjacentTileEntity(write));
 	}
 }

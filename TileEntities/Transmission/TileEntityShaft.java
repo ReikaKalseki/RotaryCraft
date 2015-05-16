@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.Collection;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -622,5 +624,20 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 		else
 			return super.getPowerSources(io, caller);
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		if (this.isCross()) {
+			if (dir == read) {
+				c.add(this.getAdjacentTileEntity(write));
+			}
+			else if (dir == read2) {
+				c.add(this.getAdjacentTileEntity(write2));
+			}
+		}
+		else {
+			super.getAllOutputs(c, dir);
+		}
 	}
 }

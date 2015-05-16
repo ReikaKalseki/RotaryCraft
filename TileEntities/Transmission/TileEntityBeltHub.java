@@ -9,9 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -461,6 +464,16 @@ Connectable, BreakAction {
 				ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, this.getBeltItem());
 			}
 			this.resetOther();
+		}
+	}
+
+	@Override
+	public final void getOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		TileEntity te = worldObj.getTileEntity(target[0], target[1], target[2]);
+		if (te instanceof TileEntityBeltHub) {
+			TileEntityBeltHub belt = (TileEntityBeltHub)te;
+			c.add(belt.getAdjacentTileEntity(belt.write));
+			c.add(belt.getAdjacentTileEntity(belt.write2));
 		}
 	}
 }

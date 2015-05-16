@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.Collection;
+
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
@@ -82,4 +85,11 @@ public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMach
 			return new PowerSourceList();
 		return PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		if (dir == read)
+			c.add(this.getAdjacentTileEntity(write));
+	}
+
 }

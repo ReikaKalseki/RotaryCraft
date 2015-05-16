@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -541,6 +543,12 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	public final void setTemperature(int temp) {
 
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		if (dir == read)
+			c.add(this.getAdjacentTileEntity(write));
 	}
 
 }

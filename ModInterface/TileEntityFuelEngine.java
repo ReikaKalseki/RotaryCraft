@@ -9,9 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import java.util.Collection;
+
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -412,6 +415,11 @@ TemperatureTE {
 
 	public void setTemperature(int temp) {
 		temperature = temp;
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		c.add(this.getAdjacentTileEntity(write));
 	}
 
 }
