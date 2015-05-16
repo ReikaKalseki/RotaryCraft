@@ -306,7 +306,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		updateticks = 0;
 		ticks++;
 		if (torquein >= this.getMinTorque()) {
-			int count2 = TorqueUsage.recursiveCount(world, this, 0);
+			int count2 = TorqueUsage.recursiveCount(world, this);
 			if (count != count2) {
 				count = count2;
 				oppTorque = TorqueUsage.getTorque(this);
@@ -375,7 +375,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 				tickcount = 0;
 			}
 			else { //same as before, but without input
-				int count2 = TorqueUsage.recursiveCount(world, this, 0);
+				int count2 = TorqueUsage.recursiveCount(world, this);
 				if (count != count2) {
 					count = count2;
 					oppTorque = TorqueUsage.getTorque(this);

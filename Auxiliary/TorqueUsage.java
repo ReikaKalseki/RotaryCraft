@@ -279,8 +279,11 @@ public class TorqueUsage {
 		return isPoweredFrom;
 	}
 
+	public static int recursiveCount(World world, TileEntityIOMachine tile) {
+		return recursiveCount(world, tile, 0);
+	}
 
-	public static int recursiveCount(World world, TileEntity tile, int count) {
+	private static int recursiveCount(World world, TileEntity tile, int count) {
 		count++;
 		if (tile instanceof TileEntitySplitter) {
 			TileEntitySplitter spl = (TileEntitySplitter)tile;
@@ -344,10 +347,15 @@ public class TorqueUsage {
 				}
 			}
 		}
-		else {
+		else if (tile instanceof TileEntityIOMachine) {
 			TileEntity di = ((TileEntityIOMachine) tile).getOutput();
 			if (di instanceof TileEntityIOMachine) {
 				if (((TileEntityIOMachine) di).getInput() == tile) {
+					count = recursiveCount(world, di, count);
+				}
+			}
+			if (di instanceof PowerAcceptor) {
+				if (((PowerAcceptor) di).isReceiving() && (((PowerAcceptor) di).canReadFrom(((TileEntityIOMachine)tile).getWriteDirection().getOpposite()) || ((PowerAcceptor) di).canReadFrom(((TileEntityIOMachine)tile).getWriteDirection2().getOpposite()))) {
 					count = recursiveCount(world, di, count);
 				}
 			}
