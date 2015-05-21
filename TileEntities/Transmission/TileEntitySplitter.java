@@ -389,8 +389,10 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				}
 			}
 
+			boolean overload = false;
 			if (!this.canCombine(in1, in2, torquein, torquein2)) {
 				overloadTick++;
+				overload = true;
 				if (overloadTick > 20) {
 					this.fail();
 					overloadTick = 0;
@@ -415,6 +417,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
 				}
 			}
+			if (!overload)
+				overloadTick = 0;
 			this.basicPowerReceiver();
 		}
 		else {

@@ -15,6 +15,7 @@ import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -297,8 +298,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	protected abstract void playSounds(World world, int x, int y, int z, float pitchMultiplier, float vol);
 
 	protected final boolean isMuffled(World world, int x, int y, int z) {
-		if (world.getBlock(x, y+1, z) == Blocks.wool || this.getMachine(ForgeDirection.UP) == MachineRegistry.ECU) {
-			if (world.getBlock(x, y-1, z) == Blocks.wool || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
+		if (ReikaWorldHelper.getMaterial(world, x, y+1, z) == Material.cloth || this.getMachine(ForgeDirection.UP) == MachineRegistry.ECU) {
+			if (ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.cloth || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
 				return true;
 		}
 		for (int i = 0; i < 6; i++) {
@@ -309,7 +310,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 				int dz = z+dir.offsetZ;
 				if ((dir != write.getOpposite() && dir != write) || dir == ForgeDirection.UP) {
 					Block b = world.getBlock(dx, dy, dz);
-					if (b != Blocks.wool)
+					if (b.getMaterial() != Material.cloth)
 						return false;
 				}
 			}

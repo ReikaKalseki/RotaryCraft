@@ -241,7 +241,7 @@ public class RotaryAux {
 		int x = te.xCoord;
 		int y = te.yCoord;
 		int z = te.zCoord;
-		if (world.getBlock(x, y+1, z) == Blocks.wool && world.getBlock(x, y-1, z) == Blocks.wool) {
+		if (ReikaWorldHelper.getMaterial(world, x, y+1, z) == Material.cloth && ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.cloth) {
 			return true;
 		}
 		return false;
