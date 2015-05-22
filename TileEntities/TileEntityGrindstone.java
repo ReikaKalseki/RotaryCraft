@@ -23,13 +23,13 @@ import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver implements DiscreteFunction, ConditionalOperation, OneSlotMachine {
+public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver implements MultiOperational, ConditionalOperation, OneSlotMachine {
 
 	private static final String NBT_TAG = "repairs";
 	private int soundtick;
@@ -59,6 +59,12 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 		if (world.isRemote)
 			return;
 
+		int n = this.getNumberConsecutiveOperations();
+		for (int i = 0; i < n; i++)
+			this.doOperation(n > 1);
+	}
+
+	private void doOperation(boolean multiple) {
 		if (tank.isEmpty())
 			return;
 
@@ -184,6 +190,11 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.GRINDSTONE.getOperationTime(omega);
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.GRINDSTONE.getNumberOperations(omega);
 	}
 
 }

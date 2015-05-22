@@ -26,7 +26,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -35,7 +35,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
+public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, MultiOperational, ConditionalOperation {
 
 	public int mixTime;
 
@@ -73,7 +73,14 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		if (power < MINPOWER || omega < MINSPEED || water.isEmpty() || lava.isEmpty())
 			return;
 		this.testIdle();
-		if (tickcount >= this.getOperationTime()) {
+
+		int n = this.getNumberConsecutiveOperations();
+		for (int i = 0; i < n; i++)
+			this.doOperation(n > 1);
+	}
+
+	private void doOperation(boolean multiple) {
+		if (multiple || tickcount >= this.getOperationTime()) {
 			tickcount = 0;
 			this.mix();
 		}
@@ -338,6 +345,11 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.OBSIDIAN.getOperationTime(omega);
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.OBSIDIAN.getNumberOperations(omega);
 	}
 
 	@Override

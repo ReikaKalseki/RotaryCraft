@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -276,7 +277,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		String name = ep.getCommandSenderName();
 		if (name == null)
 			return true;
-		if (name.equals("Reika_Kalseki")) //If you try...
+		if (ReikaPlayerAPI.isReika(ep)) //If you try...
 			return true;
 		if (this.getPlacer() == null)
 			return safePlayers.contains(name);
@@ -291,6 +292,10 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 
 	public int getOperationTime() {
 		return 20;
+	}
+
+	public final int getNumberConsecutiveOperations() {
+		return 1;
 	}
 
 	@Override

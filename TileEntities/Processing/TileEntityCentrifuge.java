@@ -26,7 +26,7 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -36,7 +36,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCentrifuge extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation, IFluidHandler, PipeConnector {
+public class TileEntityCentrifuge extends InventoriedPowerReceiver implements MultiOperational, ConditionalOperation, IFluidHandler, PipeConnector {
 
 	private int progressTime;
 	public static final int CAPACITY = 10000;
@@ -67,32 +67,38 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 		this.getPowerBelow();
 
 		if (power >= MINPOWER && omega >= MINSPEED) {
-			ItemStack in = inv[0];
-			if (in != null && RecipesCentrifuge.recipes().isCentrifugable(in)) {
-				progressTime++;
+			int n = this.getNumberConsecutiveOperations();
+			for (int i = 0; i < n; i++)
+				this.doOperation(n > 1);
+		}
+		else {
+			progressTime = 0;
+		}
+	}
 
-				if (progressTime >= this.getOperationTime()) {
-					ChancedOutputList out = RecipesCentrifuge.recipes().getRecipeResult(in);
-					Collection<ItemStack> items = out.keySet();
-					if (this.canMakeAllOf(items)) {
-						FluidStack fs = RecipesCentrifuge.recipes().getFluidResult(in);
-						if (fs == null || tank.canTakeIn(fs)) {
-							for (ItemStack is : items) {
-								//ReikaInventoryHelper.addOrSetStack(out.get(i).copy(), inv, i+1);
-								double ch = out.getItemChance(is);
-								if (ReikaRandomHelper.doWithChance(ch)) {
-									ReikaInventoryHelper.addToIInv(is, this, true, 1, this.getSizeInventory());
-								}
+	private void doOperation(boolean multiple) {
+		ItemStack in = inv[0];
+		if (in != null && RecipesCentrifuge.recipes().isCentrifugable(in)) {
+			progressTime++;
+
+			if (multiple || progressTime >= this.getOperationTime()) {
+				ChancedOutputList out = RecipesCentrifuge.recipes().getRecipeResult(in);
+				Collection<ItemStack> items = out.keySet();
+				if (this.canMakeAllOf(items)) {
+					FluidStack fs = RecipesCentrifuge.recipes().getFluidResult(in);
+					if (fs == null || tank.canTakeIn(fs)) {
+						for (ItemStack is : items) {
+							//ReikaInventoryHelper.addOrSetStack(out.get(i).copy(), inv, i+1);
+							double ch = out.getItemChance(is);
+							if (ReikaRandomHelper.doWithChance(ch)) {
+								ReikaInventoryHelper.addToIInv(is, this, true, 1, this.getSizeInventory());
 							}
-							if (fs != null)
-								tank.addLiquid(fs.amount, fs.getFluid());
-							ReikaInventoryHelper.decrStack(0, inv);
 						}
+						if (fs != null)
+							tank.addLiquid(fs.amount, fs.getFluid());
+						ReikaInventoryHelper.decrStack(0, inv);
 					}
-					progressTime = 0;
 				}
-			}
-			else {
 				progressTime = 0;
 			}
 		}
@@ -156,6 +162,11 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Di
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.CENTRIFUGE.getOperationTime(omega);
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.CENTRIFUGE.getNumberOperations(omega);
 	}
 
 	@Override

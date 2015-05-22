@@ -23,7 +23,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MulchMaterials;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -31,7 +31,7 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation
+public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ConditionalOperation
 {
 
 	/** The number of ticks that the current item has been cooking for */
@@ -114,11 +114,22 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
 		this.getPower(false);
-		ItemStack product = this.getRecipe();
+
 		if (temperaturetick >= 20) {
 			temperaturetick = 0;
 			this.updateTemperature(world, x, y, z, meta);
 		}
+
+		if (power < MINPOWER || omega < MINSPEED)
+			return;
+
+		int n = this.getNumberConsecutiveOperations();
+		for (int i = 0; i < n; i++)
+			this.doOperation(n > 1);
+	}
+
+	private void doOperation(boolean multiple) {
+		ItemStack product = this.getRecipe();
 
 		if (tickcount >= 2+rand.nextInt(18)) {
 			this.testYeastKill();
@@ -132,6 +143,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		}
 		if (product.getItem() != ItemRegistry.YEAST.getItemInstance() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
 			return;
+
+		/*
 		boolean red = world.isBlockIndirectlyGettingPowered(x, y, z);
 		if (red) {
 			if (product.getItem() == ItemRegistry.YEAST.getItemInstance()) {
@@ -143,6 +156,8 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				//return;
 			}
 		}
+		 */
+
 		if (inv[2] != null) {
 			if (product.getItem() != inv[2].getItem()) {
 				fermenterCookTime = 0;
@@ -150,8 +165,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			}
 		}
 		idle = false;
-		if (power < MINPOWER || omega < MINSPEED)
-			return;
 		if (inv[2] != null) {
 			if (inv[2].stackSize >= inv[2].getMaxStackSize()) {
 				fermenterCookTime = 0;
@@ -159,11 +172,10 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			}
 		}
 		fermenterCookTime++;
-		if (fermenterCookTime >= this.getOperationTime()) {
+		if (multiple || fermenterCookTime >= this.getOperationTime()) {
 			this.make(product);
 			fermenterCookTime = 0;
 		}
-
 	}
 
 	private boolean canMake() {
@@ -391,6 +403,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public int getOperationTime() {
 		int base = DurationRegistry.FERMENTER.getOperationTime(omega);
 		return Math.max(1, (int)(base/this.getFermentRate()));
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return (int)Math.max(1, this.getFermentRate()*DurationRegistry.FERMENTER.getNumberOperations(omega));
 	}
 
 	@Override

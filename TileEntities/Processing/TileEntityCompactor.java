@@ -26,7 +26,7 @@ import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
@@ -37,8 +37,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, ThermalMachine,
-DiscreteFunction,ConditionalOperation
-{
+MultiOperational, ConditionalOperation {
 
 	/** The number of ticks that the current item has been cooking for */
 	public int compactorCookTime;
@@ -323,24 +322,29 @@ DiscreteFunction,ConditionalOperation
 		envirotick++;
 		tickcount++;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
-		if (!world.isRemote)
-		{
-			if (this.canSmelt())
-				flag1 = true;
-			if (this.canSmelt()) {
-				compactorCookTime++;
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
-				if (compactorCookTime >= this.getOperationTime()) {
-					compactorCookTime = 0;
-					this.smeltItem();
-					flag1 = true;
-				}
-			}
-			else
-				compactorCookTime = 0;
+		if (!world.isRemote) {
+			int n = this.getNumberConsecutiveOperations();
+			for (int i = 0; i < n; i++)
+				flag1 |= this.doOperation(n > 1);
 		}
 		if (flag1)
 			this.markDirty();
+	}
+
+	private boolean doOperation(boolean multiple) {
+		if (this.canSmelt()) {
+			compactorCookTime++;
+			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
+			if (compactorCookTime >= this.getOperationTime()) {
+				compactorCookTime = 0;
+				this.smeltItem();
+			}
+			return true;
+		}
+		else {
+			compactorCookTime = 0;
+			return false;
+		}
 	}
 
 	/**
@@ -498,6 +502,11 @@ DiscreteFunction,ConditionalOperation
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.COMPACTOR.getOperationTime(omega, this.getStage()-1);
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.COMPACTOR.getNumberOperations(omega, this.getStage()-1);
 	}
 
 	@Override

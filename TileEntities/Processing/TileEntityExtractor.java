@@ -226,25 +226,34 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		boolean[] tickPer = new boolean[4];
 		for (int i = 0; i < 4; i++) {
 			boolean flag1 = false;
-			if (this.canProcess(i)) {
-				flag1 = true;
-				extractorCookTime[i]++;
-				int time = this.getOperationTime(i);
-				if (time <= 1)
-					tickPer[i] = true;
-				if (extractorCookTime[i] >= time) {
-					extractorCookTime[i] = 0;
-					this.processItem(i);
-					flag1 = true;
-				}
-			}
-			else
-				extractorCookTime[i] = 0;
+
+			int n = this.getNumberConsecutiveOperations(i);
+			for (int k = 0; k < n; k++)
+				flag1 |= this.doOperation(n > 1, i, tickPer);
+
 			if (flag1)
 				this.markDirty();
 		}
 		if (ReikaArrayHelper.isAllTrue(tickPer))
 			RotaryAchievements.INSANITY.triggerAchievement(this.getPlacer());
+	}
+
+	private boolean doOperation(boolean multiple, int i, boolean[] tickPer) {
+		if (this.canProcess(i)) {
+			extractorCookTime[i]++;
+			int time = this.getOperationTime(i);
+			if (time <= 1)
+				tickPer[i] = true;
+			if (extractorCookTime[i] >= time) {
+				extractorCookTime[i] = 0;
+				this.processItem(i);
+			}
+			return true;
+		}
+		else {
+			extractorCookTime[i] = 0;
+			return false;
+		}
 	}
 
 	private boolean canProcess(int i) {
@@ -473,6 +482,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	public int getOperationTime(int stage) {
 		return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage);
+	}
+
+	public int getNumberConsecutiveOperations(int stage) {
+		return DurationRegistry.EXTRACTOR.getNumberOperations(omega, stage);
 	}
 
 	@Override

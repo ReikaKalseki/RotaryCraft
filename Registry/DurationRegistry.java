@@ -9,8 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import Reika.DragonAPI.Instantiable.Formula.LogarithmExpression;
 import Reika.DragonAPI.Instantiable.Formula.MathExpression;
+import Reika.RotaryCraft.Auxiliary.DurationFormula;
+import Reika.RotaryCraft.Auxiliary.Interfaces.OverrunExpression;
 
 public enum DurationRegistry {
 
@@ -36,45 +37,36 @@ public enum DurationRegistry {
 	RAM(MachineRegistry.LINEBUILDER,			40, 2),
 	CENTRIFUGE(MachineRegistry.CENTRIFUGE,		1200, 60);
 
-	private final MathExpression formula;
-	private final boolean hasMultiple;
 	private final MachineRegistry machine;
-
 	private final MathExpression[] exps;
 
 	public static final DurationRegistry[] durationList = values();
 
 	/** Shorthand for the most common equation */
 	private DurationRegistry(MachineRegistry m, int a, int b) {
-		this(m, new LogarithmExpression(a, -b, 2));
+		this(m, new DurationFormula(a, b));
 	}
 
 	private DurationRegistry(MachineRegistry m, MathExpression e) {
-		formula = e;
-		hasMultiple = false;
-		exps = null;
+		exps = new MathExpression[]{e};
 		machine = m;
 	}
 
 	/** Linear stage-scale */
 	private DurationRegistry(MachineRegistry m, int a, int b, int numStages) {
 		exps = new MathExpression[numStages];
-		hasMultiple = true;
 		for (int i = 0; i < exps.length; i++) {
-			exps[i] = new LogarithmExpression(a*(i+1), -b*(i+1), 2);
+			exps[i] = new DurationFormula(a*(i+1), b*(i+1));
 		}
-		formula = exps[0];
 		machine = m;
 	}
 
 	/** 4-stage */
 	private DurationRegistry(MachineRegistry m, int b1, int s1, int b2, int s2, int b3, int s3, int b4, int s4) {
-		this(m, new LogarithmExpression(b1, -s1, 2), new LogarithmExpression(b2, -s2, 2), new LogarithmExpression(b3, -s3, 2), new LogarithmExpression(b4, -s4, 2));
+		this(m, new DurationFormula(b1, s1), new DurationFormula(b2, s2), new DurationFormula(b3, s3), new DurationFormula(b4, s4));
 	}
 
 	private DurationRegistry(MachineRegistry m, MathExpression... es) {
-		hasMultiple = true;
-		formula = es[0];
 		exps = es;
 		machine = m;
 	}
@@ -87,14 +79,11 @@ public enum DurationRegistry {
 	public int getOperationTime(int omega, int stage) {
 		omega = Math.max(0, omega);
 		try {
-			if (hasMultiple)
-				return (int)Math.max(1, exps[stage].evaluate(omega));
-			else
-				return (int)Math.max(1, formula.evaluate(omega));
+			return (int)Math.max(1, exps[stage].evaluate(omega));
 		}
 		catch (ArithmeticException e) {
 			e.printStackTrace();
-			return (int)Math.max(1, formula.getBaseValue());
+			return (int)Math.max(1, exps[0].getBaseValue());
 		}
 	}
 
@@ -106,10 +95,25 @@ public enum DurationRegistry {
 		return this.getOperationTime(omega, stage)/20D;
 	}
 
+	public int getNumberOperations(int omega) {
+		return this.getNumberOperations(omega, 0);
+	}
+
+	public int getNumberOperations(int omega, int stage) {
+		MathExpression exp = exps[stage];
+		if (exp instanceof OverrunExpression) {
+			OverrunExpression o = (OverrunExpression)exp;
+			return 1+o.getOverrun(omega);
+		}
+		else {
+			return 1;
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		if (hasMultiple) {
+		if (exps.length > 1) {
 			for (int i = 0; i < exps.length; i++) {
 				sb.append("Stage "+(i+1)+" Time = ");
 				sb.append(exps[i].toString());
@@ -119,21 +123,21 @@ public enum DurationRegistry {
 		}
 		else {
 			sb.append("Time = ");
-			sb.append(formula.toString());
+			sb.append(exps[0].toString());
 		}
 		return sb.toString();
 	}
 
 	public int getNumberStages() {
-		return hasMultiple ? exps.length : 1;
+		return exps.length;
 	}
 
 	public String getDisplayTime(int stage) {
-		if (hasMultiple) {
+		if (exps.length > 1) {
 			return "Stage "+(stage+1)+" Time = "+exps[stage].toString();
 		}
 		else {
-			return "Time = "+formula.toString();
+			return "Time = "+exps[0].toString();
 		}
 	}
 

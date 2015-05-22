@@ -76,6 +76,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -966,6 +967,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			int ticks = ((DiscreteFunction)te).getOperationTime();
 			float sec = Math.max(0.05F, ticks/20F);
 			currenttip.add(String.format("Operation Time: %.2fs", sec));
+			if (te instanceof MultiOperational) {
+				int num = ((MultiOperational)te).getNumberConsecutiveOperations();
+				currenttip.add(String.format("%d Operations Per Tick", num));
+			}
 		}
 		if (te instanceof TileEntityPiping) {
 			TileEntityPiping tp = (TileEntityPiping)te;

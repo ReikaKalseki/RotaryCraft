@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
@@ -27,7 +27,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements DiscreteFunction, ConditionalOperation {
+public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements MultiOperational, ConditionalOperation {
 
 	public int mixTime;
 	public int storeTime;
@@ -98,10 +98,17 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		}
 		this.testIdle();
 		//int operationtime = ReikaMathLibrary.extrema(BASETIME-this.omega, MINTIME, "max");
+
+		int n = this.getNumberConsecutiveOperations();
+		for (int i = 0; i < n; i++)
+			this.doOperation(n > 1);
+	}
+
+	private void doOperation(boolean multiple) {
 		if (this.process()) {
 			mixTime++;
 			//ReikaChatHelper.writeInt(this.operationTime(this.omega, 0));
-			if (mixTime >= this.getOperationTime()) {
+			if (multiple || mixTime >= this.getOperationTime()) {
 				mixTime = 0;
 				this.make();
 			}
@@ -111,7 +118,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		}
 	}
 
-	public void make() {
+	private void make() {
 		RotaryAchievements.JETFUEL.triggerAchievement(this.getPlacer());
 		for (int i = 0; i < ingredients.length; i++) {
 			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
@@ -225,6 +232,11 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.FRACTIONATOR.getOperationTime(omega);
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.FRACTIONATOR.getNumberOperations(omega);
 	}
 
 	@Override

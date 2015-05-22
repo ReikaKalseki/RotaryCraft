@@ -25,7 +25,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -34,7 +34,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, DiscreteFunction, ConditionalOperation {
+public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ConditionalOperation {
 
 	private StepTimer timer = new StepTimer(400);
 	private StepTimer tempTimer = new StepTimer(20);
@@ -63,20 +63,9 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 			this.updateTemperature(world, x, y, z, meta);
 
 		if (!worldObj.isRemote) {
-			if (!tank.isEmpty()) {
-				ItemStack toMake = RecipesCrystallizer.getRecipes().getFreezingResult(tank.getFluid());
-				//ReikaJavaLibrary.pConsole(timer.getTick()+"/"+timer.getCap()+":"+toMake);
-				if (this.canOperate(toMake)) {
-					timer.update();
-					if (timer.checkCap()) {
-						this.make(toMake);
-					}
-				}
-				else
-					timer.reset();
-			}
-			else
-				timer.reset();
+			int n = this.getNumberConsecutiveOperations();
+			for (int i = 0; i < n; i++)
+				this.doOperation(n > 1);
 
 			freezeTick = timer.getTick();
 		}
@@ -86,6 +75,23 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 			if (sound.checkCap())
 				SoundRegistry.FAN.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.1F : 0.4F, 0.6F);
 		}
+	}
+
+	private void doOperation(boolean multiple) {
+		if (!tank.isEmpty()) {
+			ItemStack toMake = RecipesCrystallizer.getRecipes().getFreezingResult(tank.getFluid());
+			//ReikaJavaLibrary.pConsole(timer.getTick()+"/"+timer.getCap()+":"+toMake);
+			if (this.canOperate(toMake)) {
+				timer.update();
+				if (multiple || timer.checkCap()) {
+					this.make(toMake);
+				}
+			}
+			else
+				timer.reset();
+		}
+		else
+			timer.reset();
 	}
 
 	private void make(ItemStack toMake) {
@@ -241,6 +247,11 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.CRYSTALLIZER.getOperationTime(Math.max(0, omega-MINSPEED));
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.CRYSTALLIZER.getNumberOperations(Math.max(0, omega-MINSPEED));
 	}
 
 	@Override

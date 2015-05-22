@@ -32,7 +32,7 @@ import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -42,7 +42,7 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction,
+public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, MultiOperational,
 ConditionalOperation, DamagingContact {
 
 	public int grinderCookTime;
@@ -170,17 +170,11 @@ ConditionalOperation, DamagingContact {
 			grinderCookTime = 0;
 			return;
 		}
-		if (this.canGrind()) {
-			grinderCookTime++;
-			if (grinderCookTime >= this.getOperationTime()) {
-				grinderCookTime = 0;
-				tickcount = 0;
-				this.grind();
-				flag1 = true;
-			}
-		}
-		else
-			grinderCookTime = 0;
+
+		int n = this.getNumberConsecutiveOperations();
+		for (int i = 0; i < n; i++)
+			flag1 |= this.doOperation(n > 1);
+
 		if (flag1)
 			this.markDirty();
 		if (inv[2] != null && tank.getLevel() >= 1000 && !world.isRemote) {
@@ -188,6 +182,22 @@ ConditionalOperation, DamagingContact {
 				inv[2] = ItemStacks.lubebucket.copy();
 				tank.removeLiquid(1000);
 			}
+		}
+	}
+
+	private boolean doOperation(boolean multiple) {
+		if (this.canGrind()) {
+			grinderCookTime++;
+			if (multiple || grinderCookTime >= this.getOperationTime()) {
+				grinderCookTime = 0;
+				tickcount = 0;
+				this.grind();
+			}
+			return true;
+		}
+		else {
+			grinderCookTime = 0;
+			return false;
 		}
 	}
 
@@ -352,6 +362,11 @@ ConditionalOperation, DamagingContact {
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.GRINDER.getOperationTime(omega);
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.GRINDER.getNumberOperations(omega);
 	}
 
 	@Override

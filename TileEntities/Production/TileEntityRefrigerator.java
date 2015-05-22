@@ -20,13 +20,13 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements DiscreteFunction {
+public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements MultiOperational {
 
 	public int time;
 	private StepTimer timer = new StepTimer(20);
@@ -38,23 +38,36 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		timer.setCap(this.getOperationTime());
+
 		if (this.canProgress()) {
-			timer.update();
 			soundTimer.update();
-			if (timer.checkCap()) {
-				if (!world.isRemote)
-					this.cycle();
-			}
 			if (soundTimer.checkCap()) {
 				SoundRegistry.FRIDGE.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.25F : 1, 0.88F);
 			}
 		}
 		else {
-			timer.reset();
 			soundTimer.reset();
 		}
+
+		int n = this.getNumberConsecutiveOperations();
+		for (int i = 0; i < n; i++)
+			this.doOperation(n > 1);
+
 		if (!world.isRemote)
 			time = timer.getTick();
+	}
+
+	private void doOperation(boolean multiple) {
+		if (this.canProgress()) {
+			timer.update();
+			if (multiple || timer.checkCap()) {
+				if (!worldObj.isRemote)
+					this.cycle();
+			}
+		}
+		else {
+			timer.reset();
+		}
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -158,6 +171,11 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	@Override
 	public int getOperationTime() {
 		return DurationRegistry.REFRIGERATOR.getOperationTime(omega);
+	}
+
+	@Override
+	public int getNumberConsecutiveOperations() {
+		return DurationRegistry.REFRIGERATOR.getNumberOperations(omega);
 	}
 
 	@Override
