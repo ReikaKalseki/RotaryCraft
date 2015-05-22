@@ -76,10 +76,6 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4, "max");
 	}
 
-	public final int getNumberConsecutiveOperations() {
-		return 1;
-	}
-
 	private void fire(World world, int x, int y, int z, int meta, List<EntityLivingBase> li) {
 		double vx = 0;
 		double vz = 0;

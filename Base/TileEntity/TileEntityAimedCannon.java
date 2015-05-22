@@ -294,10 +294,6 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		return 20;
 	}
 
-	public final int getNumberConsecutiveOperations() {
-		return 1;
-	}
-
 	@Override
 	public boolean areConditionsMet() {
 		return this.hasAmmo();
