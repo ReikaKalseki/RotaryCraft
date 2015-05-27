@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -96,7 +97,10 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			boolean drop = false;
 			boolean flag = false;
 			if (b != null) {
-				if (b instanceof IShearable) {
+				if (b instanceof BlockTieredResource) {
+
+				}
+				else if (b instanceof IShearable) {
 					drop = true;
 					flag = true;
 				}

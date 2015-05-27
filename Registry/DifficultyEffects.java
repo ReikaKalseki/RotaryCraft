@@ -32,7 +32,7 @@ public enum DifficultyEffects {
 	CANOLA(new int[]{128,280}, new int[]{64,160}, new int[]{8,64}),
 	RAILGUNCRAFT(16, 8, 2),
 	LUBEUSAGE(0.25F, 1F, 2.5F),
-	JETINGESTFAIL(0.05, 0.2, 0.5),
+	JETINGESTFAIL(0.05F, 0.2F, 0.5F),
 	FRACTIONTEAR(0F, 0F, 0.05F);
 
 	private boolean isChance = false;

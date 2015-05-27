@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -31,11 +33,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import thaumcraft.common.entities.monster.EntityWisp;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Rendering.EntityLiquidParticleFX;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -58,6 +64,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine, UpgradeableMachine {
 
@@ -430,7 +437,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			FOD--;
 	}
 
-	public void jetEngineDetonation(World world, int x, int y, int z, int meta) {
+	private void jetEngineDetonation(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB zone = this.getFlameZone(world, x, y, z, meta);
 		List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);
 		for (EntityLivingBase e : in) {
@@ -649,6 +656,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	protected void affectSurroundings(World world, int x, int y, int z, int meta) {
 		this.checkJetFailure(world, x, y, z, meta);
 		this.ingest(world, x, y, z, meta);
+		this.fluidIngest(world, x, y, z);
 		this.heatJet(world, x, y, z, meta);
 		//ReikaJavaLibrary.pConsole(lastpower+":"+power, Side.SERVER);
 		if (lastpower == 0) {
@@ -656,6 +664,56 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		}
 		this.spawnSmokeParticles(world, x, y, z, meta);
 		jetstarttimer.update();
+		this.doAfterburning(world, x, y, z);
+	}
+
+	private void fluidIngest(World world, int x, int y, int z) {
+		int dx = x+write.getOpposite().offsetX;
+		int dz = z+write.getOpposite().offsetZ;
+		Block b = world.getBlock(dx, y, dz);
+		Fluid f = FluidRegistry.lookupFluidForBlock(b);
+		if (f != null) {
+
+			if (worldObj.isRemote) {
+				this.fluidIngestParticles(world, x, y, z, f);
+			}
+			else {
+				int temp = f.getTemperature(world, dx, y, dz);
+				if (f.getName().toLowerCase().contains("fuel")) {
+					if (!isJetFailing && rand.nextInt(200) == 0) {
+						temperature = 900;
+						isJetFailing = true;
+						this.jetEngineDetonation(world, x, y, z, this.getBlockMetadata());
+					}
+				}
+				else if (temp >= 500) {
+					if (temp >= 2000 || rand.nextInt(1+(2000-temp)/500) == 0) {
+						if (FOD < 8 && world.getTotalWorldTime()%20 == 0 && rand.nextInt(1+2*FOD) == 0) {
+							this.damageEngine();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void fluidIngestParticles(World world, int x, int y, int z, Fluid f) {
+		int n = 1+rand.nextInt(8);
+		for (int i = 0; i < n; i++) {
+			double vx = (x-backx)/4D;
+			double vy = ReikaRandomHelper.getRandomPlusMinus(0, 0.0625);
+			double vz = (z-backz)/4D;
+
+			vx = ReikaRandomHelper.getRandomPlusMinus(vx, 0.0625);
+			vz = ReikaRandomHelper.getRandomPlusMinus(vz, 0.0625);
+			EntityFX fx = new EntityLiquidParticleFX(world, x+0.5+write.offsetX*0.25, y+0.5, z+0.5+write.offsetZ*0.25, vx, vy, vz, f);
+			fx.noClip = true;
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		}
+	}
+
+	private void doAfterburning(World world, int x, int y, int z) {
 		if (this.isAfterburning()) {
 			this.afterBurnParticles(world, x, y, z);
 			if (this.getTicksExisted()%40 == 0) {
