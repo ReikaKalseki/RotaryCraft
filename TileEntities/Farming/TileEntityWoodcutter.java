@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -172,30 +173,30 @@ ConditionalOperation, DamagingContact {
 			return;
 		}
 
-		int[] xyz = tree.getNextAndMoveOn();
-		Block drop = world.getBlock(xyz[0], xyz[1], xyz[2]);
-		int dropmeta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+		Coordinate c = tree.getNextAndMoveOn();
+		Block drop = c.getBlock(world);
+		int dropmeta = worldc.getBlockMetadata();
 
 		if (drop != Blocks.air) {
-			Material mat = ReikaWorldHelper.getMaterial(world, xyz[0], xyz[1], xyz[2]);
+			Material mat = ReikaWorldHelper.getMaterial(world, c.xCoord, c.yCoord, c.zCoord);
 			if (ConfigRegistry.INSTACUT.getState()) {
-				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
-				this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
-				world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
+				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
+				this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
+				c.setBlock(world, Blocks.air);
 				if (mat == Material.leaves)
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
 				else
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
 
-				if (xyz[1] == edity) {
-					Block idbelow = world.getBlock(xyz[0], xyz[1]-1, xyz[2]);
+				if (c.yCoord == edity) {
+					Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 					Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
-					if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
+					if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
 						ItemStack plant = this.getPlantedSapling();
 						if (plant != null) {
 							if (inv[0] != null)
 								ReikaInventoryHelper.decrStack(0, inv);
-							ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
+							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 						}
 					}
 					else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
@@ -203,44 +204,44 @@ ConditionalOperation, DamagingContact {
 						if (plant != null) {
 							if (inv[0] != null)
 								ReikaInventoryHelper.decrStack(0, inv);
-							world.setBlock(xyz[0], xyz[1]-1, xyz[2], Blocks.dirt);
-							ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
+							world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
+							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 						}
 					}
 				}
 			}
 			else {
-				boolean fall = BlockSand.func_149831_e(world, xyz[0], xyz[1]-1, xyz[2]);
+				boolean fall = BlockSand.func_149831_e(world, c.xCoord, c.yCoord-1, c.zCoord);
 				if (fall) {
-					EntityFallingBlock e = new EntityFallingBlock(world, xyz[0]+0.5, xyz[1]+0.65, xyz[2]+0.5, drop, dropmeta);
+					EntityFallingBlock e = new EntityFallingBlock(world, c.xCoord+0.5, c.yCoord+0.65, c.zCoord+0.5, drop, dropmeta);
 					e.field_145812_b = -2000;
 					e.field_145813_c = false;
 					if (!world.isRemote) {
 						world.spawnEntityInWorld(e);
 					}
-					world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
+					c.setBlock(world, Blocks.air);
 				}
 				else {
 
-					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, xyz[0], xyz[1], xyz[2], dropmeta, 0));
-					this.dropBlocks(world, xyz[0], xyz[1], xyz[2]);
-					world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
-					ReikaSoundHelper.playBreakSound(world, xyz[0], xyz[1], xyz[2], Blocks.log);
+					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
+					this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
+					c.setBlock(world, Blocks.air);
+					ReikaSoundHelper.playBreakSound(world, c.xCoord, c.yCoord, c.zCoord, Blocks.log);
 
 					if (mat == Material.leaves)
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
 					else
 						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
 
-					if (xyz[1] == edity) {
-						Block idbelow = world.getBlock(xyz[0], xyz[1]-1, xyz[2]);
+					if (c.yCoord == edity) {
+						Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 						Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
-						if (ReikaPlantHelper.SAPLING.canPlantAt(world, xyz[0], xyz[1], xyz[2])) {
+						if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
 								if (inv[0] != null)
 									ReikaInventoryHelper.decrStack(0, inv);
-								ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
+								ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 							}
 						}
 						else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
@@ -248,8 +249,8 @@ ConditionalOperation, DamagingContact {
 							if (plant != null) {
 								if (inv[0] != null)
 									ReikaInventoryHelper.decrStack(0, inv);
-								world.setBlock(xyz[0], xyz[1]-1, xyz[2], Blocks.dirt);
-								ReikaWorldHelper.setBlock(world, xyz[0], xyz[1], xyz[2], plant);
+								world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
+								ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 							}
 						}
 					}

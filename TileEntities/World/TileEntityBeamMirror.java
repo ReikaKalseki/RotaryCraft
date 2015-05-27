@@ -18,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -121,12 +122,12 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 		if (lastRange != r) {
 			//ReikaJavaLibrary.pConsole(light);
 			for (int i = 0; i < light.getSize(); i++) {
-				int[] xyz = light.getNthBlock(i);
-				Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+				Coordinate c = light.getNthBlock(i);
+				Block b = c.getBlock(world);
 				if (b == BlockRegistry.LIGHT.getBlockInstance()) {
 					//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
-					world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
-					world.func_147479_m(xyz[0], xyz[1], xyz[2]);
+					c.setBlock(world, Blocks.air);
+					world.func_147479_m(c.xCoord, c.yCoord, c.zCoord);
 				}
 			}
 			light.clear();
@@ -136,10 +137,10 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 		}
 
 		for (int i = 0; i < light.getSize(); i++) {
-			int[] xyz = light.getNthBlock(i);
-			if (world.getBlock(xyz[0], xyz[1], xyz[2]) == Blocks.air)
-				world.setBlock(xyz[0], xyz[1], xyz[2], BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
-			world.func_147479_m(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = light.getNthBlock(i);
+			if (c.getBlock(world) == Blocks.air)
+				c.setBlock(world, BlockRegistry.LIGHT.getBlockInstance(), 15);
+			world.func_147479_m(c.xCoord, c.yCoord, c.zCoord);
 		}
 	}
 
@@ -190,11 +191,11 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 	private void lightsOut() {
 		World world = worldObj;
 		for (int i = 0; i < light.getSize(); i++) {
-			int[] xyz = light.getNthBlock(i);
-			Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = light.getNthBlock(i);
+			Block b = c.getBlock(world);
 			if (b == BlockRegistry.LIGHT.getBlockInstance()) {
-				world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
-				world.func_147479_m(xyz[0], xyz[1], xyz[2]);
+				c.setBlock(world, Blocks.air);
+				world.func_147479_m(c.xCoord, c.yCoord, c.zCoord);
 			}
 		}
 	}

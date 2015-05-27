@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -76,10 +77,10 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 			}
 			else if (tickcount > 1 && !blocks.isEmpty()) {
 				tickcount = 0;
-				int[] coord = blocks.getNextAndMoveOn();
-				world.setBlock(coord[0], coord[1], coord[2], this.getFluidID());
-				//ReikaJavaLibrary.pConsole(coord[0]+" "+coord[1]+" "+coord[2]);
-				world.markBlockForUpdate(coord[0], coord[1], coord[2]);
+				Coordinate c = blocks.getNextAndMoveOn();
+				c.setBlock(world, this.getFluidID());
+				//ReikaJavaLibrary.pConsole(c.xCoord+" "+c.yCoord+" "+c.zCoord);
+				world.markBlockForUpdate(c.xCoord, c.yCoord, c.zCoord);
 				tank.drain(1000, true);
 			}
 		}

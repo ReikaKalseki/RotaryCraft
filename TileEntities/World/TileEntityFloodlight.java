@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.SemiTransparent;
 import Reika.RotaryCraft.RotaryCraft;
@@ -54,12 +55,12 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 			RotaryCraft.logger.debug("Updating "+this+" range from "+lastRange+" to "+r);
 			//ReikaJavaLibrary.pConsole(beam);
 			for (int i = 0; i < beam.getSize(); i++) {
-				int[] xyz = beam.getNthBlock(i);
-				Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+				Coordinate c = beam.getNthBlock(i);
+				Block b = c.getBlock(world);
 				if (this.isLightBlock(b)) {
 					//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
-					world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
-					world.func_147479_m(xyz[0], xyz[1], xyz[2]);
+					c.setBlock(world, Blocks.air);
+					world.func_147479_m(c.xCoord, c.yCoord, c.zCoord);
 				}
 			}
 			beam.clear();
@@ -69,10 +70,10 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		}
 
 		for (int i = 0; i < beam.getSize(); i++) {
-			int[] xyz = beam.getNthBlock(i);
-			if (world.getBlock(xyz[0], xyz[1], xyz[2]) == Blocks.air)
-				world.setBlock(xyz[0], xyz[1], xyz[2], this.getPlacedBlockID(), 15, 3);
-			world.func_147479_m(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = beam.getNthBlock(i);
+			if (c.getBlock(world) == Blocks.air)
+				c.setBlock(world, this.getPlacedBlockID(), 15);
+			world.func_147479_m(c.xCoord, c.yCoord, c.zCoord);
 		}
 	}
 
@@ -88,13 +89,13 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 		world.markBlockForUpdate(x, y, z);
 		world.notifyBlocksOfNeighborChange(x, y, z, this.getTileEntityBlockID());
 		for (int i = 0; i < beam.getSize(); i++) {
-			int[] xyz = beam.getNthBlock(i);
-			Block b = world.getBlock(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = beam.getNthBlock(i);
+			Block b = c.getBlock(world);
 			if (this.isLightBlock(b)) {
 				//ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
-				world.setBlockToAir(xyz[0], xyz[1], xyz[2]);
-				world.func_147479_m(xyz[0], xyz[1], xyz[2]);
-				world.markBlockForUpdate(xyz[0], xyz[1], xyz[2]);
+				c.setBlock(world, Blocks.air);
+				world.func_147479_m(c.xCoord, c.yCoord, c.zCoord);
+				world.markBlockForUpdate(c.xCoord, c.yCoord, c.zCoord);
 			}
 		}
 	}

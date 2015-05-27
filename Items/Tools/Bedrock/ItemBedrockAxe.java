@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -196,10 +197,10 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			ReikaItemHelper.dropItems(world, dx, dy, dz, items);
 		}
 		for (int i = 0; i < tree.getSize(); i++) {
-			int[] xyz = tree.getNthBlock(i);
-			int x = xyz[0];
-			int y = xyz[1];
-			int z = xyz[2];
+			Coordinate c = tree.getNthBlock(i);
+			int x = c.xCoord;
+			int y = c.yCoord;
+			int z = c.zCoord;
 			Block b = world.getBlock(x, y, z);
 			int meta = world.getBlockMetadata(x, y, z);
 			;

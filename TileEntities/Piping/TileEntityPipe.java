@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -213,10 +214,10 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		blocks.recursiveAddWithMetadata(world, x, y, z, m.getBlock(), m.getMachineMetadata());
 
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			ReikaSoundHelper.playSoundAtBlock(world, xyz[0], xyz[1], xyz[2], "random.fizz", 0.4F, 1);
-			ReikaParticleHelper.LAVA.spawnAroundBlock(world, xyz[0], xyz[1], xyz[2], 36);
-			world.setBlock(xyz[0], xyz[1], xyz[2], Blocks.flowing_lava);
+			Coordinate c = blocks.getNthBlock(i);
+			ReikaSoundHelper.playSoundAtBlock(world, c.xCoord, c.yCoord, c.zCoord, "random.fizz", 0.4F, 1);
+			ReikaParticleHelper.LAVA.spawnAroundBlock(world, c.xCoord, c.yCoord, c.zCoord, 36);
+			c.setBlock(world, Blocks.flowing_lava);
 		}
 	}
 

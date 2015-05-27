@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
@@ -108,10 +109,10 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 				solarBlocks.recursiveAdd(world, x, y, z, this.getTileEntityBlockID());
 				numberMirrors = solarBlocks.getSize();
 				while (solarBlocks.getSize() > 0) {
-					int[] xyz = solarBlocks.getNextAndMoveOn();
-					MachineRegistry m = MachineRegistry.getMachine(world, xyz[0], xyz[1], xyz[2]);
+					Coordinate c = solarBlocks.getNextAndMoveOn();
+					MachineRegistry m = MachineRegistry.getMachine(world, c.xCoord, c.yCoord, c.zCoord);
 					if (m == MachineRegistry.MIRROR) {
-						TileEntityMirror te = (TileEntityMirror)world.getTileEntity(xyz[0], xyz[1], xyz[2]);
+						TileEntityMirror te = (TileEntityMirror)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 						te.targetloc = new int[]{x,y,z};
 						float light = te.getLightLevel();
 						lightMultiplier += light;

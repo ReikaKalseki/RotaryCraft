@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -79,8 +80,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			return;
 		if (power >= MINPOWER && torque >= MINTORQUE && this.getLevel() < CAPACITY && tickcount >= this.getOperationTime()) {
 			//int loc[] = this.findSourceBlock(world, x, y, z);
-			int[] loc = blocks.getNextAndMoveOn();
-			//ReikaJavaLibrary.pConsole(loc[0]+"  "+loc[1]+"  "+loc[2]+"  for side "+FMLCommonHandler.instance().getEffectiveSide());
+			Coordinate loc = blocks.getNextAndMoveOn();
+			//ReikaJavaLibrary.pConsole(loc.xCoord+"  "+loc.yCoord+"  "+loc.zCoord+"  for side "+FMLCommonHandler.instance().getEffectiveSide());
 			this.harvest(world, x, y, z, loc);
 			tickcount = 0;
 			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));
@@ -112,18 +113,18 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		//	ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), ItemStacks.scrap);
 	}
 
-	public void harvest(World world, int x, int y, int z, int[] loc) {
+	public void harvest(World world, int x, int y, int z, Coordinate loc) {
 		if (world.isRemote)
 			return;
-		if (!this.isSource(world, loc[0], loc[1], loc[2]))
+		if (!this.isSource(world, loc.xCoord, loc.yCoord, loc.zCoord))
 			return;
 		if (tank.getLevel() >= CAPACITY)
 			return;
-		Block liqid = world.getBlock(loc[0], loc[1], loc[2]);
+		Block liqid = world.getBlock(loc.xCoord, loc.yCoord, loc.zCoord);
 		Fluid fluid = FluidRegistry.lookupFluidForBlock(liqid);
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc[0], loc[1], loc[2], world.getBlock(loc[0], loc[1], loc[2])));
-		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc[0], loc[1], loc[2]))
-			world.setBlock(loc[0], loc[1], loc[2], Blocks.air);
+		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc.xCoord, loc.yCoord, loc.zCoord, world.getBlock(loc.xCoord, loc.yCoord, loc.zCoord)));
+		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc.xCoord, loc.yCoord, loc.zCoord))
+			world.setBlock(loc.xCoord, loc.yCoord, loc.zCoord, Blocks.air);
 		int mult = 1;
 		if (this.canMultiply(fluid)) {
 			if (power/MINPOWER >= 16)
@@ -140,7 +141,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		if (fluid.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
 		tank.addLiquid(1000*mult, fluid);
-		world.markBlockForUpdate(loc[0], loc[1], loc[2]);
+		world.markBlockForUpdate(loc.xCoord, loc.yCoord, loc.zCoord);
 	}
 
 	private boolean canMultiply(Fluid fluid) {

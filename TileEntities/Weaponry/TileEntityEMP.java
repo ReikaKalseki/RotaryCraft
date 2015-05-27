@@ -34,6 +34,7 @@ import thaumcraft.api.nodes.NodeType;
 import Reika.ChromatiCraft.TileEntity.Networking.TileEntityCrystalPylon;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
@@ -221,16 +222,16 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		int num = 1+8*ConfigRegistry.EMPLOAD.getValue();
 		for (int i = 0; i < num && loading; i++) {
 			int index = rand.nextInt(check.getSize());
-			int[] b = check.getNthBlock(index);
-			int x = b[0];
-			int z = b[2];
+			Coordinate b = check.getNthBlock(index);
+			int x = b.xCoord;
+			int z = b.zCoord;
 			for (int y = 0; y < world.provider.getHeight(); y++) {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te != null) {
 					blocks.add(te);
 				}
 			}
-			check.remove(b[0], b[1], b[2]);
+			check.remove(b.xCoord, b.yCoord, b.zCoord);
 			if (check.isEmpty()) {
 				loading = false;
 				canLoad = false;

@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.InertIInv;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -115,10 +116,10 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 		}
 		//int[] xyz = light.getNextAndMoveOn();
 		for (int n = 0; n < light.getSize(); n++) {
-			int[] xyz = light.getNthBlock(n);
-			if (world.getBlock(xyz[0], xyz[1], xyz[2]) == Blocks.air)
-				world.setBlock(xyz[0], xyz[1], xyz[2], BlockRegistry.LIGHT.getBlockInstance(), 15, 3);
-			worldObj.func_147451_t(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = light.getNthBlock(n);
+			if (c.getBlock(world) == Blocks.air)
+				c.setBlock(world, BlockRegistry.LIGHT.getBlockInstance(), 15);
+			worldObj.func_147451_t(c.xCoord, c.yCoord, c.zCoord);
 		}
 	}
 
@@ -129,10 +130,10 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 
 	private void goDark() {
 		for (int n = 0; n < light.getSize(); n++) {
-			int[] xyz = light.getNthBlock(n);
-			if (worldObj.getBlock(xyz[0], xyz[1], xyz[2]) == BlockRegistry.LIGHT.getBlockInstance())
-				worldObj.setBlockToAir(xyz[0], xyz[1], xyz[2]);
-			worldObj.func_147451_t(xyz[0], xyz[1], xyz[2]);
+			Coordinate c = light.getNthBlock(n);
+			if (c.getBlock(worldObj) == BlockRegistry.LIGHT.getBlockInstance())
+				c.setBlock(worldObj, Blocks.air);
+			worldObj.func_147451_t(c.xCoord, c.yCoord, c.zCoord);
 		}
 	}
 
@@ -162,8 +163,8 @@ public class TileEntityLamp extends TileEntitySpringPowered implements InertIInv
 
 	private void clearAll() {
 		for (int k = 0; k < light.getSize(); k++) {
-			int[] ijk = light.getNthBlock(k);
-			worldObj.setBlockToAir(ijk[0], ijk[1], ijk[2]);
+			Coordinate c = light.getNthBlock(k);
+			c.setBlock(worldObj, Blocks.air);
 		}
 	}
 
