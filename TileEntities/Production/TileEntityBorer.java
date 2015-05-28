@@ -784,11 +784,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	@Override
 	public int getRedstoneOverride() {
-		if (torque < mintorque)
-			return 15;
-		if (power < reqpow)
-			return 15;
-		return 0;
+		return this.isJammed() ? 15 : 0;
 	}
 
 	static {
