@@ -175,7 +175,7 @@ ConditionalOperation, DamagingContact {
 
 		Coordinate c = tree.getNextAndMoveOn();
 		Block drop = c.getBlock(world);
-		int dropmeta = worldc.getBlockMetadata();
+		int dropmeta = c.getBlockMetadata(world);
 
 		if (drop != Blocks.air) {
 			Material mat = ReikaWorldHelper.getMaterial(world, c.xCoord, c.yCoord, c.zCoord);
