@@ -148,7 +148,7 @@ ConditionalOperation, DamagingContact {
 			this.checkAndMatchInventory();
 
 			tree.reverseBlockOrder();
-			treeCopy = tree.copy();
+			treeCopy = (TreeReader)tree.copy();
 		}
 
 		Block b = world.getBlock(x, y+1, z);
