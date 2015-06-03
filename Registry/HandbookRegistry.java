@@ -24,6 +24,7 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.PackModificationTracker;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -58,6 +59,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	TIERS("Machine Tiers"),
 	TIMING("Duration Time"),
 	ALERTS("Config Alerts"),
+	PACKMODS("Modpack Changes"),
 	//---------------------MISC--------------------//
 	MISCDESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
@@ -650,6 +652,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return false;
 		if (this == ALERTS)
 			return false;
+		if (this == PACKMODS)
+			return false;
 		if (this.getParent() == TERMS)
 			return true;
 		if (isParent)
@@ -1064,12 +1068,16 @@ public enum HandbookRegistry implements HandbookEntry {
 		//	return ItemStacks.bedingot;
 		if (this == ALLOYING)
 			return ItemStacks.bedingot;
+		if (this == ALERTS || this == PACKMODS)
+			;//return ItemStacks.steelgear;
 		return null;
 	}
 
 	public String getData() {
 		if (this == TOC)
 			return RotaryDescriptions.getTOC();
+		if (this == ALERTS || this == PACKMODS)
+			return "";
 		return RotaryDescriptions.getData(this);
 	}
 
@@ -1089,7 +1097,9 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == COMPUTERCRAFT)
 			return true;
 		if (this == ALERTS)
-			return !HandbookNotifications.getNewAlerts().isEmpty();
+			return !HandbookNotifications.instance.getNewAlerts().isEmpty();
+		if (this == PACKMODS)
+			return !PackModificationTracker.instance.getModifications().isEmpty();
 		return false;
 	}
 

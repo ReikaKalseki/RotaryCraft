@@ -72,6 +72,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
+import Reika.RotaryCraft.Auxiliary.PackModificationTracker;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RotaryIntegrationManager;
@@ -468,6 +469,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		CustomExtractLoader.instance.loadFile();
 		ExtractorModOres.addCustomSmelting();
+		PackModificationTracker.instance.load();
 
 		//RotaryRecipes.addModInterface();
 		proxy.initClasses();
@@ -600,18 +602,14 @@ public class RotaryCraft extends DragonAPIMod {
 	}
 
 	private static void setupClassFiles() {
+		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.blocks);
 		ReikaRegistryHelper.instantiateAndRegisterItems(RotaryCraft.instance, ItemRegistry.itemList, RotaryCraft.items);
 		ItemRegistry.SPAWNER.getItemInstance().setCreativeTab(tabSpawner);
-		ReikaRegistryHelper.instantiateAndRegisterBlocks(RotaryCraft.instance, BlockRegistry.blockList, RotaryCraft.blocks);
-
-		RotaryRegistration.setupLiquids();
 
 		BlockRegistry.loadMappings();
 		ItemRegistry.loadMappings();
-	}
 
-	private static void registerBlock(Block b) {
-		GameRegistry.registerBlock(b, b.getUnlocalizedName());
+		RotaryRegistration.setupLiquids();
 	}
 
 	@SubscribeEvent

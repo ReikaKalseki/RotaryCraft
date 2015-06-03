@@ -29,29 +29,35 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class HandbookNotifications {
 
-	private static HashMap<UUID, ArrayList<Alert>> data = new HashMap();
+	public static final HandbookNotifications instance = new HandbookNotifications();
 
-	private static HashMap<UUID, Boolean> alert = new HashMap();
+	private final HashMap<UUID, ArrayList<Alert>> data = new HashMap();
+
+	private final HashMap<UUID, Boolean> alert = new HashMap();
+
+	private HandbookNotifications() {
+
+	}
 
 	@SideOnly(Side.CLIENT)
-	public static boolean newAlerts() {
+	public boolean newAlerts() {
 		UUID uid = Minecraft.getMinecraft().thePlayer.getUniqueID();
 		return alert.containsKey(uid);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void clearAlert() {
+	public void clearAlert() {
 		alert.remove(Minecraft.getMinecraft().thePlayer.getUniqueID());
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static List<Alert> getNewAlerts() {
+	public List<Alert> getNewAlerts() {
 		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
 		ArrayList<Alert> li = data.get(ep.getUniqueID());
 		return li != null ? Collections.unmodifiableList(li) : new ArrayList();
 	}
 
-	private static void addAlert(EntityPlayer ep, ConfigRegistry c, Level lvl, String msg) {
+	private void addAlert(EntityPlayer ep, ConfigRegistry c, Level lvl, String msg) {
 		Alert a = new Alert(c.name().toLowerCase(), c, lvl, msg);
 		ArrayList li = data.get(ep.getUniqueID());
 		if (li == null) {
@@ -73,6 +79,7 @@ public class HandbookNotifications {
 
 		private HandbookConfigVerifier() {
 			this.addEntry(ConfigRegistry.ALLOWTNTCANNON, Level.INFO, "The TNT Cannon has been disabled.");
+			this.addEntry(ConfigRegistry.ALLOWLIGHTBRIDGE, Level.INFO, "The Light Bridge has been disabled.");
 			this.addEntry(ConfigRegistry.ALLOWEMP, Level.INFO, "The EMP has been disabled.");
 			this.addEntry(ConfigRegistry.ATTACKBLOCKS, Level.WARNING, "Machines like the heat ray and EMP will not break blocks.");
 			this.addEntry(ConfigRegistry.RAILGUNDAMAGE, Level.WARNING, "The Railgun will not cause block damage.");
@@ -118,7 +125,7 @@ public class HandbookNotifications {
 				if (chg != mark)
 					empty = false;
 				if (chg) {
-					addAlert(ep, cfg, levels.get(cfg), data.get(cfg));
+					HandbookNotifications.instance.addAlert(ep, cfg, levels.get(cfg), data.get(cfg));
 				}
 				else {
 
@@ -126,7 +133,7 @@ public class HandbookNotifications {
 				nbt.setBoolean(tag, chg);
 			}
 			if (!empty)
-				alert.put(ep.getUniqueID(), true);
+				HandbookNotifications.instance.alert.put(ep.getUniqueID(), true);
 			eptag.setTag(NBT_TAG, nbt);
 		}
 

@@ -18,25 +18,17 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
-import Reika.RotaryCraft.Entities.EntityCustomTNT;
-import Reika.RotaryCraft.Entities.EntityDischarge;
-import Reika.RotaryCraft.Entities.EntityExplosiveShell;
-import Reika.RotaryCraft.Entities.EntityFlakShot;
-import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
-import Reika.RotaryCraft.Entities.EntityGasMinecart;
-import Reika.RotaryCraft.Entities.EntityIceBlock;
-import Reika.RotaryCraft.Entities.EntityRailGunShot;
-import Reika.RotaryCraft.Entities.EntitySonicShot;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryEntities;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -58,49 +50,7 @@ public class RotaryRegistration {
 	}
 
 	public static void addEntities() {
-		int id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerModEntity(EntityRailGunShot.class, "RailGun Shot", id, RotaryCraft.instance, 64, 20, true);
-		EntityRegistry.registerGlobalEntityID(EntityRailGunShot.class, "RailGun Shot", id);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityFreezeGunShot.class, "Freeze Gun Shot", id);
-		EntityRegistry.registerModEntity(EntityFreezeGunShot.class, "Freeze Gun Shot", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityIceBlock.class, "Ice Block", id);
-		EntityRegistry.registerModEntity(EntityIceBlock.class, "Ice Block", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityGasMinecart.class, "Gas Minecart", id);
-		EntityRegistry.registerModEntity(EntityGasMinecart.class, "Gas Minecart", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityExplosiveShell.class, "Explosive Shell", id);
-		EntityRegistry.registerModEntity(EntityExplosiveShell.class, "Explosive Shell", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntitySonicShot.class, "Shock Wave", id);
-		EntityRegistry.registerModEntity(EntitySonicShot.class, "Shock Wave", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		//id = EntityRegistry.findGlobalUniqueEntityId();
-		//EntityRegistry.registerGlobalEntityID(EntityLiquidBlock.class, "Liquid Block", id);
-		//EntityRegistry.registerModEntity(EntityLiquidBlock.class, "Liquid Block", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityDischarge.class, "Discharge", id);
-		EntityRegistry.registerModEntity(EntityDischarge.class, "Discharge", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityCustomTNT.class, "CustomTNT", id);
-		EntityRegistry.registerModEntity(EntityCustomTNT.class, "CustomTNT", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		//id = EntityRegistry.findGlobalUniqueEntityId();
-		//EntityRegistry.registerGlobalEntityID(EntityFlamethrowerFire.class, "CustomTNT", id);
-		//EntityRegistry.registerModEntity(EntityFlamethrower.class, "CustomTNT", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
-
-		id = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityFlakShot.class, "Flak Shot", id);
-		EntityRegistry.registerModEntity(EntityFlakShot.class, "Flak Shot", EntityRegistry.findGlobalUniqueEntityId(), RotaryCraft.instance, 64, 20, true);
+		ReikaRegistryHelper.registerModEntities(RotaryCraft.instance, RotaryEntities.entityList);
 	}
 
 	public static void loadOreDictionary() {

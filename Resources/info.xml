@@ -49,7 +49,4 @@
 	<timing>
 		Machines which perform discrete operations often take less time per operation as the input speed increases. Hover over a machine to get its timing data. The "x" in these formulae is the input speed, and the times are in ticks (0.05s per tick).
 	</timing>
-	<alerts>
-		
-	</alerts>
 </info>

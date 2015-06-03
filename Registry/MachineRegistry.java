@@ -1241,6 +1241,8 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return !ConfigRegistry.ALLOWTNTCANNON.getState();
 		if (this == EMP)
 			return !ConfigRegistry.ALLOWEMP.getState();
+		if (this == TNTCANNON)
+			return !ConfigRegistry.ALLOWLIGHTBRIDGE.getState();
 		if (this == SPILLER)
 			return ConfigRegistry.SPILLERRANGE.getValue() == 0;
 		if (this.isModConversionEngine())
