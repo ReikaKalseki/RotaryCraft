@@ -32,6 +32,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -43,7 +44,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
-import Reika.RotaryCraft.Auxiliary.PackModificationTracker;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -161,7 +161,7 @@ public class GuiHandbook extends GuiScreen
 		if (h == HandbookRegistry.ALERTS)
 			return HandbookNotifications.instance.getNewAlerts().size()/3;
 		if (h == HandbookRegistry.PACKMODS)
-			return PackModificationTracker.instance.getModifications().size()/3;
+			return PackModificationTracker.instance.getModifications(RotaryCraft.instance).size()/3;
 		return 1;
 	}
 
@@ -450,7 +450,7 @@ public class GuiHandbook extends GuiScreen
 			}
 		}
 
-		if (HandbookNotifications.instance.newAlerts() || PackModificationTracker.instance.modificationsExist()) {
+		if (HandbookNotifications.instance.newAlerts() || PackModificationTracker.instance.modificationsExist(RotaryCraft.instance)) {
 			ReikaTextureHelper.bindFinalTexture(DragonAPICore.class, "Resources/warning.png");
 			GL11.glEnable(GL11.GL_BLEND);
 			Tessellator v5 = Tessellator.instance;
@@ -473,7 +473,7 @@ public class GuiHandbook extends GuiScreen
 			if (ReikaMathLibrary.isValueInsideBoundsIncl(261, 377, dx) && ReikaMathLibrary.isValueInsideBoundsIncl(22, 36, dy)) {
 				if (HandbookNotifications.instance.newAlerts())
 					ReikaGuiAPI.instance.drawTooltip(fontRendererObj, "Some config settings have been changed.");
-				if (PackModificationTracker.instance.modificationsExist())
+				if (PackModificationTracker.instance.modificationsExist(RotaryCraft.instance))
 					ReikaGuiAPI.instance.drawTooltip(fontRendererObj, "The modpack has made some changes to the mod.", 0, 10);
 			}
 		}
@@ -489,7 +489,7 @@ public class GuiHandbook extends GuiScreen
 		if (a == 0) {
 			int dx = x-j;
 			int dy = y-k;
-			if (HandbookNotifications.instance.newAlerts() || PackModificationTracker.instance.modificationsExist()) {
+			if (HandbookNotifications.instance.newAlerts() || PackModificationTracker.instance.modificationsExist(RotaryCraft.instance)) {
 				if (ReikaMathLibrary.isValueInsideBoundsIncl(261, 377, dx) && ReikaMathLibrary.isValueInsideBoundsIncl(22, 36, dy)) {
 					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
 					int screen = -1;
@@ -499,7 +499,7 @@ public class GuiHandbook extends GuiScreen
 						screen = HandbookRegistry.ALERTS.getScreen();
 						page = HandbookRegistry.ALERTS.getPage();
 					}
-					else if (PackModificationTracker.instance.modificationsExist()) {
+					else if (PackModificationTracker.instance.modificationsExist(RotaryCraft.instance)) {
 						screen = HandbookRegistry.PACKMODS.getScreen();
 						page = HandbookRegistry.PACKMODS.getPage();
 					}

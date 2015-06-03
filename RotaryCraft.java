@@ -39,6 +39,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.FurnaceFuelRegistry;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
@@ -72,7 +73,6 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
-import Reika.RotaryCraft.Auxiliary.PackModificationTracker;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RotaryIntegrationManager;
@@ -307,6 +307,8 @@ public class RotaryCraft extends DragonAPIMod {
 			proxy.registerRenderers();
 		}
 
+		PackModificationTracker.instance.addMod(this, config);
+
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		RotaryRegistration.addTileEntities();
 		RotaryRegistration.addEntities();
@@ -469,7 +471,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 		CustomExtractLoader.instance.loadFile();
 		ExtractorModOres.addCustomSmelting();
-		PackModificationTracker.instance.load();
 
 		//RotaryRecipes.addModInterface();
 		proxy.initClasses();

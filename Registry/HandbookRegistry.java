@@ -17,6 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -24,7 +25,6 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.PackModificationTracker;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -1099,7 +1099,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == ALERTS)
 			return !HandbookNotifications.instance.getNewAlerts().isEmpty();
 		if (this == PACKMODS)
-			return !PackModificationTracker.instance.getModifications().isEmpty();
+			return !PackModificationTracker.instance.getModifications(RotaryCraft.instance).isEmpty();
 		return false;
 	}
 

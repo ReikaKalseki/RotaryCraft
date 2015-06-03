@@ -28,6 +28,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
+import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker.PackModification;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Alert;
 import Reika.DragonAPI.Instantiable.ItemReq;
@@ -46,7 +48,6 @@ import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.PackModificationTracker.PackModification;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MachineRecipeRenderer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MulchMaterials;
@@ -710,7 +711,7 @@ public final class HandbookAuxData {
 						"behavior of the mod, and any negative effects of these changes should be discussed with the pack creator, not " +
 						"the mod developer.";
 				font.drawSplitString(title, posX+8, posY+20, 220, 0x333333);
-				List<PackModification> li = PackModificationTracker.instance.getModifications();
+				ArrayList<PackModification> li = PackModificationTracker.instance.getModifications(RotaryCraft.instance);
 				if (li.isEmpty()) {
 					font.drawSplitString("No changes were made to the mod.", posX+10, posY+88, 245, 0xffffff);
 					font.drawSplitString("Your gameplay is in line with what has been intended.", posX+10, posY+98, 245, 0xffffff);
