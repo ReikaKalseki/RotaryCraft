@@ -711,7 +711,7 @@ public final class HandbookAuxData {
 						"behavior of the mod, and any negative effects of these changes should be discussed with the pack creator, not " +
 						"the mod developer.";
 				font.drawSplitString(title, posX+8, posY+20, 220, 0x333333);
-				ArrayList<PackModification> li = PackModificationTracker.instance.getModifications(RotaryCraft.instance);
+				List<PackModification> li = PackModificationTracker.instance.getModifications(RotaryCraft.instance);
 				if (li.isEmpty()) {
 					font.drawSplitString("No changes were made to the mod.", posX+10, posY+88, 245, 0xffffff);
 					font.drawSplitString("Your gameplay is in line with what has been intended.", posX+10, posY+98, 245, 0xffffff);

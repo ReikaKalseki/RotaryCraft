@@ -22,6 +22,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.PlantMaterials;
 
 public class MulchMaterials {
@@ -71,6 +72,7 @@ public class MulchMaterials {
 				this.addValue(is, plant.getPlantValue());
 			}
 		}
+		this.addValue(ItemStacks.sawdust.copy(), 1);
 	}
 
 	private void addValue(Item i, int amt) {

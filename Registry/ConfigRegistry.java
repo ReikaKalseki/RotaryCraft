@@ -98,7 +98,8 @@ public enum ConfigRegistry implements ConfigList {
 	CONVERTERLOSS("Power Converter Loss Percent", 0),
 	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true),
 	BORERGEN("Borer Chunk Gen Radius", 0),
-	ALLOWLIGHTBRIDGE("Enable Light Bridge", true);
+	ALLOWLIGHTBRIDGE("Enable Light Bridge", true),
+	ALLOWITEMCANNON("Enable Item Cannon", true);
 
 	private String label;
 	private boolean defaultState;

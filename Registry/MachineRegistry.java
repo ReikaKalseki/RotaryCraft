@@ -1040,6 +1040,8 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return false;
 		if (this.isIncomplete() && !(DragonAPICore.isReikasComputer() || DragonOptions.DEBUGMODE.getState()))
 			return false;
+		if (this.isConfigDisabled())
+			return false;
 		if (this == PORTALSHAFT)
 			return false;
 		return true;
@@ -1239,6 +1241,8 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return ConfigRegistry.NOMINERS.getState();
 		if (this == TNTCANNON)
 			return !ConfigRegistry.ALLOWTNTCANNON.getState();
+		if (this == ITEMCANNON)
+			return !ConfigRegistry.ALLOWITEMCANNON.getState();
 		if (this == EMP)
 			return !ConfigRegistry.ALLOWEMP.getState();
 		if (this == TNTCANNON)

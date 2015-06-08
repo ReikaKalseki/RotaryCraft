@@ -109,7 +109,7 @@ public class ItemGravelGun extends ItemChargedTool {
 									}
 								}
 							}
-							ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), dmg);
+							ent.attackEntityFrom(new GravelGunDamage(ep), dmg);
 							if (dmg >= 500)
 								RotaryAchievements.MASSIVEHIT.triggerAchievement(ep);
 						}
@@ -143,6 +143,7 @@ public class ItemGravelGun extends ItemChargedTool {
 		return ConfigRegistry.GRAVELPLAYER.getState() || !(ent instanceof EntityPlayer);
 	}
 
+	@Deprecated
 	private void fire(ItemStack is, World world, EntityPlayer ep, Entity ent) {
 		Vec3 look = ep.getLookVec();
 		double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, 2);

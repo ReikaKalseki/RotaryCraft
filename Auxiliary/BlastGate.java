@@ -17,6 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
@@ -24,6 +25,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum BlastGate {
 
@@ -41,6 +43,7 @@ public enum BlastGate {
 	STEELEAF(TwilightForestHandler.ItemEntry.STEELLEAF.getItem()),
 	IRONWOOD(TwilightForestHandler.ItemEntry.IRONWOOD.getItem()),
 	MANYULLYN("ingotManyullyn"),
+	GOLDGEAR(GameRegistry.findItem(ModList.BUILDCRAFT.modLabel, "goldGearItem")),
 	;
 
 	private ItemStack item;
