@@ -238,6 +238,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 					blocked = true;
 					tickcount = 0;
 				}
+				if (id != world.getBlock(dx, dy, dz) || meta2 != world.getBlockMetadata(dx, dy, dz))
+					world.markBlockForUpdate(dx, dy, dz);
 				if (id instanceof SemiTransparent) {
 					SemiTransparent st = (SemiTransparent)id;
 					if (st.isOpaque(meta2))
@@ -245,7 +247,6 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				}
 				else if (id.isOpaqueCube())
 					blocked = true; //break loop
-				world.markBlockForUpdate(dx, dy, dz);
 			}
 			AxisAlignedBB zone = this.getBurnZone(metadata, step);
 			List<Entity> inzone = worldObj.getEntitiesWithinAABB(Entity.class, zone);

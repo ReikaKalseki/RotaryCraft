@@ -54,9 +54,9 @@ public class RotaryRegistration {
 	}
 
 	public static void loadOreDictionary() {
-		OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot); //though he has an entry, he does not add an alternative manufacture
-
 		if (!ModList.GREGTECH.isLoaded()) {//GT unificator causes an exploit, and no mods even use this anyways
+			OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot); //though he has an entry, he does not add an alternative manufacture
+
 			OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
 			OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);
 
@@ -64,7 +64,7 @@ public class RotaryRegistration {
 				OreDictionary.registerOre("ingotSteel", ItemStacks.steelingot);
 		}
 		else {
-			RotaryCraft.logger.log("Gregtech is installed, a few OreDict entries are not being added to prevent interchangeability");
+			RotaryCraft.logger.log("Gregtech is installed, a few OreDict entries are not being added to prevent interchangeability or unification issues");
 		}
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);

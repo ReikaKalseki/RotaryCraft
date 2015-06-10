@@ -63,7 +63,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}
@@ -84,7 +84,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}
@@ -108,7 +108,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			ReikaItemHelper.dropItems(world, x, y, z, items);
 			return true;
@@ -131,7 +131,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}
@@ -152,7 +152,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}
@@ -175,7 +175,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}
@@ -198,7 +198,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}
@@ -230,7 +230,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}
@@ -251,7 +251,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					}
 				}
 			}
-			if (this.isDamageable())
+			if (this.isBreakable())
 				is.damageItem(1, ep);
 			return true;
 		}

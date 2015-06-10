@@ -16,6 +16,7 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
@@ -56,6 +57,8 @@ public class ItemDebug extends ItemRotaryTool {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof RotaryCraftTileEntity)
 				ReikaChatHelper.write("Tile Entity Direction Data: "+(((RotaryCraftTileEntity)te).getBlockMetadata()+1)+" of "+((RotaryCraftTileEntity)te).getMachine().getNumberDirections());
+			else if (te instanceof TileEntityBase)
+				ReikaChatHelper.write("Tile Entity Direction Data: "+(((TileEntityBase)te).getBlockMetadata()));
 			ReikaChatHelper.write("Additional Data (Meaning differs per machine):");
 		}
 		TileEntity te = world.getTileEntity(x, y, z);

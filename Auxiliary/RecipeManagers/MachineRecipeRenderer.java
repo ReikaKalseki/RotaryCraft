@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import cpw.mods.fml.relauncher.Side;
@@ -64,6 +65,10 @@ public class MachineRecipeRenderer {
 
 	public void drawBlastFurnaceCrafting(int x, int y, int x2, int y2, ItemStack output) {
 		List<BlastCrafting> c = RecipesBlastFurnace.getRecipes().getAllCraftingMaking(output);
+		if (c.isEmpty()) {
+			RotaryCraft.logger.logError("Tried drawing a Blast Furnace Crafting of "+output+", but no recipes for it exist!");
+			return;
+		}
 		int n = (int)(System.nanoTime()/1000000000)%c.size();
 		this.drawBlastFurnaceCrafting(x, y, x2, y2, c.get(n));
 	}

@@ -442,7 +442,7 @@ public final class HandbookAuxData {
 			ArrayList<ItemStack> li = new ArrayList();
 			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 				ItemRegistry ir = ItemRegistry.itemList[i];
-				if (ir.isBedrockTool()) {
+				if (ir.isBedrockTool() && !ir.isDummiedOut()) {
 					li.add(ir.getEnchantedStack());
 				}
 			}
