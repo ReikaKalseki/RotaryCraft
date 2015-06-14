@@ -104,9 +104,12 @@ public class RenderBelt extends RotaryTERenderer
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityBeltAt((TileEntityBeltHub)tile, par2, par4, par6, par8);
-		if (((TileEntityBeltHub)tile).shouldRenderBelt())
+		if (((TileEntityBeltHub)tile).shouldRenderBelt()) {
+			GL11.glDisable(GL11.GL_CULL_FACE);
 			//this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);
 			this.drawBelt2((TileEntityBeltHub)tile, par2, par4, par6, par8);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+		}
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
 			IORenderer.renderIO(tile, par2, par4, par6);
 		//ReikaAABBHelper.renderAABB(tile.getRenderBoundingBox(), par2, par4, par6, 0, 0, 0, 127, 255, 255, 0, true);

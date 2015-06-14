@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Farming;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -206,7 +208,9 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 				runVanillaSpawnCycle(tile, te);
 			}
 			else {
-				proxy.performSpawnCycle();
+				Collection<Entity> c = proxy.performSpawnCycle();
+				for (Entity e : c)
+					flagNoDespawn(e);
 			}
 			MinecraftForge.EVENT_BUS.post(new SpawnerControllerSpawnEvent(te, this.getEntity()));
 		}
@@ -219,6 +223,17 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	private static int spawnCount = 4;
 	private static int spawnRange = 4;
+
+	public static final String CONTROLLED_SPAWN_TAG = "ControllerSpawned";
+
+	private static void flagNoDespawn(Entity e) {
+		NBTTagCompound tag = e.getEntityData();
+		tag.setBoolean(CONTROLLED_SPAWN_TAG, true);
+	}
+
+	public static boolean isFlaggedNoDespawn(Entity e) {
+		return e.getEntityData().getBoolean(CONTROLLED_SPAWN_TAG);
+	}
 
 	private static void runVanillaSpawnCycle(TileEntityMobSpawner tile, TileEntitySpawnerController c) {
 		World world = tile.worldObj;
@@ -252,6 +267,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 					if (livingSpawn == null || livingSpawn.getCanSpawnHere()) {
 						lgc.func_98265_a(toSpawn);
+						flagNoDespawn(toSpawn);
 						world.playAuxSFX(2004, x, y, z, 0);
 						if (livingSpawn != null) {
 							livingSpawn.spawnExplosionParticle();

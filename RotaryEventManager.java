@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -59,6 +60,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -72,6 +74,12 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void preventControlledDespawns(LivingSpawnEvent.AllowDespawn evt) {
+		if (TileEntitySpawnerController.isFlaggedNoDespawn(evt.entity))
+			evt.setResult(Result.DENY);
 	}
 
 	@SubscribeEvent

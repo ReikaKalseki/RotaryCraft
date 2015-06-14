@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -63,11 +64,13 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 		}
 		on = true;
 		tickcount2++;
-		int dmg = inv[0].getItemDamage();
-		if (tickcount2 > this.getUnwindTime()) {
-			ItemStack is = this.getDecrementedCharged();
-			inv[0] = is;
-			tickcount2 = 0;
+		if (!DragonAPICore.debugtest) {
+			int dmg = inv[0].getItemDamage();
+			if (tickcount2 > this.getUnwindTime()) {
+				ItemStack is = this.getDecrementedCharged();
+				inv[0] = is;
+				tickcount2 = 0;
+			}
 		}
 		this.getTopBlocks(world, x, y, z);
 		this.getMobs(world, x, y, z);

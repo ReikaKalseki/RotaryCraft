@@ -17,8 +17,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -223,5 +225,13 @@ public final class ItemStacks {
 
 	public static ItemStack getModOreIngot(ModOreList ore) {
 		return ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal());
+	}
+
+	public static ItemStack getFlake(ReikaOreHelper ore) {
+		return ItemRegistry.EXTRACTS.getStackOfMetadata(ore.ordinal());
+	}
+
+	public static ItemStack getFlake(ModOreList ore) {
+		return ExtractorModOres.getFlakeProduct(ore);
 	}
 }

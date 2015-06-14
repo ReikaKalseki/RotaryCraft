@@ -19,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
-import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -29,7 +28,6 @@ import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesExtractor
@@ -37,7 +35,6 @@ public class RecipesExtractor
 	private static final RecipesExtractor instance = new RecipesExtractor();
 
 	private final ItemHashMap<ItemStack> recipeList = new ItemHashMap().setOneWay();
-	private final MultiMap<ReikaOreHelper, String> modOres = new MultiMap();
 
 	public static final RecipesExtractor recipes()
 	{
@@ -49,45 +46,28 @@ public class RecipesExtractor
 		for (int i = 0; i < 24; i++)
 			this.addRecipe(ItemRegistry.EXTRACTS.getStackOfMetadata(i), ItemRegistry.EXTRACTS.getStackOfMetadata(i+8));
 
-		this.addRecipe(Blocks.coal_ore, 0, getFlake(ReikaOreHelper.COAL));
-		this.addRecipe(Blocks.iron_ore, 0, getFlake(ReikaOreHelper.IRON));
-		this.addRecipe(Blocks.gold_ore, 0, getFlake(ReikaOreHelper.GOLD));
-		this.addRecipe(Blocks.redstone_ore, 0, getFlake(ReikaOreHelper.REDSTONE));
-		this.addRecipe(Blocks.lapis_ore, 0, getFlake(ReikaOreHelper.LAPIS));
-		this.addRecipe(Blocks.diamond_ore, 0, getFlake(ReikaOreHelper.DIAMOND));
-		this.addRecipe(Blocks.emerald_ore, 0, getFlake(ReikaOreHelper.EMERALD));
-		this.addRecipe(Blocks.quartz_ore, 0, getFlake(ReikaOreHelper.QUARTZ));
+		this.addRecipe(Blocks.coal_ore, 0, ItemStacks.getFlake(ReikaOreHelper.COAL));
+		this.addRecipe(Blocks.iron_ore, 0, ItemStacks.getFlake(ReikaOreHelper.IRON));
+		this.addRecipe(Blocks.gold_ore, 0, ItemStacks.getFlake(ReikaOreHelper.GOLD));
+		this.addRecipe(Blocks.redstone_ore, 0, ItemStacks.getFlake(ReikaOreHelper.REDSTONE));
+		this.addRecipe(Blocks.lapis_ore, 0, ItemStacks.getFlake(ReikaOreHelper.LAPIS));
+		this.addRecipe(Blocks.diamond_ore, 0, ItemStacks.getFlake(ReikaOreHelper.DIAMOND));
+		this.addRecipe(Blocks.emerald_ore, 0, ItemStacks.getFlake(ReikaOreHelper.EMERALD));
+		this.addRecipe(Blocks.quartz_ore, 0, ItemStacks.getFlake(ReikaOreHelper.QUARTZ));
 
-		if (ConfigRegistry.GREGORES.getState()) {
-			modOres.addValue(ReikaOreHelper.IRON, "oreBandedIron");
-			modOres.addValue(ReikaOreHelper.IRON, "oreBrownLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreNetherrackBrownLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreEndstoneBrownLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreBlackgraniteBrownLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreRedgraniteBrownLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreYellowLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreNetherrackYellowLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreEndstoneYellowLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreBlackgraniteYellowLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreRedgraniteYellowLimonite");
-			modOres.addValue(ReikaOreHelper.IRON, "oreBandedIron");
-			modOres.addValue(ReikaOreHelper.IRON, "oreNetherrackBandedIron");
-			modOres.addValue(ReikaOreHelper.IRON, "oreEndstoneBandedIron");
-			modOres.addValue(ReikaOreHelper.IRON, "oreBlackgraniteBandedIron");
-			modOres.addValue(ReikaOreHelper.IRON, "oreRedgraniteBandedIron");
-		}
+
 
 		this.addModRecipes();
 	}
 
 	private void addModRecipes() {
-		for (ReikaOreHelper ore : modOres.keySet()) {
-			Collection<String> c = modOres.get(ore);
+		for (ReikaOreHelper ore : ModOreCompat.instance.keySet()) {
+			Collection<String> c = ModOreCompat.instance.getAlternateNames(ore);
 			for (String s : c) {
 				ArrayList<ItemStack> li = OreDictionary.getOres(s);
 				for (ItemStack is : li) {
-					this.addRecipe(is, getFlake(ore));
-					RotaryCraft.logger.log("Adding mod ore "+is+" as "+ore+" because its ore type "+s+" is a subcategory of "+ore);
+					this.addRecipe(is, ItemStacks.getFlake(ore));
+					RotaryCraft.logger.log("Adding mod ore "+is+" as "+ore+" in the extractor because its ore type "+s+" is a subcategory of "+ore);
 				}
 			}
 		}
@@ -181,10 +161,6 @@ public class RecipesExtractor
 			return true;
 		int dmg = is.getItemDamage();
 		return dmg < ReikaOreHelper.oreList.length*4 && dmg >= ReikaOreHelper.oreList.length*3;
-	}
-
-	private static ItemStack getFlake(ReikaOreHelper ore) {
-		return ItemRegistry.EXTRACTS.getStackOfMetadata(ore.ordinal());
 	}
 
 	public static ReikaOreHelper getOreFromExtract(ItemStack item) {
