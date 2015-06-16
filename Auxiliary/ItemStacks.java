@@ -204,6 +204,11 @@ public final class ItemStacks {
 
 	public static final ItemStack slipperyComb 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(0);
 	public static final ItemStack slipperyPropolis 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(1);
+	public static final ItemStack gearCast 			= ItemRegistry.MODINTERFACE.getStackOfMetadata(2);
+	public static final ItemStack panelCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(3);
+	public static final ItemStack shaftCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(4);
+	public static final ItemStack propCast 			= ItemRegistry.MODINTERFACE.getStackOfMetadata(5);
+	public static final ItemStack drillCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(6);
 
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
 

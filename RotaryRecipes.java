@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.SmelteryRecipeHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
@@ -149,8 +150,24 @@ public class RotaryRecipes {
 		Object ps = new PreferentialItemStack(Items.iron_ingot, "ingotLead").blockItem(ItemRegistry.MODINGOTS.getItemInstance()).getItem();
 		MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', ItemStacks.conductive.getItem(), 'C', coil, 'P', ItemStacks.basepanel, 'S', ItemStacks.diamondshaftcore, 'l', ps, 's', "ingotSilver");
 
-		if (ModList.TINKERER.isLoaded())
+		if (ModList.TINKERER.isLoaded()) {
 			GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
+
+			String f = "molten hsla";
+			int temp = 750;
+			ItemStack bk = ItemStacks.steelblock;
+			int base = SmelteryRecipeHandler.INGOT_AMOUNT;
+			SmelteryRecipeHandler.addIngotMelting(ItemStacks.steelingot, bk, temp, f);
+			SmelteryRecipeHandler.addIngotCasting(ItemStacks.steelingot, f, 40);
+			SmelteryRecipeHandler.addMelting(ItemStacks.steelblock, bk, temp, base*9, f);
+			SmelteryRecipeHandler.addMelting(ItemStacks.scrap, bk, temp, base/9, f);
+			SmelteryRecipeHandler.addBlockCasting(ItemStacks.steelblock, base*9, f, 120);
+			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.gearCast, ItemStacks.steelgear, bk, temp, f, base*5/3, 80);
+			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.drillCast, ItemStacks.drill, bk, temp, f, base*7, 80);
+			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.panelCast, ItemStacks.basepanel, bk, temp, f, base, 80);
+			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.shaftCast, ItemStacks.shaftitem, bk, temp, f, base, 80);
+			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.propCast, ItemStacks.prop, bk, temp, f, base*3, 80);
+		}
 
 		/* No longer necessary
 		if (ModList.THERMALEXPANSION.isLoaded()) {

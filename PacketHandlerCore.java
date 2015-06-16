@@ -100,6 +100,8 @@ public class PacketHandlerCore implements IPacketHandler {
 			//ReikaJavaLibrary.pConsole(inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt());
 			PacketTypes packetType = packet.getType();
 			switch(packetType) {
+			case FULLSOUND:
+				break;
 			case SOUND:
 				control = inputStream.readInt();
 				SoundRegistry s = SoundRegistry.soundList[control];

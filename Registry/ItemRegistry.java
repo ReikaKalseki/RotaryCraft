@@ -577,7 +577,7 @@ public enum ItemRegistry implements ItemEnum {
 		case RAILGUN:
 			return 16;
 		case BUCKET:
-			return 4;
+			return 5;
 		case UPGRADE:
 			return ItemEngineUpgrade.Upgrades.values().length;
 		case MODEXTRACTS:

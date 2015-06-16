@@ -107,11 +107,13 @@ public class RotaryRegistration {
 		FluidRegistry.registerFluid(RotaryCraft.lubeFluid);
 		FluidRegistry.registerFluid(RotaryCraft.nitrogenFluid);
 		FluidRegistry.registerFluid(RotaryCraft.poisonFluid);
+		FluidRegistry.registerFluid(RotaryCraft.hslaFluid);
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Items.bucket));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Items.bucket));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.ethanolFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(2), new ItemStack(Items.bucket));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.nitrogenFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(3), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.hslaFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(4), new ItemStack(Items.bucket));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -123,10 +125,13 @@ public class RotaryRegistration {
 			IIcon lubeicon = event.map.registerIcon("RotaryCraft:lubricant_anim");
 			IIcon ethanolicon = event.map.registerIcon("RotaryCraft:ethanol_anim");
 			IIcon nitrogenicon = event.map.registerIcon("RotaryCraft:nitrogen_anim");
+			IIcon hslastill = event.map.registerIcon("RotaryCraft:hsla_still");
+			IIcon hslaflow = event.map.registerIcon("RotaryCraft:hsla_flow");
 			RotaryCraft.jetFuelFluid.setIcons(jeticon);
 			RotaryCraft.lubeFluid.setIcons(lubeicon);
 			RotaryCraft.ethanolFluid.setIcons(ethanolicon);
 			RotaryCraft.nitrogenFluid.setIcons(nitrogenicon);
+			RotaryCraft.hslaFluid.setIcons(hslastill, hslaflow);
 		}
 	}
 }

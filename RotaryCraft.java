@@ -152,6 +152,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final EnhancedFluid ethanolFluid = (EnhancedFluid)new EnhancedFluid("rc ethanol").setColor(0x5CC5B2).setDensity(789).setViscosity(950).setTemperature(340);
 	public static final EnhancedFluid nitrogenFluid = (EnhancedFluid)new EnhancedFluid("liquid nitrogen").setColor(0xffffff).setDensity(808).setViscosity(158).setTemperature(77);
 	public static final Fluid poisonFluid = new Fluid("poison"); //for defoliator
+	public static final Fluid hslaFluid = new EnhancedFluid("molten hsla").setColor(0xF0B564).setTemperature(1873).setDensity(7000).setViscosity(6100); //for TiC
 
 	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
 	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");
@@ -450,6 +451,7 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveFluidRegistry.instance.registerFluid("rc ethanol");
 		SensitiveFluidRegistry.instance.registerFluid("lubricant");
 		SensitiveFluidRegistry.instance.registerFluid("liquid nitrogen");
+		SensitiveFluidRegistry.instance.registerFluid("molten hsla");
 
 		MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
 		MinetweakerHooks.instance.registerClass(PulseJetTweaker.class);

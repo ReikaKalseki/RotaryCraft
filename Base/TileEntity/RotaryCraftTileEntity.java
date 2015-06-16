@@ -58,6 +58,11 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return !RotaryCraft.instance.isLocked();
 	}
 
+	@Override
+	public final boolean allowTickAcceleration() {
+		return this.getMachine().allowsAcceleration();
+	}
+
 	public int getTick() {
 		return tickcount;
 	}
