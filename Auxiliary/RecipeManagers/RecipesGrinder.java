@@ -108,6 +108,9 @@ public class RecipesGrinder {
 		if (blizzDust != null) {
 			this.addOreDictRecipe("rodBlizz", ReikaItemHelper.getSizedItemStack(blizzDust, 6));
 		}
+
+		this.addOreDictRecipe("plankWood", this.getSizedSawdust(4));
+		this.addOreDictRecipe("logWood", this.getSizedSawdust(16));
 	}
 
 	/*
