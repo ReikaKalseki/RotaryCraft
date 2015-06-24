@@ -17,6 +17,7 @@ import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import forestry.api.apiculture.IBeeGenome;
@@ -58,7 +59,7 @@ public class CanolaBee extends BeeSpecies {
 
 		@Override
 		public boolean isAcceptedFlower(World world, IIndividual individual, int x, int y, int z) {
-			return world.getBlock(x, y, z) == BlockRegistry.CANOLA.getBlockInstance() && world.getBlockMetadata(x, y, z) < 9;
+			return world.getBlock(x, y, z) == BlockRegistry.CANOLA.getBlockInstance() && BlockCanola.canGrowAt(world, x, y, z);
 		}
 
 		@Override

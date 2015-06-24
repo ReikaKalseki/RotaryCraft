@@ -129,6 +129,8 @@ public class FillingStationHandler extends TemplateRecipeHandler {
 		FillingStationRecipe r = (FillingStationRecipe)arecipes.get(recipe);
 		Fluid f = r.fluid;
 		if (f != null) {
+			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glDisable(GL11.GL_BLEND);
 			IIcon ico = f.getIcon();
 			float u = ico.getMinU();
 			float v = ico.getMinV();
@@ -152,6 +154,7 @@ public class FillingStationHandler extends TemplateRecipeHandler {
 				int my = ReikaGuiAPI.instance.getMouseRealY();
 				ReikaGuiAPI.instance.drawTooltipAt(Minecraft.getMinecraft().fontRenderer, f.getLocalizedName(), mx-ox, my-oy);
 			}
+			GL11.glEnable(GL11.GL_BLEND);
 		}
 	}
 

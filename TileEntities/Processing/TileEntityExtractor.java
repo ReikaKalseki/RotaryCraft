@@ -274,13 +274,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			if (inv[8].stackSize+1 > inv[8].getMaxStackSize())
 				return false;
 			if (inv[3] != null) {
-				ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(inv[3]);
-				if (bon != null) {
-					ItemStack bonus = bon.getBonus();
-					if (bonus != null) {
-						if (!ReikaItemHelper.matchStacks(bonus, inv[8]))
-							return false;
-					}
+				ItemStack bonus = ExtractorBonus.getBonusItemForIngredient(inv[3]);
+				if (bonus != null) {
+					if (!ReikaItemHelper.matchStacks(bonus, inv[8]))
+						return false;
 				}
 			}
 		}
@@ -365,11 +362,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	 */
 	private void bonusItems(ItemStack is) {
 		ExtractorBonus e = ExtractorBonus.getBonusForIngredient(is);
-		if (e != null) {
-			e.addBonusToItemStack(inv, 8);
-		}
-		else {
-
+		if (e != null && e.doBonus()) {
+			ReikaInventoryHelper.addOrSetStack(ExtractorBonus.getBonusItemForIngredient(is), inv, 8);
 		}
 	}
 	/*

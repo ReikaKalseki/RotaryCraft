@@ -136,6 +136,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPurifier;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityWetter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityAggregator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
@@ -330,7 +331,8 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 	CHAIN(				"machine.chain",			BlockDMMachine.class,		TileEntityChainDrive.class,			17, "RenderBelt"),
 	CENTRIFUGE(			"machine.centrifuge",		BlockMIMachine.class,		TileEntityCentrifuge.class,			25, "RenderCentrifuge"),
 	BEDPIPE(			"machine.bedpipe", 			BlockPiping.class,			TileEntityBedrockPipe.class,		8,	"PipeRenderer"),
-	DRYING(				"machine.drying",			BlockMIMachine.class,		TileEntityDryingBed.class,			26, "RenderDryingBed");
+	DRYING(				"machine.drying",			BlockMIMachine.class,		TileEntityDryingBed.class,			26, "RenderDryingBed"),
+	WETTER(				"machine.wetter",			BlockMIMachine.class,		TileEntityWetter.class,				27, "RenderWetter");
 
 	private final String name;
 	private final Class te;

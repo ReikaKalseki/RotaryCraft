@@ -135,12 +135,9 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			}
 
 			if (true) {
-				ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(this.getSolution());
-				if (bon != null) {
-					ItemStack bonus = bon.getBonus();
-					if (bonus != null) {
-						stacks.add(new PositionedStack(bonus, 147, 44));
-					}
+				ItemStack bonus = ExtractorBonus.getBonusItemForIngredient(this.getSolution());
+				if (bonus != null) {
+					stacks.add(new PositionedStack(bonus, 147, 44));
 				}
 			}
 			return stacks;
@@ -292,15 +289,14 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 		Minecraft.getMinecraft().fontRenderer.drawString(String.format("%d%s duplication chance per stage", chance, "%"), -2, 65, 0x333333, false);
 		Minecraft.getMinecraft().fontRenderer.drawString(String.format("(Average %.2f units per ore)", Math.pow(1+0.01*this.getDupeChance(recipe), 4)), 9, 76, 0x333333, false);
 
-		if (true) {
-			ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(((ExtractorRecipe)arecipes.get(recipe)).getSolution());
-			if (bon != null) {
-				ItemStack bonus = bon.getBonus();
-				if (bonus != null) {
-					String s = String.format("%.2f%s", bon.getBonusPercent(), "%");
-					ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, s, 157, 34, 0);
-					//Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(s, 146, 34, 0xffffff);
-				}
+		ItemStack is = ((ExtractorRecipe)arecipes.get(recipe)).getSolution();
+		ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(is);
+		if (bon != null) {
+			ItemStack bonus = ExtractorBonus.getBonusItemForIngredient(is);
+			if (bonus != null) {
+				String s = String.format("%.2f%s", bon.getBonusPercent(), "%");
+				ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, s, 157, 34, 0);
+				//Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(s, 146, 34, 0xffffff);
 			}
 		}
 	}

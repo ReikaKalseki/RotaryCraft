@@ -34,7 +34,6 @@ import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource;
 import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
@@ -48,7 +47,7 @@ public class RotaryAux {
 	public static final Color[] sideColors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
 	public static final String[] sideColorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
 
-	public static final boolean getPowerOnClient = ConfigRegistry.POWERCLIENT.getState();
+	public static boolean getPowerOnClient = true;//ConfigRegistry.POWERCLIENT.getState();
 
 	private static Set<Class<? extends TileEntity>> shaftPowerBlacklist = new OneWaySet<Class<? extends TileEntity>>();
 

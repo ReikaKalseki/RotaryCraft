@@ -936,7 +936,7 @@
 	</dynamo>
 	<magnetic>
 		<desc>
-			The magnetostatic engine functions much like the pneumatic engine. It accepts RF provided to it, and its output speed can be selected to choose the total power output.
+			The magnetostatic engine functions much like the pneumatic engine. It accepts RF provided to it, and its output speed can be selected to choose the total power output. Like all other conversion engines, it requires coolant.
 		</desc>
 		<note>
 			Conduit Input: Back
@@ -1063,4 +1063,14 @@
 			
 		</note>
 	</drying>
+	<wetter>
+		<desc>
+			The liquefaction machine will mix a fluid into an item, yielding a different item.
+		</desc>
+		<note>
+			Required Power: %dW
+			Required Speed: %d rad/s
+			Power Input: Bottom
+		</note>
+	</wetter>
 </machines>

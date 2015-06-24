@@ -142,17 +142,6 @@ public class RecipesGrinder {
 	}
 
 	public void addModRecipes() {
-		for (ReikaOreHelper ore : ModOreCompat.instance.keySet()) {
-			Collection<String> c = ModOreCompat.instance.getAlternateNames(ore);
-			for (String s : c) {
-				ArrayList<ItemStack> li = OreDictionary.getOres(s);
-				for (ItemStack is : li) {
-					this.addRecipe(is, ItemStacks.getFlake(ore));
-					RotaryCraft.logger.log("Adding mod ore "+is+" as "+ore+" in the grinder because its ore type "+s+" is a subcategory of "+ore);
-				}
-			}
-		}
-
 		if (ModList.APPENG.isLoaded()) {
 			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
 			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();

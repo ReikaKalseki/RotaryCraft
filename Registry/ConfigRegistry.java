@@ -46,7 +46,6 @@ public enum ConfigRegistry implements ConfigList {
 	BANRAIN("Disable Silver Iodide Cannon Rain", false),
 	ACHIEVEMENTS("Enable Achievements", true),
 	MODORES("Force Inter-Mod Ore Compatibility", true),
-	GREGORES("Force Gregtech Ore Compatibility", true),
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
 	BLOCKDAMAGE("Direct Block Damage from Machine Failures", true),
@@ -92,7 +91,7 @@ public enum ConfigRegistry implements ConfigList {
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
-	POWERCLIENT("Run power transfer code on client", false),
+	//POWERCLIENT("Run power transfer code on client", false),  caused too many issues
 	TUTORIAL("Tutorial Mode", false),
 	FRAMES("Allow Frames to move Machines (May cause corruption)", false),
 	CONVERTERLOSS("Power Converter Loss Percent", 0),

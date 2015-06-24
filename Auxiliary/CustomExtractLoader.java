@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.Interfaces.OreType.OreRarity;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -114,6 +115,11 @@ public class CustomExtractLoader {
 
 		public int ordinal() {
 			return ordinal;
+		}
+
+		@Override
+		public String[] getOreDictNames() {
+			return ReikaJavaLibrary.collectionToArray(oreNames);
 		}
 	}
 

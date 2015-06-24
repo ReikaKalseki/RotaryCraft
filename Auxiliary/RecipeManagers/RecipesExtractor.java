@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,12 +16,10 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -61,17 +58,6 @@ public class RecipesExtractor
 	}
 
 	private void addModRecipes() {
-		for (ReikaOreHelper ore : ModOreCompat.instance.keySet()) {
-			Collection<String> c = ModOreCompat.instance.getAlternateNames(ore);
-			for (String s : c) {
-				ArrayList<ItemStack> li = OreDictionary.getOres(s);
-				for (ItemStack is : li) {
-					this.addRecipe(is, ItemStacks.getFlake(ore));
-					RotaryCraft.logger.log("Adding mod ore "+is+" as "+ore+" in the extractor because its ore type "+s+" is a subcategory of "+ore);
-				}
-			}
-		}
-
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
 			Collection<ItemStack> c = ore.getAllOreBlocks();

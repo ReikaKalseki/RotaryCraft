@@ -17,7 +17,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Interfaces.OreType;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -50,9 +53,8 @@ public enum ExtractorBonus {
 	CERTUS(ExtractorModOres.getSolutionProduct(ModOreList.CERTUSQUARTZ), ItemStacks.quartzflakes, 0.5F),
 	COBALT(ExtractorModOres.getSolutionProduct(ModOreList.COBALT), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.125F),
 	REDSTONE(ItemStacks.redsolution, ItemStacks.aluminumpowder, 0.25F),
-	MAGNETITE(ExtractorModOres.getSolutionProduct(ModOreList.MAGNETITE), ItemStacks.ironoreflakes, 0.2F);
-
-	private static final ExtractorBonus[] bonusList = values();
+	MAGNETITE(ExtractorModOres.getSolutionProduct(ModOreList.MAGNETITE), ItemStacks.ironoreflakes, 0.2F),
+	MONAZIT(ExtractorModOres.getSolutionProduct(ModOreList.MONAZIT), ExtractorModOres.getFlakeProduct(ModOreList.THORIUM), 0.15F, ModList.REACTORCRAFT);
 
 	private ItemStack bonusItem;
 	private ItemStack sourceItem;
@@ -62,6 +64,13 @@ public enum ExtractorBonus {
 	private List<ModList> bonusMods;
 	private boolean hasReq = false;
 	private ModList requirementMod;
+
+	private static final ExtractorBonus[] bonusList = values();
+	private static final ItemHashMap<ItemStack> itemmap = new ItemHashMap().setOneWay();
+	private static final ItemHashMap<ExtractorBonus> bonusmap = new ItemHashMap().setOneWay();
+	private static final OneWayMap<OreType, OreType> oremap = new OneWayMap();
+	private static final MultiMap<OreType, OreType> backwards = new MultiMap(new MultiMap.HashSetFactory()).setNullEmpty();
+	private static final Random rand = new Random();
 
 	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ModList req) {
 		bonusItem = is.copy();
@@ -105,16 +114,14 @@ public enum ExtractorBonus {
 	}
 
 	public static ExtractorBonus getBonusForIngredient(ItemStack is) {
-		for (int i = 0; i < bonusList.length; i++) {
-			ItemStack in = bonusList[i].sourceItem;
-			//ReikaJavaLibrary.pConsole(bonusList[i]+" > "+in+"  >:<  "+is);
-			if (ReikaItemHelper.matchStacks(is, in))
-				return bonusList[i];
-		}
-		return null;
+		return bonusmap.get(is);
 	}
 
-	public ItemStack getBonus() {
+	public static ItemStack getBonusItemForIngredient(ItemStack is) {
+		return itemmap.get(is);
+	}
+
+	private ItemStack getBonus() {
 		if (hasReq && !requirementMod.isLoaded())
 			return null;
 		if (isVariable) {
@@ -126,24 +133,9 @@ public enum ExtractorBonus {
 		return bonusItem.copy();
 	}
 
-	public void addBonusToItemStack(ItemStack[] inv, int slot) {
-		ItemStack bonus = this.getBonus();
-		if (bonus == null)
-			return;
+	public boolean doBonus() {
 		int chance = (int)(1F/probability);
-		Random r = new Random();
-		if (r.nextInt(chance) > 0)
-			return;
-		if (inv[slot] != null) {
-			if (!ReikaItemHelper.matchStacks(inv[slot], bonus))
-				return;
-			if (inv[slot].stackSize+bonus.stackSize > inv[slot].getMaxStackSize())
-				return;
-			inv[slot].stackSize += bonus.stackSize;
-		}
-		else {
-			inv[slot] = bonus;
-		}
+		return rand.nextInt(chance) == 0;
 	}
 
 	@Override
@@ -192,6 +184,31 @@ public enum ExtractorBonus {
 
 	public float getBonusPercent() {
 		return probability*100F;
+	}
+
+	public static boolean hasBonus(ModOreList ore) {
+		return oremap.containsKey(ore);
+	}
+
+	public static boolean isGivenAsBonus(ModOreList ore) {
+		return backwards.containsKey(ore);
+	}
+
+	static {
+		for (int i = 0; i < bonusList.length; i++) {
+			ExtractorBonus b = bonusList[i];
+			ItemStack is = b.sourceItem;
+			ItemStack bon = b.getBonus();
+			if (bon != null) {
+				OreType in = ItemStacks.getOreFromExtractItem(is);
+				OreType out = ItemStacks.getOreFromExtractItem(bon);
+				oremap.put(in, out);
+				backwards.addValue(out, in);
+				itemmap.put(is, bon);
+				bonusmap.put(is, b);
+			}
+		}
+		backwards.lock();
 	}
 
 }

@@ -14,9 +14,12 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import codechicken.nei.api.API;
@@ -44,6 +47,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final LavaMakerHandler melter = new LavaMakerHandler();
 	private static final CentrifugeHandler centrifuge = new CentrifugeHandler();
 	private static final DryingBedHandler dryingbed = new DryingBedHandler();
+	private static final WetterHandler wetter = new WetterHandler();
 
 	private static final NEITabOccluder occlusion = new NEITabOccluder();
 
@@ -111,6 +115,9 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		API.registerRecipeHandler(dryingbed);
 		API.registerUsageHandler(dryingbed);
 
+		API.registerRecipeHandler(wetter);
+		API.registerUsageHandler(wetter);
+
 		RotaryCraft.logger.log("Hiding technical blocks from NEI!");
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			if (BlockRegistry.blockList[i].isTechnical())
@@ -144,6 +151,20 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 				API.hideItem(new ItemStack(ir.getItemInstance()));
 			}
 		}
+
+		for (int i = 0; i < ModOreList.oreList.length; i++) {
+			ModOreList ore = ModOreList.oreList[i];
+			if (!ore.existsInGame() && !ExtractorBonus.isGivenAsBonus(ore)) {
+				API.hideItem(ExtractorModOres.getDustProduct(ore));
+				API.hideItem(ExtractorModOres.getSlurryProduct(ore));
+				API.hideItem(ExtractorModOres.getSolutionProduct(ore));
+				API.hideItem(ExtractorModOres.getFlakeProduct(ore));
+				API.hideItem(ExtractorModOres.getSmeltedIngot(ore));
+				RotaryCraft.logger.log("Hiding ore "+ore+" Extractor products from NEI, as it is unused.");
+			}
+		}
+
+		RotaryCraft.logger.log("Done loading NEI compatibility.");
 	}
 
 	private void hideBlock(Block b) {

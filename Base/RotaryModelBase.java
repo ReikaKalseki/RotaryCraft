@@ -38,6 +38,10 @@ public abstract class RotaryModelBase extends ModelBase implements TileModel {
 		this.renderAll(te, conditions, 0, 0);
 	}
 
+	public final void renderAll(TileEntity te, ArrayList conditions, float phi) {
+		this.renderAll(te, conditions, phi, 0);
+	}
+
 	protected final void setRotation(ModelRenderer model, float x, float y, float z)
 	{
 		model.rotateAngleX = x;

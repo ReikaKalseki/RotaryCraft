@@ -467,6 +467,8 @@ public class RotaryRecipes {
 		MachineRegistry.CENTRIFUGE.addCrafting("SGS", "S S", "PgP", 'P', ItemStacks.basepanel, 'g', ItemStacks.gearunit4, 'S', ItemStacks.steelingot, 'G', Blocks.glass_pane);
 
 		MachineRegistry.DRYING.addCrafting("S S", "SPS", "S S", 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
+
+		MachineRegistry.DRYING.addCrafting("S S", "gmg", "SPS", 'g', Blocks.glass_pane, 'm', ItemStacks.mixer, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 	}
 
 	private static void addCraftItems() {
@@ -844,7 +846,8 @@ public class RotaryRecipes {
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.bedingot, 9), ItemStacks.bedingotblock);
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemStacks.silveriodide, ItemStacks.salt, "ingotSilver"));
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Items.gunpowder, Items.redstone, ItemStacks.salt, ItemStacks.coaldust);
+		GameRegistry.addRecipe(new ShapelessOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Items.gunpowder, "redstone", "dustSalt", "dustCoal"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.nitrate, 4), Items.gunpowder, "redstone", "foodSalt", "dustCoal"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Items.redstone, "dustGold"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.redgolddust, 2), Items.redstone, ItemStacks.goldoreflakes));
 

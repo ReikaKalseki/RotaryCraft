@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityShaft extends TileEntity1DTransmitter {
+
 	public int[] readtorque = new int[2];
 	public int[] readomega = new int[2];
 	public boolean reading2Dir = false; //Is reading a 2-direction block (splitter, cross)

@@ -81,7 +81,9 @@ public class RenderFreezeGun extends RotaryTERenderer {
 			IORenderer.renderIO(tile, par2, par4, par6);
 			//this.renderIce((TileEntityFreezeGun)tile, par2, par4, par6);
 		}
-	}/*
+	}
+
+	/*
 
 	private void renderIce(TileEntityFreezeGun tile, double par2, double par4, double par6) {
 		if (tile == null)

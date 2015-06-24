@@ -26,8 +26,8 @@ public class RecipesCrystallizer
 {
 	private static final RecipesCrystallizer CrystallizerBase = new RecipesCrystallizer();
 
-	private OneWayMap<Fluid, ItemStack> recipeList = new OneWayMap();
-	private OneWayMap<Fluid, Integer> amounts = new OneWayMap();
+	private final OneWayMap<Fluid, ItemStack> recipeList = new OneWayMap();
+	private final OneWayMap<Fluid, Integer> amounts = new OneWayMap();
 
 	public static final RecipesCrystallizer getRecipes()
 	{

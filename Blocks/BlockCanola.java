@@ -44,6 +44,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.LegacyCraft.LegacyOptions;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
@@ -115,7 +116,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random par5Random) {
 		int l = world.getBlockLightValue(x, y, z);
-		if (l < 9 && !world.canBlockSeeTheSky(x, y, z)) {
+		if (l < 6 && !world.canBlockSeeTheSky(x, y, z)) {
 			this.die(world, x, y, z);
 		}
 		if (!world.getBlock(x, y-1, z).canSustainPlant(world, x, y-1, z, ForgeDirection.UP, this)) {
@@ -123,7 +124,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 		}
 		else if (l >= 9)  {
 			int metadata = world.getBlockMetadata(x, y, z);
-			if (metadata < GROWN && world.getBlockMetadata(x, y-1, z) > 0) {
+			if (metadata < GROWN && isFertileSoil(world, x, y-1, z)) {
 				if (par5Random.nextInt(3) == 0) {
 					metadata++;
 					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
@@ -338,5 +339,17 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 	@ModDependent(ModList.WAILA)
 	public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
 		return tag;
+	}
+
+	public static boolean canGrowAt(World world, int x, int y, int z) {
+		return world.getBlockLightValue(x, y, z) >= 9 && isSoil(world, x, y-1, z) && isFertileSoil(world, x, y-1, z);
+	}
+
+	private static boolean isSoil(World world, int x, int y, int z) {
+		return world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, (BlockCanola)BlockRegistry.CANOLA.getBlockInstance());
+	}
+
+	private static boolean isFertileSoil(World world, int x, int y, int z) {
+		return world.getBlock(x, y, z) == Blocks.farmland ? world.getBlockMetadata(x, y, z) > 0 : true;
 	}
 }

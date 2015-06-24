@@ -30,6 +30,12 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
 
 	public final void setInventorySlotContents(int par1, ItemStack is) {
 		inv[par1] = is;
+
+		this.onItemSet(par1, is);
+	}
+
+	protected void onItemSet(int slot, ItemStack is) {
+
 	}
 
 	public boolean validatesInputs() {
