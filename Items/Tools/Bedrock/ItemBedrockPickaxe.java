@@ -52,7 +52,6 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OpenBlockHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
-import Reika.DragonAPI.ModInteract.ItemHandlers.ThermalHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TransitionalOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -268,8 +267,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 15F;
 		if (b == OpenBlockHandler.getInstance().tankID)
 			return 20F;
-		if (b == ThermalHandler.getInstance().ductID) //fails as of newer TE, because is TileMultipart
-			return 48F;
+		//if (b == ThermalHandler.getInstance().ductID)
+		//	return 48F;
 		if (b == MystCraftHandler.getInstance().crystalID)
 			return 20F;
 		if (b == TwilightForestHandler.BlockEntry.MAZESTONE.getBlock())

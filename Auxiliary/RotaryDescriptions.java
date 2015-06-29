@@ -57,7 +57,6 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
@@ -393,8 +392,6 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.GENERATOR, ReikaEUHelper.getWattsPerEU());
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXOMEGA);
-
-		addData(HandbookRegistry.COIL, TileEntityAdvancedGear.CHARGETORQUE, TileEntityAdvancedGear.CHARGEPOWER, TileEntityAdvancedGear.CHARGETORQUEBEDROCK, TileEntityAdvancedGear.CHARGEPOWERBEDROCK);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

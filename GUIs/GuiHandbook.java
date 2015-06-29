@@ -76,7 +76,6 @@ public class GuiHandbook extends GuiScreen
 	protected int page = 0;
 	protected int subpage = 0;
 	private byte bcg;
-	private int tickcount;
 
 	public static long time;
 	private long buttontime;

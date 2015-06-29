@@ -23,6 +23,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityClutch extends TileEntity1DTransmitter {
 
+	public boolean needsRedstone = true;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta)
 	{
@@ -133,6 +135,6 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	}
 
 	public boolean isOutputEnabled() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) == needsRedstone;
 	}
 }

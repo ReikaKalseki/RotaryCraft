@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
@@ -32,11 +33,13 @@ public class ItemTileSelector extends ItemRotaryTool {
 		if (te instanceof SelectableTiles && !ep.isSneaking()) {
 			SelectableTiles sc = (SelectableTiles)te;
 			this.setID(is, sc.getUniqueID());
+			ReikaChatHelper.sendChatToPlayer(ep, "Linked to "+te);
 			return true;
 		}
 		SelectableTiles sc = this.getController(world, is);
 		if (sc != null) {
 			sc.addTile(x, y, z);
+			ReikaChatHelper.sendChatToPlayer(ep, "Added ["+x+", "+y+", "+z+"] to "+sc);
 		}
 		return true;
 	}

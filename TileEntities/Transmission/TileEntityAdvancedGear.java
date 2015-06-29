@@ -68,19 +68,13 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 
 	public static final int WORMRATIO = 16;
 
-	public static final int CHARGETORQUE = 128;
-	public static final int CHARGEPOWER = 65536;
-
-	public static final int CHARGETORQUEBEDROCK = 1024;
-	public static final int CHARGEPOWERBEDROCK = 524288;
-
 	private CVTController controller;
 
 	private ItemStack[] belts = new ItemStack[31];
 
 	private final HybridTank lubricant = new HybridTank("advgear", 20000);
 
-	private CVTState[] cvtState = new CVTState[2];
+	private final CVTState[] cvtState = new CVTState[2];
 
 	public boolean isRedstoneControlled;
 
@@ -125,7 +119,7 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	public void setReleaseTorque(int torque) {
-		releaseTorque = Math.min(this.getMaximumEmission(), torque);
+		releaseTorque = Math.min(this.getTorqueCap(), Math.min(this.getMaximumEmission(), torque));
 	}
 
 	public void setReleaseOmega(int omega) {
@@ -420,11 +414,12 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 			}
 			else if (!isCreative) {
 				long pwr = (long)torquein*(long)omegain;
-				if (torquein >= this.getChargeTorque() && pwr >= this.getChargePower())
+				if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
 					energy += pwr;
 			}
 		}
 		else if (energy > 0 && releaseTorque > 0 && releaseOmega > 0) {
+			releaseTorque = Math.min(releaseTorque, this.getTorqueCap());
 			torque = releaseTorque;
 			omega = releaseOmega;
 			power = (long)torque*(long)omega;
@@ -439,12 +434,16 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 		}
 	}
 
-	private long getChargePower() {
-		return isBedrockCoil ? CHARGEPOWERBEDROCK : CHARGEPOWER;
+	public long getChargingPower() {
+		return energy > 1 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy), 4)) : 1;
 	}
 
-	private int getChargeTorque() {
-		return isBedrockCoil ? CHARGETORQUEBEDROCK : CHARGETORQUE;
+	public int getChargingTorque() {
+		return energy > 1 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy), 3)) : 1;
+	}
+
+	public int getTorqueCap() {
+		return ReikaMathLibrary.ceilPseudo2Exp((int)Math.ceil(Math.sqrt(energy)/4));
 	}
 
 	private void overChargeExplosion(World world, int x, int y, int z) {

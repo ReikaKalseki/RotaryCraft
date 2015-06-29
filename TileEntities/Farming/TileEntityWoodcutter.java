@@ -159,7 +159,7 @@ ConditionalOperation, DamagingContact {
 			}
 		}
 
-		//RotaryCraft.logger.debug(tree);
+		RotaryCraft.logger.debug(tree);
 
 		if (tree.isEmpty())
 			return;

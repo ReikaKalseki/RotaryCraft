@@ -50,6 +50,7 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCCTV;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -225,6 +226,12 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 				TileEntityShaft ts1 = (TileEntityShaft)te;
 				//ts1.type = type;
 				return true;
+			}
+			if (m == MachineRegistry.CLUTCH) {
+				if (ep.isSneaking()) {
+					TileEntityClutch tc = (TileEntityClutch)te;
+					tc.needsRedstone = !tc.needsRedstone;
+				}
 			}
 			if (m == MachineRegistry.FLOODLIGHT) {
 				if (ep.isSneaking()) {

@@ -35,6 +35,7 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
@@ -122,6 +123,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ModWoodList wood = ModWoodList.getModWood(id, meta);
+		ReikaJavaLibrary.pConsole(wood);
 		ReikaTreeHelper tree2 = ReikaTreeHelper.getTree(id, meta);
 		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 		TreeReader tree = new TreeReader();

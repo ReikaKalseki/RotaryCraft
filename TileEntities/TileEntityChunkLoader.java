@@ -9,43 +9,48 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.util.List;
+import java.util.Collection;
 
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.DragonAPI.Auxiliary.ChunkManager;
+import Reika.DragonAPI.Interfaces.BreakAction;
+import Reika.DragonAPI.Interfaces.ChunkLoadingTile;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityChunkLoader extends TileEntityPowerReceiver implements LoadingCallback {
+public class TileEntityChunkLoader extends TileEntityPowerReceiver implements ChunkLoadingTile, BreakAction {
+
+	private boolean loaded;
 
 	public TileEntityChunkLoader() {
-		ForgeChunkManager.setForcedChunkLoadingCallback(RotaryCraft.instance, this);
+
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		Chunk ch = world.getChunkFromBlockCoords(x, z);
-		Ticket tk = ForgeChunkManager.requestTicket(RotaryCraft.instance, world, ForgeChunkManager.Type.NORMAL);
-		ChunkCoordIntPair chp = new ChunkCoordIntPair(ch.xPosition, ch.zPosition);
-		ForgeChunkManager.forceChunk(tk, chp);
+		this.getPowerBelow();
+		if (omega >= MINSPEED) {
+			this.load();
+		}
+		else {
+			this.unload();
+		}
 	}
 
-	public void unLoad(World world, int x, int y, int z) {
-		Chunk ch = world.getChunkFromBlockCoords(x, z);
-		Ticket tk = ForgeChunkManager.requestTicket(RotaryCraft.class, world, ForgeChunkManager.Type.NORMAL);
-		ChunkCoordIntPair chp = new ChunkCoordIntPair(ch.xPosition, ch.zPosition);
-		ForgeChunkManager.unforceChunk(tk, chp);
+	private void load() {
+		if (loaded)
+			return;
+		loaded = true;
+		ChunkManager.instance.loadChunks(this);
 	}
 
-	@Override
-	public void ticketsLoaded(List<Ticket> tickets, World world) {
-
+	private void unload() {
+		if (loaded) {
+			loaded = false;
+			ChunkManager.instance.unloadChunks(this);
+		}
 	}
 
 	@Override
@@ -59,6 +64,14 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Lo
 	}
 
 	@Override
+	protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalid) {
+		if (!invalid) {
+			throw new RuntimeException("Chunkloader "+this+" unloaded!");
+		}
+		this.unload();
+	}
+
+	@Override
 	public MachineRegistry getMachine() {
 		return MachineRegistry.CHUNKLOADER;
 	}
@@ -66,6 +79,16 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Lo
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public Collection<ChunkCoordIntPair> getChunksToLoad() {
+		return ChunkManager.getChunkSquare(xCoord, zCoord, 16);
+	}
+
+	@Override
+	public void breakBlock() {
+		this.unload();
 	}
 
 }
