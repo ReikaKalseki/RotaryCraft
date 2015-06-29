@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.ChunkLoadingTile;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -31,11 +32,13 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Ch
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
-		if (omega >= MINSPEED) {
-			this.load();
-		}
-		else {
-			this.unload();
+		if (!world.isRemote) {
+			if (omega >= MINSPEED) {
+				this.load();
+			}
+			else {
+				this.unload();
+			}
 		}
 	}
 
@@ -65,10 +68,12 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Ch
 
 	@Override
 	protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalid) {
-		if (!invalid) {
-			throw new RuntimeException("Chunkloader "+this+" unloaded!");
+		if (invalid) {
+			this.unload();
 		}
-		this.unload();
+		else {
+			RotaryCraft.logger.logError("Chunkloader "+this+" unloaded!");
+		}
 	}
 
 	@Override
@@ -83,7 +88,7 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Ch
 
 	@Override
 	public Collection<ChunkCoordIntPair> getChunksToLoad() {
-		return ChunkManager.getChunkSquare(xCoord, zCoord, 16);
+		return ChunkManager.getChunkSquare(xCoord, zCoord, 0);
 	}
 
 	@Override
