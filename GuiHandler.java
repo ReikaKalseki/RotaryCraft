@@ -136,7 +136,10 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.ModInterface.ContainerEnergyToPower;
+import Reika.RotaryCraft.ModInterface.ContainerFuelEngine;
 import Reika.RotaryCraft.ModInterface.GuiEnergyToPower;
+import Reika.RotaryCraft.ModInterface.GuiFuelEngine;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -357,6 +360,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityLavaMaker) {
 			return new ContainerRockMelter(player, (TileEntityLavaMaker) te);
+		}
+		if (te instanceof TileEntityFuelEngine) {
+			return new ContainerFuelEngine(player, (TileEntityFuelEngine) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -582,6 +588,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityLavaMaker) {
 			return new GuiRockMelter(player, (TileEntityLavaMaker) te);
+		}
+		if (te instanceof TileEntityFuelEngine) {
+			return new GuiFuelEngine(player, (TileEntityFuelEngine) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

@@ -20,9 +20,11 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 import cofh.api.energy.IEnergyStorage;
+
 @Strippable(value = {"cofh.api.energy.IEnergyHandler"})
-public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler {
+public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyReceiver {
 
 	@Override
 	public long getMaxPower() {
@@ -109,11 +111,6 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 		default:
 			return 0;
 		}
-	}
-
-	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-		return 0;
 	}
 
 	@Override

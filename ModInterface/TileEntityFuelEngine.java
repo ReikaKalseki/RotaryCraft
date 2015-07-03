@@ -43,6 +43,9 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
 public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidHandler, SimpleProvider, PowerGenerator, IPipeConnection,
 TemperatureTE {
@@ -53,6 +56,7 @@ TemperatureTE {
 	private int temperature;
 
 	public static final int CAPACITY = 24000;
+	public static final int MAXTEMP = 750;
 
 	private HybridTank tank = new HybridTank("fuelengine", CAPACITY);
 	private HybridTank watertank = new HybridTank("waterfuelengine", CAPACITY);
@@ -124,7 +128,7 @@ TemperatureTE {
 		if (this.canEmitPower(world, x, y, z)) {
 			fuelTimer.update();
 			if (fuelTimer.checkCap()) {
-				tank.removeLiquid(1);
+				tank.removeLiquid(this.getConsumedFuel());
 			}
 			torque = GEN_TORQUE;
 			if (this.hasECU()) {
@@ -149,6 +153,10 @@ TemperatureTE {
 			if (world.getTotalWorldTime()%32 == 0)
 				lubetank.removeLiquid(1);
 		}
+	}
+
+	private int getConsumedFuel() {
+		return 2;
 	}
 
 	private int getGenOmega() {
@@ -380,7 +388,7 @@ TemperatureTE {
 			temperature += 5;
 		}
 
-		if (temperature > 750)
+		if (temperature > MAXTEMP)
 			this.overheat(world, x, y, z);
 	}
 
@@ -420,6 +428,30 @@ TemperatureTE {
 	@Override
 	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
 		c.add(this.getAdjacentTileEntity(write));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getFuelScaled(int a) {
+		return tank.getLevel() * a / tank.getCapacity();
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getWaterScaled(int a) {
+		return watertank.getLevel() * a / watertank.getCapacity();
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getLubricantScaled(int a) {
+		return lubetank.getLevel() * a / lubetank.getCapacity();
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getTemperatureScaled(int a) {
+		return temperature * a / MAXTEMP;
+	}
+
+	public int getFuelDuration() {
+		return tank.getLevel()*fuelTimer.getCap()/this.getConsumedFuel()/20;
 	}
 
 }

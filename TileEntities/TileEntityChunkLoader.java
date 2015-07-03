@@ -16,13 +16,18 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Interfaces.ChunkLoadingTile;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityChunkLoader extends TileEntityPowerReceiver implements ChunkLoadingTile, BreakAction {
 
 	private boolean loaded;
+
+	public static final int BASE_RADIUS = 0;
+	public static final int FALLOFF = 524288;
+	public static final int MAX_RADIUS = ConfigRegistry.CHUNKLOADERSIZE.getValue();
 
 	public TileEntityChunkLoader() {
 
@@ -63,16 +68,16 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Ch
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-
+		if (omega > 0)
+			phi += ReikaMathLibrary.logbase(omega+1, 2);
 	}
 
 	@Override
 	protected void onInvalidateOrUnload(World world, int x, int y, int z, boolean invalid) {
+		if (world.isRemote)
+			return;
 		if (invalid) {
 			this.unload();
-		}
-		else {
-			RotaryCraft.logger.logError("Chunkloader "+this+" unloaded!");
 		}
 	}
 
@@ -88,12 +93,17 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Ch
 
 	@Override
 	public Collection<ChunkCoordIntPair> getChunksToLoad() {
-		return ChunkManager.getChunkSquare(xCoord, zCoord, 0);
+		return ChunkManager.getChunkSquare(xCoord, zCoord, this.getLoadingRadius());
+	}
+
+	private int getLoadingRadius() {
+		return Math.min(MAX_RADIUS, BASE_RADIUS+(int)(power-MINSPEED)/FALLOFF);
 	}
 
 	@Override
 	public void breakBlock() {
-		this.unload();
+		if (!worldObj.isRemote)
+			this.unload();
 	}
 
 }

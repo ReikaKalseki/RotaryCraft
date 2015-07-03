@@ -87,6 +87,10 @@ public class RotaryRegistration {
 
 		OreDictionary.registerOre("silicon", ItemStacks.silicon);
 		OreDictionary.registerOre("itemSilicon", ItemStacks.silicon);
+		OreDictionary.registerOre("gemSilicon", ItemStacks.silicon);
+
+		OreDictionary.registerOre("fertilizer", ItemStacks.compost);
+		OreDictionary.registerOre("itemFertilizer", ItemStacks.compost);
 		/*
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];

@@ -1056,8 +1056,6 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return false;
 		if (this == CCTV)
 			return true;
-		if (this == CHUNKLOADER)
-			return true;
 		if (requirement != null && !requirement.isLoaded())
 			return true;
 		if (powertype != null && !powertype.exists())
@@ -1247,8 +1245,10 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return !ConfigRegistry.ALLOWITEMCANNON.getState();
 		if (this == EMP)
 			return !ConfigRegistry.ALLOWEMP.getState();
-		if (this == TNTCANNON)
+		if (this == LIGHTBRIDGE)
 			return !ConfigRegistry.ALLOWLIGHTBRIDGE.getState();
+		if (this == CHUNKLOADER)
+			return !ConfigRegistry.ALLOWCHUNKLOADER.getState();
 		if (this == SPILLER)
 			return ConfigRegistry.SPILLERRANGE.getValue() == 0;
 		if (this.isModConversionEngine())
@@ -1271,9 +1271,14 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return renderInstance;
 		}
 		catch (InstantiationException e) {
+			e.printStackTrace();
 			throw new RegistrationException(RotaryCraft.instance, this+" failed to instantiate its TileEntity of "+te);
 		}
 		catch (IllegalAccessException e) {
+			throw new RegistrationException(RotaryCraft.instance, this+" failed to instantiate its TileEntity of "+te);
+		}
+		catch (LinkageError e) {
+			e.printStackTrace();
 			throw new RegistrationException(RotaryCraft.instance, this+" failed to instantiate its TileEntity of "+te);
 		}
 	}

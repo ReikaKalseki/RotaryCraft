@@ -44,6 +44,8 @@ public enum BlastGate {
 	IRONWOOD(TwilightForestHandler.ItemEntry.IRONWOOD.getItem()),
 	MANYULLYN("ingotManyullyn"),
 	GOLDGEAR(GameRegistry.findItem(ModList.BUILDCRAFT.modLabel, "goldGearItem")),
+	TERRASTEEL("ingotTerrasteel"),
+	VOIDMETAL("ingotVoid"),
 	;
 
 	private ItemStack item;

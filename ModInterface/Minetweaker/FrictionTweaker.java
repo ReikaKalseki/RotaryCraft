@@ -26,10 +26,10 @@ public class FrictionTweaker {
 	private static final RecipesFrictionHeater recipes = RecipesFrictionHeater.getRecipes();
 
 	@ZenMethod
-	public static void addRecipe(IIngredient input, IIngredient output, int temp) {
+	public static void addRecipe(IIngredient input, IIngredient output, int temp, int time) {
 		ItemStack out = MinetweakerHelper.getStack(output);
 		if (isValid(out)) {
-			MineTweakerAPI.apply(new AddRecipe(input, output, temp));
+			MineTweakerAPI.apply(new AddRecipe(input, output, temp, time));
 		}
 		else {
 			throw new IllegalArgumentException("You cannot add alternate recipes for native RotaryCraft items!");
@@ -44,11 +44,13 @@ public class FrictionTweaker {
 		private ArrayList<ItemStack> inputs = new ArrayList();
 		private ItemStack output;
 		private int temp;
+		private int time;
 
-		public AddRecipe(IIngredient input, IIngredient output, int t) {
+		public AddRecipe(IIngredient input, IIngredient output, int temp, int time) {
 			Collection<ItemStack> toAddRecipe = MinetweakerHelper.getStacks(input);
 
-			temp = t;
+			this.temp = temp;
+			this.time = time;
 
 			for (ItemStack in : toAddRecipe) {
 				if (recipes.getRecipeByInput(in) == null) {
@@ -60,7 +62,7 @@ public class FrictionTweaker {
 		@Override
 		public void apply() {
 			for (ItemStack in : inputs) {
-				recipes.addCustomRecipe(in, output, temp);
+				recipes.addCustomRecipe(in, output, temp, time);
 			}
 		}
 

@@ -71,7 +71,6 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	private int tick;
 
 	private int threshold[] = new int[SIZE];
-	//private CraftingLock[] lock = new CraftingLock[SIZE];
 	private final IdentityHashMap<ICraftingLink, Integer> locks = new IdentityHashMap();
 	private boolean[] lock = new boolean[SIZE];
 
@@ -101,11 +100,13 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		}
 
 		@Override
+		@ModDependent(ModList.APPENG)
 		public void onCraftingLinkReturned(ICraftingLink link) {
 			locks.put(link, slot);
 		}
 
 		@Override
+		@ModDependent(ModList.APPENG)
 		public void onCraftingComplete(ICraftingLink link) {
 			//isRunning = false;
 		}

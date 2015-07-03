@@ -31,18 +31,22 @@ public class RecipesFrictionHeater {
 	}
 
 	private RecipesFrictionHeater() {
-		this.addRecipe(ItemStacks.tungstenflakes, ItemStacks.tungsteningot, 1350);
+		this.addRecipe(ItemStacks.tungstenflakes, ItemStacks.tungsteningot, 1350, 600);
 		this.addRecipe(ItemStacks.silicondust, ItemStacks.silicon, 800);
 	}
 
 	private void addRecipe(ItemStack in, ItemStack out, int temp) {
-		FrictionRecipe rec = new FrictionRecipe(in, out, temp);
+		this.addRecipe(in, out, temp, 200);
+	}
+
+	private void addRecipe(ItemStack in, ItemStack out, int temp, int time) {
+		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
 		recipes.put(in, rec);
 		outputs.put(out, rec);
 	}
 
-	public void addCustomRecipe(ItemStack in, ItemStack out, int temp) {
-		FrictionRecipe rec = new FrictionRecipe(in, out, temp);
+	public void addCustomRecipe(ItemStack in, ItemStack out, int temp, int time) {
+		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
 		customRecipes.put(in, rec);
 		customOutputs.put(out, rec);
 	}
@@ -52,13 +56,13 @@ public class RecipesFrictionHeater {
 		customRecipes.remove(in);
 	}
 
-	public ItemStack getSmelting(ItemStack in, int temperature) {
+	public FrictionRecipe getSmelting(ItemStack in, int temperature) {
 		FrictionRecipe rec = recipes.get(in);
 		if (rec == null)
 			rec = customRecipes.get(in);
 		if (rec == null)
 			return null;
-		return temperature >= rec.requiredTemperature ? rec.getOutput() : null;
+		return temperature >= rec.requiredTemperature ? rec : null;
 	}
 
 	public FrictionRecipe getRecipeByOutput(ItemStack out) {
@@ -78,11 +82,13 @@ public class RecipesFrictionHeater {
 	public static final class FrictionRecipe {
 
 		public final int requiredTemperature;
+		public final int duration;
 		private final ItemStack input;
 		private final ItemStack output;
 
-		private FrictionRecipe(ItemStack in, ItemStack out, int temp) {
+		private FrictionRecipe(ItemStack in, ItemStack out, int temp, int time) {
 			requiredTemperature = temp;
+			duration = Math.abs(time);
 			input = in;
 			output = out;
 		}

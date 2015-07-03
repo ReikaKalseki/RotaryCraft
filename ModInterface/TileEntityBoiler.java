@@ -15,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -74,14 +73,20 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 		timer.update();
 		if (timer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
-		if (temperature > 100)
+		if (this.acceptEnergy())
 			storedEnergy += power*200*ConfigRegistry.getConverterEfficiency();
 
 		//ReikaJavaLibrary.pConsole(storedEnergy/ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()), Side.SERVER);
 
 		//ReikaJavaLibrary.pConsoleSideOnly(this.getSteam()+":"+storedEnergy+"/"+ReikaRailCraftHelper.getSteamBucketEnergy(), Side.SERVER);
-		if (storedEnergy >= ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp()) && !world.isRemote)
-			this.makeSteam();
+		if (!world.isRemote) {
+			int space = output.getRemainingSpace();
+			if (space > 0) {
+				int mB = Math.min(space, Math.min(input.getLevel(), ReikaRailCraftHelper.getAmountConvertibleSteam(this.getInitTemp(), storedEnergy)));
+				if (mB > 0)
+					this.makeSteam(mB);
+			}
+		}
 
 		TileEntity te = world.getTileEntity(x, y+1, z);
 		if (te instanceof IFluidHandler) {
@@ -94,19 +99,21 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 		}
 	}
 
-	private void makeSteam() {
-		if (this.getWater() >= FluidContainerRegistry.BUCKET_VOLUME && (output.isEmpty() || output.canTakeIn(this.getProducedSteam()))) {
-			input.removeLiquid(FluidContainerRegistry.BUCKET_VOLUME);
-			output.addLiquid(this.getProducedSteam(), FluidRegistry.getFluid("steam"));
-			storedEnergy -= ReikaRailCraftHelper.getSteamBucketEnergy(this.getWaterTemp());
-		}
+	private boolean acceptEnergy() {
+		return temperature > 100 && !input.isEmpty() && !output.isFull();
 	}
 
-	private int getProducedSteam() {
-		return 8000;
+	private void makeSteam(int mB) {
+		input.removeLiquid(mB);
+		output.addLiquid(this.getProducedSteam(mB), FluidRegistry.getFluid("steam"));
+		storedEnergy -= ReikaRailCraftHelper.getSteamEnergy(this.getInitTemp(), mB);
 	}
 
-	private int getWaterTemp() {
+	private int getProducedSteam(int mB) {
+		return 8*mB;
+	}
+
+	private int getInitTemp() {
 		return ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
 	}
 

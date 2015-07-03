@@ -98,7 +98,9 @@ public enum ConfigRegistry implements ConfigList {
 	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true),
 	BORERGEN("Borer Chunk Gen Radius", 0),
 	ALLOWLIGHTBRIDGE("Enable Light Bridge", true),
-	ALLOWITEMCANNON("Enable Item Cannon", true);
+	ALLOWITEMCANNON("Enable Item Cannon", true),
+	ALLOWCHUNKLOADER("Enable Chunk Loader", true),
+	CHUNKLOADERSIZE("Chunk Loader Max Radius in Chunks", 8);
 
 	private String label;
 	private boolean defaultState;

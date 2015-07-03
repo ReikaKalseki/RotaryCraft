@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -29,6 +30,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater.FrictionRecipe;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -116,9 +118,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			tickcount = 0;
 			this.updateTemperature(world, x, y, z, meta);
 		}
-		if (power < MINPOWER)
-			return;
-		if (torque < MINTORQUE)
+		if (!this.isActive())
 			return;
 
 		if (!this.hasFurnace(world)) {
@@ -142,6 +142,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		}
 		else
 			this.hijackFurnace(world, x, y, z, meta);
+	}
+
+	public boolean isActive() {
+		return power >= MINPOWER && torque >= MINTORQUE;
 	}
 
 	private void heatMachine(World world, int x, int y, int z) {
@@ -180,27 +184,31 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (in != null) {
 			ItemStack out = tile.getStackInSlot(2);
 			ItemStack smelt = FurnaceRecipes.smelting().getSmeltingResult(in);
-			ItemStack special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
-			if (!this.canTileMake(tile, special))
+			FrictionRecipe special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
+			if (special != null && !this.canTileMake(tile, special.getOutput()))
 				special = null;
-
 			if (smelt != null || special != null) {
-				this.smeltCalculation();
-				smeltTime++;
-				tile.furnaceCookTime = Math.min(smeltTime, 195);
-				if (smeltTime >= 200) {
+				int factor = this.getSpeedFactorFromTemperature();
+				if (special != null)
+					factor *= this.getAccelerationFactor(special);
+				smeltTime += 1+factor;
+				int max = special != null ? special.duration : 200;
+				tile.furnaceCookTime = Math.min(smeltTime, max-5)*200/max;
+				if (smeltTime >= max) {
+					int xp = 0;
 					if (smelt != null && tile.canSmelt()) {
 						tile.smeltItem();
-						if (ConfigRegistry.FRICTIONXP.getState()) {
-							int xp = MathHelper.ceiling_float_int(FurnaceRecipes.smelting().func_151398_b(smelt));
-							ReikaWorldHelper.splitAndSpawnXP(world, fx+0.5, fy+0.6, fz+0.5, xp, 600);
-						}
+						xp = MathHelper.ceiling_float_int(FurnaceRecipes.smelting().func_151398_b(smelt));
 					}
 					else if (special != null) {
 						ReikaInventoryHelper.decrStack(0, tile, 1);
 						int amt = out != null ? out.stackSize+1 : 1;
-						out = ReikaItemHelper.getSizedItemStack(special, amt);
+						out = ReikaItemHelper.getSizedItemStack(special.getOutput(), amt);
 						tile.setInventorySlotContents(2, out);
+						xp = 1;
+					}
+					if (xp > 0 && ConfigRegistry.FRICTIONXP.getState()) {
+						ReikaWorldHelper.splitAndSpawnXP(world, fx+0.5, fy+0.6, fz+0.5, xp, 600);
 					}
 					smeltTime = 0;
 				}
@@ -235,16 +243,16 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		}
 	}
 
+	private float getAccelerationFactor(FrictionRecipe rec) {
+		float fac = temperature/(float)rec.requiredTemperature;
+		return Math.min(1, (fac*fac)-1);
+	}
+
 	private void setFurnaceBlock(World world, boolean isOn) {
 		Block b = world.getBlock(fx, fy, fz);
 		;
 		BlockFurnace furn = (BlockFurnace)b;
 		//furn.updateFurnaceBlockState(isOn, world, fx, fy, fz);
-	}
-
-	private void smeltCalculation() {
-		int factor = this.getSpeedFactorFromTemperature();
-		smeltTime += factor;
 	}
 
 	private void getFurnaceCoordinates(World world, int x, int y, int z, int meta) {
@@ -364,6 +372,23 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	public void setTemperature(int temp) {
 
+	}
+
+	public static boolean isHijacked(TileEntityFurnace furn) {
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i];
+			int dx = furn.xCoord+dir.offsetX;
+			int dz = furn.zCoord+dir.offsetZ;
+			MachineRegistry m = MachineRegistry.getMachine(furn.worldObj, dx, furn.yCoord, dz);
+			if (m == MachineRegistry.FRICTION) {
+				TileEntityFurnaceHeater te = (TileEntityFurnaceHeater)furn.worldObj.getTileEntity(dx, furn.yCoord, dz);
+				if (te.fx == furn.xCoord && te.fz == furn.zCoord) {
+					if (te.isActive())
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

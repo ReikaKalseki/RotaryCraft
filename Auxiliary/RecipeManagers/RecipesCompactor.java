@@ -45,6 +45,8 @@ public class RecipesCompactor
 		this.addCompacting(ItemStacks.lonsda, new ItemStack(Items.diamond, this.getNumberPerStep(), 0), rp, rt);
 
 		this.addCompacting(Items.blaze_powder, new ItemStack(Blocks.glowstone, 1, 0), 2000, 600);
+
+		this.addCompacting(Blocks.ice, new ItemStack(Blocks.packed_ice), 24000, -80);
 	}
 
 	private static class CompactingRecipe {

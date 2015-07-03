@@ -1073,4 +1073,14 @@
 			Power Input: Bottom
 		</note>
 	</wetter>
+	<chunkloader>
+		<desc>
+			The chunk loader uses extremely high velocities - generated with extreme input speeds - to induce relativistic effects and distort space-time around it, keeping chunks loaded.
+		</desc>
+		<note>
+			Required Speed: %d rad/s
+			Power Input: Bottom
+			Radius In Chunks: %d+((Power-%d)/%d)
+		</note>
+	</chunkloader>
 </machines>

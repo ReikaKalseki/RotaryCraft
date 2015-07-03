@@ -214,8 +214,7 @@ ConditionalOperation, DamagingContact {
 				boolean fall = BlockSand.func_149831_e(world, c.xCoord, c.yCoord-1, c.zCoord);
 				if (fall) {
 					EntityFallingBlock e = new EntityFallingBlock(world, c.xCoord+0.5, c.yCoord+0.65, c.zCoord+0.5, drop, dropmeta);
-					e.field_145812_b = -2000;
-					e.field_145813_c = false;
+					e.field_145812_b = -5000;
 					if (!world.isRemote) {
 						world.spawnEntityInWorld(e);
 					}
