@@ -51,6 +51,9 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		if (tank.isFull())
 			return;
 
+		if (temperature >= this.getMaxTemperature())
+			return;
+
 		tickcount++;
 		if (tickcount < this.getOperationTime())
 			return;
@@ -175,5 +178,10 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 
 	public void setTemperature(int temp) {
 		temperature = temp;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 100;
 	}
 }

@@ -457,4 +457,9 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	public void setTemperature(int temp) {
 
 	}
+
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
 }

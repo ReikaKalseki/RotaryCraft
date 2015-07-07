@@ -47,7 +47,9 @@ public class GuiRockMelter extends GuiPowerOnlyMachine {
 		if (!tile.isEmpty()) {
 			if (api.isMouseInBox(minx, maxx, miny, maxy)) {
 				String sg = String.format("%s: %d/%d mB", tile.getContainedFluid().getLocalizedName(), tile.getLevel(), tile.getCapacity());
-				api.drawTooltip(fontRendererObj, sg);
+				int mx = api.getMouseRealX();
+				int my = api.getMouseRealY();
+				api.drawTooltipAt(fontRendererObj, sg, mx-fontRendererObj.getStringWidth(sg)-8, my-40);
 			}
 		}
 	}

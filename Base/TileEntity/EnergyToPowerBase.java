@@ -49,6 +49,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	private static final int MINBASE = -1;
 
+	public static final int MAXTEMP = 500;
+
 	public static final int TIERS = 6;
 
 	protected int storedEnergy;
@@ -506,8 +508,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		}
 		if (temperature - Tamb <= 16 && temperature > Tamb)
 			temperature--;
-		if (temperature > 500) {
-			temperature = 500;
+		if (temperature > MAXTEMP) {
+			temperature = MAXTEMP;
 			if (!world.isRemote)
 				this.overheat(world, x, y, z);
 		}
@@ -549,6 +551,11 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
 		if (dir == read)
 			c.add(this.getAdjacentTileEntity(write));
+	}
+
+	@Override
+	public final int getMaxTemperature() {
+		return MAXTEMP;
 	}
 
 }

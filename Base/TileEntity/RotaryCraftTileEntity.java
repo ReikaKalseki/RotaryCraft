@@ -27,6 +27,7 @@ import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Interfaces.BasicMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -37,7 +38,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher {
+public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher, BasicMachine {
 
 	protected RotaryModelBase rmb;
 	protected int tickcount = 0;
@@ -117,7 +118,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		//return MachineRegistry.getMachine(worldObj, x, y, z);
 	}
 
-	public void giveNoSuperWarning() {
+	public final void giveNoSuperWarning() {
 		ReikaJavaLibrary.pConsole("TileEntity "+this.getName()+" does not call super()!");
 		ReikaChatHelper.write("TileEntity "+this.getName()+" does not call super()!");
 	}

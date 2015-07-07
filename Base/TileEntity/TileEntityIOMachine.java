@@ -52,7 +52,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	protected int omegain;
 
 	private boolean superCalled = false;
-	private int superTick = 0;
 
 	public void updateTileEntity() {
 		if (iotick > 0)
@@ -102,7 +101,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		NBT.setInteger("torque", torque);
 		NBT.setInteger("omega", omega);
 		NBT.setLong("power", power);
-		NBT.setInteger("io", iotick);
+		//NBT.setInteger("io", iotick);
 
 		NBT.setInteger("read1", read != null ? read.ordinal() : -1);
 		NBT.setInteger("read2", read2 != null ? read2.ordinal() : -1);
@@ -120,7 +119,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		torque = NBT.getInteger("torque");
 		omega = NBT.getInteger("omega");
 		power = NBT.getLong("power");
-		iotick = NBT.getInteger("io");
+		//iotick = NBT.getInteger("io");
 
 		if (torque < 0)
 			torque = 0;

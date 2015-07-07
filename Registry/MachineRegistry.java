@@ -669,6 +669,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		case CAVESCANNER:
 		case SCREEN:
 		case GPR:
+		case RESERVOIR:
 			return true;
 		default:
 			return false;

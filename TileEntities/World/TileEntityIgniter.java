@@ -309,4 +309,9 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 	public void setTemperature(int temp) {
 
 	}
+
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
 }

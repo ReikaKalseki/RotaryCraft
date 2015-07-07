@@ -56,6 +56,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
+import Reika.DragonAPI.ModInteract.ItemStackRepository;
 import Reika.DragonAPI.ModInteract.MinetweakerHooks;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MTInteractionManager;
@@ -120,7 +121,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.recipes.RecipeManagers;
 
 
-@Mod( modid = "RotaryCraft", name="RotaryCraft", version="Gamma", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
+@Mod( modid = "RotaryCraft", name="RotaryCraft", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
 
 public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
@@ -309,6 +310,8 @@ public class RotaryCraft extends DragonAPIMod {
 		}
 
 		PackModificationTracker.instance.addMod(this, config);
+
+		ItemStackRepository.instance.registerClass(this, ItemStacks.class);
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		RotaryRegistration.addTileEntities();

@@ -30,6 +30,8 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.InertIInv;
+import Reika.DragonAPI.Interfaces.PartialInventory;
+import Reika.DragonAPI.Interfaces.PartialTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -46,7 +48,6 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -56,7 +57,8 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PipeConnector, IFluidHandler {
+public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PartialTank,
+PipeConnector, IFluidHandler {
 
 	private boolean isReleasing = false;
 	private int releaseTorque = 0;
@@ -986,8 +988,13 @@ public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements I
 	}
 
 	@Override
-	public boolean hasInventory() {
+	public final boolean hasInventory() {
 		return this.getGearType().hasInventory();
+	}
+
+	@Override
+	public final boolean hasTank() {
+		return this.getGearType().isLubricated();
 	}
 
 	public boolean isCreative() {

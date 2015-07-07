@@ -41,6 +41,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.BlockKey;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.LegacyWailaHelper;
 import Reika.LegacyCraft.LegacyOptions;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
@@ -321,6 +322,8 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 	@Override
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		if (LegacyWailaHelper.cacheAndReturn(acc))
+			return currenttip;
 		int meta = acc.getMetadata();
 		currenttip.add(String.format("Growth Stage: %d%s", 100*meta/GROWN, "%"));
 		return currenttip;

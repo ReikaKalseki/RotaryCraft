@@ -234,4 +234,9 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }

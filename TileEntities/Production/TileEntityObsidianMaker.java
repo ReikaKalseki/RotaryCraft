@@ -370,4 +370,9 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	public void setTemperature(int temp) {
 
 	}
+
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
 }

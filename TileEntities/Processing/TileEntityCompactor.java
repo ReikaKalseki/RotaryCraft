@@ -549,4 +549,9 @@ MultiOperational, ConditionalOperation {
 	public boolean canBeCooledWithFins() {
 		return true;
 	}
+
+	@Override
+	public int getMaxPressure() {
+		return MAXPRESSURE;
+	}
 }

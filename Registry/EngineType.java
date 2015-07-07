@@ -292,6 +292,10 @@ public enum EngineType {
 		}
 	}
 
+	public boolean usesFluids() {
+		return this.burnsFuel() || this.isWaterPiped() || this.requiresLubricant();
+	}
+
 	public boolean requiresLubricant() {
 		return this == HYDRO;
 	}

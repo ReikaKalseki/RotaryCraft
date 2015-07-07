@@ -391,4 +391,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		return false;
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }

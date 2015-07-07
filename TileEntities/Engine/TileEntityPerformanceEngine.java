@@ -32,7 +32,7 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	private boolean starvedengine;
 
 	@Override
-	protected int getMaxTemperature() {
+	public int getMaxTemperature() {
 		return 240;
 	}
 

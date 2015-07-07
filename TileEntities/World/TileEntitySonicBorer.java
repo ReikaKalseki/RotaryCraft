@@ -283,4 +283,9 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 		return this.getDistanceToSurface(worldObj, xCoord, yCoord, zCoord);
 	}
 
+	@Override
+	public int getMaxPressure() {
+		return MAXPRESSURE;
+	}
+
 }

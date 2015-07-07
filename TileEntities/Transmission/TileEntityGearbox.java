@@ -628,4 +628,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 1000;
+	}
 }

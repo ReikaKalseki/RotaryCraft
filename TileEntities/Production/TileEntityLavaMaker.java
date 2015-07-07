@@ -282,4 +282,9 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }

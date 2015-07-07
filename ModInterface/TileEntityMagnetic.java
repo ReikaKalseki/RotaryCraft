@@ -20,11 +20,11 @@ import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyReceiver;
+import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyStorage;
 
 @Strippable(value = {"cofh.api.energy.IEnergyHandler"})
-public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyReceiver {
+public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler { //Handler because EnderIO uses it
 
 	@Override
 	public long getMaxPower() {
@@ -56,7 +56,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyRece
 
 	@Override
 	public boolean isValidSupplier(TileEntity te) {
-		return te instanceof IEnergyHandler || te instanceof IEnergyStorage;
+		return te instanceof IEnergyHandler || te instanceof IEnergyProvider || te instanceof IEnergyStorage;
 	}
 
 	@Override
@@ -150,6 +150,11 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyRece
 	@Override
 	public int getPowerColor() {
 		return 0xff0000;
+	}
+
+	@Override
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		return 0;
 	}
 
 	//@Override

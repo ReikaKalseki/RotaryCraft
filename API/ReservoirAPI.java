@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 /** Use this to register custom reservoir handlers, so that a reservoir can perform specialized actions such as special recipe types. */
 public class ReservoirAPI {
@@ -31,8 +31,8 @@ public class ReservoirAPI {
 
 	public static interface TankHandler {
 
-		/** Returns the amount of liquid to drain. */
-		public int onTick(TileEntity te, Fluid stored, int amt);
+		/** Returns the amount of liquid to drain. Do not drain the liquidstack directly, but you can modify it in other ways. */
+		public int onTick(TileEntity te, FluidStack stored);
 
 	}
 

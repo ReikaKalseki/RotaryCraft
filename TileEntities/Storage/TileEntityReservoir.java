@@ -39,6 +39,8 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine {
 
@@ -63,7 +65,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		for (TankHandler th : tankHandlers) {
-			int amt = th.onTick(this, this.getFluid(), tank.getLevel());
+			int amt = th.onTick(this, tank.getFluid());
 			if (amt > 0)
 				tank.removeLiquid(amt);
 		}
@@ -350,6 +352,12 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return side == ForgeDirection.DOWN ? Flow.OUTPUT: Flow.INPUT;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getFluidRenderColor() {
+		FluidStack fs = tank.getFluid();
+		return fs != null && fs.tag != null && fs.tag.hasKey("renderColor") ? fs.tag.getInteger("renderColor") : 0xffffff;
 	}
 
 	@Override

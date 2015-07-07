@@ -121,7 +121,7 @@ public class TileEntityDryingBed extends InventoriedRCFluidReceiver {
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
-		return from.offsetY == 0;
+		return from != ForgeDirection.DOWN;
 	}
 
 	public int getLiquidScaled(int a) {

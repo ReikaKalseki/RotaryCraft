@@ -269,4 +269,9 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		temperature = temp;
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }

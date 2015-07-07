@@ -171,6 +171,7 @@ public class RenderReservoir extends RotaryTERenderer
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
+			v5.setColorOpaque_I(tr.getFluidRenderColor());
 			v5.addVertexWithUV(0, h, 1, u, dv);
 			v5.addVertexWithUV(1, h, 1, du, dv);
 			v5.addVertexWithUV(1, h, 0, du, v);

@@ -100,7 +100,7 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadTransferRects() {
-		transferRects.add(new RecipeTransferRect(new Rectangle(2, 25, 145, 45), "rcrockmelt"));
+		transferRects.add(new RecipeTransferRect(new Rectangle(77, 10, 50, 60), "rcrockmelt"));
 	}
 
 	@Override

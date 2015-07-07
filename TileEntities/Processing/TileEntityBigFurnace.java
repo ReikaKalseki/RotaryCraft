@@ -281,4 +281,9 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }

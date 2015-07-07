@@ -59,12 +59,15 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.LegacyWailaHelper;
+import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -305,7 +308,18 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			TileEntityReservoir tr = (TileEntityReservoir)te;
 			if (!tr.isPlayerAccessible(ep))
 				return false;
-			if (is != null) {
+			if (is == null) {
+				Fluid f = tr.getFluid();
+				if (ep.isSneaking() && ReikaXPFluidHelper.fluidsExist() && f == ReikaXPFluidHelper.getFluid().getFluid()) {
+					int amt = Math.min(Math.max(1000, Math.min(tr.getLevel()/4, 4000)), tr.getLevel());
+					int xp = ReikaXPFluidHelper.getXPForAmount(amt);
+					tr.removeLiquid(amt);
+					ep.addExperience(xp);
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.orb");
+					return true;
+				}
+			}
+			else {
 				if (ReikaItemHelper.matchStackWithBlock(is, Blocks.glass_pane)) {
 					if (!tr.isCovered) {
 						tr.isCovered = true;
@@ -905,6 +919,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		if (LegacyWailaHelper.cacheAndReturn(acc))
+			return currenttip;
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);
 		if (te instanceof TemperatureTE)

@@ -270,4 +270,9 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		temperature = temp;
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }

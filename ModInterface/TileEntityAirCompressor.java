@@ -244,4 +244,9 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 		return (int)(power/ReikaPneumaticHelper.getWattsPerAir()*ConfigRegistry.getConverterEfficiency());
 	}
 
+	@Override
+	public int getMaxPressure() {
+		return MAXPRESSURE;
+	}
+
 }

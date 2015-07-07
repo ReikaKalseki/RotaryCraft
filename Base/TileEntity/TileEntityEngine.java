@@ -33,6 +33,8 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
+import Reika.DragonAPI.Interfaces.PartialInventory;
+import Reika.DragonAPI.Interfaces.PartialTank;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -43,7 +45,6 @@ import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PartialInventory;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -57,7 +58,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 
 public abstract class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
-PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
+PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 
 	/** Water capacity */
 	public static final int CAPACITY = 60*1000;
@@ -89,7 +90,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 
 	protected ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
-	protected int getMaxTemperature() {
+	public int getMaxTemperature() {
 		return 1000;
 	}
 
@@ -803,6 +804,11 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory {
 	@Override
 	public final boolean hasInventory() {
 		return type.hasInventory();
+	}
+
+	@Override
+	public final boolean hasTank() {
+		return type.usesFluids();
 	}
 
 	@Override

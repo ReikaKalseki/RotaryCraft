@@ -172,4 +172,9 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	public void setTemperature(int temp) {
 
 	}
+
+	@Override
+	public int getMaxTemperature() {
+		return 2500;
+	}
 }

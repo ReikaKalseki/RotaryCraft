@@ -30,7 +30,7 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	}
 
 	@Override
-	protected int getMaxTemperature() {
+	public int getMaxTemperature() {
 		return 150;
 	}
 

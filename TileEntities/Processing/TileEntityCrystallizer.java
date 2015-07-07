@@ -273,4 +273,9 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		temperature = temp;
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return 1000;
+	}
+
 }

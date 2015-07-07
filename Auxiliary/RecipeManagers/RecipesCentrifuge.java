@@ -94,6 +94,8 @@ public class RecipesCentrifuge
 		}
 
 		if (ModList.MAGICCROPS.isLoaded()) {
+			//ItemStack drop = LegacyMagicCropHandler.getInstance().dropID != null ? new ItemStack(LegacyMagicCropHandler.getInstance().dropID) : null;
+			//if (drop == null)
 			ItemStack drop = EssenceType.XP.getEssence();
 			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
 				FluidStack fs = ReikaXPFluidHelper.getFluid(5);

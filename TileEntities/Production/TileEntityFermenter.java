@@ -428,4 +428,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}
+
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
 }

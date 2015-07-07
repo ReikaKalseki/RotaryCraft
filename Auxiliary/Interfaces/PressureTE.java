@@ -10,14 +10,13 @@
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 import net.minecraft.world.World;
+import Reika.RotaryCraft.API.Interfaces.PressureTile;
 
-public interface PressureTE {
+public interface PressureTE extends PressureTile {
 
 	public abstract void updatePressure(World world, int x, int y, int z, int meta);
 
 	public abstract void addPressure(int press);
-
-	public abstract int getPressure();
 
 	public abstract void overpressure(World world, int x, int y, int z);
 

@@ -454,4 +454,9 @@ TemperatureTE {
 		return tank.getLevel()*fuelTimer.getCap()/this.getConsumedFuel()/20;
 	}
 
+	@Override
+	public int getMaxTemperature() {
+		return MAXTEMP;
+	}
+
 }
