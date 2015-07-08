@@ -99,11 +99,12 @@ public class RenderClutch extends RotaryTERenderer
 		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		GL11.glPushMatrix();
 		GL11.glTranslated(par2, par4, par6);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		if (tile.isOutputEnabled())
+			GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-		double h = 0.35;
+		double h = tile.getBlockMetadata() >= 4 ? 0.5625 : 0.35;
 		double h2 = h-0.125;
 		double w = 0.225;
 

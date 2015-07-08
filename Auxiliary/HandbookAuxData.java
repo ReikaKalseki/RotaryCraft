@@ -645,7 +645,8 @@ public final class HandbookAuxData {
 						for (int j = 0; j < d.getNumberStages(); j++) {
 							//api.drawTooltipAt(font, d.getDisplayTime(j), mx, my);
 							ReikaRenderHelper.disableLighting();
-							font.drawString(d.getDisplayTime(j), posX+10, posY+150+j*10, 0xffffff);
+							int c = m.canDoMultiPerTick() ? 0x80ff80 : 0xffffff;
+							font.drawString(d.getDisplayTime(j), posX+10, posY+150+j*10, c);
 						}
 					}
 

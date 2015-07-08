@@ -42,6 +42,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
@@ -1493,5 +1494,9 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			int meta = m.meta;
 			machineMappings.put(id, meta, m);
 		}
+	}
+
+	public boolean canDoMultiPerTick() {
+		return this == EXTRACTOR || MultiOperational.class.isAssignableFrom(this.getTEClass());
 	}
 }

@@ -67,7 +67,6 @@ public class RotaryRecipes {
 	public static void addRecipes() {
 		if (RotaryCraft.instance.isLocked())
 			return;
-		OreDictionary.initVanillaEntries();
 		RotaryRegistration.loadOreDictionary();
 		addMachines();
 		addCraftItems();
