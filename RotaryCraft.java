@@ -50,6 +50,7 @@ import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
+import Reika.DragonAPI.Libraries.ReikaDispenserHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -316,6 +317,8 @@ public class RotaryCraft extends DragonAPIMod {
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		RotaryRegistration.addTileEntities();
 		RotaryRegistration.addEntities();
+
+		ReikaDispenserHelper.addDispenserAction(ItemStacks.compost, ReikaDispenserHelper.bonemealEffect);
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			RotaryDescriptions.loadData();
