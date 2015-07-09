@@ -231,8 +231,11 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (updateTimer.checkCap() && !world.isRemote) {
 			this.buildCache();
 		}
-		if (network != null)
-			network.tick();
+
+		if (ModList.APPENG.isLoaded()) {
+			if (network != null)
+				network.tick();
+		}
 
 		if (power >= MINPOWER) {
 			tick++;
