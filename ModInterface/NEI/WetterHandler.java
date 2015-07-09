@@ -29,7 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter.WettingRecipe;
-import Reika.RotaryCraft.Base.GuiOneSlotInv;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWetter;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -85,7 +85,7 @@ public class WetterHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadTransferRects() {
-		transferRects.add(new RecipeTransferRect(new Rectangle(23, 15, 94, 22), "rcwetter"));
+		transferRects.add(new RecipeTransferRect(new Rectangle(103, 15, 44, 22), "rcwetter"));
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class WetterHandler extends TemplateRecipeHandler {
 	@Override
 	public Class<? extends GuiContainer> getGuiClass()
 	{
-		return GuiOneSlotInv.class;
+		return GuiWetter.class;
 	}
 
 	@Override

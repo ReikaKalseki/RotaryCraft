@@ -18,9 +18,9 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -49,7 +49,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
-public final class BlockCanola extends BlockBasic implements IPlantable, IWailaDataProvider {
+public final class BlockCanola extends BlockBasic implements IPlantable, IGrowable, IWailaDataProvider {
 
 	private final Random rand = new Random();
 
@@ -144,7 +144,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 		ItemStack items = ItemRegistry.CANOLA.getCraftedProduct(ndrops);
 		return items;
 	}
-
+	/*
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int s, float f1, float f2, float f3) {
 		ItemStack is = ep.getCurrentEquippedItem();
@@ -163,7 +163,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 		}
 		return false;
 	}
-
+	 */
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		this.testStable(world, x, y, z);
@@ -354,5 +354,24 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IWailaD
 
 	private static boolean isFertileSoil(World world, int x, int y, int z) {
 		return world.getBlock(x, y, z) == Blocks.farmland ? world.getBlockMetadata(x, y, z) > 0 : true;
+	}
+
+	@Override //Can apply
+	public boolean func_149851_a(World world, int x, int y, int z, boolean client) {
+		return world.getBlockMetadata(x, y, z) < GROWN;
+	}
+
+	@Override //shouldTryGrow
+	public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
+		return true;
+	}
+
+	@Override //tryGrow
+	public void func_149853_b(World world, Random rand, int x, int y, int z) {
+		int to = Math.min(GROWN, world.getBlockMetadata(x, y, z)+1+rand.nextInt(4));
+		if (ModList.LEGACYCRAFT.isLoaded() && LegacyOptions.BONEMEAL.getState())
+			to = GROWN;
+		world.setBlockMetadataWithNotify(x, y, z, to, 3);
+		world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
 	}
 }

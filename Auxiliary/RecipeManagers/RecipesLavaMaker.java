@@ -65,7 +65,7 @@ public class RecipesLavaMaker {
 		}
 
 		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000);
-		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 100, 180, 6000);
+		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000);
 
 		if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.EssenceType.XP.getEssence() != null)
 			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000);

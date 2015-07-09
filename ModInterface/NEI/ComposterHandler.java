@@ -95,7 +95,7 @@ public class ComposterHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadTransferRects() {
-		transferRects.add(new RecipeTransferRect(new Rectangle(74, 35, 23, 17), "rccompost"));
+		transferRects.add(new RecipeTransferRect(new Rectangle(74, 23, 22, 17), "rccompost"));
 	}
 
 	@Override

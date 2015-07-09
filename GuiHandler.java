@@ -72,6 +72,7 @@ import Reika.RotaryCraft.Containers.Machine.ContainerSorter;
 import Reika.RotaryCraft.Containers.Machine.ContainerSteam;
 import Reika.RotaryCraft.Containers.Machine.ContainerTerraformer;
 import Reika.RotaryCraft.Containers.Machine.ContainerVacuum;
+import Reika.RotaryCraft.Containers.Machine.ContainerWetter;
 import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
 import Reika.RotaryCraft.GUIs.GuiCraftingPattern;
 import Reika.RotaryCraft.GUIs.GuiHandCraft;
@@ -133,6 +134,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiScaleChest;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiSpyCam;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiTerraformer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWetter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.ModInterface.ContainerEnergyToPower;
@@ -171,6 +173,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPurifier;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityWetter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
@@ -363,6 +366,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityFuelEngine) {
 			return new ContainerFuelEngine(player, (TileEntityFuelEngine) te);
+		}
+		if (te instanceof TileEntityWetter) {
+			return new ContainerWetter(player, (TileEntityWetter) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -591,6 +597,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityFuelEngine) {
 			return new GuiFuelEngine(player, (TileEntityFuelEngine) te);
+		}
+		if (te instanceof TileEntityWetter) {
+			return new GuiWetter(player, (TileEntityWetter) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

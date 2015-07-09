@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
@@ -159,7 +160,10 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 				API.hideItem(ExtractorModOres.getSlurryProduct(ore));
 				API.hideItem(ExtractorModOres.getSolutionProduct(ore));
 				API.hideItem(ExtractorModOres.getFlakeProduct(ore));
-				API.hideItem(ExtractorModOres.getSmeltedIngot(ore));
+
+				ItemStack out = ExtractorModOres.getSmeltedIngot(ore);
+				if (!ReikaItemHelper.isVanillaItem(out))
+					API.hideItem(out);
 				RotaryCraft.logger.log("Hiding ore "+ore+" Extractor products from NEI, as it is unused.");
 			}
 		}

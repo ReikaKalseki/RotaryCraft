@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Base.TileEntity;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -31,6 +32,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
@@ -40,6 +42,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection, BreakAction {
 
+	private static final HashSet<Class> nonInteractableClasses = new HashSet();
+	private static final HashSet<Class> interactableClasses = new HashSet();
+
 	public static final int UPPRESSURE = 40;
 	public static final int HORIZPRESSURE = 20;
 	public static final int DOWNPRESSURE = 0;
@@ -47,6 +52,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	private static final int MAXPRESSURE = 2400000;
 
 	private boolean[] connections = new boolean[6];
+	private boolean[] interaction = new boolean[6];
 
 	public final int getPressure() {
 		Fluid f = this.getFluidType();
@@ -148,6 +154,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	@Override
+	protected final void onFirstTick(World world, int x, int y, int z) {
+		this.recomputeConnections(world, x, y, z);
+	}
+
+	@Override
 	public int getPacketDelay() {
 		return 4*super.getPacketDelay();
 	}
@@ -184,8 +195,18 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			return ((PipeRenderConnector)te).canConnectToPipeOnSide(side);
 		}
 		if (te instanceof IFluidHandler) {
-			String name = te.getClass().getSimpleName().toLowerCase();
-			return !name.contains("conduit") && !name.contains("pipe") && !name.contains("multipart");
+			Class c = te.getClass();
+			if (interactableClasses.contains(c))
+				return true;
+			if (nonInteractableClasses.contains(c))
+				return false;
+			String name = c.getSimpleName().toLowerCase();
+			if (name.contains("conduit") || name.contains("fluidduct") || name.contains("pipe") || name.contains("multipart")) {
+				nonInteractableClasses.add(c);
+				return false;
+			}
+			interactableClasses.add(c);
+			return true;
 		}
 		return false;
 	}
@@ -209,7 +230,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				return;
 			}
 			ForgeDirection dir = dirs[i];
-			if (this.canInteractWith(world, x, y, z, dir)) {
+			if (interaction[i]) {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
@@ -287,7 +308,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	private final void intakeFluid(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
-			if (this.canInteractWith(world, x, y, z, dir)) {
+			if (interaction[i]) {
 				int dx = x+dir.offsetX;
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
@@ -397,6 +418,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	public void recomputeConnections(World world, int x, int y, int z) {
 		for (int i = 0; i < 6; i++) {
 			connections[i] = this.shouldTryToConnect(dirs[i]);
+			interaction[i] = this.canInteractWith(world, x, y, z, dirs[i]);
 			world.func_147479_m(x+dirs[i].offsetX, y+dirs[i].offsetY, z+dirs[i].offsetZ);
 		}
 		this.syncAllData(true);
@@ -462,9 +484,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	{
 		super.writeSyncTag(NBT);
 
-		for (int i = 0; i < 6; i++) {
-			NBT.setBoolean("conn"+i, connections[i]);
-		}
+		NBT.setByte("conn", ReikaArrayHelper.booleanToByteBitflags(connections));
 
 		ReikaNBTHelper.writeFluidToNBT(NBT, this.getFluidType());
 		NBT.setInteger("level", this.getFluidLevel());
@@ -479,9 +499,9 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 		boolean[] old = new boolean[connections.length];
 		System.arraycopy(connections, 0, old, 0, old.length);
-		for (int i = 0; i < 6; i++) {
-			connections[i] = NBT.getBoolean("conn"+i);
-		}
+
+		connections = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByte("conn"), 6);
+
 		update = !Arrays.equals(old, connections);
 
 		Fluid f = ReikaNBTHelper.getFluidFromNBT(NBT);

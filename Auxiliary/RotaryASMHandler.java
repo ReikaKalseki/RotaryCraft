@@ -76,6 +76,8 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 
 		@Override
 		public byte[] transform(String name, String transformedName, byte[] data) {
+			if (data == null)
+				return null;
 			ClassNode cn = new ClassNode();
 			ClassReader classReader = new ClassReader(data);
 			classReader.accept(cn, 0);

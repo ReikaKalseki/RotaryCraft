@@ -103,7 +103,7 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.HOSE || m.isStandardPipe();
+		return m == MachineRegistry.HOSE || m == MachineRegistry.FUELLINE || m.isStandardPipe();
 	}
 
 	@Override

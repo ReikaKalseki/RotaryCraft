@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,6 +43,9 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	public boolean failed;
 	private boolean bedrock;
+
+	private Fluid fluidType;
+	private double fluidFallSpeed;
 
 	@Override
 	protected void consumeFuel() {
@@ -83,20 +85,20 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			return false;
 		}
 
-		int[] pos = this.getWaterColumnPos();
-		Block id = world.getBlock(pos[0], y, pos[1]);
-		Fluid f = FluidRegistry.lookupFluidForBlock(id);
-		if (f == null)
-			return false;
-		if (f.getTemperature() >= 900) {
-			if (ReikaRandomHelper.doWithChance(2)) {
-				world.setBlockToAir(x, y, z);
-				boolean lube = !lubricant.isEmpty();
-				world.newExplosion(null, x+0.5, y+0.5, z+0.5, lube ? 3 : 2, lube, true);
+		this.getFluidData(world, x, y, z);
+		if (fluidType != null) {
+			if (fluidType.getTemperature() >= 900) {
+				if (ReikaRandomHelper.doWithChance(2)) {
+					world.setBlockToAir(x, y, z);
+					boolean lube = !lubricant.isEmpty();
+					world.newExplosion(null, x+0.5, y+0.5, z+0.5, lube ? 3 : 2, lube, true);
+				}
 			}
+			if (fluidType.isGaseous() || fluidType.getDensity() <= 0)
+				return false;
 		}
-		if (f.isGaseous() || f.getDensity() <= 0)
-			return false;
+
+		int[] pos = this.getWaterColumnPos();
 		if (!ReikaWorldHelper.isLiquidAColumn(world, pos[0], y, pos[1]))
 			return false;
 
@@ -170,23 +172,32 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		return pos;
 	}
 
-	private double getHydroFactor(World world, int x, int y, int z, boolean torque) {
+	private void getFluidData(World world, int x, int y, int z) {
 		int[] pos = this.getWaterColumnPos();
 		Fluid f = ReikaWorldHelper.getFluid(world, pos[0], y, pos[1]);
-		if (f == null || f.isGaseous() || f.getDensity() <= 0)
-			return 0;
+		fluidType = f;
+		if (f == null || f.isGaseous() || f.getDensity() <= 0) {
+			fluidFallSpeed = 0;
+			return;
+		}
 		double grav = ReikaPhysicsHelper.g;
 		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 			grav += ig.getGravity()*10;
 		}
 		double dy = (ReikaWorldHelper.findFluidSurface(world, pos[0], y, pos[1])-y)-0.5;
-		double v = Math.sqrt(2*grav*dy);
-		double mdot = f.getDensity()*v; //*1 since area is 1m^2
-		double P = 0.25*mdot*dy;
-		if (P >= type.getPower())
-			return 1;
-		return P/type.getPower();
+		fluidFallSpeed = Math.sqrt(2*grav*dy)/(f.getViscosity()/1000);
+	}
+
+	private int getEffectiveSpeed(World world, int x, int y, int z) {
+		double omg = fluidFallSpeed*2;
+		return Math.min((int)omg, type.getSpeed());
+	}
+
+	private int getEffectiveTorque(World world, int x, int y, int z) {
+		double mdot = fluidType.getDensity()*fluidFallSpeed; //*1 since area is 1m^2
+		double tau = 0.5*mdot*fluidFallSpeed;
+		return Math.min((int)tau, type.getTorque());
 	}
 
 	private void dealPanelDamage(World world, int x, int y, int z, int meta) {
@@ -275,7 +286,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	@Override
 	protected int getMaxSpeed(World world, int x, int y, int z, int meta) {
-		return Math.max(1, (int)(EngineType.HYDRO.getSpeed()*this.getHydroFactor(world, x, y, z, false)));
+		return Math.max(1, this.getEffectiveSpeed(world, x, y, z));
 	}
 
 	@Override
@@ -283,7 +294,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		if (failed)
 			return 1;
 		int fac = this.getArrayTorqueMultiplier();
-		int torque = (int)(EngineType.HYDRO.getTorque()*this.getHydroFactor(world, x, y, z, true)*fac);
+		int torque = this.getEffectiveTorque(world, x, y, z);
 		int r = bedrock ? 16 : 4;
 		double ratio = (double)torque/EngineType.HYDRO.getTorque();
 		if (ratio > r) {

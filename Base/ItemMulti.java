@@ -15,6 +15,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -59,7 +60,10 @@ public class ItemMulti extends ItemBasic {
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-		if (this.isProperBelt(m, is)) {
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.compost)) {
+			ItemDye.applyBonemeal(is, world, x, y, z, ep);
+		}
+		else if (this.isProperBelt(m, is)) {
 			return this.tryBeltConnection(world, x, y, z, is, ep);
 		}
 		else
