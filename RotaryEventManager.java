@@ -43,6 +43,7 @@ import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -53,6 +54,7 @@ import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
@@ -69,6 +71,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 public class RotaryEventManager {
 
@@ -76,6 +79,18 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent
+	public void cleanUpReservoirCrafting(PlayerEvent.ItemCraftedEvent evt) {
+		if (ReikaItemHelper.matchStacks(evt.crafting, MachineRegistry.RESERVOIR.getCraftedProduct())) {
+			if (evt.crafting.stackTagCompound != null && evt.crafting.stackTagCompound.getBoolean(ReservoirComboRecipe.NBT_TAG)) {
+				if (!ReikaInventoryHelper.addToIInv(MachineRegistry.RESERVOIR.getCraftedProduct(), evt.player.inventory)) {
+					ReikaItemHelper.dropItem(evt.player, MachineRegistry.RESERVOIR.getCraftedProduct());
+				}
+				evt.crafting.stackTagCompound.removeTag(ReservoirComboRecipe.NBT_TAG);
+			}
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

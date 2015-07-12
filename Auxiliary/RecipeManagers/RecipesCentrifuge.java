@@ -39,7 +39,6 @@ import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RecipesCentrifuge
 {
@@ -105,7 +104,7 @@ public class RecipesCentrifuge
 
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));
-		this.addRecipe(ItemRegistry.CANOLA.getStackOfMetadata(2), new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100);
+		this.addRecipe(ItemStacks.canolaHusks, new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100);
 	}
 
 	private static class ChanceRounder implements ChanceManipulator {

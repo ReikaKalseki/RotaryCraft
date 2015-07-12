@@ -491,7 +491,7 @@ public enum ItemRegistry implements ItemEnum {
 	}
 
 	public boolean isSteelTool() {
-		return this == STEELPICK || this == STEELAXE || this == STEELSHOVEL || this == STEELSWORD || this == STEELSHEARS || this == STEELHOE;
+		return this == STEELPICK || this == STEELAXE || this == STEELSHOVEL || this == STEELSWORD || this == STEELSHEARS || this == STEELHOE || this == STEELSICKLE;
 	}
 
 	public String getUnlocalizedName() {

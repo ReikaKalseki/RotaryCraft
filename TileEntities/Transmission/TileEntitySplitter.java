@@ -589,7 +589,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			favorbent = true;
 			ratio = -ratio;
 		}
-		if (xCoord == x+spl.getWriteDirection().offsetX && zCoord == spl.getWriteDirection().offsetZ) { //We are the inline
+		if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 			if (ratio == 1) { //Even split, favorbent irrelevant
 				torquein = spl.torque/2;
 				return;
@@ -601,7 +601,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				torquein = (int)(spl.torque*((ratio-1D)/(ratio)));
 			}
 		}
-		else if (xCoord == x+spl.getWriteDirection2().offsetX && zCoord == spl.getWriteDirection2().offsetZ) { //We are the bend
+		else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 			omegain = spl.omega; //omegain always constant
 			if (ratio == 1) { //Even split, favorbent irrelevant
 				torquein = spl.torque/2;
@@ -674,11 +674,13 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		if (caller == null)
 			caller = this;
 		if (!this.isSplitting()) { //merge
-			if (read != null && read2 != null) {
-				PowerSourceList in1 = pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
-				PowerSourceList in2 = pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
-				pwr.addAll(in1);
-				pwr.addAll(in2);
+			if (read != null) {
+				PowerSourceList in = pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+				pwr.addAll(in);
+			}
+			if (read2 != null) {
+				PowerSourceList in = pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
+				pwr.addAll(in);
 			}
 			return pwr;
 		}

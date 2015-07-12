@@ -19,7 +19,6 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
@@ -37,7 +36,7 @@ public class CanolaBee extends BeeSpecies {
 	public CanolaBee() { //cultivated + meadows
 		super("Slippery", "bee.canola", "Mechanica Lubrica", "Reika");
 		this.addSpecialty(ItemStacks.slipperyComb, 20);
-		this.addSpecialty(ItemRegistry.CANOLA.getStackOf(), 25);
+		this.addSpecialty(ItemStacks.canolaSeeds, 25);
 		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 50);
 		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 12);
 		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 5);

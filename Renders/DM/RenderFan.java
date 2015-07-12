@@ -19,8 +19,6 @@ import Reika.DragonAPI.Interfaces.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.Animated.ModelFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 
@@ -97,12 +95,17 @@ public class RenderFan extends RotaryTERenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.doRenderModel((RotaryCraftTileEntity)tile))
-			this.renderTileEntityFanAt((TileEntityFan)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			IORenderer.renderIO(tile, par2, par4, par6);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			ReikaAABBHelper.renderAABB(((TileEntityFan)tile).getBlowZone(tile.getBlockMetadata(), ((TileEntityFan)tile).getRange()), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 0, 127, 255, true);
+		TileEntityFan te = (TileEntityFan)tile;
+		if (this.doRenderModel(te))
+			this.renderTileEntityFanAt(te, par2, par4, par6, par8);
+		if (te.isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
+			IORenderer.renderIO(te, par2, par4, par6);
+
+			ReikaAABBHelper.renderAABB(te.getBlowZone(te.getBlockMetadata(), te.getRange()), par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 0, 127, 255, true);
+			if (te.wideArea) {
+				ReikaAABBHelper.renderAABB(te.getWideBlowZone(te.getBlockMetadata(), te.getRange()), par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 0, 192, 255, true);
+			}
+		}
 	}
 
 	@Override

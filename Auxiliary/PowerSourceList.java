@@ -78,26 +78,14 @@ public class PowerSourceList {
 		}
 
 		try {
-			//ReikaJavaLibrary.pConsole(tile, Side.SERVER, io.xCoord == -1011);
 			if (tile instanceof TileEntityIOMachine) {
 				TileEntityIOMachine te = (TileEntityIOMachine)tile;
-				if (te.isReadingFrom(io)) {
-					//ReikaJavaLibrary.pConsole(0, Side.SERVER, io.xCoord == -1011);
+				if (!te.isWritingTo(io) && !te.isWritingTo2(io)) {
 					return pwr;
 				}
-				if (te.isReadingFrom2(io)) {
-					//ReikaJavaLibrary.pConsole(1, Side.SERVER, io.xCoord == -1011);
+				if (te.isReadingFrom(io) || te.isReadingFrom2(io) || te.isReadingFrom3(io) || te.isReadingFrom4(io)) {
 					return pwr;
 				}
-				if (te.isReadingFrom3(io)) {
-					//ReikaJavaLibrary.pConsole(2, Side.SERVER, io.xCoord == -1011);
-					return pwr;
-				}
-				if (te.isReadingFrom4(io)) {
-					//ReikaJavaLibrary.pConsole(3, Side.SERVER, io.xCoord == -1011);
-					return pwr;
-				}
-				//ReikaJavaLibrary.pConsole(4+": "+te, Side.SERVER, io.xCoord == -1011);
 				pwr.addAll(te.getPowerSources(io, caller));
 			}
 			else if (tile instanceof PowerSourceTracker) {

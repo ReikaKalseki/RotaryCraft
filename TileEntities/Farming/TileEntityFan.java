@@ -58,7 +58,9 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public static final int FIRESPREADSPEED = 16;
 	public static final int HARVESTSPEED = 512;
 
-	private StepTimer sound = new StepTimer(27);
+	private final StepTimer sound = new StepTimer(27);
+
+	public boolean wideArea = true;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -231,24 +233,27 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
 			this.enhanceFinPower(world, editx, edity, editz);
-			editx = -1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
-			editx = -1*a+x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
 
-			editx = -1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
-			editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
-			editx = x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
+			if (wideArea) {
+				editx = -1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
+				editx = -1*a+x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
 
-			editx = x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
-			editx = 1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
-			editx = 1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
-			this.rip2(world, editx, edity, editz);
+				editx = -1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
+				editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
+				editx = x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
+
+				editx = x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
+				editx = 1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
+				editx = 1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
+				this.rip2(world, editx, edity, editz);
+			}
 		}
 	}
 
@@ -405,6 +410,14 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			break;
 		}
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.0, 0.0, 0.0);
+	}
+
+	public AxisAlignedBB getWideBlowZone(int meta, int range) {
+		AxisAlignedBB box = this.getBlowZone(meta, range);
+		int ex = ReikaMathLibrary.isValueInsideBoundsIncl(0, 1, meta) ? 0 : 1;
+		int ey = ReikaMathLibrary.isValueInsideBoundsIncl(4, 5, meta) ? 0 : 1;
+		int ez = ReikaMathLibrary.isValueInsideBoundsIncl(2, 3, meta) ? 0 : 1;
+		return box.expand(ex, ey, ez);
 	}
 
 	@Override

@@ -58,8 +58,8 @@ ConditionalOperation, DamagingContact {
 
 	static {
 		//addGrindableSeed(ItemRegistry.CANOLA.getStackOf(), 1F);
-		grindableSeeds.put(ItemRegistry.CANOLA.getStackOf(), 1F);
-		lockedSeeds.add(new KeyedItemStack(ItemRegistry.CANOLA.getStackOf()).setIgnoreNBT(true).setSimpleHash(true).lock());
+		grindableSeeds.put(ItemStacks.canolaSeeds, 1F);
+		lockedSeeds.add(new KeyedItemStack(ItemRegistry.CANOLA.getItemInstance()).lock());
 		//addGrindableSeed(ItemRegistry.CANOLA.getStackOfMetadata(2), 0.65F);
 	}
 

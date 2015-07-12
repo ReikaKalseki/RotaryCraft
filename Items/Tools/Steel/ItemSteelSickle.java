@@ -18,6 +18,7 @@ public class ItemSteelSickle extends ItemSickleBase {
 
 	public ItemSteelSickle(int index) {
 		super(index);
+		this.setMaxDamage(600);
 	}
 
 	@Override

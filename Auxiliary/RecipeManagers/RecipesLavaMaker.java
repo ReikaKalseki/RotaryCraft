@@ -54,7 +54,7 @@ public class RecipesLavaMaker {
 		this.addRecipe("dustRedstone", "redstone", 100, 600, 120000);
 		this.addRecipe(Blocks.redstone_block, "redstone", 900, 750, 1080000);
 		this.addRecipe(Items.ender_pearl, "ender", 250, 400, 240000);
-		this.addRecipe("dustCoal", "coal", 250, 300, 60000);
+		this.addRecipe("dustCoal", "coal", 100, 300, 60000);
 
 		if (ModList.THERMALFOUNDATION.isLoaded()) {
 			ItemStack pyro = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustPyrotheum", 1);

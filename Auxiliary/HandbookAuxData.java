@@ -713,7 +713,7 @@ public final class HandbookAuxData {
 						"the mod developer.";
 				font.drawSplitString(title, posX+8, posY+20, 220, 0x333333);
 				List<PackModification> li = PackModificationTracker.instance.getModifications(RotaryCraft.instance);
-				if (li.isEmpty()) {
+				if (li == null || li.isEmpty()) {
 					font.drawSplitString("No changes were made to the mod.", posX+10, posY+88, 245, 0xffffff);
 					font.drawSplitString("Your gameplay is in line with what has been intended.", posX+10, posY+98, 245, 0xffffff);
 				}

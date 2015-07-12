@@ -383,8 +383,19 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		int level = NBT.getInteger("lvl");
 		tank.setContents(level, f);
 
-		//isCreative = NBT.getBoolean("creative");
 		isCovered = NBT.getBoolean("cover");
+	}
+
+	public void combineDataFromItemStackTag(NBTTagCompound NBT) {
+		if (NBT == null)
+			return;
+		Fluid f = ReikaNBTHelper.getFluidFromNBT(NBT);
+		if (f != tank.getActualFluid())
+			return;
+		int level = NBT.getInteger("lvl");
+		tank.setContents(level+tank.getLevel(), f);
+
+		isCovered = isCovered || NBT.getBoolean("cover");
 	}
 
 	public ArrayList<String> getDisplayTags(NBTTagCompound nbt) {

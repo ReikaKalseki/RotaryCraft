@@ -18,10 +18,10 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.ItemBasic;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 
@@ -61,10 +61,10 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 				for (int zi = minz; zi <= maxz; zi++) {
 					idbelow = world.getBlock(xi, y-1, zi);
 					if ((!ReikaWorldHelper.softBlocks(world.getBlock(xi, y, zi))) || !BlockCanola.isValidFarmBlock(world, xi, y, zi, idbelow)) {
-						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemRegistry.CANOLA.getStackOf());
+						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemStacks.canolaSeeds);
 					}
 					else if (!player.canPlayerEdit(xi, y, zi, 0, items)) {
-						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemRegistry.CANOLA.getStackOf());
+						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemStacks.canolaSeeds);
 					}
 					else {
 						world.setBlock(xi, y, zi, BlockRegistry.CANOLA.getBlockInstance());

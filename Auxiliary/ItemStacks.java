@@ -212,6 +212,10 @@ public final class ItemStacks {
 	public static final ItemStack propCast 			= ItemRegistry.MODINTERFACE.getStackOfMetadata(5);
 	public static final ItemStack drillCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(6);
 
+	public static final ItemStack canolaSeeds		= ItemRegistry.CANOLA.getStackOfMetadata(0);
+	public static final ItemStack denseCanolaSeeds	= ItemRegistry.CANOLA.getStackOfMetadata(1);
+	public static final ItemStack canolaHusks		= ItemRegistry.CANOLA.getStackOfMetadata(2);
+
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
 
 	private static final Item mod = ItemRegistry.MODINGOTS.getItemInstance();

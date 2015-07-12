@@ -1061,7 +1061,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == RAILGUNAMMO)
 			return ItemRegistry.RAILGUN.getStackOf();
 		if (this == CANOLA)
-			return ItemRegistry.CANOLA.getStackOf();
+			return ItemStacks.canolaSeeds;
 		if (this == SILVERINGOT)
 			return ItemStacks.silveringot;
 		if (this == STRONGSPRING)
@@ -1101,7 +1101,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == ALERTS)
 			return !HandbookNotifications.instance.getNewAlerts().isEmpty();
 		if (this == PACKMODS)
-			return !PackModificationTracker.instance.getModifications(RotaryCraft.instance).isEmpty();
+			return PackModificationTracker.instance.modificationsExist(RotaryCraft.instance);
 		return false;
 	}
 

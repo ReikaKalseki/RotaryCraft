@@ -179,7 +179,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			favorbent = true;
 			sratio = -sratio;
 		}
-		if (xCoord == x+spl.getWriteDirection().offsetX && zCoord == spl.getWriteDirection().offsetZ) { //We are the inline
+		if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 			readomega[dir] = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("INLINE!  %d  %d  FOR %d", spl.omega, spl.torque, sratio));
 			if (sratio == 1) { //Even split, favorbent irrelevant
@@ -194,7 +194,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				readtorque[dir] = (int)(spl.torque*((sratio-1D)/(sratio)));
 			}
 		}
-		else if (xCoord == x+spl.getWriteDirection2().offsetX && zCoord == spl.getWriteDirection2().offsetZ) { //We are the bend
+		else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
 			readomega[dir] = spl.omega; //omega always constant
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("BEND!");
 			if (sratio == 1) { //Even split, favorbent irrelevant

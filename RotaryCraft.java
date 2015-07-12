@@ -237,6 +237,7 @@ public class RotaryCraft extends DragonAPIMod {
 		this.startTiming(LoadPhase.PRELOAD);
 		this.verifyInstallation();
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
+		FMLCommonHandler.instance().bus().register(RotaryEventManager.instance);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);
 
@@ -335,7 +336,7 @@ public class RotaryCraft extends DragonAPIMod {
 			logger.log(String.format("Extra iron ore gen enabled, with a scaling factor of %.1fx.", iron));
 		}
 
-		MinecraftForge.addGrassSeed(ItemRegistry.CANOLA.getStackOf(), 2);
+		MinecraftForge.addGrassSeed(ItemStacks.canolaSeeds, 2);
 		//ModCropList.addCustomCropType(new SimpleCropHandler(BlockRegistry.CANOLA.getBlockInstance(), 9, ItemRegistry.CANOLA.getStackOf()));
 
 		//MinecraftForge.setToolClass(ItemRegistry.STEELAXE.getItemInstance(), "axe", 2);
@@ -526,8 +527,12 @@ public class RotaryCraft extends DragonAPIMod {
 		if (!this.isLocked())
 			if (ModList.THAUMCRAFT.isLoaded()) {
 				RotaryCraft.logger.log("Adding ThaumCraft aspects.");
-				ReikaThaumHelper.addAspects(ItemRegistry.CANOLA.getStackOf(), Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
+				ReikaThaumHelper.addAspects(ItemStacks.canolaSeeds, Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
+				ReikaThaumHelper.addAspects(ItemStacks.denseCanolaSeeds, Aspect.EXCHANGE, 16, Aspect.CROP, 8, Aspect.MECHANISM, 8);
+				ReikaThaumHelper.addAspects(ItemStacks.canolaHusks, Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
+
 				ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
+
 				ReikaThaumHelper.clearAspects(ItemRegistry.HANDBOOK.getStackOf());
 
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 96);

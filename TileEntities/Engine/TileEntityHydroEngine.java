@@ -186,7 +186,8 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			grav += ig.getGravity()*10;
 		}
 		double dy = (ReikaWorldHelper.findFluidSurface(world, pos[0], y, pos[1])-y)-0.5;
-		fluidFallSpeed = Math.sqrt(2*grav*dy)/(f.getViscosity()/1000);
+		dy = Math.pow(dy, 1.5)/32;
+		fluidFallSpeed = 0.92*Math.sqrt(2*grav*dy)/Math.pow(f.getViscosity()/1000, 0.375);
 	}
 
 	private int getEffectiveSpeed(World world, int x, int y, int z) {
@@ -196,7 +197,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	private int getEffectiveTorque(World world, int x, int y, int z) {
 		double mdot = fluidType.getDensity()*fluidFallSpeed; //*1 since area is 1m^2
-		double tau = 0.5*mdot*fluidFallSpeed;
+		double tau = 0.0625*mdot*fluidFallSpeed;
 		return Math.min((int)tau, type.getTorque());
 	}
 
@@ -293,8 +294,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	protected int getGenTorque(World world, int x, int y, int z, int meta) {
 		if (failed)
 			return 1;
-		int fac = this.getArrayTorqueMultiplier();
-		int torque = this.getEffectiveTorque(world, x, y, z);
+		int torque = this.getEffectiveTorque(world, x, y, z)*this.getArrayTorqueMultiplier();
 		int r = bedrock ? 16 : 4;
 		double ratio = (double)torque/EngineType.HYDRO.getTorque();
 		if (ratio > r) {

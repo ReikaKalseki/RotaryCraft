@@ -44,9 +44,9 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.LegacyWailaHelper;
 import Reika.LegacyCraft.LegacyOptions;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public final class BlockCanola extends BlockBasic implements IPlantable, IGrowable, IWailaDataProvider {
@@ -80,7 +80,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	@Override
 	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return ItemRegistry.CANOLA.getStackOf();
+		return ItemStacks.canolaSeeds;
 	}
 
 	@Override
@@ -136,12 +136,12 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 
 	public void die(World world, int x, int y, int z) {
 		world.setBlockToAir(x, y, z);
-		ReikaItemHelper.dropItem(world, x, y, z, ItemRegistry.CANOLA.getStackOf());
+		ReikaItemHelper.dropItem(world, x, y, z, ItemStacks.canolaSeeds);
 	}
 
 	public ItemStack getDrops(int metadata) {
 		int ndrops = metadata == GROWN ? (1+rand.nextInt(2))*(2+rand.nextInt(8)+rand.nextInt(5)) : 1;
-		ItemStack items = ItemRegistry.CANOLA.getCraftedProduct(ndrops);
+		ItemStack items = ReikaItemHelper.getSizedItemStack(ItemStacks.canolaSeeds, ndrops);
 		return items;
 	}
 	/*
@@ -309,7 +309,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	@Override
 	@ModDependent(ModList.WAILA)
 	public ItemStack getWailaStack(IWailaDataAccessor acc, IWailaConfigHandler cfg) {
-		return ItemRegistry.CANOLA.getStackOf();
+		return ItemStacks.canolaSeeds;
 	}
 
 	@Override

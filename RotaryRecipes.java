@@ -44,6 +44,7 @@ import Reika.DragonAPI.ModInteract.RecipeHandlers.SmelteryRecipeHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ThermalRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
@@ -772,11 +773,14 @@ public class RotaryRecipes {
 			GameRegistry.addRecipe(new ItemStack(Blocks.bedrock), new Object[]{
 				"DDD", "DSD", "DDD", 'D', ItemStacks.bedrockdust, 'S', Blocks.stone});
 
-		GameRegistry.addRecipe(ItemRegistry.CANOLA.getCraftedMetadataProduct(1, 1), new Object[]{
-			"DDD", "DDD", "DDD", 'D', ItemRegistry.CANOLA.getStackOf()});
+		GameRegistry.addRecipe(ItemStacks.denseCanolaSeeds, new Object[]{"DDD", "DDD", "DDD", 'D', ItemStacks.canolaSeeds});
 
-		GameRegistry.addShapelessRecipe(ItemRegistry.CANOLA.getCraftedProduct(9),
-				ItemRegistry.CANOLA.getStackOfMetadata(1));
+		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.canolaSeeds, 9), ItemStacks.denseCanolaSeeds);
+
+
+		GameRegistry.addRecipe(new ReservoirComboRecipe());
+		GameRegistry.addShapelessRecipe(MachineRegistry.RESERVOIR.getCraftedProduct(), MachineRegistry.RESERVOIR.getCraftedProduct()); //empty
+
 
 		GameRegistry.addRecipe(ReikaItemHelper.oakWood, new Object[]{
 				"WW", "WW", 'W', ItemStacks.sawdust});

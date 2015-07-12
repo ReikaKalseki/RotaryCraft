@@ -102,7 +102,7 @@ public class RecipesGrinder {
 
 		this.addRecipe(Items.coal, ItemStacks.coaldust);
 
-		this.addRecipe(ItemRegistry.CANOLA.getStackOf(), ItemRegistry.CANOLA.getStackOfMetadata(2));
+		this.addRecipe(ItemStacks.canolaSeeds, ItemStacks.canolaHusks);
 
 		ItemStack blizzDust = ReikaItemHelper.oreItemExists("dustBlizz") ? OreDictionary.getOres("dustBlizz").get(0) : null;
 		if (blizzDust != null) {

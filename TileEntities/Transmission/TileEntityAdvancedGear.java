@@ -35,6 +35,7 @@ import Reika.DragonAPI.Interfaces.PartialTank;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -416,6 +417,7 @@ PipeConnector, IFluidHandler {
 			}
 			else if (!isCreative) {
 				long pwr = (long)torquein*(long)omegain;
+				ReikaJavaLibrary.pConsole(pwr+":"+this.getChargingPower());
 				if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
 					energy += pwr;
 			}

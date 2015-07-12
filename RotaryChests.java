@@ -24,7 +24,7 @@ public class RotaryChests {
 
 		data.addItem(2, Location.DUNGEON, ItemStacks.scrap, 6, 18, 20);
 		data.addItem(2, Location.DUNGEON, ItemStacks.ironscrap, 1, 12, 40);
-		data.addItem(1, Location.DUNGEON, ItemRegistry.CANOLA.getStackOfMetadata(0), 1, 12, 40);
+		data.addItem(1, Location.DUNGEON, ItemStacks.canolaSeeds, 1, 12, 40);
 
 		data.addItem(2, Location.MINESHAFT, ItemStacks.basepanel, 1, 3, 1);
 		data.addItem(1, Location.MINESHAFT, ItemStacks.steelingot, 1, 8, 12);
@@ -36,7 +36,7 @@ public class RotaryChests {
 		data.addItem(3, Location.MINESHAFT, ItemStacks.goldcoil, 1, 1, 1);
 		data.addItem(2, Location.MINESHAFT, ItemStacks.scrap, 12, 36, 12);
 		data.addItem(2, Location.MINESHAFT, ItemStacks.ironscrap, 1, 12, 12);
-		data.addItem(1, Location.MINESHAFT, ItemRegistry.CANOLA.getStackOfMetadata(0), 1, 12, 10);
+		data.addItem(1, Location.MINESHAFT, ItemStacks.canolaSeeds, 1, 12, 10);
 		data.addItem(2, Location.MINESHAFT, ItemRegistry.SCREWDRIVER.getStackOf(), 1, 1, 1);
 		data.addItem(3, Location.MINESHAFT, ItemRegistry.METER.getStackOf(), 1, 1, 1);
 		//data.addItem(4, Location.MINESHAFT, ItemStacks.bedrockdust, 1, 3, 1);
