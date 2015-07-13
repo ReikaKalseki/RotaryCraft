@@ -37,11 +37,13 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.CentrifugeManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 
-public class RecipesCentrifuge
-{
+public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManager {
+
 	private static final RecipesCentrifuge CentrifugeBase = new RecipesCentrifuge();
 
 	private ItemHashMap<ChancedOutputList> recipeList = new ItemHashMap().setOneWay();
@@ -55,15 +57,16 @@ public class RecipesCentrifuge
 	}
 
 	private RecipesCentrifuge() {
+		RecipeInterface.centrifuge = this;
 
-		this.addRecipe(Items.magma_cream, null, Items.slime_ball, 100, Items.blaze_powder, 100);
-		this.addRecipe(Items.melon, null, new ItemStack(Items.melon_seeds, 4), 100);
-		this.addRecipe(Blocks.pumpkin, null, new ItemStack(Items.pumpkin_seeds, 12), 100);
-		this.addRecipe(Items.wheat, null, new ItemStack(Items.wheat_seeds, 4), 100);
-		this.addRecipe(Blocks.gravel, null, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
-		this.addRecipe(ItemStacks.netherrackdust, null, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 40);
-		this.addRecipe(Blocks.dirt, null, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
-		this.addRecipe(Items.blaze_powder, null, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
+		this.addRecipe(Items.magma_cream, null, RecipeLevel.PERIPHERAL, Items.slime_ball, 100, Items.blaze_powder, 100);
+		this.addRecipe(Items.melon, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.melon_seeds, 4), 100);
+		this.addRecipe(Blocks.pumpkin, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.pumpkin_seeds, 12), 100);
+		this.addRecipe(Items.wheat, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.wheat_seeds, 4), 100);
+		this.addRecipe(Blocks.gravel, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
+		this.addRecipe(ItemStacks.netherrackdust, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 40);
+		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
+		this.addRecipe(Items.blaze_powder, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
 		if (ModList.FORESTRY.isLoaded()) {
 			Map<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
@@ -71,7 +74,7 @@ public class RecipesCentrifuge
 				ChancedOutputList out = centrifuge.get(in).copy();
 				out.manipulateChances(new ChanceExponentiator(3));
 				out.manipulateChances(new ChanceRounder());
-				this.addRecipe(in, out, null);
+				this.addRecipe(in, out, null, RecipeLevel.MODINTERACT);
 			}
 		}
 
@@ -81,14 +84,14 @@ public class RecipesCentrifuge
 		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {
 			ItemStack lead = OreDictionary.getOres("dustLead").get(0);
 			ItemStack silver = OreDictionary.getOres("dustSilver").get(0);
-			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, lead, 100, silver, 100);
+			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, RecipeLevel.PERIPHERAL, lead, 100, silver, 100);
 		}
 
 		if (ModList.TINKERER.isLoaded()) {
 			ItemStack berry = OreBerryBushHandler.BerryTypes.XP.getStack();
 			if (berry != null && ReikaXPFluidHelper.fluidsExist()) {
 				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
-				this.addRecipe(berry, fs, 100);
+				this.addRecipe(berry, fs, 100, RecipeLevel.MODINTERACT);
 			}
 		}
 
@@ -98,7 +101,7 @@ public class RecipesCentrifuge
 			ItemStack drop = EssenceType.XP.getEssence();
 			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
 				FluidStack fs = ReikaXPFluidHelper.getFluid(5);
-				this.addRecipe(drop, fs, 100);
+				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
 			}
 		}
 
@@ -121,7 +124,7 @@ public class RecipesCentrifuge
 
 	}
 
-	private void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs)
+	private void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl)
 	{
 		out.lock();
 		recipeList.put(in, out);
@@ -132,7 +135,7 @@ public class RecipesCentrifuge
 			fluidList.put(in, fs);
 	}
 
-	private void addRecipe(ItemStack in, FluidOut fs, Object... items)
+	private void addRecipe(ItemStack in, FluidOut fs, RecipeLevel rl, Object... items)
 	{
 		ChancedOutputList li = new ChancedOutputList();
 		for (int i = 0; i < items.length; i += 2) {
@@ -146,32 +149,40 @@ public class RecipesCentrifuge
 				chance = new Float((Integer)chance);
 			li.addItem((ItemStack)is1, (Float)chance);
 		}
-		this.addRecipe(in, li, fs);
+		this.addRecipe(in, li, fs, rl);
 	}
 
-	private void addRecipe(Block b, FluidOut fs, Object... items)
+	public void addAPIRecipe(ItemStack item, FluidStack fs, float fc, Object... items)
 	{
-		this.addRecipe(new ItemStack(b), fs, items);
-	}
-
-	private void addRecipe(Item item, FluidOut fs, Object... items)
-	{
-		this.addRecipe(new ItemStack(item), fs, items);
+		this.addRecipe(item, fs, fc, RecipeLevel.API, items);
 	}
 
 	private void addRecipe(ItemStack item, FluidStack fs, float fc, Object... items)
 	{
-		this.addRecipe(item, new FluidOut(fs, fc), items);
+		this.addRecipe(item, fs, fc, RecipeLevel.CORE, items);
+	}
+
+	private void addRecipe(ItemStack item, FluidStack fs, float fc, RecipeLevel rl, Object... items)
+	{
+		this.addRecipe(item, new FluidOut(fs, fc), rl, items);
+	}
+
+	private void addRecipe(Block item, FluidOut fs, RecipeLevel rl, Object... items)
+	{
+		this.addRecipe(new ItemStack(item), fs, rl, items);
+	}
+
+	private void addRecipe(Item item, FluidOut fs, RecipeLevel rl, Object... items) {
+		this.addRecipe(new ItemStack(item), fs, rl, items);
 	}
 
 	private void addRecipe(Block item, FluidStack fs, float fc, Object... items)
 	{
-		this.addRecipe(item, new FluidOut(fs, fc), items);
+		this.addRecipe(new ItemStack(item), fs, fc, items);
 	}
 
-	private void addRecipe(Item item, FluidStack fs, float fc, Object... items)
-	{
-		this.addRecipe(item, new FluidOut(fs, fc), items);
+	private void addRecipe(Item item, FluidStack fs, float fc, Object... items) {
+		this.addRecipe(new ItemStack(item), fs, fc, items);
 	}
 
 	public ChancedOutputList getRecipeResult(ItemStack item) {

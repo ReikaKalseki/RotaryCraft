@@ -21,10 +21,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.DryingBedManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
-public class RecipesDryingBed
-{
+public class RecipesDryingBed extends RecipeHandler implements DryingBedManager {
+
 	private static final RecipesDryingBed DryingBase = new RecipesDryingBed();
 
 	private OneWayMap<Fluid, ItemStack> recipeList = new OneWayMap();
@@ -37,26 +39,41 @@ public class RecipesDryingBed
 
 	private RecipesDryingBed()
 	{
-		this.addRecipe(FluidRegistry.WATER, 250, ItemStacks.salt);
-		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Items.gold_nugget));
-		this.addRecipe("oil", 200, ItemStacks.tar);
-		this.addRecipe("for.honey", 400, new ItemStack(Items.slime_ball));
-		this.addRecipe("honey", 400, new ItemStack(Items.slime_ball));
+		RecipeInterface.dryingbed = this;
+
+		this.addRecipe(FluidRegistry.WATER, 250, ItemStacks.salt, RecipeLevel.CORE);
+		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Items.gold_nugget), RecipeLevel.PERIPHERAL);
+		this.addRecipe("oil", 200, ItemStacks.tar, RecipeLevel.PERIPHERAL);
+		this.addRecipe("for.honey", 400, new ItemStack(Items.slime_ball), RecipeLevel.PERIPHERAL);
+		this.addRecipe("honey", 400, new ItemStack(Items.slime_ball), RecipeLevel.PERIPHERAL);
 
 		ArrayList<ItemStack> li = OreDictionary.getOres("rubber");
 		if (li == null || li.isEmpty()) {
 			li = OreDictionary.getOres("itemRubber");
 		}
 		if (li != null && !li.isEmpty())
-			this.addRecipe("lubricant", 100, li.get(0));
+			this.addRecipe("lubricant", 100, li.get(0), RecipeLevel.MODINTERACT);
 
-		this.addRecipe("chroma", 2000, new ItemStack(Items.emerald));
+		this.addRecipe("chroma", 2000, new ItemStack(Items.emerald), RecipeLevel.MODINTERACT);
 	}
 
-	private void addRecipe(Fluid f, int amount, ItemStack out)
-	{
+	public void addAPIRecipe(Fluid f, int amount, ItemStack out) {
+		this.addRecipe(f, amount, out, RecipeLevel.API);
+	}
+
+	private void addRecipe(Fluid f, int amount, ItemStack out) {
+		this.addRecipe(f, amount, out, RecipeLevel.CORE);
+	}
+
+	private void addRecipe(Fluid f, int amount, ItemStack out, RecipeLevel rl) {
 		recipeList.put(f, out);
 		amounts.put(f, amount);
+	}
+
+	private void addRecipe(String s, int amount, ItemStack out, RecipeLevel rl) {
+		Fluid f = FluidRegistry.getFluid(s);
+		if (f != null)
+			this.addRecipe(f, amount, out, rl);
 	}
 
 	private void addRecipe(String s, int amount, ItemStack out)

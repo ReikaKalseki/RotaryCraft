@@ -27,10 +27,13 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.GrinderManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public class RecipesGrinder {
+public class RecipesGrinder extends RecipeHandler implements GrinderManager {
+
 	private static final RecipesGrinder GrinderBase = new RecipesGrinder();
 
 	public static final int ore_rate = 3;
@@ -44,50 +47,51 @@ public class RecipesGrinder {
 	}
 
 	private RecipesGrinder() {
+		RecipeInterface.grinder = this;
 
-		this.addRecipe(Blocks.stone, new ItemStack(Blocks.cobblestone));
-		this.addRecipe(Blocks.cobblestone, new ItemStack(Blocks.gravel));
-		this.addRecipe(Blocks.gravel, new ItemStack(Blocks.sand));
-		this.addRecipe(Blocks.glass, new ItemStack(Blocks.sand));
-		this.addRecipe(Blocks.sandstone, new ItemStack(Blocks.sand));
-		this.addRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sand, 6, 0));
-		this.addRecipe(Blocks.glowstone, new ItemStack(Items.glowstone_dust, 4, 0));
-		this.addRecipe(Blocks.stonebrick, new ItemStack(Blocks.cobblestone));
-		this.addRecipe(Blocks.furnace, new ItemStack(Blocks.cobblestone, 8, 0));
-		this.addRecipe(Blocks.brick_block, new ItemStack(Items.clay_ball, 4, 0));
-		this.addRecipe(Blocks.brick_stairs, new ItemStack(Items.clay_ball, 6, 0));
-		this.addRecipe(Items.brick, new ItemStack(Items.clay_ball));
-		this.addRecipe(Blocks.stone_stairs, new ItemStack(Blocks.gravel, 2, 0));
-		this.addRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.cobblestone, 2, 0));
-		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust); //create a netherrack powder
-		this.addRecipe(Blocks.soul_sand, ItemStacks.tar); //create a tar
-		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 4));
-		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4));
+		this.addRecipe(Blocks.stone, new ItemStack(Blocks.cobblestone), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.cobblestone, new ItemStack(Blocks.gravel), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.gravel, new ItemStack(Blocks.sand), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.glass, new ItemStack(Blocks.sand), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.sandstone, new ItemStack(Blocks.sand), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sand, 6, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.glowstone, new ItemStack(Items.glowstone_dust, 4, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.stonebrick, new ItemStack(Blocks.cobblestone), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.furnace, new ItemStack(Blocks.cobblestone, 8, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.brick_block, new ItemStack(Items.clay_ball, 4, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.brick_stairs, new ItemStack(Items.clay_ball, 6, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Items.brick, new ItemStack(Items.clay_ball), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.stone_stairs, new ItemStack(Blocks.gravel, 2, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.cobblestone, 2, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
+		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE); //create a tar
+		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 4), RecipeLevel.PERIPHERAL);
+		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), RecipeLevel.CORE);
 
-		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3));//, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));
+		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), RecipeLevel.PROTECTED);//, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));
+		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15), RecipeLevel.PROTECTED);
+		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0), RecipeLevel.PROTECTED);
 
-		this.addRecipe(Blocks.log, this.getSizedSawdust(16)); //sawdust
-		this.addRecipe(Blocks.planks, this.getSizedSawdust(4));
-		this.addRecipe(Blocks.noteblock, this.getSizedSawdust(32));
-		this.addRecipe(Blocks.jukebox, this.getSizedSawdust(32));
-		this.addRecipe(Blocks.fence, this.getSizedSawdust(4));
-		this.addRecipe(Blocks.oak_stairs, this.getSizedSawdust(6));
-		this.addRecipe(Blocks.birch_stairs, this.getSizedSawdust(6));
-		this.addRecipe(Blocks.spruce_stairs, this.getSizedSawdust(6));
-		this.addRecipe(Blocks.jungle_stairs, this.getSizedSawdust(6));
-		this.addRecipe(Blocks.chest, this.getSizedSawdust(32));
-		this.addRecipe(Blocks.crafting_table, this.getSizedSawdust(16));
-		this.addRecipe(Blocks.ladder, this.getSizedSawdust(4));
-		this.addRecipe(Blocks.wooden_pressure_plate, this.getSizedSawdust(8));
-		this.addRecipe(Blocks.stone_pressure_plate, new ItemStack(Blocks.cobblestone, 2, ItemStacks.sawdust.getItemDamage()));
-		this.addRecipe(Items.bowl, this.getSizedSawdust(ModList.GREGTECH.isLoaded() ? 4 : 12));
-		this.addRecipe(Items.wooden_door, this.getSizedSawdust(24));
-		this.addRecipe(Items.sign, this.getSizedSawdust(24));
-		this.addRecipe(Items.stick, this.getSizedSawdust(2));
-		this.addRecipe(Blocks.trapdoor, this.getSizedSawdust(24));
-		this.addRecipe(Blocks.fence_gate, this.getSizedSawdust(16));
-		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15));
-		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0));
+		this.addRecipe(Blocks.log, this.getSizedSawdust(16), RecipeLevel.PERIPHERAL); //sawdust
+		this.addRecipe(Blocks.planks, this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.noteblock, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.jukebox, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.fence, this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.oak_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.birch_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.spruce_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.jungle_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.chest, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.crafting_table, this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.ladder, this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.wooden_pressure_plate, this.getSizedSawdust(8), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.stone_pressure_plate, new ItemStack(Blocks.cobblestone, 2, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Items.bowl, this.getSizedSawdust(ModList.GREGTECH.isLoaded() ? 4 : 12), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Items.wooden_door, this.getSizedSawdust(24), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Items.sign, this.getSizedSawdust(24), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Items.stick, this.getSizedSawdust(2), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.trapdoor, this.getSizedSawdust(24), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.fence_gate, this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
 
 		/*
 		this.addRecipe(Blocks.coal_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24));
@@ -203,6 +207,22 @@ public class RecipesGrinder {
 	}
 
 	public void addRecipe(ItemStack in, ItemStack out) {
+		this.addRecipe(in, out, RecipeLevel.CORE);
+	}
+
+	public void addAPIRecipe(ItemStack in, ItemStack out) {
+		this.addRecipe(in, out, RecipeLevel.API);
+	}
+
+	private void addRecipe(Block in, ItemStack out, RecipeLevel rl) {
+		this.addRecipe(new ItemStack(in), out, rl);
+	}
+
+	private void addRecipe(Item in, ItemStack out, RecipeLevel rl) {
+		this.addRecipe(new ItemStack(in), out, rl);
+	}
+
+	private void addRecipe(ItemStack in, ItemStack out, RecipeLevel rl) {
 		recipes.put(in, out);
 		//recipes.put(in, new GrinderRecipe(in, out, out2));
 	}

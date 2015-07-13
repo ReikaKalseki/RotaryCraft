@@ -27,10 +27,12 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.RockMelterManager;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class RecipesLavaMaker {
+public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager {
 
 	private static final RecipesLavaMaker recipes = new RecipesLavaMaker();
 
@@ -41,34 +43,36 @@ public class RecipesLavaMaker {
 	private final ItemHashMap<MeltingRecipe> recipeList = new ItemHashMap().setOneWay();
 
 	private RecipesLavaMaker() {
-		this.addRecipe(Blocks.stone, FluidRegistry.LAVA, 1000, 1000, ReikaThermoHelper.ROCK_MELT_ENERGY);
-		this.addRecipe(Blocks.cobblestone, FluidRegistry.LAVA, 500, 1000, 3120000);
-		this.addRecipe(Blocks.netherrack, FluidRegistry.LAVA, 2000, 600, 480000);
-		this.addRecipe(Blocks.stonebrick, FluidRegistry.LAVA, 1000, 1200, 4160000);
+		RecipeInterface.rockmelt = this;
 
-		this.addRecipe("stone", FluidRegistry.LAVA, 1000, 1000, 5200000);
-		this.addRecipe("cobblestone", FluidRegistry.LAVA, 500, 1000, 2820000);
+		this.addRecipe(Blocks.stone, FluidRegistry.LAVA, 1000, 1000, ReikaThermoHelper.ROCK_MELT_ENERGY, RecipeLevel.PROTECTED);
+		this.addRecipe(Blocks.cobblestone, FluidRegistry.LAVA, 500, 1000, 3120000, RecipeLevel.PROTECTED);
+		this.addRecipe(Blocks.netherrack, FluidRegistry.LAVA, 2000, 600, 480000, RecipeLevel.PROTECTED);
+		this.addRecipe(Blocks.stonebrick, FluidRegistry.LAVA, 1000, 1200, 4160000, RecipeLevel.PROTECTED);
 
-		this.addRecipe("dustGlowstone", "glowstone", 250, 400, 80000);
-		this.addRecipe(Blocks.glowstone, "glowstone", 1000, 500, 320000);
-		this.addRecipe("dustRedstone", "redstone", 100, 600, 120000);
-		this.addRecipe(Blocks.redstone_block, "redstone", 900, 750, 1080000);
-		this.addRecipe(Items.ender_pearl, "ender", 250, 400, 240000);
-		this.addRecipe("dustCoal", "coal", 100, 300, 60000);
+		this.addRecipe("stone", FluidRegistry.LAVA, 1000, 1000, 5200000, RecipeLevel.PROTECTED);
+		this.addRecipe("cobblestone", FluidRegistry.LAVA, 500, 1000, 2820000, RecipeLevel.PROTECTED);
+
+		this.addRecipe("dustGlowstone", "glowstone", 250, 400, 80000, RecipeLevel.MODINTERACT);
+		this.addRecipe(Blocks.glowstone, "glowstone", 1000, 500, 320000, RecipeLevel.MODINTERACT);
+		this.addRecipe("dustRedstone", "redstone", 100, 600, 120000, RecipeLevel.MODINTERACT);
+		this.addRecipe(Blocks.redstone_block, "redstone", 900, 750, 1080000, RecipeLevel.MODINTERACT);
+		this.addRecipe(Items.ender_pearl, "ender", 250, 400, 240000, RecipeLevel.MODINTERACT);
+		this.addRecipe("dustCoal", "coal", 100, 300, 60000, RecipeLevel.MODINTERACT);
 
 		if (ModList.THERMALFOUNDATION.isLoaded()) {
 			ItemStack pyro = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustPyrotheum", 1);
-			this.addRecipe(pyro, "pyrotheum", 250, 1800, 9000000);
+			this.addRecipe(pyro, "pyrotheum", 250, 1800, 9000000, RecipeLevel.MODINTERACT);
 
 			ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
-			this.addRecipe(cryo, "cryotheum", 250, -200, 2000);
+			this.addRecipe(cryo, "cryotheum", 250, -200, 2000, RecipeLevel.MODINTERACT);
 		}
 
-		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000);
-		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000);
+		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000, RecipeLevel.MODINTERACT);
+		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000, RecipeLevel.PERIPHERAL);
 
 		if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.EssenceType.XP.getEssence() != null)
-			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000);
+			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000, RecipeLevel.MODINTERACT);
 	}
 
 	private static class MeltingRecipe {
@@ -86,7 +90,7 @@ public class RecipesLavaMaker {
 		}
 	}
 
-	private void addRecipe(String in, String out, int amt, int temperature, long energy) {
+	private void addRecipe(String in, String out, int amt, int temperature, long energy, RecipeLevel rl) {
 		if (this.validateFluid(out)) {
 			ArrayList<ItemStack> li = OreDictionary.getOres(in);
 			for (int i = 0; i < li.size(); i++)
@@ -94,7 +98,7 @@ public class RecipesLavaMaker {
 		}
 	}
 
-	private void addRecipe(String in, Fluid out, int amt, int temperature, long energy) {
+	private void addRecipe(String in, Fluid out, int amt, int temperature, long energy, RecipeLevel rl) {
 		ArrayList<ItemStack> li = OreDictionary.getOres(in);
 		for (ItemStack sin : li) {
 			if (!recipeList.containsKey(sin))
@@ -117,6 +121,21 @@ public class RecipesLavaMaker {
 			this.addRecipe(new ItemStack(in), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy);
 	}
 
+	private void addRecipe(ItemStack in, String out, int amt, int temperature, long energy, RecipeLevel rl) {
+		if (this.validateFluid(out))
+			this.addRecipe(in, new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy, rl);
+	}
+
+	private void addRecipe(Item in, String out, int amt, int temperature, long energy, RecipeLevel rl) {
+		if (this.validateFluid(out))
+			this.addRecipe(new ItemStack(in), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy, rl);
+	}
+
+	private void addRecipe(Block in, String out, int amt, int temperature, long energy, RecipeLevel rl) {
+		if (this.validateFluid(out))
+			this.addRecipe(new ItemStack(in), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy, rl);
+	}
+
 	private void addRecipe(Block in, Fluid out, int amt, int temperature, long energy) {
 		this.addRecipe(new ItemStack(in), new FluidStack(out, amt), temperature, energy);
 	}
@@ -125,7 +144,31 @@ public class RecipesLavaMaker {
 		this.addRecipe(new ItemStack(in), new FluidStack(out, amt), temperature, energy);
 	}
 
+	private void addRecipe(Block in, Fluid out, int amt, int temperature, long energy, RecipeLevel rl) {
+		this.addRecipe(new ItemStack(in), new FluidStack(out, amt), temperature, energy, rl);
+	}
+
+	private void addRecipe(Item in, Fluid out, int amt, int temperature, long energy, RecipeLevel rl) {
+		this.addRecipe(new ItemStack(in), new FluidStack(out, amt), temperature, energy, rl);
+	}
+
+	public void addAPIRecipe(ItemStack in, FluidStack out, int temperature, long energy) {
+		this.addRecipe(in, out, temperature, energy, RecipeLevel.API);
+	}
+
 	private void addRecipe(ItemStack in, FluidStack out, int temperature, long energy) {
+		this.addRecipe(in, out, temperature, energy, RecipeLevel.CORE);
+	}
+
+	private void addRecipe(Block in, FluidStack out, int temperature, long energy, RecipeLevel rl) {
+		this.addRecipe(new ItemStack(in), out, temperature, energy, rl);
+	}
+
+	private void addRecipe(Item in, FluidStack out, int temperature, long energy, RecipeLevel rl) {
+		this.addRecipe(new ItemStack(in), out, temperature, energy, rl);
+	}
+
+	private void addRecipe(ItemStack in, FluidStack out, int temperature, long energy, RecipeLevel rl) {
 		if (in != null) {
 			recipeList.put(in, new MeltingRecipe(in, out, temperature, energy));
 		}

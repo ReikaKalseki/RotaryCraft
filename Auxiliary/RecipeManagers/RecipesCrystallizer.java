@@ -20,10 +20,12 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.CrystallizerManager;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-public class RecipesCrystallizer
-{
+public class RecipesCrystallizer extends RecipeHandler implements CrystallizerManager {
+
 	private static final RecipesCrystallizer CrystallizerBase = new RecipesCrystallizer();
 
 	private final OneWayMap<Fluid, ItemStack> recipeList = new OneWayMap();
@@ -36,25 +38,39 @@ public class RecipesCrystallizer
 
 	private RecipesCrystallizer()
 	{
-		this.addRecipe("ender", 250, new ItemStack(Items.ender_pearl));
-		this.addRecipe("redstone", 100, new ItemStack(Items.redstone));
-		this.addRecipe("glowstone", 250, new ItemStack(Items.glowstone_dust));
-		this.addRecipe("coal", 100, new ItemStack(Items.coal));
+		RecipeInterface.crystallizer = this;
 
-		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice));
-		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone));
+		this.addRecipe("ender", 250, new ItemStack(Items.ender_pearl), RecipeLevel.MODINTERACT);
+		this.addRecipe("redstone", 100, new ItemStack(Items.redstone), RecipeLevel.MODINTERACT);
+		this.addRecipe("glowstone", 250, new ItemStack(Items.glowstone_dust), RecipeLevel.MODINTERACT);
+		this.addRecipe("coal", 100, new ItemStack(Items.coal), RecipeLevel.MODINTERACT);
 
-		this.addRecipe("rc ethanol", 1000, ItemRegistry.ETHANOL.getStackOf());
+		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice), RecipeLevel.CORE);
+		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone), RecipeLevel.PERIPHERAL);
+
+		this.addRecipe("rc ethanol", 1000, ItemRegistry.ETHANOL.getStackOf(), RecipeLevel.PROTECTED);
 	}
 
-	private void addRecipe(Fluid f, int amount, ItemStack out)
-	{
+	public void addAPIRecipe(Fluid f, int amount, ItemStack out) {
+		this.addRecipe(f, amount, out, RecipeLevel.API);
+	}
+
+	private void addRecipe(Fluid f, int amount, ItemStack out) {
+		this.addRecipe(f, amount, out, RecipeLevel.CORE);
+	}
+
+	private void addRecipe(Fluid f, int amount, ItemStack out, RecipeLevel rl) {
 		recipeList.put(f, out);
 		amounts.put(f, amount);
 	}
 
-	private void addRecipe(String s, int amount, ItemStack out)
-	{
+	private void addRecipe(String s, int amount, ItemStack out, RecipeLevel rl) {
+		Fluid f = FluidRegistry.getFluid(s);
+		if (f != null)
+			this.addRecipe(f, amount, out, rl);
+	}
+
+	private void addRecipe(String s, int amount, ItemStack out) {
 		Fluid f = FluidRegistry.getFluid(s);
 		if (f != null)
 			this.addRecipe(f, amount, out);

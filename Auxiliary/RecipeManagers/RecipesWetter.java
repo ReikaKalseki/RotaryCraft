@@ -22,9 +22,11 @@ import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.WetterManager;
 
-public class RecipesWetter
-{
+public class RecipesWetter extends RecipeHandler implements WetterManager {
+
 	private static final RecipesWetter WetterBase = new RecipesWetter();
 
 	private final ItemHashMap<OneWayMap<Fluid, WettingRecipe>> recipeList = new ItemHashMap().setOneWay();
@@ -36,13 +38,28 @@ public class RecipesWetter
 	}
 
 	private RecipesWetter() {
-		this.addRecipe(new ItemStack(Blocks.sand), "lubricant", 500, new ItemStack(Blocks.soul_sand), 200);
-		this.addRecipe(new ItemStack(Blocks.sand), "oil", 125, new ItemStack(Blocks.soul_sand), 50);
-		this.addRecipe(new ItemStack(Blocks.cobblestone), "jet fuel", 20, new ItemStack(Blocks.netherrack), 80);
+		RecipeInterface.wetter = this;
+
+		this.addRecipe(new ItemStack(Blocks.sand), "lubricant", 500, new ItemStack(Blocks.soul_sand), 200, RecipeLevel.PROTECTED);
+		this.addRecipe(new ItemStack(Blocks.sand), "oil", 125, new ItemStack(Blocks.soul_sand), 50, RecipeLevel.MODINTERACT);
+		this.addRecipe(new ItemStack(Blocks.cobblestone), "jet fuel", 20, new ItemStack(Blocks.netherrack), 80, RecipeLevel.PERIPHERAL);
 	}
 
-	private void addRecipe(ItemStack in, Fluid f, int amount, ItemStack out, int time)
-	{
+	public void addAPIRecipe(ItemStack in, Fluid f, int amount, ItemStack out, int time) {
+		this.addRecipe(in, f, amount, out, time, RecipeLevel.API);
+	}
+
+	private void addRecipe(ItemStack in, Fluid f, int amount, ItemStack out, int time) {
+		this.addRecipe(in, f, amount, out, time, RecipeLevel.CORE);
+	}
+
+	private void addRecipe(ItemStack in, String s, int amount, ItemStack out, int time, RecipeLevel rl) {
+		Fluid f = FluidRegistry.getFluid(s);
+		if (f != null)
+			this.addRecipe(in, f, amount, out, time, rl);
+	}
+
+	private void addRecipe(ItemStack in, Fluid f, int amount, ItemStack out, int time, RecipeLevel rl) {
 		WettingRecipe wr = new WettingRecipe(in, new FluidStack(f, amount), out, time);
 		OneWayMap<Fluid, WettingRecipe> map = recipeList.get(in);
 		if (map == null) {
