@@ -39,6 +39,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -46,10 +47,13 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.MeteorCraft.API.MeteorEntity;
+import Reika.RotaryCraft.API.Event.ForceFieldEvent;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class TileEntityForceField extends TileEntityProtectionDome implements EnchantableMachine {
 
@@ -248,6 +252,13 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 					//if (!world.isRemote)
 					threat.velocityChanged = true;
 				}
+			}
+			Event evt = new ForceFieldEvent(this, threat);
+			MinecraftForge.EVENT_BUS.post(evt);
+
+			if (evt.getResult() == Result.ALLOW) {
+				threat.setDead();
+				world.createExplosion(null, x, y, z, 4F, true);
 			}
 		}
 	}
