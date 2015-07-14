@@ -51,7 +51,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private OneWayList<ItemStack> outputs = new OneWayList();
 
-	public static final RecipesCentrifuge recipes()
+	public static final RecipesCentrifuge getRecipes()
 	{
 		return CentrifugeBase;
 	}
@@ -68,60 +68,11 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
 		this.addRecipe(Items.blaze_powder, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
-		if (ModList.FORESTRY.isLoaded()) {
-			Map<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
-			for (ItemStack in : centrifuge.keySet()) {
-				ChancedOutputList out = centrifuge.get(in).copy();
-				out.manipulateChances(new ChanceExponentiator(3));
-				out.manipulateChances(new ChanceRounder());
-				this.addRecipe(in, out, null, RecipeLevel.MODINTERACT);
-			}
-		}
-
-		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("lubricant"), 50), 60, ItemStacks.slipperyPropolis, 80);
-		this.addRecipe(ItemStacks.slipperyPropolis, new FluidStack(FluidRegistry.getFluid("lubricant"), 150), 100);
-
-		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {
-			ItemStack lead = OreDictionary.getOres("dustLead").get(0);
-			ItemStack silver = OreDictionary.getOres("dustSilver").get(0);
-			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, RecipeLevel.PERIPHERAL, lead, 100, silver, 100);
-		}
-
-		if (ModList.TINKERER.isLoaded()) {
-			ItemStack berry = OreBerryBushHandler.BerryTypes.XP.getStack();
-			if (berry != null && ReikaXPFluidHelper.fluidsExist()) {
-				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
-				this.addRecipe(berry, fs, 100, RecipeLevel.MODINTERACT);
-			}
-		}
-
-		if (ModList.MAGICCROPS.isLoaded()) {
-			//ItemStack drop = LegacyMagicCropHandler.getInstance().dropID != null ? new ItemStack(LegacyMagicCropHandler.getInstance().dropID) : null;
-			//if (drop == null)
-			ItemStack drop = EssenceType.XP.getEssence();
-			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
-				FluidStack fs = ReikaXPFluidHelper.getFluid(5);
-				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
-			}
-		}
-
+		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("lubricant"), 50), 60, RecipeLevel.PROTECTED, ItemStacks.slipperyPropolis, 80);
+		this.addRecipe(ItemStacks.slipperyPropolis, new FluidStack(FluidRegistry.getFluid("lubricant"), 150), 100, RecipeLevel.PROTECTED);
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));
-		this.addRecipe(ItemStacks.canolaHusks, new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100);
-	}
-
-	private static class ChanceRounder implements ChanceManipulator {
-
-		private ChanceRounder() {
-
-		}
-
-		@Override
-		public float getChance(float original) { //round up to nearest 0.5F
-			return Math.round(2D*original)/2F;
-		}
-
-
+		this.addRecipe(ItemStacks.canolaHusks, new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100, RecipeLevel.CORE);
 	}
 
 	private void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl)
@@ -157,11 +108,6 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(item, fs, fc, RecipeLevel.API, items);
 	}
 
-	private void addRecipe(ItemStack item, FluidStack fs, float fc, Object... items)
-	{
-		this.addRecipe(item, fs, fc, RecipeLevel.CORE, items);
-	}
-
 	private void addRecipe(ItemStack item, FluidStack fs, float fc, RecipeLevel rl, Object... items)
 	{
 		this.addRecipe(item, new FluidOut(fs, fc), rl, items);
@@ -174,15 +120,6 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private void addRecipe(Item item, FluidOut fs, RecipeLevel rl, Object... items) {
 		this.addRecipe(new ItemStack(item), fs, rl, items);
-	}
-
-	private void addRecipe(Block item, FluidStack fs, float fc, Object... items)
-	{
-		this.addRecipe(new ItemStack(item), fs, fc, items);
-	}
-
-	private void addRecipe(Item item, FluidStack fs, float fc, Object... items) {
-		this.addRecipe(new ItemStack(item), fs, fc, items);
 	}
 
 	public ChancedOutputList getRecipeResult(ItemStack item) {
@@ -264,5 +201,55 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	public Collection<ItemStack> getAllCentrifugables() {
 		return Collections.unmodifiableCollection(recipeList.keySet());
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+
+		if (ModList.FORESTRY.isLoaded()) {
+			Map<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
+			for (ItemStack in : centrifuge.keySet()) {
+				ChancedOutputList out = centrifuge.get(in).copy();
+				out.manipulateChances(new ChanceExponentiator(3));
+				out.manipulateChances(new ChanceRounder());
+				this.addRecipe(in, out, null, RecipeLevel.MODINTERACT);
+			}
+		}
+
+		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {
+			ItemStack lead = OreDictionary.getOres("dustLead").get(0);
+			ItemStack silver = OreDictionary.getOres("dustSilver").get(0);
+			this.addRecipe(ExtractorModOres.getSmeltedIngot(ModOreList.GALENA), null, RecipeLevel.PERIPHERAL, lead, 100, silver, 100);
+		}
+
+		if (ModList.TINKERER.isLoaded()) {
+			ItemStack berry = OreBerryBushHandler.BerryTypes.XP.getStack();
+			if (berry != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
+				this.addRecipe(berry, fs, 100, RecipeLevel.MODINTERACT);
+			}
+		}
+
+		if (ModList.MAGICCROPS.isLoaded()) {
+			//ItemStack drop = LegacyMagicCropHandler.getInstance().dropID != null ? new ItemStack(LegacyMagicCropHandler.getInstance().dropID) : null;
+			//if (drop == null)
+			ItemStack drop = EssenceType.XP.getEssence();
+			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(5);
+				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
+			}
+		}
+	}
+
+	private static class ChanceRounder implements ChanceManipulator {
+
+		private ChanceRounder() {
+
+		}
+
+		@Override
+		public float getChance(float original) { //round up to nearest 0.5F
+			return Math.round(2D*original)/2F;
+		}
 	}
 }

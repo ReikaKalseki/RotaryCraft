@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Farming;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +28,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.TreeGetter;
+import Reika.DragonAPI.Instantiable.Data.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray.BlockTypePrioritizer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.InertIInv;
@@ -70,6 +73,15 @@ ConditionalOperation, DamagingContact {
 
 	private TreeReader tree = new TreeReader();
 	private TreeReader treeCopy = new TreeReader();
+
+	private Comparator<Coordinate> inwardsComparator;
+	private Comparator<Coordinate> leafPriority;
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		leafPriority = new LeafPrioritizer(world);
+		inwardsComparator = new InwardsComparator();
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -147,7 +159,10 @@ ConditionalOperation, DamagingContact {
 
 			this.checkAndMatchInventory();
 
+			tree.sortBlocksByHeight();
 			tree.reverseBlockOrder();
+			tree.sort(inwardsComparator);
+			tree.sort(leafPriority);
 			treeCopy = (TreeReader)tree.copy();
 		}
 
@@ -159,7 +174,7 @@ ConditionalOperation, DamagingContact {
 			}
 		}
 
-		RotaryCraft.logger.debug(tree);
+		//RotaryCraft.logger.debug(tree);
 
 		if (tree.isEmpty())
 			return;
@@ -182,7 +197,7 @@ ConditionalOperation, DamagingContact {
 			if (ConfigRegistry.INSTACUT.getState()) {
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
 				this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
-				c.setBlock(world, Blocks.air);
+				c.setBlock(world, Blocks.air, 0, 2); //2, not 3, since do not want to trigger block update
 				if (mat == Material.leaves)
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
 				else
@@ -218,7 +233,7 @@ ConditionalOperation, DamagingContact {
 					if (!world.isRemote) {
 						world.spawnEntityInWorld(e);
 					}
-					c.setBlock(world, Blocks.air);
+					c.setBlock(world, Blocks.air, 0, 2);
 				}
 				else {
 
@@ -599,5 +614,50 @@ ConditionalOperation, DamagingContact {
 	@Override
 	public DamageSource getDamageType() {
 		return DamageSource.generic;
+	}
+
+	private static class LeafPrioritizer extends BlockTypePrioritizer {
+
+		private LeafPrioritizer(World world) {
+			super(world);
+		}
+
+		@Override
+		protected int compare(BlockKey b1, BlockKey b2) {
+			boolean l1 = this.isLeaf(b1);
+			boolean l2 = this.isLeaf(b2);
+			if (l1 && l2) {
+				return 0;
+			}
+			else if (l1) {
+				return -1;
+			}
+			else if (l2) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+
+		private boolean isLeaf(BlockKey bk) {
+			if (bk.blockID.getMaterial() == Material.leaves)
+				return true;
+			if (bk.blockID == Blocks.leaves || bk.blockID == Blocks.leaves2)
+				return true;
+			if (ModWoodList.isModLeaf(bk.blockID, bk.metadata))
+				return true;
+			return false;
+		}
+
+	}
+
+	private class InwardsComparator implements Comparator<Coordinate> {
+
+		@Override
+		public int compare(Coordinate o1, Coordinate o2) {
+			return (int)Math.signum(o2.getDistanceTo(editx, edity, editz)-o1.getDistanceTo(editx, edity, editz));
+		}
+
 	}
 }

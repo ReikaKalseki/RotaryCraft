@@ -84,7 +84,6 @@ import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
 import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.MachineAspectMapper;
@@ -325,6 +324,7 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
 
+		RotaryRecipes.loadMachineRecipeHandlers();
 		if (!this.isLocked()) {
 			RotaryRecipes.addRecipes();
 		}
@@ -491,9 +491,6 @@ public class RotaryCraft extends DragonAPIMod {
 		ItemFuelTank.initCreativeFluids();
 
 		RotaryIntegrationManager.verifyClassIntegrity();
-
-		if (!this.isLocked())
-			RecipesGrinder.getRecipes().addPostLoadRecipes();
 
 		if (!this.isLocked())
 			if (ModList.FORESTRY.isLoaded()) {

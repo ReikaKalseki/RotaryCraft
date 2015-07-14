@@ -53,26 +53,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		this.addRecipe("stone", FluidRegistry.LAVA, 1000, 1000, 5200000, RecipeLevel.PROTECTED);
 		this.addRecipe("cobblestone", FluidRegistry.LAVA, 500, 1000, 2820000, RecipeLevel.PROTECTED);
 
-		this.addRecipe("dustGlowstone", "glowstone", 250, 400, 80000, RecipeLevel.MODINTERACT);
-		this.addRecipe(Blocks.glowstone, "glowstone", 1000, 500, 320000, RecipeLevel.MODINTERACT);
-		this.addRecipe("dustRedstone", "redstone", 100, 600, 120000, RecipeLevel.MODINTERACT);
-		this.addRecipe(Blocks.redstone_block, "redstone", 900, 750, 1080000, RecipeLevel.MODINTERACT);
-		this.addRecipe(Items.ender_pearl, "ender", 250, 400, 240000, RecipeLevel.MODINTERACT);
-		this.addRecipe("dustCoal", "coal", 100, 300, 60000, RecipeLevel.MODINTERACT);
-
-		if (ModList.THERMALFOUNDATION.isLoaded()) {
-			ItemStack pyro = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustPyrotheum", 1);
-			this.addRecipe(pyro, "pyrotheum", 250, 1800, 9000000, RecipeLevel.MODINTERACT);
-
-			ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
-			this.addRecipe(cryo, "cryotheum", 250, -200, 2000, RecipeLevel.MODINTERACT);
-		}
-
-		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000, RecipeLevel.MODINTERACT);
 		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000, RecipeLevel.PERIPHERAL);
-
-		if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.EssenceType.XP.getEssence() != null)
-			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000, RecipeLevel.MODINTERACT);
 	}
 
 	private static class MeltingRecipe {
@@ -94,7 +75,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		if (this.validateFluid(out)) {
 			ArrayList<ItemStack> li = OreDictionary.getOres(in);
 			for (int i = 0; i < li.size(); i++)
-				this.addRecipe(li.get(i), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy);
+				this.addRecipe(li.get(i), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy, rl);
 		}
 	}
 
@@ -102,23 +83,8 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		ArrayList<ItemStack> li = OreDictionary.getOres(in);
 		for (ItemStack sin : li) {
 			if (!recipeList.containsKey(sin))
-				this.addRecipe(sin, new FluidStack(out, amt), temperature, energy);
+				this.addRecipe(sin, new FluidStack(out, amt), temperature, energy, rl);
 		}
-	}
-
-	private void addRecipe(ItemStack in, String out, int amt, int temperature, long energy) {
-		if (this.validateFluid(out))
-			this.addRecipe(in, new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy);
-	}
-
-	private void addRecipe(Item in, String out, int amt, int temperature, long energy) {
-		if (this.validateFluid(out))
-			this.addRecipe(new ItemStack(in), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy);
-	}
-
-	private void addRecipe(Block in, String out, int amt, int temperature, long energy) {
-		if (this.validateFluid(out))
-			this.addRecipe(new ItemStack(in), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy);
 	}
 
 	private void addRecipe(ItemStack in, String out, int amt, int temperature, long energy, RecipeLevel rl) {
@@ -136,14 +102,6 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 			this.addRecipe(new ItemStack(in), new FluidStack(FluidRegistry.getFluid(out), amt), temperature, energy, rl);
 	}
 
-	private void addRecipe(Block in, Fluid out, int amt, int temperature, long energy) {
-		this.addRecipe(new ItemStack(in), new FluidStack(out, amt), temperature, energy);
-	}
-
-	private void addRecipe(Item in, Fluid out, int amt, int temperature, long energy) {
-		this.addRecipe(new ItemStack(in), new FluidStack(out, amt), temperature, energy);
-	}
-
 	private void addRecipe(Block in, Fluid out, int amt, int temperature, long energy, RecipeLevel rl) {
 		this.addRecipe(new ItemStack(in), new FluidStack(out, amt), temperature, energy, rl);
 	}
@@ -154,10 +112,6 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 
 	public void addAPIRecipe(ItemStack in, FluidStack out, int temperature, long energy) {
 		this.addRecipe(in, out, temperature, energy, RecipeLevel.API);
-	}
-
-	private void addRecipe(ItemStack in, FluidStack out, int temperature, long energy) {
-		this.addRecipe(in, out, temperature, energy, RecipeLevel.CORE);
 	}
 
 	private void addRecipe(Block in, FluidStack out, int temperature, long energy, RecipeLevel rl) {
@@ -212,6 +166,29 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 
 	public Collection<ItemStack> getAllRecipes() {
 		return Collections.unmodifiableCollection(recipeList.keySet());
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+		this.addRecipe("dustGlowstone", "glowstone", 250, 400, 80000, RecipeLevel.MODINTERACT);
+		this.addRecipe(Blocks.glowstone, "glowstone", 1000, 500, 320000, RecipeLevel.MODINTERACT);
+		this.addRecipe("dustRedstone", "redstone", 100, 600, 120000, RecipeLevel.MODINTERACT);
+		this.addRecipe(Blocks.redstone_block, "redstone", 900, 750, 1080000, RecipeLevel.MODINTERACT);
+		this.addRecipe(Items.ender_pearl, "ender", 250, 400, 240000, RecipeLevel.MODINTERACT);
+		this.addRecipe("dustCoal", "coal", 100, 300, 60000, RecipeLevel.MODINTERACT);
+
+		if (ModList.THERMALFOUNDATION.isLoaded()) {
+			ItemStack pyro = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustPyrotheum", 1);
+			this.addRecipe(pyro, "pyrotheum", 250, 1800, 9000000, RecipeLevel.MODINTERACT);
+
+			ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
+			this.addRecipe(cryo, "cryotheum", 250, -200, 2000, RecipeLevel.MODINTERACT);
+		}
+
+		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000, RecipeLevel.MODINTERACT);
+
+		if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.EssenceType.XP.getEssence() != null)
+			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000, RecipeLevel.MODINTERACT);
 	}
 
 }

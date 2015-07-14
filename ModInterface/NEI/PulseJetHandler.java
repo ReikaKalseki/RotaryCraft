@@ -45,7 +45,7 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getResult() {
 			ItemStack in = this.getInput();
-			ItemStack out = RecipesPulseFurnace.smelting().getSmeltingResult(in);
+			ItemStack out = RecipesPulseFurnace.getRecipes().getSmeltingResult(in);
 			return new PositionedStack(out, 120, 41);
 		}
 
@@ -100,7 +100,7 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rcpulsej")) {
-			Collection<ItemStack> li = RecipesPulseFurnace.smelting().getAllSmeltables();
+			Collection<ItemStack> li = RecipesPulseFurnace.getRecipes().getAllSmeltables();
 			for (ItemStack is : li)
 				arecipes.add(new PulseJetRecipe(is));
 		}
@@ -117,8 +117,8 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (RecipesPulseFurnace.smelting().isProduct(result)) {
-			List<ItemStack> li = RecipesPulseFurnace.smelting().getSources(result);
+		if (RecipesPulseFurnace.getRecipes().isProduct(result)) {
+			List<ItemStack> li = RecipesPulseFurnace.getRecipes().getSources(result);
 			if (li != null && !li.isEmpty())
 				arecipes.add(new PulseJetRecipe(li));
 		}
@@ -126,7 +126,7 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (RecipesPulseFurnace.smelting().isSmeltable(ingredient)) {
+		if (RecipesPulseFurnace.getRecipes().isSmeltable(ingredient)) {
 			arecipes.add(new PulseJetRecipe(ingredient));
 		}
 	}

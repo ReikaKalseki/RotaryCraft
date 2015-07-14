@@ -49,10 +49,6 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 		this.addRecipe(in, f, amount, out, time, RecipeLevel.API);
 	}
 
-	private void addRecipe(ItemStack in, Fluid f, int amount, ItemStack out, int time) {
-		this.addRecipe(in, f, amount, out, time, RecipeLevel.CORE);
-	}
-
 	private void addRecipe(ItemStack in, String s, int amount, ItemStack out, int time, RecipeLevel rl) {
 		Fluid f = FluidRegistry.getFluid(s);
 		if (f != null)
@@ -68,12 +64,6 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 		}
 		map.put(f, wr);
 		fluids.add(f.getName());
-	}
-
-	private void addRecipe(ItemStack in, String s, int amount, ItemStack out, int time) {
-		Fluid f = FluidRegistry.getFluid(s);
-		if (f != null)
-			this.addRecipe(in, f, amount, out, time);
 	}
 
 	public WettingRecipe getRecipe(ItemStack is, FluidStack liquid) {
@@ -158,5 +148,10 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 	public Collection<WettingRecipe> getRecipesUsing(ItemStack ingredient) {
 		OneWayMap<Fluid, WettingRecipe> map = recipeList.get(ingredient);
 		return map != null ? Collections.unmodifiableCollection(map.values()) : null;
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+
 	}
 }

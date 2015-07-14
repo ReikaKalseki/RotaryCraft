@@ -47,22 +47,11 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 		this.addRecipe("for.honey", 400, new ItemStack(Items.slime_ball), RecipeLevel.PERIPHERAL);
 		this.addRecipe("honey", 400, new ItemStack(Items.slime_ball), RecipeLevel.PERIPHERAL);
 
-		ArrayList<ItemStack> li = OreDictionary.getOres("rubber");
-		if (li == null || li.isEmpty()) {
-			li = OreDictionary.getOres("itemRubber");
-		}
-		if (li != null && !li.isEmpty())
-			this.addRecipe("lubricant", 100, li.get(0), RecipeLevel.MODINTERACT);
-
 		this.addRecipe("chroma", 2000, new ItemStack(Items.emerald), RecipeLevel.MODINTERACT);
 	}
 
 	public void addAPIRecipe(Fluid f, int amount, ItemStack out) {
 		this.addRecipe(f, amount, out, RecipeLevel.API);
-	}
-
-	private void addRecipe(Fluid f, int amount, ItemStack out) {
-		this.addRecipe(f, amount, out, RecipeLevel.CORE);
 	}
 
 	private void addRecipe(Fluid f, int amount, ItemStack out, RecipeLevel rl) {
@@ -74,13 +63,6 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 		Fluid f = FluidRegistry.getFluid(s);
 		if (f != null)
 			this.addRecipe(f, amount, out, rl);
-	}
-
-	private void addRecipe(String s, int amount, ItemStack out)
-	{
-		Fluid f = FluidRegistry.getFluid(s);
-		if (f != null)
-			this.addRecipe(f, amount, out);
 	}
 
 	public ItemStack getDryingResult(FluidStack liquid)
@@ -120,5 +102,15 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 
 	public Collection<Fluid> getAllRecipes() {
 		return Collections.unmodifiableCollection(recipeList.keySet());
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+		ArrayList<ItemStack> li = OreDictionary.getOres("rubber");
+		if (li == null || li.isEmpty()) {
+			li = OreDictionary.getOres("itemRubber");
+		}
+		if (li != null && !li.isEmpty())
+			this.addRecipe("lubricant", 100, li.get(0), RecipeLevel.MODINTERACT);
 	}
 }

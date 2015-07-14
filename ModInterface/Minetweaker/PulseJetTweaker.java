@@ -23,7 +23,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 @ZenClass("mods.rotarycraft.PulseJet")
 public class PulseJetTweaker {
 
-	private static final RecipesPulseFurnace recipes = RecipesPulseFurnace.smelting();
+	private static final RecipesPulseFurnace recipes = RecipesPulseFurnace.getRecipes();
 
 	@ZenMethod
 	public static void addRecipe(IIngredient input, IIngredient output) {

@@ -33,7 +33,7 @@ public class RecipesExtractor
 
 	private final ItemHashMap<ItemStack> recipeList = new ItemHashMap().setOneWay();
 
-	public static final RecipesExtractor recipes()
+	public static final RecipesExtractor getRecipes()
 	{
 		return instance;
 	}

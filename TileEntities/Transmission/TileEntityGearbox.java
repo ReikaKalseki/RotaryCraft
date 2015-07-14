@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.WorldRift;
+import Reika.ChromatiCraft.Auxiliary.Interfaces.NBTTile;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -46,7 +47,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTTile {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
@@ -399,13 +400,17 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		world.setBlockToAir(x, y, z);
 	}
 
-	public void repair(int dmg) {
+	public boolean repair(int dmg) {
+		if (dmg == 0)
+			return false;
 		damage -= dmg;
 		if (damage < 0)
 			damage = 0;
 		failed = false;
+		return true;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void setDamage(int dmg) {
 		damage = dmg;
 	}
@@ -632,5 +637,19 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public int getMaxTemperature() {
 		return 1000;
+	}
+
+	@Override
+	public void getTagsToWriteToStack(NBTTagCompound NBT) {
+		NBT.setInteger("damage", getDamage());
+		NBT.setInteger("lube", getLubricant());
+	}
+
+	@Override
+	public void setDataFromItemStackTag(ItemStack is) {
+		if (is.stackTagCompound != null) {
+			damage = is.stackTagCompound.getInteger("damage");
+			this.setLubricant(is.stackTagCompound.getInteger("lube"));
+		}
 	}
 }

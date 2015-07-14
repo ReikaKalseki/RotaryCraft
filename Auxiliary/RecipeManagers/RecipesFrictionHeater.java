@@ -14,9 +14,11 @@ import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.FrictionHeaterManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
-public class RecipesFrictionHeater {
+public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeaterManager {
 
 	private static final RecipesFrictionHeater instance = new RecipesFrictionHeater();
 
@@ -31,24 +33,31 @@ public class RecipesFrictionHeater {
 	}
 
 	private RecipesFrictionHeater() {
-		this.addRecipe(ItemStacks.tungstenflakes, ItemStacks.tungsteningot, 1350, 600);
-		this.addRecipe(ItemStacks.silicondust, ItemStacks.silicon, 800);
+		RecipeInterface.friction = this;
+
+		this.addRecipe(ItemStacks.tungstenflakes, ItemStacks.tungsteningot, 1350, 600, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.silicondust, ItemStacks.silicon, 800, 200, RecipeLevel.PROTECTED);
 	}
 
-	private void addRecipe(ItemStack in, ItemStack out, int temp) {
-		this.addRecipe(in, out, temp, 200);
-	}
-
-	private void addRecipe(ItemStack in, ItemStack out, int temp, int time) {
+	private void addRecipe(ItemStack in, ItemStack out, int temp, int time, RecipeLevel rl) {
 		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
 		recipes.put(in, rec);
 		outputs.put(out, rec);
 	}
 
+	public void addAPIRecipe(ItemStack in, ItemStack out, int temp, int time) {
+		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
+		this.addRecipe(rec, RecipeLevel.API);
+	}
+
 	public void addCustomRecipe(ItemStack in, ItemStack out, int temp, int time) {
 		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
-		customRecipes.put(in, rec);
-		customOutputs.put(out, rec);
+		this.addRecipe(rec, RecipeLevel.CUSTOM);
+	}
+
+	private void addRecipe(FrictionRecipe rec, RecipeLevel rl) {
+		customRecipes.put(rec.input, rec);
+		customOutputs.put(rec.output, rec);
 	}
 
 	public void removeCustomRecipe(ItemStack in) {
@@ -106,6 +115,11 @@ public class RecipesFrictionHeater {
 		Collection<ItemStack> li = new ArrayList(recipes.keySet());
 		li.addAll(customRecipes.keySet());
 		return li;
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+
 	}
 
 }

@@ -124,8 +124,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			ItemStack todrop = ItemRegistry.GEARBOX.getStackOfMetadata(type+5*ratio); //drop gearbox item
 			if (todrop.stackTagCompound == null)
 				todrop.setTagCompound(new NBTTagCompound());
-			todrop.stackTagCompound.setInteger("damage", gbx.getDamage());
-			todrop.stackTagCompound.setInteger("lube", gbx.getLubricant());
+			gbx.getTagsToWriteToStack(todrop.stackTagCompound);
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
 		}
 	}
@@ -179,8 +178,8 @@ public class BlockGearbox extends BlockModelledMachine {
 			ItemStack held = ep.getCurrentEquippedItem();
 			if (held != null) {
 				if ((ReikaItemHelper.matchStacks(fix, held))) {
-					tile.repair(1 + 20 * tile.getRandom().nextInt(18 - tile.getRatio()));
-					if (!ep.capabilities.isCreativeMode) {
+					boolean flag = tile.repair(1 + 20 * tile.getRandom().nextInt(18 - tile.getRatio()));
+					if (flag && !ep.capabilities.isCreativeMode) {
 						int num = held.stackSize;
 						if (num > 1)
 							ep.inventory.setInventorySlotContents(ep.inventory.currentItem, ReikaItemHelper.getSizedItemStack(fix, num-1));
@@ -218,8 +217,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		ItemStack is = ItemRegistry.GEARBOX.getStackOfMetadata((gbx.getBlockMetadata()/4)*5+gbx.getGearboxType().ordinal());
 		is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setInteger("damage", gbx.getDamage());
-		is.stackTagCompound.setInteger("lube", gbx.getLubricant());
+		gbx.getTagsToWriteToStack(is.stackTagCompound);
 		ret.add(is);
 		return ret;
 	}

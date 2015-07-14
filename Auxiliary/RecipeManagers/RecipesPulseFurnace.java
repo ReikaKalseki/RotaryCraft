@@ -39,7 +39,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 
 	private ItemHashMap<ItemStack> customRecipes = new ItemHashMap();
 
-	public static final RecipesPulseFurnace smelting()
+	public static final RecipesPulseFurnace getRecipes()
 	{
 		return PulseFurnaceBase;
 	}
@@ -59,24 +59,6 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		//addSmelting(RotaryCraft.shaftcraft, 9, new ItemStack(RotaryCraft.shaftcraft, 1, 1));	//Iron scrap
 		this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
 		this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
-
-		if (ModList.THERMALFOUNDATION.isLoaded()) {
-			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustEnderium", 1);
-			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotEnderium", 1);
-			if (enderdust == null || enderingot == null)
-				RotaryCraft.logger.logError("No item found for TE3 enderium crafting!");
-			else
-				this.addSmelting(enderdust, enderingot, RecipeLevel.MODINTERACT);
-		}
-
-		if (ModList.ARSENAL.isLoaded()) {
-			ItemStack fluxdust = RedstoneArsenalHandler.getInstance().getFluxDust();
-			ItemStack fluxingot = RedstoneArsenalHandler.getInstance().getFluxIngot();
-			if (fluxdust == null || fluxingot == null)
-				RotaryCraft.logger.logError("No item found for Redstone Arsenal fluxed ingot crafting!");
-			else
-				this.addSmelting(fluxdust, fluxingot, RecipeLevel.MODINTERACT);
-		}
 	}
 
 	private void addRecycling() {
@@ -116,7 +98,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		this.addSmelting(Items.diamond_sword, new ItemStack(Items.diamond, 2, 0), RecipeLevel.PROTECTED);
 		this.addSmelting(Items.diamond_shovel, new ItemStack(Items.diamond, 1, 0), RecipeLevel.PROTECTED);
 		this.addSmelting(Items.diamond_pickaxe, new ItemStack(Items.diamond, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_hoe, new ItemStack(Items.diamond, 2, 0));
+		this.addSmelting(Items.diamond_hoe, new ItemStack(Items.diamond, 2, 0), RecipeLevel.PROTECTED);
 
 		this.addSmelting(Items.iron_horse_armor, new ItemStack(Items.iron_ingot, 7), RecipeLevel.PROTECTED);
 		this.addSmelting(Items.diamond_horse_armor, new ItemStack(Items.diamond, 7), RecipeLevel.PROTECTED);
@@ -147,32 +129,24 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		return ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, size);
 	}
 
-	public void addSmelting(ItemStack in, ItemStack itemstack) {
-		this.addSmelting(in, itemstack, RecipeLevel.CORE);
-	}
-
 	public void addAPISmelting(ItemStack in, ItemStack itemstack) {
 		this.addSmelting(in, itemstack, RecipeLevel.API);
 	}
 
-	private void addSmelting(Block in, ItemStack itemstack, RecipeLevel rl) {
-		this.addSmelting(new ItemStack(in), itemstack, rl);
-	}
-
-	private void addSmelting(Item in, ItemStack itemstack, RecipeLevel rl) {
-		this.addSmelting(new ItemStack(in), itemstack, rl);
+	public void addSmelting(ItemStack in, ItemStack itemstack) {
+		this.addSmelting(in, itemstack, RecipeLevel.CORE);
 	}
 
 	private void addSmelting(ItemStack in, ItemStack itemstack, RecipeLevel rl) {
 		recipes.put(in, itemstack);
 	}
 
-	private void addSmelting(Block b, ItemStack itemstack) {
-		this.addSmelting(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE), itemstack);
+	private void addSmelting(Block b, ItemStack itemstack, RecipeLevel rl) {
+		this.addSmelting(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE), itemstack, rl);
 	}
 
-	private void addSmelting(Item i, ItemStack itemstack) {
-		this.addSmelting(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE), itemstack);
+	private void addSmelting(Item i, ItemStack itemstack, RecipeLevel rl) {
+		this.addSmelting(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE), itemstack, rl);
 	}
 
 	public void addCustomRecipe(ItemStack in, ItemStack output) {
@@ -219,5 +193,26 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		Collection<ItemStack> li = new ArrayList(recipes.keySet());
 		li.addAll(customRecipes.keySet());
 		return li;
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+		if (ModList.THERMALFOUNDATION.isLoaded()) {
+			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustEnderium", 1);
+			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotEnderium", 1);
+			if (enderdust == null || enderingot == null)
+				RotaryCraft.logger.logError("No item found for TE3 enderium crafting!");
+			else
+				this.addSmelting(enderdust, enderingot, RecipeLevel.MODINTERACT);
+		}
+
+		if (ModList.ARSENAL.isLoaded()) {
+			ItemStack fluxdust = RedstoneArsenalHandler.getInstance().getFluxDust();
+			ItemStack fluxingot = RedstoneArsenalHandler.getInstance().getFluxIngot();
+			if (fluxdust == null || fluxingot == null)
+				RotaryCraft.logger.logError("No item found for Redstone Arsenal fluxed ingot crafting!");
+			else
+				this.addSmelting(fluxdust, fluxingot, RecipeLevel.MODINTERACT);
+		}
 	}
 }

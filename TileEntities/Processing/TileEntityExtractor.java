@@ -285,7 +285,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (ore == null)
 			return false;
 
-		ItemStack itemstack = RecipesExtractor.recipes().getExtractionResult(inv[i]);
+		ItemStack itemstack = RecipesExtractor.getRecipes().getExtractionResult(inv[i]);
 		if (itemstack == null) {
 			return false;
 		}
@@ -299,7 +299,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	private void processItem(int i) {
-		ItemStack itemstack = RecipesExtractor.recipes().getExtractionResult(inv[i]);
+		ItemStack itemstack = RecipesExtractor.getRecipes().getExtractionResult(inv[i]);
 		//ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
 		//ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].getItem()) : this.getVanillaOreByItem(inv[i]);
 		OreType ore = this.getOreType(inv[i]);

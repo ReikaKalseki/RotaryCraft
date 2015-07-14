@@ -12,10 +12,8 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -43,10 +41,10 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 
 		int rp = TileEntityCompactor.REQPRESS;
 		int rt = TileEntityCompactor.REQTEMP;
-		this.addRecipe(Items.coal, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 0), rp, rt); //No charcoal
-		this.addRecipe(ItemStacks.anthracite, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 1), rp, rt);
-		this.addRecipe(ItemStacks.prismane, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 2), rp, rt);
-		this.addRecipe(ItemStacks.lonsda, new ItemStack(Items.diamond, this.getNumberPerStep(), 0), rp, rt);
+		this.addRecipe(new ItemStack(Items.coal), ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 0), rp, rt, RecipeLevel.CORE); //No charcoal
+		this.addRecipe(ItemStacks.anthracite, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 1), rp, rt, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.prismane, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 2), rp, rt, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.lonsda, new ItemStack(Items.diamond, this.getNumberPerStep(), 0), rp, rt, RecipeLevel.CORE);
 
 		this.addRecipe(new ItemStack(Items.blaze_powder), new ItemStack(Blocks.glowstone, 1, 0), 2000, 600, RecipeLevel.PERIPHERAL);
 
@@ -73,29 +71,16 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 		return DifficultyEffects.COMPACTOR.getInt();
 	}
 
-	public void addAPIRecipe(ItemStack in, ItemStack itemstack, int pressure, int temperature)
-	{
+	public void addAPIRecipe(ItemStack in, ItemStack itemstack, int pressure, int temperature) {
 		this.addRecipe(in, itemstack, pressure, temperature, RecipeLevel.API);
 	}
 
-	public void addRecipe(ItemStack in, ItemStack itemstack, int pressure, int temperature)
-	{
+	public void addRecipe(ItemStack in, ItemStack itemstack, int pressure, int temperature) {
 		this.addRecipe(in, itemstack, pressure, temperature, RecipeLevel.CORE);
 	}
 
-	private void addRecipe(ItemStack in, ItemStack itemstack, int pressure, int temperature, RecipeLevel rl)
-	{
+	private void addRecipe(ItemStack in, ItemStack itemstack, int pressure, int temperature, RecipeLevel rl) {
 		recipes.put(in, new CompactingRecipe(in, itemstack, temperature, pressure));
-	}
-
-	public void addRecipe(Item in, ItemStack itemstack, int pressure, int temperature)
-	{
-		this.addRecipe(new ItemStack(in), itemstack, pressure, temperature);
-	}
-
-	public void addRecipe(Block in, ItemStack itemstack, int pressure, int temperature)
-	{
-		this.addRecipe(new ItemStack(in), itemstack, pressure, temperature);
 	}
 
 	public ItemStack getCompactingResult(ItemStack item)
@@ -132,5 +117,10 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 
 	public Collection<ItemStack> getAllCompactables() {
 		return Collections.unmodifiableCollection(recipes.keySet());
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+
 	}
 }

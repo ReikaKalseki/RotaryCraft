@@ -78,14 +78,14 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 
 	private void doOperation(boolean multiple) {
 		ItemStack in = inv[0];
-		if (in != null && RecipesCentrifuge.recipes().isCentrifugable(in)) {
+		if (in != null && RecipesCentrifuge.getRecipes().isCentrifugable(in)) {
 			progressTime++;
 
 			if (multiple || progressTime >= this.getOperationTime()) {
-				ChancedOutputList out = RecipesCentrifuge.recipes().getRecipeResult(in);
+				ChancedOutputList out = RecipesCentrifuge.getRecipes().getRecipeResult(in);
 				Collection<ItemStack> items = out.keySet();
 				if (this.canMakeAllOf(items)) {
-					FluidStack fs = RecipesCentrifuge.recipes().getFluidResult(in);
+					FluidStack fs = RecipesCentrifuge.getRecipes().getFluidResult(in);
 					if (fs == null || tank.canTakeIn(fs)) {
 						for (ItemStack is : items) {
 							//ReikaInventoryHelper.addOrSetStack(out.get(i).copy(), inv, i+1);
@@ -146,12 +146,12 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return i == 0 && RecipesCentrifuge.recipes().isCentrifugable(itemstack);
+		return i == 0 && RecipesCentrifuge.getRecipes().isCentrifugable(itemstack);
 	}
 
 	@Override
 	public boolean areConditionsMet() {
-		return inv[0] != null && RecipesCentrifuge.recipes().isCentrifugable(inv[0]);
+		return inv[0] != null && RecipesCentrifuge.getRecipes().isCentrifugable(inv[0]);
 	}
 
 	@Override

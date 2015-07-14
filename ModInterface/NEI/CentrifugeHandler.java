@@ -57,7 +57,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		public List<PositionedStack> getOtherStacks()
 		{
 			List<PositionedStack> pos = new ArrayList();
-			ChancedOutputList c = RecipesCentrifuge.recipes().getRecipeResult(input);
+			ChancedOutputList c = RecipesCentrifuge.getRecipes().getRecipeResult(input);
 			Collection<ItemStack> li = c.keySet();
 
 			int dx = 80;
@@ -127,7 +127,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rccentri")) {
-			Collection<ItemStack> li = RecipesCentrifuge.recipes().getAllCentrifugables();
+			Collection<ItemStack> li = RecipesCentrifuge.getRecipes().getAllCentrifugables();
 			for (ItemStack is : li)
 				arecipes.add(new CentrifugeRecipe(is));
 		}
@@ -146,19 +146,19 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	public void loadCraftingRecipes(ItemStack result) {
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(result);
 		if (fs != null) {
-			ArrayList<ItemStack> li = RecipesCentrifuge.recipes().getSources(fs.getFluid());
+			ArrayList<ItemStack> li = RecipesCentrifuge.getRecipes().getSources(fs.getFluid());
 			for (int i = 0; i < li.size(); i++)
 				arecipes.add(new CentrifugeRecipe(li.get(i)));
 		}
 
-		ArrayList<ItemStack> li = RecipesCentrifuge.recipes().getSources(result);
+		ArrayList<ItemStack> li = RecipesCentrifuge.getRecipes().getSources(result);
 		for (int i = 0; i < li.size(); i++)
 			arecipes.add(new CentrifugeRecipe(li.get(i)));
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		if (RecipesCentrifuge.recipes().isCentrifugable(ingredient)) {
+		if (RecipesCentrifuge.getRecipes().isCentrifugable(ingredient)) {
 			arecipes.add(new CentrifugeRecipe(ingredient));
 		}
 	}
@@ -178,7 +178,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	private void drawFluids(int recipe) {
 		CentrifugeRecipe r = (CentrifugeRecipe)arecipes.get(recipe);
 		ItemStack in = r.input;
-		FluidStack fs = RecipesCentrifuge.recipes().getFluidResult(in);
+		FluidStack fs = RecipesCentrifuge.getRecipes().getFluidResult(in);
 		if (fs != null) {
 			Fluid f = fs.getFluid();
 			IIcon ico = f.getIcon();
@@ -203,7 +203,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 			v5.addVertexWithUV(x+16, 65, 0, du, v);
 			v5.draw();
 			FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-			String s = f.getLocalizedName()+" ("+fs.amount+" mB) ("+RecipesCentrifuge.recipes().getFluidChance(in)+"%)";
+			String s = f.getLocalizedName()+" ("+fs.amount+" mB) ("+RecipesCentrifuge.getRecipes().getFluidChance(in)+"%)";
 			int l = fr.getStringWidth(s);
 			fr.drawString(s, 166-l, 70, 0);
 		}

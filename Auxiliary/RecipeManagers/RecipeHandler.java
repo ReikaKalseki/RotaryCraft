@@ -6,6 +6,8 @@ public abstract class RecipeHandler {
 
 	}
 
+	public abstract void addPostLoadRecipes();
+
 	public static enum RecipeLevel {
 
 		CORE(), //Core native recipes

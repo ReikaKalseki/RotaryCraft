@@ -25,61 +25,68 @@ import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayLis
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.BlastFurnaceManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class RecipesBlastFurnace
-{
+public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceManager {
+
 	private static final RecipesBlastFurnace BlastFurnaceBase = new RecipesBlastFurnace();
 
 	private final OneWayList<BlastRecipe> recipeList = new OneWayList();
 	private final OneWayList<BlastCrafting> craftingList = new OneWayList();
 
 	private RecipesBlastFurnace() {
+		RecipeInterface.blastfurn = this;
 
 		BlastInput in1 = new BlastInput(Items.coal, 100, 1);
 		BlastInput in2 = new BlastInput(Items.gunpowder, 3.6F, 1);
 		BlastInput in3 = new BlastInput(Blocks.sand, 0.2F, 1);
 		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
-		recipeList.add(hsla);
+		this.addRecipe(hsla, RecipeLevel.CORE);
 
 		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe bedrock = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, 1, ItemStacks.bedingot, false, 0, TileEntityBlastFurnace.BEDROCKTEMP);
-		recipeList.add(bedrock.setAlloy());
+		this.addRecipe(bedrock.setAlloy(), RecipeLevel.CORE);
 
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, false, 0, TileEntityBlastFurnace.SMELTTEMP);
-		recipeList.add(scrap);
+		this.addRecipe(scrap, RecipeLevel.PROTECTED);
 
 		in1 = new BlastInput(ItemStacks.coke, 100, 1);
 		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
 		in3 = new BlastInput(Blocks.sand, 0.1F, 1);
 		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
-		recipeList.add(hsla2);
+		this.addRecipe(hsla2, RecipeLevel.CORE);
 
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Items.coal, ItemStacks.coke, false, 0, 400);
-		recipeList.add(coke);
+		this.addRecipe(coke, RecipeLevel.CORE);
 
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe coke2 = new BlastRecipe(in1, in2, in3, new ItemStack(Items.coal, 1, 1), ItemStacks.coke, false, 0, 500);
-		recipeList.add(coke2);
+		this.addRecipe(coke2, RecipeLevel.CORE);
 
 		in1 = new BlastInput(ItemStacks.aluminumpowder, 25F, 1);
 		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 700);
-		recipeList.add(sili);
+		this.addRecipe(sili, RecipeLevel.PROTECTED);
+	}
+
+	private void addRecipe(BlastRecipe br, RecipeLevel rl) {
+		recipeList.add(br);
 	}
 
 	public static final RecipesBlastFurnace getRecipes()
@@ -89,24 +96,28 @@ public class RecipesBlastFurnace
 
 	public void addRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, in, xp);
-		craftingList.add(c);
+		this.addCrafting(c, RecipeLevel.CORE);
 	}
 
 	public void addAlloyingRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, in, xp).setAlloying();
-		craftingList.add(c);
+		this.addCrafting(c, RecipeLevel.CORE);
 	}
 
 	public void add3x3AlloyingRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
 		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp).setAlloying();
-		craftingList.add(c);
+		this.addCrafting(c, RecipeLevel.CORE);
 	}
 
 	public void add3x3Crafting(ItemStack out, int temperature, int speed, float xp, Object... in) {
 		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp);
-		craftingList.add(c);
+		this.addCrafting(c, RecipeLevel.CORE);
+	}
+
+	private void addCrafting(BlastCrafting cr, RecipeLevel rl) {
+		craftingList.add(cr);
 	}
 
 	public static final class BlastCrafting implements BlastFurnacePattern {
@@ -502,5 +513,25 @@ public class RecipesBlastFurnace
 		c.addAll(recipeList);
 		c.addAll(craftingList);
 		return c;
+	}
+
+	@Override
+	public void addAPIAlloying(ItemStack in1, float c1, int decr1, ItemStack in2, float c2, int decr2, ItemStack in3, float c3, int decr3, ItemStack main, ItemStack out, int req, boolean bonus, float xp, int temp) {
+		BlastInput b1 = new BlastInput(in1, in1 != null ? c1 : 0, decr1);
+		BlastInput b2 = new BlastInput(in2, in2 != null ? c2 : 0, decr2);
+		BlastInput b3 = new BlastInput(in3, in3 != null ? c3 : 0, decr3);
+		BlastRecipe br = req > 0 ? new BlastRecipe(b1, b2, b3, main, req, out, bonus, xp, temp) : new BlastRecipe(b1, b2, b3, main, out, bonus, xp, temp);
+		this.addRecipe(br, RecipeLevel.API);
+	}
+
+	@Override
+	public void addAPIRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
+		BlastCrafting bc = new BlastCrafting(out, temperature, speed, in, xp);
+		this.addCrafting(bc, RecipeLevel.API);
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+
 	}
 }

@@ -93,25 +93,9 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.trapdoor, this.getSizedSawdust(24), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.fence_gate, this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
 
-		/*
-		this.addRecipe(Blocks.coal_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24));
-		this.addRecipe(Blocks.iron_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 25));
-		this.addRecipe(Blocks.gold_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 26));
-		this.addRecipe(Blocks.redstone_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 27));
-		this.addRecipe(Blocks.lapis_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 28));
-		this.addRecipe(Blocks.diamond_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 29));
-		this.addRecipe(Blocks.emerald_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 30));
-		this.addRecipe(Blocks.quartz_ore, ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 31), 0.7F);
-		 */
+		this.addRecipe(Items.coal, ItemStacks.coaldust, RecipeLevel.CORE);
 
-		this.addRecipe(Items.coal, ItemStacks.coaldust);
-
-		this.addRecipe(ItemStacks.canolaSeeds, ItemStacks.canolaHusks);
-
-		ItemStack blizzDust = ReikaItemHelper.oreItemExists("dustBlizz") ? OreDictionary.getOres("dustBlizz").get(0) : null;
-		if (blizzDust != null) {
-			this.addOreDictRecipe("rodBlizz", ReikaItemHelper.getSizedItemStack(blizzDust, 6));
-		}
+		this.addRecipe(ItemStacks.canolaSeeds, ItemStacks.canolaHusks, RecipeLevel.CORE);
 
 		this.addOreDictRecipe("plankWood", this.getSizedSawdust(4));
 		this.addOreDictRecipe("logWood", this.getSizedSawdust(16));
@@ -145,25 +129,6 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		return ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust, size);
 	}
 
-	public void addModRecipes() {
-		if (ModList.APPENG.isLoaded()) {
-			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
-			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();
-			if (cry != null && dust != null) {
-				this.addRecipe(cry, dust);
-			}
-			else {
-				RotaryCraft.logger.logError("Could not add certus quartz grinding; null itemstack "+cry+", "+dust);
-			}
-		}
-
-		ArrayList<ItemStack> obsididust = OreDictionary.getOres("dustObsidian");
-		if (!obsididust.isEmpty())
-			this.addRecipe(Blocks.obsidian, ReikaItemHelper.getSizedItemStack(obsididust.get(0), 6));
-
-
-	}
-
 	public boolean isGrindable(ItemStack item) {
 		return this.getGrindingResult(item) != null;
 	}
@@ -190,24 +155,12 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		return in;
 	}
 
-	public void addRecipe(Block b, ItemStack out) {
-		this.addRecipe(new ItemStack(b), out);
-	}
-
-	public void addRecipe(Item i, ItemStack out) {
-		this.addRecipe(new ItemStack(i), out);
-	}
-
 	public void addOreDictRecipe(String in, ItemStack out) {
 		ArrayList<ItemStack> li = OreDictionary.getOres(in);
 		for (ItemStack sin : li) {
 			if (!recipes.containsKey(sin))
-				this.addRecipe(sin, out);
+				this.addRecipe(sin, out, RecipeLevel.CORE);
 		}
-	}
-
-	public void addRecipe(ItemStack in, ItemStack out) {
-		this.addRecipe(in, out, RecipeLevel.CORE);
 	}
 
 	public void addAPIRecipe(ItemStack in, ItemStack out) {
@@ -222,12 +175,18 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(new ItemStack(in), out, rl);
 	}
 
+	public void addRecipe(ItemStack in, ItemStack out) {
+		this.addRecipe(in, out, RecipeLevel.CORE);
+	}
+
 	private void addRecipe(ItemStack in, ItemStack out, RecipeLevel rl) {
 		recipes.put(in, out);
 		//recipes.put(in, new GrinderRecipe(in, out, out2));
 	}
 
 	public void addCustomRecipe(ItemStack in, ItemStack out) {
+		//this.addRecipe(in, out, RecipeLevel.CUSTOM);
+
 		customRecipes.put(in, out);
 		//customRecipes.put(in, new GrinderRecipe(in, out, out2));
 	}
@@ -246,9 +205,30 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		return ret != null ? ret.copy() : null;
 	}
 
+	@Override
 	public void addPostLoadRecipes() {
 		this.addOreRecipes();
 		//this.addMulchRecipes();
+
+		if (ModList.APPENG.isLoaded()) {
+			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
+			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();
+			if (cry != null && dust != null) {
+				this.addRecipe(cry, dust, RecipeLevel.MODINTERACT);
+			}
+			else {
+				RotaryCraft.logger.logError("Could not add certus quartz grinding; null itemstack "+cry+", "+dust);
+			}
+		}
+
+		ArrayList<ItemStack> obsididust = OreDictionary.getOres("dustObsidian");
+		if (!obsididust.isEmpty())
+			this.addRecipe(Blocks.obsidian, ReikaItemHelper.getSizedItemStack(obsididust.get(0), 6), RecipeLevel.MODINTERACT);
+
+		ItemStack blizzDust = ReikaItemHelper.oreItemExists("dustBlizz") ? OreDictionary.getOres("dustBlizz").get(0) : null;
+		if (blizzDust != null) {
+			this.addOreDictRecipe("rodBlizz", ReikaItemHelper.getSizedItemStack(blizzDust, 6));
+		}
 	}
 	/*
 	private void addMulchRecipes() {
@@ -269,7 +249,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			Collection<ItemStack> li = ore.getAllOreBlocks();
 			for (ItemStack is : li) {
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), RecipeLevel.CORE);
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}
@@ -279,7 +259,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			Collection<ItemStack> li = ore.getAllOreBlocks();
 			for (ItemStack is : li) {
 				ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate));
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), RecipeLevel.CORE);
 				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}

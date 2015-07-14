@@ -36,14 +36,8 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 		return CrystallizerBase;
 	}
 
-	private RecipesCrystallizer()
-	{
+	private RecipesCrystallizer() {
 		RecipeInterface.crystallizer = this;
-
-		this.addRecipe("ender", 250, new ItemStack(Items.ender_pearl), RecipeLevel.MODINTERACT);
-		this.addRecipe("redstone", 100, new ItemStack(Items.redstone), RecipeLevel.MODINTERACT);
-		this.addRecipe("glowstone", 250, new ItemStack(Items.glowstone_dust), RecipeLevel.MODINTERACT);
-		this.addRecipe("coal", 100, new ItemStack(Items.coal), RecipeLevel.MODINTERACT);
 
 		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice), RecipeLevel.CORE);
 		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone), RecipeLevel.PERIPHERAL);
@@ -55,10 +49,6 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 		this.addRecipe(f, amount, out, RecipeLevel.API);
 	}
 
-	private void addRecipe(Fluid f, int amount, ItemStack out) {
-		this.addRecipe(f, amount, out, RecipeLevel.CORE);
-	}
-
 	private void addRecipe(Fluid f, int amount, ItemStack out, RecipeLevel rl) {
 		recipeList.put(f, out);
 		amounts.put(f, amount);
@@ -68,12 +58,6 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 		Fluid f = FluidRegistry.getFluid(s);
 		if (f != null)
 			this.addRecipe(f, amount, out, rl);
-	}
-
-	private void addRecipe(String s, int amount, ItemStack out) {
-		Fluid f = FluidRegistry.getFluid(s);
-		if (f != null)
-			this.addRecipe(f, amount, out);
 	}
 
 	public ItemStack getFreezingResult(FluidStack liquid)
@@ -113,5 +97,13 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 
 	public Collection<Fluid> getAllRecipes() {
 		return Collections.unmodifiableCollection(recipeList.keySet());
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+		this.addRecipe("ender", 250, new ItemStack(Items.ender_pearl), RecipeLevel.MODINTERACT);
+		this.addRecipe("redstone", 100, new ItemStack(Items.redstone), RecipeLevel.MODINTERACT);
+		this.addRecipe("glowstone", 250, new ItemStack(Items.glowstone_dust), RecipeLevel.MODINTERACT);
+		this.addRecipe("coal", 100, new ItemStack(Items.coal), RecipeLevel.MODINTERACT);
 	}
 }

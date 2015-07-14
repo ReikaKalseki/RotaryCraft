@@ -295,7 +295,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (mintemp == -1 || mintemp > temperature)
 			return false;
 
-		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
+		ItemStack itemstack = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
 		if (itemstack == null)
 			return false;
 		if (inv[2] == null)
@@ -313,7 +313,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			return;
 		flag2 = false;
 		this.smeltHeat();
-		ItemStack itemstack = RecipesPulseFurnace.smelting().getSmeltingResult(inv[0]);
+		ItemStack itemstack = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
 		if (inv[2] == null)
 			inv[2] = itemstack.copy();
 		else if (ReikaItemHelper.matchStacks(inv[2], itemstack))
@@ -363,7 +363,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (slot != 0)
 			return false;
-		return RecipesPulseFurnace.smelting().getSmeltingResult(is) != null;
+		return RecipesPulseFurnace.getRecipes().getSmeltingResult(is) != null;
 	}
 
 	@Override

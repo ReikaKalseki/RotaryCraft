@@ -33,6 +33,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
+import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -47,8 +48,17 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesDryingBed;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -141,7 +151,11 @@ public class RotaryRecipes {
 		}
 
 		addProps();
-		RecipesGrinder.getRecipes().addModRecipes();
+
+		for (RecipeHandler h : recipeHandlers) {
+			h.addPostLoadRecipes();
+		}
+
 		//RecipesExtractor.recipes().addModRecipes();
 
 		ItemStack coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1) : ItemStacks.power;
@@ -1078,5 +1092,24 @@ public class RotaryRecipes {
 		if (c.isEmpty())
 			c.add(ReikaItemHelper.stoneBricks.copy());
 		return c;
+	}
+
+	private static final Collection<RecipeHandler> recipeHandlers = new OneWayList();
+
+	public static void loadMachineRecipeHandlers() {
+		loadRecipeHandler(RecipesBlastFurnace.getRecipes());
+		loadRecipeHandler(RecipesCentrifuge.getRecipes());
+		loadRecipeHandler(RecipesCompactor.getRecipes());
+		loadRecipeHandler(RecipesCrystallizer.getRecipes());
+		loadRecipeHandler(RecipesDryingBed.getRecipes());
+		loadRecipeHandler(RecipesFrictionHeater.getRecipes());
+		loadRecipeHandler(RecipesGrinder.getRecipes());
+		loadRecipeHandler(RecipesLavaMaker.getRecipes());
+		loadRecipeHandler(RecipesPulseFurnace.getRecipes());
+		loadRecipeHandler(RecipesWetter.getRecipes());
+	}
+
+	private static void loadRecipeHandler(RecipeHandler handler) {
+		recipeHandlers.add(handler);
 	}
 }
