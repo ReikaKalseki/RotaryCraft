@@ -20,6 +20,7 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Power.PowerTracker;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -510,7 +511,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		return bedrock || !combo.isEngineSpam();
 	}
 
-	private void fail() {
+	public void fail() {
 		worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 4, false);
 		failed = true;
 	}
@@ -778,7 +779,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public void onPowerLooped(PowerSourceList pwr) {
+	public void onPowerLooped(PowerTracker pwr) {
 		if (power > 0)
 			this.fail();
 	}

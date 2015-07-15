@@ -180,6 +180,9 @@ public class WetterHandler extends TemplateRecipeHandler {
 		v5.addVertexWithUV(x+16, y2, 0, du, v2);
 		v5.draw();
 
+		String s = r.recipe.getFluid().getLocalizedName();
+		int l = Minecraft.getMinecraft().fontRenderer.getStringWidth(s);
+		Minecraft.getMinecraft().fontRenderer.drawString(s, x-l-5, y2-4, 0);
 		Minecraft.getMinecraft().fontRenderer.drawString(r.recipe.getFluid().amount+" mB", x+20, y2-4, 0);
 	}
 

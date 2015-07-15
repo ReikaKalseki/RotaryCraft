@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.Event.FlywheelFailureEvent;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
+import Reika.RotaryCraft.API.Power.PowerTracker;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -515,7 +516,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public void onPowerLooped(PowerSourceList pwr) {
+	public void onPowerLooped(PowerTracker pwr) {
 		omega = torque = 0;
 		power = 0;
 	}
@@ -524,5 +525,10 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
 		if (dir == read)
 			c.add(this.getAdjacentTileEntity(write));
+	}
+
+	@Override
+	public void fail() {
+		this.fail(worldObj, xCoord, yCoord, zCoord, ReikaPhysicsHelper.getEnergyFromExplosion(4));
 	}
 }

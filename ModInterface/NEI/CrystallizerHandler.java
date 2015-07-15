@@ -46,7 +46,7 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getResult() {
 			if (input != null) {
-				ItemStack is = RecipesCrystallizer.getRecipes().getFreezingResult(this.getEntry());
+				ItemStack is = this.getOutput();
 				return new PositionedStack(is, 75, 25);
 			}
 			return null;
@@ -58,8 +58,12 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 			return null;//new PositionedStack(this.getEntry(), 120, 5);
 		}
 
+		private ItemStack getOutput() {
+			return RecipesCrystallizer.getRecipes().getFreezingResult(new FluidStack(input, 16000));
+		}
+
 		public FluidStack getEntry() {
-			return new FluidStack(input, 16000);
+			return new FluidStack(input, RecipesCrystallizer.getRecipes().getRecipeConsumption(this.getOutput()));
 		}
 	}
 
@@ -183,6 +187,13 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 			v5.addVertexWithUV(19, 69, 0, du, v);
 			v5.addVertexWithUV(19, 64, 0, du, v2);
 			v5.draw();
+
+			//if (ReikaGuiAPI.instance.isMouseInBox(3, 19, 2, 69)) {
+			//	ReikaGuiAPI.instance.drawTooltip(Minecraft.getMinecraft().fontRenderer, f.getLocalizedName());
+			//}
+			FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+			String s = f.getLocalizedName()+" ("+fs.amount+" mB)";
+			fr.drawString(s, 22, 56, 0);
 		}
 	}
 

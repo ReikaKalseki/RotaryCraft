@@ -162,6 +162,9 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 			FontRenderer f = Minecraft.getMinecraft().fontRenderer;
 			String s = String.format("%dmB @ %dC", fs.amount, melt);
 			f.drawString(s, 165-f.getStringWidth(s), 73, 0);
+
+			s = String.format("%s", fs.getLocalizedName());
+			f.drawString(s, 165-f.getStringWidth(s), 83, 0);
 		}
 	}
 

@@ -31,7 +31,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import universalelectricity.api.item.IEnergyItem;
 import Reika.DragonAPI.Interfaces.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -111,10 +110,6 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 					Item id = ie.getEmptyItem(arm);
 					ItemStack newarm = new ItemStack(id, 1, 0);
 					target.setCurrentItemOrArmor(i, newarm);
-				}
-				else if (InterfaceCache.UEENERGYITEM.instanceOf(item)) {
-					IEnergyItem ie = (IEnergyItem)item;
-					ie.discharge(arm, 5000, true);
 				}
 				else if (item instanceof ItemBedrockArmor) {
 					//do nothing

@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Interfaces.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -126,7 +127,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				i = -999;
 			else if (rand.nextInt(15) == 0) {
 				ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
-				ModCropList modcrop = ModCropList.getModCrop(id, meta);
+				ModCrop modcrop = ModCropList.getModCrop(id, meta);
 				if (crop != null && !crop.isRipe(meta)) {
 					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 				}

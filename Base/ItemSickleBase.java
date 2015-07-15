@@ -21,6 +21,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Interfaces.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -41,7 +42,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 		World world = ep.worldObj;
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		ModCropList mod = ModCropList.getModCrop(id, meta);
+		ModCrop mod = ModCropList.getModCrop(id, meta);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		ReikaPlantHelper plant = ReikaPlantHelper.getPlant(id);
 		ModWoodList leaf = ModWoodList.getModWoodFromLeaf(id, meta);
@@ -187,7 +188,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					for (int k = -r; k <= r; k++) {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						ModCropList mod2 = ModCropList.getModCrop(id2, meta2);
+						ModCrop mod2 = ModCropList.getModCrop(id2, meta2);
 						if (mod == mod2) {
 							if (mod2.isRipe(world, x+i, y+j, z+k)) {
 								Block b2 = id2;

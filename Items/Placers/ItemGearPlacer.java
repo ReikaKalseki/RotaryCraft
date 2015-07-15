@@ -81,7 +81,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 		if (tile instanceof TileEntityGearbox) {
 			if (is.stackTagCompound == null)
 				is.setTagCompound(new NBTTagCompound());
-			((TileEntityGearbox)tile).setDataFromItemStackTag(is);
+			((TileEntityGearbox)tile).setDataFromItemStackTag(is.stackTagCompound);
 			if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 				((TileEntityGearbox)tile).isFlipped = true;
 			}

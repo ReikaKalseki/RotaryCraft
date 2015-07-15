@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Interfaces.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -138,7 +139,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
-		ModCropList mod = ModCropList.getModCrop(id, meta);
+		ModCrop mod = ModCropList.getModCrop(id, meta);
 		ModWoodList sapling = ModWoodList.getModWoodFromSapling(id, meta);
 		boolean fert = fertilizables.contains(id);
 		if (crop != null)

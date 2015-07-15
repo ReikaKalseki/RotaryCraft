@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.CropType.CropMethods;
+import Reika.DragonAPI.Interfaces.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -321,7 +322,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	 */
 	//Meta is block meta, not fan meta
 	private void harvest(World world, int x, int y, int z, int meta, Block id) {
-		ModCropList mod = ModCropList.getModCrop(id, meta);
+		ModCrop mod = ModCropList.getModCrop(id, meta);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		if (mod != null && mod.isRipe(world, x, y, z)) {
 			if (mod.destroyOnHarvest()) {

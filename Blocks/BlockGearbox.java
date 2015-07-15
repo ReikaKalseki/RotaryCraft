@@ -17,7 +17,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -122,9 +121,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			int type = gbx.getGearboxType().ordinal();
 			int ratio = gbx.getBlockMetadata()/4;
 			ItemStack todrop = ItemRegistry.GEARBOX.getStackOfMetadata(type+5*ratio); //drop gearbox item
-			if (todrop.stackTagCompound == null)
-				todrop.setTagCompound(new NBTTagCompound());
-			gbx.getTagsToWriteToStack(todrop.stackTagCompound);
+			todrop.stackTagCompound = gbx.getTagsToWriteToStack();
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
 		}
 	}
@@ -216,8 +213,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		ItemStack is = ItemRegistry.GEARBOX.getStackOfMetadata((gbx.getBlockMetadata()/4)*5+gbx.getGearboxType().ordinal());
-		is.stackTagCompound = new NBTTagCompound();
-		gbx.getTagsToWriteToStack(is.stackTagCompound);
+		is.stackTagCompound = gbx.getTagsToWriteToStack();
 		ret.add(is);
 		return ret;
 	}

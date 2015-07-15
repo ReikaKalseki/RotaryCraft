@@ -12,6 +12,7 @@ package Reika.RotaryCraft.ModInterface.NEI;
 import java.awt.Rectangle;
 import java.util.Collection;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
@@ -44,10 +45,14 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getResult() {
 			if (input != null) {
-				ItemStack is = RecipesDryingBed.getRecipes().getDryingResult(this.getEntry());
+				ItemStack is = this.getOutput();
 				return new PositionedStack(is, 120, 25);
 			}
 			return null;
+		}
+
+		private ItemStack getOutput() {
+			return RecipesDryingBed.getRecipes().getDryingResult(new FluidStack(input, 16000));
 		}
 
 		@Override
@@ -57,7 +62,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 		}
 
 		public FluidStack getEntry() {
-			return new FluidStack(input, 16000);
+			return new FluidStack(input, RecipesDryingBed.getRecipes().getRecipeConsumption(this.getOutput()));
 		}
 	}
 
@@ -174,6 +179,11 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 			v5.addVertexWithUV(19, 69, 0, du, v);
 			v5.addVertexWithUV(19, 64, 0, du, v2);
 			v5.draw();
+
+			int x = 23;
+			int y = 57;
+			String s = String.format("%s: %d mB", fs.getLocalizedName(), fs.amount);
+			Minecraft.getMinecraft().fontRenderer.drawString(s, x, y, 0);
 		}
 	}
 

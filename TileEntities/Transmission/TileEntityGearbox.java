@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.ArrayList;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -22,7 +24,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.ChromatiCraft.API.WorldRift;
-import Reika.ChromatiCraft.Auxiliary.Interfaces.NBTTile;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -35,6 +36,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -47,7 +49,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTTile {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTMachine {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
@@ -640,16 +642,28 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	@Override
-	public void getTagsToWriteToStack(NBTTagCompound NBT) {
-		NBT.setInteger("damage", getDamage());
-		NBT.setInteger("lube", getLubricant());
+	public NBTTagCompound getTagsToWriteToStack() {
+		NBTTagCompound NBT = new NBTTagCompound();
+		NBT.setInteger("damage", this.getDamage());
+		NBT.setInteger("lube", this.getLubricant());
+		return NBT;
 	}
 
 	@Override
-	public void setDataFromItemStackTag(ItemStack is) {
-		if (is.stackTagCompound != null) {
-			damage = is.stackTagCompound.getInteger("damage");
-			this.setLubricant(is.stackTagCompound.getInteger("lube"));
+	public void setDataFromItemStackTag(NBTTagCompound tag) {
+		if (tag != null) {
+			damage = tag.getInteger("damage");
+			this.setLubricant(tag.getInteger("lube"));
 		}
+	}
+
+	@Override
+	public ArrayList<NBTTagCompound> getCreativeModeVariants() {
+		return new ArrayList();
+	}
+
+	@Override
+	public ArrayList<String> getDisplayTags(NBTTagCompound NBT) {
+		return new ArrayList();
 	}
 }

@@ -49,6 +49,7 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
+import Reika.DragonAPI.Instantiable.SimpleCropHandler;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaDispenserHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -66,6 +67,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
+import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
@@ -337,7 +339,6 @@ public class RotaryCraft extends DragonAPIMod {
 		}
 
 		MinecraftForge.addGrassSeed(ItemStacks.canolaSeeds, 2);
-		//ModCropList.addCustomCropType(new SimpleCropHandler(BlockRegistry.CANOLA.getBlockInstance(), 9, ItemRegistry.CANOLA.getStackOf()));
 
 		//MinecraftForge.setToolClass(ItemRegistry.STEELAXE.getItemInstance(), "axe", 2);
 		//MinecraftForge.setToolClass(ItemRegistry.STEELPICK.getItemInstance(), "pickaxe", 2);
@@ -480,6 +481,8 @@ public class RotaryCraft extends DragonAPIMod {
 
 		CustomExtractLoader.instance.loadFile();
 		ExtractorModOres.addCustomSmelting();
+
+		ModCropList.addCustomCropType(new SimpleCropHandler(ModList.ROTARYCRAFT, 0x00cc00, "CANOLA", BlockRegistry.CANOLA.getBlockInstance(), 9, ItemRegistry.CANOLA.getStackOf()));
 
 		//RotaryRecipes.addModInterface();
 		proxy.initClasses();

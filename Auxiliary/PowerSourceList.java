@@ -18,11 +18,12 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
+import Reika.RotaryCraft.API.Power.PowerTracker;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
-public class PowerSourceList {
+public class PowerSourceList implements PowerTracker {
 
 	private ArrayList<PowerGenerator> engines = new ArrayList<PowerGenerator>();
 	private ShaftMerger caller;
