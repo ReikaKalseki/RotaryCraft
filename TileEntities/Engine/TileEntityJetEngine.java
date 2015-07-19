@@ -33,10 +33,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import thaumcraft.common.entities.monster.EntityWisp;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Rendering.EntityLiquidParticleFX;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -45,6 +47,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.JetEngineEnterFailureEvent;
 import Reika.RotaryCraft.API.Event.JetEngineExplosionEvent;
@@ -87,6 +90,12 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	private boolean canAfterBurn;
 	private boolean burnerActive;
+
+	private static final RayTracer tracer;
+
+	static {
+		tracer = new RayTracer(0, 0, 0, 0, 0, 0);
+	}
 
 	@Override
 	public int getFuelLevel() {
@@ -225,113 +234,140 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	private void ingest(World world, int x, int y, int z, int meta) {
 		if (FOD >= 8)
 			return;
+		ForgeDirection dir = this.getWriteDirection().getOpposite();
+		double px = x+0.5+dir.offsetX*0.49;
+		double pz = z+0.5+dir.offsetZ*0.49;
 		for (int step = 0; step < 8; step++) {
 			AxisAlignedBB zone = this.getSuctionZone(world, x, y, z, meta, step);
 			List<Entity> inzone = world.getEntitiesWithinAABB(Entity.class, zone);
 			for (Entity caught : inzone) {
-				boolean immune = false;
-				float mult = 1;
-				if (caught instanceof EntityPlayer) {
-					EntityPlayer caughtpl = (EntityPlayer)caught;
-					if (caughtpl.capabilities.isCreativeMode)
-						immune = true;
-					ItemStack is = caughtpl.getCurrentArmor(0);
-					if (is != null) {
-						if (is.getItem() == ItemRegistry.BEDBOOTS.getItemInstance())
-							mult = 0.1F;
-						if (is.getItem() == ItemRegistry.BEDJUMP.getItemInstance())
-							mult = 0.1F;
+				if (this.canSuckTowards(world, x, y, z, caught, px, pz)) {
+					float mult = this.getSuctionMultiplier(caught);
+					if (mult > 0) {
+						caught.motionX += (x+0.5D - caught.posX)/20*mult;
+						caught.motionY += (y+0.5D - caught.posY)/20*mult;
+						caught.motionZ += (z+0.5D - caught.posZ)/20*mult;
+						if (!world.isRemote)
+							caught.velocityChanged = true;
 					}
-				}
-				if (caught instanceof EntityTurretShot)
-					immune = true;
-				if (!immune) {
-					caught.motionX += (x+0.5D - caught.posX)/20*mult;
-					caught.motionY += (y+0.5D - caught.posY)/20*mult;
-					caught.motionZ += (z+0.5D - caught.posZ)/20*mult;
-					if (!world.isRemote)
-						caught.velocityChanged = true;
-				}
-				if (ReikaMathLibrary.py3d(caught.posX-(x+0.5), caught.posY-(y+0.5), caught.posZ-(z+0.5)) < 1.2) { // Kill the adjacent entities, except items, which are teleported
-					if (caught instanceof EntityItem) {
-						if (!caught.isDead) {
-							ItemStack is = ((EntityItem) caught).getEntityItem();
-							caught.setDead();
-							int trycount = 0;
-							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
-								if (dumpvx == 1)
-									dumpx++;
-								if (dumpvx == -1)
-									dumpx--;
-								if (dumpvz == 1)
-									dumpz++;
-								if (dumpvz == -1)
-									dumpz--;
-								trycount++;
-							}
-							EntityItem item = new EntityItem(world, dumpx+0.5D, y+0.375D, dumpz+0.5D, is);
-							if (!world.isRemote)
-								world.spawnEntityInWorld(item);
-							item.motionX = dumpvx*1.5D;
-							item.motionY = 0.15;
-							item.motionZ = dumpvz*1.5D;
-							if (!world.isRemote)
-								caught.velocityChanged = true;
-							if (is.getItem() == ItemRegistry.SCREWDRIVER.getItemInstance()) {
-								caught.setDead();
-								FOD = 2;
-								isJetFailing = true;
-							}
-						}
-					}
-					else if (caught instanceof EntityXPOrb) {
-						if (!caught.isDead) {
-							int xp = ((EntityXPOrb)caught).getXpValue();
-							caught.setDead();
-							int trycount = 0;
-							while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
-								if (dumpvx == 1)
-									dumpx++;
-								if (dumpvx == -1)
-									dumpx--;
-								if (dumpvz == 1)
-									dumpz++;
-								if (dumpvz == -1)
-									dumpz--;
-								trycount++;
-							}
-							EntityXPOrb item = new EntityXPOrb(world, dumpx+0.5D, y+0.375D, dumpz+0.5D, xp);
-							if (!world.isRemote)
-								world.spawnEntityInWorld(item);
-							item.motionX = dumpvx*1.5D;
-							item.motionY = 0.15;
-							item.motionZ = dumpvz*1.5D;
-							if (!world.isRemote)
-								caught.velocityChanged = true;
-						}
-					}
-					else if (caught instanceof EntityLivingBase && !(caught instanceof EntityPlayer && immune)) {
-						caught.setFire(2);
-						if (!world.isRemote && ((EntityLivingBase)caught).getHealth() > 0 && this.canDamageEngine(caught))
-							this.damageEngine();
-						if (FOD > 8)
-							FOD = 8;
-						if (caught instanceof EntityChicken && !caught.isDead && ((EntityChicken)caught).getHealth() > 0) {
-							chickenCount++;
-							if (chickenCount >= 50) {
-								RotaryAchievements.JETCHICKEN.triggerAchievement(this.getPlacer());
-							}
-						}
-						if (!caught.isDead && !(caught instanceof EntityLivingBase && ((EntityLivingBase)caught).getHealth() < 0))
-							SoundRegistry.INGESTION.playSoundAtBlock(world, x, y, z, 1, 1.4F);
-						caught.attackEntityFrom(RotaryCraft.jetingest, 10000);
-						if (caught instanceof EntityPlayer) {
-							RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)caught);
-						}
+					if (ReikaMathLibrary.py3d(caught.posX-px, caught.posY-(y+0.5), caught.posZ-pz) < 1.2) {
+						this.ingest(world, x, y, z, caught, mult <= 0);
 					}
 				}
 			}
 		}
+	}
+
+	private boolean canSuckTowards(World world, int x, int y, int z, Entity e, double px, double pz) {
+		int n = 2;
+		for (int i = 0; i <= n; i++) {
+			tracer.setOrigins(px, y+0.5, pz, e.posX, e.posY+e.height*i/n, e.posZ);
+			//ReikaJavaLibrary.pConsole(e+":"+tracer.isClearLineOfSight(world)+" of "+e.height, e instanceof EntityChicken);
+			if (tracer.isClearLineOfSight(world))
+				return true;
+		}
+		return false;
+	}
+
+	private float getSuctionMultiplier(Entity e) {
+		if (e instanceof EntityPlayer) {
+			EntityPlayer epl = (EntityPlayer)e;
+			if (epl.capabilities.isCreativeMode)
+				return 0;
+			ItemStack is = epl.getCurrentArmor(0);
+			if (is != null) {
+				if (is.getItem() == ItemRegistry.BEDBOOTS.getItemInstance())
+					return 0.1F;
+				if (is.getItem() == ItemRegistry.BEDJUMP.getItemInstance())
+					return 0.1F;
+			}
+		}
+		if (e instanceof EntityTurretShot)
+			return 0;
+		return 1;
+	}
+
+	private void ingest(World world, int x, int y, int z, Entity e, boolean immune) { // Kill the adjacent entities, except items, which are teleported
+		if (e instanceof EntityItem) {
+			if (!e.isDead) {
+				ItemStack is = ((EntityItem) e).getEntityItem();
+				e.setDead();
+				int trycount = 0;
+				while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
+					if (dumpvx == 1)
+						dumpx++;
+					if (dumpvx == -1)
+						dumpx--;
+					if (dumpvz == 1)
+						dumpz++;
+					if (dumpvz == -1)
+						dumpz--;
+					trycount++;
+				}
+				EntityItem item = new EntityItem(world, dumpx+0.5D, y+0.375D, dumpz+0.5D, is);
+				if (!world.isRemote)
+					world.spawnEntityInWorld(item);
+				item.motionX = dumpvx*1.5D;
+				item.motionY = 0.15;
+				item.motionZ = dumpvz*1.5D;
+				if (!world.isRemote)
+					e.velocityChanged = true;
+				if (this.itemDestroysEngine(is)) {
+					e.setDead();
+					FOD = 2;
+					isJetFailing = true;
+				}
+			}
+		}
+		else if (e instanceof EntityXPOrb) {
+			if (!e.isDead) {
+				int xp = ((EntityXPOrb)e).getXpValue();
+				e.setDead();
+				int trycount = 0;
+				while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
+					if (dumpvx == 1)
+						dumpx++;
+					if (dumpvx == -1)
+						dumpx--;
+					if (dumpvz == 1)
+						dumpz++;
+					if (dumpvz == -1)
+						dumpz--;
+					trycount++;
+				}
+				EntityXPOrb item = new EntityXPOrb(world, dumpx+0.5D, y+0.375D, dumpz+0.5D, xp);
+				if (!world.isRemote)
+					world.spawnEntityInWorld(item);
+				item.motionX = dumpvx*1.5D;
+				item.motionY = 0.15;
+				item.motionZ = dumpvz*1.5D;
+				if (!world.isRemote)
+					e.velocityChanged = true;
+			}
+		}
+		else if (e instanceof EntityLivingBase && !(e instanceof EntityPlayer && immune)) {
+			e.setFire(2);
+			if (!world.isRemote && ((EntityLivingBase)e).getHealth() > 0 && this.canDamageEngine(e))
+				this.damageEngine();
+			if (FOD > 8)
+				FOD = 8;
+			if (e instanceof EntityChicken && !e.isDead && ((EntityChicken)e).getHealth() > 0) {
+				chickenCount++;
+				if (chickenCount >= 50) {
+					RotaryAchievements.JETCHICKEN.triggerAchievement(this.getPlacer());
+				}
+			}
+			if (!e.isDead && !(e instanceof EntityLivingBase && ((EntityLivingBase)e).getHealth() < 0))
+				SoundRegistry.INGESTION.playSoundAtBlock(world, x, y, z, 1, 1.4F);
+			e.attackEntityFrom(RotaryCraft.jetingest, 10000);
+			if (e instanceof EntityPlayer) {
+				RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)e);
+			}
+		}
+	}
+
+	private boolean itemDestroysEngine(ItemStack is) {
+		return is.getItem() == ItemRegistry.SCREWDRIVER.getItemInstance() || InterfaceCache.IWRENCH.instanceOf(is.getItem());
 	}
 
 	private void damageEngine() {

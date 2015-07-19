@@ -12,6 +12,7 @@ package Reika.RotaryCraft;
 import java.util.Map;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Blocks;
@@ -162,7 +163,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
 			if (item.getItemDamage() >= MachineRegistry.machineList.length)
-				return;
+				throw new IllegalStateException("Invalid machine item for render!");
 			MachineRegistry machine = MachineRegistry.machineList.get(item.getItemDamage());
 			if (machine.isPipe()) {
 				if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
@@ -181,6 +182,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				if (machine.hasNBTVariants()) {
 					((NBTMachine)te).setDataFromItemStackTag(item.stackTagCompound);
 				}
+				if (RenderItem.renderInFrame && type == type.ENTITY) {
+					//GL11.glRotated(0, 0, 0, 0);
+				}
 				TileEntityRendererDispatcher.instance.renderTileEntityAt(te, a, -0.1D, b, 0.0F);
 			}
 			else {
@@ -188,6 +192,9 @@ public class ItemMachineRenderer implements IItemRenderer {
 				if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
 					double d = 0.5;
 					GL11.glTranslated(d, d, d);
+				}
+				else if (RenderItem.renderInFrame && type == type.ENTITY) {
+					GL11.glRotated(90, 0, 1, 0);
 				}
 				rb.renderBlockAsItem(MachineRegistry.machineList.get(item.getItemDamage()).getBlock(), MachineRegistry.machineList.get(item.getItemDamage()).getMachineMetadata(), 1);
 				if (enchant) {

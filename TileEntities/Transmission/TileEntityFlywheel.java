@@ -298,10 +298,11 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 				this.process(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);
 		}
 		else {
-			omega = 0;
-			torque = 0;
-			power = 0;
-			return;
+			//omega = 0;
+			//torque = 0;
+			//power = 0;
+			//return;
+			//why was this here?!
 		}
 		double r = 0.75;  //this calculates the flywheel datas. You already assumed r=0.75 in previous formulas, so I used that. I set h=0.4 from the model in-game
 		double h = 0.4;
@@ -361,7 +362,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 						i++;
 					}
 					updateticks = i;
-					if (tickcount % updateticks == 0) {
+					if (tickcount%updateticks == 0) {
 						omega--;
 						tickcount = 0;
 					}
@@ -415,7 +416,6 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	public int readFromCross(TileEntityShaft cross, boolean isTorque) {
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d %d", cross.writex, cross.writex2, cross.writez, cross.writez2));
 		if (cross.isWritingTo(this)) {
 			if (isTorque)
 				return cross.readtorque[0];

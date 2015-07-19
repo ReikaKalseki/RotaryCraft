@@ -10,15 +10,15 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Instantiable.Data.Maps.TileEntityCache;
 import Reika.RotaryCraft.API.Power.PowerAcceptor;
-import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
@@ -33,14 +33,11 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-
 public class TorqueUsage {
+
 	private static int torque;
-	private static Map<TileEntity, Boolean> TEMap = new HashMap<TileEntity, Boolean>();
-	private static Map<TileEntity, Double> TEMapR = new HashMap<TileEntity, Double>();
+	private static TileEntityCache<Boolean> TEMap = new TileEntityCache();
+	private static TileEntityCache<Double> TEMapR = new TileEntityCache();
 	private static TileEntityFlywheel readingTile;
 
 	public static int getTorque(TileEntityFlywheel te) {
@@ -50,11 +47,15 @@ public class TorqueUsage {
 		torque = 0;
 		addToList(readingTile, readingTile, 1);
 		TEMap.put(readingTile, true);
-		addToList(((TileEntityIOMachine) readingTile).getOutput(), readingTile);
+		addToList(readingTile.getWriteTileEntity(), readingTile);
 		while (TEMap.containsValue(false)) {
-			Multimap <Boolean, TileEntity> invert = ArrayListMultimap.create();
-			Multimaps.invertFrom(Multimaps.forMap(TEMap), invert);
-			recursiveFind(te.worldObj, (TileEntity)invert.get(false).toArray()[0], te);
+			//Multimap <Boolean, WorldLocation> invert = ArrayListMultimap.create();
+			//Multimaps.invertFrom(Multimaps.forMap(TEMap), invert);
+			//recursiveFind(te.worldObj, (TileEntity)invert.get(false).toArray()[0], te);
+
+			List<WorldLocation> c = (List<WorldLocation>)TEMap.invert().get(false);
+			if (c != null && !c.isEmpty())
+				recursiveFind(te.worldObj, c.get(0).getTileEntity(), te);
 		}
 		TEMap.clear();
 		if (torque < 0)
@@ -63,7 +64,7 @@ public class TorqueUsage {
 	}
 
 	private static void recursiveFind(World world, TileEntity tile, TileEntityFlywheel reader) {
-		TEMap.put(tile,true);
+		TEMap.put(tile, true);
 		if (tile instanceof TileEntityTransmissionMachine) { //true if the considered tile is a Transmission tile and is getting power from an already examined block
 			if (tile instanceof TileEntitySplitter) { //check if splitter
 				TileEntitySplitter spl = (TileEntitySplitter)tile;
@@ -104,20 +105,20 @@ public class TorqueUsage {
 			}
 			else if (tile instanceof TileEntityClutch) {
 				TileEntityClutch clu = (TileEntityClutch)tile;
-				if (world.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord)) {
-					if (!TEMap.containsKey(clu.getOutput()) && isPoweredFrom(world, clu.getOutput())) {
-						addToList(clu.getOutput(), tile);
+				if (clu.isOutputEnabled()) {
+					if (!TEMap.containsKey(clu.getWriteTileEntity()) && isPoweredFrom(world, clu.getWriteTileEntity())) {
+						addToList(clu.getWriteTileEntity(), tile);
 					}
 				}
 			}
 			else if (tile instanceof TileEntityGearbox) {
 				TileEntityGearbox gbx = (TileEntityGearbox)tile;
-				if (!TEMap.containsKey(gbx.getOutput()) && isPoweredFrom(world, gbx.getOutput())) {
+				if (!TEMap.containsKey(gbx.getWriteTileEntity()) && isPoweredFrom(world, gbx.getWriteTileEntity())) {
 					if (((TileEntityGearbox) tile).reduction) {
-						addToList(gbx.getOutput(), tile, TEMapR.get(tile)/((TileEntityGearbox) tile).getRatio());
+						addToList(gbx.getWriteTileEntity(), tile, TEMapR.get(tile)/((TileEntityGearbox) tile).getRatio());
 					}
 					else {
-						addToList(gbx.getOutput(), tile, TEMapR.get(tile)*((TileEntityGearbox) tile).getRatio());
+						addToList(gbx.getWriteTileEntity(), tile, TEMapR.get(tile)*((TileEntityGearbox) tile).getRatio());
 					}
 				}
 			}
@@ -125,17 +126,17 @@ public class TorqueUsage {
 				TileEntityAdvancedGear adv = (TileEntityAdvancedGear)tile;
 				switch(adv.getGearType()) {
 				case WORM:
-					if (!TEMap.containsKey(adv.getOutput()) && isPoweredFrom(world, adv.getOutput())) {
-						addToList(adv.getOutput(), tile, TEMapR.get(tile)/16);
+					if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
+						addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/16);
 					}
 					break;
 				case CVT:
-					if (!TEMap.containsKey(adv.getOutput()) && isPoweredFrom(world, adv.getOutput())) {
+					if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
 						if (adv.getRatio() > 0) {
-							addToList(adv.getOutput(), tile, TEMapR.get(tile)*adv.getRatio());
+							addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)*adv.getRatio());
 						}
 						else {
-							addToList(adv.getOutput(), tile, TEMapR.get(tile)/-adv.getRatio());
+							addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/-adv.getRatio());
 						}
 					}
 					break;
@@ -146,9 +147,9 @@ public class TorqueUsage {
 					torque += amt;
 					break;
 				case HIGH:
-					if (!TEMap.containsKey(adv.getOutput()) && isPoweredFrom(world, adv.getOutput())) {
+					if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
 						double D = adv.torquemode ? 256D : 1/256D;
-						addToList(adv.getOutput(), tile, TEMapR.get(tile)/D);
+						addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/D);
 					}
 				}
 			}
@@ -173,14 +174,15 @@ public class TorqueUsage {
 					}
 				}
 				else {
-					if (!TEMap.containsKey(((TileEntityIOMachine) tile).getOutput()) && isPoweredFrom(world, ((TileEntityIOMachine) tile).getOutput())) { //if it's anything else, it just gets its current output and then calls the recursion
-						addToList(((TileEntityIOMachine) tile).getOutput(), tile);
+					if (!TEMap.containsKey(((TileEntityIOMachine) tile).getWriteLocation()) && isPoweredFrom(world, ((TileEntityIOMachine) tile).getWriteTileEntity())) { //if it's anything else, it just gets its current output and then calls the recursion
+						addToList(((TileEntityIOMachine) tile).getWriteTileEntity(), tile);
 					}
 				}
 			}
 			else {
-				if (!TEMap.containsKey(((TileEntityIOMachine) tile).getOutput()) && isPoweredFrom(world, ((TileEntityIOMachine) tile).getOutput())) { //if it's anything else, it just gets its current output and then calls the recursion
-					addToList(((TileEntityIOMachine) tile).getOutput(), tile);
+				//ReikaJavaLibrary.pConsole(((TileEntityIOMachine) tile).getWriteTileEntity()+" & "+!TEMap.containsKey(((TileEntityIOMachine) tile).getWriteTileEntity())+" & "+isPoweredFrom(world, ((TileEntityIOMachine) tile).getWriteTileEntity()));
+				if (!TEMap.containsKey(((TileEntityIOMachine) tile).getWriteLocation()) && isPoweredFrom(world, ((TileEntityIOMachine) tile).getWriteTileEntity())) { //if it's anything else, it just gets its current output and then calls the recursion
+					addToList(((TileEntityIOMachine) tile).getWriteTileEntity(), tile);
 				}
 			}
 		}
@@ -221,7 +223,7 @@ public class TorqueUsage {
 			}
 		}
 		if (tile instanceof PowerAcceptor) {
-			torque += Math.max(((ShaftPowerReceiver)tile).getMinTorque(reader.torque), 1);
+			torque += Math.max(((PowerAcceptor)tile).getMinTorque(reader.torque), 1);
 		}
 	}
 
@@ -239,7 +241,7 @@ public class TorqueUsage {
 						TileEntity read2 = io.getReadTileEntity2();
 						TileEntity read3 = io.getReadTileEntity3();
 						TileEntity read4 = io.getReadTileEntity4();
-						if ((io.getInput() == te || read == te || read2 == te || read3 == te || read4 == te)) {
+						if ((io.getReadTileEntity() == te || read == te || read2 == te || read3 == te || read4 == te)) {
 							double ratio = te.getAbsRatio(dir);
 							if (!te.isSideSpeedMode(dir))
 								ratio = 1D/ratio;
@@ -252,11 +254,14 @@ public class TorqueUsage {
 	}
 
 	private static void addToList(TileEntity tile, TileEntity lasttile) {
-		if (!TEMap.containsKey(tile) && tile != null) {
-			if (TEMapR.get(lasttile)!= null)
-				TEMapR.put(tile,TEMapR.get(lasttile));
-			else TEMapR.put(tile,1.0);
-			TEMap.put(tile,false);
+		if (tile != null && !TEMap.containsKey(tile)) {
+
+			if (TEMapR.get(lasttile) != null)
+				TEMapR.put(tile, TEMapR.get(lasttile));
+			else
+				TEMapR.put(tile, 1D);
+
+			TEMap.put(tile, false);
 		}
 	}
 
@@ -268,16 +273,26 @@ public class TorqueUsage {
 	}
 
 	private static boolean isPoweredFrom(World world, TileEntity tile) {
-		boolean isPoweredFrom = false;
 		if (tile instanceof TileEntityIOMachine) {
 			TileEntityIOMachine io = (TileEntityIOMachine)tile;
-			TileEntity read = io.getReadTileEntity();
-			TileEntity read2 = io.getReadTileEntity2();
-			TileEntity read3 = io.getReadTileEntity3();
-			TileEntity read4 = io.getReadTileEntity4();
-			isPoweredFrom = (TEMap.containsKey(io.getInput()) || TEMap.containsKey(read) || TEMap.containsKey(read2) || TEMap.containsKey(read3) || TEMap.containsKey(read4));
+			WorldLocation read = io.getReadLocation();
+			WorldLocation read2 = io.getReadLocation2();
+			WorldLocation read3 = io.getReadLocation3();
+			WorldLocation read4 = io.getReadLocation4();
+			return TEMap.containsKey(read) || TEMap.containsKey(read2) || TEMap.containsKey(read3) || TEMap.containsKey(read4);
 		}
-		return isPoweredFrom;
+		else if (tile instanceof PowerAcceptor) {
+			PowerAcceptor acc = (PowerAcceptor)tile;
+			if (acc.isReceiving()) {
+				for (int i = 0; i < 6; i++) {
+					ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i];
+					WorldLocation loc = new WorldLocation(tile).move(dir, 1);
+					if (acc.canReadFrom(dir) && TEMap.containsKey(loc))
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public static int recursiveCount(TileEntityIOMachine tile) {
@@ -286,18 +301,33 @@ public class TorqueUsage {
 
 	private static int recursiveCount(TileEntityIOMachine tile, ForgeDirection dir, int count) {
 		Collection<TileEntity> c = new HashSet();
+		Collection<TileEntity> pass = new HashSet();
 		tile.getAllOutputs(c, dir.getOpposite());
 		for (TileEntity te : c) {
+			if (pass.contains(te))
+				continue;
+			pass.add(te);
 			if (te instanceof TileEntityIOMachine) {
 				TileEntityIOMachine io = (TileEntityIOMachine)te;
 				if (io.canTransmitPower()) {
-					count = recursiveCount(io, io.getWriteDirection(), count);
+					if (io.getWriteDirection() != null) {
+						count = recursiveCount(io, io.getWriteDirection(), count);
+					}
+					if (io.getWriteDirection2() != null) {
+						count = recursiveCount(io, io.getWriteDirection2(), count);
+					}
+
+					if (io instanceof TileEntityAdvancedGear) {
+						if (((TileEntityAdvancedGear)io).getGearType().storesEnergy())
+							count++;
+					}
 				}
 			}
 			else if (te instanceof PowerAcceptor) {
 				count++;
 			}
 		}
+		count++;
 		return count;
 	}
 }

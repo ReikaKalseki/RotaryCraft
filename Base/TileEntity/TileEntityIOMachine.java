@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.RotaryCraft.API.IOMachine;
 import Reika.RotaryCraft.API.Power.AdvancedShaftPowerReceiver;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
@@ -197,22 +198,74 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return write2 != null ? this.getAdjacentTileEntity(write2) : null;
 	}
 
+	public final WorldLocation getReadLocation() {
+		return read != null ? this.getAdjacentLocation(read) : null;
+	}
+
+	public final WorldLocation getReadLocation2() {
+		return read2 != null ? this.getAdjacentLocation(read2) : null;
+	}
+
+	public final WorldLocation getReadLocation3() {
+		return read3 != null ? this.getAdjacentLocation(read3) : null;
+	}
+
+	public final WorldLocation getReadLocation4() {
+		return read4 != null ? this.getAdjacentLocation(read4) : null;
+	}
+
+	public final WorldLocation getWriteLocation() {
+		return write != null ? this.getAdjacentLocation(write) : null;
+	}
+
+	public final WorldLocation getWriteLocation2() {
+		return write2 != null ? this.getAdjacentLocation(write2) : null;
+	}
+
 	public abstract boolean canProvidePower();
-
-	public TileEntityIOMachine getInput() {
+	/*
+	public ShaftMachine getInput() {
 		TileEntity te = this.getAdjacentTileEntity(read);
-		if (te instanceof TileEntityIOMachine)
-			return (TileEntityIOMachine)te;
+		if (te instanceof ShaftMachine)
+			return (ShaftMachine)te;
 		return null;
 	}
 
-	public TileEntityIOMachine getOutput() {
+	public ShaftMachine getInput2() {
+		TileEntity te = this.getAdjacentTileEntity(read2);
+		if (te instanceof ShaftMachine)
+			return (ShaftMachine)te;
+		return null;
+	}
+
+	public ShaftMachine getInput3() {
+		TileEntity te = this.getAdjacentTileEntity(read3);
+		if (te instanceof ShaftMachine)
+			return (ShaftMachine)te;
+		return null;
+	}
+
+	public ShaftMachine getInput4() {
+		TileEntity te = this.getAdjacentTileEntity(read4);
+		if (te instanceof ShaftMachine)
+			return (ShaftMachine)te;
+		return null;
+	}
+
+	public ShaftMachine getOutput() {
 		TileEntity te = this.getAdjacentTileEntity(write);
-		if (te instanceof TileEntityIOMachine)
-			return (TileEntityIOMachine)te;
+		if (te instanceof ShaftMachine)
+			return (ShaftMachine)te;
 		return null;
 	}
 
+	public ShaftMachine getOutput2() {
+		TileEntity te = this.getAdjacentTileEntity(write2);
+		if (te instanceof ShaftMachine)
+			return (ShaftMachine)te;
+		return null;
+	}
+	 */
 	public final int getPointingOffsetX() {
 		return pointoffsetx;
 	}
@@ -528,4 +581,24 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	}
 
 	public abstract void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir);
+	/*
+	public final int getOmega() {
+		return omega;
+	}
+
+	public final int getTorque() {
+		return torque;
+	}
+
+	public final long getPower() {
+		return power;
+	}
+
+	public final int getIORenderAlpha() {
+		return iotick;
+	}
+
+	public final void setIORenderAlpha(int io) {
+		iotick = io;
+	}*/
 }

@@ -234,7 +234,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	public abstract int getMaxStorage();
 
 	public final long getPowerLevel() {
-		return this.isEmitting() ? this.getMaxSpeed()*(long)this.getTorque() : 0;
+		return this.isEmitting() ? this.getMaxSpeed()*(long)this.getActualTorque() : 0;
 	}
 
 	public final int getSpeed() {
@@ -262,7 +262,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 				omega -= omega/256+1;
 			}
 		}
-		torque = this.getTorque();
+		torque = this.getActualTorque();
 		power = (long)torque*(long)omega;
 		if (power > 0 && !worldObj.isRemote) {
 			this.usePower();
@@ -278,7 +278,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 			storedEnergy = 0;
 	}
 
-	public final int getTorque() {
+	public final int getActualTorque() {
 		return omega > 0 ? this.getGenTorque(this.getTier()) : 0;
 	}
 

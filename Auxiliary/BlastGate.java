@@ -45,7 +45,9 @@ public enum BlastGate {
 	MANYULLYN("ingotManyullyn"),
 	GOLDGEAR(GameRegistry.findItem(ModList.BUILDCRAFT.modLabel, "goldGearItem")),
 	TERRASTEEL("ingotTerrasteel"),
+	MANASTEEL("ingotManasteel"),
 	VOIDMETAL("ingotVoid"),
+	THAUMIUM("ingotThaumium"),
 	;
 
 	private ItemStack item;

@@ -416,8 +416,8 @@ PipeConnector, IFluidHandler {
 			}
 			else if (!isCreative) {
 				long pwr = (long)torquein*(long)omegain;
-				if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
-					energy += pwr;
+				//if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
+				energy += pwr;
 			}
 		}
 		else if (energy > 0 && releaseTorque > 0 && releaseOmega > 0) {
