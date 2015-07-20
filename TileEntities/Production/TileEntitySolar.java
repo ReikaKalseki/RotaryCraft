@@ -113,7 +113,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 					MachineRegistry m = MachineRegistry.getMachine(world, c.xCoord, c.yCoord, c.zCoord);
 					if (m == MachineRegistry.MIRROR) {
 						TileEntityMirror te = (TileEntityMirror)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
-						te.targetloc = new int[]{x,y,z};
+						te.targetloc = new Coordinate(x, y, z);
 						float light = te.getLightLevel();
 						lightMultiplier += light;
 					}

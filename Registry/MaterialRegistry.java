@@ -257,7 +257,14 @@ public enum MaterialRegistry {
 	}
 
 	public ItemStack getGearUnitItem(int ratio) {
-		return ItemRegistry.GEARUNITS.getStackOfMetadata(ReikaMathLibrary.logbase2(ratio)-1+this.ordinal()*4);
+		int log = ReikaMathLibrary.logbase2(ratio)-1;
+		if (this == STEEL) {
+			return ItemRegistry.SHAFTCRAFT.getStackOfMetadata(5+log);
+		}
+		else {
+			int o = this == BEDROCK || this == DIAMOND ? this.ordinal()-1 : this.ordinal();
+			return ItemRegistry.GEARUNITS.getStackOfMetadata(log+o*4);
+		}
 	}
 
 	public ItemStack getShaftUnitItem() {

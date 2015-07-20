@@ -128,7 +128,7 @@ public class GuiHandbook extends GuiScreen
 
 		HandbookEntry h = this.getEntry();
 
-		if (h.hasSubpages()) {
+		if (h.hasSubpages() || ((h instanceof HandbookRegistry) && ((HandbookRegistry)h).getBonusSubpages() > 0)) {
 			buttonList.add(new GuiButton(13, j+xSize-27, k+40, 20, 20, ">"));
 			buttonList.add(new GuiButton(14, j+xSize-27, k+60, 20, 20, "<"));
 		}
@@ -161,7 +161,7 @@ public class GuiHandbook extends GuiScreen
 			return HandbookNotifications.instance.getNewAlerts().size()/3;
 		if (h == HandbookRegistry.PACKMODS)
 			return PackModificationTracker.instance.getModifications(RotaryCraft.instance).size()/3;
-		return 1;
+		return h.hasSubpages() ? 1+h.getBonusSubpages() : h.getBonusSubpages();
 	}
 
 	@Override
@@ -301,7 +301,7 @@ public class GuiHandbook extends GuiScreen
 			return PageType.BLACKBOX;
 		if (h == HandbookRegistry.PACKMODS)
 			return PageType.BLACKBOX;
-		if (subpage == 1)
+		if (subpage >= 1)
 			return PageType.PLAIN;
 		if (h == HandbookRegistry.STEELINGOT)
 			return PageType.BLASTFURNACE;
@@ -565,7 +565,7 @@ public class GuiHandbook extends GuiScreen
 			fontRendererObj.drawSplitString(String.format("%s", h.getData()), px, posY+descY, 242, c);
 		}
 		else {
-			fontRendererObj.drawSplitString(String.format("%s", h.getNotes()), px, posY+descY, 242, c);
+			fontRendererObj.drawSplitString(String.format("%s", h.getNotes(subpage)), px, posY+descY, 242, c);
 		}
 		if (disable) {
 			fontRendererObj.drawSplitString("This machine has been disabled by your server admin or modpack creator.", px, posY+descY, 242, 0xffffff);

@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -32,15 +33,17 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityMirror extends RotaryCraftTileEntity {
 
 	//2.3 kW/m^2 (392MW/170000) -> 2kW/block; sunlight is 15 kW per m^2, so thus efficiency of 13%
 
+	@SideOnly(Side.CLIENT)
 	public float theta;
-	public boolean broken;
+	public Coordinate targetloc;
 
-	public int[] targetloc = {Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
+	public boolean broken;
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -56,7 +59,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (broken)
 			return;
-		this.adjustAim(world, x, y, z, meta);
+		if (world.isRemote)
+			this.adjustAim(world, x, y, z, meta);
 
 		if (!world.isRemote) {
 			AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
@@ -130,10 +134,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		return 15*0.2F*phase;
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void adjustAim(World world, int x, int y, int z, int meta) {
-		if (targetloc == null || targetloc.length == 0)
-			return;
-		if (targetloc[0] == targetloc[1] && targetloc[0] == targetloc[2] && targetloc[0] == Integer.MIN_VALUE)
+		if (targetloc == null)
 			return;
 		float finalphi;
 		float finaltheta;
@@ -148,8 +151,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		//rises in +90 sets in 270 (+x, -x)
 		float movespeed = 0.5F;
 
-		float targetphi = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc[0], y-targetloc[1], z-targetloc[2])[2];
-		float targettheta = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc[0], y-targetloc[1], z-targetloc[2])[1];
+		float targetphi = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc.xCoord, y-targetloc.yCoord, z-targetloc.zCoord)[2];
+		float targettheta = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc.xCoord, y-targetloc.yCoord, z-targetloc.zCoord)[1];
 
 		targettheta = Math.abs(targettheta)-90;
 		targettheta *= 0.5;
@@ -219,28 +222,21 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		broken = false;
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
 		NBT.setBoolean("broke", broken);
-		NBT.setIntArray("target", targetloc);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
 		broken = NBT.getBoolean("broke");
-		targetloc = NBT.getIntArray("target");
 	}
 
+	@SideOnly(Side.CLIENT)
 	private float clampPhi(float phi, int time) {
 		boolean afternoon = time >= 6000;
 		if (afternoon) {
@@ -258,6 +254,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		return phi;
 	}
 
+	@SideOnly(Side.CLIENT)
 	private float adjustPhiForClosestPath(float finalphi) {
 		//ReikaJavaLibrary.pConsole(String.format("PHI: %.3f    TARGET: %.3f", phi, finalphi));
 		if (!ReikaMathLibrary.isSameSign(finalphi, phi)) {

@@ -84,13 +84,22 @@
 			The hydrokinetic engine converts the energy of falling water into shaft power. Note that this machine can only rotate counterclockwise, and therefore the waterfall must be positioned accordingly. Additionally, adjacent blocks can obstruct the paddles from rotating. Finally, this engine's power output is dependent on how far the water is falling. A 3-block fall will produce minimal power, but a 64+ block fall can produce %d Nm at %d rad/s, the highest torque of any engine, totalling %.3fkW. These engines can also be chained, adding their torques together. This engine must be lubricated to function.
 		</desc>
 		<note>
-			Max Torque: %d Nm
-			Max Speed: %d rad/s
-			Max Power: %.3fkW
-			Power Source: Falling Water
-			Requires Consumables: Lubricant
-			Risks: Spinning Paddles
-			Notes: Requires tall waterfalls to acheive full power
+			<sub>
+				<s1>
+					Max Torque: %d Nm
+					Max Speed: %d rad/s
+					Max Power: %.3fkW
+					Power Source: Falling Water
+					Requires Consumables: Lubricant
+					Risks: Spinning Paddles
+					Notes: Requires tall waterfalls to acheive full power
+				</s1>
+				<s2>
+					At most 4 engines can be chained before the torque overloads the core shaft
+
+					Can be upgraded with a bedrock shaft unit to increase that limit to 16 engines
+				</s2>
+			</sub>
 		</note>
 	</hydro>
 	<micro>

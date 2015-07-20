@@ -142,7 +142,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	}
 
 	private int getScaledTier() {
-		return ReikaEUHelper.getIC2TierFromPower(this.getTierPower(this.getTier()));
+		return ReikaEUHelper.getIC2TierFromPower(this.getTierPower());
 	}
 
 	@Override

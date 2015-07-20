@@ -10,7 +10,14 @@
 		Bevel gears are used to change the direction of power transmission without changing the torque or speed. Unlike their inline cousins, they do not need lubricant, and will operate continuously and losslessly.
 	</bevel>
 	<splitter>
-		The shaft junction does exactly what it sounds like. In 'merge' mode, it will take two engines' outputs and combine them, outputting the sum of the torques at the input speed. Note that trying to combine inputs of different speeds will merely result in a shower of sparks, and combining too many engines' power will overload the junction. In 'split' mode, they will take an input and send some torque each way, at the input speed. To swap modes, shift-right-click with the screwdriver.
+		<sub>
+			<s0>
+				The shaft junction does exactly what it sounds like. In 'merge' mode, it will take two engines' outputs and combine them, outputting the sum of the torques at the input speed. Note that trying to combine inputs of different speeds will merely result in a shower of sparks, and combining too many engines' power will overload the junction. In 'split' mode, they will take an input and send some torque each way, at the input speed. To swap modes, shift-right-click with the screwdriver.
+			</s0>
+			<s1>
+				Shaft junctions can merge at most four times the average of the input power. Exceeding that load will cause them to break. Junctions upgraded with a bedrock 2x gear unit are not subject to this limit.
+			</s1>
+		</sub>
 	</splitter>
 	<clutch>
 		The clutch is basically a gated shaft - when powered by redstone, it transmits its input torque and speed unchanged. Unpower it, and it outputs nothing.
@@ -28,7 +35,32 @@
 		A CVT (continuously variable transmission) Unit is essentially a dynamic gearbox. Rather than using toothed wheels, it uses a series of belts to change the gear ratio. This gives them the advantage of being efficient and highly flexible, allowing you to select the desired gear ratio on demand. Note that higher ratios require more belts, with each power of 2 doubling the maximum ratio (capped at 32:1). This machine also requires lubricant, but will not consume it.
 	</cvt>
 	<coil>
-		The industrial coil stores energy in a large spring that can be unwound on command with redstone. Since its output torque and speed can be chosen nearly at will, it can be used to store energy for later or as a sort of capacitor, to store energy accumulated over a long time and then release it in one powerful burst. Note that each coil type has a maximum capacity, and that exceeding it will result in an extremely violent release of all stored energy. This machine cannot simultaneously charge and release power; any power input while discharging is wasted. As the coil charges, the torque and power required to do so rises.
+		<sub>
+			<s0>
+				The industrial coil stores energy in a large spring that can be unwound on command with redstone. Since its output torque and speed can be chosen nearly at will, it can be used to store energy for later or as a sort of capacitor, to store energy accumulated over a long time and then release it in one powerful burst. Note that each coil type has a maximum capacity, and that exceeding it will result in an extremely violent release of all stored energy. This machine cannot simultaneously charge and release power; any power input while discharging is wasted. As the coil charges, the torque and power required to do so rises.
+			</s0>
+			<s1>
+				Energy storage limits:
+
+				Steel: %d J (%s)
+				Bedrock: %d J (%s)
+			</s1>
+			<s2>
+				Input requirements:
+
+				Torque: %s
+				Power: %s
+			</s2>
+			<s3>
+				Output limits:
+
+				Cap:
+				Steel: %d rad/s x %d Nm
+				Bedrock: %d rad/s x %d Nm
+				
+				Function: %s
+			</s3>
+		</sub>
 	</coil>
 	<higear>
 		The high-ratio gear allows you to create the effect of multiple chained gearboxes in a more compact space. Creating an enormous ratio of 256:1, it requires a large amount of lubricant to be able to turn, and must be made of bedrock to withstand the high stresses. Like a normal gearbox, it can be flipped between torque and speed by shift-right-clicking with the screwdriver.

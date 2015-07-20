@@ -634,10 +634,21 @@
 	</compressor>
 	<pneuengine>
 		<desc>
-			The pneumatic engine uses a turbine to convert pressurized air from BuildCraft conductive pipes into shaft power. Use its GUI to choose the speed output. Higher power outputs will require more air pressure (more MJ per tick).
+			The pneumatic engine uses a turbine to convert pressurized air from PneumaticCraft pipes into shaft power. Use its GUI to choose the speed output. Higher power outputs will require more air pressure and airflow.
 		</desc>
 		<note>
-			Conductive Pipe Input: Back
+			<sub>
+				<s1>
+					Air Pipe Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</pneuengine>
 	<liquidconverter>
@@ -726,7 +737,18 @@
 			The steam turbine takes in steam from any pipe or tank behind it and generates shaft power. Use the GUI to select the power usage (and steam consumption).
 		</desc>
 		<note>
-			Steam Input: Back
+			<sub>
+				<s1>
+					Steam Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</steamturbine>
 	<beammirror>
@@ -770,7 +792,18 @@
 			The electric motor uses IC2 electrical power to produce shaft power. Use its GUI to choose the speed output. Higher power outputs will require more electrical power and a higher supply voltage.
 		</desc>
 		<note>
-			Wire Connection: Back
+			<sub>
+				<s1>
+					Wire Connection: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</electricmotor>
 	<hose>
@@ -939,7 +972,18 @@
 			The magnetostatic engine functions much like the pneumatic engine. It accepts RF provided to it, and its output speed can be selected to choose the total power output. Like all other conversion engines, it requires coolant.
 		</desc>
 		<note>
-			Conduit Input: Back
+			<sub>
+				<s1>
+					Conduit Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</magnetic>
 	<crystallizer>
@@ -1060,7 +1104,7 @@
 			The drying bed is where some liquids can evaporate or coagulate to leave other items behind.
 		</desc>
 		<note>
-			
+
 		</note>
 	</drying>
 	<wetter>

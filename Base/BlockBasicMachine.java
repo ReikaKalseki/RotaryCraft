@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -267,11 +266,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 
 	@ModDependent(ModList.WAILA)
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		return MachineRegistry.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
+		return null;//MachineRegistry.getMachineFromIDandMetadata(this, accessor.getMetadata()).getCraftedProduct();
 	}
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		/*
 		World world = acc.getWorld();
 		MovingObjectPosition mov = acc.getPosition();
 		if (mov != null) {
@@ -279,7 +279,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			int y = mov.blockY;
 			int z = mov.blockZ;
 			currenttip.add(EnumChatFormatting.WHITE+this.getPickBlock(mov, world, x, y, z).getDisplayName());
-		}
+		}*/
 		return currenttip;
 	}
 
@@ -355,9 +355,10 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
+		/*
 		String s1 = EnumChatFormatting.ITALIC.toString();
 		String s2 = EnumChatFormatting.BLUE.toString();
-		currenttip.add(s2+s1+"RotaryCraft");
+		currenttip.add(s2+s1+"RotaryCraft");*/
 		return currenttip;
 	}
 }

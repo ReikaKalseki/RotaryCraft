@@ -36,6 +36,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -88,16 +89,37 @@ PipeConnector, IFluidHandler {
 
 	public boolean torquemode = true;
 
+	public static long getMaxStorageCapacity(boolean bedrock) {
+		return bedrock ? 240L*ReikaMathLibrary.longpow(10, 12) : 720*ReikaMathLibrary.intpow2(10, 6);
+	}
+
+	public static String getMaxStorageCapacityFormatted(boolean bedrock) {
+		long max = getMaxStorageCapacity(bedrock);
+		return String.format("%.3f%sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max));
+	}
+
+	public static String getRequiredInputPower() {
+		return "CEIL2((log_2(energy))^4)";
+	}
+
+	public static String getRequiredInputTorque() {
+		return "CEIL2((log_2(energy))^3)";
+	}
+
+	public static int getOutputCap(boolean bedrock) {
+		return bedrock ? 4096 : 1024;
+	}
+
+	public static String getOutputFunction() {
+		return "CEIL2_pseudo(SQRT(energy)/4)";
+	}
+
 	public void setController(CVTController c) {
 		controller = c;
 	}
 
 	public long getMaxStorageCapacity() {
 		return this.getGearType().storesEnergy() ? this.getMaxStorageCapacity(isBedrockCoil) : 0;
-	}
-
-	public static long getMaxStorageCapacity(boolean bedrock) {
-		return bedrock ? 240L*ReikaMathLibrary.longpow(10, 12) : 720*ReikaMathLibrary.intpow2(10, 6);
 	}
 
 	public void setBedrock(boolean bedrock) {
@@ -109,7 +131,7 @@ PipeConnector, IFluidHandler {
 	}
 
 	public int getMaximumEmission() {
-		return isCreative ? Integer.MAX_VALUE : this.isBedrockCoil() ? 4096 : 1024; //still the 16x increase in the coil item
+		return isCreative ? Integer.MAX_VALUE : getOutputCap(this.isBedrockCoil()); //still the 16x increase in the coil item
 	}
 
 	public int getReleaseTorque() {

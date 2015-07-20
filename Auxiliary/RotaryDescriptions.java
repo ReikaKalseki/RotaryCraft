@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import Reika.DragonAPI.Instantiable.Data.Maps.PluralMap;
 import Reika.DragonAPI.Instantiable.Event.Client.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
@@ -26,6 +28,7 @@ import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
+import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
@@ -58,6 +61,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
@@ -73,13 +77,16 @@ public final class RotaryDescriptions {
 	private static String PARENT = getParent();
 	private static final String DESC_SUFFIX = ":desc";
 	private static final String NOTE_SUFFIX = ":note";
+	private static final String SUBNOTE_SUFFIX = ":sub";
 
 	private static HashMap<HandbookRegistry, String> data = new HashMap<HandbookRegistry, String>();
-	private static HashMap<HandbookRegistry, String> notes = new HashMap<HandbookRegistry, String>();
+	private static PluralMap<String> notes = new PluralMap(2);
 
 	private static HashMap<MachineRegistry, Object[]> machineData = new HashMap<MachineRegistry, Object[]>();
-	private static HashMap<MachineRegistry, Object[]> machineNotes = new HashMap<MachineRegistry, Object[]>();
+	private static PluralMap<Object[]> machineNotes = new PluralMap(2);
 	private static HashMap<HandbookRegistry, Object[]> miscData = new HashMap<HandbookRegistry, Object[]>();
+
+	private static HashMap<HandbookRegistry, Integer> lengths = new HashMap<HandbookRegistry, Integer>();
 
 	private static ArrayList<HandbookRegistry> categories = new ArrayList<HandbookRegistry>();
 
@@ -148,7 +155,11 @@ public final class RotaryDescriptions {
 	}
 
 	private static void addNotes(MachineRegistry m, Object... data) {
-		machineNotes.put(m, data);
+		machineNotes.put(data, m, 0);
+	}
+
+	private static void addSubNotes(MachineRegistry m, int subpage, Object... data) {
+		machineNotes.put(data, m, subpage);
 	}
 
 	/** Call this from the SERVER side! */
@@ -196,8 +207,9 @@ public final class RotaryDescriptions {
 			MachineRegistry m = h.getMachine();
 			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase()+DESC_SUFFIX);
 			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase()+NOTE_SUFFIX);
+			Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase()+NOTE_SUFFIX+SUBNOTE_SUFFIX);
 			desc = String.format(desc, machineData.get(m));
-			aux = String.format(aux, machineNotes.get(m));
+			aux = String.format(aux, machineNotes.get(m, 0));
 
 			if (XMLInterface.NULL_VALUE.equals(desc))
 				desc = "There is no handbook data for this machine yet.";
@@ -218,13 +230,44 @@ public final class RotaryDescriptions {
 			}
 
 			addEntry(h, desc);
-			notes.put(h, aux);
+			notes.put(aux, h, 0);
+
+			if (sub != null) {
+				int k = 0;
+				for (String s : sub) {
+					String val = machines.getValueAtNode(s);
+					val = String.format(val, machineNotes.get(m, k));
+					notes.put(val, h, k);
+					k++;
+					lengths.put(h, k);
+				}
+			}
 		}
 
 		for (int i = 0; i < transtabs.length; i++) {
 			HandbookRegistry h = transtabs[i];
 			MachineRegistry m = h.getMachine();
 			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase());
+			Collection<String> sub = trans.getNodesWithin("trans:"+h.name().toLowerCase()+SUBNOTE_SUFFIX);
+
+			if (sub != null && !sub.isEmpty()) {
+				int k = 0;
+				for (String s : sub) {
+					String val = trans.getValueAtNode(s);
+					if (k == 0) {
+						val = String.format(val, machineData.get(m));
+						val = String.format(val, miscData.get(h));
+						addEntry(h, val);
+					}
+					else {
+						val = String.format(val, machineNotes.get(m, k));
+						notes.put(val, h, k-1);
+					}
+					k++;
+					lengths.put(h, k);
+				}
+				continue;
+			}
 
 			if (XMLInterface.NULL_VALUE.equals(desc))
 				desc = "There is no handbook data for this machine yet.";
@@ -240,6 +283,25 @@ public final class RotaryDescriptions {
 		for (int i = 0; i < tooltabs.length; i++) {
 			HandbookRegistry h = tooltabs[i];
 			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase());
+			Collection<String> sub = tools.getNodesWithin("tools:"+h.name().toLowerCase()+SUBNOTE_SUFFIX);
+
+			if (sub != null && !sub.isEmpty()) {
+				int k = 0;
+				for (String s : sub) {
+					String val = tools.getValueAtNode(s);
+					if (k == 0) {
+						val = String.format(val, miscData.get(h));
+						addEntry(h, val);
+					}
+					else {
+						notes.put(val, h, k-1);
+					}
+					k++;
+					lengths.put(h, k);
+				}
+				continue;
+			}
+
 			addEntry(h, desc);
 		}
 
@@ -269,10 +331,12 @@ public final class RotaryDescriptions {
 			HandbookRegistry h = enginetabs[i];
 			String desc;
 			String aux;
+			Collection<String> sub = null;
 			if (i < EngineType.engineList.length) {
 				EngineType e = EngineType.engineList[i];
 				desc = engines.getValueAtNode("engines:"+e.name().toLowerCase()+DESC_SUFFIX);
 				aux = engines.getValueAtNode("engines:"+e.name().toLowerCase()+NOTE_SUFFIX);
+				sub = engines.getNodesWithin("engines:"+e.name().toLowerCase()+NOTE_SUFFIX+SUBNOTE_SUFFIX);
 
 				desc = String.format(desc, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
 				aux = String.format(aux, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
@@ -286,10 +350,23 @@ public final class RotaryDescriptions {
 			}
 
 			data.put(h, desc);
-			notes.put(h, aux);
+			notes.put(aux, h, 0);
+
+			if (sub != null) {
+				int k = 0;
+				for (String s : sub) {
+					String val = engines.getValueAtNode(s);
+					if (k == 0 && i < EngineType.engineList.length) {
+						EngineType e = EngineType.engineList[i];
+						val = String.format(val, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
+					}
+					notes.put(val, h, k);
+					k++;
+					lengths.put(h, k);
+				}
+			}
 		}
 	}
-
 
 	public static String getData(HandbookRegistry h) {
 		if (!data.containsKey(h))
@@ -297,10 +374,15 @@ public final class RotaryDescriptions {
 		return data.get(h);
 	}
 
-	public static String getNotes(HandbookRegistry h) {
-		if (!notes.containsKey(h))
+	public static String getNotes(HandbookRegistry h, int subpage) {
+		subpage--;
+		if (!notes.containsKeyV(h, subpage))
 			return "";
-		return notes.get(h);
+		return notes.get(h, subpage);
+	}
+
+	public static int getNotesLength(HandbookRegistry h) {
+		return lengths.containsKey(h) ? lengths.get(h) : 1;
 	}
 
 	static {
@@ -477,6 +559,20 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.CENTRIFUGE, PowerReceivers.CENTRIFUGE.getMinPower(), PowerReceivers.CENTRIFUGE.getMinSpeed());
 		addNotes(MachineRegistry.WETTER, PowerReceivers.WETTER.getMinPower(), PowerReceivers.WETTER.getMinSpeed());
 		addNotes(MachineRegistry.CHUNKLOADER, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.BASE_RADIUS, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.FALLOFF);
+
+		addNotes(MachineRegistry.MAGNETIC, EnergyToPowerBase.MAXTEMP);
+		addNotes(MachineRegistry.PNEUENGINE, EnergyToPowerBase.MAXTEMP);
+		addNotes(MachineRegistry.ELECTRICMOTOR, EnergyToPowerBase.MAXTEMP);
+		addNotes(MachineRegistry.STEAMTURBINE, EnergyToPowerBase.MAXTEMP);
+
+		addSubNotes(MachineRegistry.MAGNETIC, 1, EnergyToPowerBase.getTiersAsString());
+		addSubNotes(MachineRegistry.PNEUENGINE, 1, EnergyToPowerBase.getTiersAsString());
+		addSubNotes(MachineRegistry.ELECTRICMOTOR, 1, EnergyToPowerBase.getTiersAsString());
+		addSubNotes(MachineRegistry.STEAMTURBINE, 1, EnergyToPowerBase.getTiersAsString());
+
+		addSubNotes(MachineRegistry.ADVANCEDGEARS, 1, TileEntityAdvancedGear.getMaxStorageCapacity(false), TileEntityAdvancedGear.getMaxStorageCapacityFormatted(false), TileEntityAdvancedGear.getMaxStorageCapacity(true), TileEntityAdvancedGear.getMaxStorageCapacityFormatted(true));
+		addSubNotes(MachineRegistry.ADVANCEDGEARS, 2, TileEntityAdvancedGear.getRequiredInputTorque(), TileEntityAdvancedGear.getRequiredInputPower());
+		addSubNotes(MachineRegistry.ADVANCEDGEARS, 3, TileEntityAdvancedGear.getOutputCap(false), TileEntityAdvancedGear.getOutputCap(false), TileEntityAdvancedGear.getOutputCap(true), TileEntityAdvancedGear.getOutputCap(true), TileEntityAdvancedGear.getOutputFunction());
 
 		addData(HandbookRegistry.TUNGSTEN, RecipesFrictionHeater.getRecipes().getRecipeByInput(ItemStacks.tungstenflakes).requiredTemperature);
 	}

@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -309,13 +308,13 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	@Override
 	@ModDependent(ModList.WAILA)
 	public ItemStack getWailaStack(IWailaDataAccessor acc, IWailaConfigHandler cfg) {
-		return ItemStacks.canolaSeeds;
+		return null;//ItemStacks.canolaSeeds;
 	}
 
 	@Override
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaHead(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
-		currenttip.add(EnumChatFormatting.WHITE+"Canola Plant");
+		//currenttip.add(EnumChatFormatting.WHITE+"Canola Plant");
 		return currenttip;
 	}
 
@@ -332,9 +331,10 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	@Override
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaTail(ItemStack is, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler cfg) {
+		/*
 		String s1 = EnumChatFormatting.ITALIC.toString();
 		String s2 = EnumChatFormatting.BLUE.toString();
-		currenttip.add(s2+s1+"RotaryCraft");
+		currenttip.add(s2+s1+"RotaryCraft");*/
 		return currenttip;
 	}
 

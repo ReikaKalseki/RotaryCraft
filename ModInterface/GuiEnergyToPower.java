@@ -75,7 +75,7 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		int torque = engine.getGenTorque(engine.getTier());
+		int torque = engine.getGenTorque();
 		int omega = engine.getMaxSpeed();
 		long power = (long)torque*(long)omega;
 		int inset = 1;

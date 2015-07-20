@@ -17,7 +17,7 @@ public interface HandbookEntry {
 
 	public String getData();
 
-	public String getNotes();
+	public String getNotes(int subpage);
 
 	public boolean sameTextAllSubpages();
 

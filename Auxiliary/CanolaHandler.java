@@ -99,4 +99,9 @@ public final class CanolaHandler implements CustomCropHandler {
 		return false;
 	}
 
+	@Override
+	public boolean neverDropsSecondSeed() {
+		return false;
+	}
+
 }

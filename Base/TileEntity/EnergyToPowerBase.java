@@ -30,6 +30,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.GuiController;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
@@ -74,16 +75,44 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
 	}
 
-	public final double getEfficiency() {
+	private static double getEfficiency(int tier) {
 		return 0.9-tier*0.08;
 	}
 
-	public final double getPowerLoss() {
+	private static final long getTierPower(int tier) {
+		return getGenTorque(tier)*ReikaMathLibrary.intpow2(2, getMaxSpeedBase(tier));
+	}
+
+	private static final int getGenTorque(int tier) {
+		return 8*ReikaMathLibrary.intpow2(4, tier);
+	}
+
+	public static final int getMaxSpeedBase(int tier) {
+		return 8+tier;
+	}
+
+	private final double getPowerLoss() {
 		return 1-this.getEfficiency();
 	}
 
-	public final double getConsumption() {
+	private final double getConsumption() {
 		return 1+this.getPowerLoss();
+	}
+
+	public final double getEfficiency() {
+		return getEfficiency(tier);
+	}
+
+	public final long getTierPower() {
+		return getTierPower(tier);
+	}
+
+	public final int getGenTorque() {
+		return getGenTorque(tier);
+	}
+
+	public final int getMaxSpeedBase() {
+		return getMaxSpeedBase(tier);
 	}
 
 	@Override
@@ -155,18 +184,6 @@ IFluidHandler, PipeConnector, TemperatureTE {
 				return i;
 		}
 		return 0;
-	}
-
-	public final long getTierPower(int tier) {
-		return this.getGenTorque(tier)*ReikaMathLibrary.intpow2(2, this.getMaxSpeedBase(tier));
-	}
-
-	public final int getGenTorque(int tier) {
-		return 8*ReikaMathLibrary.intpow2(4, tier);
-	}
-
-	public final int getMaxSpeedBase(int tier) {
-		return 8+tier;
 	}
 
 	public abstract boolean isValidSupplier(TileEntity te);
@@ -241,7 +258,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		return omega;
 	}
 
-	public int getMaxSpeed() {
+	public final int getMaxSpeed() {
 		if (!this.isEmitting())
 			return 0;
 		if (baseomega < 0)
@@ -279,7 +296,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	}
 
 	public final int getActualTorque() {
-		return omega > 0 ? this.getGenTorque(this.getTier()) : 0;
+		return omega > 0 ? this.getGenTorque() : 0;
 	}
 
 	public final boolean hasEnoughEnergy() {
@@ -306,7 +323,7 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	}
 
 	public final void incrementOmega() {
-		if (baseomega < this.getMaxSpeedBase(this.getTier()))
+		if (baseomega < this.getMaxSpeedBase())
 			baseomega++;
 	}
 
@@ -556,6 +573,21 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	@Override
 	public final int getMaxTemperature() {
 		return MAXTEMP;
+	}
+
+	public static String getTiersAsString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < TIERS; i++) {
+			int om = ReikaMathLibrary.intpow2(2, getMaxSpeedBase(i));
+			int tq = getGenTorque(i);
+			long pwr = getTierPower(i);
+			double base = ReikaMathLibrary.getThousandBase(pwr);
+			String eng = ReikaEngLibrary.getSIPrefix(pwr);
+			String s = String.format("Tier %d - Torque: %dNm; Max Speed: %d rad/s; Power: %.3f%sW", i, tq, om, base, eng);
+			sb.append(s);
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 
 }

@@ -1083,8 +1083,8 @@ public enum HandbookRegistry implements HandbookEntry {
 		return RotaryDescriptions.getData(this);
 	}
 
-	public String getNotes() {
-		return RotaryDescriptions.getNotes(this);
+	public String getNotes(int subpage) {
+		return RotaryDescriptions.getNotes(this, subpage);
 	}
 
 	public boolean hasSubpages() {
@@ -1119,6 +1119,10 @@ public enum HandbookRegistry implements HandbookEntry {
 	@Override
 	public boolean isConfigDisabled() {
 		return machine != null && machine.isConfigDisabled();
+	}
+
+	public int getBonusSubpages() {
+		return RotaryDescriptions.getNotesLength(this)-1;
 	}
 
 }

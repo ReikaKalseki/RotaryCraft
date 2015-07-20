@@ -301,12 +301,13 @@ public class TorqueUsage {
 
 	private static int recursiveCount(TileEntityIOMachine tile, ForgeDirection dir, int count) {
 		Collection<TileEntity> c = new HashSet();
-		Collection<TileEntity> pass = new HashSet();
+		HashSet<WorldLocation> pass = new HashSet();
 		tile.getAllOutputs(c, dir.getOpposite());
 		for (TileEntity te : c) {
-			if (pass.contains(te))
+			WorldLocation loc = new WorldLocation(te);
+			if (pass.contains(loc))
 				continue;
-			pass.add(te);
+			pass.add(loc);
 			if (te instanceof TileEntityIOMachine) {
 				TileEntityIOMachine io = (TileEntityIOMachine)te;
 				if (io.canTransmitPower()) {
