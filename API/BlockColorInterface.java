@@ -12,7 +12,7 @@ package Reika.RotaryCraft.API;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import Reika.DragonAPI.Instantiable.Data.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 

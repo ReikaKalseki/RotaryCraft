@@ -12,9 +12,8 @@ package Reika.RotaryCraft.API;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import Reika.RotaryCraft.API.Power.ShaftMachine;
-
 import net.minecraft.tileentity.TileEntity;
+import Reika.RotaryCraft.API.Power.ShaftMachine;
 
 /** Use this to have RC-style red and green IO boxes. */
 public class IOAPI {
