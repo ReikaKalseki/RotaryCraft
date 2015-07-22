@@ -30,7 +30,7 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 
 	private static final RecipesDryingBed DryingBase = new RecipesDryingBed();
 
-	private final FluidHashMap<DryingRecipe> recipeList = new FluidHashMap().setGEMatching(true);
+	private final FluidHashMap<DryingRecipe> recipeList = new FluidHashMap();
 
 	public static final RecipesDryingBed getRecipes()
 	{

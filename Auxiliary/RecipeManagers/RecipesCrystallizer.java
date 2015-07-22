@@ -29,7 +29,7 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 
 	private static final RecipesCrystallizer CrystallizerBase = new RecipesCrystallizer();
 
-	private final FluidHashMap<CrystallizerRecipe> recipeList = new FluidHashMap().setGEMatching(true);
+	private final FluidHashMap<CrystallizerRecipe> recipeList = new FluidHashMap();
 
 	public static final RecipesCrystallizer getRecipes()
 	{
