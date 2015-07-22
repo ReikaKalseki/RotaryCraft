@@ -14,7 +14,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Interfaces.MultisheetItem;
+import Reika.DragonAPI.Interfaces.Item.MultisheetItem;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;

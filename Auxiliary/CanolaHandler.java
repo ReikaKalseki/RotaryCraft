@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.CustomCropHandler;
-import Reika.DragonAPI.Interfaces.ModEntry;
+import Reika.DragonAPI.Interfaces.Registry.ModEntry;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;

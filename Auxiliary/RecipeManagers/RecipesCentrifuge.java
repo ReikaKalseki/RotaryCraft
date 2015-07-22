@@ -28,7 +28,6 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceExponentiator;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
-import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -41,15 +40,15 @@ import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CentrifugeManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManager {
 
 	private static final RecipesCentrifuge CentrifugeBase = new RecipesCentrifuge();
 
-	private ItemHashMap<ChancedOutputList> recipeList = new ItemHashMap().setOneWay();
-	private ItemHashMap<FluidOut> fluidList = new ItemHashMap().setOneWay();
+	private ItemHashMap<CentrifugeRecipe> recipeList = new ItemHashMap();
 
-	private OneWayList<ItemStack> outputs = new OneWayList();
+	private ArrayList<ItemStack> outputs = new ArrayList();
 
 	public static final RecipesCentrifuge getRecipes()
 	{
@@ -57,6 +56,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	private RecipesCentrifuge() {
+		super(MachineRegistry.CENTRIFUGE);
 		RecipeInterface.centrifuge = this;
 
 		this.addRecipe(Items.magma_cream, null, RecipeLevel.PERIPHERAL, Items.slime_ball, 100, Items.blaze_powder, 100);
@@ -75,15 +75,34 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(ItemStacks.canolaHusks, new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100, RecipeLevel.CORE);
 	}
 
+	public static class CentrifugeRecipe implements MachineRecipe {
+
+		private final ItemStack in;
+		private final ChancedOutputList out;
+		private final FluidOut fluid;
+
+		private CentrifugeRecipe(ItemStack is, ChancedOutputList li, FluidOut fs) {
+			in = is;
+			out = li;
+			fluid = fs;
+		}
+
+		@Override
+		public String getUniqueID() {
+			return in+">"+out.toString()+"&"+(fluid != null ? fluid.toString() : "X");
+		}
+
+	}
+
 	private void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl)
 	{
 		out.lock();
-		recipeList.put(in, out);
 		for (ItemStack isout : out.keySet())
 			if (!ReikaItemHelper.collectionContainsItemStack(outputs, isout))
 				outputs.add(isout);
-		if (fs != null)
-			fluidList.put(in, fs);
+		CentrifugeRecipe rec = new CentrifugeRecipe(in, out, fs);
+		recipeList.put(in, rec);
+		this.onAddRecipe(rec, rl);
 	}
 
 	private void addRecipe(ItemStack in, FluidOut fs, RecipeLevel rl, Object... items)
@@ -123,11 +142,13 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	public ChancedOutputList getRecipeResult(ItemStack item) {
-		return item != null ? recipeList.get(item) : null;
+		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
+		return cr != null ? cr.out : null;
 	}
 
 	private Collection<ItemStack> getRecipeOutputs(ItemStack item) {
-		return item != null ? recipeList.get(item).keySet() : null;
+		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
+		return cr != null ? cr.out.keySet() : null;
 	}
 
 	public float getItemChance(ItemStack in, ItemStack out) {
@@ -135,9 +156,9 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		return c.getItemChance(out);
 	}
 
-	private FluidOut getFluidOut(ItemStack item)
-	{
-		return item != null ? fluidList.get(item) : null;
+	private FluidOut getFluidOut(ItemStack item) {
+		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
+		return cr != null ? cr.fluid : null;
 	}
 
 	public FluidStack getFluidResult(ItemStack item)
@@ -163,7 +184,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	public ArrayList<ItemStack> getSources(Fluid result) {
 		ArrayList<ItemStack> li = new ArrayList();
-		for (ItemStack in : fluidList.keySet()) {
+		for (ItemStack in : recipeList.keySet()) {
 			FluidStack fs = this.getFluidResult(in);
 			if (fs != null && fs.getFluid().equals(result))
 				li.add(in.copy());
@@ -195,6 +216,11 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 		public int getAmount() {
 			return fluid.amount;
+		}
+
+		@Override
+		public final String toString() {
+			return fluid.getFluid().getName()+":"+fluid.amount+"%"+chance;
 		}
 
 	}
@@ -251,5 +277,10 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		public float getChance(float original) { //round up to nearest 0.5F
 			return Math.round(2D*original)/2F;
 		}
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipeList.removeValue((CentrifugeRecipe)recipe);
 	}
 }

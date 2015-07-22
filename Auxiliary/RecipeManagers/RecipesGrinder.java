@@ -31,6 +31,7 @@ import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.GrinderManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
@@ -38,8 +39,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 	public static final int ore_rate = 3;
 
-	private final ItemHashMap<ItemStack> recipes = new ItemHashMap().setOneWay();
-	private final ItemHashMap<ItemStack> customRecipes = new ItemHashMap();
+	private final ItemHashMap<GrinderRecipe> recipes = new ItemHashMap();
 
 	public static final RecipesGrinder getRecipes()
 	{
@@ -47,6 +47,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	}
 
 	private RecipesGrinder() {
+		super(MachineRegistry.GRINDER);
 		RecipeInterface.grinder = this;
 
 		this.addRecipe(Blocks.stone, new ItemStack(Blocks.cobblestone), RecipeLevel.PERIPHERAL);
@@ -101,6 +102,31 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addOreDictRecipe("logWood", this.getSizedSawdust(16));
 	}
 
+	private static class GrinderRecipe implements MachineRecipe {
+
+		private final ItemStack input;
+		private final ItemStack output;
+
+		private GrinderRecipe(ItemStack in, ItemStack out1) {
+			input = in;
+			output = out1;
+		}
+
+		public ItemStack getOutput() {
+			return output.copy();
+		}
+
+		public boolean makesItem(ItemStack is) {
+			return ReikaItemHelper.matchStacks(is, output);
+		}
+
+		@Override
+		public String getUniqueID() {
+			return input+">"+output;
+		}
+
+	}
+
 	/*
 	private static class GrinderRecipe {
 
@@ -134,22 +160,18 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	}
 
 	public boolean isProduct(ItemStack item) {
-		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), item) || ReikaItemHelper.collectionContainsItemStack(customRecipes.values(), item);
-		//return ReikaItemHelper.collectionContainsItemStack(recipeOuts, item) || ReikaItemHelper.collectionContainsItemStack(customRecipeOuts, item);
+		for (GrinderRecipe gr : recipes.values()) {
+			if (gr.makesItem(item))
+				return true;
+		}
+		return false;
 	}
 
 	public List<ItemStack> getSources(ItemStack out) {
 		List<ItemStack> in = new ArrayList();
 		for (ItemStack input : recipes.keySet()) {
-			ItemStack gr = recipes.get(input);
-			if (ReikaItemHelper.matchStacks(gr, out))
-				//if (gr.makesItem(out))
-				in.add(input.copy());
-		}
-		for (ItemStack input : customRecipes.keySet()) {
-			ItemStack gr = customRecipes.get(input);
-			if (ReikaItemHelper.matchStacks(gr, out))
-				//if (gr.makesItem(out))
+			GrinderRecipe gr = recipes.get(input);
+			if (gr.makesItem(out))
 				in.add(input.copy());
 		}
 		return in;
@@ -180,29 +202,18 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	}
 
 	private void addRecipe(ItemStack in, ItemStack out, RecipeLevel rl) {
-		recipes.put(in, out);
-		//recipes.put(in, new GrinderRecipe(in, out, out2));
+		GrinderRecipe rec = new GrinderRecipe(in, out);
+		recipes.put(in, rec);
+		this.onAddRecipe(rec, rl);
 	}
 
 	public void addCustomRecipe(ItemStack in, ItemStack out) {
-		//this.addRecipe(in, out, RecipeLevel.CUSTOM);
-
-		customRecipes.put(in, out);
-		//customRecipes.put(in, new GrinderRecipe(in, out, out2));
-	}
-
-	public void removeCustomRecipe(ItemStack in) {
-		customRecipes.remove(in);
+		this.addRecipe(in, out, RecipeLevel.CUSTOM);
 	}
 
 	public ItemStack getGrindingResult(ItemStack item) {
-		if (item == null)
-			return null;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d", Items, item.getItemDamage()));
-		ItemStack ret = recipes.get(item);
-		if (ret == null)
-			ret = customRecipes.get(item);
-		return ret != null ? ret.copy() : null;
+		GrinderRecipe ret = item != null ? recipes.get(item) : null;
+		return ret != null ? ret.output.copy() : null;
 	}
 
 	@Override
@@ -267,5 +278,10 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 	public Collection<ItemStack> getAllGrindables() {
 		return Collections.unmodifiableCollection(recipes.keySet());
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipes.removeValue((GrinderRecipe)recipe);
 	}
 }

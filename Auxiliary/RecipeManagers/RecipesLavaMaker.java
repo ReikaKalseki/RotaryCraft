@@ -30,6 +30,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.RockMelterManager;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager {
@@ -40,9 +41,10 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		return recipes;
 	}
 
-	private final ItemHashMap<MeltingRecipe> recipeList = new ItemHashMap().setOneWay();
+	private final ItemHashMap<MeltingRecipe> recipeList = new ItemHashMap();
 
 	private RecipesLavaMaker() {
+		super(MachineRegistry.LAVAMAKER);
 		RecipeInterface.rockmelt = this;
 
 		this.addRecipe(Blocks.stone, FluidRegistry.LAVA, 1000, 1000, ReikaThermoHelper.ROCK_MELT_ENERGY, RecipeLevel.PROTECTED);
@@ -56,7 +58,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000, RecipeLevel.PERIPHERAL);
 	}
 
-	private static class MeltingRecipe {
+	private static class MeltingRecipe implements MachineRecipe {
 
 		private final ItemStack input;
 		private final FluidStack output;
@@ -68,6 +70,11 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 			output = fs;
 			temperature = t;
 			requiredEnergy = e;
+		}
+
+		@Override
+		public String getUniqueID() {
+			return input+"@"+temperature+"#"+output.getFluid().getName()+":"+output.amount;
 		}
 	}
 
@@ -124,7 +131,9 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 
 	private void addRecipe(ItemStack in, FluidStack out, int temperature, long energy, RecipeLevel rl) {
 		if (in != null) {
-			recipeList.put(in, new MeltingRecipe(in, out, temperature, energy));
+			MeltingRecipe rec = new MeltingRecipe(in, out, temperature, energy);
+			recipeList.put(in, rec);
+			this.onAddRecipe(rec, rl);
 		}
 		else {
 			RotaryCraft.logger.logError("Null itemstack for recipe for "+out+"!");
@@ -189,6 +198,11 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 
 		if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.EssenceType.XP.getEssence() != null)
 			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000, RecipeLevel.MODINTERACT);
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipeList.removeValue((MeltingRecipe)recipe);
 	}
 
 }

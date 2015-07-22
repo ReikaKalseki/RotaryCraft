@@ -76,7 +76,7 @@ public class GrinderTweaker {
 		@Override
 		public void undo() {
 			for (ItemStack in : inputs) {
-				grinder.removeCustomRecipe(in);
+				grinder.removeRecipe(in+">"+output);
 			}
 		}
 

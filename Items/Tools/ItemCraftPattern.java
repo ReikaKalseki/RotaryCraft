@@ -25,7 +25,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Interfaces.SpriteRenderCallback;
+import Reika.DragonAPI.Interfaces.Item.SpriteRenderCallback;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;

@@ -12,12 +12,16 @@ package Reika.RotaryCraft.Registry;
 import net.minecraft.util.MathHelper;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
-import Reika.DragonAPI.Interfaces.ConfigList;
+import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
+import Reika.DragonAPI.Interfaces.Configuration.DecimalConfig;
+import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
+import Reika.DragonAPI.Interfaces.Configuration.SegmentedConfigList;
+import Reika.DragonAPI.Interfaces.Configuration.StringConfig;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
 
-public enum ConfigRegistry implements ConfigList {
+public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	ENGINEVOLUME("Engine Volume", 1F),
@@ -100,12 +104,16 @@ public enum ConfigRegistry implements ConfigList {
 	ALLOWLIGHTBRIDGE("Enable Light Bridge", true),
 	ALLOWITEMCANNON("Enable Item Cannon", true),
 	ALLOWCHUNKLOADER("Enable Chunk Loader", true),
-	CHUNKLOADERSIZE("Chunk Loader Max Radius in Chunks", 8);
+	CHUNKLOADERSIZE("Chunk Loader Max Radius in Chunks", 8),
+	RECIPEMOD("Allow Nonstandard Recipe Modifications", false),
+	STRONGRECIPEMOD("Strong Recipe Editing", false),
+	CORERECIPEMOD("Core Recipe Editing", "X");
 
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
 	private float defaultFloat;
+	private String defaultString;
 	private Class type;
 	private boolean enforcing = false;
 
@@ -134,6 +142,12 @@ public enum ConfigRegistry implements ConfigList {
 		type = float.class;
 	}
 
+	private ConfigRegistry(String l, String d) {
+		label = l;
+		defaultString = d;
+		type = String.class;
+	}
+
 	public boolean isBoolean() {
 		return type == boolean.class;
 	}
@@ -144,6 +158,11 @@ public enum ConfigRegistry implements ConfigList {
 
 	public boolean isDecimal() {
 		return type == float.class;
+	}
+
+	@Override
+	public boolean isString() {
+		return type == String.class;
 	}
 
 	public Class getPropertyType() {
@@ -167,6 +186,16 @@ public enum ConfigRegistry implements ConfigList {
 
 	public float getFloat() {
 		return (Float)RotaryCraft.config.getControl(this.ordinal());
+	}
+
+	@Override
+	public String getString() {
+		return (String)RotaryCraft.config.getControl(this.ordinal());
+	}
+
+	@Override
+	public String getDefaultString() {
+		return defaultString;
 	}
 
 	public boolean isDummiedOut() {
@@ -204,6 +233,46 @@ public enum ConfigRegistry implements ConfigList {
 
 	public static boolean enableConverters() {
 		return getConverterEfficiency() > 0;
+	}
+
+	public static int getRecipeModifyPower() {
+		if (RECIPEMOD.getState()) {
+			if (STRONGRECIPEMOD.getState()) {
+				String s = CORERECIPEMOD.getString();
+				if (isValidRecipeModString()) {
+					return 3;
+				}
+				return 2;
+			}
+			return 1;
+		}
+		return 0;
+	}
+
+	private static boolean isValidRecipeModString() {
+		return false;
+	}
+
+	@Override
+	public String getCustomConfigFile() {
+		switch (this) {
+			case STRONGRECIPEMOD:
+			case CORERECIPEMOD:
+				return "*_RecipeModding";
+			default:
+				return null;
+		}
+	}
+
+	@Override
+	public boolean saveIfUnspecified() {
+		switch (this) {
+			case STRONGRECIPEMOD:
+			case CORERECIPEMOD:
+				return false;
+			default:
+				return true;
+		}
 	}
 
 }

@@ -21,7 +21,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Interfaces.ModCrop;
+import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;

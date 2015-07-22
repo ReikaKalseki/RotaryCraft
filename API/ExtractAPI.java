@@ -14,8 +14,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
-import Reika.DragonAPI.Interfaces.OreType;
-import Reika.DragonAPI.Interfaces.OreType.OreRarity;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
+import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;

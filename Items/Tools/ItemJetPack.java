@@ -29,7 +29,7 @@ import Reika.ChromatiCraft.API.RitualAPI;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
-import Reika.DragonAPI.Interfaces.MultiLayerItemSprite;
+import Reika.DragonAPI.Interfaces.Item.MultiLayerItemSprite;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;

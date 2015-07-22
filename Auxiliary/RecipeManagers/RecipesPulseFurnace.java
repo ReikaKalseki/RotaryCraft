@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -29,23 +30,22 @@ import Reika.RotaryCraft.API.RecipeInterface.PulseFurnaceManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceManager {
 
 	private static final RecipesPulseFurnace PulseFurnaceBase = new RecipesPulseFurnace();
 
-	private ItemHashMap<ItemStack> recipes = new ItemHashMap().setOneWay();
-
-	private ItemHashMap<ItemStack> customRecipes = new ItemHashMap();
+	private ItemHashMap<PulseJetRecipe> recipes = new ItemHashMap();
 
 	public static final RecipesPulseFurnace getRecipes()
 	{
 		return PulseFurnaceBase;
 	}
 
-	private RecipesPulseFurnace()
-	{
+	private RecipesPulseFurnace() {
+		super(MachineRegistry.PULSEJET);
 		RecipeInterface.pulsefurn = this;
 
 		this.addSmelting(Blocks.obsidian, BlockRegistry.BLASTGLASS.getCraftedProduct(1), RecipeLevel.CORE);
@@ -59,6 +59,31 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		//addSmelting(RotaryCraft.shaftcraft, 9, new ItemStack(RotaryCraft.shaftcraft, 1, 1));	//Iron scrap
 		this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
 		this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
+	}
+
+	private static class PulseJetRecipe implements MachineRecipe {
+
+		private final ItemStack input;
+		private final ItemStack output;
+
+		private PulseJetRecipe(ItemStack in, ItemStack out) {
+			input = in;
+			output = out;
+		}
+
+		public ItemStack getOutput() {
+			return output.copy();
+		}
+
+		public boolean makesItem(ItemStack is) {
+			return ReikaItemHelper.matchStacks(is, output);
+		}
+
+		@Override
+		public String getUniqueID() {
+			return input+">"+output;
+		}
+
 	}
 
 	private void addRecycling() {
@@ -138,7 +163,9 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	}
 
 	private void addSmelting(ItemStack in, ItemStack itemstack, RecipeLevel rl) {
-		recipes.put(in, itemstack);
+		PulseJetRecipe rec = new PulseJetRecipe(in, itemstack);
+		recipes.put(in, rec);
+		this.onAddRecipe(rec, rl);
 	}
 
 	private void addSmelting(Block b, ItemStack itemstack, RecipeLevel rl) {
@@ -150,20 +177,12 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	}
 
 	public void addCustomRecipe(ItemStack in, ItemStack output) {
-		customRecipes.put(in, output);
-	}
-
-	public void removeCustomRecipe(ItemStack in) {
-		customRecipes.remove(in);
+		this.addSmelting(in, output, RecipeLevel.CUSTOM);
 	}
 
 	public ItemStack getSmeltingResult(ItemStack item) {
-		if (item == null)
-			return null;
-		ItemStack ret = recipes.get(item);
-		if (ret == null)
-			ret = customRecipes.get(item);
-		return ret != null ? ret.copy() : null;
+		PulseJetRecipe ret = item != null ? recipes.get(item) : null;
+		return ret != null ? ret.output.copy() : null;
 	}
 
 	public List<ItemStack> getSources(ItemStack result) {
@@ -173,16 +192,15 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			if (ReikaItemHelper.matchStacks(result, out))
 				li.add(in.copy());
 		}
-		for (ItemStack in : customRecipes.keySet()) {
-			ItemStack out = this.getSmeltingResult(in);
-			if (ReikaItemHelper.matchStacks(result, out))
-				li.add(in.copy());
-		}
 		return li;
 	}
 
-	public boolean isProduct(ItemStack result) {
-		return ReikaItemHelper.collectionContainsItemStack(recipes.values(), result) || ReikaItemHelper.collectionContainsItemStack(customRecipes.values(), result);
+	public boolean isProduct(ItemStack item) {
+		for (PulseJetRecipe pjr : recipes.values()) {
+			if (pjr.makesItem(item))
+				return true;
+		}
+		return false;
 	}
 
 	public boolean isSmeltable(ItemStack ingredient) {
@@ -190,9 +208,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	}
 
 	public Collection<ItemStack> getAllSmeltables() {
-		Collection<ItemStack> li = new ArrayList(recipes.keySet());
-		li.addAll(customRecipes.keySet());
-		return li;
+		return Collections.unmodifiableCollection(recipes.keySet());
 	}
 
 	@Override
@@ -214,5 +230,10 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			else
 				this.addSmelting(fluxdust, fluxingot, RecipeLevel.MODINTERACT);
 		}
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipes.removeValue((PulseJetRecipe)recipe);
 	}
 }

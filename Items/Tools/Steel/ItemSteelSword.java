@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Items.Tools.Steel;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import Reika.DragonAPI.Interfaces.IndexedItemSprites;
+import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;

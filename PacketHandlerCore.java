@@ -24,7 +24,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
-import Reika.DragonAPI.Interfaces.IPacketHandler;
+import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
@@ -72,7 +72,7 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 
 
-public class PacketHandlerCore implements IPacketHandler {
+public class PacketHandlerCore implements PacketHandler {
 
 	protected PacketRegistry pack;
 

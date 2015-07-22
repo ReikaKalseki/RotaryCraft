@@ -21,13 +21,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.BlastFurnaceManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,10 +36,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 	private static final RecipesBlastFurnace BlastFurnaceBase = new RecipesBlastFurnace();
 
-	private final OneWayList<BlastRecipe> recipeList = new OneWayList();
-	private final OneWayList<BlastCrafting> craftingList = new OneWayList();
+	private final ArrayList<BlastRecipe> recipeList = new ArrayList();
+	private final ArrayList<BlastCrafting> craftingList = new ArrayList();
 
 	private RecipesBlastFurnace() {
+		super(MachineRegistry.BLASTFURNACE);
 		RecipeInterface.blastfurn = this;
 
 		BlastInput in1 = new BlastInput(Items.coal, 100, 1);
@@ -87,6 +88,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 	private void addRecipe(BlastRecipe br, RecipeLevel rl) {
 		recipeList.add(br);
+		this.onAddRecipe(br, rl);
 	}
 
 	public static final RecipesBlastFurnace getRecipes()
@@ -118,6 +120,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 	private void addCrafting(BlastCrafting cr, RecipeLevel rl) {
 		craftingList.add(cr);
+		this.onAddRecipe(cr, rl);
 	}
 
 	public static final class BlastCrafting implements BlastFurnacePattern {
@@ -198,9 +201,14 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public int getRequiredTemperature() {
 			return temperature;
 		}
+
+		@Override
+		public String getUniqueID() {
+			return "CRAFT/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toString(recipe)+">"+output;
+		}
 	}
 
-	public static interface BlastFurnacePattern {
+	public static interface BlastFurnacePattern extends MachineRecipe {
 
 		public ItemStack outputItem();
 
@@ -355,6 +363,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		public int getRequiredTemperature() {
 			return temperature;
+		}
+
+		@Override
+		public String getUniqueID() {
+			return "RECIPE/"+primary+"&"+secondary+"&"+tertiary+">"+main+"^"+output+"?"+hasBonus;
 		}
 	}
 	public BlastCrafting getCrafting(ItemStack[] main, int temp) {
@@ -533,5 +546,10 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	@Override
 	public void addPostLoadRecipes() {
 
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipeList.remove(recipe) | craftingList.remove(recipe);
 	}
 }

@@ -14,7 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import Reika.DragonAPI.DragonAPICore;
-import Reika.DragonAPI.Interfaces.SidedTextureIndex;
+import Reika.DragonAPI.Interfaces.Block.SidedTextureIndex;
 import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class BlockBasic extends Block implements SidedTextureIndex {

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import net.minecraft.init.Blocks;
@@ -19,17 +20,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.WetterManager;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class RecipesWetter extends RecipeHandler implements WetterManager {
 
 	private static final RecipesWetter WetterBase = new RecipesWetter();
 
-	private final ItemHashMap<OneWayMap<Fluid, WettingRecipe>> recipeList = new ItemHashMap().setOneWay();
+	private final ItemHashMap<HashMap<Fluid, WettingRecipe>> recipeList = new ItemHashMap();
 	private final HashSet<String> fluids = new HashSet();
 
 	public static final RecipesWetter getRecipes()
@@ -38,6 +40,7 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 	}
 
 	private RecipesWetter() {
+		super(MachineRegistry.WETTER);
 		RecipeInterface.wetter = this;
 
 		this.addRecipe(new ItemStack(Blocks.sand), "lubricant", 500, new ItemStack(Blocks.soul_sand), 200, RecipeLevel.PROTECTED);
@@ -57,17 +60,18 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 
 	private void addRecipe(ItemStack in, Fluid f, int amount, ItemStack out, int time, RecipeLevel rl) {
 		WettingRecipe wr = new WettingRecipe(in, new FluidStack(f, amount), out, time);
-		OneWayMap<Fluid, WettingRecipe> map = recipeList.get(in);
+		HashMap<Fluid, WettingRecipe> map = recipeList.get(in);
 		if (map == null) {
-			map = new OneWayMap();
+			map = new HashMap();
 			recipeList.put(in, map);
 		}
 		map.put(f, wr);
 		fluids.add(f.getName());
+		this.onAddRecipe(wr, rl);
 	}
 
 	public WettingRecipe getRecipe(ItemStack is, FluidStack liquid) {
-		OneWayMap<Fluid, WettingRecipe> map = recipeList.get(is);
+		HashMap<Fluid, WettingRecipe> map = recipeList.get(is);
 		if (map == null)
 			return null;
 		Fluid f = liquid.getFluid();
@@ -82,7 +86,7 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 	public Collection<WettingRecipe> getAllRecipes() {
 		Collection<WettingRecipe> c = new ArrayList();
 		for (ItemStack is : recipeList.keySet()) {
-			OneWayMap<Fluid, WettingRecipe> map = recipeList.get(is);
+			HashMap<Fluid, WettingRecipe> map = recipeList.get(is);
 			c.addAll(map.values());
 		}
 		return c;
@@ -93,11 +97,11 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 	}
 
 	public boolean isWettableWith(ItemStack is, Fluid f) {
-		OneWayMap<Fluid, WettingRecipe> c = recipeList.get(is);
+		HashMap<Fluid, WettingRecipe> c = recipeList.get(is);
 		return c != null && c.containsKey(f);
 	}
 
-	public static class WettingRecipe {
+	public static class WettingRecipe implements MachineRecipe {
 
 		public final int duration;
 		private final FluidStack fluid;
@@ -123,6 +127,11 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 			return output.copy();
 		}
 
+		@Override
+		public String getUniqueID() {
+			return fluid.getFluid().getName()+":"+fluid.amount+"+"+input+">"+output+"#"+duration;
+		}
+
 	}
 
 	public Collection<WettingRecipe> getRecipesByResult(ItemStack result) {
@@ -146,12 +155,29 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 	}
 
 	public Collection<WettingRecipe> getRecipesUsing(ItemStack ingredient) {
-		OneWayMap<Fluid, WettingRecipe> map = recipeList.get(ingredient);
+		HashMap<Fluid, WettingRecipe> map = recipeList.get(ingredient);
 		return map != null ? Collections.unmodifiableCollection(map.values()) : null;
 	}
 
 	@Override
 	public void addPostLoadRecipes() {
 
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		WettingRecipe wr = (WettingRecipe)recipe;
+		boolean flag = false;
+		Collection<ItemStack> rem = new ArrayList();
+		for (ItemStack is : recipeList.keySet()) {
+			HashMap<Fluid, WettingRecipe> map = recipeList.get(is);
+			flag |= ReikaJavaLibrary.removeValuesFromMap(map, wr);
+			if (map.isEmpty())
+				rem.add(is);
+		}
+		for (ItemStack is : rem) {
+			recipeList.remove(is);
+		}
+		return flag;
 	}
 }

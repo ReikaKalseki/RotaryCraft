@@ -69,7 +69,7 @@ public class PulseJetTweaker {
 		@Override
 		public void undo() {
 			for (ItemStack in : inputs) {
-				recipes.removeCustomRecipe(in);
+				recipes.removeRecipe(in+">"+output);
 			}
 		}
 

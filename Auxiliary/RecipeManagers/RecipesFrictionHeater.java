@@ -9,30 +9,29 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.FrictionHeaterManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeaterManager {
 
 	private static final RecipesFrictionHeater instance = new RecipesFrictionHeater();
 
-	private final ItemHashMap<FrictionRecipe> recipes = new ItemHashMap().setOneWay();
-	private final ItemHashMap<FrictionRecipe> outputs = new ItemHashMap().setOneWay();
-
-	private final ItemHashMap<FrictionRecipe> customRecipes = new ItemHashMap().setOneWay();
-	private final ItemHashMap<FrictionRecipe> customOutputs = new ItemHashMap().setOneWay();
+	private final ItemHashMap<FrictionRecipe> recipes = new ItemHashMap();
+	private final ItemHashMap<FrictionRecipe> outputs = new ItemHashMap();
 
 	public static RecipesFrictionHeater getRecipes() {
 		return instance;
 	}
 
 	private RecipesFrictionHeater() {
+		super(MachineRegistry.FRICTION);
 		RecipeInterface.friction = this;
 
 		this.addRecipe(ItemStacks.tungstenflakes, ItemStacks.tungsteningot, 1350, 600, RecipeLevel.CORE);
@@ -43,52 +42,31 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
 		recipes.put(in, rec);
 		outputs.put(out, rec);
+		this.onAddRecipe(rec, rl);
 	}
 
 	public void addAPIRecipe(ItemStack in, ItemStack out, int temp, int time) {
-		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
-		this.addRecipe(rec, RecipeLevel.API);
+		this.addRecipe(in, out, temp, time, RecipeLevel.API);
 	}
 
 	public void addCustomRecipe(ItemStack in, ItemStack out, int temp, int time) {
-		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
-		this.addRecipe(rec, RecipeLevel.CUSTOM);
-	}
-
-	private void addRecipe(FrictionRecipe rec, RecipeLevel rl) {
-		customRecipes.put(rec.input, rec);
-		customOutputs.put(rec.output, rec);
-	}
-
-	public void removeCustomRecipe(ItemStack in) {
-		customOutputs.remove(customRecipes.get(in).output);
-		customRecipes.remove(in);
+		this.addRecipe(in, out, temp, time, RecipeLevel.CUSTOM);
 	}
 
 	public FrictionRecipe getSmelting(ItemStack in, int temperature) {
 		FrictionRecipe rec = recipes.get(in);
-		if (rec == null)
-			rec = customRecipes.get(in);
-		if (rec == null)
-			return null;
-		return temperature >= rec.requiredTemperature ? rec : null;
+		return rec != null ? (temperature >= rec.requiredTemperature ? rec : null) : null;
 	}
 
 	public FrictionRecipe getRecipeByOutput(ItemStack out) {
-		FrictionRecipe rec = outputs.get(out);
-		if (rec == null)
-			rec = customOutputs.get(out);
-		return rec;
+		return outputs.get(out);
 	}
 
 	public FrictionRecipe getRecipeByInput(ItemStack in) {
-		FrictionRecipe rec = recipes.get(in);
-		if (rec == null)
-			rec = customRecipes.get(in);
-		return rec;
+		return recipes.get(in);
 	}
 
-	public static final class FrictionRecipe {
+	public static final class FrictionRecipe implements MachineRecipe {
 
 		public final int requiredTemperature;
 		public final int duration;
@@ -109,17 +87,25 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 		public ItemStack getOutput() {
 			return output.copy();
 		}
+
+		@Override
+		public String getUniqueID() {
+			return input+">"+output+"@"+requiredTemperature+"#"+duration;
+		}
 	}
 
 	public Collection<ItemStack> getAllSmeltables() {
-		Collection<ItemStack> li = new ArrayList(recipes.keySet());
-		li.addAll(customRecipes.keySet());
-		return li;
+		return Collections.unmodifiableCollection(recipes.keySet());
 	}
 
 	@Override
 	public void addPostLoadRecipes() {
 
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipes.removeValue((FrictionRecipe)recipe) && outputs.removeValue((FrictionRecipe)recipe);
 	}
 
 }

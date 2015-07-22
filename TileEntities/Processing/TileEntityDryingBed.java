@@ -116,7 +116,7 @@ public class TileEntityDryingBed extends InventoriedRCFluidReceiver {
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return RecipesDryingBed.getRecipes().isRecipeFluid(f);
+		return RecipesDryingBed.getRecipes().isValidFluid(f);
 	}
 
 	@Override

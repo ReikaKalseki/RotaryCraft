@@ -20,8 +20,8 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Interfaces.OreType;
-import Reika.DragonAPI.Interfaces.OreType.OreRarity;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
+import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;

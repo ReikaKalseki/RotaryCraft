@@ -22,21 +22,22 @@ import Reika.RotaryCraft.API.RecipeInterface.CompactorManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 
 public class RecipesCompactor extends RecipeHandler implements CompactorManager
 {
 	private static final RecipesCompactor CompactorBase = new RecipesCompactor();
 
-	private ItemHashMap<CompactingRecipe> recipes = new ItemHashMap().setOneWay();
+	private ItemHashMap<CompactingRecipe> recipes = new ItemHashMap();
 
 	public static final RecipesCompactor getRecipes()
 	{
 		return CompactorBase;
 	}
 
-	private RecipesCompactor()
-	{
+	private RecipesCompactor() {
+		super(MachineRegistry.COMPACTOR);
 		RecipeInterface.compactor = this;
 
 		int rp = TileEntityCompactor.REQPRESS;
@@ -51,7 +52,7 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 		this.addRecipe(new ItemStack(Blocks.ice), new ItemStack(Blocks.packed_ice), 24000, -80, RecipeLevel.PERIPHERAL);
 	}
 
-	private static class CompactingRecipe {
+	private static class CompactingRecipe implements MachineRecipe {
 
 		private final ItemStack in;
 		private final ItemStack out;
@@ -63,6 +64,11 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 			out = is2;
 			temperature = t;
 			pressure = p;
+		}
+
+		@Override
+		public String getUniqueID() {
+			return in+">"+out+"@"+temperature+"&"+pressure;
 		}
 
 	}
@@ -80,7 +86,9 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 	}
 
 	private void addRecipe(ItemStack in, ItemStack itemstack, int pressure, int temperature, RecipeLevel rl) {
-		recipes.put(in, new CompactingRecipe(in, itemstack, temperature, pressure));
+		CompactingRecipe rec = new CompactingRecipe(in, itemstack, temperature, pressure);
+		recipes.put(in, rec);
+		this.onAddRecipe(rec, rl);
 	}
 
 	public ItemStack getCompactingResult(ItemStack item)
@@ -122,5 +130,10 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 	@Override
 	public void addPostLoadRecipes() {
 
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipes.removeValue((CompactingRecipe)recipe);
 	}
 }

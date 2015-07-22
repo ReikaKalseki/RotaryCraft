@@ -11,7 +11,7 @@ package Reika.RotaryCraft.Base;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Interfaces.OreType;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class AutoOreItem extends ItemBasic {
