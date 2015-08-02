@@ -27,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -69,12 +70,15 @@ public class GuiHandbook extends GuiScreen
 	/** One second in nanoseconds. */
 	public static final long SECOND = 2000000000;
 
+	public static final int PAGES_PER_SCREEN = 8;
+
 	private static final int descX = 8;
 	private static final int descY = 88;
 
 	protected int screen = 0;
 	protected int page = 0;
 	protected int subpage = 0;
+	protected int modifier = 0;
 	private byte bcg;
 
 	public static long time;
@@ -85,6 +89,8 @@ public class GuiHandbook extends GuiScreen
 
 	private static int staticwidth;
 	private static int staticheight;
+
+	private int guiTick;
 
 	protected float renderq = 22.5F;
 
@@ -114,6 +120,7 @@ public class GuiHandbook extends GuiScreen
 	public final void initGui() {
 		super.initGui();
 		buttonList.clear();
+		guiTick = 0;
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2 - 8;
@@ -134,8 +141,12 @@ public class GuiHandbook extends GuiScreen
 		}
 		if (!this.isLimitedView())
 			this.addTabButtons(j, k);
+		this.onInitGui(j, k, h);
 	}
 
+	protected void onInitGui(int j, int k, HandbookEntry h) {
+
+	}
 
 	protected void addTabButtons(int j, int k) {
 		HandbookRegistry.addRelevantButtons(j, k, screen, buttonList);
@@ -147,8 +158,12 @@ public class GuiHandbook extends GuiScreen
 		return true;
 	}
 
+	public int getMaxScreen() {
+		return HandbookRegistry.RESOURCEDESC.getScreen()+HandbookRegistry.RESOURCEDESC.getNumberChildren()/PAGES_PER_SCREEN;
+	}
+
 	public int getMaxPage() {
-		return HandbookRegistry.RESOURCEDESC.getScreen()+HandbookRegistry.RESOURCEDESC.getNumberChildren()/8;
+		return HandbookRegistry.getEntriesForScreen(screen).size()-1;
 	}
 
 	public int getMaxSubpage() {
@@ -183,29 +198,15 @@ public class GuiHandbook extends GuiScreen
 			return;
 		}
 		if (button.id == 10) {
-			if (screen > 0) {
-				screen--;
-				page = 0;
-				subpage = 0;
-			}
-			renderq = 22.5F;
-			this.initGui();
-			//this.refreshScreen();
+			this.prevScreen();
 			return;
 		}
 		if (button.id == 11) {
-			if (screen < this.getMaxPage()) {
-				screen++;
-				page = 0;
-				subpage = 0;
-			}
-			renderq = 22.5F;
-			this.initGui();
-			//this.refreshScreen();
+			this.nextScreen();
 			return;
 		}
 		if (this.isOnTOC()) {
-			screen = this.getNewScreenByTOCButton(button.id+screen*8);
+			screen = this.getNewScreenByTOCButton(button.id+screen*PAGES_PER_SCREEN);
 			this.initGui();
 			page = 0;
 			subpage = 0;
@@ -232,40 +233,91 @@ public class GuiHandbook extends GuiScreen
 		this.initGui();
 	}
 
+	private void nextScreen() {
+		if (screen < this.getMaxScreen()) {
+			screen++;
+			page = 0;
+			subpage = 0;
+		}
+		renderq = 22.5F;
+		this.initGui();
+		//this.refreshScreen();
+	}
+
+	private void prevScreen() {
+		if (screen > 0) {
+			screen--;
+			page = 0;
+			subpage = 0;
+		}
+		renderq = 22.5F;
+		this.initGui();
+		//this.refreshScreen();
+	}
+
+	private void nextPage() {
+		if (page < this.getMaxPage()) {
+			page++;
+			subpage = 0;
+		}
+		else {
+			this.nextScreen();
+			return;
+		}
+		renderq = 22.5F;
+		this.initGui();
+		//this.refreshScreen();
+	}
+
+	private void prevPage() {
+		if (page > 0) {
+			page--;
+			subpage = 0;
+		}
+		else {
+			this.prevScreen();
+			page = this.getMaxPage();
+			return;
+		}
+		renderq = 22.5F;
+		this.initGui();
+		//this.refreshScreen();
+	}
+
 	protected boolean isOnTOC() {
 		return this.getEntry() == HandbookRegistry.TOC;
 	}
 
 	protected int getNewScreenByTOCButton(int id) {
 		switch(id) {
-		case 0:
-			return HandbookRegistry.TERMS.getScreen();
-		case 1:
-			return HandbookRegistry.MISCDESC.getScreen();
-		case 2:
-			return HandbookRegistry.ENGINEDESC.getScreen();
-		case 3:
-			return HandbookRegistry.TRANSDESC.getScreen();
-		case 4:
-			return HandbookRegistry.PRODMACHINEDESC.getScreen();
-		case 5:
-			return HandbookRegistry.PROCMACHINEDESC.getScreen();
-		case 6:
-			return HandbookRegistry.FARMMACHINEDESC.getScreen();
-		case 7:
-			return HandbookRegistry.ACCMACHINEDESC.getScreen();
-		case 8:
-			return HandbookRegistry.WEPMACHINEDESC.getScreen();
-		case 9:
-			return HandbookRegistry.SURVMACHINEDESC.getScreen();
-		case 10:
-			return HandbookRegistry.COSMACHINEDESC.getScreen();
-		case 11:
-			return HandbookRegistry.UTILMACHINEDESC.getScreen();
-		case 12:
-			return HandbookRegistry.TOOLDESC.getScreen();
-		case 13:
-			return HandbookRegistry.RESOURCEDESC.getScreen();
+			case 0:
+				return HandbookRegistry.TERMS.getScreen();
+			case 1:
+				return HandbookRegistry.MISCDESC.getScreen();
+			case 2:
+				return HandbookRegistry.ENGINEDESC.getScreen();
+			case 3:
+				return HandbookRegistry.TRANSDESC.getScreen();
+			case 4:
+				return HandbookRegistry.PRODMACHINEDESC.getScreen();
+			case 5:
+				return HandbookRegistry.PROCMACHINEDESC.getScreen();
+			case 6:
+				return HandbookRegistry.FARMMACHINEDESC.getScreen();
+			case 7:
+				return HandbookRegistry.ACCMACHINEDESC.getScreen();
+			case 8:
+				return HandbookRegistry.WEPMACHINEDESC.getScreen();
+			case 9:
+				return HandbookRegistry.SURVMACHINEDESC.getScreen();
+			case 10:
+				return HandbookRegistry.COSMACHINEDESC.getScreen();
+			case 11:
+				return HandbookRegistry.UTILMACHINEDESC.getScreen();
+			case 12:
+				return HandbookRegistry.TOOLDESC.getScreen();
+			case 13:
+				return HandbookRegistry.RESOURCEDESC.getScreen();
 		}
 		return 0;
 	}
@@ -359,7 +411,8 @@ public class GuiHandbook extends GuiScreen
 		TERRAFORMER("l"),
 		MACHINERENDER("m"),
 		GREYBOX("n"),
-		BLACKBOX("o");
+		BLACKBOX("o"),
+		SOLID("p");
 
 		private final String endString;
 
@@ -419,25 +472,25 @@ public class GuiHandbook extends GuiScreen
 			ReikaRenderHelper.disableLighting();
 			int msx = ReikaGuiAPI.instance.getMouseRealX();
 			int msy = ReikaGuiAPI.instance.getMouseRealY();
-			String s = String.format("Page %d/%d", screen, this.getMaxPage());
+			String s = String.format("Page %d/%d", screen, this.getMaxScreen());
 			//ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, s, posX+xSize+23, posY+5, 0xffffff);
 			ReikaGuiAPI.instance.drawTooltipAt(fontRendererObj, s, posX+24+xSize+fontRendererObj.getStringWidth(s), posY+20);
 			if (ReikaGuiAPI.instance.isMouseInBox(posX-18, posX+2, posY+0, posY+220)) {
 				String sg = "";
 				List<HandbookEntry> li = this.getAllTabsOnScreen();
 				int idx = (msy-posY)/20;
-				if (idx >= 8) {
-					int diff = idx-8;
+				if (idx >= PAGES_PER_SCREEN) {
+					int diff = idx-PAGES_PER_SCREEN;
 					switch(diff) {
-					case 0:
-						sg = "Next";
-						break;
-					case 1:
-						sg = "Back";
-						break;
-					case 2:
-						sg = "Return";
-						break;
+						case 0:
+							sg = "Next";
+							break;
+						case 1:
+							sg = "Back";
+							break;
+						case 2:
+							sg = "Return";
+							break;
 					}
 				}
 				else if (idx < li.size()) {
@@ -530,10 +583,27 @@ public class GuiHandbook extends GuiScreen
 				}
 			}
 		}
+
+		if (key == Keyboard.KEY_LEFT) {
+			this.prevPage();
+		}
+		else if (key == Keyboard.KEY_RIGHT) {
+			this.nextPage();
+		}
+		else if (key == Keyboard.KEY_PRIOR) {
+			this.prevScreen();
+		}
+		else if (key == Keyboard.KEY_NEXT) {
+			this.nextScreen();
+		}
 	}
 
 	protected void drawAuxGraphics(int posX, int posY) {
 		HandbookAuxData.drawGraphics((HandbookRegistry)this.getEntry(), posX, posY, xSize, ySize, fontRendererObj, ri, subpage);
+	}
+
+	public final int getGuiTick() {
+		return guiTick;
 	}
 
 	@Override
@@ -544,6 +614,8 @@ public class GuiHandbook extends GuiScreen
 			buttontime = System.nanoTime();
 			buttontimer = 0;
 		}
+
+		guiTick++;
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.bindTexture();

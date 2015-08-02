@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -98,8 +97,6 @@ public class ItemMulti extends ItemBasic {
 		int rx = is.stackTagCompound.getInteger("rx");
 		int ry = is.stackTagCompound.getInteger("ry");
 		int rz = is.stackTagCompound.getInteger("rz");
-
-		ReikaJavaLibrary.pConsole(is.stackTagCompound);
 
 		int dl = Math.abs(ex-rx+ey-ry+ez-rz)-1;
 
@@ -204,45 +201,45 @@ public class ItemMulti extends ItemBasic {
 	{
 		int j;
 		switch (type) {
-		case 0: //shaftcraft
-			j = RotaryNames.shaftPartNames.length;
-			break;
-		case 1: //enginecraft
-			j = RotaryNames.enginePartNames.length;
-			break;
-		case 2: //heatcraft
-			j = RotaryNames.miscPartNames.length;
-			break;
-		case 3: //misccraft 2
-			j = RotaryNames.borerPartNames.length;
-			break;
-		case 4: //extracts
-			j = RotaryNames.extractNames.length;
-			break;
-		case 6: //compacts
-			j = RotaryNames.compactNames.length;
-			break;
-		case 7: //engines
-			j = EngineType.engineList.length;
-			break;
-		case 8: //powders
-			j = RotaryNames.powderNames.length;
-			break;
-		case 14: //mod interface
-			j = RotaryNames.interfaceNames.length;
-			break;
-		case 11: //shafts
-			j = RotaryNames.getNumberShaftTypes();
-			break;
-		case 12: //gearboxes
-			j = RotaryNames.getNumberGearTypes();
-			break;
-		case 23: //gearunits
-			j = RotaryNames.gearUnitNames.length;
-			break;
-		default:
-			j = 0;
-			break;
+			case 0: //shaftcraft
+				j = RotaryNames.shaftPartNames.length;
+				break;
+			case 1: //enginecraft
+				j = RotaryNames.enginePartNames.length;
+				break;
+			case 2: //heatcraft
+				j = RotaryNames.miscPartNames.length;
+				break;
+			case 3: //misccraft 2
+				j = RotaryNames.borerPartNames.length;
+				break;
+			case 4: //extracts
+				j = RotaryNames.extractNames.length;
+				break;
+			case 6: //compacts
+				j = RotaryNames.compactNames.length;
+				break;
+			case 7: //engines
+				j = EngineType.engineList.length;
+				break;
+			case 8: //powders
+				j = RotaryNames.powderNames.length;
+				break;
+			case 14: //mod interface
+				j = RotaryNames.interfaceNames.length;
+				break;
+			case 11: //shafts
+				j = RotaryNames.getNumberShaftTypes();
+				break;
+			case 12: //gearboxes
+				j = RotaryNames.getNumberGearTypes();
+				break;
+			case 23: //gearunits
+				j = RotaryNames.gearUnitNames.length;
+				break;
+			default:
+				j = 0;
+				break;
 		}
 		for (int i = 0; i < j; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
@@ -289,45 +286,45 @@ public class ItemMulti extends ItemBasic {
 		int d = is.getItemDamage();
 		String s = super.getUnlocalizedName();
 		switch(type) {
-		case 0:
-			s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
-			break;
-		case 1:
-			s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
-			break;
-		case 2:
-			s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
-			break;
-		case 3:
-			s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
-			break;
-		case 4:
-			s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
-			break;
-		case 6:
-			s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
-			break;
-		case 7:
-			s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
-			break;
-		case 8:
-			s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
-			break;
-		case 14:
-			s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
-			break;
-		case 10:
-			s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
-			break;
-		case 11:
-			s = super.getUnlocalizedName() + "." + RotaryNames.getShaftName(d);
-			break;
-		case 12:
-			s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
-			break;
-		case 23:
-			s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
-			break;
+			case 0:
+				s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
+				break;
+			case 1:
+				s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
+				break;
+			case 2:
+				s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
+				break;
+			case 3:
+				s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
+				break;
+			case 4:
+				s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
+				break;
+			case 6:
+				s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
+				break;
+			case 7:
+				s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
+				break;
+			case 8:
+				s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
+				break;
+			case 14:
+				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
+				break;
+			case 10:
+				s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
+				break;
+			case 11:
+				s = super.getUnlocalizedName() + "." + RotaryNames.getShaftName(d);
+				break;
+			case 12:
+				s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
+				break;
+			case 23:
+				s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
+				break;
 		}
 		return ReikaStringParser.stripSpaces(s.toLowerCase());
 	}

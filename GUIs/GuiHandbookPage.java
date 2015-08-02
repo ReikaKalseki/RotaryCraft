@@ -13,7 +13,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-public class GuiHandbookPage extends GuiHandbook {
+public final class GuiHandbookPage extends GuiHandbook {
 
 	public GuiHandbookPage(EntityPlayer p5ep, World world, int sc, int pg) {
 		super(p5ep, world, sc, pg);

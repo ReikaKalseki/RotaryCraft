@@ -150,11 +150,6 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPne
 	}
 
 	@Override
-	public long getMaxPower() {
-		return ModList.PNEUMATICRAFT.isLoaded() ? Long.MAX_VALUE : 0;
-	}
-
-	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);

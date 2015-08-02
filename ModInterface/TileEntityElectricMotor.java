@@ -86,11 +86,6 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	}
 
 	@Override
-	public long getMaxPower() {
-		return power;
-	}
-
-	@Override
 	public int getEmittingX() {
 		return xCoord+write.offsetX;
 	}

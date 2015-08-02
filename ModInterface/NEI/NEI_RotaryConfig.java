@@ -164,7 +164,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 				ItemStack out = ExtractorModOres.getSmeltedIngot(ore);
 				if (!ReikaItemHelper.isVanillaItem(out))
 					API.hideItem(out);
-				RotaryCraft.logger.log("Hiding ore "+ore+" Extractor products from NEI, as it is unused.");
+				RotaryCraft.logger.log("Hiding ore "+ore+" Extractor products from NEI, as the ore is unused or does not exist.");
 			}
 		}
 

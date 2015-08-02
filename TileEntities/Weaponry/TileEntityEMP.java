@@ -48,6 +48,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffect {
 
+	public static final long BLAST_ENERGY = (long)(4.184e9);
+
 	private List<TileEntity> blocks = new ArrayList<TileEntity>();
 	private BlockArray check  = new BlockArray();
 
@@ -182,7 +184,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		tickcount++;
 
 		this.getPowerBelow();
-		energy += power;
+		if (power >= MINPOWER)
+			energy += power;
 
 		if (fired)
 			return;
@@ -213,7 +216,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 		//power = (long)BLAST_ENERGY+800;
 
-		if (energy/20L >= MINPOWER && !loading && !world.isRemote)
+		if (energy/20L >= BLAST_ENERGY && !loading && !world.isRemote)
 			this.fire(world, x, y, z);
 	}
 
@@ -278,24 +281,24 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		te.addToContainer(Aspect.WEAPON, (short)1000);
 		te.addToContainer(Aspect.MECHANISM, (short)2000);
 		switch(te.getNodeType()) {
-		case UNSTABLE:
-			if (rand.nextInt(2) == 0) {
-				te.setNodeType(NodeType.DARK);
-			}
-			else
-				te.setNodeType(NodeType.PURE);
-			break;
-		case DARK:
-			te.setNodeType(NodeType.TAINTED);
-			break;
-		case NORMAL:
-			te.setNodeType(NodeType.UNSTABLE);
-			break;
-		case TAINTED:
-			te.setNodeType(NodeType.HUNGRY);
-			break;
-		default:
-			break;
+			case UNSTABLE:
+				if (rand.nextInt(2) == 0) {
+					te.setNodeType(NodeType.DARK);
+				}
+				else
+					te.setNodeType(NodeType.PURE);
+				break;
+			case DARK:
+				te.setNodeType(NodeType.TAINTED);
+				break;
+			case NORMAL:
+				te.setNodeType(NodeType.UNSTABLE);
+				break;
+			case TAINTED:
+				te.setNodeType(NodeType.HUNGRY);
+				break;
+			default:
+				break;
 		}
 		//ReikaJavaLibrary.pConsole(te.getNodeType()+":"+te.getAspects().aspects);
 	}

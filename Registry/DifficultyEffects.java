@@ -14,6 +14,7 @@ import java.util.Random;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.RotaryCraft.RotaryCraft;
 
 public enum DifficultyEffects {
 
@@ -27,7 +28,7 @@ public enum DifficultyEffects {
 	JETFAILURE(4500, 1800, 900),
 	CONSUMEFRAC(0.03125F, 0.25F, 0.75F),
 	PRODUCEFRAC(new int[]{1600,3200}, new int[]{1000,2200}, new int[]{400,800}),
-	BREAKCOIL(16, 4, 1),
+	BREAKCOIL(0.01D, 0.05D, 0.15D),
 	FURNACEMELT(1800, 600, 150),
 	CANOLA(new int[]{128,280}, new int[]{64,160}, new int[]{8,64}),
 	RAILGUNCRAFT(16, 8, 2),
@@ -98,59 +99,59 @@ public enum DifficultyEffects {
 	public int getInt() {
 		if (isRandom) {
 			switch(getDifficulty()) {
-			case EASY:
-				return easyMinimum+rand.nextInt(1+easyMaximum-easyMinimum);
-			case MEDIUM:
-				return mediumMinimum+rand.nextInt(1+mediumMaximum-mediumMinimum);
-			case HARD:
-				return hardMinimum+rand.nextInt(1+hardMaximum-hardMinimum);
-			default:
-				return mediumMinimum+rand.nextInt(1+mediumMaximum-mediumMinimum);
+				case EASY:
+					return easyMinimum+rand.nextInt(1+easyMaximum-easyMinimum);
+				case MEDIUM:
+					return mediumMinimum+rand.nextInt(1+mediumMaximum-mediumMinimum);
+				case HARD:
+					return hardMinimum+rand.nextInt(1+hardMaximum-hardMinimum);
+				default:
+					return mediumMinimum+rand.nextInt(1+mediumMaximum-mediumMinimum);
 			}
 		}
 		else {
 			switch(getDifficulty()) {
-			case EASY:
-				return easyInt;
-			case MEDIUM:
-				return mediumInt;
-			case HARD:
-				return hardInt;
-			default:
-				return mediumInt;
+				case EASY:
+					return easyInt;
+				case MEDIUM:
+					return mediumInt;
+				case HARD:
+					return hardInt;
+				default:
+					return mediumInt;
 			}
 		}
 	}
 
 	public float getChance() {
 		switch(getDifficulty()) {
-		case EASY:
-			return easyChance;
-		case MEDIUM:
-			return mediumChance;
-		case HARD:
-			return hardChance;
-		default:
-			return mediumChance;
+			case EASY:
+				return easyChance;
+			case MEDIUM:
+				return mediumChance;
+			case HARD:
+				return hardChance;
+			default:
+				return mediumChance;
 		}
 	}
 
 	public double getDouble() {
 		switch(getDifficulty()) {
-		case EASY:
-			return easyDouble;
-		case MEDIUM:
-			return mediumDouble;
-		case HARD:
-			return hardDouble;
-		default:
-			return mediumDouble;
+			case EASY:
+				return easyDouble;
+			case MEDIUM:
+				return mediumDouble;
+			case HARD:
+				return hardDouble;
+			default:
+				return mediumDouble;
 		}
 	}
 
 	public boolean testChance() {
 		if (!isChance) {
-			ReikaJavaLibrary.pConsole(this+" is not chance, but was called for it!");
+			RotaryCraft.logger.logError(this+" is not chance, but was called for it!");
 			ReikaJavaLibrary.dumpStack();
 			return false;
 		}
@@ -165,26 +166,26 @@ public enum DifficultyEffects {
 	public int getMaxAmount() {
 		if (isRandom) {
 			switch(getDifficulty()) {
-			case EASY:
-				return easyMaximum;
-			case MEDIUM:
-				return mediumMaximum;
-			case HARD:
-				return hardMaximum;
-			default:
-				return mediumMaximum;
+				case EASY:
+					return easyMaximum;
+				case MEDIUM:
+					return mediumMaximum;
+				case HARD:
+					return hardMaximum;
+				default:
+					return mediumMaximum;
 			}
 		}
 		else {
 			switch(getDifficulty()) {
-			case EASY:
-				return easyInt;
-			case MEDIUM:
-				return mediumInt;
-			case HARD:
-				return hardInt;
-			default:
-				return mediumInt;
+				case EASY:
+					return easyInt;
+				case MEDIUM:
+					return mediumInt;
+				case HARD:
+					return hardInt;
+				default:
+					return mediumInt;
 			}
 		}
 	}
@@ -192,26 +193,26 @@ public enum DifficultyEffects {
 	public int getAverageAmount() {
 		if (isRandom) {
 			switch(getDifficulty()) {
-			case EASY:
-				return (easyMaximum+easyMinimum)/2;
-			case MEDIUM:
-				return (mediumMaximum+mediumMinimum)/2;
-			case HARD:
-				return (hardMaximum+hardMinimum)/2;
-			default:
-				return (mediumMaximum+mediumMinimum)/2;
+				case EASY:
+					return (easyMaximum+easyMinimum)/2;
+				case MEDIUM:
+					return (mediumMaximum+mediumMinimum)/2;
+				case HARD:
+					return (hardMaximum+hardMinimum)/2;
+				default:
+					return (mediumMaximum+mediumMinimum)/2;
 			}
 		}
 		else {
 			switch(getDifficulty()) {
-			case EASY:
-				return easyInt;
-			case MEDIUM:
-				return mediumInt;
-			case HARD:
-				return hardInt;
-			default:
-				return mediumInt;
+				case EASY:
+					return easyInt;
+				case MEDIUM:
+					return mediumInt;
+				case HARD:
+					return hardInt;
+				default:
+					return mediumInt;
 			}
 		}
 	}

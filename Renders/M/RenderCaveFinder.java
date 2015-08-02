@@ -108,6 +108,7 @@ public class RenderCaveFinder extends RotaryTERenderer {
 	}
 
 	private void drawPoints(TileEntityCaveFinder te) {
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		ReikaRenderHelper.disableLighting();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -170,6 +171,7 @@ public class RenderCaveFinder extends RotaryTERenderer {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		ReikaRenderHelper.enableLighting();
+		GL11.glPopAttrib();
 	}
 
 	private double[] getColorForDepth(int y) {

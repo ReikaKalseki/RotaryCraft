@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.Registry.SoundEnum;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -172,7 +171,7 @@ public enum SoundRegistry implements SoundEnum {
 			if (soundList[i].name().equals(name))
 				return soundList[i];
 		}
-		ReikaJavaLibrary.pConsole("\""+name+"\" does not correspond to a registered sound!");
+		RotaryCraft.logger.logError("\""+name+"\" does not correspond to a registered sound!");
 		return null;
 	}
 

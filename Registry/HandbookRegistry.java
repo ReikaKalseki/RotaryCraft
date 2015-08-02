@@ -31,6 +31,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.GUIs.GuiHandbook;
 
 public enum HandbookRegistry implements HandbookEntry {
 
@@ -503,7 +504,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		for (int i = 0; i < this.ordinal(); i++) {
 			HandbookRegistry h = tabList[i];
 			if (h.isParent) {
-				sc += h.getNumberChildren()/8+1;
+				sc += h.getNumberChildren()/GuiHandbook.PAGES_PER_SCREEN+1;
 			}
 		}
 		return sc;
@@ -530,7 +531,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	}
 
 	public int getPage() {
-		return (this.ordinal()-this.getParent().ordinal())%8;
+		return (this.ordinal()-this.getParent().ordinal())%GuiHandbook.PAGES_PER_SCREEN;
 	}
 
 	public boolean hasOffset() {
@@ -563,12 +564,12 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	private static int getEnginePage(TileEntity te) {
 		EngineType e = ((TileEntityEngine)te).getEngineType();
-		return 1+e.ordinal()-(getEngineScreen(te)-ENGINEDESC.getBaseScreen())*8;
+		return 1+e.ordinal()-(getEngineScreen(te)-ENGINEDESC.getBaseScreen())*GuiHandbook.PAGES_PER_SCREEN;
 	}
 
 	private static int getEngineScreen(TileEntity te) {
 		EngineType e = ((TileEntityEngine)te).getEngineType();
-		int ei = (1+e.ordinal())/8;
+		int ei = (1+e.ordinal())/GuiHandbook.PAGES_PER_SCREEN;
 		return ENGINEDESC.getBaseScreen()+ei;
 	}
 
@@ -592,12 +593,12 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	public int getRelativeTabPosn() {
 		int offset = this.ordinal()-this.getParent().ordinal();
-		return offset-this.getRelativeScreen()*8;
+		return offset-this.getRelativeScreen()*GuiHandbook.PAGES_PER_SCREEN;
 	}
 
 	public int getRelativeScreen() {
 		int offset = this.ordinal()-this.getParent().ordinal();
-		return offset/8;
+		return offset/GuiHandbook.PAGES_PER_SCREEN;
 	}
 
 	public HandbookRegistry getParent() {
@@ -616,7 +617,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	public static void addRelevantButtons(int j, int k, int screen, List<GuiButton> li) {
 		int id = 0;
 		for (int i = 0; i < tabList.length; i++) {
-			if (tabList[i].getScreen() == screen) {
+			if (tabList[i].getScreen() == screen/* && !tabList[i].isDummiedOut()*/) {
 				li.add(new ImagedGuiButton(id, j-20, k+tabList[i].getRelativeTabPosn()*20, 20, 20, 0, 0, tabList[i].getTabImageFile(), RotaryCraft.class));
 				//ReikaJavaLibrary.pConsole("Adding "+tabList[i]+" with ID "+id+" to screen "+screen);
 				id++;
@@ -637,7 +638,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		//ReikaJavaLibrary.pConsole(screen);
 		List<HandbookRegistry> li = new ArrayList<HandbookRegistry>();
 		for (int i = 0; i < tabList.length; i++) {
-			if (tabList[i].getScreen() == screen) {
+			if (tabList[i].getScreen() == screen/* && !tabList[i].isDummiedOut()*/) {
 				li.add(tabList[i]);
 			}
 		}
@@ -1120,7 +1121,15 @@ public enum HandbookRegistry implements HandbookEntry {
 	public boolean isConfigDisabled() {
 		return machine != null && machine.isConfigDisabled();
 	}
-
+	/*
+	public boolean isDummiedOut() {
+		if (this == ALERTS)
+			return HandbookNotifications.instance.getNewAlerts().isEmpty();
+		if (this == PACKMODS)
+			return !PackModificationTracker.instance.modificationsExist(RotaryCraft.instance);
+		return false;
+	}
+	 */
 	public int getBonusSubpages() {
 		return RotaryDescriptions.getNotesLength(this)-1;
 	}

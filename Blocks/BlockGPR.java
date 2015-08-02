@@ -63,14 +63,14 @@ public class BlockGPR extends BlockBasicMachine {
 		if (tile == null)
 			return;
 		switch (i) {
-		case 0:
-		case 2:
-			tile.xdir = true;
-			break;
-		case 1:
-		case 3:
-			tile.xdir = false;
-			break;
+			case 0:
+			case 2:
+				tile.xdir = true;
+				break;
+			case 1:
+			case 3:
+				tile.xdir = false;
+				break;
 		}
 	}
 
@@ -139,48 +139,11 @@ public class BlockGPR extends BlockBasicMachine {
 	public void registerBlockIcons(IIconRegister par1IconRegister) {
 		if (RotaryCraft.instance.isLocked())
 			return;
+		String[] biome = {"grass", "mushroom", "jungle", "hills", "ocean", "desert", "snow", "nether", "end", "swamp", "ice"};
 		for (int i = 0; i < 6; i++)
-			for (int j = 0; j < 11; j++) {
-				String biome;
-				switch(j) {
-				case 0:
-					biome = "grass";
-					break;
-				case 1:
-					biome = "mushroom";
-					break;
-				case 2:
-					biome = "jungle";
-					break;
-				case 3:
-					biome = "hills";
-					break;
-				case 4:
-					biome = "ocean";
-					break;
-				case 5:
-					biome = "desert";
-					break;
-				case 6:
-					biome = "snow";
-					break;
-				case 7:
-					biome = "nether";
-					break;
-				case 8:
-					biome = "end";
-					break;
-				case 9:
-					biome = "swamp";
-					break;
-				case 10:
-					biome = "ice";
-					break;
-				default:
-					biome = "";
-				}
+			for (int j = 0; j < biome.length; j++) {
 				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:steel");
-				icons[j][1] = par1IconRegister.registerIcon("RotaryCraft:gpr_top_"+biome);
+				icons[j][1] = par1IconRegister.registerIcon("RotaryCraft:gpr_top_"+biome[j]);
 			}
 	}
 

@@ -46,6 +46,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Base.BlockModelledMultiTE;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
@@ -667,13 +668,13 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public boolean hasSneakActions() {
 		switch(this) {
-		case CAVESCANNER:
-		case SCREEN:
-		case GPR:
-		case RESERVOIR:
-			return true;
-		default:
-			return false;
+			case CAVESCANNER:
+			case SCREEN:
+			case GPR:
+			case RESERVOIR:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -685,16 +686,16 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public boolean isZFlipped() {
 		switch(this) {
-		case BEDROCKBREAKER:
-		case FLOODLIGHT:
-		case LIGHTBRIDGE:
-		case HEATRAY:
-		case FAN:
-		case PROJECTOR:
-		case SCALECHEST:
-			return true;
-		default:
-			return false;
+			case BEDROCKBREAKER:
+			case FLOODLIGHT:
+			case LIGHTBRIDGE:
+			case HEATRAY:
+			case FAN:
+			case PROJECTOR:
+			case SCALECHEST:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -756,15 +757,15 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public boolean isMultiNamed() {
 		switch(this) {
-		case ENGINE:
-		case GEARBOX:
-		case SHAFT:
-		case ADVANCEDGEARS:
-		case FLYWHEEL:
-			//case HYDRAULIC:
-			return true;
-		default:
-			return false;
+			case ENGINE:
+			case GEARBOX:
+			case SHAFT:
+			case ADVANCEDGEARS:
+			case FLYWHEEL:
+				//case HYDRAULIC:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -780,82 +781,82 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		if (e instanceof EntityItem || e instanceof EntityXPOrb)
 			return false;
 		switch(this) {
-		case COMPACTOR:
-		case HEATER:
-		case IGNITER:
-		case OBSIDIAN:
-		case PULSEJET:
-		case FRICTION:
-			return true;
-		default:
-			return false;
+			case COMPACTOR:
+			case HEATER:
+			case IGNITER:
+			case OBSIDIAN:
+			case PULSEJET:
+			case FRICTION:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	public boolean is4Sided() {
 		switch(this) {
-		case ENGINE:
-		case BORER:
-		case LIGHTBRIDGE:
-		case FLYWHEEL:
-		case GEARBOX:
-		case SPLITTER:
-		case FERMENTER:
-		case DYNAMOMETER:
-		case GRINDER:
-		case HEATRAY:
-		case COMPACTOR:
-		case WOODCUTTER:
-		case WINDER:
-		case ADVANCEDGEARS:
-		case BLASTFURNACE:
-		case PROJECTOR:
-		case SCALECHEST:
-		case MAGNETIZER:
-		case SCREEN:
-		case FRICTION:
-		case PNEUENGINE:
-		case DISPLAY:
-		case MULTICLUTCH:
-		case ARROWGUN:
-		case STEAMTURBINE:
-		case BEAMMIRROR:
-		case GENERATOR:
-		case ELECTRICMOTOR:
-		case AIRGUN:
-		case FUELENGINE:
-		case SORTING:
-		case FILLINGSTATION:
-		case DISTILLER:
-		case MAGNETIC:
-		case CRYSTALLIZER:
-		case BUSCONTROLLER:
-		case REFRIGERATOR:
-			return true;
-		default:
-			return false;
+			case ENGINE:
+			case BORER:
+			case LIGHTBRIDGE:
+			case FLYWHEEL:
+			case GEARBOX:
+			case SPLITTER:
+			case FERMENTER:
+			case DYNAMOMETER:
+			case GRINDER:
+			case HEATRAY:
+			case COMPACTOR:
+			case WOODCUTTER:
+			case WINDER:
+			case ADVANCEDGEARS:
+			case BLASTFURNACE:
+			case PROJECTOR:
+			case SCALECHEST:
+			case MAGNETIZER:
+			case SCREEN:
+			case FRICTION:
+			case PNEUENGINE:
+			case DISPLAY:
+			case MULTICLUTCH:
+			case ARROWGUN:
+			case STEAMTURBINE:
+			case BEAMMIRROR:
+			case GENERATOR:
+			case ELECTRICMOTOR:
+			case AIRGUN:
+			case FUELENGINE:
+			case SORTING:
+			case FILLINGSTATION:
+			case DISTILLER:
+			case MAGNETIC:
+			case CRYSTALLIZER:
+			case BUSCONTROLLER:
+			case REFRIGERATOR:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	public boolean is6Sided() {
 		switch(this) {
-		case SHAFT:
-		case BEDROCKBREAKER:
-		case FLOODLIGHT:
-		case FAN:
-		case COOLINGFIN:
-		case COMPRESSOR:
-		case LINEBUILDER:
-		case SONICBORER:
-		case BELT:
-		case DYNAMO:
-		case BLOWER:
-		case PIPEPUMP:
-		case CHAIN:
-		case CLUTCH:
-			return true;
-		default:
-			return false;
+			case SHAFT:
+			case BEDROCKBREAKER:
+			case FLOODLIGHT:
+			case FAN:
+			case COOLINGFIN:
+			case COMPRESSOR:
+			case LINEBUILDER:
+			case SONICBORER:
+			case BELT:
+			case DYNAMO:
+			case BLOWER:
+			case PIPEPUMP:
+			case CHAIN:
+			case CLUTCH:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -863,13 +864,13 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		if (this.isCannon())
 			return true;
 		switch(this) {
-		case PILEDRIVER:
-		case GPR:
-		case PUMP:
-		case GRINDSTONE:
-			return true;
-		default:
-			return false;
+			case PILEDRIVER:
+			case GPR:
+			case PUMP:
+			case GRINDSTONE:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -881,28 +882,28 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		if (this.isPipe())
 			return true;
 		switch(this) {
-		case ENGINE:
-		case SHAFT:
-		case GEARBOX:
-		case FLYWHEEL:
-		case ADVANCEDGEARS:
-			return true;
-		default:
-			return (BlockModelledMultiTE.class.isAssignableFrom(blockClass));
+			case ENGINE:
+			case SHAFT:
+			case GEARBOX:
+			case FLYWHEEL:
+			case ADVANCEDGEARS:
+				return true;
+			default:
+				return (BlockModelledMultiTE.class.isAssignableFrom(blockClass));
 		}
 	}
 
 	public boolean hasCustomPlacerItem() {
 		switch(this) {
-		case ENGINE:
-		case SHAFT:
-		case GEARBOX:
-		case ADVANCEDGEARS:
-		case FLYWHEEL:
-			//case HYDRAULIC:
-			return true;
-		default:
-			return false;
+			case ENGINE:
+			case SHAFT:
+			case GEARBOX:
+			case ADVANCEDGEARS:
+			case FLYWHEEL:
+				//case HYDRAULIC:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -954,13 +955,13 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public boolean isModConversionEngine() {
 		switch(this) {
-		case DYNAMO:
-		case COMPRESSOR:
-		case BOILER:
-		case GENERATOR:
-			return true;
-		default:
-			return false;
+			case DYNAMO:
+			case COMPRESSOR:
+			case BOILER:
+			case GENERATOR:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -974,42 +975,42 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public boolean hasSubdivisions() {
 		switch(this) {
-		case ENGINE:
-		case GEARBOX:
-		case SHAFT:
-		case ADVANCEDGEARS:
-		case FLYWHEEL:
-			return true;
-		default:
-			return false;
+			case ENGINE:
+			case GEARBOX:
+			case SHAFT:
+			case ADVANCEDGEARS:
+			case FLYWHEEL:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	public int getNumberSubtypes() {
 		switch(this) {
-		case ENGINE:
-			return EngineType.engineList.length;
-		case GEARBOX:
-		case SHAFT:
-			return MaterialRegistry.matList.length+1;
-		case ADVANCEDGEARS:
-			return TileEntityAdvancedGear.GearType.list.length;
-		case FLYWHEEL:
-			return 4;
-		default:
-			return 1;
+			case ENGINE:
+				return EngineType.engineList.length;
+			case GEARBOX:
+			case SHAFT:
+				return MaterialRegistry.matList.length+1;
+			case ADVANCEDGEARS:
+				return TileEntityAdvancedGear.GearType.list.length;
+			case FLYWHEEL:
+				return 4;
+			default:
+				return 1;
 		}
 	}
 
 	public boolean canBeBroken() {
 		switch(this) {
-		case MIRROR:
-		case SHAFT:
-		case FLYWHEEL:
-		case ENGINE:
-			return true;
-		default:
-			return false;
+			case MIRROR:
+			case SHAFT:
+			case FLYWHEEL:
+			case ENGINE:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -1107,12 +1108,12 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public boolean allowsAcceleration() {
 		switch(this) {
-		case BLASTFURNACE:
-		case DRYING:
-		case COMPOSTER:
-			return true;
-		default:
-			return false;
+			case BLASTFURNACE:
+			case DRYING:
+			case COMPOSTER:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -1122,7 +1123,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public void addRecipe(IRecipe ir) {
 		if (this.isCraftable()) {
-			WorktableRecipes.getInstance().addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
 			}
@@ -1132,7 +1133,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 	public void addOreRecipe(Object... obj) {
 		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedProduct(), obj);
-			WorktableRecipes.getInstance().addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
 			}
@@ -1142,7 +1143,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 	public void addSizedOreRecipe(int size, Object... obj) {
 		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
-			WorktableRecipes.getInstance().addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
 			}
@@ -1152,7 +1153,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 	public void addMetaOreRecipe(int meta, Object... obj) {
 		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
-			WorktableRecipes.getInstance().addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
 			}
@@ -1162,7 +1163,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 	public void addSizedMetaOreRecipe(int size, int meta, Object... obj) {
 		if (this.isCraftable()) {
 			ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
-			WorktableRecipes.getInstance().addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ir);
 			}
@@ -1171,7 +1172,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public void addRecipe(ItemStack is, Object... obj) {
 		if (this.isCraftable()) {
-			WorktableRecipes.getInstance().addRecipe(is, obj);
+			WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(is, obj);
 			}
@@ -1180,7 +1181,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public void addCrafting(Object... obj) {
 		if (this.isCraftable()) {
-			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), obj);
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedProduct(), obj);
 			}
@@ -1190,7 +1191,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public void addSizedCrafting(int num, Object... obj) {
 		if (this.isCraftable()) {
-			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
 			}
@@ -1200,7 +1201,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public void addMetaCrafting(int metadata, Object... obj) {
 		if (this.isCraftable()) {
-			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), obj);
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
 			}
@@ -1212,7 +1213,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		ItemStack is = this.getCraftedMetadataProduct(metadata);
 		is.stackTagCompound = (NBTTagCompound)NBT.copy();
 		if (this.isCraftable()) {
-			WorktableRecipes.getInstance().addRecipe(is, obj);
+			WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(is, obj);
 			}
@@ -1222,7 +1223,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public void addSizedMetaCrafting(int num, int metadata, Object... obj) {
 		if (this.isCraftable()) {
-			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
+			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
 			if (ConfigRegistry.TABLEMACHINES.getState()) {
 				GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(metadata), num), obj);
 			}
@@ -1333,23 +1334,24 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 
 	public boolean isAdvancedTransmission() {
 		switch(this) {
-		case ADVANCEDGEARS:
-		case GEARBOX:
-		case SPLITTER:
-			return true;
-		default:
-			return false;
+			case ADVANCEDGEARS:
+			case GEARBOX:
+			case SPLITTER:
+			case DYNAMOMETER:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	public boolean canFlip() {
 		switch(this) {
-		case SPLITTER:
-		case SMOKEDETECTOR:
-		case SPRINKLER:
-			return false;
-		default:
-			return true;
+			case SPLITTER:
+			case SMOKEDETECTOR:
+			case SPRINKLER:
+				return false;
+			default:
+				return true;
 		}
 	}
 
@@ -1357,54 +1359,65 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 	public boolean isCrucial() {
 		if (this.isPipe())
 			return true;
-		switch(this) {
-		case BEDROCKBREAKER:
-		case ENGINE:
-		case SHAFT:
-		case BEVELGEARS:
-		case SPLITTER:
-		case GEARBOX:
-		case DYNAMOMETER:
-		case FERMENTER:
-		case GRINDER:
-		case COMPACTOR:
-		case BORER:
-		case PUMP:
-		case EXTRACTOR:
-		case FAN:
-		case FRACTIONATOR:
-		case WOODCUTTER:
-		case SPAWNERCONTROLLER:
-		case HEATER:
-		case HEATRAY:
-		case ECU:
-		case WINDER:
-		case ADVANCEDGEARS:
-		case BLASTFURNACE:
-		case MOBHARVESTER:
-		case MAGNETIZER:
-		case FRICTION:
-		case MIRROR:
-		case SOLARTOWER:
-		case COOLINGFIN:
-		case WORKTABLE:
-		case COMPRESSOR:
-		case DYNAMO:
-		case MULTICLUTCH:
-		case SORTING:
-		case FERTILIZER:
-		case MAGNETIC:
-		case LAVAMAKER:
-		case AGGREGATOR:
-		case FILLINGSTATION:
-		case BELT:
-		case VANDEGRAFF:
-		case BUSCONTROLLER:
-		case POWERBUS:
-		case BIGFURNACE:
+		if (this.isCritical())
 			return true;
-		default:
-			return false;
+		switch(this) {
+			case BEDROCKBREAKER:
+			case ENGINE:
+			case SHAFT:
+			case BEVELGEARS:
+			case SPLITTER:
+			case GEARBOX:
+			case DYNAMOMETER:
+			case FERMENTER:
+			case GRINDER:
+			case COMPACTOR:
+			case BORER:
+			case PUMP:
+			case EXTRACTOR:
+			case FAN:
+			case FRACTIONATOR:
+			case WOODCUTTER:
+			case SPAWNERCONTROLLER:
+			case HEATER:
+			case HEATRAY:
+			case ECU:
+			case WINDER:
+			case ADVANCEDGEARS:
+			case BLASTFURNACE:
+			case MOBHARVESTER:
+			case MAGNETIZER:
+			case FRICTION:
+			case MIRROR:
+			case SOLARTOWER:
+			case COOLINGFIN:
+			case WORKTABLE:
+			case COMPRESSOR:
+			case DYNAMO:
+			case MULTICLUTCH:
+			case SORTING:
+			case FERTILIZER:
+			case MAGNETIC:
+			case LAVAMAKER:
+			case AGGREGATOR:
+			case FILLINGSTATION:
+			case BELT:
+			case VANDEGRAFF:
+			case BUSCONTROLLER:
+			case POWERBUS:
+			case BIGFURNACE:
+			case CRYSTALLIZER:
+			case BLOWER:
+			case REFRIGERATOR:
+			case CRAFTER:
+			case COMPOSTER:
+			case PIPEPUMP:
+			case CENTRIFUGE:
+			case DRYING:
+			case WETTER:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -1412,62 +1425,69 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		if (this.isPipe())
 			return true;
 		switch(this) {
-		case BEDROCKBREAKER:
-		case ENGINE:
-		case SHAFT:
-		case BEVELGEARS:
-		case SPLITTER:
-		case GEARBOX:
-		case FERMENTER:
-		case GRINDER:
-		case COMPACTOR:
-		case PUMP:
-		case EXTRACTOR:
-		case FAN:
-		case FRACTIONATOR:
-		case HEATER:
-		case HEATRAY:
-		case WINDER:
-		case ADVANCEDGEARS:
-		case BLASTFURNACE:
-		case MAGNETIZER:
-		case FRICTION:
-		case COOLINGFIN:
-		case WORKTABLE:
-		case MULTICLUTCH:
-		case SORTING:
-		case FERTILIZER:
-		case AGGREGATOR:
-		case FILLINGSTATION:
-		case BELT:
-		case VANDEGRAFF:
-		case BUSCONTROLLER:
-		case POWERBUS:
-			return true;
-		default:
-			return false;
+			case BEDROCKBREAKER:
+			case ENGINE:
+			case SHAFT:
+			case BEVELGEARS:
+			case SPLITTER:
+			case GEARBOX:
+			case FERMENTER:
+			case GRINDER:
+			case COMPACTOR:
+			case PUMP:
+			case EXTRACTOR:
+			case FAN:
+			case FRACTIONATOR:
+			case HEATER:
+			case HEATRAY:
+			case WINDER:
+			case ADVANCEDGEARS:
+			case BLASTFURNACE:
+			case MAGNETIZER:
+			case FRICTION:
+			case COOLINGFIN:
+			case WORKTABLE:
+			case MULTICLUTCH:
+			case SORTING:
+			case FERTILIZER:
+			case AGGREGATOR:
+			case FILLINGSTATION:
+			case BELT:
+			case VANDEGRAFF:
+			case BUSCONTROLLER:
+			case POWERBUS:
+			case BLOWER:
+			case REFRIGERATOR:
+			case CRAFTER:
+			case PIPEPUMP:
+			case CENTRIFUGE:
+			case DRYING:
+			case WETTER:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	public boolean canBeDisabledInOverworld() {
 		switch(this) {
-		case BORER:
-		case SONICBORER:
-		case EMP:
-		case RAILGUN:
-		case LASERGUN:
-			return true;
-		default:
-			return false;
+			case BORER:
+			case SONICBORER:
+			case EMP:
+			case RAILGUN:
+			case LASERGUN:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	public boolean isUncraftable() {
 		switch(this) {
-		case COOLINGFIN:
-			return false;
-		default:
-			return true;
+			case COOLINGFIN:
+				return false;
+			default:
+				return true;
 		}
 	}
 

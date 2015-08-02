@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.Registry;
 
 import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
 
@@ -69,7 +68,7 @@ public enum PowerReceivers {
 	BUCKETFILLER(1, 512, 2048),
 	SELFDESTRUCT(),
 	COMPRESSOR(),
-	EMP(4184000000L),
+	EMP(268435456),
 	LINEBUILDER(1024, 1, 131072),
 	TERRAFORMER(1024),
 	FUELENHANCER(1, 16384, 16384),
@@ -256,9 +255,9 @@ public enum PowerReceivers {
 					return e;
 				}
 			}
-			//throw new RuntimeException("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
-			ReikaJavaLibrary.pConsole("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
-			return null;
+			throw new RegistrationException(RotaryCraft.instance, "This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+			//RotaryCraft.logger.logError("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
+			//return null;
 		}
 		else
 			return null;
@@ -270,7 +269,7 @@ public enum PowerReceivers {
 			if (m.getPowerReceiverEntry() == this)
 				return m;
 		}
-		ReikaJavaLibrary.pConsole("This should not happen! Power Receiver "+this+" has no machine!");
+		RotaryCraft.logger.logError("This should not happen! Power Receiver "+this+" has no machine!");
 		return null;
 	}
 

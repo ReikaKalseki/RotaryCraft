@@ -46,7 +46,7 @@ public class TileEntityContainment extends TileEntityProtectionDome {
 		this.spawnParticles(world, x, y, z);
 		List<EntityLivingBase> inbox = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getRangedBox());
 		for (EntityLivingBase e : inbox) {
-			if (ReikaEntityHelper.isHostile(e) && !(e instanceof EntityDragon || e instanceof EntityWither)) {
+			if (this.isGeneralCapturable(e)) {
 				this.markNoDespawn(e);
 				double dx = e.posX-x-0.5;
 				double dy = e.posY-y-0.5;
@@ -93,6 +93,14 @@ public class TileEntityContainment extends TileEntityProtectionDome {
 				}
 			}
 		}
+	}
+
+	private boolean isGeneralCapturable(EntityLivingBase e) {
+		if (e instanceof EntityDragon || e instanceof EntityWither)
+			return false;
+		if (e.getClass().getSimpleName().equals("EntityClayMan"))
+			return true;
+		return ReikaEntityHelper.isHostile(e);
 	}
 
 	private void markNoDespawn(EntityLivingBase e) {

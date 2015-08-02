@@ -3,7 +3,12 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.Collection;
 import java.util.HashMap;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
+import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -24,6 +29,8 @@ public abstract class RecipeHandler {
 	}
 
 	protected final void onAddRecipe(MachineRecipe recipe, RecipeLevel rl) {
+		if (true)
+			return;
 		String s = recipeKeys.get(recipe);
 		if (s == null) {
 			this.generateKey(recipe);
@@ -80,6 +87,29 @@ public abstract class RecipeHandler {
 	public abstract void addPostLoadRecipes();
 
 	protected abstract boolean removeRecipe(MachineRecipe recipe);
+	//protected abstract boolean addCustomRecipe(String key);
+
+	private static RecipeModificationPower getRequiredPowerForOutput(ItemStack is) {
+		if (!ReikaItemHelper.getNamespace(is.getItem()).contains("RotaryCraft"))
+			return RecipeModificationPower.DEFAULT;
+		if (!ReikaItemHelper.getNamespace(is.getItem()).contains("ReactorCraft"))
+			return RecipeModificationPower.DEFAULT;
+		if (!ReikaItemHelper.getNamespace(is.getItem()).contains("ElectriCraft"))
+			return RecipeModificationPower.DEFAULT;
+		return SensitiveItemRegistry.instance.contains(is) ? RecipeModificationPower.FULL : RecipeModificationPower.NORMAL;
+	}
+
+	private static RecipeModificationPower getRequiredPowerForOutput(Fluid f) {
+		return SensitiveFluidRegistry.instance.contains(f) ? RecipeModificationPower.FULL : RecipeModificationPower.DEFAULT;
+	}
+
+	public static boolean isOutputPermitted(ItemStack is) {
+		return getModificationPower().ordinal() <= getRequiredPowerForOutput(is).ordinal();
+	}
+
+	public static boolean isOutputPermitted(Fluid f) {
+		return getModificationPower().ordinal() <= getRequiredPowerForOutput(f).ordinal();
+	}
 
 	public static enum RecipeLevel {
 

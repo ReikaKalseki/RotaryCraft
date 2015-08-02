@@ -108,8 +108,8 @@ public class WorktableAPI {
 			i.setAccessible(true);
 			instance = i.get(null);
 			add = ref.getMethod("addRecipe", IRecipe.class);
-			addShaped = ref.getMethod("addRecipe", ItemStack.class, Object[].class);
-			addShapeless = ref.getMethod("addShapelessRecipe", ItemStack.class, Object[].class);
+			addShaped = ref.getMethod("addAPIRecipe", ItemStack.class, Object[].class);
+			addShapeless = ref.getMethod("addShapelessAPIRecipe", ItemStack.class, Object[].class);
 
 			loaded = true;
 		}

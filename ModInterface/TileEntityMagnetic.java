@@ -27,11 +27,6 @@ import cofh.api.energy.IEnergyStorage;
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler { //Handler because EnderIO uses it
 
 	@Override
-	public long getMaxPower() {
-		return ReikaRFHelper.getWattsPerRF()/this.getStoredPower();
-	}
-
-	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
@@ -96,20 +91,20 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	private int getMinimumCurrent() {
 		switch(this.getTier()) {
-		case 0:
-			return 1;
-		case 1:
-			return 3;
-		case 2:
-			return 24;
-		case 3:
-			return 187;
-		case 4:
-			return 1491;
-		case 5:
-			return 11925;
-		default:
-			return 0;
+			case 0:
+				return 1;
+			case 1:
+				return 3;
+			case 2:
+				return 24;
+			case 3:
+				return 187;
+			case 4:
+				return 1491;
+			case 5:
+				return 11925;
+			default:
+				return 0;
 		}
 	}
 

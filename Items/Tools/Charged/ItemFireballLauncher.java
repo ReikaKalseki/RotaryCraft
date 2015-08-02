@@ -58,9 +58,9 @@ public class ItemFireballLauncher extends ItemChargedTool {
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack is, World world, EntityPlayer ep, int ticksUsed) {
+	public void onPlayerStoppedUsing(ItemStack is, World world, EntityPlayer ep, int ticksLeft) {
 		texture = defaulttex;
-		float power = (is.getMaxItemUseDuration()-ticksUsed)/20F;
+		float power = (is.getMaxItemUseDuration()-ticksLeft)/20F;
 		float charge = 0;
 		if (ep.capabilities.isCreativeMode) {
 			power *= 2;

@@ -18,7 +18,7 @@ import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -81,7 +81,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 	public void updateTileEntity() {
 		super.updateTileEntity();
 		if (MINPOWER == -1) {
-			ReikaJavaLibrary.pConsole(this.getName()+" has not registered its power!");
+			RotaryCraft.logger.logError(this.getName()+" has not registered its power!");
 			ReikaChatHelper.write(this.getName()+" has not registered its power!");
 		}
 	}
@@ -109,24 +109,24 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 	public void getIOSidesDefault(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			break;
-		case 4:	//moving up
-			read = ForgeDirection.DOWN;
-			break;
-		case 5:	//moving down
-			read = ForgeDirection.UP;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				break;
+			case 4:	//moving up
+				read = ForgeDirection.DOWN;
+				break;
+			case 5:	//moving down
+				read = ForgeDirection.UP;
+				break;
 		}
 	}
 

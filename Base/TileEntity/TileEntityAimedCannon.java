@@ -26,9 +26,9 @@ import org.lwjgl.input.Keyboard;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -66,7 +66,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 				player = "NULL PLAYER IN SLOT "+i;
 			else if (player.isEmpty())
 				player = "EMPTY STRING PLAYER IN SLOT "+i;
-			ReikaJavaLibrary.pConsole("Side "+FMLCommonHandler.instance().getEffectiveSide()+": Safe Player "+(i+1)+" of "+safePlayers.size()+": "+player);
+			RotaryCraft.logger.log("Side "+FMLCommonHandler.instance().getEffectiveSide()+": Safe Player "+(i+1)+" of "+safePlayers.size()+": "+player);
 		}
 	}
 
@@ -83,14 +83,14 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		if (worldObj.isRemote)
 			;//return;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			this.getPowerBelow();
-			dir = 1;
-			break;
-		case 1:
-			this.getPowerAbove();
-			dir = -1;
-			break;
+			case 0:
+				this.getPowerBelow();
+				dir = 1;
+				break;
+			case 1:
+				this.getPowerAbove();
+				dir = -1;
+				break;
 		}
 		if (power < MINPOWER)
 			return;

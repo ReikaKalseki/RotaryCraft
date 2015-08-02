@@ -95,7 +95,7 @@ public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, Boolea
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
-	//POWERCLIENT("Run power transfer code on client", false),  caused too many issues
+	POWERCLIENT("Run power transfer code on client", false),  //caused many issues
 	TUTORIAL("Tutorial Mode", false),
 	FRAMES("Allow Frames to move Machines (May cause corruption)", false),
 	CONVERTERLOSS("Power Converter Loss Percent", 0),
@@ -239,7 +239,7 @@ public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, Boolea
 		if (RECIPEMOD.getState()) {
 			if (STRONGRECIPEMOD.getState()) {
 				String s = CORERECIPEMOD.getString();
-				if (isValidRecipeModString()) {
+				if (isValidRecipeModString(s)) {
 					return 3;
 				}
 				return 2;
@@ -249,8 +249,8 @@ public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, Boolea
 		return 0;
 	}
 
-	private static boolean isValidRecipeModString() {
-		return false;
+	private static boolean isValidRecipeModString(String s) {
+		return false;//s.equals("RotaryCraft_RecipeModify@"+RotaryCraft.instance.getModVersion().toString());
 	}
 
 	@Override

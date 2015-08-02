@@ -74,6 +74,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	protected final HybridTank water = new HybridTank("enginewater", CAPACITY);
 	protected final HybridTank fuel = new HybridTank("enginefuel", FUELCAP);
 
+	protected final HybridTank air = new HybridTank("engineair", 1000);
+
 	public int temperature;
 
 	/** For timing control */
@@ -144,6 +146,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	protected abstract boolean getRequirements(World world, int x, int y, int z, int meta);
 
 	protected final boolean hasAir(World world, int x, int y, int z) {
+		if (!air.isEmpty()) {
+			air.removeLiquid(2);
+			return true;
+		}
 		if (this.isDrowned(world, x, y, z))
 			return false;
 		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
@@ -405,26 +411,26 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 
 	public final void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			write = ForgeDirection.WEST;
-			backx = x+1;
-			backz = z;
-			break;
-		case 1:
-			write = ForgeDirection.EAST;
-			backx = x-1;
-			backz = z;
-			break;
-		case 2:
-			write = ForgeDirection.NORTH;
-			backx = x;
-			backz = z+1;
-			break;
-		case 3:
-			write = ForgeDirection.SOUTH;
-			backx = x;
-			backz = z-1;
-			break;
+			case 0:
+				write = ForgeDirection.WEST;
+				backx = x+1;
+				backz = z;
+				break;
+			case 1:
+				write = ForgeDirection.EAST;
+				backx = x-1;
+				backz = z;
+				break;
+			case 2:
+				write = ForgeDirection.NORTH;
+				backx = x;
+				backz = z+1;
+				break;
+			case 3:
+				write = ForgeDirection.SOUTH;
+				backx = x;
+				backz = z-1;
+				break;
 		}
 	}
 
@@ -492,13 +498,13 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		if (i >= type.getSizeInventory())
 			return false;
 		switch(type) {
-		case GAS:
-		case AC:
-			return true;
-		case SPORT:
-			return (i == 0 && is.getItem() == ItemRegistry.ETHANOL.getItemInstance()) || (i == 1 && type.isAdditive(is));
-		default:
-			return false;
+			case GAS:
+			case AC:
+				return true;
+			case SPORT:
+				return (i == 0 && is.getItem() == ItemRegistry.ETHANOL.getItemInstance()) || (i == 1 && type.isAdditive(is));
+			default:
+				return false;
 		}
 	}
 
@@ -633,31 +639,31 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 				return true;
 		if (type.isWaterPiped() && p == MachineRegistry.PIPE) {
 			switch(side) {
-			case EAST:
-				return this.getBlockMetadata() == 0;
-			case SOUTH:
-				return this.getBlockMetadata() == 2;
-			case WEST:
-				return this.getBlockMetadata() == 1;
-			case NORTH:
-				return this.getBlockMetadata() == 3;
-			default:
-				return false;
+				case EAST:
+					return this.getBlockMetadata() == 0;
+				case SOUTH:
+					return this.getBlockMetadata() == 2;
+				case WEST:
+					return this.getBlockMetadata() == 1;
+				case NORTH:
+					return this.getBlockMetadata() == 3;
+				default:
+					return false;
 			}
 		}
 		if (type.requiresLubricant() && p == MachineRegistry.HOSE) {
 			//ReikaJavaLibrary.pConsole(this.getBlockMetadata()+":"+side.name());
 			switch(side) {
-			case EAST:
-				return this.getBlockMetadata() == 0;
-			case SOUTH:
-				return this.getBlockMetadata() == 2;
-			case WEST:
-				return this.getBlockMetadata() == 1;
-			case NORTH:
-				return this.getBlockMetadata() == 3;
-			default:
-				return false;
+				case EAST:
+					return this.getBlockMetadata() == 0;
+				case SOUTH:
+					return this.getBlockMetadata() == 2;
+				case WEST:
+					return this.getBlockMetadata() == 1;
+				case NORTH:
+					return this.getBlockMetadata() == 3;
+				default:
+					return false;
 			}
 		}
 		return false;
@@ -707,6 +713,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		else if (f.equals(FluidRegistry.getFluid("lubricant"))) {
 			return lubricant.fill(resource, doFill);
 		}
+		else if (f.equals(FluidRegistry.getFluid("air")) || f.equals(FluidRegistry.getFluid("oxygen"))) {
+			return air.fill(resource, doFill);
+		}
 		else {
 			return fuel.fill(resource, doFill);
 		}
@@ -746,6 +755,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		}
 		else if (fluid.equals(FluidRegistry.getFluid("bioethanol"))) {
 			return from == this.getFuelInputDirection();
+		}
+		else if (fluid.equals(FluidRegistry.getFluid("air")) || fluid.equals(FluidRegistry.getFluid("oxygen"))) {
+			return type.isAirBreathing() && from == this.getFuelInputDirection();
 		}
 		return false;
 	}

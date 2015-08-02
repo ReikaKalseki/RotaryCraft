@@ -30,7 +30,6 @@ import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -330,7 +329,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}
 		catch (Exception e) {
 			if (linecount >= 0)
-				ReikaJavaLibrary.pConsole("LINE "+linecount+":\n");
+				RotaryCraft.logger.log("LINE "+linecount+":\n");
 			e.printStackTrace();
 			ReikaChatHelper.write(e.getMessage()+" caused the read to fail!");
 		}
@@ -460,26 +459,26 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			else
 				pit = "";
 			switch(voice) {
-			case GUITAR:
-				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
-				break;
-			case BASS:
-				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
-				break;
-			case PLING:
-				SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
-				break;
-			case BASSDRUM:
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.bd", volume, pitch);
-				break;
-			case SNARE:
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.snare", volume, pitch);
-				break;
-			case CLAVE:
-				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.hat", volume, pitch);
-				break;
-			default:
-				break;
+				case GUITAR:
+					SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
+					break;
+				case BASS:
+					SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
+					break;
+				case PLING:
+					SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit).playSoundAtBlock(world, x, y, z, volume, pitch);
+					break;
+				case BASSDRUM:
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.bd", volume, pitch);
+					break;
+				case SNARE:
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.snare", volume, pitch);
+					break;
+				case CLAVE:
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "note.hat", volume, pitch);
+					break;
+				default:
+					break;
 			}
 		}
 

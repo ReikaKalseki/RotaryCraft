@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.PowerTracker;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
@@ -114,7 +114,7 @@ public class PowerSourceList implements PowerTracker {
 		}
 		catch (StackOverflowError e) {
 			//e.printStackTrace();
-			ReikaJavaLibrary.pConsole("PowerSourceList SOE!");
+			RotaryCraft.logger.logError("PowerSourceList SOE!");
 			return pwr;
 		}
 	}

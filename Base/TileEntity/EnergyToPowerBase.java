@@ -342,18 +342,18 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	protected final void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			facingDir = ForgeDirection.NORTH;
-			break;
-		case 1:
-			facingDir = ForgeDirection.WEST;
-			break;
-		case 2:
-			facingDir = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			facingDir = ForgeDirection.EAST;
-			break;
+			case 0:
+				facingDir = ForgeDirection.NORTH;
+				break;
+			case 1:
+				facingDir = ForgeDirection.WEST;
+				break;
+			case 2:
+				facingDir = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				facingDir = ForgeDirection.EAST;
+				break;
 		}
 		read = facingDir;
 		write = read.getOpposite();
@@ -404,6 +404,11 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	@Override
 	public final long getCurrentPower() {
 		return power;
+	}
+
+	@Override
+	public final long getMaxPower() {
+		return this.getTierPower();
 	}
 
 	@Override

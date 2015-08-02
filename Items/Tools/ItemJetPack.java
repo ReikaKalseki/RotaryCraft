@@ -34,6 +34,7 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Interfaces.Fillable;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
@@ -427,5 +428,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 			li.add(w);
 		}
 		return ReikaArrayHelper.intListToArray(li);
+	}
+
+	@Override
+	public boolean getIsRepairable(ItemStack tool, ItemStack item) {
+		return tool.getItem() == this && this.isSteel() && ReikaItemHelper.matchStacks(item, ItemStacks.steelingot);
 	}
 }

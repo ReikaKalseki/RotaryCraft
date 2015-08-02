@@ -27,18 +27,19 @@ import Reika.ChromatiCraft.Magic.ElementTagCompound;
 import Reika.ChromatiCraft.Registry.ItemElementCalculator;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
-import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Base.ItemBlockPlacer;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class WorktableRecipes
-{
+public class WorktableRecipes extends RecipeHandler {
+
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
-	private OneWayList<WorktableRecipe> recipes = new OneWayList();
-	private OneWayList<IRecipe> display = new OneWayList();
+	private ArrayList<WorktableRecipe> recipes = new ArrayList();
+	private ArrayList<IRecipe> display = new ArrayList();
 
 	private final RecipeSorter sorter = new RecipeSorter();
 
@@ -46,16 +47,28 @@ public class WorktableRecipes
 		return instance;
 	}
 
-	public void addRecipe(IRecipe recipe) {
-		recipes.add(new WorktableRecipe(recipe));
+	public void addAPIRecipe(IRecipe recipe) {
+		this.addRecipe(recipe, RecipeLevel.API);
+	}
+
+	public void addRecipe(IRecipe recipe, RecipeLevel rl) {
+		WorktableRecipe wr = new WorktableRecipe(recipe);
+		recipes.add(wr);
 		display.add(recipe);
+
+		super.onAddRecipe(wr, rl);
 	}
 
 	private WorktableRecipes() {
+		super(MachineRegistry.WORKTABLE);
 		//Collections.sort(recipes, sorter);
 	}
 
-	public ShapedRecipes addRecipe(ItemStack output, Object ... items) {
+	public ShapedRecipes addAPIRecipe(ItemStack output, Object... items) {
+		return this.addRecipe(output, RecipeLevel.API, items);
+	}
+
+	public ShapedRecipes addRecipe(ItemStack output, RecipeLevel rl, Object... items) {
 		String s = "";
 		int i = 0;
 		int j = 0;
@@ -122,11 +135,15 @@ public class WorktableRecipes
 		}
 
 		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, aitemstack, output);
-		this.addRecipe(shapedrecipes);
+		this.addRecipe(shapedrecipes, rl);
 		return shapedrecipes;
 	}
 
-	public void addShapelessRecipe(ItemStack output, Object ... items) {
+	public void addShapelessAPIRecipe(ItemStack output, Object... items) {
+		this.addShapelessRecipe(output, RecipeLevel.API, items);
+	}
+
+	public void addShapelessRecipe(ItemStack output, RecipeLevel rl, Object... items) {
 		ArrayList li = new ArrayList();
 		Object[] aobject = items;
 		int i = items.length;
@@ -153,7 +170,7 @@ public class WorktableRecipes
 			}
 		}
 
-		this.addRecipe(new ShapelessRecipes(output, li));
+		this.addRecipe(new ShapelessRecipes(output, li), rl);
 	}
 
 	public ItemStack findMatchingRecipe(InventoryCrafting ic, World world) {
@@ -209,7 +226,7 @@ public class WorktableRecipes
 		return null;
 	}
 
-	public static final class WorktableRecipe {
+	public static final class WorktableRecipe implements MachineRecipe {
 
 		private final IRecipe recipe;
 		private final ItemStack output;
@@ -241,6 +258,11 @@ public class WorktableRecipes
 			return ItemElementCalculator.instance.getIRecipeTotal(recipe);
 		}
 
+		@Override
+		public String getUniqueID() {
+			return "WORKTABLE/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toString(recipe)+">"+output+"?"+(output.getItem() instanceof ItemBlockPlacer);
+		}
+
 	}
 
 	private static class RecipeSorter implements Comparator<WorktableRecipe> {
@@ -254,5 +276,15 @@ public class WorktableRecipes
 		{
 			return ir.recipe instanceof ShapelessRecipes && ir2.recipe instanceof ShapedRecipes ? 1 : (ir2.recipe instanceof ShapelessRecipes && ir.recipe instanceof ShapedRecipes ? -1 : (ir2.recipe.getRecipeSize() < ir.recipe.getRecipeSize() ? -1 : (ir2.recipe.getRecipeSize() > ir.recipe.getRecipeSize() ? 1 : 0)));
 		}
+	}
+
+	@Override
+	public void addPostLoadRecipes() {
+
+	}
+
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipes.remove(recipe) && display.remove(((WorktableRecipe)recipe).recipe);
 	}
 }

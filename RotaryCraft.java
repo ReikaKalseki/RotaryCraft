@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
@@ -32,6 +33,7 @@ import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
@@ -67,6 +69,9 @@ import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper.TinkerMaterial;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
@@ -263,6 +268,8 @@ public class RotaryCraft extends DragonAPIMod {
 		}
 
 		logger = new ModLogger(instance, ConfigRegistry.ALARM.getState());
+		if (DragonOptions.FILELOG.getState())
+			logger.setOutput("**_Loading_Log.log");
 
 		this.setupClassFiles();
 
@@ -495,7 +502,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		RotaryIntegrationManager.verifyClassIntegrity();
 
-		if (!this.isLocked())
+		if (!this.isLocked()) {
 			if (ModList.FORESTRY.isLoaded()) {
 				try {
 					CanolaBee bee = new CanolaBee();
@@ -510,21 +517,40 @@ public class RotaryCraft extends DragonAPIMod {
 				}
 			}
 
-		if (ModList.CHROMATICRAFT.isLoaded()) {
-			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-				MachineRegistry m = MachineRegistry.machineList.get(i);
-				if (!m.allowsAcceleration()) {
-					AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
-					TimeTorchHelper.blacklistTileEntity(m.getTEClass());
+			if (ModList.TINKERER.isLoaded()) {
+				//new UnbreakabilityModifier().register();
+				int id = ExtraConfigIDs.BEDROCKID.getValue();
+				TinkerMaterial mat = TinkerMaterialHelper.instance.createMaterial(id, "RotaryCraft", "Bedrock");
+				mat.durability = 1000000;
+				mat.damageBoost = 5;
+				mat.harvestLevel = 800;
+				mat.miningSpeed = 1500;
+				mat.handleModifier = 3F;
+				mat.setUnbreakable();
+				mat.chatColor = EnumChatFormatting.BLACK.toString();
+				mat.renderColor = 0x383838;
+
+				mat.disableToolPart(TinkerToolHandler.ToolParts.PICK).disableToolPart(TinkerToolHandler.ToolParts.AXEHEAD);
+				mat.disableToolPart(TinkerToolHandler.ToolParts.SHOVEL).disableToolPart(TinkerToolHandler.ToolParts.SWORD);
+
+				mat.register(true).registerTexture("tinkertools/bedrock/bedrock", false);
+				mat.registerPatternBuilder(ItemStacks.bedingot).registerWeapons(ItemStacks.bedingot, 35, 2F, 5F, 4F, 15F, 0);
+			}
+
+			if (ModList.CHROMATICRAFT.isLoaded()) {
+				for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+					MachineRegistry m = MachineRegistry.machineList.get(i);
+					if (!m.allowsAcceleration()) {
+						AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
+						TimeTorchHelper.blacklistTileEntity(m.getTEClass());
+					}
+				}
+				for (int i = 0; i < EngineType.engineList.length; i++) {
+					EngineType type = EngineType.engineList[i];
+					AcceleratorBlacklist.addBlacklist(type.engineClass, type.name(), BlacklistReason.EXPLOIT);
 				}
 			}
-			for (int i = 0; i < EngineType.engineList.length; i++) {
-				EngineType type = EngineType.engineList[i];
-				AcceleratorBlacklist.addBlacklist(type.engineClass, type.name(), BlacklistReason.EXPLOIT);
-			}
-		}
 
-		if (!this.isLocked())
 			if (ModList.THAUMCRAFT.isLoaded()) {
 				RotaryCraft.logger.log("Adding ThaumCraft aspects.");
 				ReikaThaumHelper.addAspects(ItemStacks.canolaSeeds, Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
@@ -586,8 +612,8 @@ public class RotaryCraft extends DragonAPIMod {
 				MachineAspectMapper.instance.register();
 			}
 
-		if (!this.isLocked())
 			RotaryRecipes.addPostLoadRecipes();
+		}
 
 		if (ModList.ROUTER.isLoaded()) {
 			RouterHelper.blacklistTileEntity(TileEntityExtractor.class, "Extractor", "BlockMIMachine:10"); //Extractor

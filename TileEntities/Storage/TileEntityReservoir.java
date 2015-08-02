@@ -42,7 +42,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine {
+public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine/*, BreakAction*/ {
 
 	public static final int CAPACITY = 64000;
 
@@ -58,10 +58,33 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	private HybridTank tank = new HybridTank("reservoir", CAPACITY);
 
+	//private CompoundReservoir network;
+
 	public int getLiquidScaled(int par1) {
 		return (tank.getLevel()*par1)/CAPACITY;
 	}
+	/*
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		if (!world.isRemote)
+			this.recalculateCompound();
+	}
 
+	public void recalculateCompound() {
+		network = new CompoundReservoir(worldObj).addReservoir(this);
+		for (int i = 2; i < 6; i++) {
+			TileEntity te = this.getAdjacentTileEntity(dirs[i]);
+			if (te instanceof TileEntityReservoir) {
+				TileEntityReservoir tr = (TileEntityReservoir)te;
+				if (tr.getFluid() == this.getFluid() || tr.getFluid() == null || this.getFluid() == null) {
+					if (tr.network != null) {
+						network.merge(tr.network);
+					}
+				}
+			}
+		}
+	}
+	 */
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		for (TankHandler th : tankHandlers) {
@@ -94,6 +117,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			tank.empty();
 		else if (isCreative)
 			tank.addLiquid(CAPACITY, tank.getActualFluid());
+
+		//if (!world.isRemote && network != null)
+		//	network.tick();
+
 
 		if (!world.isRemote && !this.isEmpty() && rand.nextInt(this.getThermalTickChance()) == 0) {
 			int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
@@ -135,12 +162,21 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				}
 			}
 		}
+
 	}
 
 	private int getThermalTickChance() {
 		return isCovered ? 20 : 10;
 	}
+	/*
+	public CompoundReservoir getCompound() {
+		return network;
+	}
 
+	public void setCompound(CompoundReservoir cr) {
+		network = cr;
+	}
+	 */
 	private void transferBetween(World world, int x, int y, int z) {
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
@@ -359,7 +395,14 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		FluidStack fs = tank.getFluid();
 		return fs != null && fs.tag != null && fs.tag.hasKey("renderColor") ? fs.tag.getInteger("renderColor") : 0xffffff;
 	}
-
+	/*
+	@Override
+	public void breakBlock() {
+		if (network != null && !worldObj.isRemote) {
+			network.removeReservoir(this);
+		}
+	}
+	 */
 	@Override
 	public NBTTagCompound getTagsToWriteToStack() {
 		NBTTagCompound NBT = new NBTTagCompound();

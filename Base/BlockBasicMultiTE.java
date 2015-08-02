@@ -980,6 +980,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 					currenttip.add("Tank "+i+": "+input);
 				}
 			}
+			/*
+			if (te instanceof TileEntityReservoir) {
+				TileEntityReservoir tr = (TileEntityReservoir)te;
+				CompoundReservoir cr = tr.getCompound();
+				currenttip.add(" x"+cr.getSize()+" = "+cr.getTotalAmount());
+			}*/
 		}
 		if (te instanceof DiscreteFunction) {
 			int ticks = ((DiscreteFunction)te).getOperationTime();

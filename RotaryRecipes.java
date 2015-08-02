@@ -49,6 +49,7 @@ import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
@@ -852,7 +853,7 @@ public class RotaryRecipes {
 			"b", 'b', Items.bucket});
 
 		GameRegistry.addRecipe(ItemStacks.steelblock, "BBB", "BBB", "BBB", 'B', ItemStacks.steelingot);
-		WorktableRecipes.getInstance().addRecipe(ItemStacks.steelblock, "BBB", "BBB", "BBB", 'B', ItemStacks.steelingot);
+		WorktableRecipes.getInstance().addRecipe(ItemStacks.steelblock, RecipeLevel.PROTECTED, "BBB", "BBB", "BBB", 'B', ItemStacks.steelingot);
 		GameRegistry.addRecipe(ItemStacks.anthrablock, "BBB", "BBB", "BBB", 'B', ItemStacks.anthracite);
 		GameRegistry.addRecipe(ItemStacks.lonsblock, "BBB", "BBB", "BBB", 'B', ItemStacks.lonsda);
 		GameRegistry.addRecipe(ItemStacks.bedingotblock, "BBB", "BBB", "BBB", 'B', ItemStacks.bedingot);
@@ -1084,7 +1085,7 @@ public class RotaryRecipes {
 
 	private static void addRecipeToBoth(ItemStack out, Object... in) {
 		GameRegistry.addRecipe(out, in);
-		WorktableRecipes.getInstance().addRecipe(out, in);
+		WorktableRecipes.getInstance().addRecipe(out, RecipeLevel.CORE, in);
 	}
 
 	public static Collection<ItemStack> getBlastFurnaceGatingMaterials() {

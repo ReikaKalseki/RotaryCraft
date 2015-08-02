@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -40,6 +41,7 @@ import thaumcraft.common.entities.monster.EntityWisp;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Rendering.EntityBlockTexFX;
 import Reika.DragonAPI.Instantiable.Rendering.EntityLiquidParticleFX;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -149,18 +151,18 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	public float getChokedFraction(World world, int x, int y, int z, int meta) {
 		int[] pos = {x, z};
 		switch(meta) {
-		case 0:
-			pos[0] += 1;
-			break;
-		case 1:
-			pos[0] += -1;
-			break;
-		case 2:
-			pos[1] += 1;
-			break;
-		case 3:
-			pos[1] += -1;
-			break;
+			case 0:
+				pos[0] += 1;
+				break;
+			case 1:
+				pos[0] += -1;
+				break;
+			case 2:
+				pos[1] += 1;
+				break;
+			case 3:
+				pos[1] += -1;
+				break;
 		}
 		Block b = world.getBlock(pos[0], y, pos[1]);
 		int dmg = world.getBlockMetadata(pos[0], y, pos[1]);
@@ -409,54 +411,54 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		int maxz = 0;
 
 		switch (meta) {
-		case 0:
-			minx = x+1+step;
-			maxx = x+1+step+1;
-			miny = y-step;
-			maxy = y+step+1;
-			minz = z-step;
-			maxz = z+step+1;
-			dumpx = x-1;
-			dumpz = z;
-			dumpvx = -1;
-			dumpvz = 0;
-			break;
-		case 1:
-			minx = x-1-step;
-			maxx = x-1-step+1;
-			miny = y-step;
-			maxy = y+step+1;
-			minz = z-step;
-			maxz = z+step+1;
-			dumpx = x+1;
-			dumpz = z;
-			dumpvx = 1;
-			dumpvz = 0;
-			break;
-		case 2:
-			minz = z+1+step;
-			maxz = z+1+step+1;
-			miny = y-step;
-			maxy = y+step+1;
-			minx = x-step;
-			maxx = x+step+1;
-			dumpx = x;
-			dumpz = z-1;
-			dumpvx = 0;
-			dumpvz = -1;
-			break;
-		case 3:
-			minz = z-1-step;
-			maxz = z-1-step+1;
-			miny = y-step;
-			maxy = y+step+1;
-			minx = x-step;
-			maxx = x+step+1;
-			dumpx = x;
-			dumpz = z+1;
-			dumpvx = 0;
-			dumpvz = 1;
-			break;
+			case 0:
+				minx = x+1+step;
+				maxx = x+1+step+1;
+				miny = y-step;
+				maxy = y+step+1;
+				minz = z-step;
+				maxz = z+step+1;
+				dumpx = x-1;
+				dumpz = z;
+				dumpvx = -1;
+				dumpvz = 0;
+				break;
+			case 1:
+				minx = x-1-step;
+				maxx = x-1-step+1;
+				miny = y-step;
+				maxy = y+step+1;
+				minz = z-step;
+				maxz = z+step+1;
+				dumpx = x+1;
+				dumpz = z;
+				dumpvx = 1;
+				dumpvz = 0;
+				break;
+			case 2:
+				minz = z+1+step;
+				maxz = z+1+step+1;
+				miny = y-step;
+				maxy = y+step+1;
+				minx = x-step;
+				maxx = x+step+1;
+				dumpx = x;
+				dumpz = z-1;
+				dumpvx = 0;
+				dumpvz = -1;
+				break;
+			case 3:
+				minz = z-1-step;
+				maxz = z-1-step+1;
+				miny = y-step;
+				maxy = y+step+1;
+				minx = x-step;
+				maxx = x+step+1;
+				dumpx = x;
+				dumpz = z+1;
+				dumpvx = 0;
+				dumpvz = 1;
+				break;
 		}
 
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.25, 0.25, 0.25);
@@ -558,16 +560,16 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	private AxisAlignedBB getFlameZone(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0: //-x
-			return AxisAlignedBB.getBoundingBox(x-6, y, z, x+1, y+1, z+1);
-		case 1: //+x
-			return AxisAlignedBB.getBoundingBox(x, y, z, x+7, y+1, z+1);
-		case 2: //-z
-			return AxisAlignedBB.getBoundingBox(x, y, z-6, x+1, y+1, z+1);
-		case 3: //+z
-			return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+7);
-		default:
-			return null;
+			case 0: //-x
+				return AxisAlignedBB.getBoundingBox(x-6, y, z, x+1, y+1, z+1);
+			case 1: //+x
+				return AxisAlignedBB.getBoundingBox(x, y, z, x+7, y+1, z+1);
+			case 2: //-z
+				return AxisAlignedBB.getBoundingBox(x, y, z-6, x+1, y+1, z+1);
+			case 3: //+z
+				return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+7);
+			default:
+				return null;
 		}
 	}
 
@@ -698,7 +700,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		if (lastpower == 0) {
 			SoundRegistry.JETSTART.playSoundAtBlock(world, x, y, z);
 		}
-		this.spawnSmokeParticles(world, x, y, z, meta);
+		if (world.isRemote)
+			this.spawnSmokeParticles(world, x, y, z, meta);
 		jetstarttimer.update();
 		this.doAfterburning(world, x, y, z);
 	}
@@ -799,6 +802,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void spawnSmokeParticles(World world, int x, int y, int z, int meta) {
 		double dx = x-backx;
 		double dz = z-backz;
@@ -806,7 +810,35 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		dz /= 2;
 		double vx = -(x-backx)/2D;
 		double vz = -(z-backz)/2D;
-		world.spawnParticle("smoke", dx+x+0.25+0.5*rand.nextDouble(), y+0.5*rand.nextDouble(), dz+z+0.25+0.5*rand.nextDouble(), -vx-0.1+0.2*rand.nextDouble(), -0.1+0.2*rand.nextDouble(), -vz-0.1+0.2*rand.nextDouble());
+		ReikaParticleHelper.SMOKE.spawnAt(world, dx+x+0.25+0.5*rand.nextDouble(), y+0.5*rand.nextDouble(), dz+z+0.25+0.5*rand.nextDouble(), -vx-0.1+0.2*rand.nextDouble(), -0.1+0.2*rand.nextDouble(), -vz-0.1+0.2*rand.nextDouble());
+
+		int n = 1+rand.nextInt(8);
+		double w = n/2D;
+		dx = write.offsetX == 0 ? ReikaRandomHelper.getRandomPlusMinus(x+0.5, w) : x+0.5-n*write.offsetX;
+		double dy = ReikaRandomHelper.getRandomPlusMinus(y+0.5, w);
+		dz = write.offsetZ == 0 ? ReikaRandomHelper.getRandomPlusMinus(z+0.5, w) : z+0.5-n*write.offsetZ;
+
+		double v = -0.0625;
+
+		vx = v*(dx-x-0.5);
+		double vy = v*(dy-y-0.5);
+		vz = v*(dz-z-0.5);
+
+		int bx = MathHelper.floor_double(dx);
+		int by = MathHelper.floor_double(dy);
+		int bz = MathHelper.floor_double(dz);
+		Block b = world.getBlock(bx, by, bz);
+		int bmeta = world.getBlockMetadata(bx, by, bz);
+		if (b.isAir(world, bx, by, bz)) {
+			if (rand.nextInt(3) == 0)
+				ReikaParticleHelper.CLOUD.spawnAt(world, dx, dy, dz, vx, vy, vz);
+		}
+		else {
+			EntityBlockTexFX fx = new EntityBlockTexFX(world, dx, dy+1, dz, vx, vy-0.03125, vz, b, bmeta).setGravity(0);
+			fx.applyColourMultiplier(bx, by, bz);
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		}
+
 	}
 
 	@Override

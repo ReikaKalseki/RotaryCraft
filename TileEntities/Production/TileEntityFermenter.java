@@ -99,8 +99,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			Tdiff = temperature-OPTFERMENTTEMP;
 		if (Tdiff < 0)
 			Tdiff = -Tdiff;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(Tdiff));
-		return (16F-(Tdiff));
+		return (float)Math.pow(1-Tdiff/16F, 0.2);
 	}
 
 	public void testIdle() {
@@ -331,18 +330,18 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 			return false;
 		if (red) {
 			switch(i) {
-			case 0:
-				return is.getItem() == ItemRegistry.YEAST.getItemInstance();
-			case 1:
-				return MulchMaterials.instance.isMulchable(is);//ReikaItemHelper.matchStacks(is, ItemStacks.mulch);
+				case 0:
+					return is.getItem() == ItemRegistry.YEAST.getItemInstance();
+				case 1:
+					return MulchMaterials.instance.isMulchable(is);//ReikaItemHelper.matchStacks(is, ItemStacks.mulch);
 			}
 		}
 		else {
 			switch(i) {
-			case 0:
-				return is.getItem() == Items.sugar;
-			case 1:
-				return ReikaItemHelper.matchStackWithBlock(is, Blocks.dirt);
+				case 0:
+					return is.getItem() == Items.sugar;
+				case 1:
+					return ReikaItemHelper.matchStackWithBlock(is, Blocks.dirt);
 			}
 		}
 		return false;

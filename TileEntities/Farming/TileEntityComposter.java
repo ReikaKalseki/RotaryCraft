@@ -40,7 +40,8 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 	public int composterCookTime;
 
 	public static final int MINTEMP = 40;
-	public static final int MAXTEMP = 70;
+	public static final int KILLTEMP = 70;
+	public static final int MAXTEMP = 100;
 
 	private static enum CompostMatter {
 
@@ -108,6 +109,10 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		return a*composterCookTime/timer.getCap();
 	}
 
+	public int getScaledTemperature(int a) {
+		return a*temperature/MAXTEMP;
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		tempTimer.update();
@@ -132,7 +137,7 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 	}
 
 	private int getCompostValue() {
-		if (temperature < MINTEMP || temperature > MAXTEMP)
+		if (temperature < MINTEMP || temperature > KILLTEMP)
 			return 0;
 		if (inv[0] == null || inv[1] == null)
 			return 0;

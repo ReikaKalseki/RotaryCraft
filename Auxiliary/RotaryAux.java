@@ -34,6 +34,7 @@ import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource;
 import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
@@ -47,7 +48,7 @@ public class RotaryAux {
 	public static final Color[] sideColors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
 	public static final String[] sideColorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
 
-	public static boolean getPowerOnClient = true;//ConfigRegistry.POWERCLIENT.getState();
+	public static final boolean getPowerOnClient = ConfigRegistry.POWERCLIENT.getState();
 
 	private static Set<Class<? extends TileEntity>> shaftPowerBlacklist = new OneWaySet<Class<? extends TileEntity>>();
 
@@ -109,14 +110,14 @@ public class RotaryAux {
 		while (i < 0)
 			i += 4;
 		switch (i) {
-		case 0:
-			return 2;
-		case 1:
-			return 1;
-		case 2:
-			return 3;
-		case 3:
-			return 0;
+			case 0:
+				return 2;
+			case 1:
+				return 1;
+			case 2:
+				return 3;
+			case 3:
+				return 0;
 		}
 		return -1;
 	}
@@ -129,14 +130,14 @@ public class RotaryAux {
 			while (i < 0)
 				i += 4;
 			switch (i) {
-			case 0:
-				return 2;
-			case 1:
-				return 1;
-			case 2:
-				return 3;
-			case 3:
-				return 0;
+				case 0:
+					return 2;
+				case 1:
+					return 1;
+				case 2:
+					return 3;
+				case 3:
+					return 0;
 			}
 		}
 		else { //Looking up/down
@@ -156,14 +157,14 @@ public class RotaryAux {
 			i += 4;
 
 		switch (i) {
-		case 0:
-			return 0;
-		case 1:
-			return 1;
-		case 2:
-			return 0;
-		case 3:
-			return 1;
+			case 0:
+				return 0;
+			case 1:
+				return 1;
+			case 2:
+				return 0;
+			case 3:
+				return 1;
 		}
 		return -1;
 	}
@@ -174,12 +175,12 @@ public class RotaryAux {
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)t;
 		int m = te.getBlockMetadata();
 		switch (m) {
-		case 0:
-			te.setBlockMetadata(1);
-			break;
-		case 1:
-			te.setBlockMetadata(0);
-			break;
+			case 0:
+				te.setBlockMetadata(1);
+				break;
+			case 1:
+				te.setBlockMetadata(0);
+				break;
 		}
 	}
 
@@ -189,12 +190,12 @@ public class RotaryAux {
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)t;
 		int m = te.getBlockMetadata();
 		switch (m) {
-		case 2:
-			te.setBlockMetadata(3);
-			break;
-		case 3:
-			te.setBlockMetadata(2);
-			break;
+			case 2:
+				te.setBlockMetadata(3);
+				break;
+			case 3:
+				te.setBlockMetadata(2);
+				break;
 		}
 	}
 

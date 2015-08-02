@@ -57,7 +57,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction,
 ConditionalOperation, DamagingContact {
 
-	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+	private HashMap<Enchantment, Integer> enchantments = new HashMap();
 
 	public int editx;
 	public int edity;
@@ -209,7 +209,7 @@ ConditionalOperation, DamagingContact {
 					if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
 						ItemStack plant = this.getPlantedSapling();
 						if (plant != null) {
-							if (inv[0] != null)
+							if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
 								ReikaInventoryHelper.decrStack(0, inv);
 							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 						}
@@ -217,7 +217,7 @@ ConditionalOperation, DamagingContact {
 					else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
 						ItemStack plant = this.getPlantedSapling();
 						if (plant != null) {
-							if (inv[0] != null)
+							if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
 								ReikaInventoryHelper.decrStack(0, inv);
 							world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
 							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
@@ -253,7 +253,7 @@ ConditionalOperation, DamagingContact {
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
-								if (inv[0] != null)
+								if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
 									ReikaInventoryHelper.decrStack(0, inv);
 								ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 							}
@@ -261,7 +261,7 @@ ConditionalOperation, DamagingContact {
 						else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
-								if (inv[0] != null)
+								if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
 									ReikaInventoryHelper.decrStack(0, inv);
 								world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
 								ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
@@ -378,54 +378,54 @@ ConditionalOperation, DamagingContact {
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			read = ForgeDirection.EAST;
-			editx = x-1;
-			edity = y;
-			editz = z;
-			dropx = x+1+0.125;
-			dropz = z+0.5;
-			stepx = 1;
-			stepz = 0;
-			varyx = false;
-			varyz = true;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			editx = x+1;
-			edity = y;
-			editz = z;
-			dropx = x-0.125;
-			dropz = z+0.5;
-			stepx = -1;
-			stepz = 0;
-			varyx = false;
-			varyz = true;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			editx = x;
-			edity = y;
-			editz = z-1;
-			dropx = x+0.5;
-			dropz = z+1+0.125;
-			stepx = 0;
-			stepz = 1;
-			varyx = true;
-			varyz = false;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			editx = x;
-			edity = y;
-			editz = z+1;
-			dropx = x+0.5;
-			dropz = z-0.125;
-			stepx = 0;
-			stepz = -1;
-			varyx = true;
-			varyz = false;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				editx = x-1;
+				edity = y;
+				editz = z;
+				dropx = x+1+0.125;
+				dropz = z+0.5;
+				stepx = 1;
+				stepz = 0;
+				varyx = false;
+				varyz = true;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				editx = x+1;
+				edity = y;
+				editz = z;
+				dropx = x-0.125;
+				dropz = z+0.5;
+				stepx = -1;
+				stepz = 0;
+				varyx = false;
+				varyz = true;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				editx = x;
+				edity = y;
+				editz = z-1;
+				dropx = x+0.5;
+				dropz = z+1+0.125;
+				stepx = 0;
+				stepz = 1;
+				varyx = true;
+				varyz = false;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				editx = x;
+				edity = y;
+				editz = z+1;
+				dropx = x+0.5;
+				dropz = z-0.125;
+				stepx = 0;
+				stepz = -1;
+				varyx = true;
+				varyz = false;
+				break;
 		}
 		dropx = x+0.5; dropz = z+0.5;
 	}
@@ -501,7 +501,7 @@ ConditionalOperation, DamagingContact {
 	}
 
 	@Override
-	public HashMap<Enchantment,Integer> getEnchantments() {
+	public HashMap<Enchantment, Integer> getEnchantments() {
 		return enchantments;
 	}
 

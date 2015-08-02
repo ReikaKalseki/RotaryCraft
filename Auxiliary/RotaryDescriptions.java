@@ -65,6 +65,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
@@ -551,7 +552,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.GRINDSTONE, PowerReceivers.GRINDSTONE.getMinPower(), PowerReceivers.GRINDSTONE.getMinTorque());
 		addNotes(MachineRegistry.BLOWER, PowerReceivers.BLOWER.getMinPower(), PowerReceivers.BLOWER.getMinSpeed());
 		addNotes(MachineRegistry.REFRIGERATOR, PowerReceivers.REFRIGERATOR.getMinPower(), PowerReceivers.REFRIGERATOR.getMinTorque());
-		addNotes(MachineRegistry.COMPOSTER, TileEntityComposter.MINTEMP, TileEntityComposter.MAXTEMP);
+		addNotes(MachineRegistry.COMPOSTER, TileEntityComposter.MINTEMP, TileEntityComposter.KILLTEMP);
 		addNotes(MachineRegistry.GASTANK, PowerReceivers.GASTANK.getMinPower(), PowerReceivers.GASTANK.getMinTorque());
 		addNotes(MachineRegistry.CRAFTER, PowerReceivers.CRAFTER.getMinPower());
 		addNotes(MachineRegistry.ANTIAIR, PowerReceivers.ANTIAIR.getMinPower(), PowerReceivers.ANTIAIR.getMinTorque());
@@ -564,6 +565,8 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.PNEUENGINE, EnergyToPowerBase.MAXTEMP);
 		addNotes(MachineRegistry.ELECTRICMOTOR, EnergyToPowerBase.MAXTEMP);
 		addNotes(MachineRegistry.STEAMTURBINE, EnergyToPowerBase.MAXTEMP);
+
+		addNotes(MachineRegistry.EMP, TileEntityEMP.BLAST_ENERGY);
 
 		addSubNotes(MachineRegistry.MAGNETIC, 1, EnergyToPowerBase.getTiersAsString());
 		addSubNotes(MachineRegistry.PNEUENGINE, 1, EnergyToPowerBase.getTiersAsString());

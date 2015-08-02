@@ -701,6 +701,7 @@
 		</desc>
 		<note>
 			Purely mechanical blocks like shafts are immune
+			Activation Energy: %dJ
 			Power Input: Bottom
 		</note>
 	</emp>

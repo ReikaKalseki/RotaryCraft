@@ -25,7 +25,6 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.BasicMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
@@ -119,7 +118,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	public final void giveNoSuperWarning() {
-		ReikaJavaLibrary.pConsole("TileEntity "+this.getName()+" does not call super()!");
+		RotaryCraft.logger.logError("TileEntity "+this.getName()+" does not call super()!");
 		ReikaChatHelper.write("TileEntity "+this.getName()+" does not call super()!");
 	}
 
@@ -210,14 +209,14 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	public int getTextureStateForSide(int s) {
 		switch(this.getBlockMetadata()) {
-		case 0:
-			return s == 4 ? this.getActiveTexture() : 0;
-		case 1:
-			return s == 5 ? this.getActiveTexture() : 0;
-		case 2:
-			return s == 2 ? this.getActiveTexture() : 0;
-		case 3:
-			return s == 3 ? this.getActiveTexture() : 0;
+			case 0:
+				return s == 4 ? this.getActiveTexture() : 0;
+			case 1:
+				return s == 5 ? this.getActiveTexture() : 0;
+			case 2:
+				return s == 2 ? this.getActiveTexture() : 0;
+			case 3:
+				return s == 3 ? this.getActiveTexture() : 0;
 		}
 		return 0;
 	}

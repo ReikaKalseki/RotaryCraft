@@ -96,11 +96,6 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 	}
 
 	@Override
-	public long getMaxPower() {
-		return power;
-	}
-
-	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection dir) {
 		return dir == this.getFacing().getOpposite() && type == PipeType.FLUID ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}

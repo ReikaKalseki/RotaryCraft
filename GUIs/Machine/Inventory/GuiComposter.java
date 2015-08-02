@@ -16,12 +16,12 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 
 public class GuiComposter extends GuiNonPoweredMachine
 {
-	private TileEntityComposter ferm;
+	private TileEntityComposter comp;
 
 	public GuiComposter(EntityPlayer p5ep, TileEntityComposter Composter)
 	{
 		super(new ContainerComposter(p5ep, Composter), Composter);
-		ferm = Composter;
+		comp = Composter;
 		ep = p5ep;
 	}
 
@@ -33,8 +33,13 @@ public class GuiComposter extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = ferm.getScaledTimer(48);
+		int i1 = comp.getScaledTimer(48);
 		this.drawTexturedModalRect(j + 79, k + 34, 176, 14, 1*(i1)+1, 16);
+
+		int i2 = comp.getScaledTemperature(54);
+		if (i2 > 54)
+			i2 = 54;
+		this.drawTexturedModalRect(j+24, k+70-i2, 177, 86-i2, 9, i2);
 	}
 
 	@Override

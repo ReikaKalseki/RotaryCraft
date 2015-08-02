@@ -19,7 +19,8 @@ public enum ExtraConfigIDs implements IDRegistry {
 
 	//ACHIEVEMENT("Extra IDs", "Achievement Base ID", 24000, null),
 
-	FREEZEID("Other IDs", "Freeze Potion ID", 35, Potion.class);
+	FREEZEID("Other IDs", "Freeze Potion ID", 35, Potion.class),
+	BEDROCKID("Other IDs", "Bedrock Tool Material ID", 80, null);
 	//DEAFID("Other IDs", "Deafness ID", 37, Potion.class);
 
 	private String name;

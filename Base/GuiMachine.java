@@ -24,7 +24,6 @@ import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -155,7 +154,7 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, i);
 		if (ep == null && !(this instanceof GuiOneSlotInv))
-			ReikaJavaLibrary.pConsole("Gui for "+tile.getMultiValuedName()+" did not set player entity!");
+			RotaryCraft.logger.logError("Gui for "+tile.getMultiValuedName()+" did not set player entity!");
 		//RenderHelper.enableGUIStandardItemLighting();
 		//RenderHelper.disableStandardItemLighting();
 	}

@@ -21,6 +21,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -116,7 +117,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 		if (!ts.isBreakable(is))
 			return false;
 		int dmg = inv[0].getItemDamage();
-		float diff = (float)dmg/65536*0.05F;
+		double diff = dmg/65536D*DifficultyEffects.BREAKCOIL.getDouble();
 		boolean rand = ReikaRandomHelper.doWithChance(diff);
 		return rand;
 	}

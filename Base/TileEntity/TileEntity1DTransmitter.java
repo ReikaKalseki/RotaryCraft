@@ -46,28 +46,28 @@ public abstract class TileEntity1DTransmitter extends TileEntityTransmissionMach
 
 	public void getIOSides(World world, int x, int y, int z, int meta, boolean hasVertical) {
 		switch(meta){
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			break;
-		case 4:
-			if (hasVertical) {
-				read = ForgeDirection.DOWN;
-			}
-			break;
-		case 5:
-			if (hasVertical) {
-				read = ForgeDirection.UP;
-			}
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				break;
+			case 4:
+				if (hasVertical) {
+					read = ForgeDirection.DOWN;
+				}
+				break;
+			case 5:
+				if (hasVertical) {
+					read = ForgeDirection.UP;
+				}
+				break;
 		}
 		write = read.getOpposite();
 	}

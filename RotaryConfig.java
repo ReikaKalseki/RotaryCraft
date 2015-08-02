@@ -99,7 +99,7 @@ public class RotaryConfig extends ControlledConfig {
 			StringBuilder sb = new StringBuilder();
 			for (BlastGate g : BlastGate.values())
 				sb.append(g.name()+"; ");
-			ReikaJavaLibrary.pConsole(sb.toString());
+			RotaryCraft.logger.log(sb.toString());
 		}
 		return c;
 	}

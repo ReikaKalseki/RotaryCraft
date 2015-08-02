@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.ModReflectionException;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.FactorizationHandler;
@@ -76,7 +75,7 @@ public final class OreForcer {
 					e.printStackTrace();
 				}
 				catch (ModReflectionException e) {
-					ReikaJavaLibrary.pConsole(e.getMessage());
+					RotaryCraft.logger.logError(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -88,65 +87,65 @@ public final class OreForcer {
 		if (!api.isReikasMod())
 			RotaryCraft.logger.log("Forcing compatibility with "+api);
 		switch(api) {
-		case APPENG:
-			this.intercraftQuartz();
-			break;
-		case FORESTRY:
-			this.intercraftApatite();
-			break;
-		case THAUMCRAFT:
-			if (ConfigRegistry.MODORES.getState())
-				this.registerThaumcraft();
-			this.intercraftThaumcraft();
-			break;
-		case MFFS:
-			this.intercraftForcicium();
-			break;
-		case MEKANISM:
-			this.registerOsmium();
-			break;
-		case DARTCRAFT:
-			if (ConfigRegistry.MODORES.getState())
-				this.registerDart();
-			this.intercraftDart();
-			this.breakForceWrench();
-			break;
-		case ARSMAGICA:
-			if (ConfigRegistry.MODORES.getState())
-				this.registerMagica();
-			this.intercraftMagica();
-			break;
-		case TRANSITIONAL:
-			this.intercraftMagmanite();
-			break;
-		case RAILCRAFT:
-			this.intercraftFirestone();
-			break;
-		case IC2:
-			this.convertUranium();
-			break;
-		case MAGICCROPS:
-			if (ConfigRegistry.MODORES.getState())
-				this.registerEssence();
-			this.intercraftEssence();
-			break;
-		case MIMICRY:
-			this.intercraftMimichite();
-			break;
-		case FACTORIZATION:
-			this.intercraftDarkIron();
-			break;
-		case QCRAFT:
-			if (ConfigRegistry.MODORES.getState())
-				this.registerQuantum();
-			this.intercraftQuantum();
-			break;
-		case PROJRED:
-			this.intercraftPRGems();
-			break;
-		case GALACTICRAFT:
-			this.intercraftSilicon();
-			break;
+			case APPENG:
+				this.intercraftQuartz();
+				break;
+			case FORESTRY:
+				this.intercraftApatite();
+				break;
+			case THAUMCRAFT:
+				if (ConfigRegistry.MODORES.getState())
+					this.registerThaumcraft();
+				this.intercraftThaumcraft();
+				break;
+			case MFFS:
+				this.intercraftForcicium();
+				break;
+			case MEKANISM:
+				this.registerOsmium();
+				break;
+			case DARTCRAFT:
+				if (ConfigRegistry.MODORES.getState())
+					this.registerDart();
+				this.intercraftDart();
+				this.breakForceWrench();
+				break;
+			case ARSMAGICA:
+				if (ConfigRegistry.MODORES.getState())
+					this.registerMagica();
+				this.intercraftMagica();
+				break;
+			case TRANSITIONAL:
+				this.intercraftMagmanite();
+				break;
+			case RAILCRAFT:
+				this.intercraftFirestone();
+				break;
+			case IC2:
+				this.convertUranium();
+				break;
+			case MAGICCROPS:
+				if (ConfigRegistry.MODORES.getState())
+					this.registerEssence();
+				this.intercraftEssence();
+				break;
+			case MIMICRY:
+				this.intercraftMimichite();
+				break;
+			case FACTORIZATION:
+				this.intercraftDarkIron();
+				break;
+			case QCRAFT:
+				if (ConfigRegistry.MODORES.getState())
+					this.registerQuantum();
+				this.intercraftQuantum();
+				break;
+			case PROJRED:
+				this.intercraftPRGems();
+				break;
+			case GALACTICRAFT:
+				this.intercraftSilicon();
+				break;
 		}
 	}
 

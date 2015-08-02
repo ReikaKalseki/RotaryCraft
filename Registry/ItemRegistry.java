@@ -31,6 +31,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Base.ItemBasic;
@@ -336,26 +337,26 @@ public enum ItemRegistry implements ItemEnum {
 
 	public int getArmorType() {
 		switch(this) {
-		case BEDBOOTS:
-		case STEELBOOTS:
-		case JUMP:
-		case BEDJUMP:
-			return 3;
-		case BEDCHEST:
-		case STEELCHEST:
-		case JETPACK:
-		case BEDPACK:
-		case STEELPACK:
-			return 1;
-		case BEDHELM:
-		case STEELHELMET:
-		case BEDREVEAL:
-			return 0;
-		case BEDLEGS:
-		case STEELLEGS:
-			return 2;
-		default:
-			return 0;
+			case BEDBOOTS:
+			case STEELBOOTS:
+			case JUMP:
+			case BEDJUMP:
+				return 3;
+			case BEDCHEST:
+			case STEELCHEST:
+			case JETPACK:
+			case BEDPACK:
+			case STEELPACK:
+				return 1;
+			case BEDHELM:
+			case STEELHELMET:
+			case BEDREVEAL:
+				return 0;
+			case BEDLEGS:
+			case STEELLEGS:
+				return 2;
+			default:
+				return 0;
 		}
 	}
 
@@ -399,55 +400,55 @@ public enum ItemRegistry implements ItemEnum {
 		if (this.isCharged())
 			return this.getBasicName()+" ("+String.format("%d", dmg)+" kJ)";
 		switch(this) {
-		case SLIDE:
-			return this.getBasicName()+" ("+dmg+")";
-		case SPRING:
-		case STRONGCOIL:
-			return this.getBasicName()+" ("+String.format("%d", dmg)+" kJ)";
-		case BUCKET:
-			return RotaryNames.getBucketName(dmg);
-		case RAILGUN:
-			return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
-		case UPGRADE:
-			return ItemEngineUpgrade.Upgrades.values()[dmg].getName();
-		case MODEXTRACTS:
-			return RotaryNames.getModExtractName(dmg);
-		case MODINGOTS:
-			return RotaryNames.getModIngotName(dmg);
-		case SHAFTCRAFT:
-			return StatCollector.translateToLocal(RotaryNames.shaftPartNames[dmg]);
-		case MISCCRAFT:
-			return StatCollector.translateToLocal(RotaryNames.miscPartNames[dmg]);
-		case BORECRAFT:
-			return StatCollector.translateToLocal(RotaryNames.borerPartNames[dmg]);
-		case ENGINECRAFT:
-			return StatCollector.translateToLocal(RotaryNames.enginePartNames[dmg]);
-		case EXTRACTS:
-			return StatCollector.translateToLocal(RotaryNames.extractNames[dmg]);
-		case COMPACTS:
-			return StatCollector.translateToLocal(RotaryNames.compactNames[dmg]);
-		case POWDERS:
-			return StatCollector.translateToLocal(RotaryNames.powderNames[dmg]);
-		case MODINTERFACE:
-			return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
-		case GEARUNITS:
-			return StatCollector.translateToLocal(RotaryNames.gearUnitNames[dmg]);
-		case SHAFT:
-			return RotaryNames.getShaftName(dmg);
-		case ENGINE:
-			return RotaryNames.getEngineName(dmg);
-		case GEARBOX:
-			return RotaryNames.getGearboxName(dmg);
-		case FLYWHEEL:
-			return RotaryNames.getFlywheelName(dmg);
-		case ADVGEAR:
-			return RotaryNames.getAdvGearName(dmg);
-		case MACHINE:
-			return MachineRegistry.machineList.get(dmg).getName();
-		case CANOLA:
-			return RotaryNames.getCanolaName(dmg);
-		default:
-			break;
+			case SLIDE:
+				return this.getBasicName()+" ("+dmg+")";
+			case SPRING:
+			case STRONGCOIL:
+				return this.getBasicName()+" ("+String.format("%d", dmg)+" kJ)";
+			case BUCKET:
+				return RotaryNames.getBucketName(dmg);
+			case RAILGUN:
+				return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
+			case UPGRADE:
+				return ItemEngineUpgrade.Upgrades.values()[dmg].getName();
+			case MODEXTRACTS:
+				return RotaryNames.getModExtractName(dmg);
+			case MODINGOTS:
+				return RotaryNames.getModIngotName(dmg);
+			case SHAFTCRAFT:
+				return StatCollector.translateToLocal(RotaryNames.shaftPartNames[dmg]);
+			case MISCCRAFT:
+				return StatCollector.translateToLocal(RotaryNames.miscPartNames[dmg]);
+			case BORECRAFT:
+				return StatCollector.translateToLocal(RotaryNames.borerPartNames[dmg]);
+			case ENGINECRAFT:
+				return StatCollector.translateToLocal(RotaryNames.enginePartNames[dmg]);
+			case EXTRACTS:
+				return StatCollector.translateToLocal(RotaryNames.extractNames[dmg]);
+			case COMPACTS:
+				return StatCollector.translateToLocal(RotaryNames.compactNames[dmg]);
+			case POWDERS:
+				return StatCollector.translateToLocal(RotaryNames.powderNames[dmg]);
+			case MODINTERFACE:
+				return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
+			case GEARUNITS:
+				return StatCollector.translateToLocal(RotaryNames.gearUnitNames[dmg]);
+			case SHAFT:
+				return RotaryNames.getShaftName(dmg);
+			case ENGINE:
+				return RotaryNames.getEngineName(dmg);
+			case GEARBOX:
+				return RotaryNames.getGearboxName(dmg);
+			case FLYWHEEL:
+				return RotaryNames.getFlywheelName(dmg);
+			case ADVGEAR:
+				return RotaryNames.getAdvGearName(dmg);
+			case MACHINE:
+				return MachineRegistry.machineList.get(dmg).getName();
+			case CANOLA:
+				return RotaryNames.getCanolaName(dmg);
+			default:
+				break;
 		}
 		throw new RuntimeException("Item "+name+" was called for a multi-name, but it was not registered!");
 	}
@@ -564,87 +565,87 @@ public enum ItemRegistry implements ItemEnum {
 		if (this.isSteelTool())
 			return 600;
 		switch(this) {
-		case WORLDEDIT:
-		case CANOLA:
-			return 3;
-			//case NVH:
-			//	return Items.diamond_helmet.getMaxDamage();
-		case SPRING:
-		case STRONGCOIL:
-			return 32000;
-		case SLIDE:
-			return 25;
-		case RAILGUN:
-			return 16;
-		case BUCKET:
-			return 5;
-		case UPGRADE:
-			return ItemEngineUpgrade.Upgrades.values().length;
-		case MODEXTRACTS:
-			return 4*ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
-		case MODINGOTS:
-			return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
-		case CUSTOMEXTRACT:
-			return 4*CustomExtractLoader.instance.getEntries().size();
-		case CUSTOMINGOT:
-			return CustomExtractLoader.instance.getEntries().size();
-		case SHAFTCRAFT:
-			return RotaryNames.shaftPartNames.length;
-		case MISCCRAFT:
-			return RotaryNames.miscPartNames.length;
-		case BORECRAFT:
-			return RotaryNames.borerPartNames.length;
-		case ENGINECRAFT:
-			return RotaryNames.enginePartNames.length;
-		case EXTRACTS:
-			return RotaryNames.extractNames.length;
-		case COMPACTS:
-			return RotaryNames.compactNames.length;
-		case POWDERS:
-			return RotaryNames.powderNames.length;
-		case MODINTERFACE:
-			return RotaryNames.interfaceNames.length;
-		case GEARUNITS:
-			return RotaryNames.gearUnitNames.length;
-		case SHAFT:
-			return RotaryNames.getNumberShaftTypes();
-		case ENGINE:
-			return RotaryNames.getNumberEngineTypes();
-		case GEARBOX:
-			return RotaryNames.getNumberGearTypes();
-		case FLYWHEEL:
-			return RotaryNames.getNumberFlywheelTypes();
-		case ADVGEAR:
-			return RotaryNames.getNumberAdvGearTypes();
-		case MACHINE:
-			return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(MachineRegistry.class).size();
-		default:
-			throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
+			case WORLDEDIT:
+			case CANOLA:
+				return 3;
+				//case NVH:
+				//	return Items.diamond_helmet.getMaxDamage();
+			case SPRING:
+			case STRONGCOIL:
+				return 32000;
+			case SLIDE:
+				return 25;
+			case RAILGUN:
+				return 16;
+			case BUCKET:
+				return 5;
+			case UPGRADE:
+				return ItemEngineUpgrade.Upgrades.values().length;
+			case MODEXTRACTS:
+				return 4*ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
+			case MODINGOTS:
+				return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
+			case CUSTOMEXTRACT:
+				return 4*CustomExtractLoader.instance.getEntries().size();
+			case CUSTOMINGOT:
+				return CustomExtractLoader.instance.getEntries().size();
+			case SHAFTCRAFT:
+				return RotaryNames.shaftPartNames.length;
+			case MISCCRAFT:
+				return RotaryNames.miscPartNames.length;
+			case BORECRAFT:
+				return RotaryNames.borerPartNames.length;
+			case ENGINECRAFT:
+				return RotaryNames.enginePartNames.length;
+			case EXTRACTS:
+				return RotaryNames.extractNames.length;
+			case COMPACTS:
+				return RotaryNames.compactNames.length;
+			case POWDERS:
+				return RotaryNames.powderNames.length;
+			case MODINTERFACE:
+				return RotaryNames.interfaceNames.length;
+			case GEARUNITS:
+				return RotaryNames.gearUnitNames.length;
+			case SHAFT:
+				return RotaryNames.getNumberShaftTypes();
+			case ENGINE:
+				return RotaryNames.getNumberEngineTypes();
+			case GEARBOX:
+				return RotaryNames.getNumberGearTypes();
+			case FLYWHEEL:
+				return RotaryNames.getNumberFlywheelTypes();
+			case ADVGEAR:
+				return RotaryNames.getNumberAdvGearTypes();
+			case MACHINE:
+				return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(MachineRegistry.class).size();
+			default:
+				throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
 		}
 	}
 
 	public boolean isArmor() {
 		switch(this) {
-		case IOGOGGLES:
-		case NVG:
-			//case NVH:
-		case BEDHELM:
-		case BEDCHEST:
-		case BEDLEGS:
-		case BEDBOOTS:
-		case BEDPACK:
-		case JETPACK:
-		case STEELPACK:
-		case STEELHELMET:
-		case STEELCHEST:
-		case STEELLEGS:
-		case STEELBOOTS:
-		case JUMP:
-		case BEDJUMP:
-		case BEDREVEAL:
-			return true;
-		default:
-			return false;
+			case IOGOGGLES:
+			case NVG:
+				//case NVH:
+			case BEDHELM:
+			case BEDCHEST:
+			case BEDLEGS:
+			case BEDBOOTS:
+			case BEDPACK:
+			case JETPACK:
+			case STEELPACK:
+			case STEELHELMET:
+			case STEELCHEST:
+			case STEELLEGS:
+			case STEELBOOTS:
+			case JUMP:
+			case BEDJUMP:
+			case BEDREVEAL:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -666,17 +667,17 @@ public enum ItemRegistry implements ItemEnum {
 
 	public boolean overridesRightClick(ItemStack is) {
 		switch(this) {
-		case DEBUG:
-		case METER:
-		case SCREWDRIVER:
-		case KEY:
-		case TILESELECTOR:
-		case UPGRADE:
-			return true;
-		case PUMP:
-			return is.stackTagCompound != null;
-		default:
-			return false;
+			case DEBUG:
+			case METER:
+			case SCREWDRIVER:
+			case KEY:
+			case TILESELECTOR:
+			case UPGRADE:
+				return true;
+			case PUMP:
+				return is.stackTagCompound != null;
+			default:
+				return false;
 		}
 	}
 
@@ -702,28 +703,28 @@ public enum ItemRegistry implements ItemEnum {
 	public void addRecipe(Object... params) {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getStackOf(), params);
-			WorktableRecipes.getInstance().addRecipe(this.getStackOf(), params);
+			WorktableRecipes.getInstance().addRecipe(this.getStackOf(), this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, params);
 		}
 	}
 
 	public void addSizedRecipe(int num, Object... params) {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getCraftedProduct(num), params);
-			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(num), params);
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(num), this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, params);
 		}
 	}
 
 	public void addMetaRecipe(int meta, Object... params) {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getStackOfMetadata(meta), params);
-			WorktableRecipes.getInstance().addRecipe(this.getStackOfMetadata(meta), params);
+			WorktableRecipes.getInstance().addRecipe(this.getStackOfMetadata(meta), this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, params);
 		}
 	}
 
 	public void addSizedMetaRecipe(int meta, int num, Object... params) {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(this.getCraftedMetadataProduct(num, meta), params);
-			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(num, meta), params);
+			WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(num, meta), this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, params);
 		}
 	}
 
@@ -752,7 +753,7 @@ public enum ItemRegistry implements ItemEnum {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getEnchantedStack();
 			GameRegistry.addRecipe(is, params);
-			WorktableRecipes.getInstance().addRecipe(is, params);
+			WorktableRecipes.getInstance().addRecipe(is, this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, params);
 		}
 	}
 
@@ -760,7 +761,7 @@ public enum ItemRegistry implements ItemEnum {
 		if (!this.isDummiedOut()) {
 			ItemStack is = this.getEnchantedStack();
 			GameRegistry.addShapelessRecipe(is, params);
-			WorktableRecipes.getInstance().addShapelessRecipe(is, params);
+			WorktableRecipes.getInstance().addShapelessRecipe(is, this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, params);
 		}
 	}
 
@@ -769,32 +770,32 @@ public enum ItemRegistry implements ItemEnum {
 		if (is == null)
 			return is;
 		switch(this) {
-		case BEDBOOTS:
-		case BEDCHEST:
-		case BEDHELM:
-		case BEDLEGS:
-			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)is.getItem()).getDefaultEnchantments());
-			break;
-		case BEDPACK:
-			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDCHEST.getItemInstance()).getDefaultEnchantments());
-			break;
-		case BEDPICK:
-			is.addEnchantment(Enchantment.silkTouch, 1);
-			break;
-		case BEDJUMP:
-			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantments());
-			break;
-		case BEDREVEAL:
-			ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDHELM.getItemInstance()).getDefaultEnchantments());
-			break;
-		case BEDSWORD:
-			is.addEnchantment(Enchantment.sharpness, 5);
-			is.addEnchantment(Enchantment.looting, 5);
-			break;
-		case BEDSICKLE:
-			is.addEnchantment(Enchantment.fortune, 5);
-		default:
-			break;
+			case BEDBOOTS:
+			case BEDCHEST:
+			case BEDHELM:
+			case BEDLEGS:
+				ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)is.getItem()).getDefaultEnchantments());
+				break;
+			case BEDPACK:
+				ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDCHEST.getItemInstance()).getDefaultEnchantments());
+				break;
+			case BEDPICK:
+				is.addEnchantment(Enchantment.silkTouch, 1);
+				break;
+			case BEDJUMP:
+				ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantments());
+				break;
+			case BEDREVEAL:
+				ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDHELM.getItemInstance()).getDefaultEnchantments());
+				break;
+			case BEDSWORD:
+				is.addEnchantment(Enchantment.sharpness, 5);
+				is.addEnchantment(Enchantment.looting, 5);
+				break;
+			case BEDSICKLE:
+				is.addEnchantment(Enchantment.fortune, 5);
+			default:
+				break;
 		}
 		return is;
 	}
@@ -802,14 +803,14 @@ public enum ItemRegistry implements ItemEnum {
 	public void addShapelessRecipe(Object... params) {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addShapelessRecipe(this.getStackOf(), params);
-			WorktableRecipes.getInstance().addShapelessRecipe(this.getStackOf(), params);
+			WorktableRecipes.getInstance().addShapelessRecipe(this.getStackOf(), this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, params);
 		}
 	}
 
 	public void addRecipe(IRecipe ir) {
 		if (!this.isDummiedOut()) {
 			GameRegistry.addRecipe(ir);
-			WorktableRecipes.getInstance().addRecipe(ir);
+			WorktableRecipes.getInstance().addRecipe(ir, this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
 		}
 	}
 
@@ -818,7 +819,7 @@ public enum ItemRegistry implements ItemEnum {
 			ItemStack out = this.getStackOf();
 			boolean added = ReikaRecipeHelper.addOreRecipe(out, in);
 			if (added)
-				WorktableRecipes.getInstance().addRecipe(new ShapedOreRecipe(out, in));
+				WorktableRecipes.getInstance().addRecipe(new ShapedOreRecipe(out, in), this.isTool() || this.isArmor() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
 		}
 	}
 
@@ -841,11 +842,11 @@ public enum ItemRegistry implements ItemEnum {
 		if (this.isArmor())
 			return false;
 		switch(this) {
-		case SPRING:
-		case STRONGCOIL:
-			return false;
-		default:
-			return true;
+			case SPRING:
+			case STRONGCOIL:
+				return false;
+			default:
+				return true;
 		}
 	}
 

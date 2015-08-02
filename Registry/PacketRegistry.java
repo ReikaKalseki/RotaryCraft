@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 
 public enum PacketRegistry {
 
@@ -107,7 +107,7 @@ public enum PacketRegistry {
 			if (ReikaMathLibrary.isValueInsideBoundsIncl(e.getMinValue(), e.getMaxValue(), index))
 				return e;
 		}
-		ReikaJavaLibrary.pConsole("Index "+index+" does not correspond to an existing packet classification!");
+		RotaryCraft.logger.logError("Index "+index+" does not correspond to an existing packet classification!");
 		return null;
 	}
 

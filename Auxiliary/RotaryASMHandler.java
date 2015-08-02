@@ -20,7 +20,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaASMHelper;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
@@ -136,9 +136,11 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 			if (!classes.isEmpty()) {
 				ClassPatch p = classes.get(className);
 				if (p != null) {
-					ReikaJavaLibrary.pConsole("ROTARYCRAFT: Patching class "+p.deobfName);
+					ReikaASMHelper.activeMod = "RotaryCraft";
+					ReikaASMHelper.log("Patching class "+p.deobfName);
 					opcodes = p.apply(opcodes);
 					classes.remove(className); //for maximizing performance
+					ReikaASMHelper.activeMod = null;
 				}
 			}
 			return opcodes;

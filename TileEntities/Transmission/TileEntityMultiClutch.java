@@ -16,8 +16,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
@@ -132,48 +132,48 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				break;
 		}
 
 		switch(control[redLevel]) {
-		case 0:
-			write = ForgeDirection.DOWN;
-			break;
-		case 1:
-			write = ForgeDirection.UP;
-			break;
-		case 2:
-			write = ForgeDirection.NORTH;
-			break;
-		case 3:
-			write = ForgeDirection.SOUTH;
-			break;
-		case 4:
-			write = ForgeDirection.WEST;
-			break;
-		case 5:
-			write = ForgeDirection.EAST;
-			break;
+			case 0:
+				write = ForgeDirection.DOWN;
+				break;
+			case 1:
+				write = ForgeDirection.UP;
+				break;
+			case 2:
+				write = ForgeDirection.NORTH;
+				break;
+			case 3:
+				write = ForgeDirection.SOUTH;
+				break;
+			case 4:
+				write = ForgeDirection.WEST;
+				break;
+			case 5:
+				write = ForgeDirection.EAST;
+				break;
 		}
 	}
 
 	public void setSideOfState(int state, int side) {
 		if (side >= 6) {
-			ReikaJavaLibrary.pConsole("INVALID SIDE "+side+"!");
+			RotaryCraft.logger.logError("INVALID SIDE "+side+"!");
 		}
 		if (state >= 16) {
-			ReikaJavaLibrary.pConsole("INVALID STATE "+state+"!");
+			RotaryCraft.logger.logError("INVALID STATE "+state+"!");
 		}
 		control[state] = side;
 	}

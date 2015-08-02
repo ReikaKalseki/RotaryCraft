@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker.PackModification;
 import Reika.DragonAPI.Exception.RegistrationException;
@@ -39,7 +40,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -173,13 +173,13 @@ public final class HandbookAuxData {
 			}
 			else {
 				int i = k-ReikaOreHelper.oreList.length;
-				//ReikaJavaLibrary.pConsoleIf(modores.get(i)+" at "+i+" ("+""+")");
+				//DragonAPICore.logIf(modores.get(i)+" at "+i+" ("+""+")");
 				ItemStack is = modores.get(i);
 				ModOreList ore = ModOreList.getModOreFromOre(is);
 				if (ore == null) {
-					ReikaJavaLibrary.pConsole("DRAGONAPI: ItemStack "+is.getDisplayName()+" ("+is.getItem()+":"+is.getItemDamage()+")");
-					ReikaJavaLibrary.pConsole("has no mod ore list entry, yet was registered as such during load!");
-					ReikaJavaLibrary.pConsole("Contact both mod developers immediately!");
+					DragonAPICore.logError("ItemStack "+is.getDisplayName()+" ("+is.getItem()+":"+is.getItemDamage()+")");
+					DragonAPICore.logError("has no mod ore list entry, yet was registered as such during load!");
+					DragonAPICore.logError("Contact both mod developers immediately!");
 					oreName = "ERROR";
 				}
 				else {
@@ -388,47 +388,47 @@ public final class HandbookAuxData {
 		else if (h == HandbookRegistry.SAWDUST) {
 			int k = (int)((System.nanoTime()/2000000000)%5);
 			switch (k) {
-			case 0:
-				api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.water_bucket), dx+72+18, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+36, dy+28);
-				api.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72, dy+46);
-				api.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72+18, dy+46);
-				api.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72+36, dy+46);
-				api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.paper, 8, 0), dx+166, dy+28);
-				break;
-			case 1:
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.oakWood, dx+166, dy+28);
-				break;
-			case 2:
-				api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.BLACK.getStackOf(), dx+72+36, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.spruceWood, dx+166, dy+28);
-				break;
-			case 3:
-				api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.WHITE.getStackOf(), dx+72+36, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.birchWood, dx+166, dy+28);
-				break;
-			case 4:
-				api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.RED.getStackOf(), dx+72+36, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
-				api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-				api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.jungleWood, dx+166, dy+28);
-				break;
+				case 0:
+					api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.water_bucket), dx+72+18, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+36, dy+28);
+					api.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72, dy+46);
+					api.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72+18, dy+46);
+					api.drawItemStackWithTooltip(ri, f, new ItemStack(Blocks.stone), dx+72+36, dy+46);
+					api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.paper, 8, 0), dx+166, dy+28);
+					break;
+				case 1:
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.oakWood, dx+166, dy+28);
+					break;
+				case 2:
+					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.BLACK.getStackOf(), dx+72+36, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.spruceWood, dx+166, dy+28);
+					break;
+				case 3:
+					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.WHITE.getStackOf(), dx+72+36, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.birchWood, dx+166, dy+28);
+					break;
+				case 4:
+					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.RED.getStackOf(), dx+72+36, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
+					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.jungleWood, dx+166, dy+28);
+					break;
 			}
 		}
 		else if (h == HandbookRegistry.RAILGUNAMMO) {
@@ -480,7 +480,7 @@ public final class HandbookAuxData {
 			else if (p instanceof BlastCrafting)
 				MachineRecipeRenderer.instance.drawBlastFurnaceCrafting(dx+99, dy+18, dx+181, dy+32, (BlastCrafting)p);
 			else
-				ReikaJavaLibrary.pConsole(p+" to make "+p.outputItem()+" is an invalid (unrenderable) recipe!");
+				DragonAPICore.logError(p+" to make "+p.outputItem()+" is an invalid (unrenderable) recipe!");
 			api.drawCenteredStringNoShadow(f, p.getRequiredTemperature()+"C", dx+54, dy+66, 0);
 		}
 		else if (h == HandbookRegistry.STEELINGOT) {
@@ -503,7 +503,9 @@ public final class HandbookAuxData {
 				font.drawString(s, xc+r+10, yc-4, 0x000000);
 			}
 			else if (h == HandbookRegistry.PHYSICS) {
-				int xc = posX+xSize/8; int yc = posY+45; int r = 5;
+				int r = 5;
+				int xc = posX+xSize/8;
+				int yc = posY+45;
 				api.drawCircle(xc, yc, r, 0);
 				api.drawLine(xc, yc, xc+45, yc, 0x0000ff);
 				api.drawLine(xc+45, yc, xc+45, yc+20, 0xff0000);
@@ -521,15 +523,25 @@ public final class HandbookAuxData {
 				api.drawLine(xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
 				font.drawString("Torque", xc-24, yc+18, 0x8800ff);
 
-				r = 35; xc = posX+xSize/2+r+r/2; yc = posY+43;
+				r = 35;
+				xc = posX+xSize/2+r+r/2;
+				yc = posY+43;
 				api.drawCircle(xc, yc, r, 0);
+
+				int n1 = 2;
+				int n2 = 4;
 				double a = 57.3*System.nanoTime()/1000000000%360;
-				double b = 3*57.3*System.nanoTime()/1000000000%360;
+				double b = n1*57.3*System.nanoTime()/1000000000%360;
+				double c = n2*57.3*System.nanoTime()/1000000000%360;
 				api.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(a))*r), (int)(yc+Math.sin(Math.toRadians(a))*r), 0xff0000);
 				api.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(b))*r), (int)(yc+Math.sin(Math.toRadians(b))*r), 0x0000ff);
+				api.drawLine(xc, yc, (int)(xc+Math.cos(Math.toRadians(c))*r), (int)(yc+Math.sin(Math.toRadians(c))*r), 0x00a000);
 
-				font.drawString("1 rad/s", xc+r-4, yc+18, 0xff0000);
-				font.drawString("3 rad/s", xc+r-4, yc+18+10, 0x0000ff);
+				int dx = 2;
+				int dy = 6;
+				font.drawString("1 rad/s", xc+r-4+dx, yc+18-dy, 0xff0000);
+				font.drawString(n1+" rad/s", xc+r-4+dx, yc+18+10-dy, 0x0000ff);
+				font.drawString(n2+" rad/s", xc+r-4+dx, yc+18+20-dy, 0x00a000);
 			}
 			if (h == HandbookRegistry.BAITBOX && subpage == 1) {
 				RenderItem ri = item;

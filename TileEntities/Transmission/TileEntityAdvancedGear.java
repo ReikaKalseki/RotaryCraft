@@ -459,15 +459,15 @@ PipeConnector, IFluidHandler {
 	}
 
 	public long getChargingPower() {
-		return energy > 1 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy), 4)) : 1;
+		return energy >= 20 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy/20), 4)) : 1;
 	}
 
 	public int getChargingTorque() {
-		return energy > 1 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy), 3)) : 1;
+		return energy >= 20 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy/20), 3)) : 1;
 	}
 
 	public int getTorqueCap() {
-		return ReikaMathLibrary.ceilPseudo2Exp((int)Math.ceil(Math.sqrt(energy)/4));
+		return ReikaMathLibrary.ceilPseudo2Exp((int)Math.ceil(Math.sqrt(energy/20)/4));
 	}
 
 	private void overChargeExplosion(World world, int x, int y, int z) {
@@ -662,77 +662,77 @@ PipeConnector, IFluidHandler {
 
 		if (performRatio) {
 			switch(this.getGearType()) {
-			case WORM:
-				omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
-				if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
-					torque = torquein * WORMRATIO;
-				else {
-					torque = RotaryConfig.torquelimit;
-					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
-				}
-				break;
-			case CVT:
-				int ratio = this.getCVTRatio();
-				if (this.hasLubricant()) {
-					boolean speed = true;
-					if (ratio > 0) {
-						if (omegain <= RotaryConfig.omegalimit/ratio)
-							omega = omegain * ratio;
-						else {
-							omega = RotaryConfig.omegalimit;
-							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+				case WORM:
+					omega = (int)((omegain / WORMRATIO)*this.getPowerLossFraction(omegain));
+					if (torquein <= RotaryConfig.torquelimit/WORMRATIO)
+						torque = torquein * WORMRATIO;
+					else {
+						torque = RotaryConfig.torquelimit;
+						world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+					}
+					break;
+				case CVT:
+					int ratio = this.getCVTRatio();
+					if (this.hasLubricant()) {
+						boolean speed = true;
+						if (ratio > 0) {
+							if (omegain <= RotaryConfig.omegalimit/ratio)
+								omega = omegain * ratio;
+							else {
+								omega = RotaryConfig.omegalimit;
+								world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+								world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+							}
+							torque = torquein / ratio;
 						}
-						torque = torquein / ratio;
+						else {
+							if (torquein <= RotaryConfig.torquelimit/-ratio)
+								torque = torquein * -ratio;
+							else {
+								torque = RotaryConfig.torquelimit;
+								world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+								world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+							}
+							omega = omegain / -ratio;
+						}
 					}
 					else {
-						if (torquein <= RotaryConfig.torquelimit/-ratio)
-							torque = torquein * -ratio;
-						else {
-							torque = RotaryConfig.torquelimit;
-							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
-						}
-						omega = omegain / -ratio;
+						omega = torque = 0;
 					}
-				}
-				else {
-					omega = torque = 0;
-				}
-				break;
-			case COIL:
+					break;
+				case COIL:
 
-				break;
-			case HIGH:
-				if (this.hasLubricant()) {
-					if (torquemode) {
-						if (torquein <= RotaryConfig.torquelimit/256)
-							torque = torquein*256;
-						else {
-							torque = RotaryConfig.torquelimit;
-							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+					break;
+				case HIGH:
+					if (this.hasLubricant()) {
+						if (torquemode) {
+							if (torquein <= RotaryConfig.torquelimit/256)
+								torque = torquein*256;
+							else {
+								torque = RotaryConfig.torquelimit;
+								world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+								world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+							}
+							omega = omegain/256;
 						}
-						omega = omegain/256;
+						else {
+							torque = torquein/256;
+							if (omegain <= RotaryConfig.omegalimit/256)
+								omega = omegain*256;
+							else {
+								omega = RotaryConfig.omegalimit;
+								world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
+								world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
+							}
+						}
+						if (omega > 0 && (world.getTotalWorldTime()&4) == 4)
+							lubricant.removeLiquid((int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(Math.max(omega, torque), 2)));
 					}
 					else {
-						torque = torquein/256;
-						if (omegain <= RotaryConfig.omegalimit/256)
-							omega = omegain*256;
-						else {
-							omega = RotaryConfig.omegalimit;
-							world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-							world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
-						}
+						omega = torque = 0;
 					}
-					if (omega > 0 && (world.getTotalWorldTime()&4) == 4)
-						lubricant.removeLiquid((int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(Math.max(omega, torque), 2)));
-				}
-				else {
-					omega = torque = 0;
-				}
-				break;
+					break;
 			}
 		}
 	}

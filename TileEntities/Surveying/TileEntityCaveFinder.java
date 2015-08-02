@@ -14,8 +14,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -139,7 +139,7 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 			return points[dx][dy][dz];
 		}
 		catch (Exception e) {
-			ReikaJavaLibrary.pConsole("Exception at "+dx+", "+dy+", "+dz+"!");
+			RotaryCraft.logger.logError("Exception at "+dx+", "+dy+", "+dz+"!");
 			return false;
 		}
 	}
@@ -189,26 +189,26 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 
 	public void moveSrc(int num, ForgeDirection dir) {
 		switch(dir) {
-		case DOWN:
-			src[1] -= num;
-			break;
-		case UP:
-			src[1] += num;
-			break;
-		case WEST:
-			src[0] -= num;
-			break;
-		case EAST:
-			src[0] += num;
-			break;
-		case NORTH:
-			src[2] -= num;
-			break;
-		case SOUTH:
-			src[2] += num;
-			break;
-		default:
-			break;
+			case DOWN:
+				src[1] -= num;
+				break;
+			case UP:
+				src[1] += num;
+				break;
+			case WEST:
+				src[0] -= num;
+				break;
+			case EAST:
+				src[0] += num;
+				break;
+			case NORTH:
+				src[2] -= num;
+				break;
+			case SOUTH:
+				src[2] += num;
+				break;
+			default:
+				break;
 		}
 		needsCalc = true;
 	}
