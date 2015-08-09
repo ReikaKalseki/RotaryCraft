@@ -71,7 +71,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper.TinkerMaterial;
-import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler.ToolParts;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
@@ -530,8 +530,8 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.chatColor = EnumChatFormatting.BLACK.toString();
 				mat.renderColor = 0x383838;
 
-				mat.disableToolPart(TinkerToolHandler.ToolParts.PICK).disableToolPart(TinkerToolHandler.ToolParts.AXEHEAD);
-				mat.disableToolPart(TinkerToolHandler.ToolParts.SHOVEL).disableToolPart(TinkerToolHandler.ToolParts.SWORD);
+				mat.disableToolPart(ToolParts.PICK).disableToolPart(ToolParts.AXEHEAD).disableToolPart(ToolParts.LUMBER);
+				mat.disableToolPart(ToolParts.SHOVEL).disableToolPart(ToolParts.SWORD).disableToolPart(ToolParts.SCYTHE);
 
 				mat.register(true).registerTexture("tinkertools/bedrock/bedrock", false);
 				mat.registerPatternBuilder(ItemStacks.bedingot).registerWeapons(ItemStacks.bedingot, 35, 2F, 5F, 4F, 15F, 0);

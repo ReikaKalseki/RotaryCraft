@@ -1,13 +1,18 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2015
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import net.minecraft.item.ItemStack;
-import tconstruct.library.crafting.ModifyBuilder;
-import tconstruct.modifiers.tools.ModReinforced;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 
-public class UnbreakabilityModifier extends ModReinforced {
-
+public class UnbreakabilityModifier/* extends ModReinforced */{
+	/*
 	public UnbreakabilityModifier() {
 		super(new ItemStack[] {ItemStacks.bedingot, ItemStacks.bedingot}, 16, 1); //increase is unused, so 1
 	}
@@ -31,5 +36,5 @@ public class UnbreakabilityModifier extends ModReinforced {
 			ret += super.addToolTip(tool, tooltip, modifierTip);
 		return ret;
 	}
-
+	 */
 }

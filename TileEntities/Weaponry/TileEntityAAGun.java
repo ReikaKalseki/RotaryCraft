@@ -28,6 +28,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.Interfaces.FlyingMob;
 import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -172,6 +173,9 @@ public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISid
 		if (ent instanceof FlyingMob) {
 			FlyingMob fm = (FlyingMob)ent;
 			return fm.isCurrentlyFlying() && fm.isHostile() && ReikaMathLibrary.py3d(ent.posX-xCoord-0.5, ent.posY-yCoord-0.5, ent.posZ-zCoord-0.5) > 2;
+		}
+		if (InterfaceCache.BCROBOT.instanceOf(ent)) {
+			return true;
 		}
 		return false;
 	}
