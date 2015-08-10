@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
@@ -34,6 +35,8 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class ItemBedrockShears extends ItemShears implements IndexedItemSprites {
+
+	private static final HashSet<Block> noDrops = new HashSet();
 
 	private int index;
 
@@ -103,6 +106,9 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 				else if (b instanceof IShearable) {
 					drop = true;
 					flag = true;
+				}
+				else if (noDrops.contains(b)) {
+
 				}
 				else if (b.getMaterial() == Material.plants) {
 					drop = true;
@@ -192,6 +198,12 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
 		return ItemRegistry.getEntry(is).getBasicName();
+	}
+
+	static {
+		noDrops.add(Blocks.reeds);
+		noDrops.add(Blocks.melon_stem);
+		noDrops.add(Blocks.pumpkin_stem);
 	}
 
 }
