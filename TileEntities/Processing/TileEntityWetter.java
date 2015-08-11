@@ -31,6 +31,7 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getPowerBelow();
 		this.updateItem();
 
