@@ -19,6 +19,8 @@ import net.minecraft.nbt.NBTTagList;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.HiddenInventorySlot;
 
 public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiver implements ISidedInventory {
 
@@ -84,6 +86,8 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		if (this instanceof InertIInv)
 			return new int[0];
+		if (this instanceof HiddenInventorySlot)
+			return ReikaArrayHelper.getLinearArrayExceptFor(this.getSizeInventory(), ((HiddenInventorySlot)this).getHiddenSlots());
 		return ReikaInventoryHelper.getWholeInventoryForISided(this);
 	}
 

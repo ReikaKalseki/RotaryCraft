@@ -14,6 +14,7 @@ import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.FrictionHeaterManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -90,7 +91,17 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 
 		@Override
 		public String getUniqueID() {
-			return input+">"+output+"@"+requiredTemperature+"#"+duration;
+			return fullID(input)+">"+fullID(output)+"@"+requiredTemperature+"#"+duration;
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Smelting "+fullID(input)+" into "+fullID(output)+" @ "+requiredTemperature+"C over "+duration+" ticks";
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			return ReikaJavaLibrary.makeListFrom(input, output);
 		}
 	}
 

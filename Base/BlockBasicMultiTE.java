@@ -55,8 +55,8 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -66,7 +66,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.LegacyWailaHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -594,7 +593,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (m == MachineRegistry.CAVESCANNER) {
 			TileEntityCaveFinder tc = (TileEntityCaveFinder)te;
-			ForgeDirection dir = ReikaPlayerAPI.getDirectionFromPlayerLook(ep, true);
+			ForgeDirection dir = ReikaEntityHelper.getDirectionFromEntityLook(ep, true);
 			int mov = 4;
 			if (ep.isSneaking())
 				mov *= -1;
@@ -921,7 +920,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		if (LegacyWailaHelper.cacheAndReturn(acc))
+		if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!currenttip.isEmpty())
 			return currenttip;
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);

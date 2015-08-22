@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
@@ -38,8 +39,6 @@ public abstract class RecipeHandler {
 	}
 
 	protected final void onAddRecipe(MachineRecipe recipe, RecipeLevel rl) {
-		if (true)
-			return;
 		String s = recipeKeys.get(recipe);
 		if (s == null) {
 			this.generateKey(recipe);
@@ -49,8 +48,35 @@ public abstract class RecipeHandler {
 	}
 
 	private void generateKey(MachineRecipe recipe) {
-		String s = /*machine.getDefaultName()+"$"+recipe.getClass().getName()+"#"+*/recipe.getUniqueID();
+		String s = machine.name()+"$"+recipe.getClass().getSimpleName()+"#("+recipe.getUniqueID();
+		//ReikaJavaLibrary.pConsole("RC RECIPE LOADED: "+s);
+		if (recipeKeys.containsValue(s)) {
+			MachineRecipe pre = recipeKeys.inverse().get(s);
+			if (pre == null || pre.equals(recipe)) {
+				return; //do nothing
+			}
+			else {
+				RotaryCraft.logger.logError("Found duplicate recipe key when adding recipe "+recipe.getAllInfo()+" in place of "+pre.getAllInfo());
+				RotaryCraft.logger.log("Original Recipe Items:");
+				for (ItemStack is : pre.getAllUsedItems()) {
+					RotaryCraft.logger.log(is+" from mod '"+ReikaItemHelper.getRegistrantMod(is)+"', NBT="+is.stackTagCompound);
+				}
+				RotaryCraft.logger.log("New Recipe Items:");
+				for (ItemStack is : recipe.getAllUsedItems()) {
+					RotaryCraft.logger.log(is+" from mod '"+ReikaItemHelper.getRegistrantMod(is)+"', NBT="+is.stackTagCompound);
+				}
+				throw new RegistrationException(RotaryCraft.instance, "Two recipes have the same key: '"+s+"'");
+			}
+		}
 		recipeKeys.put(recipe, s);
+	}
+
+	protected static final String fullID(ItemStack is) {
+		if (is == null)
+			return "[null]";
+		else if (is.getItem() == null)
+			return "[null-item stack]";
+		return is.toString()+"{"+is.stackTagCompound+"}["+ReikaItemHelper.getRegistrantMod(is)+"]";
 	}
 
 	protected final Collection getRecipes(RecipeLevel rl) {
@@ -160,6 +186,8 @@ public abstract class RecipeHandler {
 	protected static interface MachineRecipe {
 
 		String getUniqueID();
+		Collection<ItemStack> getAllUsedItems();
+		String getAllInfo();
 
 	}
 

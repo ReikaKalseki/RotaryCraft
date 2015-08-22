@@ -109,7 +109,8 @@ public class PacketHandlerCore implements PacketHandler {
 					double sz = inputStream.readDouble();
 					float v = inputStream.readFloat();
 					float p = inputStream.readFloat();
-					ReikaSoundHelper.playClientSound(s, sx, sy, sz, v, p);
+					boolean att = inputStream.readBoolean();
+					ReikaSoundHelper.playClientSound(s, sx, sy, sz, v, p, att);
 					return;
 				case STRING:
 					stringdata = packet.readString();

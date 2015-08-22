@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CrystallizerManager;
@@ -58,7 +59,17 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 
 		@Override
 		public String getUniqueID() {
-			return input.getFluid().getName()+":"+input.amount+">"+output;
+			return input.getFluid().getName()+":"+input.amount+">"+fullID(output);
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Freezing "+input.amount+" of "+input.getLocalizedName()+" into "+fullID(output);
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			return ReikaJavaLibrary.makeListFrom(input);
 		}
 
 	}

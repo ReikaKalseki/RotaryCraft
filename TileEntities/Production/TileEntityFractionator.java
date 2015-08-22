@@ -38,9 +38,11 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	public boolean idle = false;
 
 	private static final ItemStack[] ingredients =
-		{new ItemStack(Items.blaze_powder), new ItemStack(Items.coal),
+		{
+		new ItemStack(Items.blaze_powder), new ItemStack(Items.coal),
 		ItemStacks.netherrackdust, ItemStacks.tar,
-		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Items.magma_cream)};
+		ItemRegistry.ETHANOL.getStackOf(), new ItemStack(Items.magma_cream)
+		};
 
 	public static boolean isJetFuelIngredient(ItemStack is) {
 		for (int i = 0; i < ingredients.length; i++) {

@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.DryingBedManager;
@@ -62,7 +63,17 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 
 		@Override
 		public String getUniqueID() {
-			return input.getFluid().getName()+":"+input.amount+">"+output;
+			return input.getFluid().getName()+":"+input.amount+">"+fullID(output);
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Drying "+input.amount+" of "+input.getLocalizedName()+" into "+fullID(output);
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			return ReikaJavaLibrary.makeListFrom(input);
 		}
 
 	}

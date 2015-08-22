@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -27,10 +26,12 @@ import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
+import Reika.DragonAPI.Interfaces.TileEntity.TriggerableAction;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMusicHelper.MusicKey;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.NoteEvent;
@@ -40,7 +41,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController, BreakAction {
+public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController, BreakAction, TriggerableAction {
 
 	/** 16 channels, 7 voices, 64 pitch states */
 	private final ArrayList<Note>[] musicQueue;
@@ -54,10 +55,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private int[] playDelay = new int[16];
 	private int[] playIndex = new int[16];
 
-	private static final Color[] channelColors = {
-		new Color(0x3636FF), new Color(0xD336FF), new Color(0xFFACAC), new Color(0xFF3636), new Color(0xFFAC36), new Color(0xD3D336),
-		new Color(0x65BC8F), new Color(0x36D336), new Color(0x36FFFF), new Color(0x58ABF9), new Color(0x8484FF), new Color(0xFF36FF),
-		new Color(0x8436FF), new Color(0xB49C8A), new Color(0x8FA9B5), new Color(0x94B581)
+	private static final int[] channelColors = {
+		0x3636FF, 0xD336FF, 0xFFACAC, 0xFF3636, 0xFFAC36, 0xD3D336,
+		0x65BC8F, 0x36D336, 0x36FFFF, 0x58ABF9, 0x8484FF, 0xFF36FF,
+		0x8436FF, 0xB49C8A, 0x8FA9B5, 0x94B581
 	};
 
 	public TileEntityMusicBox() {
@@ -69,7 +70,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		}
 	}
 
-	public static Color getColorForChannel(int channel) {
+	public static int getColorForChannel(int channel) {
 		return channelColors[channel];
 	}
 
@@ -525,7 +526,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return new Note(NoteLength.values()[l1], note, Instrument.values()[i1]);
 		}
 
-		protected static Note readFromNBT(NBTTagCompound NBT) {
+		public static Note readFromNBT(NBTTagCompound NBT) {
 			int length = NBT.getInteger("len");
 			int pitch = NBT.getInteger("pch");
 			int voice = NBT.getInteger("vc");
@@ -539,6 +540,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			NBT.setInteger("vc", voice.ordinal());
 			//ReikaJavaLibrary.pConsole(this+":"+NBT, Side.SERVER);
 			return NBT;
+		}
+
+		public MusicKey getMusicKey() {
+			return MusicKey.getByIndex(MusicKey.F2.ordinal()+pitch);
 		}
 
 	}
@@ -563,18 +568,20 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public static enum Instrument {
-		REST(0),
-		GUITAR(1),
-		BASS(2),
-		PLING(3),
-		BASSDRUM(4),
-		SNARE(5),
-		CLAVE(6);
+		REST(0, -1),
+		GUITAR(1, 18),
+		BASS(2, 32),
+		PLING(3, 98),
+		BASSDRUM(4, 116),
+		SNARE(5, 48),
+		CLAVE(6, 0);
 
 		public final int index;
+		public final int MIDIvalue;
 
-		private Instrument(int index) {
+		private Instrument(int index, int mid) {
 			this.index = index;
+			MIDIvalue = mid;
 		}
 
 		public boolean isPitched() {
@@ -590,6 +597,12 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	@Override
 	public void breakBlock() {
 		this.deleteFiles(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public boolean trigger() {
+		this.startPlaying();
+		return true;
 	}
 
 }

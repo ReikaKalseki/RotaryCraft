@@ -896,7 +896,7 @@ PipeConnector, IFluidHandler {
 	@Override
 	public int getRedstoneOverride() {
 		if (this.getGearType().storesEnergy()) {
-			int level = (int)(15L*energy/20L/this.getMaxStorageCapacity());
+			int level = (int)(15L*(energy+power)/20L/this.getMaxStorageCapacity()); //+power to "anticipate" next tick
 			return level;
 		}
 		return 0;

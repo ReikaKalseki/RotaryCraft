@@ -29,6 +29,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.HiddenInventorySlot;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -40,7 +41,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation {
+public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation, HiddenInventorySlot {
 
 	public static final int oreCopy = 50; //50% chance of doubling -> 1.5^4 = 5.1
 	public static final int oreCopyNether = 80; //80% chance of doubling -> 1.8^4 = 10.5
@@ -147,8 +148,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		}
 	}
 
-	public int getSizeInventory()
-	{
+	public int getSizeInventory() {
 		return 10;
 	}
 
@@ -176,18 +176,18 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		int j = i+1;
 		int time = -1;
 		switch (j) {
-		case 1:
-			time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
-			break;
-		case 2:
-			time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
-			break;
-		case 3:
-			time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
-			break;
-		case 4:
-			time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
-			break;
+			case 1:
+				time = 30*(30-(int)(2*ReikaMathLibrary.logbase(omega, 2)));
+				break;
+			case 2:
+				time = (800-(int)(40*ReikaMathLibrary.logbase(omega, 2)))/2;
+				break;
+			case 3:
+				time = 600-(int)(30*ReikaMathLibrary.logbase(omega, 2));
+				break;
+			case 4:
+				time = 1200-(int)(80*ReikaMathLibrary.logbase(omega, 2));
+				break;
 		}
 		if (time == -1)
 			return 0;
@@ -490,5 +490,15 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	@Override
 	public String getOperationalStatus() {
 		return tank.isEmpty() ? "No Water" : this.areConditionsMet() ? "Operational" : "No Items";
+	}
+
+	@Override
+	public boolean isSlotHidden(int slot) {
+		return slot == 9;
+	}
+
+	@Override
+	public int[] getHiddenSlots() {
+		return new int[]{9};
 	}
 }

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -260,7 +261,19 @@ public class WorktableRecipes extends RecipeHandler {
 
 		@Override
 		public String getUniqueID() {
-			return "WORKTABLE/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toString(recipe)+">"+output+"?"+(output.getItem() instanceof ItemBlockPlacer);
+			return "WORKTABLE/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toString(recipe)+">"+fullID(output)+"?"+(output.getItem() instanceof ItemBlockPlacer);
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Crafting "+fullID(output)+" from "+ReikaRecipeHelper.toString(recipe);
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			ArrayList<ItemStack> li = new ArrayList(ReikaRecipeHelper.getAllItemsInRecipe(recipe));
+			li.add(output);
+			return li;
 		}
 
 	}

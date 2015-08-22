@@ -129,7 +129,17 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 
 		@Override
 		public String getUniqueID() {
-			return fluid.getFluid().getName()+":"+fluid.amount+"+"+input+">"+output+"#"+duration;
+			return fluid.getFluid().getName()+":"+fluid.amount+"+"+fullID(input)+">"+fullID(output)+"#"+duration;
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Mixing "+fluid.amount+" of "+fluid.getLocalizedName()+" into "+fullID(input)+" for "+fullID(output)+" over "+duration+" ticks";
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			return ReikaJavaLibrary.makeListFrom(input, output);
 		}
 
 	}

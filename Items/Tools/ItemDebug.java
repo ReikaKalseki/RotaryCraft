@@ -49,7 +49,7 @@ public class ItemDebug extends ItemRotaryTool {
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int s, float par8, float par9, float par10) {
-		ReikaChatHelper.clearChat();
+		//ReikaChatHelper.clearChat();
 		if (!player.isSneaking()) {
 			ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
 			TileEntity te = world.getTileEntity(x, y, z);

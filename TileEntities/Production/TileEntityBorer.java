@@ -100,14 +100,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	@Override
 	public int getTextureStateForSide(int s) {
 		switch(this.getBlockMetadata()) {
-		case 0:
-			return s == 4 ? this.getActiveTexture() : 0;
-		case 1:
-			return s == 5 ? this.getActiveTexture() : 0;
-		case 3:
-			return s == 2 ? this.getActiveTexture() : 0;
-		case 2:
-			return s == 3 ? this.getActiveTexture() : 0;
+			case 0:
+				return s == 4 ? this.getActiveTexture() : 0;
+			case 1:
+				return s == 5 ? this.getActiveTexture() : 0;
+			case 3:
+				return s == 2 ? this.getActiveTexture() : 0;
+			case 2:
+				return s == 3 ? this.getActiveTexture() : 0;
 		}
 		return 0;
 	}
@@ -251,8 +251,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				this.setJammed(true);
 			}
 			tickcount = 0;
-			mintorque = 0;
-			reqpow = 0;
 			isMiningAir = false;
 		}
 	}
@@ -264,7 +262,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		double d2 = ReikaMathLibrary.getThousandBase(mintorque);
 		String s1 = ReikaEngLibrary.getSIPrefix(reqpow);
 		String s2 = ReikaEngLibrary.getSIPrefix(mintorque);
-		return String.format("Power: %.3f%sW; Torque: %.3f%sNm", d1, s1, d2, s2);
+		return String.format("Required Power: %.3f%sW; Required Torque: %.3f%sNm", d1, s1, d2, s2);
 	}
 
 	private void safeDig(World world, int x, int y, int z, int meta) {
@@ -362,6 +360,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	private void calcReqPower(World world, int x, int y, int z, int metadata) {
 		reqpow = 0;
+		mintorque = 0;
 		int lowtorque = -1;
 		int a = 0;
 		if (metadata > 1)
@@ -691,6 +690,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		NBT.setInteger("step", step);
 		NBT.setBoolean("jam", jammed);
 		NBT.setInteger("dura", durability);
+
+		NBT.setInteger("reqpow", reqpow);
+		NBT.setInteger("reqtrq", mintorque);
 	}
 
 	@Override
@@ -700,6 +702,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		step = NBT.getInteger("step");
 		jammed = NBT.getBoolean("jam");
 		durability = NBT.getInteger("dura");
+
+		mintorque = NBT.getInteger("reqtrq");
+		reqpow = NBT.getInteger("reqpow");
 	}
 
 	@Override

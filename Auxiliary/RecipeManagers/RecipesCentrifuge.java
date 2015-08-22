@@ -89,7 +89,19 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 		@Override
 		public String getUniqueID() {
-			return in+">"+out.toString()+"&"+(fluid != null ? fluid.toString() : "X");
+			return fullID(in)+">"+out.toString()+"&"+(fluid != null ? fluid.toString() : "X");
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Centrifuge "+fullID(in)+" to items["+out+"] and fluid "+fluid;
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			ArrayList<ItemStack> li = new ArrayList(out.keySet());
+			li.add(in);
+			return li;
 		}
 
 	}
@@ -220,7 +232,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 		@Override
 		public final String toString() {
-			return fluid.getFluid().getName()+":"+fluid.amount+"%"+chance;
+			return fluid.amount+" mB of "+fluid.getFluid().getName()+" ("+chance+"%)";
 		}
 
 	}

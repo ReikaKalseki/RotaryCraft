@@ -184,4 +184,9 @@ public enum SoundRegistry implements SoundEnum {
 	public boolean canOverlap() {
 		return this == JETPACK || this == JETDAMAGE || this == RUMBLE;
 	}
+
+	@Override
+	public boolean attenuate() {
+		return true;
+	}
 }

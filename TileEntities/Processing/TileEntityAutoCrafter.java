@@ -32,6 +32,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.CraftCompleteCall
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import appeng.api.AEApi;
@@ -134,33 +135,33 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 		private void tick(TileEntityAutoCrafter te) {
 			switch(this) {
-			case REQUEST:
-				//Do nothing tick-based
-				break;
-			case CONTINUOUS:
-				if (te.tick >= te.tickTimer) {
-					te.tick = 0;
-					long time = System.nanoTime();
-					te.attemptAllSlotCrafting();
-					te.profileCraftingTime(time);
-				}
-				break;
-			case SUSTAIN:
-				te.tickTimer = 20;
-				if (te.tick >= te.tickTimer) {
-					te.tick = 0;
-					te.craftMissingItems();
-				}
-				break;
+				case REQUEST:
+					//Do nothing tick-based
+					break;
+				case CONTINUOUS:
+					if (te.tick >= te.tickTimer) {
+						te.tick = 0;
+						long time = System.nanoTime();
+						te.attemptAllSlotCrafting();
+						te.profileCraftingTime(time);
+					}
+					break;
+				case SUSTAIN:
+					te.tickTimer = 20;
+					if (te.tick >= te.tickTimer) {
+						te.tick = 0;
+						te.craftMissingItems();
+					}
+					break;
 			}
 		}
 
 		public boolean isValid() {
 			switch(this) {
-			case SUSTAIN:
-				return ModList.APPENG.isLoaded();
-			default:
-				return true;
+				case SUSTAIN:
+					return ModList.APPENG.isLoaded();
+				default:
+					return true;
 			}
 		}
 
@@ -213,10 +214,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private void profileCraftingTime(long start) {
 		long duration = System.nanoTime()-start;
-		if (duration > 1000000*tickTimer && tickTimer < MAX_TICK_DELAY) {
+		if (ConfigRegistry.CRAFTERPROFILE.getState() && duration > 1000000*tickTimer && tickTimer < MAX_TICK_DELAY) {
 			tickTimer += this.getTickIncrement();
 		}
-		else {
+		else if (tickTimer > 0) {
 			tickTimer--;
 		}
 	}

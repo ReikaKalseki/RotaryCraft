@@ -83,7 +83,19 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 700);
-		this.addRecipe(sili, RecipeLevel.PROTECTED);
+		this.addRecipe(sili, RecipeLevel.CORE);
+
+		in1 = new BlastInput(ItemStacks.coke, 75F, 1);
+		in2 = new BlastInput(Items.redstone, 40F, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe spring = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, ItemStacks.springingot, false, 0, 1150);
+		this.addRecipe(spring, RecipeLevel.CORE);
+
+		in1 = new BlastInput(ItemStacks.silicondust, 20F, 1);
+		in2 = new BlastInput((ItemStack)null, 0, 1);
+		in3 = new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe silu = new BlastRecipe(in1, in2, in3, ItemStacks.aluminumingot, ItemStacks.silumin, false, 0, 900);
+		this.addRecipe(silu, RecipeLevel.CORE);
 	}
 
 	private void addRecipe(BlastRecipe br, RecipeLevel rl) {
@@ -206,6 +218,18 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public String getUniqueID() {
 			return "CRAFT/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toString(recipe)+">"+output;
 		}
+
+		@Override
+		public String getAllInfo() {
+			return "Crafting "+output+", Recipe="+ReikaRecipeHelper.toString(recipe)+" @ "+temperature+"C; xp="+xp+", speed="+speed+", alloy:"+alloy;
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			ArrayList<ItemStack> li = new ArrayList(ReikaRecipeHelper.getAllItemsInRecipe(recipe));
+			li.add(output);
+			return li;
+		}
 	}
 
 	public static interface BlastFurnacePattern extends MachineRecipe {
@@ -246,7 +270,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		@Override
 		public String toString() {
-			return item+" x"+numberToUse+"@"+chanceToUse+"%";
+			return fullID(item)+" x"+numberToUse+"@"+chanceToUse+"%";
 		}
 
 		public boolean match(ItemStack in) {
@@ -367,9 +391,29 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		@Override
 		public String getUniqueID() {
-			return "RECIPE/"+primary+"&"+secondary+"&"+tertiary+">"+main+"^"+output+"?"+hasBonus;
+			return "RECIPE/"+primary+"&"+secondary+"&"+tertiary+">"+fullID(main)+"^"+fullID(output)+"?"+hasBonus;
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Mainline production, "+this.toString();
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			ArrayList<ItemStack> li = new ArrayList();
+			if (primary != null)
+				li.add(primary.item);
+			if (secondary != null)
+				li.add(secondary.item);
+			if (tertiary != null)
+				li.add(tertiary.item);
+			li.add(main);
+			li.add(output);
+			return li;
 		}
 	}
+
 	public BlastCrafting getCrafting(ItemStack[] main, int temp) {
 		RecipePattern ic = new RecipePattern(main);
 		for (int i = 0; i < craftingList.size(); i++) {

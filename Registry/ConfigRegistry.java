@@ -107,7 +107,8 @@ public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, Boolea
 	CHUNKLOADERSIZE("Chunk Loader Max Radius in Chunks", 8),
 	RECIPEMOD("Allow Nonstandard Recipe Modifications", false),
 	STRONGRECIPEMOD("Strong Recipe Editing", false),
-	CORERECIPEMOD("Core Recipe Editing", "X");
+	CORERECIPEMOD("Core Recipe Editing", "X"),
+	CRAFTERPROFILE("AutoCrafter Lag Profiling And Compensation", true);
 
 	private String label;
 	private boolean defaultState;

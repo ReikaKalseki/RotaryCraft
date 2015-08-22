@@ -68,6 +68,7 @@ public class RotaryNames {
 		"crafting.impeller", "crafting.compressor", "crafting.turbine", "crafting.diffuser", "crafting.combustor", "crafting.cylinder",
 		"crafting.radiator", "crafting.condenser", "crafting.goldcoil", "crafting.woodgear", "crafting.stonegear", "crafting.diamondgear",
 		"crafting.bedrockgear", "crafting.paddle", "crafting.shaftcore", "crafting.ignition", "crafting.diamondcore", "crafting.compoundcompress",
+		"crafting.alucylinder", "crafting.highcombustor"
 	};
 
 	public static final String[] shaftPartNames = {
@@ -214,16 +215,16 @@ public class RotaryNames {
 	public static String getModExtractName(int dmg) {
 		String base = ModOreList.oreList[dmg/4].displayName;
 		switch(dmg%4) {
-		case 0:
-			return base+" Dust";
-		case 1:
-			return base+" Slurry";
-		case 2:
-			return base+" Solution";
-		case 3:
-			return base+" Flakes";
-		default:
-			return base;
+			case 0:
+				return base+" Dust";
+			case 1:
+				return base+" Slurry";
+			case 2:
+				return base+" Solution";
+			case 3:
+				return base+" Flakes";
+			default:
+				return base;
 		}
 	}
 

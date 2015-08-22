@@ -38,7 +38,6 @@ import Reika.DragonAPI.Interfaces.Block.SidedTextureIndex;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.LegacyWailaHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
@@ -188,15 +187,15 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 				return null;
 			int dmg = gbx.getGearboxType().ordinal();
 			switch(gbx.getRatio()) {
-			case 4:
-				dmg += 5;
-				break;
-			case 8:
-				dmg += 10;
-				break;
-			case 16:
-				dmg += 15;
-				break;
+				case 4:
+					dmg += 5;
+					break;
+				case 8:
+					dmg += 10;
+					break;
+				case 16:
+					dmg += 15;
+					break;
 			}
 			return new ItemStack(ItemRegistry.GEARBOX.getItemInstance(), 1, dmg);
 		}
@@ -285,7 +284,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		if (LegacyWailaHelper.cacheAndReturn(acc))
+		if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!currenttip.isEmpty())
 			return currenttip;
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);

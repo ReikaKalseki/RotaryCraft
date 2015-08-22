@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -81,7 +82,17 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 
 		@Override
 		public String getUniqueID() {
-			return input+">"+output;
+			return fullID(input)+">"+fullID(output);
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Smelting "+fullID(input)+" into "+fullID(output);
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			return ReikaJavaLibrary.makeListFrom(input, output);
 		}
 
 	}

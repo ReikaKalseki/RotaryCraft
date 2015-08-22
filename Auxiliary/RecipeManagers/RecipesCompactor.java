@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CompactorManager;
@@ -68,7 +69,17 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 
 		@Override
 		public String getUniqueID() {
-			return in+">"+out+"@"+temperature+"&"+pressure;
+			return fullID(in)+">"+fullID(out)+"@"+temperature+"&"+pressure;
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Compacting "+fullID(in)+" to "+fullID(out)+" @ "+temperature+"C & "+pressure+" kPa";
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			return ReikaJavaLibrary.makeListFrom(in, out);
 		}
 
 	}

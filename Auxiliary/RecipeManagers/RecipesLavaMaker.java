@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -74,7 +75,17 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 
 		@Override
 		public String getUniqueID() {
-			return input+"@"+temperature+"#"+output.getFluid().getName()+":"+output.amount;
+			return fullID(input)+"@"+temperature+"#"+output.getFluid().getName()+":"+output.amount;
+		}
+
+		@Override
+		public String getAllInfo() {
+			return "Melting "+fullID(input)+"into "+output.amount+" of "+output.getLocalizedName()+" @ "+temperature+"C using "+requiredEnergy+" J";
+		}
+
+		@Override
+		public Collection<ItemStack> getAllUsedItems() {
+			return ReikaJavaLibrary.makeListFrom(input);
 		}
 	}
 

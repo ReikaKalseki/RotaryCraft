@@ -59,6 +59,7 @@ public final class ItemStacks {
 	public static final ItemStack coke 				= ItemRegistry.COMPACTS.getStackOfMetadata(8);
 	public static final ItemStack springingot		= ItemRegistry.COMPACTS.getStackOfMetadata(9);
 	public static final ItemStack silicon			= ItemRegistry.COMPACTS.getStackOfMetadata(10);
+	public static final ItemStack silumin			= ItemRegistry.COMPACTS.getStackOfMetadata(11);
 
 	public static final ItemStack basepanel 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(0);
 	public static final ItemStack steelingot 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(1);
@@ -132,6 +133,8 @@ public final class ItemStacks {
 	public static final ItemStack igniter 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(15);
 	public static final ItemStack diamondshaftcore 	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(16);
 	public static final ItemStack compoundcompress	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(17);
+	public static final ItemStack aluminumcylinder	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(18);
+	public static final ItemStack highcombustor		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(19);
 
 	public static final ItemStack woodgear 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(9);
 	public static final ItemStack stonegear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(10);

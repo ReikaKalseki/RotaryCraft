@@ -48,6 +48,7 @@ public enum BlastGate {
 	MANASTEEL("ingotManasteel"),
 	VOIDMETAL("ingotVoid"),
 	THAUMIUM("ingotThaumium"),
+	OSMIUM("ingotOsmium"),
 	;
 
 	private ItemStack item;

@@ -399,6 +399,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			return false;
 		if (name.contains("firefly"))
 			return false;
+		if (name.contains("butterfly"))
+			return false;
 		return caught instanceof EntityLivingBase;
 	}
 
