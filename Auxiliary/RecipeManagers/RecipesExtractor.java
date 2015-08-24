@@ -52,8 +52,6 @@ public class RecipesExtractor
 		this.addRecipe(Blocks.emerald_ore, 0, ItemStacks.getFlake(ReikaOreHelper.EMERALD));
 		this.addRecipe(Blocks.quartz_ore, 0, ItemStacks.getFlake(ReikaOreHelper.QUARTZ));
 
-
-
 		this.addModRecipes();
 	}
 

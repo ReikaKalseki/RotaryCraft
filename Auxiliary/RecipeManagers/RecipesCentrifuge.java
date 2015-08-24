@@ -212,31 +212,6 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		return this.getRecipeResult(ingredient) != null;
 	}
 
-	private static class FluidOut {
-
-		private final FluidStack fluid;
-		private final float chance;
-
-		private FluidOut(FluidStack fs, float c) {
-			fluid = fs;
-			chance = c;
-		}
-
-		public int getRandomAmount(Random r) {
-			return (int)(r.nextFloat()*fluid.amount);
-		}
-
-		public int getAmount() {
-			return fluid.amount;
-		}
-
-		@Override
-		public final String toString() {
-			return fluid.amount+" mB of "+fluid.getFluid().getName()+" ("+chance+"%)";
-		}
-
-	}
-
 	public Collection<ItemStack> getAllCentrifugables() {
 		return Collections.unmodifiableCollection(recipeList.keySet());
 	}
@@ -279,6 +254,11 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		}
 	}
 
+	@Override
+	protected boolean removeRecipe(MachineRecipe recipe) {
+		return recipeList.removeValue((CentrifugeRecipe)recipe);
+	}
+
 	private static class ChanceRounder implements ChanceManipulator {
 
 		private ChanceRounder() {
@@ -291,8 +271,28 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		}
 	}
 
-	@Override
-	protected boolean removeRecipe(MachineRecipe recipe) {
-		return recipeList.removeValue((CentrifugeRecipe)recipe);
+	private static class FluidOut {
+
+		private final FluidStack fluid;
+		private final float chance;
+
+		private FluidOut(FluidStack fs, float c) {
+			fluid = fs;
+			chance = c;
+		}
+
+		public int getRandomAmount(Random r) {
+			return (int)(r.nextFloat()*fluid.amount);
+		}
+
+		public int getAmount() {
+			return fluid.amount;
+		}
+
+		@Override
+		public final String toString() {
+			return fluid.amount+" mB of "+fluid.getFluid().getName()+" ("+chance+"%)";
+		}
+
 	}
 }

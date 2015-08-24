@@ -13,7 +13,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -33,15 +32,6 @@ public class ExtractAPI {
 	private static Class entry;
 	private static Constructor construct;
 	private static Class product;
-
-	private static Class recipes;
-	private static Object recipeInstance;
-	private static MultiMap<ReikaOreHelper, String> extras;
-
-	/** Adds an item to be treated as a vanilla or mod ore already natively handled. Equivalent to adding it to the OreDict. */
-	public static void addExtractorAlternative(ReikaOreHelper type, String oreDict) {
-		extras.addValue(type, oreDict);
-	}
 
 	/** Adds a custom extract type for use with a custom ore type. Uses the same registry as that which is used in the special config file.
 	 * <br><br><br>
@@ -90,14 +80,6 @@ public class ExtractAPI {
 			product = Class.forName("Reika.RotaryCraft.Auxiliary.CustomExtractLoader$ProductType");
 			construct = entry.getDeclaredConstructor(int.class, String.class, OreRarity.class, product, String.class, int.class, int.class, int.class, OreType.class, String[].class);
 			construct.setAccessible(true);
-
-			recipes = Class.forName("Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor");
-			Field inst = recipes.getDeclaredField("instance");
-			inst.setAccessible(true);
-			recipeInstance = inst.get(null);
-			Field map = recipes.getDeclaredField("modOres");
-			map.setAccessible(true);
-			extras = (MultiMap<ReikaOreHelper, String>)map.get(recipeInstance);
 		}
 		catch (Exception e) {
 			ReikaJavaLibrary.pConsole("Could not load Extracts API!");
