@@ -10,9 +10,9 @@
 package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
 import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
@@ -27,7 +27,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IPollinatable;
 
 public class CanolaBee extends BeeSpecies {
 
@@ -54,16 +53,15 @@ public class CanolaBee extends BeeSpecies {
 		}
 	}
 
-	private final class FlowerProviderCanola implements IFlowerProvider {
+	private final class FlowerProviderCanola extends BasicFlowerProvider {
 
-		@Override
-		public boolean isAcceptedFlower(World world, IIndividual individual, int x, int y, int z) {
-			return world.getBlock(x, y, z) == BlockRegistry.CANOLA.getBlockInstance() && BlockCanola.canGrowAt(world, x, y, z);
+		private FlowerProviderCanola() {
+			super(BlockRegistry.CANOLA.getBlockInstance(), true);
 		}
 
 		@Override
-		public boolean isAcceptedPollinatable(World world, IPollinatable p) {
-			return false;
+		public boolean isAcceptedFlower(World world, IIndividual individual, int x, int y, int z) {
+			return super.isAcceptedFlower(world, individual, x, y, z) && BlockCanola.canGrowAt(world, x, y, z);
 		}
 
 		@Override
@@ -96,16 +94,12 @@ public class CanolaBee extends BeeSpecies {
 		public String getDescription() {
 			return "Canola Plants";
 		}
-
-		@Override
-		public ItemStack[] affectProducts(World world, IIndividual individual, int x, int y, int z, ItemStack[] products) {
-			return products;
-		}
-
+		/*
 		@Override
 		public ItemStack[] getItemStacks() {
 			return new ItemStack[]{BlockRegistry.CANOLA.getStackOf()};
 		}
+		 */
 	}
 
 	@Override

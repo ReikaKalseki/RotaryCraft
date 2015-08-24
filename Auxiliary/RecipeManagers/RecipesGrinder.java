@@ -243,6 +243,15 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			else {
 				RotaryCraft.logger.logError("Could not add certus quartz grinding; null itemstack "+cry+", "+dust);
 			}
+
+			ItemStack fluix = AppEngHandler.getInstance().getFluixCrystal();
+			ItemStack fluixdust = AppEngHandler.getInstance().getFluixDust();
+			if (fluix != null && fluixdust != null) {
+				this.addRecipe(fluix, fluixdust, RecipeLevel.MODINTERACT);
+			}
+			else {
+				RotaryCraft.logger.logError("Could not add certus quartz grinding; null itemstack "+fluix+", "+fluixdust);
+			}
 		}
 
 		ArrayList<ItemStack> obsididust = OreDictionary.getOres("dustObsidian");
