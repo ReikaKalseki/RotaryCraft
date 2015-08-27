@@ -439,7 +439,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (ItemRegistry.EXTRACTS.matchItem(is)) {
 			return slot == 1+is.getItemDamage()/8;
 		}
-		if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
+		else if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
+			return slot == 1+is.getItemDamage()%4;
+		}
+		else if (ItemRegistry.CUSTOMEXTRACT.matchItem(is)) {
 			return slot == 1+is.getItemDamage()%4;
 		}
 		if (slot == 9)
