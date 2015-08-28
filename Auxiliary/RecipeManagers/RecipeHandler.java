@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
@@ -26,6 +27,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import com.google.common.collect.HashBiMap;
 
 public abstract class RecipeHandler {
+
+	private static final boolean enableRegistries = ConfigRegistry.RECIPEMOD.getState();
 
 	private final MultiMap<RecipeLevel, String> recipesByLevel = new MultiMap(new MultiMap.HashSetFactory());
 	private final HashMap<String, RecipeLevel> recipeLevels = new HashMap();
@@ -39,17 +42,20 @@ public abstract class RecipeHandler {
 	}
 
 	protected final void onAddRecipe(MachineRecipe recipe, RecipeLevel rl) {
-		String s = recipeKeys.get(recipe);
-		if (s == null) {
-			this.generateKey(recipe);
+		if (enableRegistries) {
+			String s = recipeKeys.get(recipe);
+			if (s == null) {
+				this.generateKey(recipe);
+			}
+			recipesByLevel.addValue(rl, s);
+			recipeLevels.put(s, rl);
 		}
-		recipesByLevel.addValue(rl, s);
-		recipeLevels.put(s, rl);
 	}
 
 	private void generateKey(MachineRecipe recipe) {
 		String s = machine.name()+"$"+recipe.getClass().getSimpleName()+"#("+recipe.getUniqueID();
-		//ReikaJavaLibrary.pConsole("RC RECIPE LOADED: "+s);
+		if (RotaryCraft.logger.shouldDebug())
+			ReikaJavaLibrary.pConsole("Recipe Loaded: "+recipe+"="+s);
 		if (recipeKeys.containsValue(s)) {
 			MachineRecipe pre = recipeKeys.inverse().get(s);
 			if (pre == null || pre.equals(recipe)) {

@@ -237,9 +237,11 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		int tick = 1;
 		if (!fuel.isEmpty() && power > 0 && omega >= MINSPEED && accel.getLevel() > 10) {
 			tick = 4;
-			accel.removeLiquid(10);
-			if (canprocess && rand.nextInt(4) == 0)
-				temperature += 1;
+			if (canprocess || temperature >= 800) {
+				accel.removeLiquid(10);
+				if (rand.nextInt(4) == 0)
+					temperature += 1;
+			}
 		}
 
 		if (temperature >= reqtemp && reqtemp != -1 && this.canSmelt()) {
@@ -462,7 +464,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[]{water.getInfo(), fuel.getInfo()};
+		return new FluidTankInfo[]{water.getInfo(), fuel.getInfo(), accel.getInfo()};
 	}
 
 	public int getWater() {
