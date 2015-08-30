@@ -22,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -84,6 +85,9 @@ public class BlockAdvGear extends BlockModelledMachine {
 				if (is.stackTagCompound == null)
 					is.stackTagCompound = new NBTTagCompound();
 				is.stackTagCompound.setInteger("lube", lube);
+			}
+			if (te.isUnharvestable()) {
+				is = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
 			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
 		}

@@ -21,9 +21,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockBasicMachine;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 
@@ -165,6 +168,9 @@ public class BlockGPR extends BlockBasicMachine {
 			return;
 		if (!world.isRemote) {
 			ItemStack todrop = MachineRegistry.GPR.getCraftedProduct();
+			if (((RotaryCraftTileEntity)world.getTileEntity(x, y, z)).isUnharvestable()) {
+				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
+			}
 			EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 			item.delayBeforeCanPickup = 10;
 			if (!world.isRemote)

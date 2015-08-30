@@ -67,14 +67,14 @@ public class BlockShaft extends BlockModelledMachine {
 			return 0;
 		MaterialRegistry type = sha.getShaftType();
 		switch(type) {
-		case WOOD:
-			return 3F;
-		case STONE:
-			return 8F;
-		case STEEL:
-		case DIAMOND:
-		case BEDROCK:
-			return 15F;
+			case WOOD:
+				return 3F;
+			case STONE:
+				return 8F;
+			case STEEL:
+			case DIAMOND:
+			case BEDROCK:
+				return 15F;
 		}
 		return 0;
 	}
@@ -119,24 +119,24 @@ public class BlockShaft extends BlockModelledMachine {
 			if (tile.getShaftType() == null)
 				return false;
 			switch(tile.getShaftType()) {
-			case WOOD:
-				fix = new ItemStack(Items.stick);
-				break;
-			case STONE:
-				fix = ItemStacks.stonerod;
-				break;
-			case STEEL:
-				fix = ItemStacks.shaftitem;
-				break;
-			case DIAMOND:
-				fix = ItemStacks.diamondshaft;
-				break;
-			case BEDROCK:
-				fix = ItemStacks.bedrockshaft;
-				break;
-			default:
-				fix = new ItemStack(Blocks.stone);
-				break;
+				case WOOD:
+					fix = new ItemStack(Items.stick);
+					break;
+				case STONE:
+					fix = ItemStacks.stonerod;
+					break;
+				case STEEL:
+					fix = ItemStacks.shaftitem;
+					break;
+				case DIAMOND:
+					fix = ItemStacks.diamondshaft;
+					break;
+				case BEDROCK:
+					fix = ItemStacks.bedrockshaft;
+					break;
+				default:
+					fix = new ItemStack(Blocks.stone);
+					break;
 			}
 			if (ep.getCurrentEquippedItem() != null && ReikaItemHelper.matchStacks(fix, ep.getCurrentEquippedItem())) {
 				tile.repair();
@@ -163,21 +163,21 @@ public class BlockShaft extends BlockModelledMachine {
 				ItemStack todrop = null;
 				if (par5Random.nextInt(8) == 0) {
 					switch(sha.getShaftType()) {
-					case WOOD:
-						todrop = new ItemStack(Blocks.planks, 5, 0);
-						break;
-					case STONE:
-						todrop = ReikaItemHelper.getSizedItemStack(ReikaItemHelper.cobbleSlab, 5);
-						break;
-					case STEEL:
-						todrop = ItemStacks.mount.copy();	//drop mount
-						break;
-					case DIAMOND:
-						todrop = ItemStacks.mount.copy();	//drop mount
-						break;
-					case BEDROCK:
-						todrop = ItemStacks.mount.copy();	//drop mount
-						break;
+						case WOOD:
+							todrop = new ItemStack(Blocks.planks, 5, 0);
+							break;
+						case STONE:
+							todrop = ReikaItemHelper.getSizedItemStack(ReikaItemHelper.cobbleSlab, 5);
+							break;
+						case STEEL:
+							todrop = ItemStacks.mount.copy();	//drop mount
+							break;
+						case DIAMOND:
+							todrop = ItemStacks.mount.copy();	//drop mount
+							break;
+						case BEDROCK:
+							todrop = ItemStacks.mount.copy();	//drop mount
+							break;
 					}
 					EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 					item.delayBeforeCanPickup = 10;
@@ -187,6 +187,9 @@ public class BlockShaft extends BlockModelledMachine {
 			}
 			else if (sha.getBlockMetadata() < 6) {
 				ItemStack todrop = ItemRegistry.SHAFT.getStackOfMetadata(sha.getShaftType().ordinal()); //drop shaft item
+				if (sha.isUnharvestable()) {
+					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
+				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
@@ -199,6 +202,9 @@ public class BlockShaft extends BlockModelledMachine {
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
 					world.spawnEntityInWorld(item);*/
 				ItemStack todrop = ItemStacks.shaftcross.copy(); //drop shaft cross
+				if (sha.isUnharvestable()) {
+					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
+				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
@@ -221,18 +227,18 @@ public class BlockShaft extends BlockModelledMachine {
 			while (i < 0)
 				i += 4;
 			switch (i) {
-			case 0:
-				world.setBlockMetadataWithNotify(x, y, z, base+0, 3);
-				break;
-			case 1:
-				world.setBlockMetadataWithNotify(x, y, z, base+3, 3);
-				break;
-			case 2:
-				world.setBlockMetadataWithNotify(x, y, z, base+2, 3);
-				break;
-			case 3:
-				world.setBlockMetadataWithNotify(x, y, z, base+1, 3);
-				break;
+				case 0:
+					world.setBlockMetadataWithNotify(x, y, z, base+0, 3);
+					break;
+				case 1:
+					world.setBlockMetadataWithNotify(x, y, z, base+3, 3);
+					break;
+				case 2:
+					world.setBlockMetadataWithNotify(x, y, z, base+2, 3);
+					break;
+				case 3:
+					world.setBlockMetadataWithNotify(x, y, z, base+1, 3);
+					break;
 			}
 		}
 		else { //Looking up/down

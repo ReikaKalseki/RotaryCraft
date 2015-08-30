@@ -65,14 +65,14 @@ public class BlockGearbox extends BlockModelledMachine {
 			return 0;
 		MaterialRegistry type = gbx.getGearboxType();
 		switch(type) {
-		case WOOD:
-			return 5F;
-		case STONE:
-			return 10F;
-		case STEEL:
-		case DIAMOND:
-		case BEDROCK:
-			return 15F;
+			case WOOD:
+				return 5F;
+			case STONE:
+				return 10F;
+			case STEEL:
+			case DIAMOND:
+			case BEDROCK:
+				return 15F;
 		}
 		return 0;
 	}
@@ -122,6 +122,9 @@ public class BlockGearbox extends BlockModelledMachine {
 			int ratio = gbx.getBlockMetadata()/4;
 			ItemStack todrop = ItemRegistry.GEARBOX.getStackOfMetadata(type+5*ratio); //drop gearbox item
 			todrop.stackTagCompound = gbx.getTagsToWriteToStack();
+			if (gbx.isUnharvestable()) {
+				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
+			}
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
 		}
 	}
@@ -139,18 +142,18 @@ public class BlockGearbox extends BlockModelledMachine {
 			i += 4;
 
 		switch (i) {
-		case 0:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+2, 3);
-			break;
-		case 1:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+1, 3);
-			break;
-		case 2:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+3, 3);
-			break;
-		case 3:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+0, 3);
-			break;
+			case 0:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+2, 3);
+				break;
+			case 1:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+1, 3);
+				break;
+			case 2:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+3, 3);
+				break;
+			case 3:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+0, 3);
+				break;
 		}
 	}
 

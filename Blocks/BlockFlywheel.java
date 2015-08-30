@@ -23,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
@@ -81,6 +82,9 @@ public class BlockFlywheel extends BlockModelledMachine {
 			else {
 				int metadata = fly.getBlockMetadata();
 				ItemStack todrop = ItemRegistry.FLYWHEEL.getStackOfMetadata(metadata/4); //drop flywheel
+				if (fly.isUnharvestable()) {
+					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
+				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
 				if (!world.isRemote)
@@ -116,18 +120,18 @@ public class BlockFlywheel extends BlockModelledMachine {
 			i += 4;
 
 		switch (i) {
-		case 0:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+3, 3);
-			break;
-		case 1:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+0, 3);
-			break;
-		case 2:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+2, 3);
-			break;
-		case 3:
-			world.setBlockMetadataWithNotify(x, y, z, prevmeta+1, 3);
-			break;
+			case 0:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+3, 3);
+				break;
+			case 1:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+0, 3);
+				break;
+			case 2:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+2, 3);
+				break;
+			case 3:
+				world.setBlockMetadataWithNotify(x, y, z, prevmeta+1, 3);
+				break;
 		}
 	}
 

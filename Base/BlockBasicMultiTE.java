@@ -677,10 +677,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (m == MachineRegistry.SCALECHEST) {
 				((TileEntityScaleableChest)te).writeInventoryToItem(is);
 			}
-			if (m.isBroken((RotaryCraftTileEntity)te))
+			if (((RotaryCraftTileEntity)te).isUnharvestable()) {
+				li = ReikaJavaLibrary.makeListFrom(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12)));
+			}
+			else if (m.isBroken((RotaryCraftTileEntity)te)) {
 				li = m.getBrokenProducts();
-			else
+			}
+			else {
 				li = ReikaJavaLibrary.makeListFrom(is);
+			}
 			ReikaItemHelper.dropItems(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), li);
 		}
 	}

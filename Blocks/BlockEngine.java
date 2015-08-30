@@ -188,9 +188,9 @@ public class BlockEngine extends BlockModelledMachine {
 			return;
 
 		switch(tile.getEngineType()) {
-		case DC:
-			maxy -= 0.1875F;
-			break;/*
+			case DC:
+				maxy -= 0.1875F;
+				break;/*
 		case WIND:
 			maxy = 1.5F;
 			miny = -0.5F;
@@ -217,12 +217,12 @@ public class BlockEngine extends BlockModelledMachine {
 			break;
 			}
 			break;*/
-		case STEAM:
-			maxy -= 0.125F;
-			break;
-		case GAS:
-			maxy -= 0.0625F;
-			break;/*
+			case STEAM:
+				maxy -= 0.125F;
+				break;
+			case GAS:
+				maxy -= 0.0625F;
+				break;/*
 		case HYDRO:
 			maxy = 1.5F;
 			miny = -0.5F;
@@ -235,14 +235,14 @@ public class BlockEngine extends BlockModelledMachine {
 				minx = -0.5F;
 			}
 			break;*/
-		case MICRO:
-			maxy -= 0.125F;
-			break;
-		case JET:
-			maxy -= 0.125F;
-			break;
-		default:
-			break;
+			case MICRO:
+				maxy -= 0.125F;
+				break;
+			case JET:
+				maxy -= 0.125F;
+				break;
+			default:
+				break;
 		}
 
 		this.setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
@@ -292,6 +292,9 @@ public class BlockEngine extends BlockModelledMachine {
 					if (todrop.stackTagCompound == null)
 						todrop.stackTagCompound = new NBTTagCompound();
 					todrop.stackTagCompound.setBoolean("bed", ((TileEntityHydroEngine)eng).isBedrock());
+				}
+				if (eng.isUnharvestable()) {
+					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 				item.delayBeforeCanPickup = 10;
