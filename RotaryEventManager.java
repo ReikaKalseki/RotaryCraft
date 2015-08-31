@@ -41,7 +41,9 @@ import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
 import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
+import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
+import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
@@ -66,6 +68,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -79,6 +82,18 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent
+	public void applyEMPEffects(SetBlockEvent evt) {
+		TileEntityEMP.resetCoordinate(evt.world, evt.xCoord, evt.yCoord, evt.zCoord);
+	}
+
+	@SubscribeEvent
+	public void applyEMPEffects(TileUpdateEvent evt) {
+		if (TileEntityEMP.isShutdown(evt.getWorld(), evt.getTileX(), evt.getTileY(), evt.getTileZ())) {
+			evt.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent

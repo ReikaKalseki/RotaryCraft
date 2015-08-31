@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -35,6 +36,7 @@ import Reika.ChromatiCraft.TileEntity.Networking.TileEntityCrystalPylon;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
@@ -54,6 +56,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	private BlockArray check  = new BlockArray();
 
 	private static List<Class<? extends TileEntity>> blacklist = new ArrayList<Class<? extends TileEntity>>();
+
+	private static HashSet<WorldLocation> shutdownLocations = new HashSet();
 
 	private boolean loading = true;
 	private boolean canLoad = true;
@@ -328,12 +332,14 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	private void shutdownFallback(TileEntity te) {
-		int x = te.xCoord;
-		int y = te.yCoord;
-		int z = te.zCoord;
-		Block id = worldObj.getBlock(x, y, z);
-		int meta = worldObj.getBlockMetadata(x, y, z);
-		this.dropMachine(worldObj, x, y, z);
+		shutdownLocations.add(new WorldLocation(te));
+
+		//int x = te.xCoord;
+		//int y = te.yCoord;
+		//int z = te.zCoord;
+		//Block id = worldObj.getBlock(x, y, z);
+		//int meta = worldObj.getBlockMetadata(x, y, z);
+		//this.dropMachine(worldObj, x, y, z);
 		/*
 		;
 		ItemStack[] inv;
@@ -354,6 +360,18 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		for (int i = 0; i < inv.length; i++) {
 			dead.setInventorySlotContents(i, inv[i]);
 		}*/
+	}
+
+	public static boolean isShutdown(TileEntity te) {
+		return shutdownLocations.contains(new WorldLocation(te));
+	}
+
+	public static boolean isShutdown(World world, int x, int y, int z) {
+		return shutdownLocations.contains(new WorldLocation(world, x, y, z));
+	}
+
+	public static void resetCoordinate(World world, int x, int y, int z) {
+		shutdownLocations.remove(new WorldLocation(world, x, y, z));
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {
