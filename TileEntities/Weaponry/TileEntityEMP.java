@@ -332,14 +332,14 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	private void shutdownFallback(TileEntity te) {
-		shutdownLocations.add(new WorldLocation(te));
+		//shutdownLocations.add(new WorldLocation(te));
 
-		//int x = te.xCoord;
-		//int y = te.yCoord;
-		//int z = te.zCoord;
-		//Block id = worldObj.getBlock(x, y, z);
-		//int meta = worldObj.getBlockMetadata(x, y, z);
-		//this.dropMachine(worldObj, x, y, z);
+		int x = te.xCoord;
+		int y = te.yCoord;
+		int z = te.zCoord;
+		Block id = worldObj.getBlock(x, y, z);
+		int meta = worldObj.getBlockMetadata(x, y, z);
+		this.dropMachine(worldObj, x, y, z);
 		/*
 		;
 		ItemStack[] inv;

@@ -77,36 +77,36 @@ public class RenderSEngine extends RotaryTERenderer
 		ModelWind var22 = WindModel;
 
 		switch(tile.getEngineType()) {
-		case DC:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
-			break;
-		case WIND:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windtex.png");
-			break;
-		case STEAM:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamtex.png");
-			break;
-		case GAS:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/combtex.png");
-			break;
-		case AC:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/actex.png");
-			break;
-		case SPORT:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
-			break;
-		case HYDRO:
-			TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
-			String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
-			this.bindTextureByName(sg);
-			break;
-		case MICRO:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
-			break;
-		case JET:
-			String s = ((TileEntityJetEngine)tile).canAfterBurn() ? "_b": "";
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex"+s+".png");
-			break;
+			case DC:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
+				break;
+			case WIND:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windtex.png");
+				break;
+			case STEAM:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamtex.png");
+				break;
+			case GAS:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/combtex.png");
+				break;
+			case AC:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/actex.png");
+				break;
+			case SPORT:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
+				break;
+			case HYDRO:
+				TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
+				String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
+				this.bindTextureByName(sg);
+				break;
+			case MICRO:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
+				break;
+			case JET:
+				String s = ((TileEntityJetEngine)tile).canAfterBurn() ? "_b": "";
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex"+s+".png");
+				break;
 		}
 
 		this.setupGL(tile, par2, par4, par6);
@@ -116,18 +116,18 @@ public class RenderSEngine extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 90;
-				break;
-			case 3:
-				var11 = 270;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 90;
+					break;
+				case 3:
+					var11 = 270;
+					break;
 			}
 
 			if (tile.getEngineType().isJetFueled())
@@ -141,63 +141,63 @@ public class RenderSEngine extends RotaryTERenderer
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
 			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
 			switch(tile.getEngineType()) {
-			case DC:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
-				var14.renderAll(tile, null, 0, 0);
-				break;
-			case WIND:
-				GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
-				s = 0.7;
-				d = 0.375;
-				GL11.glScaled(s, s, s);
-				double d2 = 0.2;
-				GL11.glTranslated(0, d, 0);
-				GL11.glTranslated(d2, 0, 0);
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windtex.png");
-				var22.renderAll(tile, null, 0, 0);
-				GL11.glTranslated(0, -d, 0);
-				GL11.glTranslated(-d2, 0, 0);
-				GL11.glScaled(1D/s, 1D/s, 1D/s);
-				GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-				break;
-			case STEAM:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamtex.png");
-				var15.renderAll(tile, null, 0, 0);
-				break;
-			case GAS:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/combtex.png");
-				var16.renderAll(tile, null, 0, 0);
-				break;
-			case AC:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/actex.png");
-				var17.renderAll(tile, null, 0, 0);
-				break;
-			case SPORT:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
-				var18.renderAll(tile, null, Float.MIN_NORMAL, 0);
-				break;
-			case HYDRO:
-				TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
-				String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
-				this.bindTextureByName(sg);
-				s = 0.7;
-				d = 0.375;
-				GL11.glTranslated(0, d, 0);
-				GL11.glScaled(s, s, s);
-				var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), 0, 0);
-				GL11.glScaled(1D/s, 1D/s, 1D/s);
-				GL11.glTranslated(0, -d, 0);
-				break;
-			case MICRO:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
-				GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
-				var19.renderAll(tile, null, 0, 0);
-				break;
-			case JET:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex.png");
-				GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
-				var20.renderAll(tile, null, 0, 0);
-				break;
+				case DC:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
+					var14.renderAll(tile, null, 0, 0);
+					break;
+				case WIND:
+					GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
+					s = 0.7;
+					d = 0.375;
+					GL11.glScaled(s, s, s);
+					double d2 = 0.2;
+					GL11.glTranslated(0, d, 0);
+					GL11.glTranslated(d2, 0, 0);
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windtex.png");
+					var22.renderAll(tile, null, 0, 0);
+					GL11.glTranslated(0, -d, 0);
+					GL11.glTranslated(-d2, 0, 0);
+					GL11.glScaled(1D/s, 1D/s, 1D/s);
+					GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
+					break;
+				case STEAM:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamtex.png");
+					var15.renderAll(tile, null, 0, 0);
+					break;
+				case GAS:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/combtex.png");
+					var16.renderAll(tile, null, 0, 0);
+					break;
+				case AC:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/actex.png");
+					var17.renderAll(tile, null, 0, 0);
+					break;
+				case SPORT:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
+					var18.renderAll(tile, null, Float.MIN_NORMAL, 0);
+					break;
+				case HYDRO:
+					TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
+					String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
+					this.bindTextureByName(sg);
+					s = 0.7;
+					d = 0.375;
+					GL11.glTranslated(0, d, 0);
+					GL11.glScaled(s, s, s);
+					var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), 0, 0);
+					GL11.glScaled(1D/s, 1D/s, 1D/s);
+					GL11.glTranslated(0, -d, 0);
+					break;
+				case MICRO:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
+					GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
+					var19.renderAll(tile, null, 0, 0);
+					break;
+				case JET:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex.png");
+					GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
+					var20.renderAll(tile, null, 0, 0);
+					break;
 			}
 
 			this.closeGL(tile);
@@ -205,36 +205,36 @@ public class RenderSEngine extends RotaryTERenderer
 		}
 
 		switch (tile.getEngineType()) {
-		case DC:
-			var14.renderAll(tile, null, -tile.phi, 0);
-			break;
-		case WIND:
-			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-			var22.renderAll(tile, null, -tile.phi, 0);
-			GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
-			break;
-		case STEAM:
-			var15.renderAll(tile, null, -tile.phi, 0);
-			break;
-		case GAS:
-			var16.renderAll(tile, null, -tile.phi, 0);
-			break;
-		case AC:
-			var17.renderAll(tile, null, -tile.phi, 0);
-			break;
-		case SPORT:
-			var18.renderAll(tile, null, -tile.phi, 0);
-			break;
-		case HYDRO:
-			TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
-			var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), -tile.phi, 0);
-			break;
-		case MICRO:
-			var19.renderAll(tile, null, -tile.phi, 0);
-			break;
-		case JET:
-			var20.renderAll(tile, null, -tile.phi, 0);
-			break;
+			case DC:
+				var14.renderAll(tile, null, -tile.phi, 0);
+				break;
+			case WIND:
+				GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
+				var22.renderAll(tile, null, -tile.phi, 0);
+				GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
+				break;
+			case STEAM:
+				var15.renderAll(tile, null, -tile.phi, 0);
+				break;
+			case GAS:
+				var16.renderAll(tile, null, -tile.phi, 0);
+				break;
+			case AC:
+				var17.renderAll(tile, null, -tile.phi, 0);
+				break;
+			case SPORT:
+				var18.renderAll(tile, null, -tile.phi, 0);
+				break;
+			case HYDRO:
+				TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
+				var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), -tile.phi, 0);
+				break;
+			case MICRO:
+				var19.renderAll(tile, null, -tile.phi, 0);
+				break;
+			case JET:
+				var20.renderAll(tile, null, -tile.phi, 0);
+				break;
 		}
 
 		this.closeGL(tile);
@@ -317,24 +317,24 @@ public class RenderSEngine extends RotaryTERenderer
 			return null;
 		TileEntityEngine tile = (TileEntityEngine)te;
 		switch(tile.getEngineType()) {
-		case DC:
-			return "dc.png";
-		case WIND:
-			return "windtex.png";
-		case STEAM:
-			return "steamtex.png";
-		case GAS:
-			return "combtex.png";
-		case AC:
-			return "actex.png";
-		case SPORT:
-			return "perftex.png";
-		case HYDRO:
-			return "hydrotex.png";
-		case MICRO:
-			return "microtex.png";
-		case JET:
-			return "jettex.png";
+			case DC:
+				return "dc.png";
+			case WIND:
+				return "windtex.png";
+			case STEAM:
+				return "steamtex.png";
+			case GAS:
+				return "combtex.png";
+			case AC:
+				return "actex.png";
+			case SPORT:
+				return "perftex.png";
+			case HYDRO:
+				return "hydrotex.png";
+			case MICRO:
+				return "microtex.png";
+			case JET:
+				return "jettex.png";
 		}
 		return null;
 	}
