@@ -83,7 +83,17 @@ public class RotaryEventManager {
 	private RotaryEventManager() {
 
 	}
-
+	/*
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void preventUncrafting(AddToSlotEvent evt) {
+		if (evt.inventory.getClass().getSimpleName().toLowerCase().contains("uncrafting")) {
+			ItemStack is = evt.getItem();
+			if (is != null && ItemRegistry.getEntry(is) != null && ItemRegistry.getEntry(is).isPlacer())
+				Minecraft.getMinecraft().thePlayer.closeScreen();
+		}
+	}
+	 */
 	@SubscribeEvent
 	public void applyEMPEffects(SetBlockEvent evt) {
 		TileEntityEMP.resetCoordinate(evt.world, evt.xCoord, evt.yCoord, evt.zCoord);

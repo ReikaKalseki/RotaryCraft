@@ -125,32 +125,32 @@ public class TorqueUsage {
 			else if (tile instanceof TileEntityAdvancedGear) {
 				TileEntityAdvancedGear adv = (TileEntityAdvancedGear)tile;
 				switch(adv.getGearType()) {
-				case WORM:
-					if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
-						addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/16);
-					}
-					break;
-				case CVT:
-					if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
-						if (adv.getRatio() > 0) {
-							addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)*adv.getRatio());
+					case WORM:
+						if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
+							addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/16);
 						}
-						else {
-							addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/-adv.getRatio());
+						break;
+					case CVT:
+						if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
+							if (adv.getRatio() > 0) {
+								addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)*adv.getRatio());
+							}
+							else {
+								addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/-adv.getRatio());
+							}
 						}
-					}
-					break;
-				case COIL:
-					double amt = Math.sqrt(2*adv.getEnergy());
-					if (adv.isBedrockCoil())
-						amt *= 16;
-					torque += amt;
-					break;
-				case HIGH:
-					if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
-						double D = adv.torquemode ? 256D : 1/256D;
-						addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/D);
-					}
+						break;
+					case COIL:
+						double amt = Math.sqrt(2*adv.getEnergy());
+						if (adv.isBedrockCoil())
+							amt *= 16;
+						torque += amt;
+						break;
+					case HIGH:
+						if (!TEMap.containsKey(adv.getWriteTileEntity()) && isPoweredFrom(world, adv.getWriteTileEntity())) {
+							double D = adv.torquemode ? 256D : 1/256D;
+							addToList(adv.getWriteTileEntity(), tile, TEMapR.get(tile)/D);
+						}
 				}
 			}
 			else if (tile instanceof TileEntityShaft) {
@@ -304,6 +304,8 @@ public class TorqueUsage {
 		HashSet<WorldLocation> pass = new HashSet();
 		tile.getAllOutputs(c, dir.getOpposite());
 		for (TileEntity te : c) {
+			if (te == null)
+				continue;
 			WorldLocation loc = new WorldLocation(te);
 			if (pass.contains(loc))
 				continue;

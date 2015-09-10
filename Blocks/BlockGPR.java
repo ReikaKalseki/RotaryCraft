@@ -167,14 +167,14 @@ public class BlockGPR extends BlockBasicMachine {
 		if (!this.canHarvest(world, ep, x, y, z))
 			return;
 		if (!world.isRemote) {
+			TileEntity te = world.getTileEntity(x, y, z);
 			ItemStack todrop = MachineRegistry.GPR.getCraftedProduct();
-			if (((RotaryCraftTileEntity)world.getTileEntity(x, y, z)).isUnharvestable()) {
+			if (te != null && ((RotaryCraftTileEntity)te).isUnharvestable()) {
 				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
 			EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
 			item.delayBeforeCanPickup = 10;
-			if (!world.isRemote)
-				world.spawnEntityInWorld(item);
+			world.spawnEntityInWorld(item);
 		}
 	}
 }
