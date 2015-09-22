@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.ModHandlerBase;
 import Reika.DragonAPI.Exception.ModReflectionException;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartOreHandler;
@@ -23,6 +24,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.FactorizationHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.GalacticCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.LegacyMagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicaOreHandler;
@@ -31,6 +33,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.MimicryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.QuantumOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RailcraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.VeryLegacyMagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -204,7 +207,13 @@ public final class OreForcer {
 	}
 
 	private void registerEssence() {
-		MagicCropHandler.getInstance().registerEssence();
+		ModHandlerBase h = ModList.MAGICCROPS.getHandler("Handler");
+		if (h instanceof MagicCropHandler)
+			((MagicCropHandler)h).registerEssence();
+		if (h instanceof LegacyMagicCropHandler)
+			((LegacyMagicCropHandler)h).registerEssence();
+		if (h instanceof VeryLegacyMagicCropHandler)
+			((VeryLegacyMagicCropHandler)h).registerEssence();
 	}
 
 	private void intercraftEssence() {

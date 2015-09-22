@@ -1189,6 +1189,18 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		//this.addOreRecipe(obj);
 	}
 
+	public void addSizedNBTCrafting(NBTTagCompound NBT, int num, Object... obj) {
+		if (this.isCraftable()) {
+			ItemStack is = ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num);
+			is.stackTagCompound = (NBTTagCompound)NBT.copy();
+			WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(is, obj);
+			}
+		}
+		//this.addSizedOreRecipe(num, obj);
+	}
+
 	public void addSizedCrafting(int num, Object... obj) {
 		if (this.isCraftable()) {
 			WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);

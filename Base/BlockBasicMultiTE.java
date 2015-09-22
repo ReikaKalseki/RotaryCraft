@@ -677,7 +677,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (m == MachineRegistry.SCALECHEST) {
 				((TileEntityScaleableChest)te).writeInventoryToItem(is);
 			}
-			if (((RotaryCraftTileEntity)te).isUnharvestable()) {
+			if (((RotaryCraftTileEntity)te).isUnHarvestable()) {
 				li = ReikaJavaLibrary.makeListFrom(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12)));
 			}
 			else if (m.isBroken((RotaryCraftTileEntity)te)) {
@@ -925,8 +925,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!currenttip.isEmpty())
-			return currenttip;
+		//if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!currenttip.isEmpty())
+		//	return currenttip;
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);
 		if (te instanceof TemperatureTE)

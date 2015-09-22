@@ -169,7 +169,7 @@ public class BlockGPR extends BlockBasicMachine {
 		if (!world.isRemote) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			ItemStack todrop = MachineRegistry.GPR.getCraftedProduct();
-			if (te != null && ((RotaryCraftTileEntity)te).isUnharvestable()) {
+			if (te != null && ((RotaryCraftTileEntity)te).isUnHarvestable()) {
 				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
 			EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);

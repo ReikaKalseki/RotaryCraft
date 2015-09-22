@@ -131,6 +131,6 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 
 	@Override
 	public int getRedstoneOverride() {
-		return power > 0 ? Math.max(1, (int)(15L*power/1048576)) : 1;
+		return power > 0 ? Math.max(1, Math.min(15, (int)(15L*power/1048576))) : 0;
 	}
 }

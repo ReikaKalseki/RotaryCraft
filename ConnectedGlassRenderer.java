@@ -22,9 +22,9 @@ import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.Block.ConnectedTextureGlass;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
+import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 
@@ -50,8 +50,8 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 		boolean render5 = b.renderCentralTextureForItem(metadata);
 
-		IIcon ico = b.getIconForEdge(0);
-		IIcon ico2 = b.getIconForEdge(5);
+		IIcon ico = b.getIconForEdge(metadata, 0);
+		IIcon ico2 = b.getIconForEdge(metadata, 5);
 		float u = ico.getMinU();
 		float du = ico.getMaxU();
 		float v = ico.getMinV();
@@ -68,7 +68,6 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 		v5.addTranslation(dx, dy, dz);
 
 		this.setFaceBrightness(v5, ForgeDirection.UP);
-		v5.setNormal(0, 1, 0);
 		v5.addVertexWithUV(1, 1, 0, u, v);
 		v5.addVertexWithUV(0, 1, 0, du, v);
 		v5.addVertexWithUV(0, 1, 1, du, dv);
@@ -159,7 +158,6 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 
 		int mix = block.getMixedBrightnessForBlock(world, x, y, z);
 		v5.setBrightness(mix);
-		v5.setNormal(0, 1, 0);
 
 		if (renderPass == 0) {
 			ArrayList<Integer> li = b.getEdgesForFace(world, x, y, z, ForgeDirection.UP);
@@ -167,7 +165,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.UP.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
-					IIcon ico = b.getIconForEdge(edge);
+					IIcon ico = b.getIconForEdge(world, x, y, z, edge);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
 					float v = ico.getMinV();
@@ -190,7 +188,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.DOWN.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
-					IIcon ico = b.getIconForEdge(edge);
+					IIcon ico = b.getIconForEdge(world, x, y, z, edge);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
 					float v = ico.getMinV();
@@ -212,7 +210,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.EAST.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
-					IIcon ico = b.getIconForEdge(edge);
+					IIcon ico = b.getIconForEdge(world, x, y, z, edge);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
 					float v = ico.getMinV();
@@ -233,7 +231,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.WEST.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
-					IIcon ico = b.getIconForEdge(edge);
+					IIcon ico = b.getIconForEdge(world, x, y, z, edge);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
 					float v = ico.getMinV();
@@ -254,7 +252,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.SOUTH.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
-					IIcon ico = b.getIconForEdge(edge);
+					IIcon ico = b.getIconForEdge(world, x, y, z, edge);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
 					float v = ico.getMinV();
@@ -275,7 +273,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 			if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.NORTH.ordinal()))
 				for (int i = 0; i < li.size(); i++) {
 					int edge = li.get(i);
-					IIcon ico = b.getIconForEdge(edge);
+					IIcon ico = b.getIconForEdge(world, x, y, z, edge);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
 					float v = ico.getMinV();
@@ -298,18 +296,17 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 			if (tile != null) {
 				Fluid f = tile.getFluid();
 				if (f != null) {
-					v5.draw();
-					v5.startDrawingQuads();
-					v5.setNormal(0, 1, 0);
-					ReikaLiquidRenderer.bindFluidTexture(f);
-					if (f.getLuminosity() > 0) {
+					if (f.getLuminosity() >= 10 || TankFlags.LIGHTED.apply(world, x, y, z)) {
 						v5.setBrightness(240);
 						//ReikaRenderHelper.disableLighting();
 					}
 					else {
 						v5.setBrightness(mix);
 					}
-					v5.setColorOpaque_I(f.getColor());
+					if (TankFlags.NOCOLOR.apply(world, x, y, z))
+						v5.setColorOpaque_I(0xffffff);
+					else
+						v5.setColorOpaque_I(f.getColor());
 					IIcon ico = f.getIcon();
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
@@ -320,46 +317,62 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 					float dx = uu/16F;
 					float dz = vv/16F;
 
+					double maxx = world.getBlock(x+1, y, z) == block ? 1 : 1-d;
+					double minx = world.getBlock(x-1, y, z) == block ? 0 : d;
+					double maxy = world.getBlock(x, y+1, z) == block ? 1 : 1-d;
+					double miny = world.getBlock(x, y-1, z) == block ? 0 : d;
+					double maxz = world.getBlock(x, y, z+1) == block ? 1 : 1-d;
+					double minz = world.getBlock(x, y, z-1) == block ? 0 : d;
 
 					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.UP.ordinal())) {
-						if (f.getLuminosity() == 0)
+						if (f.getLuminosity() < 10)
 							this.setFaceBrightness(v5, ForgeDirection.UP);
-						v5.addVertexWithUV(1-d, 1-d, d, u, v);
-						v5.addVertexWithUV(d, 1-d, d, du, v);
-						v5.addVertexWithUV(d, 1-d, 1-d, du, dv);
-						v5.addVertexWithUV(1-d, 1-d, 1-d, u, dv);
+						else
+							v5.setBrightness(240);
+						v5.addVertexWithUV(maxx, maxy, minz, u, v);
+						v5.addVertexWithUV(minx, maxy, minz, du, v);
+						v5.addVertexWithUV(minx, maxy, maxz, du, dv);
+						v5.addVertexWithUV(maxx, maxy, maxz, u, dv);
 					}
 
 					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.DOWN.ordinal())) {
-						if (f.getLuminosity() == 0)
+						if (f.getLuminosity() < 10)
 							this.setFaceBrightness(v5, ForgeDirection.DOWN);
-						v5.addVertexWithUV(d, d, d, du, v);
-						v5.addVertexWithUV(1-d, d, d, u, v);
-						v5.addVertexWithUV(1-d, d, 1-d, u, dv);
-						v5.addVertexWithUV(d, d, 1-d, du, dv);
+						else
+							v5.setBrightness(240);
+						v5.addVertexWithUV(minx, miny, minz, du, v);
+						v5.addVertexWithUV(maxx, miny, minz, u, v);
+						v5.addVertexWithUV(maxx, miny, maxz, u, dv);
+						v5.addVertexWithUV(minx, miny, maxz, du, dv);
 					}
 
 					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.EAST.ordinal())) {
-						if (f.getLuminosity() == 0)
+						if (f.getLuminosity() < 10)
 							this.setFaceBrightness(v5, ForgeDirection.EAST);
-						v5.addVertexWithUV(1-d, d, d, du, v);
-						v5.addVertexWithUV(1-d, 1-d, d, u, v);
-						v5.addVertexWithUV(1-d, 1-d, 1-d, u, dv);
-						v5.addVertexWithUV(1-d, d, 1-d, du, dv);
+						else
+							v5.setBrightness(240);
+						v5.addVertexWithUV(maxx, miny, minz, du, v);
+						v5.addVertexWithUV(maxx, maxy, minz, u, v);
+						v5.addVertexWithUV(maxx, maxy, maxz, u, dv);
+						v5.addVertexWithUV(maxx, miny, maxz, du, dv);
 					}
 
 					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.WEST.ordinal())) {
-						if (f.getLuminosity() == 0)
+						if (f.getLuminosity() < 10)
 							this.setFaceBrightness(v5, ForgeDirection.WEST);
-						v5.addVertexWithUV(d, 1-d, d, u, v);
-						v5.addVertexWithUV(d, d, d, du, v);
-						v5.addVertexWithUV(d, d, 1-d, du, dv);
-						v5.addVertexWithUV(d, 1-d, 1-d, u, dv);
+						else
+							v5.setBrightness(240);
+						v5.addVertexWithUV(minx, maxy, minz, u, v);
+						v5.addVertexWithUV(minx, miny, minz, du, v);
+						v5.addVertexWithUV(minx, miny, maxz, du, dv);
+						v5.addVertexWithUV(minx, maxy, maxz, u, dv);
 					}
 
 					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.SOUTH.ordinal())) {
-						if (f.getLuminosity() == 0)
+						if (f.getLuminosity() < 10)
 							this.setFaceBrightness(v5, ForgeDirection.SOUTH);
+						else
+							v5.setBrightness(240);
 						v5.addVertexWithUV(d, 1-d, 1-d, u, v);
 						v5.addVertexWithUV(d, d, 1-d, du, v);
 						v5.addVertexWithUV(1-d, d, 1-d, du, dv);
@@ -367,12 +380,14 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 					}
 
 					if (block.shouldSideBeRendered(world, x, y, z, ForgeDirection.NORTH.ordinal())) {
-						if (f.getLuminosity() == 0)
+						if (f.getLuminosity() < 10)
 							this.setFaceBrightness(v5, ForgeDirection.NORTH);
-						v5.addVertexWithUV(d, d, d, du, v);
-						v5.addVertexWithUV(d, 1-d, d, u, v);
-						v5.addVertexWithUV(1-d, 1-d, d, u, dv);
-						v5.addVertexWithUV(1-d, d, d, du, dv);
+						else
+							v5.setBrightness(240);
+						v5.addVertexWithUV(minx, miny, minz, du, v);
+						v5.addVertexWithUV(minx, maxy, minz, u, v);
+						v5.addVertexWithUV(maxx, maxy, minz, u, dv);
+						v5.addVertexWithUV(maxx, miny, minz, du, dv);
 					}
 				}
 			}
@@ -400,26 +415,26 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 	private void setFaceBrightness(Tessellator v5, ForgeDirection dir) {
 		float f = 1;
 		switch(dir) {
-		case DOWN:
-			f = 0.4F;
-			break;
-		case EAST:
-			f = 0.5F;
-			break;
-		case NORTH:
-			f = 0.65F;
-			break;
-		case SOUTH:
-			f = 0.65F;
-			break;
-		case UP:
-			f = 1F;
-			break;
-		case WEST:
-			f = 0.5F;
-			break;
-		default:
-			break;
+			case DOWN:
+				f = 0.4F;
+				break;
+			case EAST:
+				f = 0.5F;
+				break;
+			case NORTH:
+				f = 0.65F;
+				break;
+			case SOUTH:
+				f = 0.65F;
+				break;
+			case UP:
+				f = 1F;
+				break;
+			case WEST:
+				f = 0.5F;
+				break;
+			default:
+				break;
 		}
 		v5.setColorOpaque_F(f, f, f);
 	}

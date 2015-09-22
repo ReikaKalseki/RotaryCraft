@@ -47,9 +47,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	/** For emp */
 	private boolean disabled;
 
-	/** For mapmakers */
-	private boolean unharvestable;
-
 	public int[] paint = {-1, -1, -1};
 
 	protected StepTimer second = new StepTimer(20);
@@ -162,8 +159,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		NBT.setInteger("tick", tickcount);
 
 		NBT.setBoolean("emp", disabled);
-
-		NBT.setBoolean("no_drops", unharvestable);
 	}
 
 	@Override
@@ -171,8 +166,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		super.readFromNBT(NBT);
 		tickcount = NBT.getInteger("tick");
 		disabled = NBT.getBoolean("emp");
-
-		unharvestable = NBT.getBoolean("no_drops");
 	}
 
 	public boolean isSelfBlock() {
@@ -249,10 +242,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	public void onRedirect() {
 
-	}
-
-	public final boolean isUnharvestable() {
-		return unharvestable;
 	}
 
 	@Override

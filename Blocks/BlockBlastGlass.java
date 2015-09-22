@@ -210,7 +210,11 @@ public class BlockBlastGlass extends BlockBasic implements ConnectedTextureGlass
 		return li;
 	}
 
-	public IIcon getIconForEdge(int edge) {
+	public IIcon getIconForEdge(IBlockAccess world, int x, int y, int z, int edge) {
+		return edges[edge];
+	}
+
+	public IIcon getIconForEdge(int itemMeta, int edge) {
 		return edges[edge];
 	}
 

@@ -93,14 +93,14 @@ public class BlockDeco extends BlockBasic {
 
 	public int getBlockTextureFromSideAndMetadata(int side, int meta) {
 		switch(meta) {
-		case 0:
-			return 29;
-		case 1:
-			return 75;
-		case 2:
-			return 76;
-		default:
-			return 0;
+			case 0:
+				return 29;
+			case 1:
+				return 75;
+			case 2:
+				return 76;
+			default:
+				return 0;
 		}
 	}
 
@@ -108,6 +108,8 @@ public class BlockDeco extends BlockBasic {
 	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		if (world.getBlockMetadata(x, y, z) == ItemStacks.anthrablock.getItemDamage())
 			return 30;
+		if (world.getBlockMetadata(x, y, z) == ItemStacks.cokeblock.getItemDamage())
+			return 20;
 		return 0;
 	}
 
@@ -131,6 +133,7 @@ public class BlockDeco extends BlockBasic {
 		icons[2][0] = par1IconRegister.registerIcon("RotaryCraft:lons");
 		icons[3][0] = par1IconRegister.registerIcon("RotaryCraft:shield");
 		icons[4][0] = par1IconRegister.registerIcon("RotaryCraft:bedrock");
+		icons[5][0] = par1IconRegister.registerIcon("RotaryCraft:coke");
 	}
 
 	@Override

@@ -105,7 +105,16 @@ public class RotaryEventManager {
 			evt.setCanceled(true);
 		}
 	}
-
+	/*
+	@SubscribeEvent
+	public void cleanUpDecoTankCrafting(PlayerEvent.ItemCraftedEvent evt) {
+		if (ReikaItemHelper.matchStacks(evt.crafting, BlockRegistry.DECOTANK.getStackOf())) {
+			if (evt.crafting.stackTagCompound != null && evt.crafting.stackTagCompound.getBoolean(DecoTankSettingsRecipe.NBT_TAG)) {
+				evt.crafting.stackTagCompound.removeTag(DecoTankSettingsRecipe.NBT_TAG);
+			}
+		}
+	}
+	 */
 	@SubscribeEvent
 	public void cleanUpReservoirCrafting(PlayerEvent.ItemCraftedEvent evt) {
 		if (ReikaItemHelper.matchStacks(evt.crafting, MachineRegistry.RESERVOIR.getCraftedProduct())) {

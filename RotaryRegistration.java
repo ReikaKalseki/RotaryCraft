@@ -39,7 +39,12 @@ public class RotaryRegistration {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			String label = "RC"+MachineRegistry.machineList.get(i).name().toLowerCase().replaceAll("\\s","");
 			String aux = "RC"+MachineRegistry.machineList.get(i).getDefaultName().toLowerCase().replaceAll("\\s","");
-			GameRegistry.registerTileEntityWithAlternatives(MachineRegistry.machineList.get(i).getTEClass(), label, aux);
+			if (label.equals(aux)) {
+				GameRegistry.registerTileEntity(MachineRegistry.machineList.get(i).getTEClass(), label);
+			}
+			else {
+				GameRegistry.registerTileEntityWithAlternatives(MachineRegistry.machineList.get(i).getTEClass(), label, aux);
+			}
 			ReikaJavaLibrary.initClass(MachineRegistry.machineList.get(i).getTEClass());
 		}
 		for (int i = 0; i < EngineType.engineList.length; i++) {
@@ -92,6 +97,10 @@ public class RotaryRegistration {
 
 		OreDictionary.registerOre("fertilizer", ItemStacks.compost);
 		OreDictionary.registerOre("itemFertilizer", ItemStacks.compost);
+
+		OreDictionary.registerOre("fuelCoke", ItemStacks.coke);
+		OreDictionary.registerOre("coalCoke", ItemStacks.coke);
+		OreDictionary.registerOre("coke", ItemStacks.coke);
 		/*
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];

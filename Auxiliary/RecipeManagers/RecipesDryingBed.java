@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
@@ -110,6 +111,13 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 	public Fluid getRecipe(ItemStack result) {
 		for (FluidStack f : recipeList.keySet()) {
 			DryingRecipe cr = recipeList.get(f);
+			if (cr == null) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
+				sb.append("Map data: "+recipeList.toString());
+				sb.append("Report this to Reika!");
+				throw new IllegalStateException(sb.toString());
+			}
 			if (ReikaItemHelper.matchStacks(result, cr.output))
 				return f.getFluid();
 		}
@@ -119,6 +127,13 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 	public int getRecipeConsumption(ItemStack result) {
 		for (FluidStack f : recipeList.keySet()) {
 			DryingRecipe cr = recipeList.get(f);
+			if (cr == null) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
+				sb.append("Map data: "+recipeList.toString());
+				sb.append("Report this to Reika!");
+				throw new IllegalStateException(sb.toString());
+			}
 			if (ReikaItemHelper.matchStacks(result, cr.output))
 				return cr.input.amount;
 		}

@@ -30,6 +30,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
+import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -46,7 +47,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine,
-IFluidHandler, PipeConnector, TemperatureTE {
+IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 
 	private static final int MINBASE = -1;
 
@@ -69,7 +70,9 @@ IFluidHandler, PipeConnector, TemperatureTE {
 
 	private int tier;
 
-	private RedstoneState rsState;
+	private RedstoneState rsState = RedstoneState.IGNORE;
+
+	private boolean enabled = true;
 
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
@@ -227,6 +230,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 	}
 
 	public boolean isEmitting() {
+		if (!enabled)
+			return false;
 		if (this.isRedstoneControlEnabled()) {
 			boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			RedstoneState rs = this.getRedstoneState();
@@ -377,6 +382,8 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		tank.writeToNBT(NBT);
 
 		NBT.setInteger("temp", temperature);
+
+		NBT.setBoolean("t_enable", enabled);
 	}
 
 	@Override
@@ -399,6 +406,9 @@ IFluidHandler, PipeConnector, TemperatureTE {
 		tank.readFromNBT(NBT);
 
 		temperature = NBT.getInteger("temp");
+
+		if (NBT.hasKey("t_enable"))
+			enabled = NBT.getBoolean("t_enable");
 	}
 
 	@Override
@@ -593,6 +603,17 @@ IFluidHandler, PipeConnector, TemperatureTE {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public final boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public final void setEnabled(boolean enable) {
+		enabled = enable;
+		this.syncAllData(false);
 	}
 
 }

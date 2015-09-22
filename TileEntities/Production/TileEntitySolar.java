@@ -135,7 +135,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
 		omega = GENOMEGA;
 		torque = (int)(this.getArrayOverallBrightness()*Math.min(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64)*(this.getArraySize()+1));
-		if (this.getArraySize() <= 0 || torque == 0 || tank.isEmpty()) {
+		if (this.getArraySize() <= 0 || torque == 0 || tank.getLevel() >= this.getConsumedWater()) {
 			omega = 0;
 			torque = 0;
 		}

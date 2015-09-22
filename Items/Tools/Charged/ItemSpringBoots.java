@@ -68,7 +68,7 @@ public class ItemSpringBoots extends ItemChargedArmor {
 			if (pot == null || pot.getAmplifier() < SPEED_LEVEL) {
 				ep.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 1, SPEED_LEVEL));
 			}
-			ep.stepHeight = 1.45F; //1.25F
+			ep.stepHeight = Math.max(ep.stepHeight, 1.45F); //1.25F
 			if (itemRand.nextInt(160) == 0) {
 				if (is.getItem() != ItemRegistry.BEDJUMP.getItemInstance()) {
 					ep.setCurrentItemOrArmor(1, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1));
@@ -77,8 +77,9 @@ public class ItemSpringBoots extends ItemChargedArmor {
 			}
 			//ReikaPlayerAPI.schedulePlayerTick(ep, 5);
 		}
-		else
+		else {
 			ep.stepHeight = 0.5F;
+		}
 	}
 	/*
 	@SubscribeEvent

@@ -36,6 +36,7 @@ import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SelectableTiles;
@@ -142,7 +143,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			int dy = y+dir.offsetY;
 			int dz = z+dir.offsetZ;
 			TileEntity te = world.getTileEntity(dx, dy, dz);
-			if (te instanceof IAreaProvider) {
+			if (InterfaceCache.AREAPROVIDER.instanceOf(te)) {
 				IAreaProvider iap = (IAreaProvider)te;
 				for (int mx = iap.xMin()-1; mx <= iap.xMax()+1; mx++) {
 					for (int mz = iap.zMin()-1; mz <= iap.zMax()+1; mz++) {

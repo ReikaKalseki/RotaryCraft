@@ -428,14 +428,23 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 		//buildcraft
 	}
 
-	@Override
 	public final void damageScrewdriver(World world, EntityPlayer player) {
+		//legacy project red
+	}
+
+	@Override
+	public final void damageScrewdriver(EntityPlayer player, ItemStack is) {
 		//project red
 	}
 
 	@Override
+	public boolean canUse(EntityPlayer player, ItemStack stack) {
+		return true; //project red
+	}
+
+	@Override
 	public boolean isActive(ItemStack is) {
-		return true;//extratrees
+		return true; //extratrees
 	}
 
 	@Override

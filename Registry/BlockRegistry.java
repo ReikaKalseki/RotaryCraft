@@ -168,13 +168,13 @@ public enum BlockRegistry implements BlockEnum {
 
 	public boolean isTechnical() {
 		switch(this) {
-		case DECO:
-		case BLASTGLASS:
-		case BLASTPANE:
-		case DECOTANK:
-			return false;
-		default:
-			return true;
+			case DECO:
+			case BLASTGLASS:
+			case BLASTPANE:
+			case DECOTANK:
+				return false;
+			default:
+				return true;
 		}
 	}
 
@@ -197,12 +197,12 @@ public enum BlockRegistry implements BlockEnum {
 		if (!this.hasMultiValuedName())
 			return this.getBasicName();
 		switch(this) {
-		case DECO:
-			return StatCollector.translateToLocal(RotaryNames.blockNames[meta]);
-		case DECOTANK:
-			return StatCollector.translateToLocal("block.decotank."+meta);
-		default:
-			throw new RegistrationException(RotaryCraft.instance, "No multiname for "+this+"!");
+			case DECO:
+				return StatCollector.translateToLocal(RotaryNames.blockNames[meta]);
+			case DECOTANK:
+				return StatCollector.translateToLocal("block.decotank.0"/*+meta*/);
+			default:
+				throw new RegistrationException(RotaryCraft.instance, "No multiname for "+this+"!");
 		}
 	}
 
@@ -214,14 +214,14 @@ public enum BlockRegistry implements BlockEnum {
 	@Override
 	public int getNumberMetadatas() {
 		switch(this) {
-		case DECO:
-			return RotaryNames.blockNames.length;
-			//case MININGPIPE:
-			//	return 4;
-		case DECOTANK:
-			return 2;
-		default:
-			return 1;
+			case DECO:
+				return RotaryNames.blockNames.length;
+				//case MININGPIPE:
+				//	return 4;
+			case DECOTANK:
+				return 16;
+			default:
+				return 1;
 		}
 	}
 

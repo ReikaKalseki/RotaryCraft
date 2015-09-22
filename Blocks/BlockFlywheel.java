@@ -82,7 +82,7 @@ public class BlockFlywheel extends BlockModelledMachine {
 			else {
 				int metadata = fly.getBlockMetadata();
 				ItemStack todrop = ItemRegistry.FLYWHEEL.getStackOfMetadata(metadata/4); //drop flywheel
-				if (fly.isUnharvestable()) {
+				if (fly.isUnHarvestable()) {
 					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);

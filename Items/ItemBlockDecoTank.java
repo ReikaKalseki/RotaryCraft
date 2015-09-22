@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.API.Interfaces.Fillable;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
+import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
 
 public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 
@@ -36,7 +37,7 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 
 	@Override
 	public int getMetadata(int meta) {
-		return meta;
+		return 0;//meta;
 	}
 
 	@Override
@@ -89,6 +90,7 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te instanceof TileEntityDecoTank) {
 					((TileEntityDecoTank)te).setLiquid(stack);
+					((TileEntityDecoTank)te).setFlags(stack);
 				}
 			}
 		}
@@ -108,6 +110,10 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 		}
 		else {
 			li.add("Empty");
+		}
+		for (int i = 0; i < TankFlags.list.length; i++) {
+			TankFlags f = TankFlags.list[i];
+			li.add(f.displayName+": "+f.apply(is));
 		}
 	}
 

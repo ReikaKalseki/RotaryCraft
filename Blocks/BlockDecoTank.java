@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,9 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Items.ItemBlockDecoTank;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
+import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
 
 public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
@@ -49,6 +52,18 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 		for (int i = 1; i < 10; i++) {
 			allDirs.add(i);
 		}
+	}
+
+	@Override
+	public float getBlockHardness(World world, int x, int y, int z) {
+		float h = super.getBlockHardness(world, x, y, z);
+		return TankFlags.RESISTANT.apply(world, x, y, z) ? h*2 : h;
+	}
+
+	@Override
+	public float getExplosionResistance(Entity e, World world, int x, int y, int z, double eX, double eY, double eZ) {
+		float r = super.getExplosionResistance(e, world, x, y, z, eX, eY, eZ);
+		return TankFlags.RESISTANT.apply(world, x, y, z) ? 600000 : r;
 	}
 
 	@Override
@@ -69,12 +84,24 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 		TileEntityDecoTank te = (TileEntityDecoTank)world.getTileEntity(x, y, z);
 		if (te != null) {
 			Fluid f = te.getFluid();
+
+			ItemStack is = li.get(0);
+
 			if (f != null) {
-				ItemStack is = li.get(0);
 				is.stackTagCompound = new NBTTagCompound();
 				ReikaNBTHelper.writeFluidToNBT(is.stackTagCompound, f);
 				is.stackTagCompound.setInteger("level", ItemBlockDecoTank.FILL);
 			}
+
+			int dropmeta = 0;
+			for (int k = 0; k < TankFlags.list.length; k++) {
+				TankFlags fg = TankFlags.list[k];
+				if (te.getFlag(fg)) {
+					dropmeta = dropmeta | fg.getItemMetadataBit();
+				}
+			}
+
+			is.setItemDamage(dropmeta);
 		}
 		else
 			li.clear();
@@ -88,7 +115,6 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 			this.harvestBlock(world, player, x, y, z, world.getBlockMetadata(x, y, z));
 		return world.setBlockToAir(x, y, z);
 	}
-
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
@@ -120,14 +146,14 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
 	@Override
 	public boolean renderCentralTextureForItem(int meta) {
-		return meta == 0;
+		return !TankFlags.CLEAR.applyItem(meta);
 	}
 
 	public ArrayList<Integer> getEdgesForFace(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		ArrayList<Integer> li = new ArrayList();
 		li.addAll(allDirs);
 
-		if (world.getBlockMetadata(x, y, z) == 1) //clear version
+		if (TankFlags.CLEAR.apply(world, x, y, z))
 			li.remove(new Integer(5)); //glass tex
 
 		if (face.offsetX != 0) { //test YZ
@@ -196,8 +222,12 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 		return li;
 	}
 
-	public IIcon getIconForEdge(int edge) {
-		return icons[edge];
+	public IIcon getIconForEdge(IBlockAccess world, int x, int y, int z, int edge) {
+		return TankFlags.RESISTANT.apply(world, x, y, z) ? ((BlockBlastGlass)BlockRegistry.BLASTGLASS.getBlockInstance()).getIconForEdge(world, x, y, z, edge) : icons[edge];
+	}
+
+	public IIcon getIconForEdge(int itemMeta, int edge) {
+		return TankFlags.RESISTANT.applyItem(itemMeta) ? ((BlockBlastGlass)BlockRegistry.BLASTGLASS.getBlockInstance()).getIconForEdge(itemMeta, edge) : icons[edge];
 	}
 
 	@Override
@@ -235,7 +265,7 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 		if (id == this) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof TileEntityDecoTank) {
-				return ((TileEntityDecoTank) te).getFluid();
+				return ((TileEntityDecoTank)te).getFluid();
 			}
 		}
 		return null;
@@ -243,6 +273,8 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+		if (TankFlags.LIGHTED.apply(world, x, y, z))
+			return 15;
 		Fluid f = this.getFluid(world, x, y, z);
 		return f != null ? f.getLuminosity() : 0;
 	}
@@ -250,21 +282,13 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		TileEntityDecoTank te = (TileEntityDecoTank)world.getTileEntity(x, y, z);
-		ItemStack is = new ItemStack(this, 1, world.getBlockMetadata(x, y, z));
-		if (te != null) {
-			Fluid f = te.getFluid();
-			if (f != null) {
-				is.stackTagCompound = new NBTTagCompound();
-				ReikaNBTHelper.writeFluidToNBT(is.stackTagCompound, f);
-				is.stackTagCompound.setInteger("level", ItemBlockDecoTank.FILL);
-			}
-		}
+		ItemStack is = this.getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0).get(0);
 		return is;
 	}
 
 	@Override
 	public int damageDropped(int dmg) {
-		return dmg;
+		return 0;
 	}
 
 	@Override

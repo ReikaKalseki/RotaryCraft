@@ -228,27 +228,26 @@ public class ModelChunkLoader extends RotaryModelBase
 		Shape21b.render(te, f5);
 
 		GL11.glPushMatrix();
-		phi = -16384*8*(float)Math.pow(phi, 0.25);
 		GL11.glRotated(phi, 0, 1, 0);
 		Shape3d.render(te, f5);
-		//Shape31d.render(te, f5);
-		//Shape32d.render(te, f5);
+		Shape31d.render(te, f5);
+		Shape32d.render(te, f5);
 
 		GL11.glRotated(phi, 0, 1, 0);
 		Shape3c.render(te, f5);
-		//Shape31c.render(te, f5);
-		//Shape32c.render(te, f5);
+		Shape31c.render(te, f5);
+		Shape32c.render(te, f5);
 
 		GL11.glRotated(phi, 0, 1, 0);
 		Shape3b.render(te, f5);
-		//Shape31b.render(te, f5);
-		//Shape32b.render(te, f5);
+		Shape31b.render(te, f5);
+		Shape32b.render(te, f5);
 
 		GL11.glRotated(phi, 0, 1, 0);
 
 		Shape3.render(te, f5);
-		//Shape31.render(te, f5);
-		//Shape32.render(te, f5);
+		Shape31.render(te, f5);
+		Shape32.render(te, f5);
 
 		GL11.glPopMatrix();
 	}

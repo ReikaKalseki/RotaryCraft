@@ -40,7 +40,8 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 		power = (long)omega*(long)torque;
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
-		this.makeBeam(world, x, y, z, meta);
+		if (!world.isRemote)
+			this.makeBeam(world, x, y, z, meta);
 	}
 
 	@Override
@@ -49,18 +50,18 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 		boolean blocked = false;
 		int dir = 0;
 		switch(metadata) {
-		case 0:
-			dir = 3;
-			break;
-		case 1:
-			dir = 1;
-			break;
-		case 2:
-			dir = 2;
-			break;
-		case 3:
-			dir = 0;
-			break;
+			case 0:
+				dir = 3;
+				break;
+			case 1:
+				dir = 1;
+				break;
+			case 2:
+				dir = 2;
+				break;
+			case 3:
+				dir = 0;
+				break;
 		}
 		//Make punch thru snow, tall grass, etc!
 		//if (world.getBlock(x+facing.offsetX, y+facing.offsetY, z+facing.offsetZ) == BlockRegistry.BRIDGE.getBlockInstance().blockID)
@@ -100,18 +101,18 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 		animtick = 0;
 		int dir = 0;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			dir = 3;
-			break;
-		case 1:
-			dir = 1;
-			break;
-		case 2:
-			dir = 2;
-			break;
-		case 3:
-			dir = 0;
-			break;
+			case 0:
+				dir = 3;
+				break;
+			case 1:
+				dir = 1;
+				break;
+			case 2:
+				dir = 2;
+				break;
+			case 3:
+				dir = 0;
+				break;
 		}
 		for (int i = 1; i < this.getMaxRange(); i++) {
 			Block idview = world.getBlock(x+facing.offsetX*i, y+facing.offsetY*i, z+facing.offsetZ*i);

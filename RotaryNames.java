@@ -98,7 +98,7 @@ public class RotaryNames {
 	};
 
 	public static final String[] blockNames = {
-		"block.steel", "block.anthra", "block.lonsda", "block.shield", "block.bedrockingot"
+		"block.steel", "block.anthra", "block.lonsda", "block.shield", "block.bedrockingot", "block.coke"
 	};
 
 	public static final String[] powderNames = {

@@ -293,7 +293,7 @@ public class BlockEngine extends BlockModelledMachine {
 						todrop.stackTagCompound = new NBTTagCompound();
 					todrop.stackTagCompound.setBoolean("bed", ((TileEntityHydroEngine)eng).isBedrock());
 				}
-				if (eng.isUnharvestable()) {
+				if (eng.isUnHarvestable()) {
 					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);

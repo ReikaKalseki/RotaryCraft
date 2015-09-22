@@ -122,7 +122,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			int ratio = gbx.getBlockMetadata()/4;
 			ItemStack todrop = ItemRegistry.GEARBOX.getStackOfMetadata(type+5*ratio); //drop gearbox item
 			todrop.stackTagCompound = gbx.getTagsToWriteToStack();
-			if (gbx.isUnharvestable()) {
+			if (gbx.isUnHarvestable()) {
 				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);

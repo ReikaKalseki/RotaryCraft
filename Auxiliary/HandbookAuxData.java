@@ -686,7 +686,7 @@ public final class HandbookAuxData {
 						if (api.isMouseInBox(x, x+17, y, y+17)) {
 							int k = 0;
 							for (LuaMethod cur : li) {
-								if (cur.isClassInstanceOf(m.getTEClass())) {
+								if (cur.isDocumented() && cur.isClassInstanceOf(m.getTEClass())) {
 									ReikaRenderHelper.disableLighting();
 									String s = cur.getReturnType().displayName+" "+cur.displayName+"("+cur.getArgsAsString()+")";
 									font.drawString(s, posX+11, posY+88+k*10, 0xffffff);

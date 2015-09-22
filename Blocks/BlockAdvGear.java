@@ -86,7 +86,7 @@ public class BlockAdvGear extends BlockModelledMachine {
 					is.stackTagCompound = new NBTTagCompound();
 				is.stackTagCompound.setInteger("lube", lube);
 			}
-			if (te.isUnharvestable()) {
+			if (te.isUnHarvestable()) {
 				is = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
 			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);

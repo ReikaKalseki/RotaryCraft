@@ -99,9 +99,9 @@ public class BlockLightBridge extends BlockBasic {
 	 * coordinates.  Args: blockAccess, x, y, z, side
 	 */
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+	public boolean shouldSideBeRendered(IBlockAccess iba, int par2, int par3, int par4, int par5)
 	{
-		return par5 == 1 ? true : super.shouldSideBeRendered(par1IBlockAccess, par2, par3, par4, par5);
+		return par5 == 1 ? true : super.shouldSideBeRendered(iba, par2, par3, par4, par5) && iba.getBlock(par2, par3, par4) != this;
 	}
 
 	@Override

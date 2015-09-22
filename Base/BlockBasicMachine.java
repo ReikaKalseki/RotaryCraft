@@ -284,8 +284,8 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 
 	@ModDependent(ModList.WAILA)
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor acc, IWailaConfigHandler config) {
-		if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!currenttip.isEmpty())
-			return currenttip;
+		//if (/*LegacyWailaHelper.cacheAndReturn(acc)*/!currenttip.isEmpty())
+		//	return currenttip;
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);
 		if (te instanceof TemperatureTE && !(te instanceof TileEntityEngine))

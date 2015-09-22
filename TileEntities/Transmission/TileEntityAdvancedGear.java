@@ -32,6 +32,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialTank;
+import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -59,7 +60,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PartialTank,
-PipeConnector, IFluidHandler {
+PipeConnector, IFluidHandler, ToggleTile {
 
 	private boolean isReleasing = false;
 	private int releaseTorque = 0;
@@ -88,6 +89,8 @@ PipeConnector, IFluidHandler {
 	private StepTimer redstoneTimer = new StepTimer(40);
 
 	public boolean torquemode = true;
+
+	private boolean enabled = true;
 
 	public static long getMaxStorageCapacity(boolean bedrock) {
 		return bedrock ? 240L*ReikaMathLibrary.longpow(10, 12) : 720*ReikaMathLibrary.intpow2(10, 6);
@@ -425,7 +428,7 @@ PipeConnector, IFluidHandler {
 
 	private void store(World world, int x, int y, int z, int meta) {
 		this.transferPower(world, x, y, z, meta);
-		isReleasing = world.isBlockIndirectlyGettingPowered(x, y, z);
+		isReleasing = enabled && world.isBlockIndirectlyGettingPowered(x, y, z);
 		//ReikaJavaLibrary.pConsole(energy/20+"/"+this.getMaxStorageCapacity(), Side.SERVER);
 		if (!isCreative && !world.isRemote && energy/20 >= this.getMaxStorageCapacity()) {
 			this.overChargeExplosion(world, x, y, z);
@@ -752,6 +755,8 @@ PipeConnector, IFluidHandler {
 		NBT.setBoolean("creative", isCreative);
 		NBT.setBoolean("trq", torquemode);
 
+		NBT.setBoolean("t_enable", enabled);
+
 		lubricant.writeToNBT(NBT);
 	}
 
@@ -769,6 +774,9 @@ PipeConnector, IFluidHandler {
 		isBedrockCoil = NBT.getBoolean("bedrock");
 		isCreative = NBT.getBoolean("creative");
 		torquemode = NBT.getBoolean("trq");
+
+		if (NBT.hasKey("t_enable"))
+			enabled = NBT.getBoolean("t_enable");
 
 		lubricant.readFromNBT(NBT);
 	}
@@ -1085,5 +1093,16 @@ PipeConnector, IFluidHandler {
 
 	public void setLubricantFromNBT(NBTTagCompound NBT) {
 		lubricant.setContents(NBT.getInteger("lube"), FluidRegistry.getFluid("lubricant"));
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public void setEnabled(boolean enable) {
+		enabled = enable;
+		this.syncAllData(false);
 	}
 }

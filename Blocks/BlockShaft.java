@@ -187,7 +187,7 @@ public class BlockShaft extends BlockModelledMachine {
 			}
 			else if (sha.getBlockMetadata() < 6) {
 				ItemStack todrop = ItemRegistry.SHAFT.getStackOfMetadata(sha.getShaftType().ordinal()); //drop shaft item
-				if (sha.isUnharvestable()) {
+				if (sha.isUnHarvestable()) {
 					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
@@ -202,7 +202,7 @@ public class BlockShaft extends BlockModelledMachine {
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
 					world.spawnEntityInWorld(item);*/
 				ItemStack todrop = ItemStacks.shaftcross.copy(); //drop shaft cross
-				if (sha.isUnharvestable()) {
+				if (sha.isUnHarvestable()) {
 					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}
 				EntityItem item = new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, todrop);
