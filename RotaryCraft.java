@@ -520,13 +520,12 @@ public class RotaryCraft extends DragonAPIMod {
 			}
 
 			if (ModList.TINKERER.isLoaded()) {
-				//new UnbreakabilityModifier().register();
 				int id = ExtraConfigIDs.BEDROCKID.getValue();
 				CustomTinkerMaterial mat = TinkerMaterialHelper.instance.createMaterial(id, this, "Bedrock");
 				mat.durability = 1000000;
 				mat.damageBoost = 5;
 				mat.harvestLevel = 800;
-				mat.miningSpeed = 1500;
+				mat.miningSpeed = 1800;
 				mat.handleModifier = 3F;
 				mat.setUnbreakable();
 				mat.chatColor = EnumChatFormatting.BLACK.toString();
@@ -535,8 +534,29 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.disableToolPart(ToolParts.PICK).disableToolPart(ToolParts.AXEHEAD).disableToolPart(ToolParts.LUMBER);
 				mat.disableToolPart(ToolParts.SHOVEL).disableToolPart(ToolParts.SWORD).disableToolPart(ToolParts.SCYTHE);
 
+				mat.setDisallowCheatedParts();
+
 				mat.register(true).registerTexture("tinkertools/bedrock/bedrock", false);
-				mat.registerPatternBuilder(ItemStacks.bedingot).registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
+				//mat.registerPatternBuilder(ItemStacks.bedingot).registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
+
+				id = ExtraConfigIDs.HSLAID.getValue();
+				mat = TinkerMaterialHelper.instance.createMaterial(id, this, "HSLA");
+				mat.durability = 600;
+				mat.damageBoost = 3;
+				mat.harvestLevel = 2;
+				mat.miningSpeed = 1800;
+				mat.handleModifier = 1.2F;
+				mat.chatColor = EnumChatFormatting.LIGHT_PURPLE.toString();
+				mat.renderColor = 0xCACBF2;
+
+				//mat.disableToolPart(ToolParts.PICK).disableToolPart(ToolParts.AXEHEAD).disableToolPart(ToolParts.LUMBER);
+				//mat.disableToolPart(ToolParts.SHOVEL).disableToolPart(ToolParts.SWORD).disableToolPart(ToolParts.SCYTHE);
+
+				mat.setDisallowCheatedParts();
+
+				mat.register(true).registerTexture("tinkertools/hsla/hsla", false);
+				//mat.registerPatternBuilder(ItemStacks.bedingot).registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
+				mat.registerSmelteryCasting(ItemStacks.steelingot, hslaFluid, 750, ItemStacks.steelblock);
 			}
 
 			if (ModList.CHROMATICRAFT.isLoaded()) {

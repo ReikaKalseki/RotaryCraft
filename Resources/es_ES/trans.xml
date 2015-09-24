@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<trans>
+	<shaft>
+		El dispositivo mas basico de transmision de potencia es el shaft (eje). Nada de florituras, solo lleva potencia de un sitio a otro, sin cambios en el par o la velocidad. Presta atencion, sin embargo, a la direccion para evitar dolores de cabeza. Shafts de diferentes materiales tienen diferentes fuerzas, y por lo tanto diferentes limites de par y velocidad.
+	</shaft>
+	<gearbox>
+		Los Gearboxes se usan para cambiar el ratio de par y velocidad, mientras se mantiene la potencia constante. Vienen en cuatro ratios - 2:1, 4:1, 8:1, y 16:1, y afectan al par y a la velocidad de manera acorde. Transmision reductora incrementa el par y reduce la velocidad; transmision mutiplicadora hace lo contrario. Aviso: estos necesitan ser lubricados para trabajar a maxima potencia; la mayoria de transmisiones sin lubricar se dañan, y reducen el par transmitido proporcionalmente. Como los shafts, los gearboxes estan sujetos a fallos por material bajo carga excesiva. Los Gearboxes pueden ser reparados con objetos "gear".
+	</gearbox>
+	<bevel>
+		Los Bevel gears se usan para cambiar la direccion de la potencia sin cambiar la velocidad o el par. Al contrario de sus primos lineales, no necesitan lubricante, y operan continuamente sin perdidas.
+	</bevel>
+	<splitter>
+		<sub>
+			<s0>
+				El shaft junction hace exactamente lo que su nombre dice. En modo "merge", cogera la salida de dos motores y las combinara, sacando la suma de las potencias en la velocidad inicial. Toma nota de que intentar combinar entradas a diferente velocidad terminara en una lluvia de chispas, y combinar la potencia de muchos motores sobrecargara la union. En modo "split", coge la potencia de entrada y proporciona la mitad del par a cada salida, a la velocidad de entrada. Para cambiar modos, haz shift-right-click con el screwdriver (destornillador).
+			</s0>
+			<s1>
+				Los Shaft junctions pueden unir como mucho cuatro veces la media de la potencia de entrada. Exceder esta carga provocara su rotura. Los  Junctions se upgradean con "bedrock 2x gear" (engranajes x2 de bedrock) y ya no tienen ese limite.
+			</s1>
+		</sub>
+	</splitter>
+	<clutch>
+		El clutch es basicamente un eje pilotado - cuando recibe señal de redstone, transmite su velocidad y par de entrada sin cambiar. Sin alimentar, no transmite nada.
+	</clutch>
+	<dyna>
+		El dynamometer muestra su potencia, velocidad y par de entradas mientras que lo lleva a la salida sin cambiarlo.
+	</dyna>
+	<flywheel>
+		Los Flywheels almacenan energia cinetica rotacional. Requieren algo de tiempo en acelerar hasta la velocidad de entrada, pero cuando lo hacen, se mantienen girando algun tiempo, proporcionando una salida de potencia mas estable a una maquina conectada a una fuente variable. Materiales mas pesados son mejores, haciendo flywheels mas eficientes - y potentes -, pero requieren mayor par para empezar a girar. Acelerar uno de estos demasiado rapido termina con un violento y destructivo fallo. La delceleracion del Flywheel esta basado en el requisito de par que estan intentando proporcionar. Sin conectar, giran para siempre.
+	</flywheel>
+	<worm>
+		El worm gear es una manera rapida de incrementar el par sin usar un monton de cajas de cambios intermedias, produciendo un  16:1 de ratio. Sin embargo, los tornillos sin fin son poco eficientes, y pierden parte de la potencia, con una velocidad de salida mucho menor. Esta perdida se incrementa a medida que la velocidad de entrada se incrementa.
+	</worm>
+	<cvt>
+		Una CVT (continuously variable transmission) Unit es esencialmente una caja de cambios dinamica. En vez de usar ruedas dentadas, usa una serie de cinturones para cambiar el ratio de conversion. Esto le da la ventaja de ser eficiente y altamente flexible, permitiendote seleccionar el ratio deseado segun demanda. Ten en cuenta que ratios mayores requieren mas cinturones, cada uno en potencia de dos duplicando el ratio maximo (limitado a 32:1). Esta maquina tambien requiere lubricante, pero no lo consume.
+	</cvt>
+	<coil>
+		<sub>
+			<s0>
+				El industrial coil almacena energia en un gran resorte que puede ser destensado a placer con redstone.Como su par y velocidad de salida pueden ser seleccionados a placer, puede ser usado para almacenar energia para mas tarde, o como algun tipo de condensador, para acumular energia durante un largo periodo y despues liberarla en un poderoso empujon. Ten en cuenta que cada tipo de resorte tiene una capacidad maxima, y escederlo termina con una liberacion de toda la energia almacenada muy violentamente. Esta maquina no puede simultaneamente cargarse y descargarse; toda potencia de entrada mientras proporcione una potencia a la salida sera desaprovechada. A medida que el resorte se cargue, el par y la potencia requerida para hacerlo tambien aumenta.
+			</s0>
+			<s1>
+				Limites de almacenaje de energia:
+
+				Acero: %d J (%s)
+				Bedrock: %d J (%s)
+			</s1>
+			<s2>
+				Requisitos de entrada:
+
+				Par: %s
+				Potencia: %s
+			</s2>
+			<s3>
+				Limites de salida:
+
+				Maximo:
+				Acero: %d rad/s x %d Nm
+				Bedrock: %d rad/s x %d Nm
+				
+				Funcion: %s
+			</s3>
+		</sub>
+	</coil>
+	<higear>
+		El high-ratio gear te permite crear el efecto de multiples gearboxes encadenados en un espacio mas compacto. Crea un ratio de 256:1, requiere una elevada cantidad de lubricante para funcionar, y debe estar hecho de bedrock para soportar el estres al que se le someten las piezas. Como un gearbox normal, puede cambiar entre par y velocidad al hacer shift-right-click con un screwdriver (destornillador).
+	</higear>
+	<multi>
+		El multi-clutch te permite redirigir la potencia segun una señal de redstone. Simplemente elige una salida para cada fuerza de la señal, desde 0 hasta 15.
+	</multi>
+	<belt>
+		Elbelt hub puede ser usado para transportar potencia de manera barata a traves de largas distancias. Simplemente coloca dos hubs para que puedan conectarse (linea de vista directa y compartiendo el plano). Para conectar belts, haz right-click a uno de ellos con un stack de belts, luego haz right-click al otro con el mismo stack. Para cada metro viajado, necesitas un belt adicional (hasta un maximo de 64 bloques). El cinturon no puede transmitir demasiada potencia sin romperse; puede llevar, como maximo, %d Nm de par a %d rad/s antes de que las perdidas se aprecien, y menos cuando esta mojado. Los Belts solop ueden ser conectados si uno de ellos esta en modo salida.
+	</belt>
+	<buscontroller>
+		El shaft power bus controller es el cerebro del shaft power bus unit. Esta estructura multibloque puede distribuir potencia inteligentemente dependiendo del numero de salidas seleccionadas. Esto hace mucho mas facil usar un motor para multiples maquinas. Cada salida seleccionada recibe una fraccion equivalente del par de entrada, a la velocidad de entrada. El bus requiere lubricante para funcionar.
+	</buscontroller>
+	<bus>
+		Las piezas del power bus distribuyen la potencia dependiendo de sus opciones seleccionadas. Cada lado tiene un hueco de item correspondiente; pon un eje o engranaje ahi para controlar la velocidad y el par de salida. Items invalidos o huecos vacios hacen que esa salida se ignore. Usa los botones adyacentes para controlar las opciones de par(t)/velocidad(?).
+	</bus>
+	<chain>
+		El chain drive es la version avanzada del belt hub. Puede aceptar el doble de par, hasta a 65536 rad/s antes de fallar. Tambien es inmutable a la lluvia.
+	</chain>
+</trans>

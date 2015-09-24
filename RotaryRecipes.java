@@ -37,9 +37,12 @@ import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler.ToolParts;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler.WeaponParts;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.SmelteryRecipeHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ThermalRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -65,6 +68,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -182,6 +186,30 @@ public class RotaryRecipes {
 			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.panelCast, ItemStacks.basepanel, bk, temp, f, base, 80);
 			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.shaftCast, ItemStacks.shaftitem, bk, temp, f, base, 80);
 			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.propCast, ItemStacks.prop, bk, temp, f, base*3, 80);
+
+			//Bedrock parts
+			int id = ExtraConfigIDs.BEDROCKID.getValue();
+			int id2 = ExtraConfigIDs.HSLAID.getValue();
+			for (int i = 0; i < ToolParts.partList.length; i++) {
+				ToolParts p = ToolParts.partList[i];
+				if (TinkerMaterialHelper.instance.isPartEnabled(id, p)) {
+					ItemStack is = p.getItem(id);
+					if (is != null) {
+						ItemStack part = p.getItem(id2);
+						RecipesBlastFurnace.getRecipes().add3x3Crafting(is, 1000, 4, 0, " D ", "DPD", " D ", 'D', ItemStacks.bedrockdust, 'P', part);
+					}
+				}
+			}
+			for (int i = 0; i < WeaponParts.partList.length; i++) {
+				WeaponParts p = WeaponParts.partList[i];
+				if (TinkerMaterialHelper.instance.isPartEnabled(id, p)) {
+					ItemStack is = p.getItem(id);
+					if (is != null) {
+						ItemStack part = p.getItem(id2);
+						RecipesBlastFurnace.getRecipes().add3x3Crafting(is, 1000, 4, 0, " D ", "DPD", " D ", 'D', ItemStacks.bedrockdust, 'P', part);
+					}
+				}
+			}
 		}
 
 		/* No longer necessary

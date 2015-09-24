@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<info>
+	<terms>
+		W/kW/MW - Watios/Kilowatios/Megawatios - una unidad e potencia (energia por unidad de tiempo). 1W = 1 Julio por segundo.
+
+		Nm - Newton-metro - una unidad de par (fuerza por distancia al eje).
+
+		rad/s - Radianes por segundo. Una unidad de velocidad angular (rotacional). 1 rad/s = 9.55 rpm.
+
+		Radian - Una unidad de angulo, equivale a  180/pi (57.3) grados; por lo que hay 6.28 radianes en un circulo completo.
+	</terms>
+	<physics>
+		El par es la "fuerza" del giro; un par superior puede con mayores cargas. Por lo tanto, una maquina que requiere mas fuerza para trabajar, como el Compactor, naturalmente requerira mas par que el Woodcutter.
+
+		La velocidad angular es la velocidad de rotacion. Por ejemplo, una maquina que mezcla cosas rapidamente, como el Fractionator, requerira una mayor velocidad angular que otra que los mezcla de forma mas lenta, como el Fermenter.
+	</physics>
+	<material>
+		Diferentes materiales tienen diferentes fuerzas, que controlan cuando los ejes y los volantes de inercia fallan. Los volantes de inercia fallan basandose en la densidad y la fuerza tensil (TS), mientras que los ejes fallan por sobrecarga de tension (SS).
+
+		Madera: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Piedra: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Hierro: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Acero: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Oro: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Diamante: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+	</material>
+	<shafts>
+		Esta es la carga maxima para los ejes y las cajas de cambio. Excederla significa romper. Para una caja de cambios, tanto la entrada como la salida deben ser considerados.
+		
+		Madera: %dNm at %d rad/s
+		Piedra: %dNm at %d rad/s
+		Acero: %dNm at %d rad/s
+		Diamante: %dNm at %d rad/s
+		Bedrock: Infinito
+	</shafts>
+	<flywheels>
+		Estas son las velocidades limite de los volantes de inercia. Excederlos provocan un fallo violento.
+		Madera: %d rad/s
+		Piedra: %d rad/s
+		Hierro: %d rad/s
+		Oro: %d rad/s
+	</flywheels>
+	<transfer>
+		La potencia en el eje se comporta completamente diferente de la electrica, neumatica, o cualquier otro tipo de potencia. Por ejemplo, la potencia en el eje es verdadera potencia, no energia, y como tal no se "acumula" en las maquinas o ejes que no tienen salida; debe ser usada en cuanto se crea. Es mas, la "carga" de un eje no tiene efecto en su consumo de potencia - un eje desacoplado sigue usando toda la potencia que se le proporciona, pero simplemente la desaprovecha. Esto no funciona igual a un cable, donde salidas desconetadas redirigirian la potencia hacia las salidas restantes.
+	</transfer>
+	<tiers>
+		No todas las maquinas son creadas de la misma manera; algunas son mucho mas dificles de operar que otras. Una buena medida para relativizar la posicion de una maquina en el arbol de tecnologia es su requisito de potencia, si es aplicable. Hay excepciones a esta regla, y por su puesto diferentes estilos de juego pueden significar diferentes caminos que tomar, pero generalmente es generalmente recomendado estar al tanto de esta jerarquia. Tambien tener en cuenta que un minimo de cero significa que no hay unminimo, y que los efectos de potencia incrementada son complejos.
+	</tiers>
+	<timing>
+		Las maquinas que realizan operaciones discretas suelen tomar menos tiempo por operacion segun la velocidad de entrada se incrementa. Apunta a una maquina para obtener su dato de tiempos. La "x" en esa formula es la velocidad de entrada, y los tiempos estan en ticks (0.05s cda tick).
+	</timing>
+</info>

@@ -1,0 +1,1136 @@
+<?xml version="1.0"?>
+<machines>
+	<bedrockbreaker>
+		<desc>
+			El bedrock breaker , cuando se alimente correctamente, triturara progresivamente el bloque de bedrock que tenga delante y pasara al siguiente. Cuando cada bloque sea consumido, producira un poco de polvo de bedrock, que puede ser usado para hacer las herramientas, los engranajes y los ejes de mayor nivel. La velocidad operacional de esta maquina aumena segun la velocidad de entrada aumente. Esta maquina NO rompera el bedrock de la capa 0.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Detras
+		</note>
+	</bedrockbreaker>
+	<fermenter>
+		<desc>
+			El fermenter es lo que te permite producir ethanol para los motores que lo consumen. Para hacer yeast, pon azucar en el slot superior y tierra en el inferior. Para hacer sludge, pon yeast en el slot superior y material vegetal en el inferior. Pon el resultado en un horno, y tendras cristales de ethanol. La velocidad operacional de esta maquina se incrementa a medida que la velocidad de entrada lo hace. Esta maquina es sensible a la temperatura, y temperaturas muy altas o muy bajas la ralentizaran o incluso mataran el yeast. Para automatizar esta maquina, usa redstone para elegir el producto deseado (mostrado en la parte superior-derecha del GUI). El slot central es el medidor de agua, no un slot para items.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Detras
+		</note>
+	</fermenter>
+	<grinder>
+		<desc>
+			El grinder hace exactamente lo que su nombre sugiere - tritura cosas. De piedra cocida a piedra, piedra a grava, grava a arena, ese tipo de cosas. Tambien juego un papel crucial en la lubricacion de las gearboxes -  tritura las canola seeds y produce lubricante.  La velocidad operacional de esta maquina aumenta segun la velocidad de entrada aumente.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Detras
+		</note>
+	</grinder>
+	<floodlight>
+		<desc>
+			El floodlight crea un rayo de luz que ilumina todo en su camino hasta que se encuentra con un bloque opaco solido. Perfecto para iluminar grandes espacios donde los sistemas de iluminacion puntuales como las antorchas simplemente no encajan.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Detras
+		</note>
+	</floodlight>
+	<heatray>
+		<desc>
+			Una de las maquinas mas caras y potentes, el heat ray crea un rayo de muerte ardiente y destruccion hasta donde su rango permite. Aunque es dificil proporcionar suficiente potencia para desbloquear algunas de sus caracteristicas mas potentes puede, cuando se alimenta completamente, hacer arder un bioma a kilometros de distancia si le dejas. Aumentar la potencia, a parte de incrementar su rango, tambien incrementa el rango de su habilidad de fundir roca, encender TNT...
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 8+(Potencia-%d)W/%d m
+			Entrada de potencia: Detras
+		</note>
+	</heatray>
+	<borer>
+		<desc>
+			El boring machine es bastante interesante. Perforara un tunel en la direccion en la que apunta durante el tiempo que quieras. Con el GUI, puedes controlar la forma del tunel, y controlar el drop de items. Materiales mas duros requieren mayor potencia y par para ser excavados - %dW por punto de dureza de los bloques a picar, y hasta %d Nm de par para atravesar los materiales mas duros. El borer se asegurara de que el techo del tunel no colapse reemplazando arena y grava. Un rumor cuenta que ciertos laberintos subterraneos son facilmente conquistados con esta maquina, aunque la piedra dura requiere un gran par como requisito.
+		</desc>
+		<note>
+			Potencia requerida: Varia
+			Par requerido: Varies
+			Entrada de potencia: Detras
+		</note>
+	</borer>
+	<piledriver>
+		<desc>
+			El pile driver golpea repetidamente el suelo para romperlo, excavando un profundo y recto tunel. Este tunel atravesara cualquier liquido que haya en su camino, y atravesara todo menos el bedrock. Multiples impactos son requeridos para romper los materiales mas duros, y las vibraciones descolgara cosas como pinturas, desenterrara semillas y desorientara jugadores. Ten cuidado: Ponerte en el camino del mining pile termina como puedes imaginar. Los requisitos de potencia de esta maquina se incrementa segun cava mas hondo - %dW por metro de profundidad.
+		</desc>
+		<note>
+			Potencia requerida: %dW por metro
+			Par requerido: %dNm
+			Entrada de potencia: Delante o Detras
+		</note>
+	</piledriver>
+	<aerosolizer>
+		<desc>
+			El potion aerosolizer tienen nueve tanques internos que pueden almacenar hsata 64 botellas de pociones cada uno. Estos efectos se dispersan a traves de la habitacion en la que se encuentra la habitacion, y se aplican a todas las criaturas vivientes que se encuentren dentro. Llenar mas de un hueco con la misma pocion proporciona efectos aumentados.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Cualquier lado horizontal o Debajo
+		</note>
+	</aerosolizer>
+	<lightbridge>
+		<desc>
+			Esta maquina, cuando su tremendo requisito de potencia sea satisfecho, emite un rayo de luz solida y tangible que te permite caminar sobre ella, soportando cualquier masa que se ponga. Nada puede destruir este rayo, pero se bloquea por cualquier bloque solido que no sea aire. Ten en cuenta que requiere luz brillante sobre el - o una linea de vision al cielo - para poder crear el rayo.
+		</desc>
+		<note>
+			Potencia requerida: %dW para maximo rango, o %dW por metro
+			Entrada de potencia: Detras
+		</note>
+	</lightbridge>
+	<extractor>
+		<desc>
+			El extractor es usado para conseguir mas material de una mena. Primero, lo pulveriza, luego lo mezcla con agua para formar barro, entonces lo pasa por un filtro para conseguir una solucion liquida, entonces quema el resultado para obtener fragmentos. Esos fragmentos pueden ser fundidos en un horno para obtener una unidad del material de la mena. Cada estadio en el extractor tiene un minimo de un 50%% de duplicar la salida. Los requisitos de la maquina son complejos y varian de etapa a etapa, pero un suministro de agua y %d Nm de par a %d rad/s haria funcionar las 4 etapas.
+		</desc>
+		<note>
+			Potencia para estadio 1: %dW
+			Potencia para estadio 2: %dW
+			Potencia para estadio 3: %dW
+			Potencia para estadio 4: %dW
+			Par para estadio 1: %dNm
+			Par para estadio 4: %dNm
+			Velocidad para estadio 2: %drad/s
+			Velocidad para estadio 3: %drad/s
+			Entrada de potencia: Debajo
+			Notas: Estadio 2 y 3 requieren suministro constante de agua
+		</note>
+	</extractor>
+	<pulsejet>
+		<desc>
+			El pulse jet es un horno hipervitaminado. Aunque no pueda fundir las recetas normales, funde la obsidiana en cristal inmune al TNT, funde armaduras y herramientas de nuevo en lingotes, y hace acero de forma mas eficiente que el horno estandar. Se pone MUY caliente, y prendera fuego a los materiales cercanos inflamables - mantenerlo refrigerado con agua es una necesidad. Mientras que no hay minimo de potencia requerida, requiere una alta velocidad. El pulse jet consume jet fuel para funcionar, y una buena cantidad de el. Esta maquina recibe potencia desde abajo.
+		</desc>
+		<note>
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Debajo
+			Temperatura maxima: %dC
+		</note>
+	</pulsejet>
+	<pump>
+		<desc>
+			La pump, cuando se alimenta, succiona liquidos de su alrededor y los hace pasar por tubos, para transportarlos a la maquina que los necesite. Agua es normalmente usada como refrigerante, mientras que la lava es usualmente llevada a un reservoir para acceso conveniente o como combustible en algunos motores.
+		</desc>
+		<note>
+			Potencia requerida: %d W
+			Par requerido: %d Nm
+			Entrada de potencia: Delante o Detras
+		</note>
+	</pump>
+	<reservoir>
+		<desc>
+			El reservoir es un simple tanqe para almacenar cualquier liquido, con una capacidad de %d metros cubicos (cubos). Se le puede hacer boton derecho con un cubo para añadir o quitar liquido, y si esta lleno de agua, las botellas se pueden llenar de el. Adicionalmente, puede unirse horizontalmente para formar grandes depositos.
+		</desc>
+		<note>
+			Capacidad: %d m^3 por cada bloque
+		</note>
+	</reservoir>
+	<fan>
+		<desc>
+			El fan emite una corriente de aire que empuja a las entidades de alrededor. Con mejores potencias de entrada, se pueden mover entidades mas pesadas, y todas las entidades aceleraran mas deprisa. Un minimo de %dW de potencia es requerido, y potencias por encima de los %dW no tendran efecto incrementado debido al limite del aire. El fan, a superiores velocidades, tambien puede ser usado para arrancar cultivos para recolectarlos, y para apagar - o esparcir - incendios.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 8+(Potencia-POTENCIA MINIMA*2)/%d m
+			Entrada de potencia: Detras
+			Velocidad para recoleccion: %d rad/s
+			Velocidad para extintor: %d rad/s
+		</note>
+	</fan>
+	<compactor>
+		<desc>
+			El compactor es capaz de comprimir carbon hasta que se convierte en anthracite, luegto lonsdaleite, y al final diamante. Cada estadio requiere cuatro items para crear uno. Todos los pasos requieren una enorme presion de %dkPa y temperaturas por encima de %dC para tener lugar. El compacador se calienta o enfria gradualmente segun sus alrededores, y la presion se produce al aplicar altos pares de entrada.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Presion requerida: %dkPa
+			Temperatura requerida: %dC
+			Presion maxima: %dkPa
+			Temperatura maxima: %dC
+			Entrada de potencia: Detras
+		</note>
+	</compactor>
+	<autobreeder>
+		<desc>
+			El auto-breeder atraera animales, y cuando esten cerca, los alimentara hasta que se sientan con ganas de procrear. Con esta maquina, puedes amasar grandes granjas. Cada animal tiene su propia comida ; sin ese item, la maquina fallara a la hora de atraer o alimentar el animal. Los lobos, por ejemplo, les gusta en concreto el cerdo crudo. La comida se consumira cuando el animal entre en modo apareamiento.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 8+(Potencia-%d)/%d m
+			Entrada de potencia: Debajo
+		</note>
+	</autobreeder>
+	<baitbox>
+		<desc>
+			El bait box atraera o repelera mobs de todos los tipos, mientras contenga los items adecuados para ello. Por ejemplo, los Enderman son atraidos por bloques de hierba y la oportunidad de cogerlo, pero les repele las caras del soulsand mientras los miran. Los items no son consumidos.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 8+(Potencia-%d)/%d m
+			Entrada de potencia: Cualquier lado
+		</note>
+	</baitbox>
+	<firework>
+		<desc>
+			El firework machine, cuando se le suministre con ingredientes apropiados para hacer fuegos artificiales, lanza fuegos artificiales aleatorios de entre las posibles combinaciones de sus ingredientes y los lanza automaticamente. Cuando se le suministra cohetes ya fabricados, los usara con preferencia. Con mucha potencia de entrada, la maquina es capaz de conservar ingredientes y, por lo tanto, lanzar mas de un cohete con la misma cantidad de ingredientes.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Cualquier lado
+		</note>
+	</firework>
+	<fractionator>
+		<desc>
+			El fractionator destila diferentes items para producir jet fuel, que se usa en algunos motores y maquinas. El Jet fuel requiere tar, polvo de netherrack, carbon, polvo llameante, ethanol, y magma cream. Adicionalmente, las lagrimas de ghast son usadas como solvente, pero no son consumidas como los otros objetos. Las lineas de combustible solo se conectan a la parte superior de esta maquina.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Debajo
+		</note>
+	</fractionator>
+	<gpr>
+		<desc>
+			El Ground-Penetrating Radar es capaz de leer las densidades y otras propiedades de los bloques que tiene debajo, y a partir de ello determinar que bloques tiene debajo. Esto le permite dibujar mapas de cuevas, estructuras subterraneas y otros materiales. Mayor potencia de entrada le proporciona mayor campo de vision, hasta un maximo de 82 bloques.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Field-of-View = 1+2*log_2(potencia-%d) m
+			Entrada de potencia: Cualquier lado
+		</note>
+	</gpr>	
+	<heater>
+		<desc>
+			Cansado de hacer reventar tus compactadores y otras maquinas por sobrecalentarlas? El heater se calentara a la temperatura que le especifiques, y cuando se coloque debajo de una maquina, la calentara a una temperatura similar a la propia. El heater puede consumir cualquier combustible que pueda un horno normal, proporcionando mas calor con mejores combustibles, con el maximo de 800C para el cubo de lava.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Maxima temperatura obtenible: %dC
+			Entrada de potencia: Debajo
+		</note>
+	</heater>
+	<obsidian>
+		<desc>
+			El obsidian factory, cuando se le proporcione agua y lava, producira obsidiana. Ten cuidado; si la maquina se la mantiene llena solo de lava durante mucho tiempo, comenzara a sobrecalentarse y, eventualmente, se fundira.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Temperatura maxima: %dC
+			Capacidad de liquidos: %d mB
+			Entrada de potencia: Debajo
+		</note>
+	</obsidian>
+	<playerdetector>
+		<desc>
+			El player detector hace excatamente lo que su nombre indica - cuando un jugador entra dentro de su rango configurable, emitira una señal de redstone. El rango maximo es determinado por la entrada de potencia, y el tiempo de respuesta del detector - el retardo entre el jugador entrando dentro del rango y la emision de la señal - es dependiente de la velocidad de entrada. 
+		</desc>
+		<note>
+			Rango = (Potencia)/%d m
+			Entrada de potencia: Debajo
+			Tiempo de reaccion: %d-(Velocidad/%d)
+		</note>
+	</playerdetector>
+	<spawnercontroller>
+		<desc>
+			El spawner controller hackea la funcionalidad del mob spawner, permitiendote apagarlo completamente o ajustar el ratio de spawn segun te parezca. El minimo ratio de spawneo es determinado por la velocidad de entrada.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Retraso minimo: %d-40*log_2(Speed)
+			Entrada de potencia: Bloque Spawner
+		</note>
+	</spawnercontroller>
+	<sprinkler>
+		<desc>
+			El sprinkler, cuando se le suministre con agua, la esparcira sobre los bloques que tenga debajo, regando las plantas y aumentando su crecimiento, hidratando la tierra de cultivo, y extinguiendo fuegos. Mayores presiones de agua -  creadas por bombas con mayor potencia - derivan en un mayor rango.
+		</desc>
+		<note>
+			Rango: Presion del agua/80
+		</note>
+	</sprinkler>
+	<vacuum>
+		<desc>
+			El item vacuum atrae items y XP hacia si mismo, y los absorbera en su almacenamiento interno cuando se acerquen. Para extraer la experiencia almacenada, haz boton derecho con un screwdriver mientras te agaches. El item vacuum tambien succiona items de los inventarios adyacentes horizontalmente a este (excepto otros vacuums).
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 8+(Potencia*4)/%d m
+			Entrada de potencia: Cualquier lado
+		</note>
+	</vacuum>
+	<woodcutter>
+		<desc>
+			El woodcutter talara cualquier tronco de arbol, causando que el resto del arbol colapse, posiblemente replantando el arbol si deja caer saplings. Si esta encantado con infinidad, siemre replantara el arbol.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Detras
+		</note>
+	</woodcutter>
+	<ecu>
+		<desc>
+			El engine controller puede decelerar los motores alimentados con fuel. Cuando se desaceleran, emiten el mismo par, pero a una fraccion de la velocidad. El beneficio radica en que consumen el combustible mas lentamente; veocidades inferiores tienen mejor eficiencia que velocidades superiores, aunque los turbine engine no lo ven como un beneficio. Los modos se cambian al hacer click derecho al ECU con un screwdriver. El ECU tambien puede aceptar señales de redstone, que apagaran el motor por completo.
+		</desc>
+		<note>
+			Modos disponibles:
+			%s
+		</note>
+	</ecu>
+	<mobradar>
+		<desc>
+			El mob radar puede detectar mobs en un gran radio a su alrededor, y no se ve apantallado por bloques intermedios. Mostrara sus posiciones en el plano NSEW, indicado con el simbolo apropiado. Si tienes un motion tracker en tu inventario, el radar tambien renderizara un HUD para alertarte de la posicion de los mobs que tengas cerca.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 8+(Potencia-%d)/%d m
+			Entrada de potencia: Debajo
+		</note>
+	</mobradar>
+	<winder>
+		<desc>
+			El coil winder es usado para tensar coil items, para almacenar energia mecanica para un uso posterior. Tambien uede usar coils pre-tensados como fuente de energia, permitiendo transportar potencia en forma de item.
+		</desc>
+		<note>
+			La maxima potencia conseguible es proporcional al par de entrada. 
+		</note>
+	</winder>
+	<tntcannon>
+		<desc>
+			El TNT cannon dispara TNT activados con una velocidad predeterminada (especificada mediante la velocidad, el angulo de disparo y la direccion horizontal), o a unas coordenadas objetivo especificas. Requiere un suministro constante de TNT para continuar con la operacion. Requiere mayor par para disparar en angulos mas verticales, mas velocidad para disparar proyectiles mas rapidos, y mas potencia para llegar a objetivos mas lejanos.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Cualquier panel horizontal o Debajo
+		</note>
+	</tntcannon>
+	<sonicweapon>
+		<desc>
+			El sonic weapon es un arma a distancia diseñada para proporcionar proteccion ante mobs hostiles y jugadores. A volumenes cada vez superiores (gracias a mayores pares de entrada), puede causar efectos cada vez mas debilitadores a aquellos en su radio de accion, desde confusion hasta ceguera, llegando incluso a ahogar hasta la muerte. Esta maquina sigue la ley del inverso del cuadrado, y por ello la intensidad del sonido y la serveridad de sus efectos disminuyen de manera acorde.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 8+(Potencia-%d)/%d m
+			Ceguera a: %d W/m^2
+			Confusion a: %d W/m^2
+			Ahogamiento a: %d W/m^2
+			Letal a: %d W/m^2
+			Entrada de potencia: Cualquier lado
+		</note>
+	</sonicweapon>
+	<blastfurnace>
+		<desc>
+			El blast furnace es la principal manera de hace steel. Simplemente suministra carbon (en forma de carbon o coke) a la izquierda, polvora abajo a la izquierda, arena arriba a la izquierda y llena alguno o todos los huecos intermedios con lingotes de hierro. Calienta la maquina hasta %dC para empezar el proceso. La maquina operara mas eficientemente con coke que con carbon y cuando mas slots sean llenados de hierro. El carbon no es un combustible - una fuente externa de calor es requerida. Esta maquina tambien se usa para hacer lingotes de bedrock. Para hacer esto, pon 4 polvo de bedrock en la izquierda, un lingote arriba a la izquierda de la malla, y calienta la maquina hasta %dC.
+		</desc>
+		<note>
+			Requisitos para acero: Carbon/coke a la izquierda, polvora abajo a la izquierda, arena arriba a la izquierda, hierro en los huecos centrales
+
+			Bonus: Las posibilidades incrementan segun los slots se llenan, maximo 50 por ciento
+			Mayor bonus por tamaño: Incrementa segun el numero de los slots ocupados se incrementa, maximo 100 por cien
+
+			Puntos de experiencia por lingote de acero: %.2f
+		</note>
+	</blastfurnace>
+	<forcefield>
+		<desc>
+			El force field emite una esfera solida de energia que repelo todos los mobs y proyectiles. Toma nota de que solo es solido en una direccion - las amenazas pueden salir pero no pueden volver a entrar. Sin embargo, debido al enorme campo magnetico, las flechas son desviadasincluso si se lanzan desde dentro de la esfera. Esta maquina necesita una linea de vision vertical similar al radio seleccionado.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 2+(Potencia-%d)/%d m
+			Entrada de potencia: Cualquier lado
+		</note>
+	</forcefield>
+	<musicbox>
+		<desc>
+			El music box es basicamente un circuito musical integrado. Simplemente programalo con musica - ya sea usando un disco o una demo hecha por ti - y proporcinale potencia para hacer sonar la musica. Un pulso tocara la cancion una vez, par ah acer un loop, usa potencia de eje.
+		</desc>
+		<note>
+			Activacion: Redstone para un ciclo, potencia con eje para loop
+			Potencia para el loop: %d
+			Modo de entrada de datos: Secuencial
+			Entrada de potencia: Cualquier lado
+		</note>
+	</musicbox>
+	<mobharvester>
+		<desc>
+			El mob harvester esta diseñado para matar mobs como si se tratase de un jugador, so that normally player-only drops (such as Blaze Rods) can be automatically farmed. The machine will deal damage to mobs directly above it, with the amount depending on the Entrada de potencia.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			DaÃ±o provocado: log_2((2+Potencia/%d)^6)
+			Entrada de potencia: Cualquier lado horizontal or Debajo
+		</note>
+	</mobharvester>
+	<projector>
+		<desc>
+			El projector emite una imagen de una diapositiva contra el muro. Ten en cuenta que el muro debe tener 7 bloques de anchura y 5 de altura, y tiene que ser opaco sin obstruir.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Detras
+		</note>
+	</projector>
+	<railgun>
+		<desc>
+			El railgun es una arma defensiva muy potente. Utiliza fuertes campos magneticos para acelerar enormemente municion pesada contra el objetivo, provocando grandes cantidades de daño. Ten en cuenta que proyectiles mas pesados hacen mas daño, y pueden destruir zonas mas grandes de terreno. El railgun automaticamente apunta al mob enemigo visible mas cercano; para maxima eficiencia, ponlo donde tenga una clara vision de la zona de alrededor. Tambien puedes invertir el railgun para que apunte hacia abajo en vez de hacia arriba.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: 512*SQRT(mass) Nm
+			Entrada de potencia: encima o debajo, depende de la orientacion
+		</note>
+	</railgun>
+	<weathercontroller>
+		<desc>
+			El silver iodide cannon es usado para controlar el tiempo. Tiene un sensor de luz interno para determinar el clima actual y, si esta programado para hacerlo, disparar los quimicos apropiados al aire para alterarlo. Ten en cuenta que tiene un tiempo de recarga, y debe tener una vision clara hacia el cielo.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Debajo
+			Sol: Sawdust
+			Lluvia: Silver Iodide
+			Tormenta: Redstone+Silver Iodide
+			Supertormenta: Glowstone Dust+Redstone+Silver Iodide
+		</note>
+	</weathercontroller>
+	<refresher>
+		<desc>
+			El item refresher evitat que los items cercanos desaparezcan. Ten en cuenta que los items que hayan sido mantenidos cargados durante mucho tiempo desapareceran inmediatamente si la maquina es destruida o pierde potencia.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 4+(Potencia-%d)/%d m
+			Entrada de potencia: Cualquier lado
+		</note>
+	</refresher>
+	<cavescanner>
+		<desc>
+			El cave scanner funciona como un escaner laser 3D. Manda pulsos hacia el suelo y puede detectar la interferencia entre el aire y los bloques, que renderiza en el mundo. Esto te permite mapear cuevas desde la superficie. Su campo de vision es 16 bloques de fabrica, y puede ser movido alrededor haciendo click derecho en el bloque. Hacer boton derecho lo empuja en la direccion en la que estas mirando, y mayusculas click derecho lo empuja en la direccion opuesta. Las cuevas tienen codificacion de color segun su profundidad.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Mueve la region seleccionada haciendo right-click al bloque
+			Entrada de potencia: Cualquier lado
+		</note>
+	</cavescanner>
+	<scalechest>
+		<desc>
+			El scaleable chest te permite almacenar tus cosas en un espacio pequeño. Su inventario escala con la potencia que recibe, hasta un maximo de %d stacks. Si la entrada de potencia baja o se pierde mientras hay objetos en los huecos ahora inaccesibles, permaneceran escondidos hasta que se restaure la potencia suficiente.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			TamaÃ±o del inventario: 9+(Potencia-%d)/%d slots
+			TamaÃ±o maximo: %d
+			Entrada de potencia: Detras
+		</note>
+	</scalechest>
+	<spiller>
+		<desc>
+			El liquid spiller esta diseñaod para llenar una depresion con liquido que se le alimente mediante tuberias. Cada cubo suministrado equivale a un cubo de liquido. Primero llena las capas inferiores.
+		</desc>
+		<note>
+			Requiere liquido entubado para funcionar
+		</note>
+	</spiller>
+	<smokedetector>
+		<desc>
+			El smoke detector hara sonar una alarma cuando detecta un bloque de fuego cercano, y tambien pita ocasionalmente cuando el resorte que lo alimente este bajo de carga.
+		</desc>
+		<note>
+			Requiere un windspring cargado como fuente de potencia
+		</note>
+	</smokedetector>
+	<igniter>
+		<desc>
+			El firestarter te permite prender fuego a materiales inflamables en un gran radio, y es por lo tanto muy efectivo a la hora de limpiar areas en bosques y hierba alta. Debido a su habilidad para prender fuego a criaturas, tambien sirve como un potente, aunque peligroso, objeto de defensa personal.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = Temperature/50 m
+			Combustibles aceptados: Carbon, Blaze Powder, Madera, Lava, Termita
+			Entrada de potencia: Cualquier lado
+		</note>
+	</igniter>
+	<freezegun>
+		<desc>
+			El freeze gun es una arma no letal de defensa.  Apunta automaticamente a las amenzas, y las congela con un bloque de hielo, inmobilizandolas completamente mientras no causa ningun daño. El hielo es mas efectivo como municion que las bolas de nieve. Com el Railgun, esta maquina puede ser orientada boca abajo y es mas efectiva con un campo de vision limpio de los alrededores. Ten en cuenta que los enemigos congelados aun pueden atacar si te acercas a ellos.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Encima o Debajo, depende de la orientacion
+		</note>
+	</freezegun>
+	<magnetizer>
+		<desc>
+			El magnetizer usa un eje magnetico que gira a altas velocidades para crear magnetismo dentro de un nucleo. Este es uno de los componentes criticos de un AC Electric Engine. Requiere una corriente alterna de redstone y altas velocidades. 
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Detras
+		</note>
+	</magnetizer>
+	<containment>
+		<desc>
+			El containment field es complementario al Force Field - mientras que el anterior mantiene las cosas fuera, este otro las mantiene dentro. Ten en cuenta que los mobs hostiles que disparan proyectiles, como los esqueletos y el wither, todavia pueden disparar al exterior sin abandonar el campo. Esta maquina necesita linea de vision hacia arriba similar al radio del campo de contencion que crea. 
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Rango = 2+(Potencia-%d)/%d m
+			Entrada de potencia: Cualquier lado
+			Requiere %dW para resgringir al wither y %dW para restringir al EnderDragon
+		</note>
+	</containment>
+	<screen>
+		<desc>
+			El CCTV monitor es como las CCTV cameras son vistas. Simplemente añade un codigo de color añadiendo 3 tintes - que coincidan con las camaras CCTV que ya existan en el mundo - y haz shift boton derecho para usar la camara. 
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Debajo
+		</note>
+	</screen>
+	<cctv>
+		<desc>
+			La CCTV camera te permite ver areas a las cuales no tendrias un acceso seguro de otras maneras. Simplemente proporciona un resorte cargado y un codigo de color de tres colores, y puedes ver el mundo a traves de sus lentes con la ayuda del CCTV Monitor. Para salir del modo camara, presiona  "\". La camara puede ser reorientada con un screwdriver (con shift click para la inclinacion). 
+		</desc>
+		<note>
+			Requiere un windspring cargado como fuente de potencia
+		</note>
+	</cctv>
+	<purifier>
+		<desc>
+			El steel purifier es usado para transformar acero de baja calidad en acero HSLA puro para usar en maquinas. Como el Blast Furnace, requiere polvora, arena y temperaturas superiores a %dC. 
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Temperatura requerida: %dC
+			Entrada de potencia: Cualquier lado
+		</note>
+	</purifier>
+	<lasergun>
+		<desc>
+			El laser gun es otra potente arma de ataque o defensa. Como el RailGun, apunta a los mobs o jugadores que no estene en la white list, y su rayo barre el area, iniciando incendios, derritiendo roca, y generalmente causando destruccion. 		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Encima o debajo, depende de la orientacion
+		</note>
+	</lasergun>
+	<itemcannon>
+		<desc>
+			El item cannon puede disparar objetos a traves del mapa sin dañarlos, lo que permite transporte en largas distancias casi instantaneo. Ten en cuanta que debes introducir las coordenadas de otro item cannon para recibir los objetos. 
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Detras
+		</note>
+	</itemcannon>
+	<friction>
+		<desc>
+			El friction heater es una herramienta para calentar el horno vanilla sin combustible. Pares mas altos y velocidades superiores significan mayor temperatura, pero quedas advertido: permanece mucho tiemopo a altas temperaturas y puedes fundir el horno por completo. Tambien, temperaturas superiores aceleran las operaciones de coccion. Un horno caliente es tambien la unica manera de convertir los fragmentos de tungsteno en lingotes de tungsteno. Ten en cuenta que mientras la temperatura es basicamente una funcion de potencia de entrada, igualar el par y la velocidad mejora la eficiencia.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Detras
+		</note>
+	</friction>
+	<landmine>
+		<desc>
+			El land mine es una trampa que puede ser depositada un bloque por debajo de la tierra. Requiere un muelle cargado, y a medida que su carga desaparece, el riesgo de detonaciones expontaneas incrementa. Efectos adicionales pueden ser añadidos poniendo TNT, polvo llameante, ojos de araña o cristales en los huecos de la derecha, y mas polvora en los huecos de la izquierda incrementan la fuerza explosiva. 
+		</desc>
+		<note>
+			Requiere un windspring cargado como fuente de potencia
+		</note>
+	</landmine>
+	<bucketfiller>
+		<desc>
+			El bucket filler toma liquidos de los laterales y cubos vacios de la parte superior, y los llena automaticamente. Tambien puede ser usado al reves; cubos llenos pueden suministrar liquido.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Cualquier lado
+		</note>
+	</bucketfiller>
+	<blockcannon>
+		<desc>
+			El block cannon puede disparar bloques como proyectiles, permitiendote hacer un destrozo a tu objetivo. Para lanzar liquidos, llenalo de cubos llenos.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: Se incrementa con la masa del bloque
+			Entrada de potencia: Cualquier lado or Debajo
+		</note>
+	</blockcannon>
+	<spycam>
+		<desc>
+			El aerial camera te permite ver un area como si estuvieses a vista de pajaro, y por lo tanto te permite saber la posicion de los mobs expuestos y bloques. Como la CCTV camera, usa un resorte cargado y un codigo de canal de tres colores. 
+		</desc>
+		<note>
+			Requiere un windspring cargado como fuente de potencia
+		</note>
+	</spycam>
+	<mirror>
+		<desc>
+			Los mirrors son cruciales para que la Solar Power plant funcione. Mas mirrors significa mas potencia. Ten en cuenta que requieren una linea de vision clara al cielo, y funcionan con eficiencia reducida si el sol no brilla con toda su fuerza. Adicionalmente, los espejos se pueden romper si objetos pesados como jugadores o slimes aterrizan sobre ellos. 
+		</desc>
+		<note>
+			Require una linea de vision despejada al cielo
+		</note>
+	</mirror>
+	<selfdestruct>
+		<desc>
+			El self-destruct machine puede detectar cuando la fuente de potencia es dañada, y liberar todo tipo de destruccion bajo la suposicion de que la base en la que reside haya sido dañada o destruida. 
+		</desc>
+		<note>
+			Detona con perdida de potencia
+			Entrada de potencia: Cualquier lado
+		</note>
+	</selfdestruct>
+	<coolingfin>
+		<desc>
+			El cooling fin drena calor de las maquinas pra mantenerlas frias sin necesidad de sistemas de tuberias avanzados. 
+		</desc>
+		<note>
+			Provoca daño de contacto si se conecta a una maquina caliente
+		</note>
+	</coolingfin>
+	<worktable>
+		<desc>
+			La worktable es la mesa de crafteo en la que todas las maquinas deben ser crafteadas, con la excepcion de la porpia worktable y la Blast Furnace. Simplemente usala como una mesa de crafteo ordinaria. Para montar los productos, da una señal de redstone o clica el item de la derecha. La workbench tambien es usada para recargar herramientas alimentadas por resortes. Simplemente pon un nuevo resorte y la herramienta a la izquierda, y coge los productos de la derecha. Al reves que una mesa de crafteo, la workbench almacena los objetos que contiene.
+		</desc>
+		<note>
+			Necesario para fabricar cualquier maquina
+		</note>
+	</worktable>
+	<compressor>
+		<desc>
+			El air compressor convierte potencia en el eje en aire a presion, que puede ser llevado a traves de tuberias conductoras de BuildCraft. Si se le proporcionan excesivas cantidades de potencia, puede explotar pefectamente. Violentamente.
+		</desc>
+		<note>
+			Presion maxima antes de explotar: %d kPa
+			Orientacion y salida: Como los motores de BuildCraft
+			Entrada de potencia: Detras
+		</note>
+	</compressor>
+	<pneuengine>
+		<desc>
+			El pneumatic engine usa una turbina para convertir aire presurizado de PneumaticCraft en potencia en el eje. Usa su GUI para elegir la velocidad de salida. Mayores salidas de potencia requieren mas presion y mayores cantidades de aire. 
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Entrada de aire: Detras
+
+					Sobrecalentado a: %dC
+
+					Tier desde el 0 hasta el 5; cada tier incrementa la potencia de salida pero disminuye la eficiencia
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</pneuengine>
+	<liquidconverter>
+		<desc>
+			El pressure balancer es usado para conectar lineas presurizadas, tuberias y tubos de combustible con conductos de liquidos estandar.
+		</desc>
+		<note>
+			Admite: Agua, Lava, Lubricante, Jet Fuel
+		</note>
+	</liquidconverter>
+	<display>
+		<desc>
+			El display screen es usado para mostrar un texto en una pantalla holografica, para cosas como mensajes de bienvenida del servidor. Requiere un resorte cargado para funcionar. Para añadir el texto, haz click derecho a la maquina con el libro, que no sera consumido. 
+		</desc>
+		<note>
+			La maquina puede mostrar codigos.
+		</note>
+	</display>
+	<lamp>
+		<desc>
+			La bright lamp iluminara una gran area alrededor de si misma, mientras mantenga un resorte cargado. 
+		</desc>
+		<note>
+			Maximum Rango: %d m
+		</note>
+	</lamp>
+	<terraformer>
+		<desc>
+			El terraformer es usado para convertir unos biomas en otros. Ten en cuenta que solo puede convertir biomas similares - asi que cambios radicales pueden necesitar varios pasos - y cada estadio posiblemente consuma grandes cantidades de objetos y liquidos. Porporciona un diamante a la maquina y puede incluso imitar el world-gen del bioma objetivo. 
+		</desc>
+		<note>
+			Selecciona los tiles a los que convertir conn la Tile Selection tool
+			Solo los tiles que estan en el mismo bioma que la maquina pueden ser convertidos
+			Entrada de potencia: Cualquier lado horizontal
+		</note>
+	</terraformer>
+	<fuelenhancer>
+		<desc>
+			El fuel enhancer toma petroleo comun, como el usado en los motores de combustion, y lo pufirica y refina mas alla, produciendo al final jet fuel. Ten en cuenta que el proceso de purificacion causa una reduccion delvolumen, y que la maquina sigue necesitando magma cream, polvo llameante, polvo de netherrack y tar. 
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Debajo
+		</note>
+	</fuelenhancer>
+	<emp>
+		<desc>
+			El EMP, cuando se dispara, desactiva permanentemente todas las maquinas vulnerables cercanas. Cosas como los ejes son inmunes debido a la falta de partes electronicas o de redstone, y de inteligencia, pero cualquier cosa remotamente mas compleja, como un spawner, un motor, o una bateria sera destruido. Un rumor dice que el pulso de esta maquina es tan potente que puede incluso desajustar el balance de los "nodos" magicos que dicen que existen en el mundo.
+		</desc>
+		<note>
+			Bloques puramente mecanicos, como los shaft, son inmunes
+			Energia de activacion: %dJ
+			Entrada de potencia: Debajo
+		</note>
+	</emp>
+	<linebuilder>
+		<desc>
+			El block ram empuja una linea de bloques, al igual que un piston hipervitaminado. Simplemente proveelo de bloques de construccion y los colocara hasta que encuentre un obstaculo como el bedrock, un cofre, un spawner u otra maquina, o hasta que llegue a los 512 metros.
+		</desc>
+		<note>
+			Entrada de potencia: Detras
+		</note>
+	</linebuilder>
+	<arrowgun>
+		<desc>
+			La arrow gun es la evolucion del dispensador. Cuando se le proporciona potencia, detecta cualquier enemigo en frente, y le dispara un aflecha. Velocidades de entrada mayores equivalen a mas disparos por minuto, mientras que pares mayores  hacen que la flecha vuele mas rapido, mas lejos y que haga mas daño. 
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Detras
+			Velocidad de lanzamiento: 20*log_2(par) m/s
+			Velocidad de disparo: 0.8-log_2(velocidad)/20 segundos por disparo, hasta 5 disparos por segundo
+			Rango: 10+2*log_2(par) m
+		</note>
+	</arrowgun>
+	<boiler>
+		<desc>
+			El friction boiler usa potencia en el eje para calentar agua que se le suministre. Cuando hierva, el agua puede ser retirada de la parte superior del boiler como vapor. Esta maquina tiene un periodo de calentamiento en el cual no produce vapor. Ten en cuenta que esta maquina puede sobrecalentarse y sufrir un fallo catastrofico que termine en una violenta explosion. 
+		</desc>
+		<note>
+			Entrada de potencia: Debajo
+		</note>
+	</boiler>
+	<steamturbine>
+		<desc>
+			La steam turbine toma el vapor de cualquier tuberia o tanque que tenga detras y genera potencia en el eje. Usa la GUI para seleccionar la salida de potencia (y consumo de vapor).
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Entrada de vapor: Detras
+
+					Sobrecalentamiento a: %dC
+
+					Con tier desde el 0 hasta el 5; cada tier incrementa la salida de potencia, pero disminuye la eficiencia
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</steamturbine>
+	<beammirror>
+		<desc>
+			El beam mirror refleja los rayos del sol en un rayo horizontal, permitiendo por lo tanto iluminar largos tuneles con luz natural sin consumir potencia. Esto tambien sirve como un sistema anti-no muertos, ya que los rayos reflejados siguen siendo capaces de prender fuego a zombies, esqueletos y similares. 
+		</desc>
+		<note>
+			Solo funciona de dia
+
+			El rango disminuye segun se va escondiendo el sol
+		</note>
+	</beammirror>
+	<fertilizer>
+		<desc>
+			El fertilizer, cuando se le suministra apatite o polvo de huesos, puede acelerar el crecimiento de las semillas cercanas, saplings y otras plantas. Para disolver el fertilizante, esta maquina requiere agua liquida.
+		</desc>
+		<note>
+			Entrada de potencia: Debajo
+			Rango: 2*log_2(par)
+			Potencia requerida: %dW
+		</note>
+	</fertilizer>
+	<lavamaker>
+		<desc>
+			El rock melter usa calor por friccion para fundir roca en lava, que puede entonces ser extraida por tuberias. El netherrack proporciona el mejor ratio de lava por bloque, mientras que el cobblestone proporciona el peor.
+		</desc>
+		<note>
+			Entrada de potencia: Debajo
+		</note>
+	</lavamaker>
+	<generator>
+		<desc>
+			El electric generator toma potencia en el eje y produce energia electrica similar a la de IC2 a un ratio de %.0f W/EU. El total de potencia de salida asi como los paquetes de EU escalan con la potencia de entrada.
+		</desc>
+		<note>
+			Entrada de potencia: Detras
+		</note>
+	</generator>
+	<electricmotor>
+		<desc>
+			El electric motor usa energia electrica de IC2 para producir potencia en el eje. Usa su GUI para elegir la velocidad de salida. Potencias superiores requieren mas EU/tick y un voltaje superior.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Conexion del cable: Detras
+
+					Sobrecalentamiento a: %dC
+
+					Con tier desde el 0 hasta el 5; cada rango incrementa la salida de potencia pero disminuye la eficiencia
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</electricmotor>
+	<hose>
+		<desc>
+			Estos llevan el aceite lubricante de canola del grinder a los gearboxes. La transmision es hecha automaticamente, y se conectan tambien automticamente a cualquier gearbox o grinder.
+		</desc>
+		<note>
+			Recuerda que tambien se pueden conectar a los depositos para almacenar grandes cantidades de liquido.
+		</note>
+	</hose>
+	<pipe>
+		<desc>
+			Las pipes llevan liquidos desde las bombas hasta las maquinas o los reservoirs. Una tuberia puede almacenar una cantidad ilimitada internamente, pero solo puede almacenar un tipo de liquido al mismo tiempo, y debe ser vaciada completamente antes de cambiar de contenidos. Debido a los temas de corrosion, las pipes no pueden ser usadas para mover el jet fuel o los fluidos basados en fluorine.
+		</desc>
+		<note>
+			Recuerda que tambien se pueden conectar a los depositos para almacenar grandes cantidades de liquido.
+		</note>
+	</pipe>
+	<fuelline>
+		<desc>
+			Fuel lines carry ethanol or jet fuel to the engines and furnaces that require it. Once connected to a source, they will automatically start to fill themselves from it, and if connected to a target, will automatically empty themselves into it. They have an infinite capacity, so caution is recommended when breaking them, to avoid destroying large quantities of stored fuel.
+		</desc>
+		<note>
+			Recuerda que tambien se pueden conectar a los depositos para almacenar grandes cantidades de liquido.
+		</note>
+	</fuelline>
+	<valve>
+		<desc>
+			Las valve pipe, como otros tipos de pipe, extraen liquidos de los reservoirs colocados bajo ellas. Sin embargo, la valve pipe permanece inerte hasta que recibe una señal de redstone.
+		</desc>
+		<note>
+			No olvides vaciar por completo las tuberias antes de moverlas o quitarlas para no perder el liquido almacenado.
+		</note>
+	</valve>
+	<bypass>
+		<desc>
+			Las bypass pipes no se conectan a otras tuberias u otras maquinas, permitiendo un sistema de tuberias mas complejo y compacto.
+		</desc>
+		<note>
+			No olvides vaciar por completo las tuberias antes de moverlas o quitarlas par no perder el liquido almacenado.
+		</note>
+	</bypass>
+	<separation>
+		<desc>
+			La separator pipe puede ser usada para distribuir liquidos acorde a una señal de redstone. Admite los liquidos lateralmente, y los extrae hacia arriba o hacia abajo, dependiendo de si esta recibiendo potencia. Transmitira los liquidos hacia ariba cuando reciba potencia.
+		</desc>
+		<note>
+		</note>
+	</separation>
+	<bedpipe>
+		<desc>
+			La bedrock pipe es identica a la steel pipe con la excepcion de que puede soportar mayores presiones y temperaturas.
+		</desc>
+		<note>
+			No olvides vaciar por completo las tuberias antes de moverlas o quitarlas par no perder el liquido almacenado.
+		</note>
+	</bedpipe>
+	<aggregator>
+		<desc>
+			El dew point aggregator centrifuga el vapor de agua del aire, recogiendolo y, si es posible, enviandolo a los sistemas de tuberias o maquinas cercanos. Esta maquina puede incluso funcionar en el Nether, aunque a menor velocidad. Debe ser enfriada constantemente por debajo de la temperatura ambiente para funcionar. Mas par significa mas agua por ciclo, y mayor velocidad significa mas ciclos por minuto.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Debajo
+		</note>
+	</aggregator>
+	<fuelengine>
+		<desc>
+			El fuel-Potenciaed engine se alimenta de combustible de BuildCraft para producir potencia en el eje. Trabaja de manera similar a los motores de combustion del mod al que pertenece el combustible en temas de potencia de salida. Requiere lubricante y agua como lubricante, y decelerara a medida que se sobrecaliente.
+		</desc>
+		<note>
+			Par producido: %d Nm
+			Rotational Speed: %d rad/s
+			Potencia Produced: %dW
+		</note>
+	</fuelengine>
+	<airgun>
+		<desc>
+			La air pressure gun es basicamente una maquina monada y mejorada del KnockBack Gun. Usa potencia de entrada para conseguir aire a presion, y cuando un mob se le acerca, lo manda volando hacia antras a altas velocidades.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Detras
+		</note>
+	</airgun>
+	<sonicborer>
+		<desc>
+			El sonic borer usa ondas de choque para cavar tuneles. Esto le permite ser apuntado en cualquier direccion para cavar tuneles y trabaja mas rapidamente que su primo el "borer". La unica desventaja  es que el sonic borer suelta los bloques en su localizacion original, en vez de transportarlos de vuelta a la maquina para recogerlos facilmente. Si suministras demasiada potencia, esta maquina sufrira un violento fallo catastrofico.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Detras
+		</note>
+	</sonicborer>
+	<sorting>
+		<desc>
+			La sorting machine organiza los items recogidos en uno de sus tres lados de salida (rojo, verde o azul). Para grandes stacks, transmite un item por tick (por lo que un stack entero toma 3 segundos en ser distribuido completamente).
+		</desc>
+		<note>
+			Potencia requerida: %dW
+		</note>
+	</sorting>
+	<fillingstation>
+		<desc>
+			La filling station es usada para rellenar los depositos de los items que funcionan con fuel, como el jetpack.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Detras
+		</note>
+	</fillingstation>
+	<vandegraff>
+		<desc>
+			El van de graaff usa un cinturon para fabricar una carga estatica alrededor de la esfera metalica. Si un objeto conductivo - como un mob - se acerca lo suficiente, esta carga es liberada hacia el objeto. Cuanto mayor sea la carga, mayor salto puede pegar. Ten en cuenta que ciertos mobs no reaccionan de forma similar a las descargas. Caras excesivas pueden provocar mayores descargas provenientes de arriba.
+		</desc>
+		<note>
+			El agua disipa la carga estatica
+		</note>
+	</vandegraff>
+	<defoliator>
+		<desc>
+			El defoliator es usado para limpiar grandes zonas de vida vegetal. Ten en cuenta que la vida animal de la cercania tiene todas las papeletas para morir tambien.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Debajo
+		</note>
+	</defoliator>
+	<bigfurnace>
+		<desc>
+			La lava smeltery puede fundir hasta 18 objetos al mismo tiempo. Para hacerlo, sin embargo, sus tanques deben estar llenos de lava, y necesita estar al menos a 400 grados. Tambien requiere potencia en el eje.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Entrada de potencia: Debajo
+		</note>
+	</bigfurnace>
+	<distiller>
+		<desc>
+			EL distiller es usado para convertir un tipo de fludo en otro. Simplemente bombea los fluidos hacia la maquina.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Debajo
+			Conversiones validas:
+			%s
+		</note>
+	</distiller>
+	<suction>
+		<desc>
+			La suction pipe succiona fluidos de tanques y maquinas de otros mods. No esta diseñada para ser conectada a otro sistema de tuberias,, o a maquinas de RotaryCraft.
+		</desc>
+		<note>
+			No olvides vaciar por completo las tuberias antes de moverlas o quitarlas par no perder el liquido almacenado.
+
+		</note>
+	</suction>
+	<dynamo>
+		<desc>
+			La rotational dynamo convierte potencia de RotaryCraft en redstone flux de ThermalExpansion. Debido a las limitaciones de su campo magnetico, puede tomar un maximo de %d Nm de par a un maximo de %d rad/s. Cualquier exceso, aunque no resulte peligroso, es desperdiciado.
+		</desc>
+		<note>
+			Orientacion y Salida: Como las dynamo de ThermalExpansion
+			Entrada de potencia: Detras
+		</note>
+	</dynamo>
+	<magnetic>
+		<desc>
+			El magnetostatic engine funciona como el pneumatic engine. Acepta RF suministrado, y su velocidad de salida puede ser seleccionada para elegir la potencia total de salida. Como todos los demas motores de conversion, requiere refrigerante.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Entrada para el conduit: Detras
+
+					Sobrecalentamiento a: %dC
+
+					Con tier desde el 0 hasta el 5; cada tier incrementa la potencia de salida pero disminuye la eficiencia
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</magnetic>
+	<crystallizer>
+		<desc>
+			El fluid crystallizer congela liquidos. Ten en cuenta que debe estar por debajo del punto de fusion del fluido objetivo.
+		</desc>
+		<note>
+			Entrada de potencia: Detras
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+		</note>
+	</crystallizer>
+	<particle>
+		<desc>
+			El particle display puede emitir un torrente de cualquier particula que elijas desde su GUI. Requiere un resorte cargado para funcionar.
+		</desc>
+		<note>
+		</note>
+	</particle>
+	<lawnsprinkler>
+		<desc>
+			El ground sprinkler es la variedad de suelo del overheat sprinkler, y puede apagar fuegos, hidratar tierras de cultivo, e incrementar la velocidad de crecimiento de las plantas. Debido a su gran volumen de agua consumido, es mas efectivo que siu version de techo. Ten en cuenta que resiones de agua superiores pueden ser peligrosas.
+		</desc>
+		<note>
+		</note>
+	</lawnsprinkler>
+	<grindstone>
+		<desc>
+			El grindstone es usado para afilar y reparar herramientas sin necesidad de gastar material adicional. Debido a que esto reduce la cantidad de maeterial de la herramienta, no puede reparar completamente una herramienta, y la herramienta se degradara progresivamente hasta que no pueda ser reparada de nuevo.
+		</desc>
+		<note>
+			Entrada de potencia: Detras
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Requiere agua
+		</note>
+	</grindstone>
+	<blower>
+		<desc>
+			La pneumatic item pump es usada para transferir objetos rapidamente entre inventarios. Si una item pump tiene un inventario tras de sí, comprobara un inventario receptor en frente. Si encuentra otra pump, sigue la direccion frontal de esa pump y repite el proceso. Este sistema te permite transportar objetos a traves de cualquier distancia casi instantaneamente. La pump puede transmitir un objeto por tick por cada kW de potencia de entrada; por lo tanto, para transmitir stacks enteros, suministra 65kW de potencia. Mas potencia transmitira multiples stacks, ya que no hay limite en el ratio de transferencia.
+		</desc>
+		<note>
+			Entrada de potencia: Cualquier lado
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+		</note>
+	</blower>
+	<refrigerator>
+		<desc>
+			La refrigeration unit es usada para enfriar el aire hasta el punto de que algunos componentes se condensen o congelen. Asi es como se producen el hielo seco y el nitrogeno liquido. Ten en cuenta que hace falta añadir hielo para enfriar el aire.
+		</desc>
+		<note>
+			Entrada de potencia: Detras
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+		</note>
+	</refrigerator>
+	<composter>
+		<desc>
+			El composter te permite convertir la comida descartada, materia vegetal y otra materia organica en algo que, aunque no te apetezca mucho, es altamente valorada por las plantas y acelera su crecimiento. Este proceso requiere yeast para facilitar el proceso.
+		</desc>
+		<note>
+			Temperatura requerida: Between %dC and %dC
+		</note>
+	</composter>
+	<gastank>
+		<desc>
+			El fluid compression chamber puede almacenar hasta un millon de cubos de cualquier liquido. Pares mas altos permiten obtener presiones mayores; si tu par no es lo suficientemente alto, no podras seguir bombeando liquidos hacia el interior. Tanto los gases como los liquidos pueden ser almacenados, pero los liquidos requiere mayor par para ser comprimidos.
+		</desc>
+		<note>
+			Entrada de potencia: Debajo
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Capacidad de almacenamiento: f*10^(0.5*log_2(par))/40 mB, f = 1 para liquidos y 8 para gases
+		</note>
+	</gastank>
+	<crafter>
+		<desc>
+			El autocrafter te permite automatizar los crafteos de cualquier cosa de la mesa de crafteo original. Tiene dos modos: en modo autonomo, fabrica constantemente mientras tenga los materiales para hacerlo; en modo demanda, fabricara una vez el objeto requerido y luego se mantiene a la espera. Puede usar cualquier inventario que este por encima o puede tomar objetos de la red de Applied Energistics. Esta maquina puede almacenar 18 patrones, y puede por lo tanto fabricar 18 recetas en paralelo.
+		</desc>
+		<note>
+			Entrada de potencia: Cualquier lado
+			Potencia requerida: %dW
+		</note>
+	</crafter>
+	<antiair>
+		<desc>
+			Como una version especializada mas barata que el RailGun, el AntiAir Gun dispara basura a mobs voladores como forma de defensa. Solo provoca un corazon de daño por impacto, pero puede disparar 3 balas por segundo,y la municion es mucho mas barata que la del railgun.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Par requerido: %d Nm
+			Entrada de potencia: Encima o debajo, depende de la orientacion
+		</note>
+	</antiair>
+	<pipepump>
+		<desc>
+			La pipe pump ayuda a bomber liquidos a traves de tuberias, reduciendo la cantidad que se queda atrapada en las tuberias e incrementando el flujo total. Velocidades de entrada superiores significan un bombeo mas rapido del liquido. Ten en cuenta que bomber mucho liquido en una tuberia la hara reventar.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Cualquier lado
+		</note>
+	</pipepump>
+	<centrifuge>
+		<desc>
+			La centrifuge usara una gran fuerza centripeta para separar objetos en sus constituyentes de diferente densidad, o para extraer parte de los liquidos dentro de objetos. Si eres un apicultor, tambien puede extraer la cera y otros productos de los panales.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Debajo
+		</note>
+	</centrifuge>
+	<drying>
+		<desc>
+			La drying bed es donde algunos liquidos pueden evaporar o coagular para mantener otros objetos detras.
+		</desc>
+		<note>
+
+		</note>
+	</drying>
+	<wetter>
+		<desc>
+			La liquefaction machine mezcla un fluido y un objeto para crear un objeto diferente.
+		</desc>
+		<note>
+			Potencia requerida: %dW
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Debajo
+		</note>
+	</wetter>
+	<chunkloader>
+		<desc>
+			El chunk loader usa velocidades extremas - generadas con velocidades de entrada extremas - para inducir efectos relativistas y distorsionar el espacio-tiempo a su alrededor, manteniendo los chunks cargados.
+		</desc>
+		<note>
+			Velocidad requerida: %d rad/s
+			Entrada de potencia: Debajo
+			Radio en chunks: %d+((Potencia-%d)/%d)
+		</note>
+	</chunkloader>
+</machines>

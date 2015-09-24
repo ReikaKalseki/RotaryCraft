@@ -1091,7 +1091,7 @@
 	</pipepump>
 	<centrifuge>
 		<desc>
-			The centrifuge will use large centripetal forces to separate items into constituents of different density, or to squeeze fluids of of some items. If you are into beekeeping, it can also extract propolis and other products from combs.
+			The centrifuge will use large centripetal forces to separate items into constituents of different density, or to squeeze fluids out of some items. If you are into beekeeping, it can also extract propolis and other products from combs.
 		</desc>
 		<note>
 			Required Power: %dW

@@ -32,6 +32,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import Reika.ChromatiCraft.Base.CrystalBlock;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -257,6 +258,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 10F;
 		if (b == Blocks.iron_door)
 			return 18F;
+		if (ModList.CHROMATICRAFT.isLoaded() && b instanceof CrystalBlock)
+			return 24F;
 
 		if (ThaumItemHelper.isTotemBlock(b, meta))
 			return 48F;

@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<engines>
+	<dc>
+		<desc>
+			El motor de corriente continua (CC) es el mas simple de hacer y operar. Todo lo que requiere es una señal continua de redstone de cualquier fuerza. Esta facilidad viene acompañada de un coste, sin embargo - estos motores son los mas debiles de todos, proporcionando %d Nm de par a %d rad/s, produciendo %.3fkW de potencia.
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fkW
+			Fuente de poder: Redstone
+			Requiere consumibles: No
+			Riesgos: Ninguno
+		</note>
+	</dc>
+	<wind>
+		<desc>
+			El molino de viento usa el aire para generar potencia rotativa.Debido a la baja densidad del aire, no genera mucho par (solo %d Nm), pero su diseño le permite girar an unas velocidades de %d rad/s, produciendo un total de %.3fkW a la maxima eficiencia. max efficiency. Notese que la eficiencia de este motor solo se maximiza cuando se logra en zonas elevadas y abiertas. Objetos y bloques pueden obstruir las aspas del motor.
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fkW
+			Fuente de poder: Viento
+			Requiere consumibles: No
+			Riesgos: Cuchillas giratorias
+			Notas: Requiere 16 bloques de espacio libre frente a las aspas, eficiencia optima a 128m metros de altitud.
+		</note>
+	</wind>
+	<steam>
+		<desc>
+			El motor de vapor funciona constantemente si se le proporciona una fuente de calor debajo y agua por tuberias.Ligeramente mas fuerte que motores anteriores, proporciona  %d Nm a %d rad/s (%.3fkW).
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fkW
+			Fuente de poder: Agua y calor
+			Requiere consumibles: Agua
+			Riesgos: Sobrecalentado a 150C
+		</note>
+	</steam>
+	<gas>
+		<desc>
+			El motor de gasolina, fiela  su nombre, funciona con... etanol. Simplemente cargalo con cristales de etanol y miralos arder para producir %d Nm de par a %d rad/s, o %.3fkW de potencia.
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fkW
+			Fuente de poder: Etanol
+			Requiere consumibles: Etanol
+			Riesgos: Ninguno
+		</note>
+	</gas>
+	<ac>
+		<desc>
+			El motor de corriente alterna (CA), como su primo CC, requiere una señal de redstone para funcionar. Sin embargo, este necesita una señal alterna, proporcionada mediante un reloj de redstone. Ciclos de tiempo mas rapidos corresponden a una potencia de salida mas consistente, produciendo %d Nm a %d rad/s (%.3fkW) con dos relojes. Este meotor requiere un nucleo magnetizado, que se desmagnetiza gradualmente.
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fkW
+			Fuente de poder: Reloj de redstone y nucleo magnetizado
+			Requiere consumibles: No
+			Riesgos: Ninguno
+		</note>
+	</ac>
+	<sport>
+		<desc>
+			El motor de cuatro tiempos, como el de gasolina, funciona con etanol, pero tambien requiere refrigerante de agua y solo puede alcanzar su maxima potencia cuando se le suministra los aditivos correctos a su alimentacion - redstone, polvora o polvo de blaze, cada uno siendo mas efectivo que el anterior. Completamente suministrado y mantenido, este motor produce %d Nm de par a  %d rad/s, un total de %.3fkW.
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fkW
+			Fuente de poder: Ethanol And Additives
+			Requiere consumibles: Ethanol and Redstone/Gunpowder/Blaze Powder
+			Riesgos: Sobrecalentado a 240C
+		</note>
+	</sport>
+	<hydro>
+		<desc>
+			El motor hidrokinetico convierte la energia de las caidas de agua en potencia en el eje. Notese que esta maquina solo puede rotar en el sentido contrario a las agujas del reloj, por lo que la caida de agua tiene que posicionarse acorde. Adicionalmente, bloques cercanos pueden obstruir las paletas. Finalmente, la potencia de salida de este motor depende de la altura de la caída de agua. Una caida de 3 bloques  producira una potencia minima, pero una caida de 64 bloques o mas puede producir  %d Nm a %d rad/s, el mayor par de todos los motores, produciendo %.3fkW. Estos motores tambien pueden ser encadenados, sumando su par. Este motor debe ser lubricado para su funcionamiento.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Par maximo: %d Nm
+					Velocidad maxima: %d rad/s
+					Potencia maxima: %.3fkW
+					Fuente de poder: Caida de agua
+					Requiere consumibles: Lubricante
+					Riesgos: Paletas giratorias
+					Notas: Requiere caidas de agua elevadas para conseguir toda la potencia
+				</s1>
+				<s2>
+					Como mucho se pueden encadenar 4 motores antes de que el nucleo del eje se sobrecargue.
+
+					Se puede mejorar con ejes de bedrock para incrementar el limite a 16 motores.
+				</s2>
+			</sub>
+		</note>
+	</hydro>
+	<micro>
+		<desc>
+			La microturbina es unica. Con un suministro constante de combustible, proporciona muy poco par (%d Nm), pero lo hace a una velocidad de %d rad/s, para una potencia de salida justo por encima de los dos megawatios (%.3fMW).
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fMW
+			Fuente de poder: Jet Fuel
+			Requiere consumibles: Jet Fuel
+			Riesgos: Ninguno
+		</note>
+	</micro>
+	<jet>
+		<desc>
+			El motor mas potente de todos, la turbina de gas es un monstruo, proporcionando potencia comparable a la de un motor de un avion comercial... y con un sonido que lo iguala. Estos motores, cuando se alimentan, proporcionan %d Nm de par a %d rad/s (%.3fMW). Ten en cuenta, a no ser que quieras saber que se siente pasando por una batidora, mantente ALEJADO de la parte frontal mientras este en funcionamiento! Ni tu ni el motor lo soportara bien. 
+		</desc>
+		<note>
+			Par: %d Nm
+			Velocidad: %d rad/s
+			Potencia: %.3fMW
+			Fuente de poder: Jet Fuel
+			Requiere consumibles: Jet Fuel
+			Riesgos: Ingestion; Posible fallo violento si se daña
+		</note>
+	</jet>
+	<solar>
+		<desc>
+			La planta solar es unica en cuanto a que su tamaño, y por lo tanto su potencia de salida, son escalables. Simplemente construye una torre de dos bloques, y rodea la base con espejos. Mas espejos y una torre mas alta significa mas potencia. Ten en cuenta que la potencia se extrae por debajo de la torre, y el agua debe ser proporcionada. Los espejos debe estar conectados (posiblemente mediante otros espejos) a la torre para funcionar.
+		</desc>
+		<note>
+			Par: Escalable
+			Speed: %d rad/s
+			Power: Escalable
+			Fuente de poder: Luz del sol
+			Requiere consumible: Agua
+			Riesgos: Ignicion de bloques inflamables cercanos
+		</note>
+	</solar>
+</engines>

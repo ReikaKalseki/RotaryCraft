@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<categories>
+	<misc>
+		Alguna informacion importante sobre trabajar con maquinas y algunas herramientas esenciales.
+	</misc>
+	<engine>
+		Puede que las mas cruciales de todas las maquinas, los motores son usados para producir potencia. Cada una tiene su propio par y velocidades caracteristicas, pero usualmente todas son de alta velocidad y bajo par. Cada motor tambien tiene su propio requerimiento en terminos de suministro de energia, y algunos de ellos tienen su propios triquitos especiales que es sabio conocer.
+	</engine>
+	<trans>
+		Las posibilidades serian limitadas si la potencia producida por los motores tuviese que ser consumida en la fuente. Afortunadamente, es simple ly facil transportar esta potencia, casi sin perdidas, a traves de cualquier distancia que desees. Una cosa importante a tener en cuenta de estos es que son direccionales - transmiten la potencia en una sola direccion. Las maquinas renderizaran una caja verde alrededor del bloque(s) de entrada, y una roja alrededor del bloque(s) de salida.
+	</trans>
+	<procmachine>
+		Estas maquinas son usadas para procesar materiales, ya sea creando nuevos materiales, incrementando la produccion o conviritiendo items entre mods.
+	</procmachine>
+	<utilmachine>
+		Estas son maquinas que no cumplen propositos especificos y no puede categorizarse facilmente en otros grupos.
+	</utilmachine>
+	<prodmachine>
+		Estas maquinas son usadas para producir recursos basicos, ya sea directamente de mineria o de ingredientes basicos.
+	</prodmachine>
+	<survmachine>
+		Estas maquinas son usadas para evaluar tu entorno, para ser consciente de los peligros potenciales o items de valor.
+	</survmachine>
+	<wepmachine>
+		Maquinas de tipo arma y proteccion son usadas para atacar oponentes - ya sean mobs o jugadores - y defenderte de sus ataques.
+	</wepmachine>
+	<farmmachine>
+		Estas maquinas estan diseñadas para ser usadas bien para reemplazar o mejorar las granjas tradicionales.
+	</farmmachine>
+	<cosmachine>
+		Las maquinas cosmeticas proporcionan poca o ningun bonus util, pero proporcionan atractivo acustico o visual.
+	</cosmachine>
+	<accmachine>
+		No muy utiles por su cuenta, estas maquina estan diseñadas para trabajar junto con otras, para mejorar su funcionalidad.
+	</accmachine>
+	<tool>
+		Estas son las herramientas alimentadas mediante muelles tensados. Su muelle se destensa ligeramente con cada uso.Para recargarlos, craftealos junto a un nuevo muelle y obtendras el viejo muelle de vuelta, que puede volver a ser usado.
+	</tool>
+	<resource>
+		Estos son los items de recursos, usados para diferentes propósitos.
+	</resource>
+</categories>

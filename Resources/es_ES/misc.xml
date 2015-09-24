@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<misc>
+	<lube>
+		La mayoria de cajas de cambios necesitan ser lubricadas para mantener su habilidad de transmitir potencia. Operadas sin lubricante, se degradan gradualmente y transmiten menos y menos par, y por lo tanto menos potencia. Para mantenerlas lubricadas, simplemente pon una linea de tuberia de lubricante desde el grinder hasta la caja de cambios, pon algunas semillas en el grinder y mira la tuberia transmitir el aceite (o simplemente usa cubos para transportarlo). La mayoria de caja de cambios consumen lubricante, y mas todavia a mayores velocidades, asi que manten un ojo en el medidor de la GUI. Otras maquinas puede que tambien necesiten lubricante para funcionar.
+	</lube>
+	<canola>
+		Encuentra algunas semillas de canola en la hierba alta, plantalas en una granja y miralas crecer. Cuando se cubren de pequeñas flores amarillas, las plantas estan listas para ser cosechadas y dropearan semillas. Comparten el mismo requisito que el trigo en terminos de nivel de luz, suministro de agua y demas.Las plantas de canola requieren grandes cantidades de agua, asi que no te sorprenda si secan la tierra de cultivo. Las semillas de canola tambien pueden ser compactadas en montones densos para un almacenamiento mas sencillo.
+	</canola>
+	<meter>
+		El transductor angular es una herramienta indispensable para aquellos con sistemas de transmision largos o complejos. Haz click derecho a cualquier motor, caja de cambios o maquina con el, y seras informado de la potencia y la velocidad entrante o saliente. La mayor parte de las maquinas tambien tienen informacion adicional.
+	</meter>
+	<screw>
+		Esto se usa para reorientar maquinas que han sido colocadas incorrectamente o fueron dificiles de colocar correctamente. Mayusculas + click suele producir una funcion diferente, como cambiar entre modos de unir o separar en el shaft junction. El destornillador tambien reorienta pistones y escaleras.
+	</screw>
+	<modinterface>
+		Estos son los ratios de conversion y comportamientos entre maquinas operadas con potencia en el eje y maquinas e items de otros mods.
+
+		RF/t a Watios: 1 RF/t = %.3f %sW
+
+		Ratios de duplicacion del extractor:
+		Ores normales: %d percent chance per step
+		Ores del nether: %d percent chance per step
+		Ores raros: %d percent chance per step
+	</modinterface>
+	<enchanting>
+		Algunas maquinas pueden ser encantadas. Hacer eso añade funcionalidades simliares a los efectos del encantamiento de su objeto destino inicial. Por ejemplo, el Borer puede recibir Toque de Seda, Fortuna y Eficiencia, cada uno haciendo lo mismo a la maquina como harian a la herramienta. Para encantar una maquina, haz click derecho con el libro encantado.
+
+		Las siguientes maquinas pueden ser encantadas: %s
+	</enchanting>
+	<computercraft>
+		Si tienes ComputerCraft o OpenComputers instalado, puedes usarlos para leer y, en ocasiones, controlar diferentes maquinas. Simplemente usa la maquina como haria con cualquier otro periferico, y llama uno de los metodos indicados. Ten en cuenta que no todas las maquinas tienen acceso a todos los metodos: por ejemplo, el Reservoir no tiene inventario, potencia, o rango; metodos como estos serian un sinsentido.
+	</computercraft>
+</misc>

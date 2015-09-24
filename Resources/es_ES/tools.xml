@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<tools>
+	<spring>
+		El wind spring es usado para almacenar energia mecanica. Una vez tensado en el coil winder, puede ser usado en otro winder para proporcionar una peqeña cantidad de potencia, o puede ser usado para hacer funcionar diversas herramientas. Ten en cuenta, cuando cargues coils, que tienen riesgo de romperse, un riesgo que se incrementa a medida que la tension aumenta.
+	</spring>
+	<strongspring>
+		Para eliminar la posibilidad de rotura, la resistencia tensil del spring puede ser mejorada uniendo el acer y reforzandolo con diamante y bedrock. Debido a su rigidez, sin embargo, requieren 16 veces el par para conseguir la misma carga. Estos coils tambien pueden proporcionar mucha mas potencia cuando se liberan en un coil winder.
+	</strongspring>
+	<ultra>
+		El ultrasound envia ruido de alta frecuencia a traves de los bloques para determinar su densidad. A partir de esto, es capaz de detectar bolsas de baja densidad, como aire, o variaciones en la densidad, como vetas de minerales. Tambien es capaz de detectar los bloques infestados de silverfish.
+	</ultra>
+	<motion>
+		El motion tracker emite un sonar y pulso de radar para detectar criaturas y valorar su distancia y velocidad. A partir de esto, puede informarte de mobs cercanos (incluso si te estan apuntando), incluso a traves de los muros.
+	</motion>
+	<vac>
+		El vacuum es basicamente una version de mano del Item Vacuum. Haz Right-clicking con el para absorber items y experiencia hacia ti, asumiendo que tengas espacio libre en el inventario. Puedes usar shift-right-clicking en un bloque de almacenamiento para vaciarlo de golpe.
+	</vac>
+	<stun>
+		El knockback gun no inflige daño directo, pero puede ser usado para enviar a los mobs hacia atras volando, manteniendolos a distancia. Haciendo shift-right-click, su potente empujon puede ser usado para desprender areas conectadas de material suelto, tal como grava, hojas y menas.
+	</stun>
+	<gravel>
+		El gravel gun lanza pedazos de pedernal a alta velocidad hacia el objetivo. A mayores niveles de carga, los fragmentos producen suficiente daño para matar la mayoria de los mobs de un solo toque. Debido a su baja masa y enorme velocidad, el pedernal no es afectado por la gravedado a lo largo de su trayectoria. Esta herramienta usa grava como municion, y solo puede disparar a entidades vivas, no cosas como bloques, maquinas o items que esten en el suelo.
+	</gravel>
+	<fireball>
+		El fireball launcher dispara bolas de fuego similares a las de la llorona al objetivo. Puede ser cargado como un arco, hasta un maximo de potencia de azul oscuro. Mayores niveles de carga significan explosiones mas potentes, hasta el doble de explosion del TNT. Esta herramienta requiere cargas de fuego como municion.
+	</fireball>
+	<handcraft>
+		El handheld crafting unit es exactamente lo que dice su nombre; puede ser usado como mesa de crafteo portatil sin tener que colocarla en el suelo.
+	</handcraft>
+	<nvg>
+		Las Night-vision goggles te permiten ver claramente, incluso en la oscuridad completa. Sin embargo, ocupan el slot del casco, y no proporcionan defensa. Para corregir esto, pueden ser crafteados junto a un casco de diamante para hacer un night-vision helmet.
+	</nvg>
+	<buckets>
+		Los cubos de lubricant o jet fuel se pueden conseguir colocando cubos vacios en los huecos correctos del grinder o del fractionator. Pueden ser llevados a la maquina que los necesite, para ahorrarse tuberias a traves de largas distancias. El ethanol tambien puede ser llevado en cubos o puesto dentro de depositos.
+	</buckets>
+	<bedtools>
+		Las herramientas de bedrock estan hechas de lingotes de bedrock. Tienen durabilidad infinita, y son mas rapidas que las herramientas de diamantes mientras son tan efectivas picando bloques. Tambien, debido a su dureza, las herramientas de bedrock estan extremadamente afiladas. Un pico de bedrock puede picar cualquier bloque, como si tuviese Toque de Seda, y la espada de bedrock es muy efectiva contra armaduras y puede cosechar enemigos mucho mas limpiamente. Lo muy afilado que esta el bedrock le permite cosechar incluso las plantas mas delicadas. Una hazada de bedrock se puede usar para cultivar un area de 5x5 o, mientras te agachas, puede usar semillas para replantar hierba.
+	</bedtools>
+	<bedarmor>
+		La armadura tambien puede ser hecha de lingotes de bedrock. Al igual que las herramientas de bedrock, tienen durabilidad infinita.
+	</bedarmor>
+	<targeter>
+		El TNT cannon targeting aid te permite elegir facilmente el objetivo del TNT cannon. Simplemente mira hacia tu objetivo, poniendo tu cruceta sobre el objetivo, y el TNT cannon, si esta programado en modo objetivos, apuntara al bloque sobre el que apuntas. Esta herramienta puede que no funcione para objetivos muy lejanos, aunque estan fuera del rango del TNT cannon, de cualquier modo.
+	</targeter>
+	<iogoggles>
+		Las IO Goggles son un dispositivo de utilidad para ver las entradas y las salidas de todas las maquinas al mismo tiempo, util para depurar configuraciones complejas.
+	</iogoggles>
+	<ckey>
+		La cannon key se usa para configurar las maquinas de cañon, como el RailGun. Si el propietario hace right-click a la maquina con ella, pueden editar la lista blanca de jugadores objetivo. Si alguien mas hace right-click a la maquina con ella, seran añadidos a la lista blanca.
+	</ckey>
+	<minecart>
+		El ethanol-engine-powered minecart es mas rapido que cualquier equivalente a la carreta con horno, y es por lo tanto ideal para empujar un largo tren de vagonetas. Funciona, al igual que su motor, con ethanol crystals.
+	</minecart>
+	<tileselect>
+		El tile selector es usado para añadir tiels a la memoria de algunas maquinas, como el terraformer.Si hces right-click a la maquina con la herramienta, vincula la herramienta a la maquina, y entonces right-clicking en cualquier otro sitio añade ese bloque al almacenamiento de la maquina. Para añadir bloques a la maquina, haz shift-right-click con ellos.
+	</tileselect>
+	<jetpack>
+		El jetpack te perimte volar, haciendo la construccion y navegacion (o incluso el combate) mucho mas facil. Consume una buena cantidad de combustible, asi que manten un ojo en el indicador de gasolina. Usar jet fuel proporciona una empujon, asi como añadir una turbina de gas. Tambien, añadir tres lingotes en lo alto de la mesa de trabajo añade un ala, ayudando a deslizarse.
+	
+		El bedrock chestplate puede ser combinado con el jetpack para obtener tanto la habilidad de volar como la proteccion del peto. Debido a la masa adicional, es ligeramente menos potente y responde un poco mas lentamente.
+	</jetpack>
+	<steeltools>
+		El HSLA puede ser transformado en herramientas. Estas herramientas tienen 600 usos, pero para todo lo demas equivalen a las herramientas de hierro.
+	</steeltools>
+	<steelarmor>
+		La armadura tambien puede ser hecha de HSLA steel. Proporciona una proteccion ligeramente superior a la del peto de hierro y dura bastante mas.
+	</steelarmor>
+	<itempump>
+		La spring-powered pump permite coger grandes cantidades de liquido del mundo para meterlas en su deposito interno. Este liquido puede ser despues depositado en un tank con right-clicking en el.
+	</itempump>
+	<jumpboots>
+		Spring Boots da al que lo lleva gran agilidad y movilidad al incrementar su altura de salto y velocidad de carrera. Tambien sirven como amortiguadores, reduciendo el daño por caida.
+	</jumpboots>
+	<tanks>
+		Los Backup fuel tanks te permite llevar un poco de combustible extra para cosas como el jetpack en caso de emergencia. Pueden ser rellenados en la filling station. Hacer right-click para vaciarlos en su item objetivo.
+	</tanks>
+	<disk>
+		El music disc te permite copiar musica entre cajas de musica. Haz right-click a una caja de musica programada con un disco vacio para crear una copia escrita; haciendo right-click a una caja de musica con un disco escrito sobreescribe la caja de musica con el contenido del disco.
+	</disk>
+</tools>
