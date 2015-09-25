@@ -197,7 +197,7 @@ ConditionalOperation, DamagingContact {
 			if (ConfigRegistry.INSTACUT.getState()) {
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
 				this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
-				c.setBlock(world, Blocks.air, 0, 2); //2, not 3, since do not want to trigger block update
+				c.setBlock(world, Blocks.air);
 				if (mat == Material.leaves)
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
 				else
@@ -233,7 +233,7 @@ ConditionalOperation, DamagingContact {
 					if (!world.isRemote) {
 						world.spawnEntityInWorld(e);
 					}
-					c.setBlock(world, Blocks.air, 0, 2);
+					c.setBlock(world, Blocks.air);
 				}
 				else {
 

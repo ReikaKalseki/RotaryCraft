@@ -21,7 +21,7 @@ public enum DifficultyEffects {
 	BEDROCKDUST(3, 2, 1),
 	PIPECRAFT(32, 16, 8),
 	PARTCRAFT(6, 3, 2),
-	BELTCRAFT(3, 2, 1),
+	BELTCRAFT(16, 8, 2),
 	COMPACTOR(2, 2, 1),
 	SMALLERCRAFT(2, 2, 1),
 	BONUSSTEEL(2D, 1D, 0.5D),
