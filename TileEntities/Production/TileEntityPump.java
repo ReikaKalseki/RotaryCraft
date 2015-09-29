@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Production;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +20,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -116,17 +119,17 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public void harvest(World world, int x, int y, int z, Coordinate loc) {
 		if (world.isRemote)
 			return;
-		if (!this.isSource(world, loc.xCoord, loc.yCoord, loc.zCoord))
+		FluidStack fs = ReikaWorldHelper.getDrainableFluid(world, loc.xCoord, loc.yCoord, loc.zCoord);
+		if (fs == null)
 			return;
-		if (tank.getLevel() >= CAPACITY)
+		if (fs == null || !tank.canTakeIn(fs))
 			return;
-		Block liqid = world.getBlock(loc.xCoord, loc.yCoord, loc.zCoord);
-		Fluid fluid = FluidRegistry.lookupFluidForBlock(liqid);
+		Fluid f = fs.getFluid();
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc.xCoord, loc.yCoord, loc.zCoord, world.getBlock(loc.xCoord, loc.yCoord, loc.zCoord)));
-		if (!ReikaWorldHelper.is1p9InfiniteLava(world, loc.xCoord, loc.yCoord, loc.zCoord))
+		if (f != FluidRegistry.LAVA || !ReikaWorldHelper.is1p9InfiniteLava(world, loc.xCoord, loc.yCoord, loc.zCoord))
 			world.setBlock(loc.xCoord, loc.yCoord, loc.zCoord, Blocks.air);
 		int mult = 1;
-		if (this.canMultiply(fluid)) {
+		if (this.canMultiply(f)) {
 			if (power/MINPOWER >= 16)
 				mult *= 2;
 			if (power/MINPOWER >= 64)
@@ -138,9 +141,9 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 			if (power/MINPOWER >= 4096)
 				mult *= 2;
 		}
-		if (fluid.equals(FluidRegistry.WATER))
+		if (f.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
-		tank.addLiquid(1000*mult, fluid);
+		tank.addLiquid(fs.amount*mult, f);
 		world.markBlockForUpdate(loc.xCoord, loc.yCoord, loc.zCoord);
 	}
 
@@ -153,29 +156,29 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public boolean isSource(World world, int x, int y, int z) {
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d, %d, %d, %d", x,y,z,(int)id));
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, x, y, z, 49);
-		boolean dmg0 = (world.getBlockMetadata(x, y, z) == 0);
 		Block liqid = world.getBlock(x, y, z);
-		if (liqid == Blocks.air)
+		if (!(liqid instanceof BlockFluidBase || liqid instanceof BlockLiquid))
 			return false;
+		boolean srcmeta = liqid instanceof BlockFluidFinite ? world.getBlockMetadata(x, y, z) == 7 : world.getBlockMetadata(x, y, z) == 0;
 		Fluid f2 = FluidRegistry.lookupFluidForBlock(liqid);
 		Fluid f = tank.getActualFluid();
 		if (f2 == null)
 			return false;
-		boolean liq = (f2.equals(f) || f == null);
+		boolean liq = f2.equals(f) || f == null;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.valueOf(liq)+"  "+String.valueOf(dmg0));
-		return (dmg0 && liq);
+		return srcmeta && liq;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 1:
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.WEST;
-			break;
-		case 0:
-			read = ForgeDirection.NORTH;
-			read2 = ForgeDirection.SOUTH;
-			break;
+			case 1:
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.WEST;
+				break;
+			case 0:
+				read = ForgeDirection.NORTH;
+				read2 = ForgeDirection.SOUTH;
+				break;
 		}
 	}
 

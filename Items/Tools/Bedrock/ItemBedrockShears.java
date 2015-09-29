@@ -130,7 +130,7 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 		}
 	}
 
-	private int getDroppedMeta(Block id, int meta) {
+	public static int getDroppedMeta(Block id, int meta) {
 		if (id == Blocks.leaves || id == Blocks.leaves2)
 			return meta&3;
 		if (id == Blocks.vine)

@@ -60,12 +60,12 @@ public class RenderPump extends RotaryTERenderer
 
 		if (tile.isInWorld()) {
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 90;
-				break;
-			case 1:
-				var11 = 0;
-				break;
+				case 0:
+					var11 = 90;
+					break;
+				case 1:
+					var11 = 0;
+					break;
 			}
 
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
@@ -100,6 +100,8 @@ public class RenderPump extends RotaryTERenderer
 	}
 
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
+		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glColor3f(1, 1, 1);
@@ -119,22 +121,21 @@ public class RenderPump extends RotaryTERenderer
 			v += offset;
 			du -= offset;
 			dv -= offset;
-			double h = 0.625;
+			double h = 0.3125+0.375*tr.getLevel()/tr.CAPACITY;
 			Tessellator v5 = Tessellator.instance;
 			if (f.getLuminosity() > 0)
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
-			v5.addVertexWithUV(inset, h, inset, u, v);
-			v5.addVertexWithUV(1-inset, h, inset, du, v);
-			v5.addVertexWithUV(1-inset, h, 1-inset, du, dv);
 			v5.addVertexWithUV(inset, h, 1-inset, u, dv);
+			v5.addVertexWithUV(1-inset, h, 1-inset, du, dv);
+			v5.addVertexWithUV(1-inset, h, inset, du, v);
+			v5.addVertexWithUV(inset, h, inset, u, v);
 			v5.draw();
 			ReikaRenderHelper.enableLighting();
 		}
-		GL11.glTranslated(-par2, -par4, -par6);
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopAttrib();
+		GL11.glPopMatrix();
 	}
 
 	@Override

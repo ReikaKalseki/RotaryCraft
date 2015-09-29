@@ -1093,6 +1093,8 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			return true;
 		if (this.isPipe())
 			return true;
+		if (this == PUMP)
+			return true;
 		return false;
 	}
 

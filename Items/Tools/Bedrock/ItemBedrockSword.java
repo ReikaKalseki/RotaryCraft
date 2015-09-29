@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -37,6 +38,8 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
@@ -131,6 +134,10 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 			if (target.isDead || target.getHealth() <= 0) {
 				if (itemRand.nextInt(5) == 0) {
 					ReikaEntityHelper.dropHead(target);
+				}
+				if (target instanceof EntityLiving) {
+					int xp = (int)(((EntityLiving)target).experienceValue*ReikaRandomHelper.getRandomBetween(1, 10));
+					ReikaWorldHelper.splitAndSpawnXP(target.worldObj, target.posX, target.posY+itemRand.nextDouble()*target.height, target.posZ, xp);
 				}
 			}
 		}

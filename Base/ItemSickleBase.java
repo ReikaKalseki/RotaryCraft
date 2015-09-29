@@ -30,6 +30,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
 
 public abstract class ItemSickleBase extends ItemRotaryTool {
 
@@ -217,9 +218,9 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 							Block b2 = id2;
 							if (this.canActAsShears()) {
 								if (b2.canSilkHarvest(world, ep, x, y, z, meta2))
-									ReikaItemHelper.dropItem(world, x+i+0.5, y+j+0.5, z+k+0.5, new ItemStack(id2, 1, meta2));
+									ReikaItemHelper.dropItem(world, x+i+0.5, y+j+0.5, z+k+0.5, new ItemStack(id2, 1, ItemBedrockShears.getDroppedMeta(id2, meta2)));
 								else if (b2 instanceof IShearable)
-									ReikaItemHelper.dropItem(world, x+i+0.5, y+j+0.5, z+k+0.5, new ItemStack(id2, 1, meta2));
+									ReikaItemHelper.dropItem(world, x+i+0.5, y+j+0.5, z+k+0.5, new ItemStack(id2, 1, ItemBedrockShears.getDroppedMeta(id2, meta2)));
 								else
 									b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
 							}
