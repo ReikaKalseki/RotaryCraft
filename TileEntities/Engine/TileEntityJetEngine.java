@@ -898,7 +898,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	}
 
 	@Override
-	public void upgrade() {
+	public void upgrade(ItemStack is) {
 		canAfterBurn = true;
 	}
 

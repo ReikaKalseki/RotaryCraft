@@ -126,7 +126,7 @@
 	</pump>
 	<reservoir>
 		<desc>
-			El reservoir es un simple tanqe para almacenar cualquier liquido, con una capacidad de %d metros cubicos (cubos). Se le puede hacer boton derecho con un cubo para añadir o quitar liquido, y si esta lleno de agua, las botellas se pueden llenar de el. Adicionalmente, puede unirse horizontalmente para formar grandes depositos.
+			El reservoir es un simple tanqe para almacenar cualquier liquido, con una capacidad de %d metros cubicos (cubos). Se le puede hacer boton derecho con un cubo para verter o quitar liquido, y si esta lleno de agua, las botellas se pueden llenar de el. Adicionalmente, puede unirse horizontalmente para formar grandes depositos.
 		</desc>
 		<note>
 			Capacidad: %d m^3 por cada bloque
@@ -232,7 +232,7 @@
 	</obsidian>
 	<playerdetector>
 		<desc>
-			El player detector hace excatamente lo que su nombre indica - cuando un jugador entra dentro de su rango configurable, emitira una señal de redstone. El rango maximo es determinado por la entrada de potencia, y el tiempo de respuesta del detector - el retardo entre el jugador entrando dentro del rango y la emision de la señal - es dependiente de la velocidad de entrada. 
+			El player detector hace excatamente lo que su nombre indica - cuando un jugador entra dentro de su rango configurable, emitira una corriente de redstone. El rango maximo es determinado por la entrada de potencia, y el tiempo de respuesta del detector - el retardo entre el jugador entrando dentro del rango y la emision de la corriente - es dependiente de la velocidad de entrada. 
 		</desc>
 		<note>
 			Rango = (Potencia)/%d m
@@ -280,7 +280,7 @@
 	</woodcutter>
 	<ecu>
 		<desc>
-			El engine controller puede decelerar los motores alimentados con fuel. Cuando se desaceleran, emiten el mismo par, pero a una fraccion de la velocidad. El beneficio radica en que consumen el combustible mas lentamente; veocidades inferiores tienen mejor eficiencia que velocidades superiores, aunque los turbine engine no lo ven como un beneficio. Los modos se cambian al hacer click derecho al ECU con un screwdriver. El ECU tambien puede aceptar señales de redstone, que apagaran el motor por completo.
+			El engine controller puede decelerar los motores alimentados con fuel. Cuando se desaceleran, emiten el mismo par, pero a una fraccion de la velocidad. El beneficio radica en que consumen el combustible mas lentamente; veocidades inferiores tienen mejor eficiencia que velocidades superiores, aunque los turbine engine no lo ven como un beneficio. Los modos se cambian al hacer click derecho al ECU con un screwdriver. El ECU tambien puede aceptar corrientes de redstone, que apagaran el motor por completo.
 		</desc>
 		<note>
 			Modos disponibles:
@@ -317,7 +317,7 @@
 	</tntcannon>
 	<sonicweapon>
 		<desc>
-			El sonic weapon es un arma a distancia diseñada para proporcionar proteccion ante mobs hostiles y jugadores. A volumenes cada vez superiores (gracias a mayores pares de entrada), puede causar efectos cada vez mas debilitadores a aquellos en su radio de accion, desde confusion hasta ceguera, llegando incluso a ahogar hasta la muerte. Esta maquina sigue la ley del inverso del cuadrado, y por ello la intensidad del sonido y la serveridad de sus efectos disminuyen de manera acorde.
+			El sonic weapon es un arma a distancia pensada para proporcionar proteccion ante mobs hostiles y jugadores. A volumenes cada vez superiores (gracias a mayores pares de entrada), puede causar efectos cada vez mas debilitadores a aquellos en su radio de accion, desde confusion hasta ceguera, llegando incluso a ahogar hasta la muerte. Esta maquina sigue la ley del inverso del cuadrado, y por ello la intensidad del sonido y la serveridad de sus efectos disminuyen de manera acorde.
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -337,7 +337,7 @@
 			Requisitos para acero: Carbon/coke a la izquierda, polvora abajo a la izquierda, arena arriba a la izquierda, hierro en los huecos centrales
 
 			Bonus: Las posibilidades incrementan segun los slots se llenan, maximo 50 por ciento
-			Mayor bonus por tamaño: Incrementa segun el numero de los slots ocupados se incrementa, maximo 100 por cien
+			Mayor bonus por volumen: Incrementa segun el numero de los slots ocupados se incrementa, maximo 100 por cien
 
 			Puntos de experiencia por lingote de acero: %.2f
 		</note>
@@ -365,7 +365,7 @@
 	</musicbox>
 	<mobharvester>
 		<desc>
-			El mob harvester esta diseñado para matar mobs como si se tratase de un jugador, so that normally player-only drops (such as Blaze Rods) can be automatically farmed. The machine will deal damage to mobs directly above it, with the amount depending on the Entrada de potencia.
+			El mob harvester esta pensado para matar mobs como si se tratase de un jugador, para que los drops que se sueltan solo a los jugadores (como la vara llameante) puedan ser automaticamente cosechados. La maquina herira a los mobs justo encima de si, dependiendo de la potencia de entrada.
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -384,7 +384,7 @@
 	</projector>
 	<railgun>
 		<desc>
-			El railgun es una arma defensiva muy potente. Utiliza fuertes campos magneticos para acelerar enormemente municion pesada contra el objetivo, provocando grandes cantidades de daño. Ten en cuenta que proyectiles mas pesados hacen mas daño, y pueden destruir zonas mas grandes de terreno. El railgun automaticamente apunta al mob enemigo visible mas cercano; para maxima eficiencia, ponlo donde tenga una clara vision de la zona de alrededor. Tambien puedes invertir el railgun para que apunte hacia abajo en vez de hacia arriba.
+			El railgun es una arma defensiva muy potente. Utiliza fuertes campos magneticos para acelerar enormemente municion pesada contra el objetivo, provocando grandes cantidades de destruccion. Ten en cuenta que proyectiles mas pesados hieren mas, y pueden destruir zonas mas grandes de terreno. El railgun automaticamente apunta al mob enemigo visible mas cercano; para maxima eficiencia, ponlo donde tenga una clara vision de la zona de alrededor. Tambien puedes invertir el railgun para que apunte hacia abajo en vez de hacia arriba.
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -427,7 +427,7 @@
 	</cavescanner>
 	<scalechest>
 		<desc>
-			El scaleable chest te permite almacenar tus cosas en un espacio pequeño. Su inventario escala con la potencia que recibe, hasta un maximo de %d stacks. Si la entrada de potencia baja o se pierde mientras hay objetos en los huecos ahora inaccesibles, permaneceran escondidos hasta que se restaure la potencia suficiente.
+			El scaleable chest te permite almacenar tus cosas en un espacio reducido. Su inventario escala con la potencia que recibe, hasta un maximo de %d stacks. Si la entrada de potencia baja o se pierde mientras hay objetos en los huecos ahora inaccesibles, permaneceran escondidos hasta que se restaure la potencia suficiente.
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -438,7 +438,7 @@
 	</scalechest>
 	<spiller>
 		<desc>
-			El liquid spiller esta diseñaod para llenar una depresion con liquido que se le alimente mediante tuberias. Cada cubo suministrado equivale a un cubo de liquido. Primero llena las capas inferiores.
+			El liquid spiller esta pensado para llenar una depresion con liquido que se le alimente mediante tuberias. Cada cubo suministrado equivale a un cubo de liquido. Primero llena las capas inferiores.
 		</desc>
 		<note>
 			Requiere liquido entubado para funcionar
@@ -465,7 +465,7 @@
 	</igniter>
 	<freezegun>
 		<desc>
-			El freeze gun es una arma no letal de defensa.  Apunta automaticamente a las amenzas, y las congela con un bloque de hielo, inmobilizandolas completamente mientras no causa ningun daño. El hielo es mas efectivo como municion que las bolas de nieve. Com el Railgun, esta maquina puede ser orientada boca abajo y es mas efectiva con un campo de vision limpio de los alrededores. Ten en cuenta que los enemigos congelados aun pueden atacar si te acercas a ellos.
+			El freeze gun es una arma no letal de defensa.  Apunta automaticamente a las amenzas, y las congela con un bloque de hielo, inmobilizandolas completamente mientras no causa ninguna herida. El hielo es mas efectivo como municion que las bolas de nieve. Com el Railgun, esta maquina puede ser orientada boca abajo y es mas efectiva con un campo de vision limpio de los alrededores. Ten en cuenta que los enemigos congelados aun pueden atacar si te acercas a ellos.
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -496,7 +496,7 @@
 	</containment>
 	<screen>
 		<desc>
-			El CCTV monitor es como las CCTV cameras son vistas. Simplemente añade un codigo de color añadiendo 3 tintes - que coincidan con las camaras CCTV que ya existan en el mundo - y haz shift boton derecho para usar la camara. 
+			El CCTV monitor es como las CCTV cameras son vistas. Simplemente ponle un codigo de color usando 3 tintes - que coincidan con las camaras CCTV que ya existan en el mundo - y haz shift boton derecho para usar la camara. 
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -533,7 +533,7 @@
 	</lasergun>
 	<itemcannon>
 		<desc>
-			El item cannon puede disparar objetos a traves del mapa sin dañarlos, lo que permite transporte en largas distancias casi instantaneo. Ten en cuanta que debes introducir las coordenadas de otro item cannon para recibir los objetos. 
+			El item cannon puede disparar objetos a traves del mapa sin destruirlos, lo que permite transporte en largas distancias casi instantaneo. Ten en cuanta que debes introducir las coordenadas de otro item cannon para recibir los objetos. 
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -553,7 +553,7 @@
 	</friction>
 	<landmine>
 		<desc>
-			El land mine es una trampa que puede ser depositada un bloque por debajo de la tierra. Requiere un muelle cargado, y a medida que su carga desaparece, el riesgo de detonaciones expontaneas incrementa. Efectos adicionales pueden ser añadidos poniendo TNT, polvo llameante, ojos de araña o cristales en los huecos de la derecha, y mas polvora en los huecos de la izquierda incrementan la fuerza explosiva. 
+			El land mine es una trampa que puede ser depositada un bloque por debajo de la tierra. Requiere un muelle cargado, y a medida que su carga desaparece, el riesgo de detonaciones expontaneas incrementa. Efectos adicionales pueden ser apilados poniendo TNT, polvo llameante, ojos de spider o cristales en los huecos de la derecha, y mas polvora en los huecos de la izquierda incrementan la fuerza explosiva. 
 		</desc>
 		<note>
 			Requiere un windspring cargado como fuente de potencia
@@ -597,7 +597,7 @@
 	</mirror>
 	<selfdestruct>
 		<desc>
-			El self-destruct machine puede detectar cuando la fuente de potencia es dañada, y liberar todo tipo de destruccion bajo la suposicion de que la base en la que reside haya sido dañada o destruida. 
+			El self-destruct machine puede detectar cuando la fuente de potencia es destruida, y liberar todo tipo de destruccion bajo la suposicion de que la base en la que reside haya sido destruida. 
 		</desc>
 		<note>
 			Detona con perdida de potencia
@@ -609,12 +609,12 @@
 			El cooling fin drena calor de las maquinas pra mantenerlas frias sin necesidad de sistemas de tuberias avanzados. 
 		</desc>
 		<note>
-			Provoca daño de contacto si se conecta a una maquina caliente
+			Provoca heridas de contacto si se conecta a una maquina caliente
 		</note>
 	</coolingfin>
 	<worktable>
 		<desc>
-			La worktable es la mesa de crafteo en la que todas las maquinas deben ser crafteadas, con la excepcion de la porpia worktable y la Blast Furnace. Simplemente usala como una mesa de crafteo ordinaria. Para montar los productos, da una señal de redstone o clica el item de la derecha. La workbench tambien es usada para recargar herramientas alimentadas por resortes. Simplemente pon un nuevo resorte y la herramienta a la izquierda, y coge los productos de la derecha. Al reves que una mesa de crafteo, la workbench almacena los objetos que contiene.
+			La worktable es la mesa de crafteo en la que todas las maquinas deben ser crafteadas, con la excepcion de la porpia worktable y la Blast Furnace. Simplemente usala como una mesa de crafteo ordinaria. Para montar los productos, da una corriente de redstone o clica el item de la derecha. La workbench tambien es usada para recargar herramientas alimentadas por resortes. Simplemente pon un nuevo resorte y la herramienta a la izquierda, y coge los productos de la derecha. Al reves que una mesa de crafteo, la workbench almacena los objetos que contiene.
 		</desc>
 		<note>
 			Necesario para fabricar cualquier maquina
@@ -659,7 +659,7 @@
 	</liquidconverter>
 	<display>
 		<desc>
-			El display screen es usado para mostrar un texto en una pantalla holografica, para cosas como mensajes de bienvenida del servidor. Requiere un resorte cargado para funcionar. Para añadir el texto, haz click derecho a la maquina con el libro, que no sera consumido. 
+			El display screen es usado para mostrar un texto en una pantalla holografica, para cosas como mensajes de bienvenida del servidor. Requiere un resorte cargado para funcionar. Para poner el texto, haz click derecho a la maquina con el libro, que no sera consumido. 
 		</desc>
 		<note>
 			La maquina puede mostrar codigos.
@@ -713,7 +713,7 @@
 	</linebuilder>
 	<arrowgun>
 		<desc>
-			La arrow gun es la evolucion del dispensador. Cuando se le proporciona potencia, detecta cualquier enemigo en frente, y le dispara un aflecha. Velocidades de entrada mayores equivalen a mas disparos por minuto, mientras que pares mayores  hacen que la flecha vuele mas rapido, mas lejos y que haga mas daño. 
+			La arrow gun es la evolucion del dispensador. Cuando se le proporciona potencia, detecta cualquier enemigo en frente, y le dispara un aflecha. Velocidades de entrada mayores equivalen a mas disparos por minuto, mientras que pares mayores  hacen que la flecha vuele mas rapido, mas lejos y que provoque heridas mayores. 
 		</desc>
 		<note>
 			Potencia requerida: %dW
@@ -831,7 +831,7 @@
 	</fuelline>
 	<valve>
 		<desc>
-			Las valve pipe, como otros tipos de pipe, extraen liquidos de los reservoirs colocados bajo ellas. Sin embargo, la valve pipe permanece inerte hasta que recibe una señal de redstone.
+			Las valve pipe, como otros tipos de pipe, extraen liquidos de los reservoirs colocados bajo ellas. Sin embargo, la valve pipe permanece inerte hasta que recibe una corriente de redstone.
 		</desc>
 		<note>
 			No olvides vaciar por completo las tuberias antes de moverlas o quitarlas para no perder el liquido almacenado.
@@ -847,7 +847,7 @@
 	</bypass>
 	<separation>
 		<desc>
-			La separator pipe puede ser usada para distribuir liquidos acorde a una señal de redstone. Admite los liquidos lateralmente, y los extrae hacia arriba o hacia abajo, dependiendo de si esta recibiendo potencia. Transmitira los liquidos hacia ariba cuando reciba potencia.
+			La separator pipe puede ser usada para distribuir liquidos acorde a una corriente de redstone. Admite los liquidos lateralmente, y los extrae hacia arriba o hacia abajo, dependiendo de si esta recibiendo potencia. Transmitira los liquidos hacia ariba cuando reciba potencia.
 		</desc>
 		<note>
 		</note>
@@ -957,7 +957,7 @@
 	</distiller>
 	<suction>
 		<desc>
-			La suction pipe succiona fluidos de tanques y maquinas de otros mods. No esta diseñada para ser conectada a otro sistema de tuberias,, o a maquinas de RotaryCraft.
+			La suction pipe succiona fluidos de tanques y maquinas de otros mods. No esta pensada para ser conectada a otro sistema de tuberias,, o a maquinas de RotaryCraft.
 		</desc>
 		<note>
 			No olvides vaciar por completo las tuberias antes de moverlas o quitarlas par no perder el liquido almacenado.
@@ -1039,7 +1039,7 @@
 	</blower>
 	<refrigerator>
 		<desc>
-			La refrigeration unit es usada para enfriar el aire hasta el punto de que algunos componentes se condensen o congelen. Asi es como se producen el hielo seco y el nitrogeno liquido. Ten en cuenta que hace falta añadir hielo para enfriar el aire.
+			La refrigeration unit es usada para enfriar el aire hasta el punto de que algunos componentes se condensen o congelen. Asi es como se producen el hielo seco y el nitrogeno liquido. Ten en cuenta que hace falta incluir hielo para enfriar el aire.
 		</desc>
 		<note>
 			Entrada de potencia: Detras
@@ -1077,7 +1077,7 @@
 	</crafter>
 	<antiair>
 		<desc>
-			Como una version especializada mas barata que el RailGun, el AntiAir Gun dispara basura a mobs voladores como forma de defensa. Solo provoca un corazon de daño por impacto, pero puede disparar 3 balas por segundo,y la municion es mucho mas barata que la del railgun.
+			Como una version especializada mas barata que el RailGun, el AntiAir Gun dispara basura a mobs voladores como forma de defensa. Solo provoca un corazon de herida por impacto, pero puede disparar 3 balas por segundo,y la municion es mucho mas barata que la del railgun.
 		</desc>
 		<note>
 			Potencia requerida: %dW

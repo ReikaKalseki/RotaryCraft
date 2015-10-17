@@ -2,7 +2,7 @@
 <engines>
 	<dc>
 		<desc>
-			El motor de corriente continua (CC) es el mas simple de hacer y operar. Todo lo que requiere es una señal continua de redstone de cualquier fuerza. Esta facilidad viene acompañada de un coste, sin embargo - estos motores son los mas debiles de todos, proporcionando %d Nm de par a %d rad/s, produciendo %.3fkW de potencia.
+			El motor de corriente continua (CC) es el mas simple de hacer y operar. Todo lo que requiere es una corriente continua de redstone de cualquier fuerza. Esta facilidad viene seguida de un coste, sin embargo - estos motores son los mas debiles de todos, proporcionando %d Nm de par a %d rad/s, produciendo %.3fkW de potencia.
 		</desc>
 		<note>
 			Par: %d Nm
@@ -15,7 +15,7 @@
 	</dc>
 	<wind>
 		<desc>
-			El molino de viento usa el aire para generar potencia rotativa.Debido a la baja densidad del aire, no genera mucho par (solo %d Nm), pero su diseño le permite girar an unas velocidades de %d rad/s, produciendo un total de %.3fkW a la maxima eficiencia. max efficiency. Notese que la eficiencia de este motor solo se maximiza cuando se logra en zonas elevadas y abiertas. Objetos y bloques pueden obstruir las aspas del motor.
+			El molino de viento usa el aire para generar potencia rotativa.Debido a la baja densidad del aire, no genera mucho par (solo %d Nm), pero su construccion le permite girar an unas velocidades de %d rad/s, produciendo un total de %.3fkW a la maxima eficiencia. max efficiency. Notese que la eficiencia de este motor solo se maximiza cuando se logra en zonas elevadas y abiertas. Objetos y bloques pueden obstruir las aspas del motor.
 		</desc>
 		<note>
 			Par: %d Nm
@@ -55,7 +55,7 @@
 	</gas>
 	<ac>
 		<desc>
-			El motor de corriente alterna (CA), como su primo CC, requiere una señal de redstone para funcionar. Sin embargo, este necesita una señal alterna, proporcionada mediante un reloj de redstone. Ciclos de tiempo mas rapidos corresponden a una potencia de salida mas consistente, produciendo %d Nm a %d rad/s (%.3fkW) con dos relojes. Este meotor requiere un nucleo magnetizado, que se desmagnetiza gradualmente.
+			El motor de corriente alterna (CA), como su primo CC, requiere una corriente de redstone para funcionar. Sin embargo, este necesita una corriente alterna, proporcionada mediante un reloj de redstone. Ciclos de tiempo mas rapidos corresponden a una potencia de salida mas consistente, produciendo %d Nm a %d rad/s (%.3fkW) con dos relojes. Este meotor requiere un nucleo magnetizado, que se desmagnetiza gradualmente.
 		</desc>
 		<note>
 			Par: %d Nm
@@ -125,12 +125,12 @@
 			Potencia: %.3fMW
 			Fuente de poder: Jet Fuel
 			Requiere consumibles: Jet Fuel
-			Riesgos: Ingestion; Posible fallo violento si se daña
+			Riesgos: Ingestion; Posible fallo violento si se estropea
 		</note>
 	</jet>
 	<solar>
 		<desc>
-			La planta solar es unica en cuanto a que su tamaño, y por lo tanto su potencia de salida, son escalables. Simplemente construye una torre de dos bloques, y rodea la base con espejos. Mas espejos y una torre mas alta significa mas potencia. Ten en cuenta que la potencia se extrae por debajo de la torre, y el agua debe ser proporcionada. Los espejos debe estar conectados (posiblemente mediante otros espejos) a la torre para funcionar.
+			La planta solar es unica en cuanto a que su volumen, y por lo tanto su potencia de salida, son escalables. Simplemente construye una torre de dos bloques, y rodea la base con espejos. Mas espejos y una torre mas alta significa mas potencia. Ten en cuenta que la potencia se extrae por debajo de la torre, y el agua debe ser proporcionada. Los espejos debe estar conectados (posiblemente mediante otros espejos) a la torre para funcionar.
 		</desc>
 		<note>
 			Par: Escalable

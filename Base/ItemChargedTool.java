@@ -68,8 +68,8 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack is) {
-		return super.getItemStackDisplayName(is)+" ("+is.getItemDamage()+" kJ)";
+	public final String getItemStackDisplayName(ItemStack is) {
+		return super.getItemStackDisplayName(is);
 	}
 
 }

@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -122,6 +123,10 @@ public class RotaryRegistration {
 		FluidRegistry.registerFluid(RotaryCraft.nitrogenFluid);
 		FluidRegistry.registerFluid(RotaryCraft.poisonFluid);
 		FluidRegistry.registerFluid(RotaryCraft.hslaFluid);
+
+		ReikaFluidHelper.registerNameSwap("lubricant", "rc lubricant");
+		ReikaFluidHelper.registerNameSwap("jet fuel", "rc jet fuel");
+		ReikaFluidHelper.registerNameSwap("liquid nitrogen", "rc liquid nitrogen");
 
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.lubeFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(0), new ItemStack(Items.bucket));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(RotaryCraft.jetFuelFluid, FluidContainerRegistry.BUCKET_VOLUME), ItemRegistry.BUCKET.getStackOfMetadata(1), new ItemStack(Items.bucket));

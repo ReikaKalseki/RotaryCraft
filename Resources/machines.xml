@@ -815,14 +815,14 @@
 	</hose>
 	<pipe>
 		<desc>
-			Pipes carry liquids from pumps to machines or reservoirs. A pipe can hold an unlimited amount internally, but can only store one liquid at a time, and must be emptied before changing contents. Due to corrosion concerns, pipes cannot carry jet fuel or fluorine-based fluids.
+			Pipes carry liquids from pumps to machines or reservoirs. A pipe can hold an almost unlimited amount internally, but can only store one liquid at a time, and must be emptied before changing contents. Due to corrosion concerns, pipes cannot carry jet fuel or fluorine-based fluids.
 		</desc>
 		<note>
 		</note>
 	</pipe>
 	<fuelline>
 		<desc>
-			Fuel lines carry ethanol or jet fuel to the engines and furnaces that require it. Once connected to a source, they will automatically start to fill themselves from it, and if connected to a target, will automatically empty themselves into it. They have an infinite capacity, so caution is recommended when breaking them, to avoid destroying large quantities of stored fuel.
+			Fuel lines carry ethanol or jet fuel to the engines and furnaces that require it. Once connected to a source, they will automatically start to fill themselves from it, and if connected to a target, will automatically empty themselves into it. They have a nearly infinite capacity, so caution is recommended when breaking them, to avoid destroying large quantities of stored fuel.
 		</desc>
 		<note>
 		</note>
@@ -960,7 +960,7 @@
 	</suction>
 	<dynamo>
 		<desc>
-			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Due to the limitations imposed by the internal magnetic fields, it can take a maximum of %d Nm of torque at a maximum of %d rad/s. Any excess, while not dangerous, will be wasted.
+			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Due to the limitations imposed by the internal magnetic fields, it can take a maximum of %d Nm of torque (%d Nm if upgraded) at a maximum of %d rad/s. Any excess, while not dangerous, will be wasted.
 		</desc>
 		<note>
 			Orientation and Output: Like ThermalExpansion Dynamos

@@ -17,4 +17,6 @@ public interface FrictionHeatable {
 
 	public int getMaxTemperature();
 
+	public void resetAmbientTemperatureTimer();
+
 }

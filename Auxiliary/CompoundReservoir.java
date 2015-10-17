@@ -100,7 +100,7 @@ public class CompoundReservoir {
 			hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null;
 			hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null;
 			if (hot) {
-				boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("jet fuel"));
+				boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("rc jet fuel"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("biofuel")) || f.equals(FluidRegistry.getFluid("bioethanol"));

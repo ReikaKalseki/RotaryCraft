@@ -71,6 +71,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.TimeTorchHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper.CustomTinkerMaterial;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler.Pulses;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler.ToolParts;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
@@ -155,10 +156,10 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final ArmorMaterial BEDROCK = EnumHelper.addArmorMaterial("Bedrock", Integer.MAX_VALUE, new int[]{6, 12, 10, 5}, 18);
 	public static final ArmorMaterial HSLA = EnumHelper.addArmorMaterial("HSLA", 24, new int[]{3, 7, 5, 3}, ArmorMaterial.IRON.getEnchantability());
 
-	public static final EnhancedFluid jetFuelFluid = (EnhancedFluid)new EnhancedFluid("jet fuel").setColor(0xFB5C90).setDensity(810).setViscosity(800);
-	public static final EnhancedFluid lubeFluid = (EnhancedFluid)new EnhancedFluid("lubricant").setColor(0xE4E18E).setDensity(750).setViscosity(1200);
+	public static final EnhancedFluid jetFuelFluid = (EnhancedFluid)new EnhancedFluid("rc jet fuel").setColor(0xFB5C90).setDensity(810).setViscosity(800);
+	public static final EnhancedFluid lubeFluid = (EnhancedFluid)new EnhancedFluid("rc lubricant").setColor(0xE4E18E).setDensity(750).setViscosity(1200);
 	public static final EnhancedFluid ethanolFluid = (EnhancedFluid)new EnhancedFluid("rc ethanol").setColor(0x5CC5B2).setDensity(789).setViscosity(950).setTemperature(340);
-	public static final EnhancedFluid nitrogenFluid = (EnhancedFluid)new EnhancedFluid("liquid nitrogen").setColor(0xB37ECC).setDensity(808).setViscosity(158).setTemperature(77);
+	public static final EnhancedFluid nitrogenFluid = (EnhancedFluid)new EnhancedFluid("rc liquid nitrogen").setColor(0xB37ECC).setDensity(808).setViscosity(158).setTemperature(77);
 	public static final Fluid poisonFluid = new Fluid("poison"); //for defoliator
 	public static final Fluid hslaFluid = new EnhancedFluid("molten hsla").setColor(0xF0B564).setTemperature(1873).setDensity(7000).setViscosity(6100); //for TiC
 
@@ -462,10 +463,10 @@ public class RotaryCraft extends DragonAPIMod {
 			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.WORKTABLE.getCraftedProduct());
 		}
 
-		SensitiveFluidRegistry.instance.registerFluid("jet fuel");
+		SensitiveFluidRegistry.instance.registerFluid("rc jet fuel");
 		SensitiveFluidRegistry.instance.registerFluid("rc ethanol");
-		SensitiveFluidRegistry.instance.registerFluid("lubricant");
-		SensitiveFluidRegistry.instance.registerFluid("liquid nitrogen");
+		SensitiveFluidRegistry.instance.registerFluid("rc lubricant");
+		SensitiveFluidRegistry.instance.registerFluid("rc liquid nitrogen");
 		SensitiveFluidRegistry.instance.registerFluid("molten hsla");
 
 		MinetweakerHooks.instance.registerClass(GrinderTweaker.class);
@@ -511,7 +512,7 @@ public class RotaryCraft extends DragonAPIMod {
 					bee.register();
 					bee.addBreeding("Meadows", "Cultivated", 20);
 					RecipeManagers.centrifugeManager.addRecipe(30, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
-					FluidStack fs = new FluidStack(FluidRegistry.getFluid("lubricant"), 20); //was 150
+					FluidStack fs = new FluidStack(FluidRegistry.getFluid("rc lubricant"), 20); //was 150
 					RecipeManagers.squeezerManager.addRecipe(30, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
 				}
 				catch (Exception e) {
@@ -519,7 +520,7 @@ public class RotaryCraft extends DragonAPIMod {
 				}
 			}
 
-			if (ModList.TINKERER.isLoaded()) {
+			if (ModList.TINKERER.isLoaded() && (Pulses.TOOLS.isLoaded() || Pulses.WEAPONS.isLoaded())) {
 				int id = ExtraConfigIDs.BEDROCKID.getValue();
 				CustomTinkerMaterial mat = TinkerMaterialHelper.instance.createMaterial(id, this, "Bedrock");
 				mat.durability = 1000000;
@@ -537,7 +538,8 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.setDisallowCheatedParts();
 
 				mat.register(true).registerTexture("tinkertools/bedrock/bedrock", false);
-				//mat.registerPatternBuilder(ItemStacks.bedingot).registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
+				//mat.registerPatternBuilder(ItemStacks.bedingot);
+				mat.registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
 
 				id = ExtraConfigIDs.HSLAID.getValue();
 				mat = TinkerMaterialHelper.instance.createMaterial(id, this, "HSLA");
@@ -555,7 +557,8 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.setDisallowCheatedParts();
 
 				mat.register(true).registerTexture("tinkertools/hsla/hsla", false);
-				//mat.registerPatternBuilder(ItemStacks.bedingot).registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
+				//mat.registerPatternBuilder(ItemStacks.bedingot);
+				mat.registerWeapons(ItemStacks.steelblock, 8, 0.75F, 2F, 2.5F, 8F, 0.015F);
 				mat.registerSmelteryCasting(ItemStacks.steelingot, hslaFluid, 750, ItemStacks.steelblock);
 			}
 

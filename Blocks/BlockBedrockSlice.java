@@ -74,32 +74,24 @@ public class BlockBedrockSlice extends BlockBasic
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, var6, 1.0F);
 	}
 
-	/**
-	 * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-	 * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this Blocks.
-	 */
 	@Override
-	public boolean isOpaqueCube()
-	{
+	public boolean isOpaqueCube() {
 		return false;
 	}
 
 	@Override
-	public boolean renderAsNormalBlock()
-	{
+	public boolean renderAsNormalBlock() {
 		return false;
 	}
 
 	@Override
-	public boolean canPlaceBlockAt(World world, int x, int y, int z)
-	{
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 		Block var5 = world.getBlock(x, y - 1, z);
 		return var5 != Blocks.air && (var5 == Blocks.leaves || var5 == Blocks.leaves2 || var5.isOpaqueCube()) ? ReikaWorldHelper.getMaterial(world, x, y - 1, z).blocksMovement() : false;
 	}
 
 	@Override
-	public Item getItemDropped(int par1, Random xRandom, int y)
-	{
+	public Item getItemDropped(int par1, Random xRandom, int y) {
 		return null;
 	}
 
@@ -139,4 +131,42 @@ public class BlockBedrockSlice extends BlockBasic
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
 		return 0;
 	}
+	/*
+	@Override
+	public boolean hasTileEntity(int meta) {
+		return true;
+	}
+
+	@Override
+	public TileEntity createTileEntity(World world, int meta) {
+		return new TileEntityBedrockSlice();
+	}
+
+	public static class TileEntityBedrockSlice extends TileEntity {
+
+		public float dustYield = 1;
+
+		@Override
+		public boolean canUpdate() {
+			return false;
+		}
+
+		@Override
+		public void readFromNBT(NBTTagCompound NBT) {
+			super.readFromNBT(NBT);
+			dustYield = NBT.getFloat("yield");
+		}
+
+		@Override
+		public void writeToNBT(NBTTagCompound NBT) {
+			super.writeToNBT(NBT);
+			NBT.setFloat("yield", dustYield);
+		}
+
+		@Override
+		public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
+			return oldBlock != newBlock;
+		}
+
+}*/
 }

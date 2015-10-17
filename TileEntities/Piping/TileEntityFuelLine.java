@@ -26,7 +26,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 	private Fluid fluid;
 
 	private boolean isAcceptableFuel(Fluid f) {
-		if (f.equals(FluidRegistry.getFluid("jet fuel")))
+		if (f.equals(FluidRegistry.getFluid("rc jet fuel")))
 			return true;
 		if (f.equals(FluidRegistry.getFluid("rc ethanol")))
 			return true;

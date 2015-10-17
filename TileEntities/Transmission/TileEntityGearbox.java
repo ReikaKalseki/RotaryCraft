@@ -57,7 +57,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	private MaterialRegistry type;
 
-	private HybridTank tank = new HybridTank("gear", 24000);
+	private final HybridTank tank = new HybridTank("gear", 24000);
 	private boolean failed;
 
 	private int temperature;
@@ -526,7 +526,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from != (isFlipped ? ForgeDirection.DOWN : ForgeDirection.UP) && fluid.equals(FluidRegistry.getFluid("lubricant"));
+		return from != (isFlipped ? ForgeDirection.DOWN : ForgeDirection.UP) && fluid.equals(FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	@Override
@@ -544,7 +544,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public void setLubricant(int amt) {
-		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
+		tank.setContents(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	public void fillWithLubricant() {
@@ -556,7 +556,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public void addLubricant(int amt) {
-		tank.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+		tank.addLiquid(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	public void clearLubricant() {

@@ -39,7 +39,7 @@ public class RotaryNames {
 	};
 
 	private static final String[] liquidNames = {
-		"fluid.lubricant", "fluid.jet fuel", "fluid.rc ethanol", "fluid.liquid nitrogen", "fluid.molten hsla"
+		"fluid.rc lubricant", "fluid.rc jet fuel", "fluid.rc ethanol", "fluid.rc liquid nitrogen", "fluid.molten hsla"
 	};
 
 	private static final String[] canolaNames = {

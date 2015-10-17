@@ -92,10 +92,10 @@ public class TorqueUsage {
 				else {
 					TileEntity di = spl.getAdjacentTileEntity(spl.getWriteDirection()); //records both outputs
 					TileEntity di2 = spl.getAdjacentTileEntity(spl.getWriteDirection2());
-					if (!TEMap.containsKey(di) && isPoweredFrom(world, di)) { //calls the recursion first with one output, then with the other
+					if (di != null && !TEMap.containsKey(di) && isPoweredFrom(world, di)) { //calls the recursion first with one output, then with the other
 						addToList(di, tile);
 					}
-					if (!TEMap.containsKey(di2) && isPoweredFrom(world, di2)) {
+					if (di2 != null && !TEMap.containsKey(di2) && isPoweredFrom(world, di2)) {
 						addToList(di2, tile);
 					}
 				}
@@ -312,7 +312,7 @@ public class TorqueUsage {
 			pass.add(loc);
 			if (te instanceof TileEntityIOMachine) {
 				TileEntityIOMachine io = (TileEntityIOMachine)te;
-				if (io.canTransmitPower()) {
+				if (io.canTransmitPower() && canReadFrom(io, tile)) {
 					if (io.getWriteDirection() != null) {
 						count = recursiveCount(io, io.getWriteDirection(), count);
 					}
@@ -332,5 +332,10 @@ public class TorqueUsage {
 		}
 		count++;
 		return count;
+	}
+
+	private static boolean canReadFrom(TileEntityIOMachine te, TileEntityIOMachine input) {
+		//ForgeDirection dir = ReikaDirectionHelper.getDirectionBetween(input.xCoord, input.yCoord, input.zCoord, te.xCoord, te.yCoord, te.zCoord);
+		return te.getReadTileEntity() == input || te.getReadTileEntity2() == input || te.getReadTileEntity3() == input || te.getReadTileEntity4() == input;
 	}
 }

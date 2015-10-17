@@ -58,7 +58,7 @@ public class JetpackFuelOverlay {
 						float dy = h*f;
 						//ReikaJavaLibrary.pConsole(1-frac);
 						float u = w;
-						if (fluid != null && fluid.equals(FluidRegistry.getFluid("jet fuel")))
+						if (fluid != null && fluid.equals(FluidRegistry.getFluid("rc jet fuel")))
 							u += w;
 						GL11.glEnable(GL11.GL_BLEND);
 						v5.startDrawingQuads();

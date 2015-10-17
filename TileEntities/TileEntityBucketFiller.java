@@ -36,12 +36,12 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 
 	public static final int CAPACITY = 24000;
 
-	private HybridTank tank = new HybridTank("bucketfiller", CAPACITY);
+	private final HybridTank tank = new HybridTank("bucketfiller", CAPACITY);
 
 	public static final Fluid WATER = FluidRegistry.WATER;
 	public static final Fluid LAVA = FluidRegistry.LAVA;
-	public static final Fluid JETFUEL = FluidRegistry.getFluid("jet fuel");
-	public static final Fluid LUBRICANT = FluidRegistry.getFluid("lubricant");
+	public static final Fluid JETFUEL = FluidRegistry.getFluid("rc jet fuel");
+	public static final Fluid LUBRICANT = FluidRegistry.getFluid("rc lubricant");
 
 	@Override
 	public int getSizeInventory() {

@@ -99,7 +99,7 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 
 	private void cycle() {
 		ReikaInventoryHelper.decrStack(0, inv);
-		tank.addLiquid(this.getProducedLN2(), FluidRegistry.getFluid("liquid nitrogen"));
+		tank.addLiquid(this.getProducedLN2(), FluidRegistry.getFluid("rc liquid nitrogen"));
 		if (rand.nextInt(4) == 0)
 			ReikaInventoryHelper.addOrSetStack(ItemStacks.dryice, inv, 1);
 	}

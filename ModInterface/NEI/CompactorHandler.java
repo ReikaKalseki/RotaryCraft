@@ -25,7 +25,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
-import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCompactor;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -139,7 +139,7 @@ public class CompactorHandler extends TemplateRecipeHandler {
 	@Override
 	public Class<? extends GuiContainer> getGuiClass()
 	{
-		return GuiGrinder.class;
+		return GuiCompactor.class;
 	}
 
 	@Override

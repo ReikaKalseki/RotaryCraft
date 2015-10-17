@@ -70,7 +70,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	@Override
 	protected boolean getRequirements(World world, int x, int y, int z, int meta) {
-		boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("lubricant"));
+		boolean hasLube = !lubricant.isEmpty() && lubricant.getActualFluid().equals(FluidRegistry.getFluid("rc lubricant"));
 		if (hasLube)
 			this.distributeLubricant(world, x, y, z);
 		else
@@ -126,17 +126,17 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 						int it = hy.lubricant.getLevel();
 						int dL = lubricant.getLevel()-it;
 						if (dL > 3) {
-							hy.lubricant.addLiquid(dL/4, FluidRegistry.getFluid("lubricant"));
+							hy.lubricant.addLiquid(dL/4, FluidRegistry.getFluid("rc lubricant"));
 							lubricant.removeLiquid(dL/4);
 						}
 					}
 				}
 				else if (m == MachineRegistry.RESERVOIR) {
 					TileEntityReservoir te = (TileEntityReservoir)this.getAdjacentTileEntity(dir);
-					if (!lubricant.isEmpty() && te.canAcceptFluid(FluidRegistry.getFluid("lubricant"))) {
+					if (!lubricant.isEmpty() && te.canAcceptFluid(FluidRegistry.getFluid("rc lubricant"))) {
 						int amt = Math.min(this.getLube(), te.CAPACITY-te.getLevel());
 						if (amt > 0) {
-							te.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+							te.addLiquid(amt, FluidRegistry.getFluid("rc lubricant"));
 							lubricant.removeLiquid(amt);
 						}
 					}

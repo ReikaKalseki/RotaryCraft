@@ -52,7 +52,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	public final static int CAPACITY = 24*1000;
 
-	private HybridTank tank = new HybridTank("pump", CAPACITY);
+	private final HybridTank tank = new HybridTank("pump", CAPACITY);
 
 	/** Rate of conversion - one power++ = one tick-- per operation */
 	public static final int FALLOFF = 256; //256W per 1 kPa

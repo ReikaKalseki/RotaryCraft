@@ -249,7 +249,7 @@ public class RenderGearbox extends RotaryTERenderer
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityGearbox tr = (TileEntityGearbox)tile;
 		if (tr.getLubricant() > 0) {
-			Fluid f = FluidRegistry.getFluid("lubricant");
+			Fluid f = FluidRegistry.getFluid("rc lubricant");
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			GL11.glEnable(GL11.GL_BLEND);
 			IIcon ico = f.getIcon();

@@ -192,7 +192,7 @@ PipeConnector, IFluidHandler, ToggleTile {
 	}
 
 	public void addLubricant(int amt) {
-		lubricant.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+		lubricant.addLiquid(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	public boolean hasLubricant() {
@@ -1048,7 +1048,7 @@ PipeConnector, IFluidHandler, ToggleTile {
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return this.getGearType().consumesLubricant() ? FluidRegistry.getFluid("lubricant").equals(fluid) : false;
+		return this.getGearType().consumesLubricant() ? FluidRegistry.getFluid("rc lubricant").equals(fluid) : false;
 	}
 
 	@Override
@@ -1092,7 +1092,7 @@ PipeConnector, IFluidHandler, ToggleTile {
 	}
 
 	public void setLubricantFromNBT(NBTTagCompound NBT) {
-		lubricant.setContents(NBT.getInteger("lube"), FluidRegistry.getFluid("lubricant"));
+		lubricant.setContents(NBT.getInteger("lube"), FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	@Override

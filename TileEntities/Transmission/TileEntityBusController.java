@@ -61,7 +61,7 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 		timer.update();
 
 		if (DragonAPICore.debugtest)
-			tank.addLiquid(5, FluidRegistry.getFluid("lubricant"));
+			tank.addLiquid(5, FluidRegistry.getFluid("rc lubricant"));
 
 		if (tank.isEmpty()) {
 			torque = 0;
@@ -129,7 +129,7 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 
 	@Override
 	public Fluid getInputFluid() {
-		return FluidRegistry.getFluid("lubricant");
+		return FluidRegistry.getFluid("rc lubricant");
 	}
 
 	@Override

@@ -710,7 +710,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		if (f.equals(FluidRegistry.WATER)) {
 			return water.fill(resource, doFill);
 		}
-		else if (f.equals(FluidRegistry.getFluid("lubricant"))) {
+		else if (f.equals(FluidRegistry.getFluid("rc lubricant"))) {
 			return lubricant.fill(resource, doFill);
 		}
 		else if (f.equals(FluidRegistry.getFluid("air")) || f.equals(FluidRegistry.getFluid("oxygen"))) {
@@ -741,13 +741,13 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 			int dz = zCoord+from.offsetZ;
 			return dx == backx && dy == yCoord && dz == backz;
 		}
-		else if (fluid.equals(FluidRegistry.getFluid("lubricant"))) {
+		else if (fluid.equals(FluidRegistry.getFluid("rc lubricant"))) {
 			int dx = xCoord+from.offsetX;
 			int dy = yCoord+from.offsetY;
 			int dz = zCoord+from.offsetZ;
 			return dx == backx && dy == yCoord && dz == backz;
 		}
-		else if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
+		else if (fluid.equals(FluidRegistry.getFluid("rc jet fuel"))) {
 			return from == this.getFuelInputDirection();
 		}
 		else if (fluid.equals(FluidRegistry.getFluid("rc ethanol"))) {
@@ -781,7 +781,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	}
 
 	public final void addLubricant(int amt) {
-		lubricant.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+		lubricant.addLiquid(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	public final void removeLubricant(int amt) {
@@ -789,7 +789,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	}
 
 	public final void setLube(int amt) {
-		lubricant.setContents(amt, FluidRegistry.getFluid("lubricant"));
+		lubricant.setContents(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	public final int getLube() {

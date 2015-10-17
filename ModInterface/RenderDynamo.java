@@ -15,6 +15,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -39,10 +41,15 @@ public class RenderDynamo extends RotaryTERenderer
 		ModelDynamo2 var14;
 		var14 = StaticModel;
 
+		String s = "/Reika/RotaryCraft/Textures/TileEntityTex/dynamotex";
+
 		if (tile.isInWorld() && tile.power > 0)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dynamotex2.png");
-		else
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dynamotex.png");
+			s = s+"2";
+		if (tile.isUpgraded())
+			s = s+"_u";
+		s = s+".png";
+
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, s);
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -51,24 +58,24 @@ public class RenderDynamo extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 0;
-				break;
-			case 3:
-				var11 = 90;
-				break;
-			case 4:
-				var11 = 180;
-				break;
-			case 5:
-				var11 = 270;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 0;
+					break;
+				case 3:
+					var11 = 90;
+					break;
+				case 4:
+					var11 = 180;
+					break;
+				case 5:
+					var11 = 270;
+					break;
 			}
 
 			if (tile.getBlockMetadata() < 2) {

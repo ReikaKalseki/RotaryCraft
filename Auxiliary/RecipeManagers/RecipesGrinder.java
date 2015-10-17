@@ -283,10 +283,13 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
 			Collection<ItemStack> li = ore.getAllOreBlocks();
+			int n = ore_rate;
+			if (ore.isNetherOres())
+				n *= 2;
 			for (ItemStack is : li) {
 				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), RecipeLevel.CORE);
-				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
+				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, n), RecipeLevel.CORE);
+				RotaryCraft.logger.log("Adding "+(n)+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}
 

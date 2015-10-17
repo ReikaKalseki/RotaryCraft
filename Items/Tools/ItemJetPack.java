@@ -98,7 +98,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	}
 	/*
 	public Fluid getFuelType() {
-		return ConfigRegistry.JETFUELPACK.getState() ? FluidRegistry.getFluid("jet fuel") : FluidRegistry.getFluid("rc ethanol");
+		return ConfigRegistry.JETFUELPACK.getState() ? FluidRegistry.getFluid("rc jet fuel") : FluidRegistry.getFluid("rc ethanol");
 	}*/
 
 	@Override
@@ -275,9 +275,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		}
 		ItemStack is2 = is.copy();
 		ItemStack is3 = is.copy();
-		Fluid f = ConfigRegistry.JETFUELPACK.getState() ? FluidRegistry.getFluid("jet fuel") : FluidRegistry.getFluid("rc ethanol");
+		Fluid f = ConfigRegistry.JETFUELPACK.getState() ? FluidRegistry.getFluid("rc jet fuel") : FluidRegistry.getFluid("rc ethanol");
 		this.setFuel(is, f, this.getMaxFuel(is));
-		this.setFuel(is3, FluidRegistry.getFluid("jet fuel"), this.getMaxFuel(is3));
+		this.setFuel(is3, FluidRegistry.getFluid("rc jet fuel"), this.getMaxFuel(is3));
 		ItemStack is5 = is3.copy();
 		PackUpgrades.WING.enable(is3, true);
 		for (int i = 0; i < PackUpgrades.list.length; i++) {
@@ -306,9 +306,9 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	@Override
 	public boolean isValidFluid(Fluid f, ItemStack is) {
 		Fluid f2 = this.getCurrentFluid(is);
-		if (f2 != null && !f2.equals(f2))
+		if (f2 != null && !f.equals(f2))
 			return false;
-		if (f.equals(FluidRegistry.getFluid("jet fuel")))
+		if (f.equals(FluidRegistry.getFluid("rc jet fuel")))
 			return true;
 		if (f.equals(FluidRegistry.getFluid("rocket fuel")))
 			return true;
@@ -416,7 +416,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 
 	public boolean isJetFueled(ItemStack is) {
 		Fluid f = this.getCurrentFluid(is);
-		return f != null && f.equals(FluidRegistry.getFluid("jet fuel"));
+		return f != null && f.equals(FluidRegistry.getFluid("rc jet fuel"));
 	}
 
 	@Override

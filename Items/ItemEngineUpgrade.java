@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import cpw.mods.fml.relauncher.Side;
@@ -48,7 +49,9 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 		if (te instanceof UpgradeableMachine) {
 			UpgradeableMachine u = (UpgradeableMachine)te;
 			if (u.canUpgradeWith(is)) {
-				u.upgrade();
+				u.upgrade(is);
+				if (te instanceof TileEntityBase)
+					((TileEntityBase)te).syncAllData(true);
 				if (!ep.capabilities.isCreativeMode)
 					is.stackSize--;
 				return true;
@@ -103,7 +106,9 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 		MAGNETOSTATIC3("upgrade.tier3"), //Made with pulse jet ingot
 		MAGNETOSTATIC4("upgrade.tier4"), //Made with 4MW extractor product
 		MAGNETOSTATIC5("upgrade.tier5"), //Made with bedrock
-		AFTERBURNER("upgrade.afterburn");
+		AFTERBURNER("upgrade.afterburn"),
+		EFFICIENCY("upgrade.efficiency"),
+		FLUX("upgrade.flux");
 
 		private final String desc;
 

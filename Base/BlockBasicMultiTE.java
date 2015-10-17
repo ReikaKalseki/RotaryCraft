@@ -261,7 +261,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {
 					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
-					if (f != null && f.getFluid().equals(FluidRegistry.getFluid("lubricant"))) {
+					if (f != null && f.getFluid().equals(FluidRegistry.getFluid("rc lubricant"))) {
 						TileEntityBusController tb = (TileEntityBusController)te;
 						tb.fill(ForgeDirection.DOWN, f, true);
 						if (!ep.capabilities.isCreativeMode)
@@ -292,7 +292,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 							((TileEntityBase)te).syncAllData(true);
 							return true;
 						}
-						else if (f.getFluid().equals(FluidRegistry.getFluid("lubricant"))) {
+						else if (f.getFluid().equals(FluidRegistry.getFluid("rc lubricant"))) {
 							tf.addLube(f.amount);
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItem(is));
@@ -671,9 +671,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 				NBTTagCompound nbt = ((NBTMachine)te).getTagsToWriteToStack();
 				is.stackTagCompound = (NBTTagCompound)(nbt != null ? nbt.copy() : null);
 			}
-			if (te instanceof EnergyToPowerBase) {
-				((EnergyToPowerBase)te).setItemTagFromTier(is);
-			}
 			if (m == MachineRegistry.SCALECHEST) {
 				((TileEntityScaleableChest)te).writeInventoryToItem(is);
 			}
@@ -749,7 +746,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 						dura = 600;
 					eb.addPotionEffect(new PotionEffect(Potion.confusion.id, dura, 3));
 				}
-				else if (tr.getFluid().equals(FluidRegistry.getFluid("jet fuel"))) {
+				else if (tr.getFluid().equals(FluidRegistry.getFluid("rc jet fuel"))) {
 					if (e instanceof EntityLivingBase) {
 						EntityLivingBase eb = (EntityLivingBase)e;
 						PotionEffect eff = eb.getActivePotionEffect(Potion.poison);

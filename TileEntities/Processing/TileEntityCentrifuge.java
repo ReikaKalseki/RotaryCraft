@@ -40,7 +40,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 
 	private int progressTime;
 	public static final int CAPACITY = 10000;
-	private HybridTank tank = new HybridTank("centrifuge", CAPACITY);
+	private final HybridTank tank = new HybridTank("centrifuge", CAPACITY);
 
 	public int getProgressScaled(int l) {
 		return l * progressTime / this.getOperationTime();

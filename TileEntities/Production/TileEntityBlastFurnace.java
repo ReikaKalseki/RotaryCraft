@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -57,6 +58,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	private float xp;
 
 	private BlastFurnacePattern pattern;
+
+	private final StepTimer tempTimer = new StepTimer(20);
 
 	@Override
 	protected int getActiveTexture() {
@@ -106,10 +109,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
-		tickcount++;
-		if (tickcount >= 20) {
+		tempTimer.update();
+		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z, meta);
-			tickcount = 0;
 		}
 
 		BlastRecipe rec = this.getRecipe();
@@ -375,16 +377,16 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 		int type = RecipesBlastFurnace.getRecipes().getInputTypeForItem(is);
 		switch (type) {
-		case 0:
-			return slot >= 1 && slot <= 9;
-		case 1:
-			return slot == SLOT_1;
-		case 2:
-			return slot == SLOT_2;
-		case 3:
-			return slot == SLOT_3;
-		default:
-			return false;
+			case 0:
+				return slot >= 1 && slot <= 9;
+			case 1:
+				return slot == SLOT_1;
+			case 2:
+				return slot == SLOT_2;
+			case 3:
+				return slot == SLOT_3;
+			default:
+				return false;
 		}
 	}
 
@@ -462,5 +464,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	public void setTemperature(int temp) {
 		temperature = temp;
+	}
+
+	@Override
+	public void resetAmbientTemperatureTimer() {
+		tempTimer.reset();
 	}
 }

@@ -30,7 +30,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFluidCompressor extends TileEntityPowerReceiver implements IFluidHandler, PipeConnector, NBTMachine {
 
-	private HybridTank tank = new HybridTank("gastank", 1000000000);
+	private final HybridTank tank = new HybridTank("gastank", 1000000000);
 	private int timer = 0;
 
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();

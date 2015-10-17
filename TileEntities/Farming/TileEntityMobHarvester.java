@@ -44,11 +44,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		this.getSummativeSidedPower();
 		if (power < MINPOWER)
 			return;
-		EntityPlayer ep = null;
-		if (owner != null)
-			ep = world.getPlayerEntityByName(owner);
-		if (ep == null)
-			ep = world.getClosestPlayer(x, y, z, -1);
+		EntityPlayer ep = this.getPlacer();
 		//if (this.tickcount < 5)
 		//return;
 		//this.tickcount = 0;

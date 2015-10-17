@@ -223,11 +223,15 @@ public final class ItemStacks {
 	private static ArrayList<ItemStack> modsteel = new ArrayList<ItemStack>();
 
 	private static final Item mod = ItemRegistry.MODINGOTS.getItemInstance();
+
 	public static final PreferentialItemStack electric = new PreferentialItemStack(Items.gold_ingot, "ingotElectrum");
 	public static final PreferentialItemStack conductive = new PreferentialItemStack(Items.gold_ingot, "ingotCopper").blockItem(mod);
 	public static final PreferentialItemStack conductive2 = new PreferentialItemStack(ItemStacks.steelingot, "ingotCopper").blockItem(mod);
 	public static final PreferentialItemStack heavy = new PreferentialItemStack(Items.gold_ingot, "ingotLead").blockItem(mod);
 	public static final PreferentialItemStack reflective = new PreferentialItemStack(Items.iron_ingot, "ingotSilver").blockItem(mod);
+
+	public static final PreferentialItemStack enderium = new PreferentialItemStack(ItemStacks.bedingot, "ingotEnderium");
+	public static final PreferentialItemStack electrum = new PreferentialItemStack(ItemStacks.redgoldingot, "ingotElectrum");
 
 	public static List getModSteels() {
 		return modsteel;

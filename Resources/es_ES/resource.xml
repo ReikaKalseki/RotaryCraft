@@ -7,16 +7,16 @@
 		Los ejes tambien pueden ser fabricados de madera, piedra, diamante o bedrock. Usa un palo como nucle de eje en un eje de madera. Las variedades de bedrock se fabrican en la blast furnace como las herramientas de bedrock. Materiales mas fuertes permiten transmitir mayor par a mayores velocidades. Sobrecargar un eje causara un fallo violento.
 	</othershaft>
 	<othergearunit>
-		Las unidades de engranajes  pueden ser hechas de ruedas dentadas de diferentes tipos. Engranajes mas fuertes se dañan mas lentamente, y los engranajes de bedrock no se dañan en absoluto. Simplemente craftealos usando el mismo material base en el eje, pero sustituyendo una unidad de engranaje por el eje.
+		Las unidades de engranajes  pueden ser hechas de ruedas dentadas de diferentes tipos. Engranajes mas fuertes se estropean mas lentamente, y los engranajes de bedrock no se estropean en absoluto. Simplemente craftealos usando el mismo material base en el eje, pero sustituyendo una unidad de engranaje por el eje.
 	</othergearunit>
 	<othergear>
-		Los engranajes pueden ser fabricados de mas materiales a parte del acero. Madera, piedra, diamante y bedrock tambien pueden ser usados. Diferentes materiales consumen lubricante y reciben daños a diferentes velocidades. Los engranajes de bedrock no requieren lubricante. Las variedades de bedrock son fabricadas en el blast furnace como las herramientas de bedrock.
+		Los engranajes pueden ser fabricados de mas materiales a parte del acero. Madera, piedra, diamante y bedrock tambien pueden ser usados. Diferentes materiales consumen lubricante y se estropean a diferentes velocidades. Los engranajes de bedrock no requieren lubricante. Las variedades de bedrock son fabricadas en el blast furnace como las herramientas de bedrock.
 	</othergear>
 	<netherdust>
 		El polvo de netherrack se hace triturando bloques de netherrack en el grinder, mientras que el tar se consigue triturando tierra de almas. Ambos son requisitos constituyentes del combustible del jet fuel, debido a su contenido de hidrocarburos. 
 	</netherdust>
 	<sawdust>
-		Has hecho 20 stacks de escaleras de madera? No hay problema; varios objetos de madera puede ser colocados en el grinder y convertidos en sawdust, que puede ser convertido de nuevo en madera o, para no usar caña de azucar, en papel. Tintes pueden ser añadidos para alternar entre los tipos de madera.
+		Has hecho 20 stacks de escaleras de madera? No hay problema; varios objetos de madera puede ser colocados en el grinder y convertidos en sawdust, que puede ser convertido de nuevo en madera o, para no usar sugar cane, en papel. Tintes pueden ser incluidos para alternar entre los tipos de madera.
 	</sawdust>
 	<beddust>
 		El polvo de bedrock se produce cuando los bedrock breaker trituran por completo un bloque de bedrock. Esto es una parte esencial de ciertas maquinas, ya que el bedrock es el unico material lo suficientemente fuerte como para aguantar las enormes presiones y temperaturas. Adicionalmente, se puede usar herramientas y armaduras de bedrock, y el mejor nivel de ejes y cajas de cambios.
@@ -40,7 +40,7 @@
 		Si tienes la suficiente suerte de picar a traves de una mazmorra, gruta o fortaleza con una Boring machine o un Pile Driver, el spawner, en vez de ser completamente destruido, se colectara como objeto utilizable, y mantendra el tipo de mob. Este es un inestimable recurso para las granjas de mobs, especialmente cuando se combina con el spawner controller.
 	</spawners>
 	<yeast>
-		El Yeast se cultiva en el fermenter añadiendo azucar y agua a la tierra. Su mejor temperatura de crecimiento esta entre los 20 y los 40 grados, con el tope a 25 grados. Fuera de este rango, crecera lentamente o en absoluto. Ten cuidado - a temperaturas por encima de 60C, el yeast muere. El Ethanol sludge se hace añadiendo yeast a materia vegetal y agua. Se crea mas rapidamente alrededor de los 35C.
+		El Yeast se cultiva en el fermenter poniendo azucar y agua a la tierra. Su mejor temperatura de crecimiento esta entre los 20 y los 40 grados, con el tope a 25 grados. Fuera de este rango, crecera lentamente o en absoluto. Ten cuidado - a temperaturas por encima de 60C, el yeast muere. El Ethanol sludge se hace poniendo yeast a materia vegetal y agua. Se crea mas rapidamente alrededor de los 35C.
 	</yeast>
 	<ethanol>
 		Los Ethanol crystals pueden fabricarse secando ethanol sludge en un horno. Estos cristales puede entonces ser utilizados como combustible en el ethanol y performance engines.
@@ -49,7 +49,7 @@
 		El bedrock ingot es usado para craftear herramientas de bedrock, armaduras y algunas maquinas.
 	</bedingot>
 	<alloying>
-		Algunos items y maquinas necesitan aleaciones especiales de metales, que se hacen normalmente en la Blast furnace al añadir los ingredientes constituyentes a la malla principal, y alcanzando la temperatura necesaria.
+		Algunos items y maquinas necesitan aleaciones especiales de metales, que se hacen normalmente en la Blast furnace al colocar los ingredientes constituyentes a la malla principal, y alcanzando la temperatura necesaria.
 	</alloying>
 	<silveringot>
 		Los lingotes de plata se usa para hacer compuestos de plata. La plata es un bonus ocasional del extractor cuando procesa oro.
@@ -67,13 +67,13 @@
 		El Aluminum powder puede ser usado con los lingotes de hierro para iniciar una reaccion termita en el firestarter, produciendo mas calor que cualquier otro combustible. It is an occasional bonus from the extractor when processing redstone. It can also be smelted into aluminum ingots.
 	</aluminum>
 	<railgunammo>
-		La municion del Railgun se hace de un nucleo ferromagnetico rodeado de materiales pesados. Materiales mas pesados significan mayor daño de impacto. Cada nivel se fabrica añadiendo masa al nivel anterior.
+		La municion del Railgun se hace de un nucleo ferromagnetico rodeado de materiales pesados. Materiales mas pesados significan mayores heridas de impacto. Cada nivel se fabrica uniendo masa al nivel anterior.
 	</railgunammo>
 	<slides>
 		Los Projector Slides son insertados dentro del proyector para disponer imagenes. Se craftean con tintes para crear otro.
 	</slides>
 	<explosives>
-		Los Explosive Shells son municion alternativa para el railgun. Son mas baratos de fabricar, pero provocan menos daño a entidades a las que golpeen, y son mas destructivos con el terreno de alrededor.
+		Los Explosive Shells son municion alternativa para el railgun. Son mas baratos de fabricar, pero provocan menos heridas a entidades a las que golpeen, y son mas destructivos con el terreno de alrededor.
 	</explosives>
 	<tungsten>
 		El tungsteno es un subproducto de procesar mena de hierro en el Extractor, y se usa en aplicaciones de elevada temperatura, fuerza o presion. Solo puede ser fundido en el horno tradicional por encima de %dC.

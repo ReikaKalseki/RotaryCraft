@@ -4,7 +4,7 @@
 		El dispositivo mas basico de transmision de potencia es el shaft (eje). Nada de florituras, solo lleva potencia de un sitio a otro, sin cambios en el par o la velocidad. Presta atencion, sin embargo, a la direccion para evitar dolores de cabeza. Shafts de diferentes materiales tienen diferentes fuerzas, y por lo tanto diferentes limites de par y velocidad.
 	</shaft>
 	<gearbox>
-		Los Gearboxes se usan para cambiar el ratio de par y velocidad, mientras se mantiene la potencia constante. Vienen en cuatro ratios - 2:1, 4:1, 8:1, y 16:1, y afectan al par y a la velocidad de manera acorde. Transmision reductora incrementa el par y reduce la velocidad; transmision mutiplicadora hace lo contrario. Aviso: estos necesitan ser lubricados para trabajar a maxima potencia; la mayoria de transmisiones sin lubricar se dañan, y reducen el par transmitido proporcionalmente. Como los shafts, los gearboxes estan sujetos a fallos por material bajo carga excesiva. Los Gearboxes pueden ser reparados con objetos "gear".
+		Los Gearboxes se usan para cambiar el ratio de par y velocidad, mientras se mantiene la potencia constante. Vienen en cuatro ratios - 2:1, 4:1, 8:1, y 16:1, y afectan al par y a la velocidad de manera acorde. Transmision reductora incrementa el par y reduce la velocidad; transmision mutiplicadora hace lo contrario. Aviso: estos necesitan ser lubricados para trabajar a maxima potencia; la mayoria de transmisiones sin lubricar se estropean, y reducen el par transmitido proporcionalmente. Como los shafts, los gearboxes estan sujetos a fallos por material bajo carga excesiva. Los Gearboxes pueden ser reparados con objetos "gear".
 	</gearbox>
 	<bevel>
 		Los Bevel gears se usan para cambiar la direccion de la potencia sin cambiar la velocidad o el par. Al contrario de sus primos lineales, no necesitan lubricante, y operan continuamente sin perdidas.
@@ -20,7 +20,7 @@
 		</sub>
 	</splitter>
 	<clutch>
-		El clutch es basicamente un eje pilotado - cuando recibe señal de redstone, transmite su velocidad y par de entrada sin cambiar. Sin alimentar, no transmite nada.
+		El clutch es basicamente un eje pilotado - cuando recibe corriente de redstone, transmite su velocidad y par de entrada sin cambiar. Sin alimentar, no transmite nada.
 	</clutch>
 	<dyna>
 		El dynamometer muestra su potencia, velocidad y par de entradas mientras que lo lleva a la salida sin cambiarlo.
@@ -66,7 +66,7 @@
 		El high-ratio gear te permite crear el efecto de multiples gearboxes encadenados en un espacio mas compacto. Crea un ratio de 256:1, requiere una elevada cantidad de lubricante para funcionar, y debe estar hecho de bedrock para soportar el estres al que se le someten las piezas. Como un gearbox normal, puede cambiar entre par y velocidad al hacer shift-right-click con un screwdriver (destornillador).
 	</higear>
 	<multi>
-		El multi-clutch te permite redirigir la potencia segun una señal de redstone. Simplemente elige una salida para cada fuerza de la señal, desde 0 hasta 15.
+		El multi-clutch te permite redirigir la potencia segun una corriente de redstone. Simplemente elige una salida para cada fuerza de la corriente, desde 0 hasta 15.
 	</multi>
 	<belt>
 		Elbelt hub puede ser usado para transportar potencia de manera barata a traves de largas distancias. Simplemente coloca dos hubs para que puedan conectarse (linea de vista directa y compartiendo el plano). Para conectar belts, haz right-click a uno de ellos con un stack de belts, luego haz right-click al otro con el mismo stack. Para cada metro viajado, necesitas un belt adicional (hasta un maximo de 64 bloques). El cinturon no puede transmitir demasiada potencia sin romperse; puede llevar, como maximo, %d Nm de par a %d rad/s antes de que las perdidas se aprecien, y menos cuando esta mojado. Los Belts solop ueden ser conectados si uno de ellos esta en modo salida.

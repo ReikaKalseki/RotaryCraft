@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -42,6 +43,7 @@ import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
+import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -216,6 +218,17 @@ public class RotaryEventManager {
 				int y = event.y;
 				int z = event.z;
 				event.setResult(Event.Result.DENY);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onRemoveArmor(AddToSlotEvent evt) {
+		int id = evt.slotID;
+		if (evt.inventory instanceof InventoryPlayer && evt.slotID == 36) { //foot armor
+			ItemStack is = evt.getItem();
+			if (is == null || !(is.getItem() instanceof ItemSpringBoots)) {
+				((InventoryPlayer)evt.inventory).player.stepHeight = 0.5F;
 			}
 		}
 	}

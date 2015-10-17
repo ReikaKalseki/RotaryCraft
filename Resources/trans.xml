@@ -60,6 +60,9 @@
 				
 				Function: %s
 			</s3>
+			<s4>
+				Outputs a redstone comparator signal in proportion to its fill state
+			</s4>
 		</sub>
 	</coil>
 	<higear>

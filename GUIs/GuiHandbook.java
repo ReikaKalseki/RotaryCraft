@@ -464,7 +464,7 @@ public class GuiHandbook extends GuiScreen
 		return new ArrayList(li);
 	}
 
-	private final void drawGraphics() {
+	private final void drawGraphics(float ptick) {
 		int posX = (width - xSize) / 2-2;
 		int posY = (height - ySize) / 2-8;
 
@@ -530,7 +530,7 @@ public class GuiHandbook extends GuiScreen
 			}
 		}
 
-		this.drawAuxGraphics(posX, posY);
+		this.drawAuxGraphics(posX, posY, ptick);
 	}
 
 	@Override
@@ -598,7 +598,7 @@ public class GuiHandbook extends GuiScreen
 		}
 	}
 
-	protected void drawAuxGraphics(int posX, int posY) {
+	protected void drawAuxGraphics(int posX, int posY, float ptick) {
 		HandbookAuxData.drawGraphics((HandbookRegistry)this.getEntry(), posX, posY, xSize, ySize, fontRendererObj, ri, subpage);
 	}
 
@@ -654,7 +654,7 @@ public class GuiHandbook extends GuiScreen
 			this.drawTabIcons();
 		}
 
-		this.drawGraphics();
+		this.drawGraphics(f);
 
 		if (subpage == 0)
 			this.drawMachineRender(posX, posY);

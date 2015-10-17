@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 
 public interface UpgradeableMachine {
 
-	public void upgrade();
+	public void upgrade(ItemStack item);
 	public boolean canUpgradeWith(ItemStack item);
 
 }

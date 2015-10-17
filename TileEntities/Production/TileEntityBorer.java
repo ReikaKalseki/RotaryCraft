@@ -30,6 +30,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Interfaces.Block.SemiUnbreakable;
@@ -373,6 +374,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 					int yread = y+step*facing.offsetY+(4-j);
 					int zread = z+step*facing.offsetZ+b*(i-3);
 					this.reqPowAdd(world, xread, yread, zread);
+					if (reqpow == -1)
+						return;
 				}
 			}
 		}
@@ -416,6 +419,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			else {
 				reqpow += (int)(DIGPOWER*10*hard);
 				mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
+			}
+
+			if (DragonOptions.DEBUGMODE.getState()) {
+				RotaryCraft.logger.log(this+" mined block "+id+":"+meta+" at "+xread+", "+yread+", "+zread+"; pow="+reqpow+", torq="+mintorque);
 			}
 		}
 	}

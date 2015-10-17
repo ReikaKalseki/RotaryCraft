@@ -110,7 +110,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			e.applyEnchants(is);
 		}
 		if (te instanceof EnergyToPowerBase) {
-			((EnergyToPowerBase)te).setTierFromItemTag(is.stackTagCompound);
+			((EnergyToPowerBase)te).setDataFromItemStackTag(is.stackTagCompound);
 		}
 		if (te instanceof NBTMachine) {
 			((NBTMachine)te).setDataFromItemStackTag(is.stackTagCompound);
@@ -127,14 +127,14 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		if (m == MachineRegistry.GPR) {
 			TileEntityGPR tile = (TileEntityGPR)te;
 			switch (RotaryAux.get2SidedMetadataFromPlayerLook(ep)) {
-			case 0:
-			case 2:
-				tile.xdir = true;
-				break;
-			case 1:
-			case 3:
-				tile.xdir = false;
-				break;
+				case 0:
+				case 2:
+					tile.xdir = true;
+					break;
+				case 1:
+				case 3:
+					tile.xdir = false;
+					break;
 			}
 			world.setBlockMetadataWithNotify(x, y, z, BlockGPR.getBiomeDesign(world, x, y, z), 3);
 			return true;
@@ -143,24 +143,24 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			return true;
 		if (m.isSidePlaced()) {
 			switch(side) {
-			case 0:
-				te.setBlockMetadata(1);
-				break;
-			case 1:
-				te.setBlockMetadata(0);
-				break;
-			case 2:
-				te.setBlockMetadata(4);
-				break;
-			case 3:
-				te.setBlockMetadata(2);
-				break;
-			case 4:
-				te.setBlockMetadata(5);
-				break;
-			case 5:
-				te.setBlockMetadata(3);
-				break;
+				case 0:
+					te.setBlockMetadata(1);
+					break;
+				case 1:
+					te.setBlockMetadata(0);
+					break;
+				case 2:
+					te.setBlockMetadata(4);
+					break;
+				case 3:
+					te.setBlockMetadata(2);
+					break;
+				case 4:
+					te.setBlockMetadata(5);
+					break;
+				case 5:
+					te.setBlockMetadata(3);
+					break;
 			}
 			return true;
 		}
@@ -172,18 +172,18 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (!m.hasModel() && m.is4Sided() && !m.hasInv()) {
 			switch(RotaryAux.get4SidedMetadataFromPlayerLook(ep)) {
-			case 0:
-				te.setBlockMetadata(0);
-				break;
-			case 1:
-				te.setBlockMetadata(1);
-				break;
-			case 2:
-				te.setBlockMetadata(3);
-				break;
-			case 3:
-				te.setBlockMetadata(2);
-				break;
+				case 0:
+					te.setBlockMetadata(0);
+					break;
+				case 1:
+					te.setBlockMetadata(1);
+					break;
+				case 2:
+					te.setBlockMetadata(3);
+					break;
+				case 3:
+					te.setBlockMetadata(2);
+					break;
 			}
 			return true;
 		}
@@ -228,22 +228,18 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				ItemMachineRenderer ir = ClientProxy.machineItems;
 				TileEntity te = m.createTEInstanceForRender(0);
 				ItemStack item = m.getCraftedProduct();
-				par3List.add(item);
-				if (m.isEnergyToPower()) {
-					ItemStack item2 = item.copy();
-					if (item2.stackTagCompound == null)
-						item2.stackTagCompound = new NBTTagCompound();
-					item2.stackTagCompound.setInteger("tier", EnergyToPowerBase.TIERS-1);
-					par3List.add(item2);
-				}
 				if (m.hasNBTVariants()) {
 					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
-					for (int k = 0; k < li.size(); k++) {
-						NBTTagCompound NBT = li.get(k);
+					if (li.isEmpty())
+						li.add(new NBTTagCompound());
+					for (NBTTagCompound NBT : li) {
 						ItemStack is = m.getCraftedProduct();
 						is.stackTagCompound = NBT;
 						par3List.add(is);
 					}
+				}
+				else {
+					par3List.add(item);
 				}
 			}
 		}
@@ -276,34 +272,6 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (m.hasNBTVariants() && is.stackTagCompound != null) {
 			li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
-		}
-		if (m.isEnergyToPower()) {
-			int tier = 0;
-			if (is.stackTagCompound != null) {
-				tier = is.stackTagCompound.getInteger("tier");
-			}
-			li.add(String.format("Tier %d", tier));
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				EnergyToPowerBase e = (EnergyToPowerBase)te;
-				e.setTierFromItemTag(is.stackTagCompound);
-				int torque = e.getGenTorque();
-				int speed = ReikaMathLibrary.intpow2(2, e.getMaxSpeedBase(tier));
-				long power = (long)torque*(long)speed;
-				double val = ReikaMathLibrary.getThousandBase(power);
-				String exp = ReikaEngLibrary.getSIPrefix(power);
-				li.add(String.format("Torque: %d Nm", torque));
-				li.add(String.format("Max Speed: %d rad/s", speed));
-				li.add(String.format("Max Power: %.3f%sW", val, exp));
-			}
-			else {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Hold ");
-				sb.append(EnumChatFormatting.GREEN.toString());
-				sb.append("Shift");
-				sb.append(EnumChatFormatting.GRAY.toString());
-				sb.append(" for power data");
-				li.add(sb.toString());
-			}
 		}
 		if (m.isPowerReceiver()) {
 			PowerReceivers p = m.getPowerReceiverEntry();

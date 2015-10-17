@@ -89,7 +89,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 			return true;
 		if (f.equals(FluidRegistry.getFluid("rc ethanol")))
 			return true;
-		if (f.equals(FluidRegistry.getFluid("jet fuel")))
+		if (f.equals(FluidRegistry.getFluid("rc jet fuel")))
 			return true;
 		if (f.equals(FluidRegistry.getFluid("bioethanol")))
 			return true;
@@ -138,7 +138,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 	public static void initCreativeFluids() {
 		creativeFluids.clear();
 		addCreativeFluid("fuel");
-		addCreativeFluid("jet fuel");
+		addCreativeFluid("rc jet fuel");
 		addCreativeFluid("rc ethanol");
 		addCreativeFluid("bioethanol");
 		addCreativeFluid("biofuel");
@@ -190,7 +190,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 				int amt = Math.min(this.getCurrentFillLevel(is), te.getFuelCapacity()-te.getFuelLevel());
 				if (amt > 0) {
 					boolean flag = false;
-					if (eng.isJetFueled() && f.equals(FluidRegistry.getFluid("jet fuel"))) {
+					if (eng.isJetFueled() && f.equals(FluidRegistry.getFluid("rc jet fuel"))) {
 						te.addFuel(amt);
 						flag = true;
 					}
@@ -210,7 +210,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 				if (amt > 0) {
 					boolean flag = false;
 					if (eng.isJetFueled()) {
-						this.addFluid(is, FluidRegistry.getFluid("jet fuel"), amt);
+						this.addFluid(is, FluidRegistry.getFluid("rc jet fuel"), amt);
 						flag = true;
 					}
 					else if (eng.isEthanolFueled()) {
@@ -252,13 +252,13 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 			if (f == null) {
 				int amt = Math.min(this.getCapacity(is), te.getFuel());
 				if (amt > 0) {
-					this.addFluid(is, FluidRegistry.getFluid("jet fuel"), amt);
+					this.addFluid(is, FluidRegistry.getFluid("rc jet fuel"), amt);
 					te.removeFuel(amt);
 					ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "fuel");
 					return true;
 				}
 			}
-			else if (f.equals(FluidRegistry.getFluid("jet fuel"))) {
+			else if (f.equals(FluidRegistry.getFluid("rc jet fuel"))) {
 				int amt = Math.min(this.getCurrentFillLevel(is), te.MAXFUEL-te.getFuel());
 				if (amt > 0) {
 					te.addFuel(amt);

@@ -152,6 +152,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		FrictionHeatable te = (FrictionHeatable)this.getTileEntity(fx, fy, fz);
 		int tdiff = Math.min(te.getMaxTemperature(), temperature)-te.getTemperature();
 		te.addTemperature(tdiff);
+		te.resetAmbientTemperatureTimer();
 
 		soundtick++;
 		if (soundtick > 49) {
@@ -228,18 +229,18 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		}
 		// world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.gravel", 1F, 2F);
 		switch(meta) {
-		case 0:
-			world.spawnParticle("crit", x, fy+rand.nextDouble(), fz+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
-			break;
-		case 1:
-			world.spawnParticle("crit", x+1, fy+rand.nextDouble(), fz+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
-			break;
-		case 2:
-			world.spawnParticle("crit", fx+rand.nextDouble(), fy+rand.nextDouble(), z, -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
-			break;
-		case 3:
-			world.spawnParticle("crit", fx+rand.nextDouble(), fy+rand.nextDouble(), z+1, -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
-			break;
+			case 0:
+				world.spawnParticle("crit", x, fy+rand.nextDouble(), fz+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
+				break;
+			case 1:
+				world.spawnParticle("crit", x+1, fy+rand.nextDouble(), fz+rand.nextDouble(), -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
+				break;
+			case 2:
+				world.spawnParticle("crit", fx+rand.nextDouble(), fy+rand.nextDouble(), z, -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
+				break;
+			case 3:
+				world.spawnParticle("crit", fx+rand.nextDouble(), fy+rand.nextDouble(), z+1, -0.2+0.4*rand.nextDouble(), 0.4*rand.nextDouble(), -0.2+0.4*rand.nextDouble());
+				break;
 		}
 	}
 
@@ -260,18 +261,18 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		fx = x;
 		fz = z;
 		switch(meta) {
-		case 0:
-			fx = x-1;
-			break;
-		case 1:
-			fx = x+1;
-			break;
-		case 2:
-			fz = z-1;
-			break;
-		case 3:
-			fz = z+1;
-			break;
+			case 0:
+				fx = x-1;
+				break;
+			case 1:
+				fx = x+1;
+				break;
+			case 2:
+				fz = z-1;
+				break;
+			case 3:
+				fz = z+1;
+				break;
 		}
 	}
 

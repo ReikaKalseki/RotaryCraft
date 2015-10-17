@@ -25,13 +25,13 @@
 		Maquinas de tipo arma y proteccion son usadas para atacar oponentes - ya sean mobs o jugadores - y defenderte de sus ataques.
 	</wepmachine>
 	<farmmachine>
-		Estas maquinas estan diseñadas para ser usadas bien para reemplazar o mejorar las granjas tradicionales.
+		Estas maquinas estan pensadas para ser usadas bien para reemplazar o mejorar las granjas tradicionales.
 	</farmmachine>
 	<cosmachine>
 		Las maquinas cosmeticas proporcionan poca o ningun bonus util, pero proporcionan atractivo acustico o visual.
 	</cosmachine>
 	<accmachine>
-		No muy utiles por su cuenta, estas maquina estan diseñadas para trabajar junto con otras, para mejorar su funcionalidad.
+		No muy utiles por su cuenta, estas maquina estan pensadas para trabajar junto con otras, para mejorar su funcionalidad.
 	</accmachine>
 	<tool>
 		Estas son las herramientas alimentadas mediante muelles tensados. Su muelle se destensa ligeramente con cada uso.Para recargarlos, craftealos junto a un nuevo muelle y obtendras el viejo muelle de vuelta, que puede volver a ser usado.

@@ -56,7 +56,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	public boolean isCreative;
 
-	private HybridTank tank = new HybridTank("reservoir", CAPACITY);
+	private final HybridTank tank = new HybridTank("reservoir", CAPACITY);
 
 	//private CompoundReservoir network;
 
@@ -152,7 +152,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null;
 			if (hot) {
 				Fluid f = tank.getActualFluid();
-				boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("jet fuel"));
+				boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("rc jet fuel"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
 				flammable = flammable || f.equals(FluidRegistry.getFluid("biofuel")) || f.equals(FluidRegistry.getFluid("bioethanol"));
@@ -479,10 +479,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		creativeFluids.clear();
 		addCreativeFluid("water");
 		addCreativeFluid("lava");
-		addCreativeFluid("lubricant");
-		addCreativeFluid("jet fuel");
+		addCreativeFluid("rc lubricant");
+		addCreativeFluid("rc jet fuel");
 		addCreativeFluid("rc ethanol");
-		addCreativeFluid("liquid nitrogen");
+		addCreativeFluid("rc liquid nitrogen");
 		addCreativeFluid("rc ammonia");
 		addCreativeFluid("rc sodium");
 		addCreativeFluid("rc chlorine");

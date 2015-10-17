@@ -24,7 +24,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 public class TileEntityGasEngine extends TileEntityEngine implements UpgradeableMachine {
 
 	@Override
-	public void upgrade() {
+	public void upgrade(ItemStack is) {
 		NBTTagCompound NBT = new NBTTagCompound();
 		type = EngineType.SPORT;
 		this.writeToNBT(NBT);

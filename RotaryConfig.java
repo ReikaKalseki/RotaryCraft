@@ -30,7 +30,7 @@ public class RotaryConfig extends ControlledConfig {
 	}
 
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(RotaryAchievements.class);
-	private int[] achievementIDs = new int[entries.size()]; //
+	private final int[] achievementIDs = new int[entries.size()]; //
 	private String[] blastGate;
 
 	/** Non-config-file control data used by the machines */

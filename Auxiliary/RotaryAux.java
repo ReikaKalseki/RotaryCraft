@@ -205,6 +205,8 @@ public class RotaryAux {
 		ItemStack eitem = ep.inventory.getCurrentItem();
 		if (eitem == null)
 			return false;
+		if (TinkerToolHandler.getInstance().isHammer(eitem))
+			return false;
 		if (TinkerToolHandler.getInstance().isPick(eitem) && TinkerToolHandler.getInstance().isStoneOrBetter(eitem))
 			return true;
 		if (MekToolHandler.getInstance().isPickTypeTool(eitem) && !MekToolHandler.getInstance().isWood(eitem))

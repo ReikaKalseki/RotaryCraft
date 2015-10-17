@@ -111,6 +111,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		this.getSummativeSidedPower();
 		//ReikaJavaLibrary.pConsole(Arrays.toString(musicQueue), Side.SERVER);
 
+		if (world.isRemote)
+			return;
+
 		if (power < LOOPPOWER) {
 			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
 				isOneTimePlaying = true;
@@ -136,8 +139,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 						if (playIndex[i] < musicQueue[i].size()) {
 							Note n = musicQueue[i].get(playIndex[i]);
 							if (n != null) {
-								if (!world.isRemote)
-									this.playNote(i, n);
+								this.playNote(i, n);
 							}
 						}
 					}
@@ -246,6 +248,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void save() {
+		if (worldObj.isRemote)
+			return;
 		try {
 			File save = DimensionManager.getCurrentSaveRootDirectory();
 			String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
@@ -283,20 +287,18 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public boolean hasSavedFile() {
+		if (worldObj.isRemote)
+			return false;
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		String base = save.getPath();
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-		try {
-			BufferedReader p = ReikaFileReader.getReader(base+"/RotaryCraft/"+name);
-			p.close();
-			return true;
-		}
-		catch (Exception e) {
-			return false;
-		}
+		File f = new File(base+"/RotaryCraft/"+name);
+		return f.exists();
 	}
 
 	public void read() {
+		if (worldObj.isRemote)
+			return;
 		File save = DimensionManager.getCurrentSaveRootDirectory();
 		//ReikaJavaLibrary.pConsole(musicFile);
 		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
@@ -337,6 +339,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void loadDemo() {
+		if (worldObj.isRemote)
+			return;
 		String path = "Resources/demomusic.rcmusic";
 		this.readFile(path, true);
 		isOneTimePlaying = true;
@@ -353,6 +357,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void setMusicFromDisc(ItemStack is) {
+		if (worldObj.isRemote)
+			return;
 		if (is.getItem() != ItemRegistry.DISK.getItemInstance())
 			return;
 		if (is.stackTagCompound == null)
@@ -377,6 +383,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	public void saveMusicToDisk(ItemStack is) {
+		if (worldObj.isRemote)
+			return;
 		if (is.getItem() != ItemRegistry.DISK.getItemInstance())
 			return;
 		is.stackTagCompound = new NBTTagCompound();
@@ -508,11 +516,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		public String toSerialString() {
 			StringBuilder sb = new StringBuilder();
-			sb.append(length);
+			sb.append(length.ordinal());
 			sb.append(":");
 			sb.append(pitch);
 			sb.append(":");
-			sb.append(voice);
+			sb.append(voice.ordinal());
 			return sb.toString();
 		}
 

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
@@ -18,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,6 +28,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import org.lwjgl.input.Keyboard;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -37,17 +42,19 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine,
-IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
+IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 
 	private static final int MINBASE = -1;
 
@@ -74,12 +81,14 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 
 	private boolean enabled = true;
 
+	private boolean efficient = false;
+
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
 	}
 
-	private static double getEfficiency(int tier) {
-		return 0.9-tier*0.08;
+	private static double getEfficiency(int tier, boolean eff) {
+		return eff ? 1-tier*0.05 : 0.9-tier*0.08;
 	}
 
 	private static final long getTierPower(int tier) {
@@ -103,7 +112,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 	}
 
 	public final double getEfficiency() {
-		return getEfficiency(tier);
+		return getEfficiency(tier, efficient);
 	}
 
 	public final long getTierPower() {
@@ -123,7 +132,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 		super.updateTileEntity();
 		if (DragonAPICore.debugtest) {
 			storedEnergy = this.getMaxStorage();
-			tank.setContents(tank.getCapacity(), FluidRegistry.getFluid("liquid nitrogen"));
+			tank.setContents(tank.getCapacity(), FluidRegistry.getFluid("rc liquid nitrogen"));
 		}
 		if (storedEnergy < 0) {
 			storedEnergy = 0;
@@ -139,12 +148,19 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 	}
 
 	@Override
-	public final void upgrade() {
-		tier++;
+	public final void upgrade(ItemStack item) {
+		if (item.getItemDamage() == Upgrades.EFFICIENCY.ordinal()) {
+			efficient = true;
+		}
+		else {
+			tier++;
+		}
 		this.syncAllData(true);
 	}
 
 	public final boolean canUpgradeWith(ItemStack item) {
+		if (!efficient && item.getItemDamage() == Upgrades.EFFICIENCY.ordinal())
+			return true;
 		if (tier >= 5)
 			return false;
 		if (item.getItemDamage() == 2) {
@@ -153,7 +169,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 			if (item.stackTagCompound.getInteger("magnet") < 720)
 				return false;
 		}
-		return item.getItem() == ItemRegistry.UPGRADE.getItemInstance() && item.getItemDamage() == tier+1;
+		return ItemRegistry.UPGRADE.matchItem(item) && (item.getItemDamage() == tier+1);
 	}
 
 	protected final boolean isMuffled() {
@@ -315,16 +331,57 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 		return MathHelper.ceiling_double_int(this.getIdealConsumedUnitsPerTick()*this.getConsumption());
 	}
 
-	public final void setTierFromItemTag(NBTTagCompound nbt) {
+	public final void setDataFromItemStackTag(NBTTagCompound nbt) {
 		if (nbt != null) {
 			tier = nbt.getInteger("tier");
+			efficient = nbt.getBoolean("efficient");
 		}
 	}
 
-	public final void setItemTagFromTier(ItemStack is) {
-		if (is.stackTagCompound == null)
-			is.stackTagCompound = new NBTTagCompound();
-		is.stackTagCompound.setInteger("tier", tier);
+	@Override
+	public final ArrayList<NBTTagCompound> getCreativeModeVariants() {
+		ArrayList<NBTTagCompound> li = new ArrayList();
+		li.add(new NBTTagCompound());
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger("tier", TIERS-1);
+		li.add(tag);
+		return li;
+	}
+
+	@Override
+	public final ArrayList<String> getDisplayTags(NBTTagCompound NBT) {
+		ArrayList<String> li = new ArrayList();
+		this.setDataFromItemStackTag(NBT);
+		li.add(String.format("Tier %d", tier));
+		if (efficient)
+			li.add(EnumChatFormatting.GOLD+"Efficiency Boost");
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			int torque = this.getGenTorque();
+			int speed = ReikaMathLibrary.intpow2(2, getMaxSpeedBase(tier));
+			long power = (long)torque*(long)speed;
+			double val = ReikaMathLibrary.getThousandBase(power);
+			String exp = ReikaEngLibrary.getSIPrefix(power);
+			li.add(String.format("Torque: %d Nm", torque));
+			li.add(String.format("Max Speed: %d rad/s", speed));
+			li.add(String.format("Max Power: %.3f%sW", val, exp));
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Hold ");
+			sb.append(EnumChatFormatting.GREEN.toString());
+			sb.append("Shift");
+			sb.append(EnumChatFormatting.GRAY.toString());
+			sb.append(" for power data");
+			li.add(sb.toString());
+		}
+		return li;
+	}
+
+	public final NBTTagCompound getTagsToWriteToStack() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("tier", tier);
+		nbt.setBoolean("efficient", efficient);
+		return nbt;
 	}
 
 	public final void incrementOmega() {
@@ -384,6 +441,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 		NBT.setInteger("temp", temperature);
 
 		NBT.setBoolean("t_enable", enabled);
+
+		NBT.setBoolean("efficient", efficient);
 	}
 
 	@Override
@@ -409,6 +468,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 
 		if (NBT.hasKey("t_enable"))
 			enabled = NBT.getBoolean("t_enable");
+
+		efficient = NBT.getBoolean("efficient");
 	}
 
 	@Override
@@ -479,7 +540,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile {
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.getFluid("liquid nitrogen"));
+		return fluid.equals(FluidRegistry.getFluid("rc liquid nitrogen"));
 	}
 
 	@Override

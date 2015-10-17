@@ -43,9 +43,9 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 		super(MachineRegistry.WETTER);
 		RecipeInterface.wetter = this;
 
-		this.addRecipe(new ItemStack(Blocks.sand), "lubricant", 500, new ItemStack(Blocks.soul_sand), 200, RecipeLevel.PROTECTED);
+		this.addRecipe(new ItemStack(Blocks.sand), "rc lubricant", 500, new ItemStack(Blocks.soul_sand), 200, RecipeLevel.PROTECTED);
 		this.addRecipe(new ItemStack(Blocks.sand), "oil", 125, new ItemStack(Blocks.soul_sand), 50, RecipeLevel.MODINTERACT);
-		this.addRecipe(new ItemStack(Blocks.cobblestone), "jet fuel", 20, new ItemStack(Blocks.netherrack), 80, RecipeLevel.PERIPHERAL);
+		this.addRecipe(new ItemStack(Blocks.cobblestone), "rc jet fuel", 20, new ItemStack(Blocks.netherrack), 80, RecipeLevel.PERIPHERAL);
 	}
 
 	public void addAPIRecipe(ItemStack in, Fluid f, int amount, ItemStack out, int time) {

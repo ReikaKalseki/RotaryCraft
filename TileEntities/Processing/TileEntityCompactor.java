@@ -22,10 +22,10 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
@@ -36,7 +36,7 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, ThermalMachine,
+public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, FrictionHeatable,
 MultiOperational, ConditionalOperation {
 
 	/** The number of ticks that the current item has been cooking for */
@@ -55,6 +55,7 @@ MultiOperational, ConditionalOperation {
 	private boolean animdir = false;
 
 	private int envirotick = 0;
+	private int tempTick;
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -90,18 +91,18 @@ MultiOperational, ConditionalOperation {
 
 	public boolean getIOSides(World world, int x, int y, int z, int metadata) {
 		switch (metadata) {
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				break;
 		}
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, powinx, y, powinz, 4);
 		return true;
@@ -191,14 +192,14 @@ MultiOperational, ConditionalOperation {
 		if (item == Items.coal)
 			return 80;
 		switch(meta) {
-		case 0:
-			return 160;
-		case 1:
-			return 320;
-		case 2:
-			return 640;
-		default:
-			return -1;
+			case 0:
+				return 160;
+			case 1:
+				return 320;
+			case 2:
+				return 640;
+			default:
+				return -1;
 		}
 	}
 
@@ -314,12 +315,15 @@ MultiOperational, ConditionalOperation {
 		this.getPower(false);
 		if (envirotick >= 20) {
 			this.updatePressure(world, x, y, z, meta);
-			this.updateTemperature(world, x, y, z, meta);
+			if (tempTick == 0)
+				this.updateTemperature(world, x, y, z, meta);
 			envirotick = 0;
 		}
 		this.testIdle();
 		boolean flag1 = false;
 		envirotick++;
+		if (tempTick > 0)
+			tempTick--;
 		tickcount++;
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
 		if (!world.isRemote) {
@@ -536,16 +540,6 @@ MultiOperational, ConditionalOperation {
 	}
 
 	@Override
-	public void onOverheat(World world, int x, int y, int z) {
-		this.overheat(world, x, y, z);
-	}
-
-	@Override
-	public boolean canBeFrictionHeated() {
-		return true;
-	}
-
-	@Override
 	public boolean canBeCooledWithFins() {
 		return true;
 	}
@@ -553,5 +547,10 @@ MultiOperational, ConditionalOperation {
 	@Override
 	public int getMaxPressure() {
 		return MAXPRESSURE;
+	}
+
+	@Override
+	public void resetAmbientTemperatureTimer() {
+		tempTick = 5;
 	}
 }

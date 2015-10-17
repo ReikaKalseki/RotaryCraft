@@ -166,7 +166,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		fontRendererObj.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
 
 		if (cvt.hasLubricant()) {
-			Fluid f = FluidRegistry.getFluid("lubricant");
+			Fluid f = FluidRegistry.getFluid("rc lubricant");
 			IIcon ico = f.getIcon();
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			GL11.glColor4f(1, 1, 1, 1);

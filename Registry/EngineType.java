@@ -265,12 +265,12 @@ public enum EngineType {
 				return true;
 			break;
 		case HYDRO:
-			if (fluid.equals(FluidRegistry.getFluid("lubricant")))
+			if (fluid.equals(FluidRegistry.getFluid("rc lubricant")))
 				return true;
 			break;
 		case MICRO:
 		case JET:
-			if (fluid.equals(FluidRegistry.getFluid("jet fuel")))
+			if (fluid.equals(FluidRegistry.getFluid("rc jet fuel")))
 				return true;
 			break;
 		default:
@@ -286,7 +286,7 @@ public enum EngineType {
 			return FluidRegistry.getFluid("rc ethanol");
 		case MICRO:
 		case JET:
-			return FluidRegistry.getFluid("jet fuel");
+			return FluidRegistry.getFluid("rc jet fuel");
 		default:
 			return null;
 		}

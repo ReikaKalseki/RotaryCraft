@@ -34,7 +34,7 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 
 	public static final int CAPACITY = 300000;
 
-	//private HybridTank steam = new HybridTank("steamturb", CAPACITY);
+	//private final HybridTank steam = new HybridTank("steamturb", CAPACITY);
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {

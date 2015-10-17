@@ -28,7 +28,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	public static final Fluid BC_FUEL = FluidRegistry.getFluid("fuel");
-	public static final Fluid JET_FUEL = FluidRegistry.getFluid("jet fuel");
+	public static final Fluid JET_FUEL = FluidRegistry.getFluid("rc jet fuel");
 
 	public static final int CAPACITY = 5*FluidContainerRegistry.BUCKET_VOLUME;
 
@@ -86,7 +86,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 		if (convert && input.getFluid() != null && input.getFluid().amount >= ratio*factor && this.hasItems()) {
 			FluidStack drain = input.drain(ratio*factor, true);
-			output.fill(FluidRegistry.getFluidStack("jet fuel", factor), true);
+			output.fill(FluidRegistry.getFluidStack("rc jet fuel", factor), true);
 			if (!world.isRemote)
 				this.consumeItems();
 		}

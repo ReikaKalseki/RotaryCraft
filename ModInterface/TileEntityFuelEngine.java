@@ -58,9 +58,9 @@ TemperatureTE {
 	public static final int CAPACITY = 24000;
 	public static final int MAXTEMP = 750;
 
-	private HybridTank tank = new HybridTank("fuelengine", CAPACITY);
-	private HybridTank watertank = new HybridTank("waterfuelengine", CAPACITY);
-	private HybridTank lubetank = new HybridTank("lubefuelengine", CAPACITY);
+	private final HybridTank tank = new HybridTank("fuelengine", CAPACITY);
+	private final HybridTank watertank = new HybridTank("waterfuelengine", CAPACITY);
+	private final HybridTank lubetank = new HybridTank("lubefuelengine", CAPACITY);
 
 	private StepTimer fuelTimer = new StepTimer(36); //30 min a bucket
 	private StepTimer soundTick = new StepTimer(40);
@@ -241,7 +241,7 @@ TemperatureTE {
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		Fluid f = resource.getFluid();
 		if (this.canFill(from, f)) {
-			if (f.equals(FluidRegistry.getFluid("lubricant")))
+			if (f.equals(FluidRegistry.getFluid("rc lubricant")))
 				return lubetank.fill(resource, doFill);
 			else if (f.equals(FluidRegistry.getFluid("fuel")))
 				return tank.fill(resource, doFill);
@@ -272,7 +272,7 @@ TemperatureTE {
 		case NORTH:
 		case SOUTH:
 		case WEST:
-			return f.equals(FluidRegistry.getFluid("lubricant")) || f.equals(FluidRegistry.WATER);
+			return f.equals(FluidRegistry.getFluid("rc lubricant")) || f.equals(FluidRegistry.WATER);
 		default:
 			return false;
 		}
@@ -352,7 +352,7 @@ TemperatureTE {
 	}
 
 	public void addLube(int amt) {
-		lubetank.addLiquid(amt, FluidRegistry.getFluid("lubricant"));
+		lubetank.addLiquid(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	@Override

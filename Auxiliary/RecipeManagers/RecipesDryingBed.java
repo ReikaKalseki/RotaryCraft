@@ -114,8 +114,8 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 			if (cr == null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
-				sb.append("Map data: "+recipeList.toString());
-				sb.append("Report this to Reika!");
+				sb.append("\nMap data: "+recipeList.toString());
+				sb.append("\nReport this to Reika!");
 				throw new IllegalStateException(sb.toString());
 			}
 			if (ReikaItemHelper.matchStacks(result, cr.output))
@@ -130,8 +130,8 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 			if (cr == null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
-				sb.append("Map data: "+recipeList.toString());
-				sb.append("Report this to Reika!");
+				sb.append("\nMap data: "+recipeList.toString());
+				sb.append("\nReport this to Reika!");
 				throw new IllegalStateException(sb.toString());
 			}
 			if (ReikaItemHelper.matchStacks(result, cr.output))
@@ -159,7 +159,7 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 			li = OreDictionary.getOres("itemRubber");
 		}
 		if (li != null && !li.isEmpty())
-			this.addRecipe("lubricant", 100, li.get(0), RecipeLevel.MODINTERACT);
+			this.addRecipe("rc lubricant", 100, li.get(0), RecipeLevel.MODINTERACT);
 	}
 
 	@Override

@@ -64,6 +64,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
+import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -95,7 +96,7 @@ public class RotaryRecipes {
 			addThermalExpansion();
 		if (ModList.BCENERGY.isLoaded()) {
 			FuelManager.INSTANCE.addFuel(FluidRegistry.getFluid("rc ethanol"), 9, 3000); //ethanol generates about 50% more power, but burns fast
-			CoolantManager.INSTANCE.addCoolant(FluidRegistry.getFluid("liquid nitrogen"), 0.01F);
+			CoolantManager.INSTANCE.addCoolant(FluidRegistry.getFluid("rc liquid nitrogen"), 0.01F);
 		}
 	}
 
@@ -168,6 +169,10 @@ public class RotaryRecipes {
 		coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1) : ItemStacks.goldcoil;
 		Object ps = new PreferentialItemStack(Items.iron_ingot, "ingotLead").blockItem(ItemRegistry.MODINGOTS.getItemInstance()).getItem();
 		MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', ItemStacks.conductive.getItem(), 'C', coil, 'P', ItemStacks.basepanel, 'S', ItemStacks.diamondshaftcore, 'l', ps, 's', "ingotSilver");
+
+		ItemStack enderium = ModList.THERMALFOUNDATION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotEnderium", 1) : ItemStacks.bedingot;
+		ItemStack electrum = ModList.THERMALFOUNDATION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotElectrum", 1) : ItemStacks.redgoldingot;
+		ItemRegistry.UPGRADE.addMetaRecipe(Upgrades.FLUX.ordinal(), "BeB", "tEt", "BeB", 'e', electrum, 'B', ItemStacks.basepanel, 'E', enderium, 't', ItemStacks.tungsteningot);
 
 		if (ModList.TINKERER.isLoaded()) {
 			GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
@@ -815,7 +820,7 @@ public class RotaryRecipes {
 		ItemRegistry.UPGRADE.addMetaBlastRecipe(1000, 4, 4, "cEc", "ERE", "SES", 'c', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'R', ItemStacks.bedingot, 'S', ItemStacks.steelingot, 'E', ItemStacks.tungsteningot);
 		ItemRegistry.UPGRADE.addMetaBlastRecipe(1800, 8, 5, "SES", "ERE", "SES", 'R', ItemStacks.bedrockgear, 'S', ItemStacks.steelingot, 'E', ItemStacks.springingot);
 
-		ItemRegistry.UPGRADE.addMetaRecipe(6, "SEI", "ERE", "SEI", 'R', ItemStacks.compoundturb, 'S', ItemStacks.combustor, 'I', ItemStacks.igniter, 'E', ItemStacks.bedrockdust);
+		ItemRegistry.UPGRADE.addMetaRecipe(6, "SEI", "ERE", "SEI", 'R', ItemStacks.compoundturb, 'S', ItemStacks.highcombustor, 'I', ItemStacks.igniter, 'E', ItemStacks.bedrockdust);
 	}
 
 	private static void addMisc() {

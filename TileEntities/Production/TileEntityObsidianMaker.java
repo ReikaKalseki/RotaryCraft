@@ -52,8 +52,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	public static final int CAPACITY = 320*1000;
 	public static final int MAXTEMP = 1000;
 
-	private HybridTank lava = new HybridTank("lavamix", CAPACITY);
-	private HybridTank water = new HybridTank("watermix", CAPACITY);
+	private final HybridTank lava = new HybridTank("lavamix", CAPACITY);
+	private final HybridTank water = new HybridTank("watermix", CAPACITY);
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -134,6 +134,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	public void mix() {
 		int slot = this.getNonFullStack();
 		if (slot == -1)
+			return;
+		if (lava.getLevel() < 1000 || water.getLevel() < 1000)
 			return;
 		lava.removeLiquid(1000);
 		water.removeLiquid(1000);

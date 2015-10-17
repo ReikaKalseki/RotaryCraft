@@ -109,8 +109,8 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 			if (cr == null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
-				sb.append("Map data: "+recipeList.toString());
-				sb.append("Report this to Reika!");
+				sb.append("\nMap data: "+recipeList.toString());
+				sb.append("\nReport this to Reika!");
 				throw new IllegalStateException(sb.toString());
 			}
 			if (ReikaItemHelper.matchStacks(result, cr.output))
@@ -125,8 +125,8 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 			if (cr == null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
-				sb.append("Map data: "+recipeList.toString());
-				sb.append("Report this to Reika!");
+				sb.append("\nMap data: "+recipeList.toString());
+				sb.append("\nReport this to Reika!");
 				throw new IllegalStateException(sb.toString());
 			}
 			if (ReikaItemHelper.matchStacks(result, cr.output))

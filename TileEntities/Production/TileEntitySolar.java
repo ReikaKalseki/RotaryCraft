@@ -53,7 +53,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	public static final int GENOMEGA = 512;
 
-	private HybridTank tank = new HybridTank("solar", 4000);
+	private final HybridTank tank = new HybridTank("solar", 4000);
 
 	@Override
 	public boolean canProvidePower() {
@@ -134,8 +134,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		write = ForgeDirection.DOWN;
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
 		omega = GENOMEGA;
-		torque = (int)(this.getArrayOverallBrightness()*Math.min(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64)*(this.getArraySize()+1));
-		if (this.getArraySize() <= 0 || torque == 0 || tank.getLevel() >= this.getConsumedWater()) {
+		torque = this.getGenTorque(world, x, y, z);
+		if (this.getArraySize() <= 0 || torque == 0 || tank.getLevel() < this.getConsumedWater()) {
 			omega = 0;
 			torque = 0;
 		}
@@ -143,6 +143,10 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		if (power > 0 && tank.getLevel() > 0) {
 			tank.removeLiquid(this.getConsumedWater());
 		}
+	}
+
+	private int getGenTorque(World world, int x, int y, int z) {
+		return Math.min(16384, (int)(this.getArrayOverallBrightness()*Math.min(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64)*(this.getArraySize()+1)));
 	}
 
 	public int getConsumedWater() {

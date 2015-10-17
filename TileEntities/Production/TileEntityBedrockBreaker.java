@@ -33,6 +33,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.FactorizationHandler;
 import Reika.RotaryCraft.API.Event.BedrockDigEvent;
+import Reika.RotaryCraft.API.Interfaces.SurrogateBedrock;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -100,7 +101,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 
 	private boolean processBlock(World world, int x, int y, int z) {
 		Block b = world.getBlock(x, y, z);
-		if (this.isBedrock(b))
+		if (this.isBedrock(world, x, y, z))
 			return true;
 		if (b == BlockRegistry.BEDROCKSLICE.getBlockInstance())
 			return true;
@@ -126,80 +127,84 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		if (y == 0 && !ConfigRegistry.VOIDHOLE.getState())
 			return false;
 		switch (metadata) {
-		case 0:
-			read = ForgeDirection.WEST;
-			break;
-		case 1:
-			read = ForgeDirection.EAST;
-			break;
-		case 2:
-			read = ForgeDirection.NORTH;
-			break;
-		case 3:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 4:
-			read = ForgeDirection.DOWN;
-			break;
-		case 5:
-			read = ForgeDirection.UP;
-			break;
+			case 0:
+				read = ForgeDirection.WEST;
+				break;
+			case 1:
+				read = ForgeDirection.EAST;
+				break;
+			case 2:
+				read = ForgeDirection.NORTH;
+				break;
+			case 3:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 4:
+				read = ForgeDirection.DOWN;
+				break;
+			case 5:
+				read = ForgeDirection.UP;
+				break;
 		}
 		return true;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch (metadata) {
-		case 0:
-			dropx = x+0.5;
-			dropy = y+1.25;
-			dropz = z+0.5;
-			facing = ForgeDirection.EAST;
-			break;
-		case 1:
-			dropx = x+0.5;
-			dropy = y+1.25;
-			dropz = z+0.5;
-			facing = ForgeDirection.WEST;
-			break;
-		case 2:
-			dropx = x+0.5;
-			dropy = y+1.25;
-			dropz = z+0.5;
-			facing = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			dropx = x+0.5;
-			dropy = y+1.25;
-			dropz = z+0.5;
-			facing = ForgeDirection.NORTH;
-			break;
-		case 4:
-			dropx = x+0.5;
-			dropy = y+1.25;
-			dropz = z+0.5;
-			facing = ForgeDirection.UP;
-			break;
-		case 5:
-			dropx = x+0.5;
-			dropy = y-0.25;
-			dropz = z+0.5;
-			facing = ForgeDirection.DOWN;
-			break;
+			case 0:
+				dropx = x+0.5;
+				dropy = y+1.25;
+				dropz = z+0.5;
+				facing = ForgeDirection.EAST;
+				break;
+			case 1:
+				dropx = x+0.5;
+				dropy = y+1.25;
+				dropz = z+0.5;
+				facing = ForgeDirection.WEST;
+				break;
+			case 2:
+				dropx = x+0.5;
+				dropy = y+1.25;
+				dropz = z+0.5;
+				facing = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				dropx = x+0.5;
+				dropy = y+1.25;
+				dropz = z+0.5;
+				facing = ForgeDirection.NORTH;
+				break;
+			case 4:
+				dropx = x+0.5;
+				dropy = y+1.25;
+				dropz = z+0.5;
+				facing = ForgeDirection.UP;
+				break;
+			case 5:
+				dropx = x+0.5;
+				dropy = y-0.25;
+				dropz = z+0.5;
+				facing = ForgeDirection.DOWN;
+				break;
 		}
 	}
 
-	private boolean isBedrock(Block id) {
+	private boolean isBedrock(World world, int x, int y, int z) {
+		Block id = world.getBlock(x, y, z);
 		if (id == Blocks.bedrock)
 			return true;
 		if (id == FactorizationHandler.getInstance().bedrockID)
 			return true;
+		if (id instanceof SurrogateBedrock) {
+			return ((SurrogateBedrock)id).isBedrock(world, x, y, z);
+		}
 		return false;
 	}
 
 	public void grind(World world, int mx, int my, int mz, int x, int y, int z, int meta) {
 		if (this.processBlock(world, x, y, z)) {
-			if (this.isBedrock(world.getBlock(x, y, z))) {
+			if (this.isBedrock(world, x, y, z)) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 				world.setBlock(x, y, z, BlockRegistry.BEDROCKSLICE.getBlockInstance(), 0, 3);
 			}
@@ -207,12 +212,12 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 				int rockmetadata = world.getBlockMetadata(x, y, z);
 				if (rockmetadata < 15) {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
-					world.setBlock(x, y, z, BlockRegistry.BEDROCKSLICE.getBlockInstance(), rockmetadata+1, 3);
+					world.setBlockMetadataWithNotify(x, y, z, rockmetadata+1, 3);
 				}
 				else {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
+					ItemStack is = this.getDrops(world, x, y, z);
 					world.setBlockToAir(x, y, z);
-					ItemStack is = this.getDrops();
 					if (!this.chestCheck(world, x, y, z, is)) {
 						if (this.isInventoryFull())
 							ReikaItemHelper.dropItem(world, dropx, dropy, dropz, is);
@@ -294,12 +299,14 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		inv[0] = null;
 	}
 
-	private ItemStack getDrops() {
-		ItemStack dust = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, this.getNumberDust());
+	private ItemStack getDrops(World world, int x, int y, int z) {
+		ItemStack dust = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, this.getNumberDust(world, x, y, z));
 		return dust;
 	}
 
-	private int getNumberDust() {
+	private int getNumberDust(World world, int x, int y, int z) {
+		//float f = Math.min(1, ((TileEntityBedrockSlice)world.getTileEntity(x, y, z)).dustYield);
+		//return Math.max(1, (int)(f*DifficultyEffects.BEDROCKDUST.getInt()));
 		return DifficultyEffects.BEDROCKDUST.getInt();
 	}
 

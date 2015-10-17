@@ -31,7 +31,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	public static final int FUELCAP = 3000;
 
-	private HybridTank tank = new HybridTank("ecu", FUELCAP);
+	private final HybridTank tank = new HybridTank("ecu", FUELCAP);
 
 	public boolean redstoneMode;
 	private int redstoneTick = 0;
@@ -293,7 +293,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
 		//if (fluid.equals(FluidRegistry.LAVA)) Why was THIS here???
 		//	return true;
-		if (fluid.equals(FluidRegistry.getFluid("jet fuel")))
+		if (fluid.equals(FluidRegistry.getFluid("rc jet fuel")))
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
 			return true;

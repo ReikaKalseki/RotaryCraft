@@ -32,7 +32,7 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 
 	public int oldLevel;
 
-	private HybridTank tank = new HybridTank("flooder", 4000);
+	private final HybridTank tank = new HybridTank("flooder", 4000);
 
 	private StepTimer waterTimer = new StepTimer(5);
 

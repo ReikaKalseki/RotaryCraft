@@ -60,9 +60,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	boolean flag2 = false;
 
-	private HybridTank fuel = new HybridTank("fuel", MAXFUEL);
-	private HybridTank water = new HybridTank("water", CAPACITY);
-	private HybridTank accel = new HybridTank("accel", MAXFUEL);
+	private final HybridTank fuel = new HybridTank("fuel", MAXFUEL);
+	private final HybridTank water = new HybridTank("water", CAPACITY);
+	private final HybridTank accel = new HybridTank("accel", MAXFUEL);
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -424,7 +424,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (fluid.equals(FluidRegistry.WATER)) {
 			return water.fill(resource, doFill);
 		}
-		if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
+		if (fluid.equals(FluidRegistry.getFluid("rc jet fuel"))) {
 			return fuel.fill(resource, doFill);
 		}
 		if (fluid.equals(FluidRegistry.getFluid("rc oxygen"))) {
@@ -448,7 +448,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (fluid.equals(FluidRegistry.WATER)) {
 			return from.offsetY == 0;
 		}
-		if (fluid.equals(FluidRegistry.getFluid("jet fuel"))) {
+		if (fluid.equals(FluidRegistry.getFluid("rc jet fuel"))) {
 			return from.offsetY == 0;
 		}
 		if (fluid.equals(FluidRegistry.getFluid("rc oxygen"))) {
@@ -481,7 +481,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}
 
 	public void addFuel(int amt) {
-		fuel.addLiquid(amt, FluidRegistry.getFluid("jet fuel"));
+		fuel.addLiquid(amt, FluidRegistry.getFluid("rc jet fuel"));
 	}
 
 	public void addWater(int amt) {

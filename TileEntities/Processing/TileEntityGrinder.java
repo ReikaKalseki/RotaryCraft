@@ -51,7 +51,7 @@ ConditionalOperation, DamagingContact {
 
 	public static final int MAXLUBE = 4000;
 
-	private HybridTank tank = new HybridTank("grinder", MAXLUBE);
+	private final HybridTank tank = new HybridTank("grinder", MAXLUBE);
 
 	private static final ItemHashMap<Float> grindableSeeds = new ItemHashMap();
 	private static final OneWaySet<KeyedItemStack> lockedSeeds = new OneWaySet();
@@ -241,7 +241,7 @@ ConditionalOperation, DamagingContact {
 
 		if (is != null && isGrindableSeed(is)) {
 			float num = grindableSeeds.get(is);
-			tank.addLiquid((int)(DifficultyEffects.CANOLA.getInt()*num), FluidRegistry.getFluid("lubricant"));
+			tank.addLiquid((int)(DifficultyEffects.CANOLA.getInt()*num), FluidRegistry.getFluid("rc lubricant"));
 		}
 
 		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(is);
@@ -347,7 +347,7 @@ ConditionalOperation, DamagingContact {
 	}
 
 	public void setLevel(int amt) {
-		tank.setContents(amt, FluidRegistry.getFluid("lubricant"));
+		tank.setContents(amt, FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	public void removeLiquid(int amt) {

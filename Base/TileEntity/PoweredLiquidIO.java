@@ -26,8 +26,8 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 @Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
 public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFluidHandler, PipeConnector, IPipeConnection {
 
-	protected HybridTank output = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()+"out"), this.getCapacity());
-	protected HybridTank input = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()+"in"), this.getCapacity());
+	protected final HybridTank output = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()+"out"), this.getCapacity());
+	protected final HybridTank input = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase()+"in"), this.getCapacity());
 
 	@Override
 	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {

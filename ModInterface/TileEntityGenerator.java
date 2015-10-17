@@ -150,7 +150,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return f != null && (f.equals(FluidRegistry.getFluid("ic2coolant")) || f.equals(FluidRegistry.getFluid("liquid nitrogen")));
+		return f != null && (f.equals(FluidRegistry.getFluid("ic2coolant")) || f.equals(FluidRegistry.getFluid("rc liquid nitrogen")));
 	}
 
 	@Override

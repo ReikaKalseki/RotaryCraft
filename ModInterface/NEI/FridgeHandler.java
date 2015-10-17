@@ -104,7 +104,7 @@ public class FridgeHandler extends TemplateRecipeHandler {
 	}
 
 	private void drawFluids(int recipe) {
-		Fluid f = FluidRegistry.getFluid("liquid nitrogen");
+		Fluid f = FluidRegistry.getFluid("rc liquid nitrogen");
 		if (f != null) {
 			IIcon ico = f.getIcon();
 			float u = ico.getMinU();

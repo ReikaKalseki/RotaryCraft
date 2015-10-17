@@ -91,7 +91,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(this.getDrops(metadata));
+		ret.add(this.getDrops(metadata, fortune));
 		return ret;
 	}
 
@@ -137,8 +137,11 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 		ReikaItemHelper.dropItem(world, x, y, z, ItemStacks.canolaSeeds);
 	}
 
-	public ItemStack getDrops(int metadata) {
+	public ItemStack getDrops(int metadata, int fortune) {
 		int ndrops = metadata == GROWN ? (1+rand.nextInt(2))*(2+rand.nextInt(8)+rand.nextInt(5)) : 1;
+		if (metadata == GROWN && fortune > 0) {
+			ndrops = Math.max(ndrops, (int)(ndrops*rand.nextDouble()*(1+fortune)));
+		}
 		ItemStack items = ReikaItemHelper.getSizedItemStack(ItemStacks.canolaSeeds, ndrops);
 		return items;
 	}

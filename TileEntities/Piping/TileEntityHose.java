@@ -61,7 +61,7 @@ public class TileEntityHose extends TileEntityPiping implements PumpablePipe {
 
 	@Override
 	public Fluid getFluidType() {
-		return this.hasLiquid() ? FluidRegistry.getFluid("lubricant") : null;
+		return this.hasLiquid() ? FluidRegistry.getFluid("rc lubricant") : null;
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class TileEntityHose extends TileEntityPiping implements PumpablePipe {
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return f.equals(FluidRegistry.getFluid("lubricant"));
+		return f.equals(FluidRegistry.getFluid("rc lubricant"));
 	}
 
 	@Override

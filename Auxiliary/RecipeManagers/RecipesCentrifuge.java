@@ -68,11 +68,11 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
 		this.addRecipe(Items.blaze_powder, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
-		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("lubricant"), 50), 60, RecipeLevel.PROTECTED, ItemStacks.slipperyPropolis, 80);
-		this.addRecipe(ItemStacks.slipperyPropolis, new FluidStack(FluidRegistry.getFluid("lubricant"), 150), 100, RecipeLevel.PROTECTED);
+		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 50), 60, RecipeLevel.PROTECTED, ItemStacks.slipperyPropolis, 80);
+		this.addRecipe(ItemStacks.slipperyPropolis, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 150), 100, RecipeLevel.PROTECTED);
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));
-		this.addRecipe(ItemStacks.canolaHusks, new FluidStack(FluidRegistry.getFluid("lubricant"), amt), 100, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.canolaHusks, new FluidStack(FluidRegistry.getFluid("rc lubricant"), amt), 100, RecipeLevel.CORE);
 	}
 
 	public static class CentrifugeRecipe implements MachineRecipe {

@@ -133,7 +133,7 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 	}
 
 	private static enum Conversion {
-		OIL("oil", "lubricant", 6),
+		OIL("oil", "rc lubricant", 6),
 		ETHANOL1("bioethanol", "rc ethanol", 1),
 		ETHANOL2("biofuel", "rc ethanol", -2);
 

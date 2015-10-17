@@ -141,9 +141,9 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		if (f.equals(FluidRegistry.getFluid("jet fuel")))
+		if (f.equals(FluidRegistry.getFluid("rc jet fuel")))
 			return false;
-		if (f.equals(FluidRegistry.getFluid("lubricant")))
+		if (f.equals(FluidRegistry.getFluid("rc lubricant")))
 			return false;
 		if (f.equals(FluidRegistry.getFluid("rc ethanol")))
 			return false;
