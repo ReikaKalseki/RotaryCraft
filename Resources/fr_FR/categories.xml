@@ -13,30 +13,30 @@
 		These machines are used to process materials, either creating new materials, increasing yields, or converting items between mods.
 	</procmachine>
 	<utilmachine>
-		These are machines which fill specific purposes not easily categorized into the other groups.
+		Ce sont des machines qui remplissent des buts spécifique pas facilement catégorisable dans les autres groupes.
 	</utilmachine>
 	<prodmachine>
 		Ce sont des machines utilisées pour produite les ressources de base, soit directement du minnage soit d'ingrédients bruts.
 	</prodmachine>
 	<survmachine>
-		These machines are used to evaluate your surroundings, to become more aware of potential dangers or items of value.
+		Ces machines sont utilisées pour évaluer votre environnement, pour devenir plus conscient de dangers potentiels ou des articles de valeur.
 	</survmachine>
 	<wepmachine>
-		Weaponry- and Protection-type machines are used to attack opponents - either mobs or players - and defend yourself from their attacks.
+		Machines Weaponry- and Protection-type machines are used to attack opponents - either mobs or players - and defend yourself from their attacks.
 	</wepmachine>
 	<farmmachine>
-		These machines are designed to be used to either replace or enhance traditional farms.
+		Ces machines sont conçues, soit pour remplacer, soit pour améliorer des fermes traditionnelles.
 	</farmmachine>
 	<cosmachine>
-		Cosmetic machines provide little to no utilitarian bonus, but provide visual or acoustic appeal.
+		Les machines cosmétiques ne fournissent que peu de bonus utiles, mais elles fournissent des attraits visuels ou acoustiques.
 	</cosmachine>
 	<accmachine>
 		Pas terriblement utiles seules, ces machines sont concue pour fonctionner avec d'autres afin d'en augmenter leurs fonctionnalités.
 	</accmachine>
 	<tool>
-		These are the tools powered by wound-up coils. Their coil depletes slightly with each use. To recharge them, craft them with a new coil and you will get the old coil back, which can be used again.
+		Ce sont les outils énergisés par des bobines enroulées dessus. Leur bobine épuise légèrement à chaque utilisation. Pour les recharger, fabriquez les avec une nouvelle bobine et vous aurez la vieille bobine en retour, qui pourra être encore réutilisée.
 	</tool>
 	<resource>
-		Ce sont des éléments de type ressource, utilisés pour various purposes.
+		Ce sont des éléments de type ressource, utilisés pour des buts divers.
 	</resource>
 </categories>
