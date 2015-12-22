@@ -78,7 +78,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 	private void drawRadar(int a, int b) {
 		for (int j = gpr.getBounds()[0]; j <= gpr.getBounds()[1]; j++) {
 			for (int i = 0; i < gpr.yCoord; i++) {
-				int color = 0xff000000 | gpr.colors[i][j];
+				int color = 0xff000000 | gpr.getColor(i, j);
 				this.drawRect(a+7+UNIT*j, b+16+UNIT*i, a+7+UNIT+UNIT*j, b+16+UNIT*i+UNIT, color);
 			}
 		}

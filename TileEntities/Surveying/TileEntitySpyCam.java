@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -29,6 +30,8 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffect {
 
@@ -36,7 +39,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 
 	public static final int MAXRANGE = 24;
 
-	private int[][] topBlocks = new int[2*MAXRANGE+1][2*MAXRANGE+1];
+	private BlockKey[][] topBlocks = new BlockKey[2*MAXRANGE+1][2*MAXRANGE+1];
 	private int[][] mobs = new int[2*MAXRANGE+1][2*MAXRANGE+1];
 	private int[][] topY = new int[2*MAXRANGE+1][2*MAXRANGE+1];
 	private List<EntityLivingBase> inzone;
@@ -105,7 +108,7 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 				Block b = world.getBlock(x+i, topy, z+j);
 				int meta = world.getBlockMetadata(x+i, topy, z+j);
 				if (world.isRemote)
-					topBlocks[(i+range)][j+range] = BlockColorMapper.instance.getColorForBlock(b, meta);
+					topBlocks[(i+range)][j+range] = new BlockKey(b, meta);
 				if (world.getBlock(x+i, y, z+j) != Blocks.air) {
 					//topBlocks[(i+range)][j+range] = 0;
 				}
@@ -124,8 +127,9 @@ public class TileEntitySpyCam extends RemoteControlMachine implements RangedEffe
 		return mobs[i][j];
 	}
 
-	public int getTopBlockAt(int i, int j) {
-		return topBlocks[i][j];
+	@SideOnly(Side.CLIENT)
+	public int getTopBlockColorAt(int i, int j) {
+		return BlockColorMapper.instance.getColorForBlock(topBlocks[i][j]);
 	}
 
 	public int getHeightAt(int i, int j) {

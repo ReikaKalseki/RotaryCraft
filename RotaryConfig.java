@@ -40,8 +40,8 @@ public class RotaryConfig extends ControlledConfig {
 	@Deprecated
 	public static final int MILLIBUCKET = FluidContainerRegistry.BUCKET_VOLUME;
 
-	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
-		super(mod, option, id, cfg);
+	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id) {
+		super(mod, option, id);
 
 		for (int i = 0; i < entries.size(); i++) {
 			String name = entries.get(i);

@@ -24,6 +24,8 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGPR extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
@@ -31,7 +33,6 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	 * drawn downwards (first slots are top layer) */
 	public BlockKey[][] blocks = new BlockKey[256][81]; //from 0-16 -> centred on 8 (8 above and below)
 
-	public int[][] colors = new int[256][81];
 	public boolean xdir;
 
 	private int offsetX;
@@ -106,23 +107,19 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		if (tickcount == 0) {
 			int[] bounds = this.getBounds();
 			this.eval2(world, x+offsetX, y+offsetY, z+offsetZ, meta, bounds);
-			if (world.isRemote)
-				this.blockToColor(bounds, y);
 			tickcount = 20;
 		}
 		tickcount--;
 	}
 
-	private void blockToColor(int[] bounds, int y) {
-		for (int j = bounds[0]; j <= bounds[1]; j++) {
-			for (int i = 0; i < y; i++) {
-				colors[i][j] = this.getBlockColor(blocks[i][j]);
-			}
-		}
+	@SideOnly(Side.CLIENT)
+	public int getColor(int x, int y) {
+		return this.getBlockColor(blocks[x][y]);
 	}
 
-	public int getBlockColor(BlockKey bk) {
-		return BlockColorMapper.instance.getColorForBlock(bk.blockID, bk.metadata);
+	@SideOnly(Side.CLIENT)
+	private int getBlockColor(BlockKey bk) {
+		return bk != null ? BlockColorMapper.instance.getColorForBlock(bk.blockID, bk.metadata) : BlockColorMapper.UNKNOWN_COLOR;
 	}
 
 	private void eval2(World world, int x, int y, int z, int meta, int[] bounds) {

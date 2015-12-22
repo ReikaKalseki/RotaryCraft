@@ -32,12 +32,12 @@ public class LuaGetBlockAtPos extends LuaMethod {
 		if (x < lim[0] || x > lim[1] || y < 0 || y > tg.blocks.length) //out of bounds
 			return null;
 		BlockKey bk = tg.blocks[x][y];
-		return new Object[]{bk.blockID, bk.metadata, tg.colors[x][y]};
+		return new Object[]{bk.blockID, bk.metadata};
 	}
 
 	@Override
 	public String getDocumentation() {
-		return "Returns the block at a given position.\nArgs: horizontal offset, depth\nReturns: Block ID, metadata, renderColor";
+		return "Returns the block at a given position.\nArgs: horizontal offset, depth\nReturns: Block ID, metadata";
 	}
 
 	@Override

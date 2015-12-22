@@ -9,11 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +23,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -35,7 +34,10 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class BlockColorMapper {
 
 	public static final BlockColorMapper instance = new BlockColorMapper();
@@ -43,8 +45,8 @@ public class BlockColorMapper {
 	public static final int UNKNOWN_COLOR = 0xffD47EFF;
 	public static final int AIR_COLOR = ReikaColorAPI.GStoHex(33);
 
-	private final HashMap<Block, BlockColor> map = new HashMap();
-	private final HashMap<Block, Block> mimics = new HashMap();
+	private final BlockMap<Integer> map = new BlockMap();
+	private final BlockMap<BlockKey> mimics = new BlockMap();
 
 	private BlockColorMapper() {
 		this.addBlockColor(Blocks.stone, ReikaColorAPI.RGBtoHex(126, 126, 126));
@@ -281,11 +283,10 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 		this.addBlockMimic(BlockRegistry.BLASTPANE, Blocks.obsidian);
 		this.addBlockMimic(BlockRegistry.BLASTGLASS, Blocks.obsidian);
 
-		BlockColor deco = new BlockColor();
-		deco.addMetaColor(0, 210, 200, 220);
-		deco.addMetaColor(1, 240, 240, 240);
-		deco.addMetaColor(2, 15, 15, 15);
-		map.put(BlockRegistry.DECO.getBlockInstance(), deco);
+		Block b = BlockRegistry.DECO.getBlockInstance();
+		this.addBlockColor(b, 0, ReikaColorAPI.RGBtoHex(210, 200, 220));
+		this.addBlockColor(b, 1, ReikaColorAPI.RGBtoHex(240, 240, 240));
+		this.addBlockColor(b, 2, ReikaColorAPI.RGBtoHex(15, 15, 15));
 	}
 
 	private void addFluids() {
@@ -294,7 +295,6 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 			if (f != null && !f.equals(FluidRegistry.WATER) && !f.equals(FluidRegistry.LAVA)) {
 				if (f.canBePlacedInWorld()) {
 					Block b = f.getBlock();
-					;
 					int color = f.getColor();
 					this.addBlockColor(b, color);
 				}
@@ -368,32 +368,23 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	private void addOrSetColorMapping(Block b, int meta, int color, boolean allowOverwrite) {
 		if (b == null)
 			throw new IllegalArgumentException("Block ID "+b+" does not exist!");
-		BlockColor c = map.get(b);
-		if (c == null) {
-			c = new BlockColor();
-			map.put(b, c);
-		}
-		if (c.colorInts[meta] != UNKNOWN_COLOR && !allowOverwrite)
+		if (!allowOverwrite && map.containsKey(b, meta))
 			throw new IllegalArgumentException("Cannot overwrite color mapping for "+b+":"+meta+"!");
-		c.addMetaColor(meta, color);
+		this.addBlockColor(b, meta, color);
 	}
 
 	private void addSlabs() {
-		BlockColor slab = new BlockColor();
 		int[] colors = new int[]{0xA3A3A3, 0xDCD3A0, 0xBC9862, 0x969696, 0xA55B47, 0x797979, 0x36181E, 0xE8E4DC};
 		for (int i = 0; i < colors.length; i++) {
-			slab.addMetaColor(i, colors[i]);
+			this.addBlockColor(Blocks.stone_slab, i, colors[i]);
 		}
-		map.put(Blocks.stone_slab, slab);
 	}
 
 	private void addFlowers() {
-		BlockColor rose = new BlockColor();
 		int[] colors = new int[]{0xF7070F, 0x29AEFB, 0xBF75FB, 0xF2F29C, 0xD33A17, 0xE17124, 0xF3F3F3, 0xEABEEA, 0xD2C71E};
 		for (int i = 0; i < colors.length; i++) {
-			rose.addMetaColor(i, colors[i]);
+			this.addBlockColor(Blocks.red_flower, i, colors[i]);
 		}
-		map.put(Blocks.red_flower, rose);
 		/*
 		BlockColor flowers = new BlockColor(0);
 		int[] colors2 = new int[]{0xE2A41F, 0x9F78A4, 0x58864C, 0x58864C, 0xBA050B, 0xDEA5F7};
@@ -404,55 +395,75 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	}
 
 	private void addWool() {
-		BlockColor c = new BlockColor();
 		for (int i = 0; i < 16; i++) {
 			ReikaDyeHelper color = ReikaDyeHelper.dyes[i];
 			int meta = color.getWoolMeta();
-			c.addMetaColor(meta, color.color);
+			this.addBlockColor(Blocks.wool, meta, color.color);
 		}
-		map.put(Blocks.wool, c);
 	}
 
 	private void addDyeGlass() {
-		BlockColor c = new BlockColor();
 		for (int i = 0; i < 16; i++) {
 			ReikaDyeHelper color = ReikaDyeHelper.dyes[i];
 			int meta = color.getWoolMeta();
-			c.addMetaColor(meta, color.color);
+			this.addBlockColor(Blocks.stained_glass, meta, color.color);
+			this.addBlockColor(Blocks.stained_glass_pane, meta, color.color);
 		}
-		map.put(Blocks.stained_glass, c);
-		map.put(Blocks.stained_glass_pane, c);
 	}
 
 	private void addBlockColor(Block b, int rgb) {
-		map.put(b, new BlockColor(rgb));
+		this.addBlockColor(new BlockKey(b), rgb);
+	}
+
+	private void addBlockColor(Block b, int meta, int rgb) {
+		this.addBlockColor(new BlockKey(b, meta), rgb);
+	}
+
+	private void addBlockColor(BlockKey bk, int rgb) {
+		map.put(bk, rgb);
 	}
 
 	private void addBlockColor(BlockRegistry b, int rgb) {
 		this.addBlockColor(b.getBlockInstance(), rgb);
 	}
 
-	private void addBlockMimic(BlockRegistry mimic, Block target) {
-		this.addBlockMimic(mimic.getBlockInstance(), target);
+	private void addBlockMimic(Block mimic, Block target) {
+		this.addBlockMimic(new BlockKey(mimic), new BlockKey(target));
 	}
 
-	private void addBlockMimic(Block mimic, Block target) {
+	private void addBlockMimic(Block mimic, BlockKey target) {
+		this.addBlockMimic(new BlockKey(mimic), target);
+	}
+
+	private void addBlockMimic(BlockRegistry mimic, Block target) {
+		this.addBlockMimic(mimic, new BlockKey(target, 0));
+	}
+
+	private void addBlockMimic(BlockRegistry mimic, BlockKey target) {
+		this.addBlockMimic(new BlockKey(mimic.getBlockInstance()), target);
+	}
+
+	private void addBlockMimic(BlockKey mimic, BlockKey target) {
 		if (mimic == null || target == null)
 			throw new IllegalArgumentException("Null cannot mimic or be mimicked!");
 		if (mimic == target)
 			throw new IllegalArgumentException("A block cannot mimic itself!");
 		mimics.put(mimic, target);
 	}
-
+	/*
+	@Deprecated
 	private static class BlockColor {
+
+		private final Block blockID;
 		private final int[] colorInts = new int[16];
 		private boolean metaTag = false;
 
-		public BlockColor(int r, int g, int b) {
-			this(ReikaColorAPI.RGBtoHex(r, g, b));
+		public BlockColor(Block bk, int r, int g, int b) {
+			this(bk, ReikaColorAPI.RGBtoHex(r, g, b));
 		}
 
-		public BlockColor(int rgb) {
+		public BlockColor(Block bk, int rgb) {
+			blockID = bk;
 			colorInts[0] = rgb;
 
 			for (int i = 1; i < 16; i++) {
@@ -460,8 +471,8 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 			}
 		}
 
-		public BlockColor() {
-			this(BlockColorMapper.UNKNOWN_COLOR);
+		public BlockColor(Block bk) {
+			this(bk, BlockColorMapper.UNKNOWN_COLOR);
 		}
 
 		public BlockColor addMetaColor(int meta, int r, int g, int b) {
@@ -469,12 +480,20 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 		}
 
 		public BlockColor addMetaColor(int meta, int rgb) {
+			if (meta >= 16) {
+				RotaryCraft.logger.logError("Could not assign GPR Color mapping "+Integer.toHexString(rgb)+" to "+blockID+" meta "+meta+": invalid metadata.");
+				return this;
+			}
 			metaTag = true;
 			colorInts[meta] = rgb;
 			return this;
 		}
 
 		public int getColorInt(int meta) {
+			if (meta >= 16) {
+				RotaryCraft.logger.logError("Could not fetch GPR Color mapping for "+blockID+" meta "+meta+": invalid metadata.");
+				return BlockColorMapper.UNKNOWN_COLOR;
+			}
 			if (metaTag) {
 				return colorInts[meta];
 			}
@@ -487,17 +506,22 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 			return new Color(this.getColorInt(meta));
 		}
 	}
+	 */
+
+	public int getColorForBlock(BlockKey bk) {
+		return this.getColorForBlock(bk.blockID, bk.metadata);
+	}
 
 	public int getColorForBlock(Block b, int meta) {
 		if (b == Blocks.air)
 			return AIR_COLOR;
 		if (b == null)
 			return UNKNOWN_COLOR;
-		Block mimic = mimics.get(b);
+		BlockKey mimic = mimics.get(b, meta);
 		if (mimic != null)
-			return this.getColorForBlock(mimic, meta);
-		BlockColor c = map.get(b);
-		return c != null ? c.getColorInt(meta) : UNKNOWN_COLOR;
+			return this.getColorForBlock(mimic.blockID, mimic.metadata);
+		Integer c = map.get(b, meta);
+		return c != null ? c : UNKNOWN_COLOR;
 	}/*
 
 	public void addModBlockColor(int blockID, int metadata, int color) {

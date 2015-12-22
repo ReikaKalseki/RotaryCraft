@@ -187,7 +187,7 @@ public class RotaryCraft extends DragonAPIMod {
 	@Instance("RotaryCraft")
 	public static RotaryCraft instance = new RotaryCraft();
 
-	public static final RotaryConfig config = new RotaryConfig(instance, ConfigRegistry.optionList, ExtraConfigIDs.idList, 0);
+	public static final RotaryConfig config = new RotaryConfig(instance, ConfigRegistry.optionList, ExtraConfigIDs.idList);
 
 	public static ModLogger logger;
 
@@ -495,7 +495,10 @@ public class RotaryCraft extends DragonAPIMod {
 		CustomExtractLoader.instance.loadFile();
 		ExtractorModOres.addCustomSmelting();
 
-		BlockColorMapper.instance.loadFromConfig();
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			ReikaJavaLibrary.initClass(BlockColorMapper.class);
+			BlockColorMapper.instance.loadFromConfig();
+		}
 
 		ModCropList.addCustomCropType(new SimpleCropHandler(ModList.ROTARYCRAFT, 0x00cc00, "CANOLA", BlockRegistry.CANOLA.getBlockInstance(), 9, ItemRegistry.CANOLA.getStackOf()));
 
