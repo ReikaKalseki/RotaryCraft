@@ -78,7 +78,7 @@ public class GuiCrystallizer extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = te.getProgressScaled(44);
+		int i1 = Math.min(44, te.getProgressScaled(44));
 		this.drawTexturedModalRect(j+29, k+41, 178, 1, i1, 4);
 	}
 

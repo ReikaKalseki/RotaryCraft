@@ -66,7 +66,8 @@ public enum SoundRegistry implements SoundEnum {
 	SONIC("#sonic"),
 	SHORTJET("shortjet"),
 	AFTERBURN("afterburner"),
-	RUMBLE("rumble2");
+	RUMBLE("rumble2"),
+	COIL("#coil");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 
@@ -97,6 +98,11 @@ public enum SoundRegistry implements SoundEnum {
 
 	public float getSoundVolume() {
 		float vol = ConfigRegistry.MACHINEVOLUME.getFloat();
+		if (this.isEngineSound()) {
+			vol *= ConfigRegistry.ENGINEVOLUME.getFloat();
+			if (!ConfigRegistry.ENGINESOUNDS.getState())
+				vol = 0;
+		}
 		if (vol < 0)
 			vol = 0;
 		if (vol > 1)
@@ -104,7 +110,8 @@ public enum SoundRegistry implements SoundEnum {
 		return vol;
 	}
 
-	public float getModVolume() {
+	@Override
+	public float getModulatedVolume() {
 		if (!isVolumed)
 			return 1F;
 		else
@@ -124,7 +131,7 @@ public enum SoundRegistry implements SoundEnum {
 			return;
 		//Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
 		//PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
-		ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, world, x, y, z, vol*this.getModVolume(), pitch);
+		ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {
@@ -183,6 +190,10 @@ public enum SoundRegistry implements SoundEnum {
 	@Override
 	public boolean canOverlap() {
 		return this == JETPACK || this == JETDAMAGE || this == RUMBLE;
+	}
+
+	private boolean isEngineSound() {
+		return name.endsWith("engine");
 	}
 
 	@Override

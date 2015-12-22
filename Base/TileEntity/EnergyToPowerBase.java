@@ -103,6 +103,10 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		return 8+tier;
 	}
 
+	protected double getRelativeEfficiency() {
+		return 1;
+	}
+
 	private final double getPowerLoss() {
 		return 1-this.getEfficiency();
 	}
@@ -112,7 +116,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 	}
 
 	public final double getEfficiency() {
-		return getEfficiency(tier, efficient);
+		return getEfficiency(tier, efficient)*this.getRelativeEfficiency();
 	}
 
 	public final long getTierPower() {
@@ -265,9 +269,9 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		return storedEnergy;
 	}
 
-	public final void setStoredPower(int e) {
-		storedEnergy = e;
-	}
+	//public final void setStoredPower(int e) {
+	//	storedEnergy = e;
+	//}
 
 	public abstract int getMaxStorage();
 

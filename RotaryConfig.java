@@ -10,9 +10,7 @@
 package Reika.RotaryCraft;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
@@ -25,13 +23,9 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class RotaryConfig extends ControlledConfig {
 
-	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
-		super(mod, option, id, cfg);
-	}
-
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(RotaryAchievements.class);
-	private final int[] achievementIDs = new int[entries.size()]; //
-	private String[] blastGate;
+	private final DataElement<Integer>[] achievementIDs = new DataElement[entries.size()]; //
+	private DataElement<String[]> blastGate;
 
 	/** Non-config-file control data used by the machines */
 
@@ -46,15 +40,15 @@ public class RotaryConfig extends ControlledConfig {
 	@Deprecated
 	public static final int MILLIBUCKET = FluidContainerRegistry.BUCKET_VOLUME;
 
-	//Initialization of the config
-	@Override
-	protected void loadAdditionalData() {
+	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
+		super(mod, option, id, cfg);
+
 		for (int i = 0; i < entries.size(); i++) {
 			String name = entries.get(i);
-			achievementIDs[i] = config.get("Achievement IDs", name, 24000+i).getInt();
+			achievementIDs[i] = this.registerAdditionalOption("Achievement IDs", name, 24000+i);
 		}
 
-		blastGate = config.get("Other Options", "Alternate Blast Furnace Materials", new String[0]).getStringList();
+		blastGate = this.registerAdditionalOption("Other Options", "Alternate Blast Furnace Materials", new String[0]);
 	}
 
 	@Override
@@ -63,16 +57,17 @@ public class RotaryConfig extends ControlledConfig {
 	}
 
 	public int getAchievementID(int idx) {
-		return achievementIDs[idx];
+		return achievementIDs[idx].getData();
 	}
 
-	public Collection<ItemStack> getBlastFurnaceGatingMaterials() {
-		if (blastGate == null || blastGate.length == 0)
+	public ArrayList<Object> getBlastFurnaceGatingMaterials() {
+		String[] arr = blastGate.getData();
+		if (arr == null || arr.length == 0)
 			return new ArrayList();
-		Collection<ItemStack> c = new ArrayList();
+		ArrayList<Object> c = new ArrayList();
 		boolean invalid = false;
-		for (int i = 0; i < blastGate.length; i++) {
-			String idx = blastGate[i].toUpperCase();
+		for (int i = 0; i < arr.length; i++) {
+			String idx = arr[i].toUpperCase();
 			BlastGate g = null;
 			try {
 				g = BlastGate.valueOf(idx);
@@ -85,9 +80,9 @@ public class RotaryConfig extends ControlledConfig {
 				invalid = true;
 			}
 			else {
-				ItemStack item = g.getItem();
+				Object item = g.getItem();
 				if (item == null) {
-					RotaryCraft.logger.logError("Selected gating material "+g+" could not be found; either the item does not exist or its mod has not yet loaded.");
+					RotaryCraft.logger.logError("Selected gating material "+g+" could not be found; either the item does not exist or its mods have not yet loaded.");
 				}
 				else {
 					c.add(item);

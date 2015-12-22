@@ -61,7 +61,7 @@ public class GuiGrinder extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = grin.getCookProgressScaled(48);
+		int i1 = Math.min(48, grin.getCookProgressScaled(48));
 		this.drawTexturedModalRect(j + 99, k + 34, 176, 14, 1*(i1)+1, 16);
 
 		int i2 = grin.getLubricantScaled(55);

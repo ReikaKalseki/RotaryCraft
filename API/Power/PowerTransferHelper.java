@@ -20,6 +20,8 @@ import Reika.RotaryCraft.API.IOMachine;
 public class PowerTransferHelper {
 
 	public static boolean checkPowerFrom(TileEntity tile, ForgeDirection dir) {
+		if (tile == null)
+			return false;
 		int x = tile.xCoord;
 		int y = tile.yCoord;
 		int z = tile.zCoord;

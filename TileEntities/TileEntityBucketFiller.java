@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -184,9 +185,7 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (!this.canDrain(from, resource.getFluid()))
-			return null;
-		return tank.drain(resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -198,7 +197,7 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return !filling && from.offsetY == 0;
+		return !filling && from.offsetY == 0 && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

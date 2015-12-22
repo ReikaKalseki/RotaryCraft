@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -65,7 +64,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(Items.wheat, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.wheat_seeds, 4), 100);
 		this.addRecipe(Blocks.gravel, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
 		this.addRecipe(ItemStacks.netherrackdust, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 40);
-		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10);
+		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10, new ItemStack(Items.wheat_seeds), 2F, new ItemStack(Items.pumpkin_seeds), 0.125F, new ItemStack(Items.melon_seeds), 0.125F, new ItemStack(Blocks.sapling), 0.03125F, new ItemStack(Blocks.tallgrass), 0.0625F);
 		this.addRecipe(Items.blaze_powder, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
 		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 50), 60, RecipeLevel.PROTECTED, ItemStacks.slipperyPropolis, 80);
@@ -220,9 +219,9 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	public void addPostLoadRecipes() {
 
 		if (ModList.FORESTRY.isLoaded()) {
-			Map<ItemStack, ChancedOutputList> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
-			for (ItemStack in : centrifuge.keySet()) {
-				ChancedOutputList out = centrifuge.get(in).copy();
+			Collection<ItemStack> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
+			for (ItemStack in : centrifuge) {
+				ChancedOutputList out = ForestryRecipeHelper.getInstance().getRecipeOutput(in);
 				out.manipulateChances(new ChanceExponentiator(3));
 				out.manipulateChances(new ChanceRounder());
 				this.addRecipe(in, out, null, RecipeLevel.MODINTERACT);

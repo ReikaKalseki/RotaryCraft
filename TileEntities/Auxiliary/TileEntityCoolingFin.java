@@ -24,9 +24,29 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	private int targety;
 	private int targetz;
 
-	public int temperature;
+	private int temperature;
 
 	public int ticks = 512;
+
+	public FinSettings setting = FinSettings.FULL;
+
+	public static enum FinSettings {
+		FULL(20),
+		HALF(40),
+		QUARTER(80);
+
+		public final int tickRate;
+
+		private static final FinSettings[] list = values();
+
+		private FinSettings(int n) {
+			tickRate = n;
+		}
+
+		public FinSettings next() {
+			return this.ordinal() == list.length-1 ? list[0] : list[this.ordinal()+1];
+		}
+	}
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -70,7 +90,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 		if (ticks > 0)
 			ticks -= 8;
 		this.getTargetSide(world, x, y, z, meta);
-		if (tickcount < 20)
+		if (tickcount < setting.tickRate)
 			return;
 		tickcount = 0;
 		this.updateTemperature(world, x, y, z, meta);
@@ -89,36 +109,36 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 
 	private void getTargetSide(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			targetx = x;
-			targety = y-1;
-			targetz = z;
-			break;
-		case 1:
-			targetx = x;
-			targety = y+1;
-			targetz = z;
-			break;
-		case 2:
-			targetx = x;
-			targety = y;
-			targetz = z-1;
-			break;
-		case 3:
-			targetx = x-1;
-			targety = y;
-			targetz = z;
-			break;
-		case 4:
-			targetx = x;
-			targety = y;
-			targetz = z+1;
-			break;
-		case 5:
-			targetx = x+1;
-			targety = y;
-			targetz = z;
-			break;
+			case 0:
+				targetx = x;
+				targety = y-1;
+				targetz = z;
+				break;
+			case 1:
+				targetx = x;
+				targety = y+1;
+				targetz = z;
+				break;
+			case 2:
+				targetx = x;
+				targety = y;
+				targetz = z-1;
+				break;
+			case 3:
+				targetx = x-1;
+				targety = y;
+				targetz = z;
+				break;
+			case 4:
+				targetx = x;
+				targety = y;
+				targetz = z+1;
+				break;
+			case 5:
+				targetx = x+1;
+				targety = y;
+				targetz = z;
+				break;
 		}
 	}
 
@@ -152,6 +172,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	{
 		super.writeSyncTag(NBT);
 		NBT.setInteger("tick", ticks);
+		NBT.setInteger("setting", setting.ordinal());
 	}
 
 	@Override
@@ -159,6 +180,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	{
 		super.readSyncTag(NBT);
 		ticks = NBT.getInteger("tick");
+		setting = FinSettings.list[NBT.getInteger("setting")];
 	}
 
 	@Override

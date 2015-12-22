@@ -7,15 +7,12 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Auxiliary.Interfaces;
+package Reika.RotaryCraft.API.Interfaces;
 
-import Reika.RotaryCraft.API.Interfaces.BasicTemperatureMachine;
+import Reika.DragonAPI.Interfaces.TileEntity.ThermalTile;
 
+public interface BasicTemperatureMachine extends ThermalTile, TemperatureTile {
 
-public interface FrictionHeatable extends BasicTemperatureMachine {
-
-	public void addTemperature(int add);
-
-	public int getMaxTemperature();
+	public void resetAmbientTemperatureTimer();
 
 }

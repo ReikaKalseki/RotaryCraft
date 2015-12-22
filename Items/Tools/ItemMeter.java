@@ -454,7 +454,7 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			if (m == MachineRegistry.COMPRESSOR) {
 				TileEntityAirCompressor clicked = (TileEntityAirCompressor)tile;
-				ReikaChatHelper.writeString(String.format("%s generating %.3f mL/t.", clicked.getName(), clicked.getGenAir()));
+				ReikaChatHelper.writeString(String.format("%s generating %d mL/t.", clicked.getName(), clicked.getGenAir()));
 			}
 			if (tile instanceof EnergyToPowerBase) {
 				EnergyToPowerBase te = (EnergyToPowerBase)tile;

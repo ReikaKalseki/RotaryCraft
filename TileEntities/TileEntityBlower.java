@@ -21,11 +21,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -102,40 +104,27 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 			//this.printTEs(source, target);
 
 			if (target instanceof IInventory) {
-				HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
+				if (InterfaceCache.DSU.instanceOf(source)) {
+					this.transferItems(null, (IInventory)source, (IInventory)target, dir);
+				}
+				else {
+					HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
+					if (map != null && !map.isEmpty())
+						this.transferItems(map, (IInventory)source, (IInventory)target, dir);
+				}
 				//ReikaJavaLibrary.pConsole(map, Side.SERVER);
-				if (map != null && !map.isEmpty())
-					this.transferItems(map, (IInventory)source, (IInventory)target, dir);
 			}
 			else if (target == null && ConfigRegistry.BLOWERSPILL.getState()) {
 				if (tg.isEmpty()) {
-					HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
-					if (map != null && !map.isEmpty()) {
-						this.dumpItems(map, (IInventory)source, tg);
+					if (InterfaceCache.DSU.instanceOf(source)) {
+						this.dumpItems(null, (IInventory)source, tg);
 					}
-				}
-			}
-		}
-	}
-
-	private void dumpItems(HashMap<Integer, ItemStack> map, IInventory source, WorldLocation loc) {
-		int items = 0;
-		int max = this.getNumberTransferrableItems();
-		if (max <= 0)
-			return;
-
-		for (int slot : map.keySet()) {
-			ItemStack is = map.get(slot);
-			if (this.isItemTransferrable(is)) {
-				int maxadd = Math.min(max-items, is.getMaxStackSize());
-				for (int i = 0; i < maxadd; i++) {
-					if (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0) {
-						loc.dropItem(ReikaItemHelper.getSizedItemStack(is, 1), 2+rand.nextDouble()*4);
-						ReikaInventoryHelper.decrStack(slot, source, 1);
-						items += 1;
+					else {
+						HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
+						if (map != null && !map.isEmpty()) {
+							this.dumpItems(map, (IInventory)source, tg);
+						}
 					}
-					if (items >= max)
-						return;
 				}
 			}
 		}
@@ -156,42 +145,104 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 		return (int)(power/1024);
 	}
 
+	/** Supply null map for custom handling like DSU. */
 	private void transferItems(HashMap<Integer, ItemStack> map, IInventory source, IInventory target, ForgeDirection dir) {
-		int items = 0;
 		int max = this.getNumberTransferrableItems();
 		if (max <= 0)
 			return;
 
-		int size = target.getSizeInventory();
-
-		for (int slot : map.keySet()) {
-			ItemStack is = map.get(slot);
-			if (this.isItemTransferrable(is)) {
-				int maxadd = Math.min(max-items, Math.min(is.getMaxStackSize(), target.getInventoryStackLimit()));
-				for (int i = 0; i < maxadd; i++) {
-					for (int k = 0; k < size; k++) {
-						if (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0) {
-							if (target instanceof ISidedInventory) {
-								if (((ISidedInventory) target).canInsertItem(k, is, dir.getOpposite().ordinal())) {
-									if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
-										ReikaInventoryHelper.decrStack(slot, source, 1);
-										items += 1;
-									}
-								}
-							}
-							else {
-								if (ReikaInventoryHelper.addToIInv(ReikaItemHelper.getSizedItemStack(is, 1), target)) {
-									ReikaInventoryHelper.decrStack(slot, source, 1);
-									items += 1;
-								}
-							}
-							if (items >= max)
-								return;
-						}
-					}
+		if (map == null) {
+			IDeepStorageUnit dsu = (IDeepStorageUnit)source;
+			ItemStack is = dsu.getStoredItemType();
+			if (is != null && this.isItemTransferrable(is)) {
+				int add = Math.min(max, is.stackSize);
+				int rem = this.addItemToInventory(is, target,  null, -1, add, dir);
+				dsu.setStoredItemCount(is.stackSize-rem);
+			}
+		}
+		else {
+			for (int slot : map.keySet()) {
+				ItemStack is = map.get(slot);
+				if (this.isItemTransferrable(is)) {
+					int rem = this.addItemToInventory(is, target, source, slot, max, dir);
 				}
 			}
 		}
+	}
+
+	/** Supply null map for custom handling like DSU. */
+	private void dumpItems(HashMap<Integer, ItemStack> map, IInventory source, WorldLocation loc) {
+		int max = this.getNumberTransferrableItems();
+		if (max <= 0)
+			return;
+
+		if (map == null) {
+			IDeepStorageUnit dsu = (IDeepStorageUnit)source;
+			ItemStack is = dsu.getStoredItemType();
+			if (is != null && this.isItemTransferrable(is)) {
+				int drop = Math.min(max, is.stackSize);
+				int rem = this.dropItem(is, null, -1, drop, loc);
+				dsu.setStoredItemCount(is.stackSize-rem);
+			}
+		}
+		else {
+			for (int slot : map.keySet()) {
+				ItemStack is = map.get(slot);
+				if (this.isItemTransferrable(is)) {
+					this.dropItem(is, source, slot, max, loc);
+				}
+			}
+		}
+	}
+
+	/** Supply null source for custom handling like DSU. */
+	private int dropItem(ItemStack is, IInventory source, int slot, int amt, WorldLocation loc) {
+		int items = 0;
+		int maxadd = Math.min(amt-items, is.getMaxStackSize());
+		for (int i = 0; i < maxadd; i++) {
+			if (source == null || (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0)) {
+				loc.dropItem(ReikaItemHelper.getSizedItemStack(is, 1), 2+rand.nextDouble()*4);
+				if (source != null)
+					ReikaInventoryHelper.decrStack(slot, source, 1);
+				items += 1;
+			}
+			if (items >= amt)
+				return amt;
+		}
+		return items;
+	}
+
+	/** Supply null source for custom handling like DSU. */
+	private int addItemToInventory(ItemStack is, IInventory ii, IInventory source, int slot, int amt, ForgeDirection dir) {
+		int items = 0;
+		int size = ii.getSizeInventory();
+		int maxadd = Math.min(amt-items, Math.min(is.getMaxStackSize(), ii.getInventoryStackLimit()));
+		ItemStack one = ReikaItemHelper.getSizedItemStack(is, 1);
+		for (int i = 0; i < maxadd; i++) {
+			for (int k = 0; k < size; k++) {
+				if (source == null || (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0)) {
+					if (ii instanceof ISidedInventory) {
+						if (((ISidedInventory)ii).canInsertItem(k, is, dir.getOpposite().ordinal())) {
+							if (ReikaInventoryHelper.addToIInv(one, ii)) {
+								if (source != null)
+									ReikaInventoryHelper.decrStack(slot, source, 1);
+								items += 1;
+							}
+						}
+					}
+					else {
+						if (ReikaInventoryHelper.addToIInv(one, ii)) {
+							if (source != null)
+								ReikaInventoryHelper.decrStack(slot, source, 1);
+							items += 1;
+						}
+					}
+					if (items >= amt)
+						return amt;
+				}
+			}
+		}
+		return items;
 	}
 
 	public boolean isIntake() {
@@ -200,24 +251,24 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 4:
-			facing = ForgeDirection.DOWN;
-			break;
-		case 5:
-			facing = ForgeDirection.UP;
-			break;
-		case 3:
-			facing = ForgeDirection.NORTH;
-			break;
-		case 1:
-			facing = ForgeDirection.WEST;
-			break;
-		case 2:
-			facing = ForgeDirection.SOUTH;
-			break;
-		case 0:
-			facing = ForgeDirection.EAST;
-			break;
+			case 4:
+				facing = ForgeDirection.DOWN;
+				break;
+			case 5:
+				facing = ForgeDirection.UP;
+				break;
+			case 3:
+				facing = ForgeDirection.NORTH;
+				break;
+			case 1:
+				facing = ForgeDirection.WEST;
+				break;
+			case 2:
+				facing = ForgeDirection.SOUTH;
+				break;
+			case 0:
+				facing = ForgeDirection.EAST;
+				break;
 		}
 	}
 

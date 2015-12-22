@@ -15,6 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -28,16 +29,14 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 
 	/** A depth-by-width array of the discovered block IDs, materials, colors
 	 * drawn downwards (first slots are top layer) */
-	public Block[][] ids = new Block[256][81]; //from 0-16 -> centred on 8 (8 above and below)
-	public int[][] metas = new int[256][81];
+	public BlockKey[][] blocks = new BlockKey[256][81]; //from 0-16 -> centred on 8 (8 above and below)
 
-	public int[][] colors = new int[256][81]; //these three arrays take 52KB RAM collectively (assuming Mat'l is 32bits)
+	public int[][] colors = new int[256][81];
 	public boolean xdir;
 
 	private int offsetX;
 	private int offsetY;
 	private int offsetZ;
-
 
 	private int oldmeta = 0;
 
@@ -53,6 +52,10 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		offsetX += dir.offsetX*amt;
 		offsetY += dir.offsetY*amt;
 		offsetZ += dir.offsetZ*amt;
+	}
+
+	public void shiftInt(int amt) {
+		this.shift(this.getGuiDirection(), amt);
 	}
 
 	public void resetOffset() {
@@ -83,7 +86,6 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 						mineshaft = true;
 					if (id == Blocks.end_portal || id == Blocks.end_portal_frame)
 						stronghold = true;
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
 				}
 			}
 		}
@@ -114,13 +116,13 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	private void blockToColor(int[] bounds, int y) {
 		for (int j = bounds[0]; j <= bounds[1]; j++) {
 			for (int i = 0; i < y; i++) {
-				colors[i][j] = this.getBlockColor(ids[i][j], metas[i][j]);
+				colors[i][j] = this.getBlockColor(blocks[i][j]);
 			}
 		}
 	}
 
-	public int getBlockColor(Block id, int meta) {
-		return BlockColorMapper.instance.getColorForBlock(id, meta);
+	public int getBlockColor(BlockKey bk) {
+		return BlockColorMapper.instance.getColorForBlock(bk.blockID, bk.metadata);
 	}
 
 	private void eval2(World world, int x, int y, int z, int meta, int[] bounds) {
@@ -129,33 +131,31 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 			a = 1;
 		int b = 1-a;
 		int diff = (bounds[1]-bounds[0])/2;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", val[0], val[1]));
 		if (a == 1) {
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
-					ids[i][j] = world.getBlock(x+j-bounds[0]-diff, y-i-1, z);
-					metas[i][j] = world.getBlockMetadata(x+j-bounds[0]-diff, y-i-1, z);
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
-					if (ids[i][j] == Blocks.end_portal || ids[i][j] == Blocks.end_portal_frame)
-						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
-					if (ids[i][j] == Blocks.mob_spawner)
-						RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
+					BlockKey bk = BlockKey.getAt(world, x+j-bounds[0]-diff, y-i-1, z);
+					blocks[i][j] = bk;
+					this.checkAchievements(bk);
 				}
 			}
 		}
 		else {
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
-					ids[i][j] = world.getBlock(x, y-i-1, z+j-bounds[0]-diff);
-					metas[i][j] = world.getBlockMetadata(x, y-i-1, z+j-bounds[0]-diff);
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", x-j*a+diff/2, z-j*b));
-					if (ids[i][j] == Blocks.end_portal || ids[i][j] == Blocks.end_portal_frame)
-						RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
-					if (ids[i][j] == Blocks.mob_spawner)
-						RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
+					BlockKey bk = BlockKey.getAt(world, x, y-i-1, z+j-bounds[0]-diff);
+					blocks[i][j] = bk;
+					this.checkAchievements(bk);
 				}
 			}
 		}
+	}
+
+	private void checkAchievements(BlockKey bk) {
+		if (bk.blockID == Blocks.end_portal || bk.blockID == Blocks.end_portal_frame)
+			RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
+		else if (bk.blockID == Blocks.mob_spawner)
+			RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
 	}
 
 	public int[] getBounds() { //Returns [low, hi]
@@ -166,29 +166,10 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 			return val;
 		val[0] -= range;
 		val[1] += range;
-		/*
-		long jetpower = EnumEngineType.JET.getPower();
-
-		if (power >= EnumEngineType.AC.getPower() && power < jetpower) {
-			val[0]--;
-			val[1]++;
-		}
-
-		if (power >= EnumEngineType.SPORT.getPower() && power < jetpower) {
-			val[0] -= 2;
-			val[1] += 2;
-		}
-
-		if (power >= EnumEngineType.MICRO.getPower() && power < jetpower) {
-			val[0] -= 3;
-			val[1] += 3;
-		}*/
-
 		if (val[0] < 0)
 			val[0] = 0;
 		if (val[1] >= 80)
 			val[1] = 80;
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d", val[0], val[1]));
 		return val;
 	}
 

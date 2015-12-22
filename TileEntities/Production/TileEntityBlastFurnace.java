@@ -152,8 +152,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 						return;
 
 		xp += out.stackSize*bc.xp;
-		if (this.getPlacer() != null)
+		if (this.getPlacer() != null) {
 			out.onCrafting(worldObj, this.getPlacer(), out.stackSize);
+		}
 
 		for (int i = 1; i < 10; i++) {
 			if (inv[i] != null)
@@ -212,10 +213,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	private int getProducedFor(BlastRecipe rec) {
 		int num = 0;
-		ItemStack main = rec.mainItem();
 		for (int i = 1; i < 10; i++) {
 			if (inv[i] != null) {
-				if (ReikaItemHelper.matchStacks(inv[i], main))
+				if (rec.isValidMainItem(inv[i]))
 					num++;
 			}
 		}
@@ -223,7 +223,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	private RotaryAchievements getAchievement(BlastRecipe rec) {
-		if (ReikaItemHelper.matchStacks(ItemStacks.scrap, rec.mainItem()))
+		if (rec.isValidMainItem(ItemStacks.scrap))
 			return RotaryAchievements.RECYCLE;
 		if (ReikaItemHelper.matchStacks(rec.outputItem(), ItemStacks.steelingot))
 			return RotaryAchievements.MAKESTEEL;

@@ -9,22 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.Collection;
-
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.LoaderState;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum BlastGate {
@@ -38,6 +26,7 @@ public enum BlastGate {
 	SILVER("ingotSilver"),
 	BRASS("ingotBrass"),
 	BRONZE("ingotBronze"),
+	INVAR("ingotInvar"),
 	TITANIUM("ingotTitanium"),
 	DARKSTEEL("ingotDarkSteel"),
 	STEELEAF(TwilightForestHandler.ItemEntry.STEELLEAF.getItem()),
@@ -51,42 +40,15 @@ public enum BlastGate {
 	OSMIUM("ingotOsmium"),
 	;
 
-	private ItemStack item;
+	private Object item;
 
 	private static final BlastGate[] matList = values();
 
-	private BlastGate(Block b) {
-		this(b != null ? new ItemStack(b) : null);
+	private BlastGate(Object o) {
+		item = o;
 	}
 
-	private BlastGate(Item i) {
-		this(i != null ? new ItemStack(i) : null);
-	}
-
-	private BlastGate(ItemStack is) {
-		item = is;
-	}
-
-	private BlastGate(String s) {
-		Collection<ItemStack> c = OreDictionary.getOres(s);
-		for (ItemStack is : c) {
-			if (is.getItem() == ItemRegistry.MODINGOTS.getItemInstance())
-				continue;
-			else if (ReikaItemHelper.matchStacks(is, ItemStacks.steelingot))
-				continue;
-			else {
-				item = is;
-				break;
-			}
-		}
-	}
-
-	public ItemStack getItem() {
-		return item != null ? item.copy() : item;
-	}
-
-	static {
-		if (!Loader.instance().hasReachedState(LoaderState.POSTINITIALIZATION))
-			throw new RegistrationException(RotaryCraft.instance, "Blast Furnace gating material registry accessed too early, cannot populate!");
+	public Object getItem() {
+		return item;
 	}
 }

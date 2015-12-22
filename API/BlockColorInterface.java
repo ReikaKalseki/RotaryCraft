@@ -29,7 +29,8 @@ public class BlockColorInterface {
 	}
 
 	public static void addGPRBlockColor(Block blockID, int metadata, int color) {
-		map.put(blockID, metadata, color);
+		if (!map.containsKey(blockID, metadata))
+			map.put(blockID, metadata, color);
 	}
 
 	public static void addGPRBlockColor(Block blockID, int metadata, int red, int green, int blue) {

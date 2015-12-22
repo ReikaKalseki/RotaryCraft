@@ -46,6 +46,9 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	private int experience = 0;
 	public boolean equidistant = true;
+	public boolean suckIfFull = true;
+
+	private boolean isFull = false;
 
 	public int getExperience() {
 		return experience;
@@ -69,9 +72,16 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		if (tickcount < 2)
 			return;
 		tickcount = 0;
-		this.suck(world, x, y, z);
-		this.absorb(world, x, y, z);
-		this.transfer(world, x, y, z);
+		if (suckIfFull || !isFull) {
+			this.suck(world, x, y, z);
+			this.absorb(world, x, y, z);
+			this.transfer(world, x, y, z);
+		}
+	}
+
+	@Override
+	protected void onInventoryChanged() {
+		isFull = false;
 	}
 
 	private void transfer(World world, int x, int y, int z) {
@@ -168,6 +178,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	private void absorb(World world, int x, int y, int z) {
 		if (world.isRemote)
 			return;
+		boolean suck = false;
 		AxisAlignedBB close = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(0.25D, 0.25D, 0.25D);
 		List<EntityItem> closeitems = world.getEntitiesWithinAABB(EntityItem.class, close);
 		for (EntityItem ent : closeitems) {
@@ -179,6 +190,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 						inv[targetslot] = is.copy();
 					else
 						inv[targetslot].stackSize += is.stackSize;
+					suck = true;
 				}
 				else {
 					return;
@@ -187,7 +199,11 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.pop", 0.1F+0.5F*rand.nextFloat(), rand.nextFloat());
 				MinecraftForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy(): null));
 			}
+			else {
+				suck = true;
+			}
 		}
+		isFull = !suck;
 		List<EntityXPOrb> closeorbs = world.getEntitiesWithinAABB(EntityXPOrb.class, close);
 		for (EntityXPOrb xp : closeorbs) {
 			int val = xp.getXpValue();
@@ -310,7 +326,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return resource.fluidID == ReikaXPFluidHelper.getFluid().fluidID ? this.drain(from, resource.amount, doDrain) : null;
+		return resource.getFluidID() == ReikaXPFluidHelper.getFluid().getFluidID() ? this.drain(from, resource.amount, doDrain) : null;
 	}
 
 	@Override

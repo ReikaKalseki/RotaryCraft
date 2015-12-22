@@ -46,6 +46,10 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 		this.onAddRecipe(rec, rl);
 	}
 
+	public void addCoreRecipe(ItemStack in, ItemStack out, int temp, int time) {
+		this.addRecipe(in, out, temp, time, RecipeLevel.CORE);
+	}
+
 	public void addAPIRecipe(ItemStack in, ItemStack out, int temp, int time) {
 		this.addRecipe(in, out, temp, time, RecipeLevel.API);
 	}

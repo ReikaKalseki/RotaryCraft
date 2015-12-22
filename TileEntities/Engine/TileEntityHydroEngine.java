@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,9 +23,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import streams.block.FixedFlowBlock;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -46,6 +50,10 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	private Fluid fluidType;
 	private double fluidFallSpeed;
+
+	private boolean streamPower = false;
+	private int streamTorque = 0;
+	private int streamOmega = 0;
 
 	@Override
 	protected void consumeFuel() {
@@ -85,22 +93,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			return false;
 		}
 
-		this.getFluidData(world, x, y, z);
-		if (fluidType != null) {
-			if (fluidType.getTemperature() >= 900) {
-				if (ReikaRandomHelper.doWithChance(2)) {
-					world.setBlockToAir(x, y, z);
-					boolean lube = !lubricant.isEmpty();
-					world.newExplosion(null, x+0.5, y+0.5, z+0.5, lube ? 3 : 2, lube, true);
-				}
-			}
-			if (fluidType.isGaseous() || fluidType.getDensity() <= 0)
-				return false;
-		}
-
 		int[] pos = this.getWaterColumnPos();
-		if (!ReikaWorldHelper.isLiquidAColumn(world, pos[0], y, pos[1]))
-			return false;
 
 		for (int i = -1; i <= 1; i++) {
 			if (this.doesBlockObstructBlades(world, 2*x-pos[0], y+i, 2*z-pos[1])) {
@@ -108,7 +101,70 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 				return false;
 			}
 		}
-		return true;
+
+		//ReikaJavaLibrary.pConsole(Block.getIdFromBlock(world.getBlock(x, y-1, z))+":"+world.getBlockMetadata(x, y, z)+" > "+world.getBlock(x, y-1, z));
+		Block b = world.getBlock(x, y-1, z);
+		if (InterfaceCache.STREAM.instanceOf(b)) {
+			return this.handleStream(world, x, y, z, meta, b, pos);
+		}
+		else {
+			streamPower = false;
+
+			if (!ReikaWorldHelper.isLiquidAColumn(world, pos[0], y, pos[1]))
+				return false;
+
+			this.getFluidData(world, x, y, z, pos);
+
+			if (fluidType != null) {
+				if (fluidType.getTemperature() >= 900) {
+					if (ReikaRandomHelper.doWithChance(2)) {
+						world.setBlockToAir(x, y, z);
+						boolean lube = !lubricant.isEmpty();
+						world.newExplosion(null, x+0.5, y+0.5, z+0.5, lube ? 3 : 2, lube, true);
+					}
+				}
+				if (fluidType.isGaseous() || fluidType.getDensity() <= 0)
+					return false;
+			}
+			return true;
+		}
+	}
+
+	private boolean handleStream(World world, int x, int y, int z, int meta, Block b, int[] pos) {
+		FixedFlowBlock ff = (FixedFlowBlock)b;
+		double vel = this.getUsefulVelocity(ff.dx(), ff.dz(), meta);
+		if (vel > 0) {
+			streamPower = true;
+			Block b2 = world.getBlock(pos[0], y, pos[1]);
+			boolean fall = (FluidRegistry.lookupFluidForBlock(b2) == FluidRegistry.WATER && world.getBlock(pos[0], y-1, pos[1]) instanceof FixedFlowBlock) || (b2 instanceof FixedFlowBlock && this.getUsefulVelocity(((FixedFlowBlock)b2).dx(), ((FixedFlowBlock)b2).dz(), meta) > 0);
+			double grav = this.getGravity(world);
+			double vh_sq = fall ? 2*grav*1 : 0;
+			double vtot = Math.sqrt(vh_sq+vel*vel);
+			streamOmega = (int)(vtot*2);
+			double F = ReikaEngLibrary.rhowater*vtot*vtot; //A=1
+			double fudge = 0.875;
+			streamTorque = ReikaMathLibrary.ceil2exp((int)(F*0.5*fudge));
+			return true;
+		}
+		streamPower = false;
+		return false;
+	}
+
+	private double getUsefulVelocity(int dx, int dz, int meta) {
+		double vx = Math.abs(2D*dx);
+		double vz = Math.abs(2D*dz);
+		switch(meta) {
+			case 0:
+				return vz;
+			case 1:
+				return vz;
+			case 2:
+				return vx;
+			case 3:
+				return vx;
+			default:
+				return 0;
+		}
 	}
 
 	private void distributeLubricant(World world, int x, int y, int z) {
@@ -156,47 +212,46 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	private int[] getWaterColumnPos() {
 		int[] pos = {xCoord, zCoord};
 		switch(this.getBlockMetadata()) {
-		case 0:
-			pos[1] += -1;
-			break;
-		case 1:
-			pos[1] += 1;
-			break;
-		case 2:
-			pos[0] += 1;
-			break;
-		case 3:
-			pos[0] += -1;
-			break;
+			case 0:
+				pos[1] += -1;
+				break;
+			case 1:
+				pos[1] += 1;
+				break;
+			case 2:
+				pos[0] += 1;
+				break;
+			case 3:
+				pos[0] += -1;
+				break;
 		}
 		return pos;
 	}
 
-	private void getFluidData(World world, int x, int y, int z) {
-		int[] pos = this.getWaterColumnPos();
+	private void getFluidData(World world, int x, int y, int z, int[] pos) {
 		Fluid f = ReikaWorldHelper.getFluid(world, pos[0], y, pos[1]);
 		fluidType = f;
 		if (f == null || f.isGaseous() || f.getDensity() <= 0) {
 			fluidFallSpeed = 0;
 			return;
 		}
-		double grav = ReikaPhysicsHelper.g;
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			grav += ig.getGravity()*10;
-		}
+		double grav = this.getGravity(world);
 		double dy = (ReikaWorldHelper.findFluidSurface(world, pos[0], y, pos[1])-y)-0.5;
 		dy = Math.pow(dy, 1.5)/32;
-		fluidFallSpeed = 0.92*Math.sqrt(2*grav*dy)/Math.pow(f.getViscosity()/1000, 0.375);
+		fluidFallSpeed = 0.92*Math.sqrt(2*grav*dy)/Math.max(0.25, Math.pow(f.getViscosity()/1000, 0.375));
 	}
 
 	private int getEffectiveSpeed(World world, int x, int y, int z) {
+		if (streamPower)
+			return streamOmega;
 		double omg = fluidFallSpeed*2;
 		return Math.min((int)omg, type.getSpeed());
 	}
 
 	private int getEffectiveTorque(World world, int x, int y, int z) {
-		double mdot = fluidType.getDensity()*fluidFallSpeed; //*1 since area is 1m^2
+		if (streamPower)
+			return streamTorque;
+		double mdot = Math.min(12000, fluidType.getDensity())*fluidFallSpeed; //*1 since area is 1m^2
 		double tau = 0.0625*mdot*fluidFallSpeed;
 		return Math.min((int)tau, type.getTorque());
 	}
@@ -212,6 +267,15 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		for (EntityLivingBase ent : in) {
 			ent.attackEntityFrom(RotaryCraft.hydrokinetic, 1);
 		}
+	}
+
+	private double getGravity(World world) {
+		double grav = ReikaPhysicsHelper.g;
+		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
+			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+			grav += ig.getGravity()*20; //*20 since tick/s
+		}
+		return grav;
 	}
 
 	private boolean isPartOfArray() {
@@ -324,10 +388,10 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			ForgeDirection dir = this.getWriteDirection();
 			ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 			for (int i = -1; i <= y; i++) {
-				ReikaWorldHelper.dropAndDestroyBlockAt(world, x+left.offsetX, y+i, z+left.offsetZ, false);
+				ReikaWorldHelper.dropAndDestroyBlockAt(world, x+left.offsetX, y+i, z+left.offsetZ, null, false);
 			}
-			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y+1, z, false);
-			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y-1, z, false);
+			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y+1, z, null, false);
+			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y-1, z, null, false);
 		}
 	}
 

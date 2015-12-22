@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -104,18 +105,18 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	public float getSoundStretch() {
 		switch(setting) {
-		case FULL:
-			return 1F;
-		case LOW:
-			return 0.6F;
-		case MEDIUM:
-			return 0.8F;
-		case SHUTDOWN:
-			return 0F;
-		case STANDBY:
-			return 0.4F;
-		default:
-			return 1F;
+			case FULL:
+				return 1F;
+			case LOW:
+				return 0.6F;
+			case MEDIUM:
+				return 0.8F;
+			case SHUTDOWN:
+				return 0F;
+			case STANDBY:
+				return 0.4F;
+			default:
+				return 1F;
 		}
 	}
 
@@ -281,7 +282,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return tank.drain(resource.amount, doDrain);
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -304,7 +305,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
+		return ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

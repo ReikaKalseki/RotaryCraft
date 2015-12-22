@@ -101,7 +101,7 @@
 			Stage 2 Speed: %drad/s
 			Stage 3 Speed: %drad/s
 			Power Input: Bottom
-			Notes: Stages 2 and 3 require a water supply
+			Notes: Stages 2 and 3 require a water supply; can be upgraded with a bedrock drill
 		</note>
 	</extractor>
 	<pulsejet>
@@ -126,7 +126,7 @@
 	</pump>
 	<reservoir>
 		<desc>
-			The reservoir is simply a tank for storing any liquid, with a maximum capacity of %d cubic meters (buckets). It can be right-clicked with a bucket to add or remove liquid, and if it is full of water, glass bottles can be filled from it. Additionally, they can be linked horizontally to form large vats.
+			The reservoir is simply a tank for storing any liquid, with a maximum capacity of %d cubic meters (buckets). It can be right-clicked with a bucket to add or remove liquid, and if it is full of water, glass bottles can be filled from it. Additionally, they can be linked horizontally to form large vats, and covered with glass panes.
 		</desc>
 		<note>
 			Capacity: %d m^3 per block
@@ -682,6 +682,7 @@
 			Select tiles to convert with the Tile Selection tool
 			Only tiles that are the same biome as the one the machine is in can be converted
 			Power Input: Any horizontal side
+			Requires a redstone input to activate
 		</note>
 	</terraformer>
 	<fuelenhancer>
@@ -1062,11 +1063,12 @@
 	</gastank>
 	<crafter>
 		<desc>
-			The autocrafter allows you to automate crafting of anything from the vanilla crafting table. It has two modes: In autonomous mode, it continuously crafts as long as it has ingredients to do so; in request mode, it will craft one cycle of the requested items and then sit idle. It can read any inventory above it or it can draw from an Applied Energistics network for its ingredient supply. This machine can store 18 patterns, and thus can craft 18 recipes in parallel.
+			The autocrafter allows you to automate crafting of anything from the vanilla crafting table. It has three modes: In autonomous mode, it continuously crafts as long as it has ingredients to do so; in request mode, it will craft one cycle of the requested items and then sit idle. It can read any inventory above it or it can draw from an Applied Energistics network for its ingredient supply. This machine can store 18 patterns, and thus can craft 18 recipes in parallel. Its third mode, sustain, ensures a certain amount of a given item remains in the ME system.
 		</desc>
 		<note>
 			Power Input: Any Side
 			Required Power: %dW
+			Sustain mode use the AE crafting CPU
 		</note>
 	</crafter>
 	<antiair>

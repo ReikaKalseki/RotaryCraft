@@ -52,16 +52,16 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 	public int getTargetDimID() {
 		int id = this.getCurrentDimID();
 		switch(type) {
-		case END:
-			return id == 0 ? 1 : 0;
-		case MYSTCRAFT: //portal has a book slot?
-			return this.getMystCraftTarget();
-		case NETHER:
-			return id == 0 ? -1 : 0;
-		case TWILIGHT:
-			return id == 0 ? TwilightForestHandler.getInstance().dimensionID : 0;
-		default:
-			return id;
+			case END:
+				return id == 0 ? 1 : 0;
+			case MYSTCRAFT: //portal has a book slot?
+				return this.getMystCraftTarget();
+			case NETHER:
+				return id == 0 ? -1 : 0;
+			case TWILIGHT:
+				return id == 0 ? TwilightForestHandler.getInstance().dimensionID : 0;
+			default:
+				return id;
 		}
 	}
 
@@ -100,16 +100,16 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 		//ReikaJavaLibrary.pConsole(id+":"+block+" @ "+x+", "+y+", "+z, Side.SERVER);
 		//ReikaJavaLibrary.pConsole(id+":"+block+" @ "+x+", "+y+", "+z, id == 7);
 		switch(type) {
-		case END:
-			return block == Blocks.end_portal ? id == 0 ? 1 : 0 : Integer.MIN_VALUE;
-		case MYSTCRAFT: //portal has a book slot?
-			return ReikaMystcraftHelper.getTargetDimensionIDFromPortalBlock(world, x, y, z);
-		case NETHER:
-			return block == Blocks.portal ? id == 0 ? -1 : 0 : Integer.MIN_VALUE;
-		case TWILIGHT:
-			return id == 0 ? TwilightForestHandler.getInstance().dimensionID : 0;
-		default:
-			return id;
+			case END:
+				return block == Blocks.end_portal ? id == 0 ? 1 : 0 : Integer.MIN_VALUE;
+			case MYSTCRAFT: //portal has a book slot?
+				return ReikaMystcraftHelper.getTargetDimensionIDFromPortalBlock(world, x, y, z);
+			case NETHER:
+				return block == Blocks.portal ? id == 0 ? -1 : 0 : Integer.MIN_VALUE;
+			case TWILIGHT:
+				return id == 0 ? TwilightForestHandler.getInstance().dimensionID : 0;
+			default:
+				return id;
 		}
 	}
 
@@ -202,30 +202,30 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 
 	public void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			read = ForgeDirection.EAST;
-			write = read.getOpposite();
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			write = read.getOpposite();
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			write = read.getOpposite();
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			write = read.getOpposite();
-			break;
-		case 4:	//moving up
-			read = ForgeDirection.DOWN;
-			write = read.getOpposite();
-			break;
-		case 5:	//moving down
-			read = ForgeDirection.UP;
-			write = read.getOpposite();
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				write = read.getOpposite();
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				write = read.getOpposite();
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				write = read.getOpposite();
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				write = read.getOpposite();
+				break;
+			case 4:	//moving up
+				read = ForgeDirection.DOWN;
+				write = read.getOpposite();
+				break;
+			case 5:	//moving down
+				read = ForgeDirection.UP;
+				write = read.getOpposite();
+				break;
 		}
 	}
 
@@ -265,7 +265,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.isWritingTo(this)) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

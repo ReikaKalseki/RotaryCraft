@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -30,10 +31,7 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
 
 	@Override
 	public final FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		int maxDrain = resource.amount;
-		if (this.canDrain(from, null))
-			return tank.drain(maxDrain, doDrain);
-		return null;
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -45,7 +43,7 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
 
 	@Override
 	public final boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return this.canOutputTo(from);
+		return this.canOutputTo(from) && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

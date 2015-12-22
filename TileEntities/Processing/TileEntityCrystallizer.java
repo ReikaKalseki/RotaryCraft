@@ -207,7 +207,8 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		}
 
 		int dT = Tamb-temperature;
-		temperature += dT/4;
+
+		temperature += Math.abs(dT) < 4 ? Math.signum(dT) : dT/4;
 	}
 
 	@Override

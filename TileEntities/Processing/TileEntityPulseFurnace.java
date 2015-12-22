@@ -430,6 +430,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		if (fluid.equals(FluidRegistry.getFluid("rc oxygen"))) {
 			return accel.fill(resource, doFill);
 		}
+		if (fluid.equals(FluidRegistry.getFluid("oxygen"))) {
+			return accel.fill(resource, doFill);
+		}
 		return 0;
 	}
 
@@ -452,6 +455,9 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			return from.offsetY == 0;
 		}
 		if (fluid.equals(FluidRegistry.getFluid("rc oxygen"))) {
+			return from.offsetY == 0;
+		}
+		if (fluid.equals(FluidRegistry.getFluid("oxygen"))) {
 			return from.offsetY == 0;
 		}
 		return false;

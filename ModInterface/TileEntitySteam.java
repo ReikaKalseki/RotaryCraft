@@ -37,6 +37,11 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 	//private final HybridTank steam = new HybridTank("steamturb", CAPACITY);
 
 	@Override
+	protected double getRelativeEfficiency() {
+		return 0.5;
+	}
+
+	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
 			phi = 0;

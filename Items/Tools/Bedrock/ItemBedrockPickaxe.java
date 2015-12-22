@@ -63,6 +63,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -82,6 +83,11 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		damageVsEntity = 5;
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
 	}
 
 	@Override

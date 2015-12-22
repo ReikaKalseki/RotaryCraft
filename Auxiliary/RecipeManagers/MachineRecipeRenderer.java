@@ -96,18 +96,18 @@ public class MachineRecipeRenderer {
 		for (int i = 0; i < 3; i++) {
 			for (int n = 0; n < 3; n++) {
 				if (i*3+n < num) {
-					ItemStack is = r.mainItem();
+					ItemStack is = r.mainItemForDisplay();
 					gui.drawItemStackWithTooltip(itemRender, font, is, x+j+18*n, y+k+i*18);
 				}
 			}
 		}
 
-		if (r.primary.getItem() != null)
-			gui.drawItemStackWithTooltip(itemRender, font, r.primary.getItem(), x+j-36, y+k+18);
-		if (r.secondary.getItem() != null)
-			gui.drawItemStackWithTooltip(itemRender, font, r.secondary.getItem(), x+j-36, y+k+37);
-		if (r.tertiary.getItem() != null)
-			gui.drawItemStackWithTooltip(itemRender, font, r.tertiary.getItem(), x+j-36, y+k-1);
+		if (r.primary.exists())
+			gui.drawItemStackWithTooltip(itemRender, font, r.primary.getItemForDisplay(), x+j-36, y+k+18);
+		if (r.secondary.exists())
+			gui.drawItemStackWithTooltip(itemRender, font, r.secondary.getItemForDisplay(), x+j-36, y+k+37);
+		if (r.tertiary.exists())
+			gui.drawItemStackWithTooltip(itemRender, font, r.tertiary.getItemForDisplay(), x+j-36, y+k-1);
 
 		ItemStack out = ReikaItemHelper.getSizedItemStack(r.outputItem(), r.getNumberProduced(num));
 		gui.drawItemStackWithTooltip(itemRender, font, out, x2+j, y2+k);

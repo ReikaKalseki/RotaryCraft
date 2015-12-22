@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
@@ -17,16 +18,17 @@ import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
+import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.api.genetics.IIndividual;
 
 public class CanolaBee extends BeeSpecies {
 
@@ -39,6 +41,9 @@ public class CanolaBee extends BeeSpecies {
 		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 50);
 		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 12);
 		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 5);
+		if (ConfigRegistry.BEEYEAST.getState()) {
+			this.addSpecialty(ItemRegistry.YEAST.getStackOf(), 20);
+		}
 	}
 
 	private final class AlleleCanola extends BasicGene implements IAlleleFlowers {
@@ -56,16 +61,16 @@ public class CanolaBee extends BeeSpecies {
 	private final class FlowerProviderCanola extends BasicFlowerProvider {
 
 		private FlowerProviderCanola() {
-			super(BlockRegistry.CANOLA.getBlockInstance(), true);
+			super(BlockRegistry.CANOLA.getBlockInstance(), "canola");
 		}
-
+		/*
 		@Override
 		public boolean isAcceptedFlower(World world, IIndividual individual, int x, int y, int z) {
 			return super.isAcceptedFlower(world, individual, x, y, z) && BlockCanola.canGrowAt(world, x, y, z);
 		}
-
+		 */
 		@Override
-		public boolean growFlower(World world, IIndividual individual, int x, int y, int z) {
+		public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
 			int r = 24;
 			boolean flag = false;
 			for (int i = -r; i <= r; i++) {
@@ -79,7 +84,10 @@ public class CanolaBee extends BeeSpecies {
 							int meta = world.getBlockMetadata(dx, dy, dz);
 							if (b == BlockRegistry.CANOLA.getBlockInstance()) {
 								if (meta < 9) {
-									world.scheduleBlockUpdate(dx, dy, dz, b, 20+rand.nextInt(300));
+									//world.scheduleBlockUpdate(dx, dy, dz, b, 20+rand.nextInt(20)); //was 20+rand(300)
+									if (rand.nextInt(3) == 0) {
+										b.updateTick(world, dx, dy, dz, rand);
+									}
 									flag = true;
 								}
 							}
@@ -150,10 +158,8 @@ public class CanolaBee extends BeeSpecies {
 	@Override
 	public boolean isJubilant(IBeeGenome ibg, IBeeHousing ibh) {
 		World world = ibh.getWorld();
-		int x = ibh.getXCoord();
-		int y = ibh.getYCoord();
-		int z = ibh.getZCoord();
-		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		ChunkCoordinates c = ibh.getCoordinates();
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, c.posX, c.posY, c.posZ);
 		return Tamb > 15 && Tamb < 35;
 	}
 

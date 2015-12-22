@@ -56,7 +56,7 @@ public class GuiExtractor extends GuiMachine
 			this.drawTexturedModalRect(25, 33, 25, 33, 18, 18);
 			GL11.glDisable(GL11.GL_BLEND);
 
-			int i1 = ext.getCookProgressScaled(32, 0);
+			int i1 = Math.min(32, ext.getCookProgressScaled(32, 0));
 			this.drawTexturedModalRect(29, 34, 176, 48, 10, i1);
 			GL11.glPopMatrix();
 		}
@@ -70,11 +70,11 @@ public class GuiExtractor extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i2 = ext.getCookProgressScaled(28, 1);
-		int i3 = ext.getCookProgressScaled(28, 2);
-		int i4 = ext.getCookProgressScaled(32, 3);
+		int i2 = Math.min(28, ext.getCookProgressScaled(28, 1));
+		int i3 = Math.min(28, ext.getCookProgressScaled(28, 2));
+		int i4 = Math.min(32, ext.getCookProgressScaled(32, 3));
 		if (!ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
-			int i1 = ext.getCookProgressScaled(32, 0);
+			int i1 = Math.min(32, ext.getCookProgressScaled(32, 0));
 			this.drawTexturedModalRect(j + 29, k + 34, 176, 48, 10, i1);
 		}
 		this.drawTexturedModalRect(j + 63, k + 35, 186, 48, 14, i2);

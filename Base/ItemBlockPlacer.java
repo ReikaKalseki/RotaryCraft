@@ -53,7 +53,7 @@ public abstract class ItemBlockPlacer extends ItemBasic implements ISize {
 		return y >= 0 && y < world.provider.getHeight()-1;
 	}
 
-	protected void checkAndBreakAdjacent(World world, int x, int y, int z) {}
+	protected void checkAndBreakAdjacent(World world, int x, int y, int z, EntityPlayer ep) {}
 
 	@Override
 	public int getMetadata(int damageValue) {

@@ -109,7 +109,19 @@ public class ItemGravelGun extends ItemChargedTool {
 								}
 							}
 						}
+						float pre = ent.getHealth();
 						ent.attackEntityFrom(new GravelGunDamage(ep), dmg);
+						float post = ent.getHealth();
+						if (post > 0) {
+							float newh = Math.min(post, pre-Math.min(10, dmg));
+							if (newh <= 0) {
+								ent.setHealth(0.01F);
+								ent.attackEntityFrom(new GravelGunDamage(ep), dmg);
+							}
+							else {
+								ent.setHealth(newh);
+							}
+						}
 						if (dmg >= 500)
 							RotaryAchievements.MASSIVEHIT.triggerAchievement(ep);
 					}

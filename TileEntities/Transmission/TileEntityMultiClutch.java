@@ -45,7 +45,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.isWritingTo(this)) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}
@@ -128,6 +128,8 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 		redLevel = world.getBlockPowerInput(x, y, z);
 		this.getIOSides(world, x, y, z, meta);
 		this.transferPower(world, x, y, z, meta);
+
+		this.basicPowerReceiver();
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {

@@ -87,6 +87,10 @@ public enum MaterialRegistry {
 		return /*this == WOOD ||*/ this == STONE || this == STEEL;
 	}
 
+	public boolean takesTemperatureDamage() {
+		return this == WOOD || this == STONE;
+	}
+
 	public boolean isFlammable() {
 		return this == WOOD;
 	}
@@ -111,60 +115,60 @@ public enum MaterialRegistry {
 			return this != BEDROCK;
 		if (item instanceof ItemPickaxe) {
 			switch(this) {
-			case STONE:
-				return true;
-			case STEEL:
-				return item.canHarvestBlock(Blocks.iron_ore, tool);
-			case DIAMOND:
-				return item.canHarvestBlock(Blocks.diamond_ore, tool);
-			case BEDROCK:
-				return item.canHarvestBlock(Blocks.obsidian, tool);
-			default:
-				return false;
+				case STONE:
+					return true;
+				case STEEL:
+					return item.canHarvestBlock(Blocks.iron_ore, tool);
+				case DIAMOND:
+					return item.canHarvestBlock(Blocks.diamond_ore, tool);
+				case BEDROCK:
+					return item.canHarvestBlock(Blocks.obsidian, tool);
+				default:
+					return false;
 			}
 		}
 		if (TinkerToolHandler.getInstance().isPick(tool)) {
 			switch(this) {
-			case STONE:
-				return true;
-			case STEEL:
-				return TinkerToolHandler.getInstance().isStoneOrBetter(tool);
-			case DIAMOND:
-				return TinkerToolHandler.getInstance().isIronOrBetter(tool);
-			case BEDROCK:
-				return TinkerToolHandler.getInstance().isDiamondOrBetter(tool);
-			default:
-				return false;
+				case STONE:
+					return true;
+				case STEEL:
+					return TinkerToolHandler.getInstance().isStoneOrBetter(tool);
+				case DIAMOND:
+					return TinkerToolHandler.getInstance().isIronOrBetter(tool);
+				case BEDROCK:
+					return TinkerToolHandler.getInstance().isDiamondOrBetter(tool);
+				default:
+					return false;
 			}
 		}
 		if (MekToolHandler.getInstance().isPickTypeTool(tool)) {
 			switch(this) {
-			case STONE:
-				return true;
-			case STEEL:
-				return item.canHarvestBlock(Blocks.iron_ore, tool);
-			case DIAMOND:
-				return item.canHarvestBlock(Blocks.diamond_ore, tool);
-			case BEDROCK:
-				return item.canHarvestBlock(Blocks.obsidian, tool);
-			default:
-				return false;
+				case STONE:
+					return true;
+				case STEEL:
+					return item.canHarvestBlock(Blocks.iron_ore, tool);
+				case DIAMOND:
+					return item.canHarvestBlock(Blocks.diamond_ore, tool);
+				case BEDROCK:
+					return item.canHarvestBlock(Blocks.obsidian, tool);
+				default:
+					return false;
 			}
 		}
 		if (item == RedstoneArsenalHandler.getInstance().pickID) {
 			return RedstoneArsenalHandler.getInstance().pickLevel >= this.ordinal()-1;
 		}
 		switch(this) {
-		case STONE:
-			return item.canHarvestBlock(Blocks.stone, tool);
-		case STEEL:
-			return item.canHarvestBlock(Blocks.iron_ore, tool);
-		case DIAMOND:
-			return item.canHarvestBlock(Blocks.diamond_ore, tool);
-		case BEDROCK:
-			return item.canHarvestBlock(Blocks.obsidian, tool);
-		default:
-			break;
+			case STONE:
+				return item.canHarvestBlock(Blocks.stone, tool);
+			case STEEL:
+				return item.canHarvestBlock(Blocks.iron_ore, tool);
+			case DIAMOND:
+				return item.canHarvestBlock(Blocks.diamond_ore, tool);
+			case BEDROCK:
+				return item.canHarvestBlock(Blocks.obsidian, tool);
+			default:
+				break;
 		}
 		return false;
 	}
@@ -242,16 +246,16 @@ public enum MaterialRegistry {
 
 	public ItemStack getGearItem() {
 		switch(this) {
-		case BEDROCK:
-			return ItemStacks.bedrockgear;
-		case DIAMOND:
-			return ItemStacks.diamondgear;
-		case STEEL:
-			return ItemStacks.steelgear;
-		case STONE:
-			return ItemStacks.stonegear;
-		case WOOD:
-			return ItemStacks.woodgear;
+			case BEDROCK:
+				return ItemStacks.bedrockgear;
+			case DIAMOND:
+				return ItemStacks.diamondgear;
+			case STEEL:
+				return ItemStacks.steelgear;
+			case STONE:
+				return ItemStacks.stonegear;
+			case WOOD:
+				return ItemStacks.woodgear;
 		}
 		return null;
 	}
@@ -269,16 +273,16 @@ public enum MaterialRegistry {
 
 	public ItemStack getShaftUnitItem() {
 		switch(this) {
-		case BEDROCK:
-			return ItemStacks.bedrockshaft;
-		case DIAMOND:
-			return ItemStacks.diamondshaft;
-		case STEEL:
-			return ItemStacks.shaftitem;
-		case STONE:
-			return ItemStacks.stonerod;
-		case WOOD:
-			return new ItemStack(Items.stick);
+			case BEDROCK:
+				return ItemStacks.bedrockshaft;
+			case DIAMOND:
+				return ItemStacks.diamondshaft;
+			case STEEL:
+				return ItemStacks.shaftitem;
+			case STONE:
+				return ItemStacks.stonerod;
+			case WOOD:
+				return new ItemStack(Items.stick);
 		}
 		return null;
 	}

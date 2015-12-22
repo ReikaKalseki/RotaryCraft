@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -25,7 +26,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
 public class PowerSourceList implements PowerTracker {
 
-	private ArrayList<PowerGenerator> engines = new ArrayList<PowerGenerator>();
+	private HashSet<PowerWrapper> engines = new HashSet();
 	private ShaftMerger caller;
 	private ArrayList<ShaftMerger> mergers = new ArrayList();
 	private boolean isLooping = false;
@@ -33,8 +34,8 @@ public class PowerSourceList implements PowerTracker {
 	public long getMaxGennablePower() {
 		long pwr = 0;
 
-		for (int i = 0; i < engines.size(); i++) {
-			pwr += engines.get(i).getMaxPower();
+		for (PowerWrapper eng : engines) {
+			pwr += eng.generator.getMaxPower();
 		}
 
 		return pwr;
@@ -43,14 +44,14 @@ public class PowerSourceList implements PowerTracker {
 	public long getRealMaxPower() {
 		long pwr = 0;
 
-		for (int i = 0; i < engines.size(); i++) {
-			pwr += engines.get(i).getCurrentPower();
+		for (PowerWrapper eng : engines) {
+			pwr += eng.generator.getCurrentPower();
 		}
 		return pwr;
 	}
 
 	public PowerSourceList addSource(PowerGenerator te) {
-		engines.add(te);
+		engines.add(new PowerWrapper(te));
 		return this;
 	}
 
@@ -120,9 +121,8 @@ public class PowerSourceList implements PowerTracker {
 	}
 
 	public void addAll(PowerSourceList pwr) {
-		for (int i = 0; i < pwr.engines.size(); i++) {
-			PowerGenerator te = pwr.engines.get(i);
-			this.addSource(te);
+		for (PowerWrapper te : pwr.engines) {
+			this.addSource(te.generator);
 		}
 	}
 
@@ -133,16 +133,16 @@ public class PowerSourceList implements PowerTracker {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n");
-		for (int i = 0; i < engines.size(); i++) {
-			sb.append(engines.get(i));
-			if (i < engines.size()-1)
-				sb.append("\n");
+		for (PowerWrapper gen : engines) {
+			sb.append(gen.generator);
+			//if (i < engines.size()-1)
+			//	sb.append("\n");
 		}
 		return sb.toString();
 	}
 
 	public boolean contains(PowerGenerator te) {
-		return engines.contains(te);
+		return engines.contains(new PowerWrapper(te));
 	}
 
 	public boolean calledFrom(ShaftMerger sm) {
@@ -174,6 +174,10 @@ public class PowerSourceList implements PowerTracker {
 		return avg > 0 && sum/avg > 4;
 	}
 
+	public int size() {
+		return engines.size();
+	}
+
 	public static PowerSourceList combine(PowerSourceList in1, PowerSourceList in2, ShaftMerger caller) {
 		PowerSourceList psl = new PowerSourceList();
 		psl.engines.addAll(in1.engines);
@@ -189,6 +193,26 @@ public class PowerSourceList implements PowerTracker {
 		psl.caller = caller;
 
 		return psl;
+	}
+
+	private static class PowerWrapper {
+
+		private final PowerGenerator generator;
+
+		private PowerWrapper(PowerGenerator gen) {
+			generator = gen;
+		}
+
+		@Override
+		public int hashCode() {
+			return new WorldLocation((TileEntity)generator).hashCode();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			return o instanceof PowerWrapper && new WorldLocation((TileEntity)((PowerWrapper)o).generator).equals(new WorldLocation((TileEntity)generator));
+		}
+
 	}
 
 }

@@ -40,102 +40,102 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	public void getIOSides(World world, int x, int y, int z) {
 		//ReikaJavaLibrary.pConsole(direction, Side.SERVER);
 		switch(direction) {
-		case 0://-x -> -z
-			read = ForgeDirection.WEST;
-			write = ForgeDirection.NORTH;
-			break;
-		case 1:
-			read = ForgeDirection.NORTH;
-			write = ForgeDirection.EAST;
-			break;
-		case 2:
-			read = ForgeDirection.EAST;
-			write = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			read = ForgeDirection.SOUTH;
-			write = ForgeDirection.WEST;
-			break;
-		case 4:
-			read = ForgeDirection.WEST;
-			write = ForgeDirection.SOUTH;
-			break;
-		case 5:
-			read = ForgeDirection.NORTH;
-			write = ForgeDirection.WEST;
-			break;
-		case 6:
-			write = ForgeDirection.NORTH;
-			read = ForgeDirection.EAST;
-			break;
-		case 7:
-			read = ForgeDirection.SOUTH;
-			write = ForgeDirection.EAST;
-			break;
-		case 8:	//VERTICAL POSITIONS - going up from flat
-			read = ForgeDirection.WEST;
-			write = ForgeDirection.UP;
-			break;
-		case 9:
-			read = ForgeDirection.NORTH;
-			write = ForgeDirection.UP;
-			break;
-		case 10:
-			read = ForgeDirection.EAST;
-			write = ForgeDirection.UP;
-			break;
-		case 11:
-			read = ForgeDirection.SOUTH;
-			write = ForgeDirection.UP;
-			break;
-		case 12: //VERTICAL POSITIONS - going flat from up
-			read = ForgeDirection.DOWN;
-			write = ForgeDirection.WEST;
-			break;
-		case 13:
-			read = ForgeDirection.DOWN;
-			write = ForgeDirection.NORTH;
-			break;
-		case 14:
-			read = ForgeDirection.DOWN;
-			write = ForgeDirection.EAST;
-			break;
-		case 15:
-			read = ForgeDirection.DOWN;
-			write = ForgeDirection.SOUTH;
-			break;
-		case 16: //VERTICAL POSITIONS - going down from flat
-			write = ForgeDirection.DOWN;
-			read = ForgeDirection.WEST;
-			break;
-		case 17:
-			write = ForgeDirection.DOWN;
-			read = ForgeDirection.NORTH;
-			break;
-		case 18:
-			write = ForgeDirection.DOWN;
-			read = ForgeDirection.EAST;
-			break;
-		case 19:
-			write = ForgeDirection.DOWN;
-			read = ForgeDirection.SOUTH;
-			break;
-		case 20: //VERTICAL POSITIONS - going flat from down
-			read = ForgeDirection.UP;
-			write = ForgeDirection.WEST;
-			break;
-		case 21:
-			read = ForgeDirection.UP;
-			write = ForgeDirection.NORTH;
-			break;
-		case 22:
-			read = ForgeDirection.UP;
-			write = ForgeDirection.EAST;
-			break;
-		case 23:
-			read = ForgeDirection.UP;
-			write = ForgeDirection.SOUTH;
-			break;
+			case 0://-x -> -z
+				read = ForgeDirection.WEST;
+				write = ForgeDirection.NORTH;
+				break;
+			case 1:
+				read = ForgeDirection.NORTH;
+				write = ForgeDirection.EAST;
+				break;
+			case 2:
+				read = ForgeDirection.EAST;
+				write = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				read = ForgeDirection.SOUTH;
+				write = ForgeDirection.WEST;
+				break;
+			case 4:
+				read = ForgeDirection.WEST;
+				write = ForgeDirection.SOUTH;
+				break;
+			case 5:
+				read = ForgeDirection.NORTH;
+				write = ForgeDirection.WEST;
+				break;
+			case 6:
+				write = ForgeDirection.NORTH;
+				read = ForgeDirection.EAST;
+				break;
+			case 7:
+				read = ForgeDirection.SOUTH;
+				write = ForgeDirection.EAST;
+				break;
+			case 8:	//VERTICAL POSITIONS - going up from flat
+				read = ForgeDirection.WEST;
+				write = ForgeDirection.UP;
+				break;
+			case 9:
+				read = ForgeDirection.NORTH;
+				write = ForgeDirection.UP;
+				break;
+			case 10:
+				read = ForgeDirection.EAST;
+				write = ForgeDirection.UP;
+				break;
+			case 11:
+				read = ForgeDirection.SOUTH;
+				write = ForgeDirection.UP;
+				break;
+			case 12: //VERTICAL POSITIONS - going flat from up
+				read = ForgeDirection.DOWN;
+				write = ForgeDirection.WEST;
+				break;
+			case 13:
+				read = ForgeDirection.DOWN;
+				write = ForgeDirection.NORTH;
+				break;
+			case 14:
+				read = ForgeDirection.DOWN;
+				write = ForgeDirection.EAST;
+				break;
+			case 15:
+				read = ForgeDirection.DOWN;
+				write = ForgeDirection.SOUTH;
+				break;
+			case 16: //VERTICAL POSITIONS - going down from flat
+				write = ForgeDirection.DOWN;
+				read = ForgeDirection.WEST;
+				break;
+			case 17:
+				write = ForgeDirection.DOWN;
+				read = ForgeDirection.NORTH;
+				break;
+			case 18:
+				write = ForgeDirection.DOWN;
+				read = ForgeDirection.EAST;
+				break;
+			case 19:
+				write = ForgeDirection.DOWN;
+				read = ForgeDirection.SOUTH;
+				break;
+			case 20: //VERTICAL POSITIONS - going flat from down
+				read = ForgeDirection.UP;
+				write = ForgeDirection.WEST;
+				break;
+			case 21:
+				read = ForgeDirection.UP;
+				write = ForgeDirection.NORTH;
+				break;
+			case 22:
+				read = ForgeDirection.UP;
+				write = ForgeDirection.EAST;
+				break;
+			case 23:
+				read = ForgeDirection.UP;
+				write = ForgeDirection.SOUTH;
+				break;
 		}
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready, readz, 4);
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, writex, writey, writez, 49);
@@ -159,7 +159,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.isWritingTo(this)) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

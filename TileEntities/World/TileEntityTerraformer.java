@@ -311,6 +311,8 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		addBiomeTransformation(BiomeGenBase.desert, BiomeGenBase.mesa, 32768, null, new ItemReq(Blocks.clay, 0.2F));
 		addBiomeTransformation(BiomeGenBase.ocean, BiomeGenBase.deepOcean, 1024, FluidRegistry.getFluidStack("water", 200));
 
+		addBiomeTransformation(BiomeGenBase.mesa, BiomeGenBase.desert, 16384, null, new ItemReq(Blocks.sand, 0.5F), new ItemReq(Blocks.sandstone, 0.1F));
+
 		addBiomeTransformation(BiomeGenBase.roofedForest, BiomeGenBase.forest, 32768, null, new ItemReq(Blocks.sapling, 0, 0.5F), new ItemReq(Blocks.sapling, 2, 0.2F));
 		addBiomeTransformation(BiomeGenBase.birchForest, BiomeGenBase.forest, 32768, null, new ItemReq(Blocks.sapling, 0, 0.5F));
 	}

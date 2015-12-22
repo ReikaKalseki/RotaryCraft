@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 
@@ -35,6 +36,11 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 		this.setMaxDamage(0);
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
 	}
 
 	@Override

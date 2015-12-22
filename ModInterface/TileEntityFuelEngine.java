@@ -74,11 +74,13 @@ TemperatureTE {
 			if (!ig.hasBreathableAtmosphere() || !ig.isGasPresent(IAtmosphericGas.OXYGEN))
 				return false;
 		}
+		if (lubetank.isEmpty())
+			return false;
 		if (this.hasECU()) {
 			TileEntityEngineController te = this.getECU();
 			return te.canProducePower();
 		}
-		return !lubetank.isEmpty();
+		return true;
 	}
 
 	private boolean hasECU() {
@@ -167,39 +169,39 @@ TemperatureTE {
 		if (isFlipped)
 			y -= 0.5;
 		switch(meta) {
-		case 0:
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.6875, y+0.9375, z+0.0625);
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.6875, y+0.9375, z+0.9375);
-			break;
-		case 1:
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.3175, y+0.9375, z+0.0625);
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.3175, y+0.9375, z+0.9375);
-			break;
-		case 2:
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.0625, y+0.9375, z+0.6875);
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.9375, y+0.9375, z+0.6875);
-			break;
-		case 3:
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.0625, y+0.9375, z+0.3175);
-			ReikaParticleHelper.SMOKE.spawnAt(world, x+0.9375, y+0.9375, z+0.3175);
-			break;
+			case 0:
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.6875, y+0.9375, z+0.0625);
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.6875, y+0.9375, z+0.9375);
+				break;
+			case 1:
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.3175, y+0.9375, z+0.0625);
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.3175, y+0.9375, z+0.9375);
+				break;
+			case 2:
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.0625, y+0.9375, z+0.6875);
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.9375, y+0.9375, z+0.6875);
+				break;
+			case 3:
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.0625, y+0.9375, z+0.3175);
+				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.9375, y+0.9375, z+0.3175);
+				break;
 		}
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			write = ForgeDirection.WEST;
-			break;
-		case 1:
-			write = ForgeDirection.EAST;
-			break;
-		case 2:
-			write = ForgeDirection.NORTH;
-			break;
-		case 3:
-			write = ForgeDirection.SOUTH;
-			break;
+			case 0:
+				write = ForgeDirection.WEST;
+				break;
+			case 1:
+				write = ForgeDirection.EAST;
+				break;
+			case 2:
+				write = ForgeDirection.NORTH;
+				break;
+			case 3:
+				write = ForgeDirection.SOUTH;
+				break;
 		}
 	}
 
@@ -264,17 +266,17 @@ TemperatureTE {
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid f) {
 		switch(from) {
-		case UP:
-			return isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
-		case DOWN:
-			return !isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
-		case EAST:
-		case NORTH:
-		case SOUTH:
-		case WEST:
-			return f.equals(FluidRegistry.getFluid("rc lubricant")) || f.equals(FluidRegistry.WATER);
-		default:
-			return false;
+			case UP:
+				return isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
+			case DOWN:
+				return !isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
+			case EAST:
+			case NORTH:
+			case SOUTH:
+			case WEST:
+				return f.equals(FluidRegistry.getFluid("rc lubricant")) || f.equals(FluidRegistry.WATER);
+			default:
+				return false;
 		}
 	}
 

@@ -69,7 +69,7 @@ public class DecoTankSettingsRecipe implements IRecipe {
 		}
 		ItemStack is = basicItem.copy();
 		is.setItemDamage(meta);
-		is.stackTagCompound = (NBTTagCompound)tank.stackTagCompound.copy(); //Keep fluids
+		is.stackTagCompound = tank.stackTagCompound != null ? (NBTTagCompound)tank.stackTagCompound.copy() : new NBTTagCompound(); //Keep fluids
 		//is.stackTagCompound.setBoolean(NBT_TAG, true);
 		return is;
 	}

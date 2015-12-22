@@ -55,7 +55,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 						this.readFromCross(devicein);
 						return;
 					}
-					if (devicein.isWritingTo(this)) {
+					else if (devicein.isWritingTo(this)) {
 						torquein = devicein.torque;
 						omegain = devicein.omega;
 					}

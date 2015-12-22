@@ -79,16 +79,16 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	public static int getMinTorque(int i) {
 		switch(i) {
-		case 0:
-			return WOODFLYTORQUEMAX/MINTORQUERATIO;
-		case 1:
-			return STONEFLYTORQUEMAX/MINTORQUERATIO;
-		case 2:
-			return IRONFLYTORQUEMAX/MINTORQUERATIO;
-		case 3:
-			return GOLDFLYTORQUEMAX/MINTORQUERATIO;
-		default:
-			return 0;
+			case 0:
+				return WOODFLYTORQUEMAX/MINTORQUERATIO;
+			case 1:
+				return STONEFLYTORQUEMAX/MINTORQUERATIO;
+			case 2:
+				return IRONFLYTORQUEMAX/MINTORQUERATIO;
+			case 3:
+				return GOLDFLYTORQUEMAX/MINTORQUERATIO;
+			default:
+				return 0;
 		}
 	}
 
@@ -99,10 +99,10 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public void testFailure() {
 		double factor = 0.25*Math.sqrt(omega);
 		switch(this.getTypeOrdinal()) {
-		case 1:
-			factor /= 2.5;
-		case 3:
-			factor *= 1.25;
+			case 1:
+				factor /= 2.5;
+			case 3:
+				factor *= 1.25;
 		}
 		factor *= ReikaMathLibrary.doubpow(omega/65536D, 1.5); //to reduce damage
 		double energy = ReikaEngLibrary.rotenergy(this.getDensity(), 0.25, omega, 0.75);
@@ -129,14 +129,14 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	public static double getDensity(int dmg) {
 		switch (dmg) {
-		case 0:
-			return ReikaEngLibrary.rhowood;
-		case 1:
-			return ReikaEngLibrary.rhorock;
-		case 2:
-			return ReikaEngLibrary.rhoiron;
-		case 3:
-			return ReikaEngLibrary.rhogold;
+			case 0:
+				return ReikaEngLibrary.rhowood;
+			case 1:
+				return ReikaEngLibrary.rhorock;
+			case 2:
+				return ReikaEngLibrary.rhoiron;
+			case 3:
+				return ReikaEngLibrary.rhogold;
 		}
 		return 0;
 	}
@@ -147,14 +147,14 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	public static double getStrength(int i) {
 		switch (i) {
-		case 0:
-			return ReikaEngLibrary.Twood;
-		case 1:
-			return 0.9*ReikaEngLibrary.Tstone;
-		case 2:
-			return 5*ReikaEngLibrary.Tiron;
-		case 3:
-			return ReikaEngLibrary.Tgold;
+			case 0:
+				return ReikaEngLibrary.Twood;
+			case 1:
+				return 0.9*ReikaEngLibrary.Tstone;
+			case 2:
+				return 5*ReikaEngLibrary.Tiron;
+			case 3:
+				return ReikaEngLibrary.Tgold;
 		}
 		return 0;
 	}
@@ -201,43 +201,43 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	public void getType(int meta) {
 		switch (meta) {
-		case 0:
-			maxtorque = WOODFLYTORQUEMAX;
-			decayTime = 2;
-			break;
-		case 1:
-			maxtorque = STONEFLYTORQUEMAX;
-			decayTime = 5;
-			break;
-		case 2:
-			maxtorque = IRONFLYTORQUEMAX;
-			decayTime = 15;
-			break;
-		case 3:
-			maxtorque = GOLDFLYTORQUEMAX;
-			decayTime = 40;
-			break;
-		default:
-			maxtorque = 0;
-			decayTime = 1;
-			break;
+			case 0:
+				maxtorque = WOODFLYTORQUEMAX;
+				decayTime = 2;
+				break;
+			case 1:
+				maxtorque = STONEFLYTORQUEMAX;
+				decayTime = 5;
+				break;
+			case 2:
+				maxtorque = IRONFLYTORQUEMAX;
+				decayTime = 15;
+				break;
+			case 3:
+				maxtorque = GOLDFLYTORQUEMAX;
+				decayTime = 40;
+				break;
+			default:
+				maxtorque = 0;
+				decayTime = 1;
+				break;
 		}
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata%4) {
-		case 0:
-			read = ForgeDirection.WEST;
-			break;
-		case 1:
-			read = ForgeDirection.EAST;
-			break;
-		case 2:
-			read = ForgeDirection.NORTH;
-			break;
-		case 3:
-			read = ForgeDirection.SOUTH;
-			break;
+			case 0:
+				read = ForgeDirection.WEST;
+				break;
+			case 1:
+				read = ForgeDirection.EAST;
+				break;
+			case 2:
+				read = ForgeDirection.NORTH;
+				break;
+			case 3:
+				read = ForgeDirection.SOUTH;
+				break;
 		}
 		write = read.getOpposite();
 	}
@@ -471,7 +471,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	@Override
 	public int getRedstoneOverride() {
-		return 0;
+		return 15*omega/this.getLimitLoads()[this.getTypeOrdinal()];
 	}
 
 	@Override

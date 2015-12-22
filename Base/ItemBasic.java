@@ -95,8 +95,8 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 			RotaryAchievements.BEDROCKSHAFT.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, new ItemStack(ItemRegistry.ADVGEAR.getItemInstance(), 1, 1)))
 			RotaryAchievements.CVT.triggerAchievement(player);
-		if (ItemRegistry.isRegistered(item) && ItemRegistry.getEntry(item).isBedrockTool())
-			RotaryAchievements.BEDROCKTOOLS.triggerAchievement(player);
+		//if (ItemRegistry.isRegistered(item) && ItemRegistry.getEntry(item).isBedrockTool())
+		//	RotaryAchievements.BEDROCKTOOLS.triggerAchievement(player);
 		for (int i = 0; i < 4; i++) {
 			if (ReikaItemHelper.matchStacks(item, new ItemStack(ItemRegistry.GEARBOX.getItemInstance(), 1, MaterialRegistry.DIAMOND.ordinal()+i*5)))
 				RotaryAchievements.DIAMONDGEARS.triggerAchievement(player);

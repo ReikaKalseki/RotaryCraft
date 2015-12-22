@@ -10,6 +10,7 @@
 package Reika.RotaryCraft;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
@@ -46,6 +47,8 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler.WeaponParts;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.SmelteryRecipeHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ThermalRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.ReactorCraft.Auxiliary.ReactorStacks;
+import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.RotaryCraft.Auxiliary.DecoTankSettingsRecipe;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
@@ -84,7 +87,6 @@ public class RotaryRecipes {
 	public static void addRecipes() {
 		if (RotaryCraft.instance.isLocked())
 			return;
-		RotaryRegistration.loadOreDictionary();
 		addMachines();
 		addCraftItems();
 		addMultiTypes();
@@ -149,12 +151,9 @@ public class RotaryRecipes {
 		if (RotaryCraft.instance.isLocked())
 			return;
 
-		Collection<ItemStack> c = RotaryRecipes.getBlastFurnaceGatingMaterials();
-		for (ItemStack bgt : c) {
-			addRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 't', bgt, 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks);
-			if (!ReikaItemHelper.matchStacks(bgt, ReikaItemHelper.stoneBricks))
-				RotaryCraft.logger.log("Blast Furnace gating material set to "+bgt.getDisplayName()+": "+bgt.toString());
-		}
+		Object[] bin = getBlastFurnaceIngredients();
+		addOreRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), bin);
+		RotaryCraft.logger.log("Blast Furnace gating materials set to "+Arrays.toString(bin));
 
 		addProps();
 
@@ -164,8 +163,30 @@ public class RotaryRecipes {
 
 		//RecipesExtractor.recipes().addModRecipes();
 
+		ItemStack ctr = ItemStacks.steelingot;
+		switch(ConfigRegistry.LATEDYNAMO.getValue()) {
+			case 1:
+				ctr = ItemStacks.redgoldingot;
+				break;
+			case 2:
+				ctr = ItemStacks.tungsteningot;
+				break;
+			case 3:
+				ctr = ItemStacks.bedingot;
+				break;
+			case 4:
+				if (ModList.REACTORCRAFT.isLoaded())
+					ctr = CraftingItems.ALLOY.getItem();
+				break;
+			case 5:
+				if (ModList.REACTORCRAFT.isLoaded())
+					ctr = ReactorStacks.maxMagnet;
+				break;
+			default:
+				break;
+		}
 		ItemStack coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1) : ItemStacks.power;
-		MachineRegistry.DYNAMO.addOreRecipe(" C ", "GIG", "IRI", 'C', coil, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Items.redstone);
+		MachineRegistry.DYNAMO.addOreRecipe(" C ", "GiG", "IRI", 'C', coil, 'i', ctr, 'I', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'R', Items.redstone);
 		coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1) : ItemStacks.goldcoil;
 		Object ps = new PreferentialItemStack(Items.iron_ingot, "ingotLead").blockItem(ItemRegistry.MODINGOTS.getItemInstance()).getItem();
 		MachineRegistry.MAGNETIC.addOreRecipe("lCl", "scs", "PSP", 'c', ItemStacks.conductive.getItem(), 'C', coil, 'P', ItemStacks.basepanel, 'S', ItemStacks.diamondshaftcore, 'l', ps, 's', "ingotSilver");
@@ -339,7 +360,7 @@ public class RotaryRecipes {
 		MachineRegistry.OBSIDIAN.addCrafting("SpS", "PMP", "BBB", 'M', ItemStacks.mixer, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'p', Blocks.glass_pane, 'P', ItemStacks.pipe);
 		MachineRegistry.OBSIDIAN.addOreRecipe("SpS", "PMP", "BBB", 'M', ItemStacks.mixer, 'B', ItemStacks.basepanel, 'S', "ingotInvar", 'p', Blocks.glass_pane, 'P', ItemStacks.pipe);
 
-		MachineRegistry.HEATER.addCrafting("sBs", "prp", "scs", 's', ItemStacks.steelingot, 'B', Blocks.iron_bars, 'p', ItemStacks.basepanel, 'c', ItemStacks.combustor);
+		MachineRegistry.HEATER.addCrafting("sBs", "prp", "scs", 'r', ItemStacks.tungsteningot, 's', ItemStacks.steelingot, 'B', Blocks.iron_bars, 'p', ItemStacks.basepanel, 'c', ItemStacks.combustor);
 
 		MachineRegistry.GPR.addCrafting("SsS", "PCP", "SRS", 'S', ItemStacks.steelingot, 's', ItemStacks.screen, 'P', ItemStacks.basepanel, 'R', ItemStacks.radar, 'C', ItemStacks.pcb);
 
@@ -878,9 +899,12 @@ public class RotaryRecipes {
 
 		for (int i = 0; i < MaterialRegistry.matList.length; i++) {
 			MaterialRegistry mat = MaterialRegistry.matList[i];
-			for (int k = 2; k < 16; k *= 2) {
-				GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(k), 2), mat.getGearUnitItem(k*2));
-			}
+			//for (int k = 2; k < 16; k *= 2) {
+			//	GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(k), 2), mat.getGearUnitItem(k*2));
+			//}
+			//anything else is not an even split
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(4), 2), mat.getGearUnitItem(16));
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(2), 2), mat.getGearUnitItem(4));
 		}
 
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);
@@ -1124,16 +1148,51 @@ public class RotaryRecipes {
 		return is;
 	}
 
+	private static void addOreRecipeToBoth(ItemStack out, Object... in) {
+		ShapedOreRecipe sr = new ShapedOreRecipe(out, in);
+		GameRegistry.addRecipe(sr);
+		WorktableRecipes.getInstance().addRecipe(sr, RecipeLevel.CORE);
+	}
+
 	private static void addRecipeToBoth(ItemStack out, Object... in) {
 		GameRegistry.addRecipe(out, in);
 		WorktableRecipes.getInstance().addRecipe(out, RecipeLevel.CORE, in);
 	}
 
-	public static Collection<ItemStack> getBlastFurnaceGatingMaterials() {
-		Collection<ItemStack> c = RotaryCraft.config.getBlastFurnaceGatingMaterials();
-		if (c.isEmpty())
-			c.add(ReikaItemHelper.stoneBricks.copy());
-		return c;
+	public static Object[] getBlastFurnaceIngredients() {
+		Object obj1 = ReikaItemHelper.stoneBricks;
+		Object obj2 = ReikaItemHelper.stoneBricks;
+		Object obj3 = ReikaItemHelper.stoneBricks;
+		Object obj4 = ReikaItemHelper.stoneBricks;
+
+		ArrayList<Object> c = RotaryCraft.config.getBlastFurnaceGatingMaterials();
+		switch(c.size()) {
+			case 1:
+				obj1 = obj2 = obj3 = obj4 = c.get(0);
+				break;
+			case 2:
+				obj1 = obj4 = c.get(0);
+				obj2 = obj3 = c.get(1);
+				break;
+			case 3:
+				obj1 = obj4 = c.get(0);
+				obj2 = c.get(1);
+				obj3 = c.get(2);
+				break;
+			case 4:
+				obj1 = c.get(0);
+				obj2 = c.get(1);
+				obj3 = c.get(2);
+				obj4 = c.get(3);
+				break;
+			default:
+				break;
+		}
+
+		Object[] args = {
+				"BaB", "bRc", "BdB", 'B', ReikaItemHelper.stoneBricks, 'r', Items.redstone, 'a', obj1, 'b', obj2, 'c', obj3, 'd', obj4
+		};
+		return args;
 	}
 
 	private static final Collection<RecipeHandler> recipeHandlers = new OneWayList();

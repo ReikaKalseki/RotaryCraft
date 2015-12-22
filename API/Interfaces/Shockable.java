@@ -18,6 +18,9 @@ public interface Shockable {
 	/** The minimum charge the VDG must attain before attempting to hit the TileEntity */
 	public int getMinDischarge();
 
+	/** Can this TileEntity accept discharges from a range greater than one meter (block) */
+	public boolean canDischargeLongRange();
+
 	/** Where in the block to aim the bolt tip (X-axis). Normal range 0-1. */
 	public float getAimX();
 

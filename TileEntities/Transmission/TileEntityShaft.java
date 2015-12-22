@@ -71,21 +71,21 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			world.createExplosion(null, x+0.5, y+0.5, z+0.5, 1F, true);
 			ItemStack item = null;
 			switch(type) {
-			case WOOD:
-				item = ItemStacks.sawdust.copy();
-				break;
-			case STONE:
-				item = new ItemStack(Blocks.gravel, 1, 0);
-				break;
-			case STEEL:
-				item = ItemStacks.scrap.copy();
-				break;
-			case DIAMOND:
-				item = new ItemStack(Items.diamond, 1, 0);
-				break;
-			case BEDROCK:
-				item = ItemStacks.bedrockdust.copy();
-				break;
+				case WOOD:
+					item = ItemStacks.sawdust.copy();
+					break;
+				case STONE:
+					item = new ItemStack(Blocks.gravel, 1, 0);
+					break;
+				case STEEL:
+					item = ItemStacks.scrap.copy();
+					break;
+				case DIAMOND:
+					item = new ItemStack(Items.diamond, 1, 0);
+					break;
+				case BEDROCK:
+					item = ItemStacks.bedrockdust.copy();
+					break;
 			}
 			EntityItem ei = new EntityItem(world, x+0.5, y+1.25, z+0.5, item);
 			ei.motionY = 0.4F+0.6F*rand.nextFloat();
@@ -101,21 +101,21 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.break", 1F, 1F);
 			ItemStack item = null;
 			switch(type) {
-			case WOOD:
-				item = new ItemStack(Items.stick, 1, 0);
-				break;
-			case STONE:
-				item = new ItemStack(Blocks.cobblestone, 1, 0);
-				break;
-			case STEEL:
-				item = ItemStacks.shaftitem.copy();
-				break;
-			case DIAMOND:
-				item = new ItemStack(Items.diamond, 1, 0);
-				break;
-			case BEDROCK:
-				item = ItemStacks.bedrockdust.copy();
-				break;
+				case WOOD:
+					item = new ItemStack(Items.stick, 1, 0);
+					break;
+				case STONE:
+					item = new ItemStack(Blocks.cobblestone, 1, 0);
+					break;
+				case STEEL:
+					item = ItemStacks.shaftitem.copy();
+					break;
+				case DIAMOND:
+					item = new ItemStack(Items.diamond, 1, 0);
+					break;
+				case BEDROCK:
+					item = ItemStacks.bedrockdust.copy();
+					break;
 			}
 			EntityItem ei = new EntityItem(world, x+0.5, y+1, z+0.5, item);
 			ei.motionY = rand.nextFloat()/5;
@@ -284,54 +284,54 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			read = ForgeDirection.EAST;
-			write = ForgeDirection.WEST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			write = ForgeDirection.EAST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			write = ForgeDirection.NORTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			write = ForgeDirection.SOUTH;
-			break;
-		case 4:	//moving up
-			read = ForgeDirection.DOWN;
-			write = ForgeDirection.UP;
-			break;
-		case 5:	//moving down
-			read = ForgeDirection.UP;
-			write = ForgeDirection.DOWN;
-			break;
-		case 6:	//cross - has 4 states
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.SOUTH;
-			write = ForgeDirection.WEST;
-			write2 = ForgeDirection.NORTH;
-			break;
-		case 7:	//cross - has 4 states
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.NORTH;
-			write = ForgeDirection.WEST;
-			write2 = ForgeDirection.SOUTH;
-			break;
-		case 8:	//cross - has 4 states
-			read = ForgeDirection.WEST;
-			read2 = ForgeDirection.NORTH;
-			write = ForgeDirection.EAST;
-			write2 = ForgeDirection.SOUTH;
-			break;
-		case 9:	//cross - has 4 states
-			read = ForgeDirection.WEST;
-			read2 = ForgeDirection.SOUTH;
-			write = ForgeDirection.EAST;
-			write2 = ForgeDirection.NORTH;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				write = ForgeDirection.WEST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				write = ForgeDirection.EAST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				write = ForgeDirection.NORTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				write = ForgeDirection.SOUTH;
+				break;
+			case 4:	//moving up
+				read = ForgeDirection.DOWN;
+				write = ForgeDirection.UP;
+				break;
+			case 5:	//moving down
+				read = ForgeDirection.UP;
+				write = ForgeDirection.DOWN;
+				break;
+			case 6:	//cross - has 4 states
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.SOUTH;
+				write = ForgeDirection.WEST;
+				write2 = ForgeDirection.NORTH;
+				break;
+			case 7:	//cross - has 4 states
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.NORTH;
+				write = ForgeDirection.WEST;
+				write2 = ForgeDirection.SOUTH;
+				break;
+			case 8:	//cross - has 4 states
+				read = ForgeDirection.WEST;
+				read2 = ForgeDirection.NORTH;
+				write = ForgeDirection.EAST;
+				write2 = ForgeDirection.SOUTH;
+				break;
+			case 9:	//cross - has 4 states
+				read = ForgeDirection.WEST;
+				read2 = ForgeDirection.SOUTH;
+				write = ForgeDirection.EAST;
+				write2 = ForgeDirection.NORTH;
+				break;
 		}
 	}
 
@@ -353,7 +353,6 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		TileEntity te1 = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 		MachineRegistry m2 = isCentered ? this.getMachine(read2) : MachineRegistry.getMachine(world, dx2, dy2, dz2);
 		TileEntity te2 = isCentered ? this.getAdjacentTileEntity(read2) : world.getTileEntity(dx2, dy2, dz2);
-
 
 		//ReikaJavaLibrary.pConsole(read.name()+":"+read2.name(), Side.SERVER);
 
@@ -561,6 +560,12 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	{
 		super.writeSyncTag(NBT);
 		NBT.setBoolean("failed", failed);
+
+		NBT.setIntArray("readtorque", readtorque);
+		NBT.setIntArray("readomega", readomega);
+
+		NBT.setFloat("cphi1", crossphi1);
+		NBT.setFloat("cphi2", crossphi2);
 	}
 
 	@Override
@@ -568,6 +573,12 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	{
 		super.readSyncTag(NBT);
 		failed = NBT.getBoolean("failed");
+
+		readtorque = NBT.getIntArray("readtorque");
+		readomega = NBT.getIntArray("readomega");
+
+		crossphi1 = NBT.getFloat("cphi1");
+		crossphi2 = NBT.getFloat("cphi2");
 	}
 
 	@Override

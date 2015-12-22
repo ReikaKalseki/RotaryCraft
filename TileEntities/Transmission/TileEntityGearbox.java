@@ -27,6 +27,7 @@ import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -88,18 +89,18 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	public int getMaxLubricant() {
 		switch(type) {
-		case BEDROCK:
-			return 0;
-		case DIAMOND:
-			return 1000;
-		case STEEL:
-			return 24000;
-		case STONE:
-			return 8000;
-		case WOOD:
-			return 0;//3000;
-		default:
-			return 0;
+			case BEDROCK:
+				return 0;
+			case DIAMOND:
+				return 1000;
+			case STEEL:
+				return 24000;
+			case STONE:
+				return 8000;
+			case WOOD:
+				return 0;//3000;
+			default:
+				return 0;
 		}
 	}
 
@@ -203,7 +204,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 		this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
-		this.getLube(world, x, y, z, meta);
+		this.getLubeAndApplyDamage(world, x, y, z, meta);
 		tempTimer.update();
 		if (tempTimer.checkCap()) {
 			this.updateTemperature(world, x, y, z, meta);
@@ -213,9 +214,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 	}
 
-	public void getLube(World world, int x, int y, int z, int metadata) {
+	private void getLubeAndApplyDamage(World world, int x, int y, int z, int metadata) {
 		int oldlube = 0;
-		if (type.needsLubricant() && omegain > 0) {
+		if (type.needsLubricant() && omega > 0) {
 			if (tank.isEmpty()) {
 				if (!world.isRemote && damage < MAX_DAMAGE && rand.nextInt(40) == 0 && this.getTicksExisted() >= 100) {
 					damage++;
@@ -254,26 +255,26 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			if (reduction) {
-				omega = cross.readomega[0]/ratio;
-				torque = cross.readtorque[0]*ratio;
+				omegain = cross.readomega[0]/ratio;
+				torquein = cross.readtorque[0]*ratio;
 			}
 			else {
-				omega = cross.readomega[0]*ratio;
-				torque = cross.readtorque[0]/ratio;
+				omegain = cross.readomega[0]*ratio;
+				torquein = cross.readtorque[0]/ratio;
 			}
 		}
 		else if (cross.isWritingTo2(this)) {
 			if (reduction) {
-				omega = cross.readomega[1]/ratio;
-				torque = cross.readtorque[1]*ratio;
+				omegain = cross.readomega[1]/ratio;
+				torquein = cross.readtorque[1]*ratio;
 			}
 			else {
-				omega = cross.readomega[1]*ratio;
-				torque = cross.readtorque[1]/ratio;
+				omegain = cross.readomega[1]*ratio;
+				torquein = cross.readtorque[1]/ratio;
 			}
 		}
 		else {
-			omega = torque = 0;
+			omegain = torquein = 0;
 			return; //not its output
 		}
 	}
@@ -380,21 +381,21 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 1F, true);
 		ItemStack item = null;
 		switch(type) {
-		case WOOD:
-			item = ItemStacks.sawdust.copy();
-			break;
-		case STONE:
-			item = new ItemStack(Blocks.gravel, 1, 0);
-			break;
-		case STEEL:
-			item = ItemStacks.scrap.copy();
-			break;
-		case DIAMOND:
-			item = new ItemStack(Items.diamond, 1, 0);
-			break;
-		case BEDROCK:
-			item = ItemStacks.bedrockdust.copy();
-			break;
+			case WOOD:
+				item = ItemStacks.sawdust.copy();
+				break;
+			case STONE:
+				item = new ItemStack(Blocks.gravel, 1, 0);
+				break;
+			case STEEL:
+				item = ItemStacks.scrap.copy();
+				break;
+			case DIAMOND:
+				item = new ItemStack(Items.diamond, 1, 0);
+				break;
+			case BEDROCK:
+				item = ItemStacks.bedrockdust.copy();
+				break;
 		}
 		for (int i = 0; i < this.getRatio(); i++) {
 			ReikaItemHelper.dropItem(world, x+0.5, y+1.25, z+0.5, item);
@@ -579,20 +580,21 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		if (type == MaterialRegistry.WOOD) {
 			if (omega > 0) {
 				temperature++;
-				world.playSound(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 1, 1, true);
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.getDamageNoise(), 0.5F, 1);
 			}
 		}
 		else if (type == MaterialRegistry.STONE) {
 			if (omega > 8192) {
 				temperature++;
-				world.playSound(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 1, 1, true);
+				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.getDamageNoise(), 0.67F, 1);
 			}
 		}
 		else {
 			temperature = Tamb;
 		}
-		if (temperature > 90 && rand.nextBoolean() && (type == MaterialRegistry.STONE || type == MaterialRegistry.WOOD)) {
+		if (temperature > 90 && rand.nextBoolean() && type.takesTemperatureDamage()) {
 			damage++;
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.getDamageNoise(), 1, 1);
 		}
 		if (omega == 0 && temperature > Tamb) {
 			temperature--;

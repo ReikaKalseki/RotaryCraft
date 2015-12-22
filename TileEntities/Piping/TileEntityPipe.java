@@ -234,7 +234,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		super.writeSyncTag(NBT);
 		NBT.setInteger("temp", temperature);
 	}
-
+	/*
 	@Override
 	public boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
 		if (p instanceof TileEntityPipe) {
@@ -250,7 +250,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		liquid = ((TileEntityPipe)from).liquid;
 		liquidLevel += amt;
 	}
-
+	 */
 	@Override
 	public boolean canBeCooledWithFins() {
 		return false;

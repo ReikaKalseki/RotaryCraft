@@ -39,7 +39,10 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 	private BlockArray blocks = new BlockArray();
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta) {/*
+	public void updateEntity(World world, int x, int y, int z, int meta) {
+		if (world.isRemote)
+			return;
+		/*
 		tickcount++;/*
 		if (BlockFallingLiquid.canMoveInto(world, x, y-1, z)) {
 			waterTimer.update();
@@ -61,7 +64,7 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 
 	private void legacyFunction(World world, int x, int y, int z, int meta) {
 		tickcount++;
-		if (!tank.isEmpty()) {
+		if (tank.getLevel() >= 1000) {
 			if (blocks.isEmpty()) {
 				int r = ConfigRegistry.SPILLERRANGE.getValue();
 				if (r > 0) {

@@ -120,7 +120,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 	public boolean canOutputToIFluidHandler(ForgeDirection side) {
 		return side.offsetY == 0;
 	}
-
+	/*
 	@Override
 	public boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
 		if (p instanceof TileEntityFuelLine) {
@@ -136,4 +136,5 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 		fluid = ((TileEntityFuelLine)from).fluid;
 		fuel += amt;
 	}
+	 */
 }

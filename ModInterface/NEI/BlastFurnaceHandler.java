@@ -47,7 +47,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 		private int getInput() {
 			long time = System.currentTimeMillis();
-			int index = (int)((time/1000)%inputs.size());
+			int index = (int)((time/500)%inputs.size());
 			return inputs.get(index);
 		}
 
@@ -68,17 +68,17 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					if (i*3+j < num) {
-						stacks.add(new PositionedStack(recipe.mainItem(), dx+18*i, dy+18*j));
+						stacks.add(new PositionedStack(recipe.mainItemForDisplay(), dx+18*i, dy+18*j));
 					}
 				}
 			}
 
-			if (recipe.tertiary.getItem() != null)
-				stacks.add(new PositionedStack(recipe.tertiary.getItem(), 21, 5));
-			if (recipe.primary.getItem() != null)
-				stacks.add(new PositionedStack(recipe.primary.getItem(), 21, 24));
-			if (recipe.secondary.getItem() != null)
-				stacks.add(new PositionedStack(recipe.secondary.getItem(), 21, 43));
+			if (recipe.tertiary.exists())
+				stacks.add(new PositionedStack(recipe.tertiary.getItemForDisplay(), 21, 5));
+			if (recipe.primary.exists())
+				stacks.add(new PositionedStack(recipe.primary.getItemForDisplay(), 21, 24));
+			if (recipe.secondary.exists())
+				stacks.add(new PositionedStack(recipe.secondary.getItemForDisplay(), 21, 43));
 
 			return stacks;
 		}
@@ -234,22 +234,22 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		if (r instanceof BlastFurnRecipe) {
 			BlastRecipe br = ((BlastFurnRecipe)r).recipe;
 			BlastInput in1 = br.primary;
-			if (in1.getItem() != null) {
-				String sg = String.format("%s: x%d (%.1f%%)", in1.getItem().getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
+			if (in1.exists()) {
+				String sg = String.format("%s: x%d (%.1f%%)", in1.getItemForDisplay().getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
 				f.drawString(sg, 21, 72, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
 			BlastInput in2 = br.secondary;
-			if (in2.getItem() != null) {
-				String sg = String.format("%s: x%d (%.1f%%)", in2.getItem().getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
+			if (in2.exists()) {
+				String sg = String.format("%s: x%d (%.1f%%)", in2.getItemForDisplay().getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
 			BlastInput in3 = br.tertiary;
-			if (in3.getItem() != null) {
-				String sg = String.format("%s: x%d (%.1f%%)", in3.getItem().getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
+			if (in3.exists()) {
+				String sg = String.format("%s: x%d (%.1f%%)", in3.getItemForDisplay().getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
 				dy += f.FONT_HEIGHT+2;
 			}

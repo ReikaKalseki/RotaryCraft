@@ -237,19 +237,19 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).getEngineType()) {
-			case STEAM:
-				return new ContainerSteam(player, (TileEntitySteamEngine) te);
-			case GAS:
-				return new ContainerEthanol(player, (TileEntityGasEngine) te);
-			case AC:
-				return new OneSlotContainer(player, te);
-			case SPORT:
-				return new ContainerPerformance(player, (TileEntityPerformanceEngine) te);
-			case MICRO:
-			case JET:
-				return new ContainerJet(player, (TileEntityEngine)te);
-			default:
-				return null;
+				case STEAM:
+					return new ContainerSteam(player, (TileEntitySteamEngine) te);
+				case GAS:
+					return new ContainerEthanol(player, (TileEntityGasEngine) te);
+				case AC:
+					return new OneSlotContainer(player, te);
+				case SPORT:
+					return new ContainerPerformance(player, (TileEntityPerformanceEngine) te);
+				case MICRO:
+				case JET:
+					return new ContainerJet(player, (TileEntityEngine)te);
+				default:
+					return null;
 			}
 		}
 		if (te instanceof TileEntityExtractor) {
@@ -278,12 +278,12 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityAdvancedGear) {
 			switch (((TileEntityAdvancedGear) te).getGearType()) {
-			case COIL:
-				return new CoreContainer(player, te);
-			case CVT:
-				return new ContainerCVT(player, (TileEntityAdvancedGear) te);
-			default:
-				return null;
+				case COIL:
+					return new CoreContainer(player, te);
+				case CVT:
+					return new ContainerCVT(player, (TileEntityAdvancedGear) te);
+				default:
+					return null;
 			}
 		}
 		if (te instanceof TileEntityLaunchCannon) {
@@ -391,9 +391,9 @@ public class GuiHandler implements IGuiHandler {
 
 		if (gr == GuiRegistry.HANDCRAFT)
 			return new GuiHandCraft(player, world);
+
 		if (gr == GuiRegistry.HANDBOOK)
 			return new GuiHandbook(player, world, 0, 0);
-		//return new GuiGuide();
 		if (gr == GuiRegistry.LOADEDHANDBOOK) {
 			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 			return new GuiHandbook(player, world, HandbookRegistry.getScreen(m, te), HandbookRegistry.getPage(m, te));
@@ -402,6 +402,7 @@ public class GuiHandler implements IGuiHandler {
 			MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 			return new GuiHandbookPage(player, world, HandbookRegistry.getScreen(m, te), HandbookRegistry.getPage(m, te));
 		}
+
 		if (gr == GuiRegistry.WORLDEDIT)
 			return new GuiWorldEdit(player, world);
 		if (gr == GuiRegistry.SAFEPLAYERS)
@@ -429,19 +430,19 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityEngine) {
 			switch(((TileEntityEngine) te).getEngineType()) {
-			case STEAM:
-				return new GuiSteam(player, (TileEntitySteamEngine) te);
-			case GAS:
-				return new GuiEthanol(player, (TileEntityGasEngine) te);
-			case AC:
-				return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
-			case SPORT:
-				return new GuiPerformance(player, (TileEntityPerformanceEngine) te);
-			case MICRO:
-			case JET:
-				return new GuiJet(player, (TileEntityEngine) te);
-			default:
-				return null;
+				case STEAM:
+					return new GuiSteam(player, (TileEntitySteamEngine) te);
+				case GAS:
+					return new GuiEthanol(player, (TileEntityGasEngine) te);
+				case AC:
+					return new GuiOneSlotInv(player, new OneSlotContainer(player, te), (RotaryCraftTileEntity)te);
+				case SPORT:
+					return new GuiPerformance(player, (TileEntityPerformanceEngine) te);
+				case MICRO:
+				case JET:
+					return new GuiJet(player, (TileEntityEngine) te);
+				default:
+					return null;
 			}
 		}
 		if (te instanceof TileEntityExtractor) {
@@ -485,12 +486,12 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityAdvancedGear) {
 			switch (((TileEntityAdvancedGear) te).getGearType()) {
-			case COIL:
-				return new GuiCoil(player, (TileEntityAdvancedGear) te);
-			case CVT:
-				return new GuiCVT(player, (TileEntityAdvancedGear) te);
-			default:
-				return null;
+				case COIL:
+					return new GuiCoil(player, (TileEntityAdvancedGear) te);
+				case CVT:
+					return new GuiCVT(player, (TileEntityAdvancedGear) te);
+				default:
+					return null;
 			}
 		}
 		if (te instanceof TileEntityMobRadar) {

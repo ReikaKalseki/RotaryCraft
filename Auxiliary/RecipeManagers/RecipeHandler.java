@@ -12,9 +12,11 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.Collection;
 import java.util.HashMap;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Exception.RegistrationException;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -77,12 +79,30 @@ public abstract class RecipeHandler {
 		recipeKeys.put(recipe, s);
 	}
 
+	protected static final String fullIDKeys(Collection<KeyedItemStack> c) {
+		StringBuilder sb = new StringBuilder();
+		for (KeyedItemStack is : c) {
+			sb.append(fullID(is.getItemStack()));
+			sb.append("|");
+		}
+		return sb.toString();
+	}
+
+	protected static final String fullID(Collection<ItemStack> c) {
+		StringBuilder sb = new StringBuilder();
+		for (ItemStack is : c) {
+			sb.append(fullID(is));
+			sb.append("|");
+		}
+		return sb.toString();
+	}
+
 	protected static final String fullID(ItemStack is) {
 		if (is == null)
 			return "[null]";
 		else if (is.getItem() == null)
 			return "[null-item stack]";
-		return is.toString()+"{"+is.stackTagCompound+"}["+ReikaItemHelper.getRegistrantMod(is)+"]";
+		return is.stackSize+"x"+Item.itemRegistry.getNameForObject(is.getItem())+"@"+is.getItemDamage()+"{"+is.stackTagCompound+"}["+ReikaItemHelper.getRegistrantMod(is)+"]";
 	}
 
 	protected final Collection getRecipes(RecipeLevel rl) {

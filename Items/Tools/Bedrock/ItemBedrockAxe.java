@@ -42,6 +42,7 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -58,6 +59,11 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		damageVsEntity = 6;
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
 	}
 
 	@Override
@@ -167,7 +173,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			return true;
 		}
 		else if (!tree.isEmpty() && tree.isValidTree()) {
-			this.cutEntireTree(is, world, tree, x, y, z);
+			this.cutEntireTree(is, world, tree, x, y, z, ep);
 			return true;
 		}
 		else if (!world.isRemote) {
@@ -189,11 +195,11 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		return false;
 	}
 
-	private void cutEntireTree(ItemStack is, World world, TreeReader tree, int dx, int dy, int dz) {
+	private void cutEntireTree(ItemStack is, World world, TreeReader tree, int dx, int dy, int dz, EntityPlayer ep) {
 		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 		boolean rainbow = tree.isRainbowTree();
 		if (rainbow) {
-			ArrayList<ItemStack> items = tree.getAllDroppedItems(world, fortune);
+			ArrayList<ItemStack> items = tree.getAllDroppedItems(world, fortune, ep);
 			ReikaItemHelper.dropItems(world, dx, dy, dz, items);
 		}
 		for (int i = 0; i < tree.getSize(); i++) {

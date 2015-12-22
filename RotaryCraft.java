@@ -10,7 +10,7 @@
 package Reika.RotaryCraft;
 
 import java.net.URL;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -29,6 +29,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
@@ -74,6 +75,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper.CustomTinke
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler.Pulses;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler.ToolParts;
 import Reika.DragonAPI.ModRegistry.ModCropList;
+import Reika.RotaryCraft.Auxiliary.BlockColorMapper;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.FindMachinesCommand;
 import Reika.RotaryCraft.Auxiliary.FreezePotion;
@@ -334,6 +336,7 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryDescriptions.loadData();
 		//DemoMusic.addTracks();
 
+		RotaryRegistration.loadOreDictionary();
 		RotaryRecipes.loadMachineRecipeHandlers();
 		if (!this.isLocked()) {
 			RotaryRecipes.addRecipes();
@@ -492,6 +495,8 @@ public class RotaryCraft extends DragonAPIMod {
 		CustomExtractLoader.instance.loadFile();
 		ExtractorModOres.addCustomSmelting();
 
+		BlockColorMapper.instance.loadFromConfig();
+
 		ModCropList.addCustomCropType(new SimpleCropHandler(ModList.ROTARYCRAFT, 0x00cc00, "CANOLA", BlockRegistry.CANOLA.getBlockInstance(), 9, ItemRegistry.CANOLA.getStackOf()));
 
 		//RotaryRecipes.addModInterface();
@@ -511,12 +516,23 @@ public class RotaryCraft extends DragonAPIMod {
 					CanolaBee bee = new CanolaBee();
 					bee.register();
 					bee.addBreeding("Meadows", "Cultivated", 20);
-					RecipeManagers.centrifugeManager.addRecipe(30, ItemStacks.slipperyComb, ItemStacks.slipperyPropolis);
+					HashMap<ItemStack, Float> map = new HashMap();
+					map.put(ItemStacks.slipperyPropolis, 0.80F);
+					RecipeManagers.centrifugeManager.addRecipe(30, ItemStacks.slipperyComb, map);
 					FluidStack fs = new FluidStack(FluidRegistry.getFluid("rc lubricant"), 20); //was 150
 					RecipeManagers.squeezerManager.addRecipe(30, new ItemStack[]{ItemStacks.slipperyPropolis}, fs);
 				}
+				catch (IncompatibleClassChangeError e) {
+					e.printStackTrace();
+					logger.logError("Could not add Forestry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
+				}
 				catch (Exception e) {
 					e.printStackTrace();
+					logger.logError("Could not add Forestry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
+				}
+				catch (LinkageError e) {
+					e.printStackTrace();
+					logger.logError("Could not add Forestry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
 				}
 			}
 
@@ -557,6 +573,7 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.setDisallowCheatedParts();
 
 				mat.register(true).registerTexture("tinkertools/hsla/hsla", false);
+				mat.registerRepairMaterial(ItemStacks.steelingot);
 				//mat.registerPatternBuilder(ItemStacks.bedingot);
 				mat.registerWeapons(ItemStacks.steelblock, 8, 0.75F, 2F, 2.5F, 8F, 0.015F);
 				mat.registerSmelteryCasting(ItemStacks.steelingot, hslaFluid, 750, ItemStacks.steelblock);
@@ -656,9 +673,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public void overrideRecipes(FMLServerStartedEvent evt) {
 		if (!this.isLocked()) {
 			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.BLASTFURNACE.getCraftedProduct())) {
-				Collection<ItemStack> c = RotaryRecipes.getBlastFurnaceGatingMaterials();
-				for (ItemStack is : c)
-					GameRegistry.addRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), "StS", "trt", "StS", 'r', Items.redstone, 'S', ReikaItemHelper.stoneBricks, 't', is);
+				GameRegistry.addRecipe(new ShapedOreRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), RotaryRecipes.getBlastFurnaceIngredients()));
 			}
 			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.WORKTABLE.getCraftedProduct())) {
 				GameRegistry.addRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);

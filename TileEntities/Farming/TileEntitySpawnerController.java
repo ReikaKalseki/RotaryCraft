@@ -101,7 +101,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	private int getNumberNearbySpawns(World world, int x, int y, int z, Class ent) {
-		return world.getEntitiesWithinAABB(ent, ReikaAABBHelper.getBlockAABB(x, y, z).expand(8, 8, 8)).size();
+		return world.getEntitiesWithinAABB(ent, ReikaAABBHelper.getBlockAABB(x, y, z).expand(16, 24, 16)).size();
 	}
 
 	private boolean canSpawn(World world, int x, int y, int z) {

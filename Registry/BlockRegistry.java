@@ -94,6 +94,8 @@ public enum BlockRegistry implements BlockEnum {
 
 	public static final BlockRegistry[] blockList = values();
 
+	private static final HashMap<Item, BlockRegistry> itemMap = new HashMap();
+
 	private static final HashMap<Block, BlockRegistry> IDMap = new HashMap();
 	private static final PluralMap<BlockRegistry> classMap = new PluralMap(2);
 
@@ -259,9 +261,15 @@ public enum BlockRegistry implements BlockEnum {
 		return new ItemStack(this.getBlockInstance(), amt, meta);
 	}
 
+	public static BlockRegistry getFromItem(ItemStack is) {
+		return itemMap.get(is.getItem());
+	}
+
 	public static void loadMappings() {
 		for (int i = 0; i < blockList.length; i++) {
 			BlockRegistry block = blockList[i];
+			Block b = block.getBlockInstance();
+			itemMap.put(Item.getItemFromBlock(b), block);
 			IDMap.put(block.getBlockInstance(), block);
 			classMap.put(block, block.block, block.offset);
 		}

@@ -10,9 +10,9 @@
 package Reika.RotaryCraft.TileEntities.Farming;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
@@ -20,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +36,9 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
@@ -45,6 +48,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -55,7 +59,7 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction,
-ConditionalOperation, DamagingContact {
+ConditionalOperation, DamagingContact, Cleanable {
 
 	private HashMap<Enchantment, Integer> enchantments = new HashMap();
 
@@ -77,6 +81,27 @@ ConditionalOperation, DamagingContact {
 	private Comparator<Coordinate> inwardsComparator;
 	private Comparator<Coordinate> leafPriority;
 
+	private static final int MAX_JAM = 20;
+
+	private int jam = 0;
+	private int jamColor = -1;
+
+	public int getJamColor() {
+		return jamColor;
+	}
+
+	public void clean() {
+		jam--;
+		if (jam <= 0) {
+			jam = 0;
+			jamColor = -1;
+		}
+	}
+
+	public boolean isJammed() {
+		return jam > MAX_JAM;
+	}
+
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
 		leafPriority = new LeafPrioritizer(world);
@@ -97,6 +122,9 @@ ConditionalOperation, DamagingContact {
 		if (power < MINPOWER || torque < MINTORQUE) {
 			return;
 		}
+
+		if (this.isJammed())
+			return;
 
 		if (world.isRemote)
 			return;
@@ -140,7 +168,7 @@ ConditionalOperation, DamagingContact {
 					for (int i = -1; i <= 1; i++) {
 						for (int j = -1; j <= 1; j++) {
 							//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-							tree.setModTree(wood);
+							tree.setTree(wood);
 							tree.addModTree(world, editx+i, edity, editz+j);
 						}
 						//ReikaJavaLibrary.pConsole(tree, Side.SERVER);
@@ -169,7 +197,7 @@ ConditionalOperation, DamagingContact {
 		Block b = world.getBlock(x, y+1, z);
 		if (b != Blocks.air) {
 			if (b.getMaterial() == Material.wood || b.getMaterial() == Material.leaves) {
-				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, b.getDrops(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), this.getEnchantment(Enchantment.fortune)));
+				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, this.getDrops(world, x, y+1, z, b, world.getBlockMetadata(x, y, z)));
 				world.setBlockToAir(x, y+1, z);
 			}
 		}
@@ -184,6 +212,7 @@ ConditionalOperation, DamagingContact {
 		tickcount = 0;
 
 		if (!tree.isValidTree()) {
+			tree.reset();
 			tree.clear();
 			return;
 		}
@@ -196,12 +225,7 @@ ConditionalOperation, DamagingContact {
 			Material mat = ReikaWorldHelper.getMaterial(world, c.xCoord, c.yCoord, c.zCoord);
 			if (ConfigRegistry.INSTACUT.getState()) {
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
-				this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
-				c.setBlock(world, Blocks.air);
-				if (mat == Material.leaves)
-					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
-				else
-					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
+				this.cutBlock(world, x, y, z, c, mat);
 
 				if (c.yCoord == edity) {
 					Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
@@ -214,7 +238,7 @@ ConditionalOperation, DamagingContact {
 							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 						}
 					}
-					else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
+					else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
 						ItemStack plant = this.getPlantedSapling();
 						if (plant != null) {
 							if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
@@ -236,17 +260,7 @@ ConditionalOperation, DamagingContact {
 					c.setBlock(world, Blocks.air);
 				}
 				else {
-
-					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
-					this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
-					c.setBlock(world, Blocks.air);
-					ReikaSoundHelper.playBreakSound(world, c.xCoord, c.yCoord, c.zCoord, Blocks.log);
-
-					if (mat == Material.leaves)
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
-					else
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
-
+					this.cutBlock(world, x, y, z, c, mat);
 					if (c.yCoord == edity) {
 						Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 						Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
@@ -258,7 +272,7 @@ ConditionalOperation, DamagingContact {
 								ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
 							}
 						}
-						else if (tree.getModTree() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
+						else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
 							ItemStack plant = this.getPlantedSapling();
 							if (plant != null) {
 								if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
@@ -273,16 +287,56 @@ ConditionalOperation, DamagingContact {
 		}
 	}
 
+	private void cutBlock(World world, int x, int y, int z, Coordinate c, Material mat) {
+		//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
+		this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
+		c.setBlock(world, Blocks.air);
+		ReikaSoundHelper.playBreakSound(world, c.xCoord, c.yCoord, c.zCoord, Blocks.log);
+
+		if (mat == Material.leaves)
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
+		else
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
+		if (tree.getTreeType() == ModWoodList.SLIME && c.getBlock(world) == tree.getTreeType().getLogID()) {
+			jam++;
+			jamColor = 0xff000000 | ReikaColorAPI.mixColors(ModWoodList.SLIME.logColor, 0xffffff, (float)jam/MAX_JAM);
+		}
+	}
+
+	private Collection<ItemStack> getDrops(World world, int x, int y, int z, Block b, int meta) {
+		float f = this.getYield(b, meta);
+		if (ReikaRandomHelper.doWithChance(f)) {
+			Collection<ItemStack> ret = b.getDrops(world, x, y, z, meta, this.getEnchantment(Enchantment.fortune));
+			if (tree.getTreeType() == ModWoodList.SLIME) {
+				Block log = tree.getTreeType().getLogID();
+				if (b == log) {
+					ret.clear();
+					ret.add(new ItemStack(Items.slime_ball));
+				}
+			}
+			return ret;
+		}
+		else
+			return new ArrayList();
+	}
+
+	private float getYield(Block b, int meta) {
+		if (tree.getTreeType() == ModWoodList.SLIME) {
+			Block log = tree.getTreeType().getLogID();
+			if (b == log) {
+				return 0.2F;
+			}
+		}
+		return 1;
+	}
+
 	private void checkAndMatchInventory() {
 		ItemStack sapling = null;
 		if (tree.isDyeTree()) {
 			sapling = new ItemStack(TreeGetter.getSaplingID(), 1, tree.getDyeTreeMeta());
 		}
-		else if (tree.getModTree() != null) {
-			sapling = tree.getModTree().getCorrespondingSapling();
-		}
-		else if (tree.getVanillaTree() != null) {
-			sapling = tree.getVanillaTree().getSapling();
+		else if (tree.getTreeType() != null) {
+			sapling = tree.getSapling();
 		}
 		if (!ReikaItemHelper.matchStacks(inv[0], sapling)) {
 			this.dumpInventory();
@@ -294,27 +348,17 @@ ConditionalOperation, DamagingContact {
 		if (drop == Blocks.air)
 			return;
 		int dropmeta = world.getBlockMetadata(x, y, z);
-		ItemStack sapling = null;
-		Block logID = null;
-		if (tree.isVanillaTree()) {
-			sapling = tree.getVanillaTree().getSapling();
-			logID = Block.getBlockFromItem(tree.getVanillaTree().getLog().getItem());
-		}
-		else if (tree.isModTree()) {
-			sapling = tree.getModTree().getCorrespondingSapling();
-			logID = Block.getBlockFromItem(tree.getModTree().getItem().getItem());
-		}
+		ItemStack sapling = tree.getSapling();
+		Block logID = tree.getTreeType().getLogID();
 
-		List<ItemStack> drops = drop.getDrops(world, x, y, z, dropmeta, this.getEnchantment(Enchantment.fortune));
+		Collection<ItemStack> drops = this.getDrops(world, x, y, z, drop, dropmeta);
 		if (drop == logID && logID != null) {
 			if (rand.nextInt(3) == 0) {
 				drops.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust.copy(), 1+rand.nextInt(4)));
 			}
 		}
 
-		for (int i = 0; i < drops.size(); i++) {
-			ItemStack todrop = drops.get(i);
-
+		for (ItemStack todrop : drops) {
 			if (ReikaItemHelper.matchStacks(todrop, sapling)) {
 				if (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize()) {
 					if (!this.chestCheck(todrop))
@@ -353,10 +397,8 @@ ConditionalOperation, DamagingContact {
 			return null;
 		if (treeCopy.isDyeTree())
 			return new ItemStack(TreeGetter.getSaplingID(), 1, treeCopy.getDyeTreeMeta());
-		else if (treeCopy.isVanillaTree())
-			return treeCopy.getVanillaTree().getSapling();
-		else if (treeCopy.isModTree())
-			return treeCopy.getModTree().getCorrespondingSapling();
+		else if (treeCopy.getTreeType() != null)
+			return treeCopy.getSapling();
 		else
 			return null;
 	}
@@ -367,13 +409,11 @@ ConditionalOperation, DamagingContact {
 		if (treeCopy.isDyeTree()) {
 			return inv[0] != null && inv[0].stackSize > 0 && Block.getBlockFromItem(inv[0].getItem()) == TreeGetter.getSaplingID();
 		}
-		else if (treeCopy.isVanillaTree()) {
-			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getVanillaTree().getSapling());
+		else if (treeCopy.getTreeType() != null) {
+			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getSapling());
 		}
-		else if (treeCopy.getModTree() != null)
-			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getModTree().getCorrespondingSapling());
-			else
-				return false;
+		else
+			return false;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -441,7 +481,7 @@ ConditionalOperation, DamagingContact {
 			phi = 0;
 			return;
 		}
-		if (power < MINPOWER || torque < MINTORQUE)
+		if (power < MINPOWER || torque < MINTORQUE || this.isJammed())
 			return;
 		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
@@ -542,11 +582,17 @@ ConditionalOperation, DamagingContact {
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
+
+		NBT.setInteger("jam", jam);
+		NBT.setInteger("jamc", jamColor);
 	}
 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
+
+		jam = NBT.getInteger("jam");
+		jamColor = NBT.getInteger("jamc");
 	}
 
 	@Override

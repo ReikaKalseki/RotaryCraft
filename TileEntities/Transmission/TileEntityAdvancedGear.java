@@ -58,6 +58,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PartialTank,
 PipeConnector, IFluidHandler, ToggleTile {
@@ -450,6 +451,8 @@ PipeConnector, IFluidHandler, ToggleTile {
 			torque = releaseTorque;
 			omega = releaseOmega;
 			power = (long)torque*(long)omega;
+			if (this.getTicksExisted()%26 == 0)
+				SoundRegistry.COIL.playSoundAtBlock(this);
 			if (!isCreative)
 				energy -= power;
 			if (energy <= 0) {
@@ -612,7 +615,7 @@ PipeConnector, IFluidHandler, ToggleTile {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.isWritingToCoordinate(x, y, z)) {
+				else if (devicein.isWritingToCoordinate(x, y, z)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

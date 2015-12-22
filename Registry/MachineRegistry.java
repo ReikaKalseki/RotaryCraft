@@ -1363,6 +1363,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 			case SPLITTER:
 			case SMOKEDETECTOR:
 			case SPRINKLER:
+			case PULSEJET:
 				return false;
 			default:
 				return true;

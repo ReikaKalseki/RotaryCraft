@@ -27,6 +27,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -94,18 +95,18 @@ ConditionalOperation, DamagingContact {
 		if (y == 0)
 			return false;
 		switch (metadata) {
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				break;
 		}
 		//ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready+3, readz, 4);
 		return true;
@@ -315,9 +316,7 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (this.canDrain(from, null))
-			return tank.drain(resource.amount, doDrain);
-		return null;
+		return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 	}
 
 	@Override
@@ -334,7 +333,7 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return from != ForgeDirection.UP;
+		return from != ForgeDirection.UP && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
 	}
 
 	@Override

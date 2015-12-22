@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -28,6 +29,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
 import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -73,6 +75,8 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				this.accelerateGrowth(world, x, y, z);
 				this.extinguishFire(world, x, y, z);
 			}
+			if (this.getPressure() > 3000)
+				this.washMachines(world, x, y, z);
 			if (ModList.REACTORCRAFT.isLoaded() && rand.nextInt(2400) == 0)
 				this.clearRadiation(world, x, y, z);
 			if (this.getPressure() > 300000)
@@ -90,6 +94,28 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 			e.clean();
 			if (rand.nextBoolean())
 				break;
+		}
+	}
+
+	private void washMachines(World world, int x, int y, int z) {
+		int r = this.getRange();
+		int n = 3;
+		for (int c = 0; c < n; c++) {
+			int rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
+			int rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
+			for (int i = y; i > y-4; i--) {
+				Block id = world.getBlock(rx, i, rz);
+				int meta = world.getBlockMetadata(rx, i, rz);
+				MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
+				if (m != null) {
+					TileEntity te = world.getTileEntity(rx, i, rz);
+					if (te instanceof Cleanable) {
+						((Cleanable)te).clean();
+					}
+				}
+				else if (id != Blocks.air && id.isOpaqueCube())
+					i = -999;
+			}
 		}
 	}
 

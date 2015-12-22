@@ -25,12 +25,17 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 
 	protected ItemStack[] inv = new ItemStack[this.getSizeInventory()];
 
+	protected void onInventoryChanged() {
+
+	}
+
 	public final ItemStack getStackInSlot(int par1) {
 		return inv[par1];
 	}
 
 	public final void setInventorySlotContents(int par1, ItemStack is) {
 		inv[par1] = is;
+		this.onInventoryChanged();
 	}
 
 	public final String getInventoryName() {
@@ -55,6 +60,7 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 		{
 			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
 		}
+		this.onInventoryChanged();
 	}
 
 	public int getInventoryStackLimit()
@@ -63,11 +69,15 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 	}
 
 	public final ItemStack decrStackSize(int par1, int par2) {
-		return ReikaInventoryHelper.decrStackSize(this, par1, par2);
+		ItemStack ret = ReikaInventoryHelper.decrStackSize(this, par1, par2);
+		this.onInventoryChanged();
+		return ret;
 	}
 
 	public final ItemStack getStackInSlotOnClosing(int par1) {
-		return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
+		ItemStack ret = ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
+		this.onInventoryChanged();
+		return ret;
 	}
 
 	public final int[] getAccessibleSlotsFromSide(int var1) {

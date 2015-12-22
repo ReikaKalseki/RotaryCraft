@@ -76,6 +76,8 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("ingotSilver", ItemStacks.silveringot);
 		OreDictionary.registerOre("ingotAluminum", ItemStacks.aluminumingot);
 
+		OreDictionary.registerOre("dustAluminum", ItemStacks.aluminumpowder);
+
 		OreDictionary.registerOre("RotaryCraft:dustBedrock", ItemStacks.bedrockdust);
 		OreDictionary.registerOre("RotaryCraft:ingotBedrock", ItemStacks.bedingot);
 

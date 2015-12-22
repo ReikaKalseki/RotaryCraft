@@ -40,6 +40,8 @@ import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation, HiddenInventorySlot {
 
@@ -76,6 +78,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return extractorCookTime[stage];
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void setCookTime(int stage, int time) {
 		extractorCookTime[stage] = time;
 	}

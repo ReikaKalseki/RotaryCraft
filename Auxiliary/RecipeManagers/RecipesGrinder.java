@@ -190,6 +190,13 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		return in;
 	}
 
+	public void addDualOreDictRecipe(String in, String out, int numout, RecipeLevel rl) {
+		ItemStack isout = ReikaItemHelper.oreItemExists(out) ? OreDictionary.getOres(out).get(0) : null;
+		if (isout != null) {
+			this.addOreDictRecipe(in, ReikaItemHelper.getSizedItemStack(isout, numout), rl);
+		}
+	}
+
 	public void addOreDictRecipe(String in, ItemStack out, RecipeLevel rl) {
 		ArrayList<ItemStack> li = OreDictionary.getOres(in);
 		for (ItemStack sin : li) {
@@ -258,10 +265,9 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		if (!obsididust.isEmpty())
 			this.addRecipe(Blocks.obsidian, ReikaItemHelper.getSizedItemStack(obsididust.get(0), 6), RecipeLevel.MODINTERACT);
 
-		ItemStack blizzDust = ReikaItemHelper.oreItemExists("dustBlizz") ? OreDictionary.getOres("dustBlizz").get(0) : null;
-		if (blizzDust != null) {
-			this.addOreDictRecipe("rodBlizz", ReikaItemHelper.getSizedItemStack(blizzDust, 6), RecipeLevel.MODINTERACT);
-		}
+		this.addDualOreDictRecipe("rodBlizz", "dustBlizz", 6, RecipeLevel.MODINTERACT);
+		this.addDualOreDictRecipe("rodBlitz", "dustBlitz", 6, RecipeLevel.MODINTERACT);
+		this.addDualOreDictRecipe("rodBasalz", "dustBasalz", 6, RecipeLevel.MODINTERACT);
 
 		this.addOreDictRecipe("netherrack", ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
 		this.addOreDictRecipe("soulsand", ItemStacks.tar, RecipeLevel.CORE); //create a tar

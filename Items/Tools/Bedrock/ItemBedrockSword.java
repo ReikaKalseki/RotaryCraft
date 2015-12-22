@@ -45,6 +45,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cofh.api.energy.IEnergyContainerItem;
 
 import com.google.common.collect.Multimap;
@@ -90,6 +91,11 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	public float func_150931_i()
 	{
 		return 1;
+	}
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
 	}
 
 	@Override

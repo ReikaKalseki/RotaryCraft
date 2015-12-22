@@ -19,6 +19,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import forestry.api.arboriculture.IToolGrafter;
 
 @Strippable(value = {"forestry.api.arboriculture.IToolGrafter"})
@@ -26,6 +27,11 @@ public class ItemBedrockGrafter extends ItemRotaryTool implements IToolGrafter {
 
 	public ItemBedrockGrafter(int index) {
 		super(index);
+	}
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
 	}
 
 	@Override

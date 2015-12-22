@@ -27,6 +27,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MulchMaterials;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -70,7 +71,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (inv[0].getItem() == Items.sugar) {
 			if (this.hasWater())
 				if (ReikaItemHelper.matchStackWithBlock(inv[1], Blocks.dirt))
-					return new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
+					return ConfigRegistry.BEEYEAST.getState() ? null : new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
 		}
 		if (inv[0].getItem() == ItemRegistry.YEAST.getItemInstance()) {
 			if (MulchMaterials.instance.isMulchable(inv[1]))
@@ -328,7 +329,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (i >= 2)
 			return false;
-		if (red) {
+		if (red || ConfigRegistry.BEEYEAST.getState()) {
 			switch(i) {
 				case 0:
 					return is.getItem() == ItemRegistry.YEAST.getItemInstance();

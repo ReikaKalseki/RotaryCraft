@@ -84,14 +84,14 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 1:
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.WEST;
-			break;
-		case 0:
-			read = ForgeDirection.SOUTH;
-			read2 = ForgeDirection.NORTH;
-			break;
+			case 1:
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.WEST;
+				break;
+			case 0:
+				read = ForgeDirection.SOUTH;
+				read2 = ForgeDirection.NORTH;
+				break;
 		}
 	}
 

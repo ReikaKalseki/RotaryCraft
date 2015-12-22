@@ -42,7 +42,7 @@ public class GuiFridge extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = te.getProgressScaled(145);
+		int i1 = Math.min(145, te.getProgressScaled(145));
 		this.drawTexturedModalRect(j+7, k+17, 0, 189, i1, 67);
 	}
 

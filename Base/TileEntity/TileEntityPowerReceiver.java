@@ -217,7 +217,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					torquein = (int) powerin[0][1];
 					omegain = (int) powerin[0][2];
 				}
-				if (devicein.isWritingTo(this)) {
+				else if (devicein.isWritingTo(this)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

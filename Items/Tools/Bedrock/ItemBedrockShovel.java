@@ -14,6 +14,8 @@ import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
@@ -31,6 +34,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -51,6 +55,11 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		damageVsEntity = 4;
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
 	}
 
 	@Override
@@ -79,7 +88,8 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
 			ChancedOutputList co = extraDrops.get(ep.worldObj.getBlock(x, y, z), ep.worldObj.getBlockMetadata(x, y, z));
 			if (co != null) {
-				Collection<ItemStack> c = co.calculate();
+				double mult = Math.sqrt(1+EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, is));
+				Collection<ItemStack> c = co.calculate(mult);
 				for (ItemStack drop : c) {
 					ReikaItemHelper.dropItem(ep.worldObj, x+0.5, y+0.5, z+0.5, drop);
 				}

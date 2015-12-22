@@ -33,6 +33,8 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class ItemBedrockShears extends ItemShears implements IndexedItemSprites {
 
@@ -46,6 +48,11 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 		this.setMaxDamage(0);
 		this.setNoRepair();
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+	}
+
+	@Override
+	public void onCreated(ItemStack is, World world, EntityPlayer ep) {
+		RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
 	}
 
 	@Override
@@ -99,27 +106,17 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			int meta = player.worldObj.getBlockMetadata(x, y, z);
 			boolean drop = false;
 			boolean flag = false;
-			if (b != null) {
-				if (b instanceof BlockTieredResource) {
-
-				}
-				else if (b instanceof IShearable) {
-					drop = true;
-					flag = true;
-				}
-				else if (noDrops.contains(b)) {
-
-				}
-				else if (b.getMaterial() == Material.plants) {
-					drop = true;
-					flag = true;
-				}
-				else if (b == Blocks.web) {
-					drop = true;
-					flag = true;
-				}
-				else
+			Result res = getHarvestResult(b, meta, player, player.worldObj, x, y, z);
+			switch(res) {
+				case ALLOW:
+					drop = flag = true;
+					break;
+				case DEFAULT:
 					flag = super.onBlockStartBreak(is, x, y, z, player);
+					break;
+				case DENY:
+					drop = flag = false;
+					break;
 			}
 			if (drop) {
 				ItemStack block = new ItemStack(b, 1, this.getDroppedMeta(b, meta));
@@ -127,6 +124,30 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 				player.worldObj.setBlockToAir(x, y, z);
 			}
 			return flag;
+		}
+	}
+
+	public static Result getHarvestResult(Block b, int meta, EntityPlayer player, World world, int x, int y, int z) {
+		if (b instanceof BlockTieredResource) {
+			return Result.DENY;
+		}
+		else if (noDrops.contains(b)) {
+			return Result.DENY;
+		}
+		else if (b.canSilkHarvest(world, player, x, y, z, meta)) {
+			return Result.ALLOW;
+		}
+		else if (b == Blocks.web) {
+			return Result.ALLOW;
+		}
+		else if (b instanceof IShearable) {
+			return Result.ALLOW;
+		}
+		else if (b.getMaterial() == Material.plants) {
+			return Result.ALLOW;
+		}
+		else {
+			return Result.DEFAULT;
 		}
 	}
 
@@ -141,6 +162,9 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			return meta&3;
 		if (id instanceof BlockDoublePlant)
 			return meta%BlockDoublePlant.field_149892_a.length;
+		if (id.getClass().getName().equals("vazkii.botania.common.block.BlockModFlower")) {
+			return id.damageDropped(meta);
+		}
 		ModWoodList wood = ModWoodList.getModWoodFromLeaf(id, meta);
 		if (wood != null) {
 			return wood.getLeafMetadatas().get(0);

@@ -180,6 +180,10 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 			if (m == MachineRegistry.COOLINGFIN) {
 				TileEntityCoolingFin clicked = (TileEntityCoolingFin)te;
 				clicked.ticks = 512;
+				if (ep.isSneaking()) {
+					clicked.setting = clicked.setting.next();
+					return true;
+				}
 			}
 			if (m == MachineRegistry.ECU) {
 				TileEntityEngineController clicked = (TileEntityEngineController)te;
@@ -327,6 +331,8 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 				TileEntityVacuum clicked = (TileEntityVacuum)te;
 				if (ep.isSneaking())
 					clicked.equidistant = !clicked.equidistant;
+				else
+					clicked.suckIfFull = !clicked.suckIfFull;
 				return true;
 			}
 			if (m == MachineRegistry.CRAFTER) {

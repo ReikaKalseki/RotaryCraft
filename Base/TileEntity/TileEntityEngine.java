@@ -11,8 +11,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import java.util.Collection;
 
-import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.api.world.OxygenHooks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -31,6 +30,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
@@ -39,7 +39,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -50,7 +49,6 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -152,10 +150,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		}
 		if (this.isDrowned(world, x, y, z))
 			return false;
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			if (!ig.hasBreathableAtmosphere() || !ig.isGasPresent(IAtmosphericGas.OXYGEN))
-				return false;
+		if (ModList.GALACTICRAFT.isLoaded()) {
+			if (OxygenHooks.noAtmosphericCombustion(world.provider)) {
+				return OxygenHooks.inOxygenBubble(world, x+0.5, y+0.5, z+0.5) && OxygenHooks.checkTorchHasOxygen(world, blockType, x, y, z);
+			}
 		}
 		return true;
 	}
@@ -388,8 +386,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		}
 
 		if (power > 0) {
-			if (ConfigRegistry.ENGINESOUNDS.getState())
-				this.playSounds(world, x, y, z, pitch, ConfigRegistry.ENGINEVOLUME.getFloat());
+			this.playSounds(world, x, y, z, pitch, 1);
 		}
 		else if (soundtick < this.getSoundLength(soundfactor))
 			soundtick = 2000;

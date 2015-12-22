@@ -83,9 +83,7 @@ public class GuiCentrifuge extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i3 = cent.getProgressScaled(37);
-		if (i3 > 37)
-			i3 = 37;
+		int i3 = Math.min(37, cent.getProgressScaled(37));
 		this.drawTexturedModalRect(j+45, k+27, 178, 1, i3, 37);
 	}
 

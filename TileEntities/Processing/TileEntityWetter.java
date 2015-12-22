@@ -42,7 +42,7 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 				if (fs != null) {
 					WettingRecipe wr = RecipesWetter.getRecipes().getRecipe(is, fs);
 					if (wr != null) {
-						if (tick >= wr.duration) {
+						if (tick >= this.getDuration(wr)) {
 							tank.removeLiquid(wr.getFluid().amount);
 							inv[0] = wr.getOutput();
 							tick = 0;
@@ -67,6 +67,10 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 		else {
 			tick = 0;
 		}
+	}
+
+	public int getDuration(WettingRecipe wr) {
+		return Math.max(1, wr.duration-5*((omega/MINSPEED)-1));
 	}
 
 	@Override

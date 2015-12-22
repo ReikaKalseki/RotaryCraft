@@ -9,22 +9,28 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Interfaces.CustomPotion;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -38,13 +44,8 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	public static final int MAXRANGE = Math.max(64, ConfigRegistry.AERORANGE.getValue());
 	public static final int CAPACITY = 64;
 
-	public int potionLevel[] = new int[9];
-	public int potionDamage[] = new int[9];
-	private int potionIDs[] = new int[9];
-	private int copies[] = new int[9];
-
-	public int[] slotColor = new int[9];
-
+	private PotionApplication[] potions = new PotionApplication[9];
+	private int[] potionLevel = new int[9];
 
 	private int tickcount2 = 0;
 
@@ -53,7 +54,7 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	public void testIdle() {
 		boolean empty = true;
 		for (int i = 0; i < 9; i++) {
-			if (potionDamage[i] > 8192)
+			if (potions[i] != null)
 				empty = false;
 		}
 		idle = empty;
@@ -69,20 +70,14 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	{
 		super.updateTileEntity();
 		power = (long)omega*(long)torque;
-		//this.getIOSides(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		this.getSummativeSidedPower();
 		tickcount++;
 		tickcount2++;
-		this.consumeBottles();
-		this.colorize();
-		for (int i = 0; i < 9; i++)
-			potionIDs[i] = ReikaPotionHelper.getPotionID(potionDamage[i]);
+		this.consumeBottlesAndStorePotions();
 		if (power < MINPOWER)
 			return;
 		this.testIdle();
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", this.potionDamage.length, this.potionLevel.length, 0, 0));
 		for (int i = 0; i < 9; i++) {
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.potionLevel[i]));
 			if (tickcount2 >= 20/ReikaMathLibrary.extrema(this.getMultiplier(i), 1, "max")) {
 				//this.potionDamage[i] = this.getPotion(i);
 				AxisAlignedBB room = this.getRoom(world, x, y, z, meta);
@@ -104,44 +99,73 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 		}
 	}
 
-	public void colorize() {
-		for (int i = 0; i < 9; i++) {
-			if (potionIDs[i] > 0)
-				slotColor[i] = Potion.potionTypes[potionIDs[i]].getLiquidColor();
-			else
-				slotColor[i] = 0xff000000; //solid black
-		}
-	}
-
-	public void consumeBottles() {
+	private void consumeBottlesAndStorePotions() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			return;
 		for (int i = 0; i < 9; i++) {
 			ItemStack inslot = this.getStackInSlot(i);
 			if (inslot != null) {
-				int size = inslot.stackSize;
-				if (inslot.getItem() == Items.potionitem && (inslot.getItemDamage() == potionDamage[i] || potionLevel[i] == 0) && potionLevel[i] < CAPACITY) {
-					int potionID = ReikaPotionHelper.getPotionID(inslot.getItemDamage());
-					if (potionID != -1) {
-						if (!Potion.potionTypes[potionID].isInstant()) {
-							boolean extended = PotionHelper.checkFlag(inslot.getItemDamage(), 6); //Bit 6 is enhanced
-							boolean level2 = PotionHelper.checkFlag(inslot.getItemDamage(), 5); //Bit 5 is extended
-							if (potionLevel[i] == 0) {
-								potionDamage[i] = inslot.getItemDamage();
-							}
-							potionLevel[i] += size;
-							if (extended && (potionLevel[i]+2 <= CAPACITY))
-								potionLevel[i] += 2;
-							//this.decrStackSize(i, 1);
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("+%d", size)+String.valueOf(FMLCommonHandler.instance().getEffectiveSide()));
-							this.setInventorySlotContents(i, new ItemStack(Items.glass_bottle, size, 0));
-							if (potionLevel[i] > CAPACITY)
-								potionLevel[i] = CAPACITY;
-						}
+				PotionApplication eff = this.getEffectFromItem(inslot);
+				if (eff != null) {
+					int num = inslot.stackSize*eff.amount;
+					if (this.matchEffects(eff, potions[i]) && potionLevel[i]+num <= CAPACITY) {
+						potions[i] = eff;
+						potionLevel[i] += num;
+						this.setInventorySlotContents(i, new ItemStack(Items.glass_bottle, inslot.stackSize, 0));
+						if (potionLevel[i] > CAPACITY)
+							potionLevel[i] = CAPACITY;
 					}
 				}
 			}
 		}
+	}
+
+	private boolean matchEffects(PotionApplication eff1, PotionApplication eff2) {
+		return eff1 == eff2 || eff1 == null || eff2 == null || eff1.equals(eff2);
+	}
+
+	public int getPotionColor(int slot) {
+		return potions[slot] != null ? (0xff000000 | potions[slot].renderColor) : 0xff000000;
+	}
+
+	public int getPotionLevel(int slot) {
+		return potionLevel[slot];
+	}
+
+	private PotionApplication getEffectFromItem(ItemStack is) { // add mod potion support
+		Item i = is.getItem();
+		if (i instanceof ItemPotion) {
+			int dmg = is.getItemDamage();
+			/*
+			int id = ReikaPotionHelper.getPotionID(dmg);
+			if (id != -1) {
+				Potion p = Potion.potionTypes[id];
+				if (p != null && !p.isInstant()) {
+					boolean extended = PotionHelper.checkFlag(dmg, 6); //Bit 6 is enhanced
+					boolean level2 = PotionHelper.checkFlag(dmg, 5); //Bit 5 is extended
+					return new PotionApplication(ReikaJavaLibrary.makeListFrom(new PotionEffect(p.id, 0)), extended ? 3 : 1, level2 ? 1 : 0);
+				}
+			}
+			 */
+			List<PotionEffect> li = ((ItemPotion)i).getEffects(is);
+			for (PotionEffect p : li) {
+				if (!Potion.potionTypes[p.getPotionID()].isInstant()) {
+					boolean extended = PotionHelper.checkFlag(dmg, 6); //Bit 6 is enhanced
+					boolean level2 = p.getAmplifier() > 0;
+					return new PotionApplication(ReikaJavaLibrary.makeListFrom(new PotionEffect(p.getPotionID(), 0)), extended ? 3 : 1, level2 ? 1 : 0);
+				}
+			}
+		}
+		else if (i instanceof CustomPotion) {
+			CustomPotion cp = (CustomPotion)i;
+			Potion p = cp.getPotion(is);
+			if (p != null && !p.isInstant()) {
+				boolean extended = cp.isExtended(is);
+				boolean level2 = cp.getAmplifier(is) > 0;
+				return new PotionApplication(ReikaJavaLibrary.makeListFrom(new PotionEffect(p.id, 0)), extended ? 3 : 1, level2 ? 1 : 0);
+			}
+		}
+		return null;
 	}
 
 	public int getLiquidScaled(int par1, int par2)
@@ -149,21 +173,7 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 		return (par2*par1)/CAPACITY;
 	}
 
-	public int getPotion(int i) { //add mod potion support!
-		if (this.getStackInSlot(i) != null) {
-			if (this.getStackInSlot(i).stackSize > 0 && this.getStackInSlot(i).getItem() instanceof ItemPotion) {
-				int dmg = this.getStackInSlot(i).getItemDamage();
-				return dmg;
-			}
-			else
-				return 0;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	public AxisAlignedBB getRoom(World world, int x, int y, int z, int meta) {
+	private AxisAlignedBB getRoom(World world, int x, int y, int z, int meta) {
 		int minx = x;
 		int maxx = x+1;
 		int miny = y;
@@ -218,24 +228,19 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz);
 	}
 
-	public void dispense2(World world, int x, int y, int z, int meta, AxisAlignedBB room, int i) { // id, duration, amplifier
+	private void dispense2(World world, int x, int y, int z, int meta, AxisAlignedBB room, int i) { // id, duration, amplifier
 		if (!worldObj.isRemote) {
-			List effects = Items.potionitem.getEffects(potionDamage[i]);
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.potionDamage[i]));
-			if (effects != null && !effects.isEmpty()) {
-				List<EntityLivingBase> inroom = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, room);
-				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", inroom.size()));
-				for (EntityLivingBase mob : inroom) {
-					Iterator potioneffects = effects.iterator();
-					while (potioneffects.hasNext()) {
-						PotionEffect effect = (PotionEffect)potioneffects.next();
-						int id = effect.getPotionID();
-						if (!Potion.potionTypes[id].isInstant()) {
+			if (potions[i] != null) {
+				List<PotionEffect> effects = potions[i].effects;
+				if (effects != null && !effects.isEmpty()) {
+					List<EntityLivingBase> inroom = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, room);
+					for (EntityLivingBase mob : inroom) {
+						for (PotionEffect effect : effects) {
+							int id = effect.getPotionID();
 							int bonus = this.getMultiplier(i) - 1;  //-1 since adding
 							if (effect.getAmplifier() == 1)
 								bonus *= 2;
 							mob.addPotionEffect(new PotionEffect(id, 100, effect.getAmplifier()+bonus));
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", effect.getAmplifier()));
 						}
 					}
 				}
@@ -244,54 +249,55 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	}
 
 	public int getMultiplier(int i) {
-		if (potionIDs[i] == -1)
+		if (potions[i] == null)
 			return 0;
-		int[] number = new int[Potion.potionTypes.length];
-		number = this.countCopies();
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", this.potionIDs[i], number[this.potionIDs[i]]));
-		return (number[potionIDs[i]]);
+		return this.countCopies(potions[i]);
 	}
 
-	//method to return number of occurrences of the numbers in diceRolls
-	public int[] countCopies() {
-		int occurrence[] = new int[Potion.potionTypes.length]; //to hold the counts
-
-		for(int i = 0; i < 9; i++) { //Loop over the dice rolls array
-			int value = potionIDs[i]; //Get the value of the next roll
-			if (value != -1) {
-				occurrence[value]++; //Increment the value in the count array;
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", occurrence[value]));
+	private int countCopies(PotionApplication p) {
+		int c = 0;
+		for (int i = 0; i < 9; i++) {
+			PotionApplication in = potions[i];
+			if (in != null && in.equals(p)) {
+				c++;
 			}
 		}
-		return occurrence; //return the counts
+		return c;
 	}
 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
-		potionDamage = NBT.getIntArray("damages");
+		for (int i = 0; i < 9; i++) {
+			if (NBT.hasKey("potion_"+i)) {
+				NBTTagCompound tag = NBT.getCompoundTag("potion_"+i);
+				potions[i] = PotionApplication.readFromNBT(tag);
+			}
+			else {
+				potions[i] = null;
+			}
+		}
 		potionLevel = NBT.getIntArray("levels");
-		potionIDs = NBT.getIntArray("IDs");
 	}
 
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
-		NBT.setIntArray("damages", potionDamage);
+		for (int i = 0; i < 9; i++) {
+			if (potions[i] != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				potions[i].writeToNBT(tag);
+				NBT.setTag("potion_"+i, tag);
+			}
+		}
 		NBT.setIntArray("levels", potionLevel);
-		NBT.setIntArray("IDs", potionIDs);
 	}
 
 	public int getSizeInventory()
 	{
 		return 9;
-	}
-
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
 	}
 
 	@Override
@@ -341,5 +347,85 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	@Override
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "No Potions";
+	}
+
+	private static class PotionApplication {
+
+		private final List<PotionEffect> effects;
+		private final int amount;
+		private final int potionLevel;
+		public final int renderColor;
+
+		private PotionApplication(List<PotionEffect> li, int amt, int lvl) {
+			effects = li;
+			amount = amt;
+			potionLevel = lvl;
+			Collections.sort(effects, ReikaPotionHelper.effectSorter);
+
+			renderColor = this.calcColor(effects);
+		}
+
+		private int calcColor(List<PotionEffect> li) {
+			int sum = 0;
+			for (PotionEffect p : li) {
+				sum += Potion.potionTypes[p.getPotionID()].getLiquidColor();
+			}
+			return sum/li.size();
+		}
+
+		public void writeToNBT(NBTTagCompound NBT) {
+			NBTTagList li = new NBTTagList();
+			for (PotionEffect eff : effects) {
+				NBTTagCompound tag = new NBTTagCompound();
+				eff.writeCustomPotionEffectToNBT(tag);
+				li.appendTag(tag);
+			}
+			NBT.setTag("effects", li);
+			NBT.setInteger("amount", amount);
+			NBT.setInteger("level", potionLevel);
+			NBT.setInteger("color", renderColor);
+		}
+
+		public static PotionApplication readFromNBT(NBTTagCompound NBT) {
+			int amt = NBT.getInteger("amount");
+			int lvl = NBT.getInteger("level");
+			int c = NBT.getInteger("color");
+			ArrayList<PotionEffect> fx = new ArrayList();
+			NBTTagList li = NBT.getTagList("effects", NBTTypes.COMPOUND.ID);
+			for (Object o : li.tagList) {
+				NBTTagCompound tag = (NBTTagCompound)o;
+				PotionEffect p = PotionEffect.readCustomPotionEffectFromNBT(tag);
+				fx.add(p);
+			}
+			return new PotionApplication(fx, amt, lvl);
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof PotionApplication) {
+				PotionApplication p = (PotionApplication)o;
+				return p.potionLevel == potionLevel && this.matchEffects(p);
+			}
+			return false;
+		}
+
+		private boolean matchEffects(PotionApplication p) {
+			if (effects.size() != p.effects.size())
+				return false;
+			for (int i = 0; i < effects.size(); i++) {
+				PotionEffect p1 = effects.get(i);
+				PotionEffect p2 = p.effects.get(i);
+				if (!(p1.getPotionID() == p2.getPotionID() && p1.getAmplifier() == p2.getAmplifier())) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		@Override
+		public int hashCode() {
+			return (amount | (potionLevel << 8)) << 16 | effects.hashCode();
+		}
+
 	}
 }

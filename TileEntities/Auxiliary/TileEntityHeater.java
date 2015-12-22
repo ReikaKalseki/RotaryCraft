@@ -50,7 +50,7 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 
 	private int tickcount2 = 0;
 
-	public static final int MAXTEMP = 1000;
+	public static final int MAXTEMP = 2000;
 
 	public boolean idle = false;
 

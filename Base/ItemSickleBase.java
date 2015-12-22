@@ -18,7 +18,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.IShearable;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
@@ -31,6 +30,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public abstract class ItemSickleBase extends ItemRotaryTool {
 
@@ -217,9 +217,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 						if (plant2 == plant) {
 							Block b2 = id2;
 							if (this.canActAsShears()) {
-								if (b2.canSilkHarvest(world, ep, x, y, z, meta2))
-									ReikaItemHelper.dropItem(world, x+i+0.5, y+j+0.5, z+k+0.5, new ItemStack(id2, 1, ItemBedrockShears.getDroppedMeta(id2, meta2)));
-								else if (b2 instanceof IShearable)
+								if (ItemBedrockShears.getHarvestResult(b2, meta2, ep, world, x+i, y+j, z+k) == Result.ALLOW)
 									ReikaItemHelper.dropItem(world, x+i+0.5, y+j+0.5, z+k+0.5, new ItemStack(id2, 1, ItemBedrockShears.getDroppedMeta(id2, meta2)));
 								else
 									b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);

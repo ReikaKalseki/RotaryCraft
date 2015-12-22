@@ -57,24 +57,24 @@ public class RenderFin extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 0;
-				break;
-			case 3:
-				var11 = 90;
-				break;
-			case 4:
-				var11 = 180;
-				break;
-			case 5:
-				var11 = 270;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 0;
+					break;
+				case 3:
+					var11 = 90;
+					break;
+				case 4:
+					var11 = 180;
+					break;
+				case 5:
+					var11 = 270;
+					break;
 			}
 
 			if (tile.getBlockMetadata() < 2) {
@@ -91,7 +91,7 @@ public class RenderFin extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.isInWorld()), -tile.phi, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.isInWorld(), tile.setting), -tile.phi, 0);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

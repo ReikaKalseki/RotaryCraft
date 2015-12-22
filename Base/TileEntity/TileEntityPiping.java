@@ -36,14 +36,17 @@ import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection, BreakAction {
+public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection, BreakAction, PumpablePipe {
 
 	private static final HashSet<Class> nonInteractableClasses = new HashSet();
 	private static final HashSet<Class> interactableClasses = new HashSet();
+
+	private static final int CAPACITY_LIMIT = 1000000000; //1 billion mB to prevent overflow
 
 	public static final int UPPRESSURE = 40;
 	public static final int HORIZPRESSURE = 20;
@@ -212,7 +215,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	public final int getPipeIntake(int otherlevel) {
-		return TransferAmount.QUARTER.getTransferred(otherlevel);
+		return Math.min(CAPACITY_LIMIT-this.getFluidLevel(), TransferAmount.QUARTER.getTransferred(otherlevel));
 	}
 
 	public final int getPipeOutput(int max) {
@@ -363,7 +366,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				}
 				else if (te instanceof IFluidHandler && this.canIntakeFromIFluidHandler(dir)) {
 					IFluidHandler fl = (IFluidHandler)te;
-					FluidStack fs = fl.drain(dir.UNKNOWN, 16000, false);
+					FluidStack fs = fl.drain(dir.UNKNOWN, Integer.MAX_VALUE, false);
 					//ReikaJavaLibrary.pConsole(fs);
 					if (fs != null) {
 						int level = this.getFluidLevel();
@@ -550,6 +553,22 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	}
 
+	@Override
+	public final boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
+		return p instanceof TileEntityPiping && this.canConnectToPipe(((TileEntityPiping)p).getMachine());
+	}
+
+	@Override
+	public final void transferFrom(PumpablePipe from, int amt) {
+		TileEntityPiping te = (TileEntityPiping)from;
+		this.setLevel(this.getFluidLevel()+amt);
+		this.setFluid(te.getFluidType()); {
+			te.setLevel(te.getFluidLevel()-amt);
+			if (te.getFluidLevel() == 0)
+				te.setFluid(null);
+		}
+	}
+
 	public static enum TransferAmount {
 		UNITY(),
 		BUCKET(),
@@ -561,18 +580,18 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			if (max <= 0)
 				return 0;
 			switch(this) {
-			case ALL:
-				return max;
-			case FORCEDQUARTER:
-				return max/4+1;
-			case QUARTER:
-				return max/4;
-			case UNITY:
-				return 1;
-			case BUCKET:
-				return max > 1000 ? 1000 : max;
-			default:
-				return 1;
+				case ALL:
+					return max;
+				case FORCEDQUARTER:
+					return max/4+1;
+				case QUARTER:
+					return max/4;
+				case UNITY:
+					return 1;
+				case BUCKET:
+					return max > 1000 ? 1000 : max;
+				default:
+					return 1;
 			}
 		}
 	}

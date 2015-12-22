@@ -20,6 +20,7 @@ import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -45,7 +46,21 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 
 	@Override
 	public boolean canHarvestBlock(Block b, ItemStack is) {
-		return Items.iron_pickaxe.canHarvestBlock(b, is);
+		if (ConfigRegistry.HSLAHARVEST.getState() && b.blockHardness < 20 && this.getDigSpeed(is, b, 0) > 1) {
+			return true;
+		}
+		else
+			return Items.iron_pickaxe.canHarvestBlock(b, is);
+	}
+
+	@Override
+	public int getHarvestLevel(ItemStack stack, String toolClass) {
+		if (ConfigRegistry.HSLAHARVEST.getState() && toolClass.toLowerCase().contains("pick")) {
+			return 5;
+		}
+		else {
+			return super.getHarvestLevel(stack, toolClass);
+		}
 	}
 
 	@Override

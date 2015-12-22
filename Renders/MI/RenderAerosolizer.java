@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -16,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -76,11 +78,7 @@ public class RenderAerosolizer extends RotaryTERenderer
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;*/
 			// if (tile.getBlockMetadata() < 4)
-			int liqlevel = 0;
-			for (int i = 0; i < 9; i++) {
-				liqlevel += tile.potionLevel[i];
-			}
-			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(liqlevel > 0), 0, 0);
+			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(/*liqlevel > 0*/false), 0, 0);
 			// else
 			//var15.renderAll(tile, );
 			//if (!tile.isInWorld())
@@ -97,8 +95,48 @@ public class RenderAerosolizer extends RotaryTERenderer
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityAerosolizerAt((TileEntityAerosolizer)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
+			this.drawPotionLevels((TileEntityAerosolizer)tile, par2, par4, par6);
+		}
+	}
+
+	private void drawPotionLevels(TileEntityAerosolizer tile, double par2, double par4, double par6) {
+		GL11.glPushMatrix();
+
+		Tessellator v5 = Tessellator.instance;
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
+		BlendMode.DEFAULT.apply();
+
+		GL11.glTranslated(par2, par4, par6);
+
+		for (int i = 0; i < 9; i++) {
+			int lvl = tile.getPotionLevel(i);
+			if (lvl > 0) {
+
+				double h = 0.785+(0.075*lvl/tile.CAPACITY);
+				double w = 0.25;
+
+				double dx = 0.0625+(i%3)*(5/16D);
+				double dy = 0.0625+(i/3)*(5/16D);
+				v5.startDrawingQuads();
+
+				v5.setColorRGBA_I(tile.getPotionColor(i), 192);
+
+				v5.addVertex(dx, h, dy+w);
+				v5.addVertex(dx+w, h, dy+w);
+				v5.addVertex(dx+w, h, dy);
+				v5.addVertex(dx, h, dy);
+
+				v5.draw();
+			}
+		}
+
+		GL11.glPopAttrib();
+		GL11.glPopMatrix();
 	}
 
 	@Override

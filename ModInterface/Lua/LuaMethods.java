@@ -36,5 +36,7 @@ public class LuaMethods {
 	private static final LuaMethod toggleMeta = new LuaToggleMetadata();
 	private static final LuaMethod toggleNBT = new LuaToggleNBT();
 	private static final LuaMethod toggleBlacklist = new LuaToggleBlacklist();
+	private static final LuaMethod getBlockAtPos = new LuaGetBlockAtPos();
+	private static final LuaMethod shiftPlane = new LuaShiftPlane();
 
 }

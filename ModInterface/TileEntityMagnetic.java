@@ -110,7 +110,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {
-		return from == this.getFacing() && this.isValidSupplier(this.getAdjacentTileEntity(from));
+		return from == this.getFacing();// && this.isValidSupplier(this.getAdjacentTileEntity(from));
 	}
 
 	@Override

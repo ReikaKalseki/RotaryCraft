@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -21,14 +22,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.oredict.OreDictionary;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.BlastFurnaceManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -49,6 +54,12 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(hsla, RecipeLevel.CORE);
 
+		in1 = new BlastInput(ItemStacks.coke, 100, 1);
+		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
+		in3 = new BlastInput(Blocks.sand, 0.1F, 1);
+		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		this.addRecipe(hsla2, RecipeLevel.CORE);
+
 		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
@@ -61,25 +72,13 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, false, 0, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(scrap, RecipeLevel.PROTECTED);
 
-		in1 = new BlastInput(ItemStacks.coke, 100, 1);
-		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
-		in3 = new BlastInput(Blocks.sand, 0.1F, 1);
-		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
-		this.addRecipe(hsla2, RecipeLevel.CORE);
-
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe coke = new BlastRecipe(in1, in2, in3, Items.coal, ItemStacks.coke, false, 0, 400);
+		BlastRecipe coke = new BlastRecipe(in1, in2, in3, ReikaJavaLibrary.makeListFrom(new ItemStack(Items.coal), new ItemStack(Items.coal, 1, 1)), ItemStacks.coke, false, 0, 400);
 		this.addRecipe(coke, RecipeLevel.CORE);
 
-		in1 = new BlastInput((ItemStack)null, 0, 1);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe coke2 = new BlastRecipe(in1, in2, in3, new ItemStack(Items.coal, 1, 1), ItemStacks.coke, false, 0, 500);
-		this.addRecipe(coke2, RecipeLevel.CORE);
-
-		in1 = new BlastInput(ItemStacks.aluminumpowder, 25F, 1);
+		in1 = new BlastInput("dustAluminum", 25F, 1);
 		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 700);
@@ -94,7 +93,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		in1 = new BlastInput(ItemStacks.silicondust, 20F, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe silu = new BlastRecipe(in1, in2, in3, ItemStacks.aluminumingot, ItemStacks.silumin, false, 0, 900);
+		BlastRecipe silu = new BlastRecipe(in1, in2, in3, "ingotAluminum", ItemStacks.silumin, false, 0, 900);
 		this.addRecipe(silu, RecipeLevel.CORE);
 	}
 
@@ -246,9 +245,12 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	}
 
 	public static final class BlastInput {
-		private final ItemStack item;
+
+		private final HashSet<KeyedItemStack> items = new HashSet();
 		public final float chanceToUse;
 		public final int numberToUse;
+
+		private final ArrayList<ItemStack> display = new ArrayList();
 
 		private BlastInput(Block in, float chance, int toDecr) {
 			this(new ItemStack(in), chance, toDecr);
@@ -259,22 +261,57 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		}
 
 		private BlastInput(ItemStack in, float chance, int toDecr) {
-			item = in;
-			chanceToUse = chance/100F;
-			numberToUse = toDecr;
+			this(in != null ? ReikaJavaLibrary.makeListFrom(in) : null, chance, toDecr);
 		}
 
-		public ItemStack getItem() {
-			return item != null ? ReikaItemHelper.getSizedItemStack(item, numberToUse) : null;
+		private BlastInput(String ore, float chance, int toDecr) {
+			this(OreDictionary.getOres(ore), chance, toDecr);
+		}
+
+		private BlastInput(Collection<ItemStack> in, float chance, int toDecr) {
+			if (in != null) {
+				for (ItemStack is : in) {
+					items.add(new KeyedItemStack(is).setSimpleHash(true).lock());
+				}
+			}
+			chanceToUse = chance/100F;
+			numberToUse = toDecr;
+
+			if (in != null && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+				display.addAll(in);
+		}
+
+		@SideOnly(Side.CLIENT)
+		public ItemStack getItemForDisplay() {
+			if (!this.exists())
+				return null;
+			int tick = (int)((System.currentTimeMillis()/1000)%display.size());
+			return ReikaItemHelper.getSizedItemStack(display.get(tick), numberToUse);
 		}
 
 		@Override
 		public String toString() {
-			return fullID(item)+" x"+numberToUse+"@"+chanceToUse+"%";
+			return fullIDKeys(items)+" x"+numberToUse+"@"+chanceToUse+"%";
 		}
 
 		public boolean match(ItemStack in) {
-			return item == null ? in == null : ReikaItemHelper.matchStacks(in, this.getItem()) && in.stackSize >= numberToUse;
+			return !this.exists() ? in == null : this.isItemCorrect(in) && in.stackSize >= numberToUse;
+		}
+
+		private boolean isItemCorrect(ItemStack in) {
+			return in != null && items.contains(new KeyedItemStack(in).setSimpleHash(true));
+		}
+
+		public boolean exists() {
+			return !items.isEmpty();
+		}
+
+		public Collection<ItemStack> getItems() {
+			ArrayList<ItemStack> c = new ArrayList();
+			for (KeyedItemStack ks : items) {
+				c.add(ks.getItemStack());
+			}
+			return c;
 		}
 	}
 
@@ -282,7 +319,10 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public final BlastInput primary;
 		public final BlastInput secondary;
 		public final BlastInput tertiary;
-		private final ItemStack main;
+
+		private final HashSet<KeyedItemStack> main = new HashSet();
+		private final ArrayList<ItemStack> mainDisplay = new ArrayList();
+
 		public final int mainRequired;
 		private boolean matchNumberExactly;
 		private final ItemStack output;
@@ -299,22 +339,49 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			this(in1, in2, in3, new ItemStack(main), out, bonus, xp, temp);
 		}
 
+		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Collection<ItemStack> main, ItemStack out, boolean bonus, float xp, int temp) {
+			this(in1, in2, in3, main, 1, out, bonus, xp, temp);
+			matchNumberExactly = false;
+		}
+
+		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, String main, ItemStack out, boolean bonus, float xp, int temp) {
+			this(in1, in2, in3, main, 1, out, bonus, xp, temp);
+			matchNumberExactly = false;
+		}
+
 		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, ItemStack main, ItemStack out, boolean bonus, float xp, int temp) {
 			this(in1, in2, in3, main, 1, out, bonus, xp, temp);
 			matchNumberExactly = false;
 		}
 
 		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, ItemStack main, int req, ItemStack out, boolean bonus, float xp, int temp) {
+			this(in1, in2, in3, ReikaJavaLibrary.makeListFrom(main), req, out, bonus, xp, temp);
+		}
+
+		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, String main, int req, ItemStack out, boolean bonus, float xp, int temp) {
+			this(in1, in2, in3, OreDictionary.getOres(main), req, out, bonus, xp, temp);
+		}
+
+		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Collection<ItemStack> main, int req, ItemStack out, boolean bonus, float xp, int temp) {
 			primary = in1;
 			secondary = in2;
 			tertiary = in3;
 			hasBonus = bonus;
-			this.main = main;
+
 			mainRequired = req;
 			this.xp = xp;
 			output = out;
 			matchNumberExactly = true;
 			temperature = temp;
+
+			for (ItemStack is : main) {
+				this.main.add(new KeyedItemStack(is).setSimpleHash(true).lock());
+			}
+			if (main.isEmpty()) {
+				throw new IllegalArgumentException("Empty item list for main item in Blast Recipe "+this.toString());
+			}
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+				mainDisplay.addAll(main);
 		}
 
 		private BlastRecipe setAlloy() {
@@ -322,8 +389,10 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			return this;
 		}
 
-		public ItemStack mainItem() {
-			return main != null ? main.copy() : null;
+		@SideOnly(Side.CLIENT)
+		public ItemStack mainItemForDisplay() {
+			int tick = (int)((System.currentTimeMillis()/1000)%mainDisplay.size());
+			return mainDisplay.get(tick);
 		}
 
 		public ItemStack outputItem() {
@@ -366,14 +435,26 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		@Override
 		public boolean isValidInputForSlot(int slot, ItemStack is) {
 			if (slot == TileEntityBlastFurnace.SLOT_1)
-				return ReikaItemHelper.matchStacks(is, primary.getItem());
+				return primary.match(is);
 			if (slot == TileEntityBlastFurnace.SLOT_2)
-				return ReikaItemHelper.matchStacks(is, secondary.getItem());
+				return secondary.match(is);
 			if (slot == TileEntityBlastFurnace.SLOT_3)
-				return ReikaItemHelper.matchStacks(is, tertiary.getItem());
+				return tertiary.match(is);
 			if (slot >= 1 && slot < 10)
-				return ReikaItemHelper.matchStacks(is, main);
+				return this.isValidMainItem(is);
 			return false;
+		}
+
+		public boolean isValidMainItem(ItemStack is) {
+			return main.contains(new KeyedItemStack(is).setSimpleHash(true));
+		}
+
+		public Collection<ItemStack> getMainItems() {
+			ArrayList<ItemStack> c = new ArrayList();
+			for (KeyedItemStack ks : main) {
+				c.add(ks.getItemStack());
+			}
+			return c;
 		}
 
 		@Override
@@ -391,7 +472,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		@Override
 		public String getUniqueID() {
-			return "RECIPE/"+primary+"&"+secondary+"&"+tertiary+">"+fullID(main)+"^"+fullID(output)+"?"+hasBonus;
+			return "RECIPE/"+primary+"&"+secondary+"&"+tertiary+">"+fullIDKeys(main)+"^"+fullID(output)+"?"+hasBonus;
 		}
 
 		@Override
@@ -403,12 +484,12 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public Collection<ItemStack> getAllUsedItems() {
 			ArrayList<ItemStack> li = new ArrayList();
 			if (primary != null)
-				li.add(primary.item);
+				li.addAll(primary.getItems());
 			if (secondary != null)
-				li.add(secondary.item);
+				li.addAll(secondary.getItems());
 			if (tertiary != null)
-				li.add(tertiary.item);
-			li.add(main);
+				li.addAll(tertiary.getItems());
+			li.addAll(this.getMainItems());
 			li.add(output);
 			return li;
 		}
@@ -441,12 +522,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			return false;
 		if (!r.tertiary.match(in3))
 			return false;
-		ItemStack main1 = r.mainItem();
 		int num = 0;
 		for (int i = 0; i < main.length; i++) {
 			ItemStack is = main[i];
 			if (is != null) {
-				if (ReikaItemHelper.matchStacks(is, main1)) {
+				if (r.isValidMainItem(is)) {
 					num++;
 				}
 				else {
@@ -473,13 +553,13 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	public int getInputTypeForItem(ItemStack is) {
 		for (int i = 0; i < recipeList.size(); i++) {
 			BlastRecipe r = recipeList.get(i);
-			if (ReikaItemHelper.matchStacks(is, r.mainItem()))
+			if (r.isValidMainItem(is))
 				return 0;
-			if (ReikaItemHelper.matchStacks(is, r.primary.getItem()))
+			else if (r.primary.match(is))
 				return 1;
-			if (ReikaItemHelper.matchStacks(is, r.secondary.getItem()))
+			else if (r.secondary.match(is))
 				return 2;
-			if (ReikaItemHelper.matchStacks(is, r.tertiary.getItem()))
+			else if (r.tertiary.match(is))
 				return 3;
 		}
 		return -1;
@@ -489,13 +569,13 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		ArrayList<BlastRecipe> li = new ArrayList();
 		for (int i = 0; i < recipeList.size(); i++) {
 			BlastRecipe r = recipeList.get(i);
-			if (ReikaItemHelper.matchStacks(is, r.mainItem()))
+			if (r.isValidMainItem(is))
 				li.add(r);
-			else if (ReikaItemHelper.matchStacks(is, r.primary.getItem()))
+			if (r.primary.match(is))
 				li.add(r);
-			else if (ReikaItemHelper.matchStacks(is, r.secondary.getItem()))
+			if (r.secondary.match(is))
 				li.add(r);
-			else if (ReikaItemHelper.matchStacks(is, r.tertiary.getItem()))
+			if (r.tertiary.match(is))
 				li.add(r);
 		}
 		return li;

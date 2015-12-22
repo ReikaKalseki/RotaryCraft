@@ -9,13 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
-import Reika.RotaryCraft.API.Interfaces.BasicTemperatureMachine;
 
+public interface Cleanable {
 
-public interface FrictionHeatable extends BasicTemperatureMachine {
-
-	public void addTemperature(int add);
-
-	public int getMaxTemperature();
+	public void clean();
 
 }

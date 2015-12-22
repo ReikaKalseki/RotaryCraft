@@ -48,7 +48,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					this.readFromCross(devicein);
 					return;
 				}
-				if (devicein.isWritingToCoordinate(x, y, z)) {
+				else if (devicein.isWritingToCoordinate(x, y, z)) {
 					torquein = devicein.torque;
 					omegain = devicein.omega;
 				}

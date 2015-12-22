@@ -28,7 +28,7 @@
 		The handheld crafting unit is exactly as the name implies; it can be used as a portable crafting table without having to place it down.
 	</handcraft>
 	<nvg>
-		Night-vision goggles allow you to see clearly, even in full blackness. However, they require a helmet armor slot and provide no defensive protection. To alleviate this, they can be crafted with a diamond helmet to make a night-vision helmet.
+		Night-vision goggles allow you to see clearly, even in full blackness. However, they require a helmet armor slot and provide no defensive protection. To alleviate this, they can be crafted with a bedrock helmet to make a night-vision helmet.
 	</nvg>
 	<buckets>
 		Buckets of lubricant or jet fuel can be made by placing empty buckets in the appropriate slots of the grinder or fractionator. They can then be carried to a machine that needs them, to save on piping for long distances. Ethanol can also be bucketed in and out of engines and tanks.

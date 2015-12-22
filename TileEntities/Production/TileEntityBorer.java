@@ -78,7 +78,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private int mintorque;
 
 	/** Power required to break a block, per 0.1F hardness */
-	public static final int DIGPOWER = 64;
+	public static final int DIGPOWER = (int)(64*ConfigRegistry.getBorerPowerMult());
 	public static final int OBSIDIANTORQUE = 512;
 
 	private static final int genRange = ConfigRegistry.BORERGEN.getValue();

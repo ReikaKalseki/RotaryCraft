@@ -32,6 +32,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.CraftCompleteCall
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
+import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -393,7 +394,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	}
 
 	private ItemStack getOutput(ItemStack is) {
-		if (is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null) {
+		if (is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING) {
 			return ItemCraftPattern.getRecipeOutput(is);
 		}
 		else if (ModList.APPENG.isLoaded() && is.getItem() instanceof ICraftingPatternItem) {

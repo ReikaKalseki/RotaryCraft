@@ -54,7 +54,8 @@ public enum ExtractorBonus {
 	COBALT(ExtractorModOres.getSolutionProduct(ModOreList.COBALT), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.125F),
 	REDSTONE(ItemStacks.redsolution, ItemStacks.aluminumpowder, 0.25F),
 	MAGNETITE(ExtractorModOres.getSolutionProduct(ModOreList.MAGNETITE), ItemStacks.ironoreflakes, 0.2F),
-	MONAZIT(ExtractorModOres.getSolutionProduct(ModOreList.MONAZIT), ExtractorModOres.getFlakeProduct(ModOreList.THORIUM), 0.15F, ModList.REACTORCRAFT);
+	MONAZIT(ExtractorModOres.getSolutionProduct(ModOreList.MONAZIT), ExtractorModOres.getFlakeProduct(ModOreList.THORIUM), 0.15F, ModList.REACTORCRAFT),
+	EMERALD(ItemStacks.emeraldsolution, ExtractorModOres.getFlakeProduct(ModOreList.RUBY), 0.1F);
 
 	private ItemStack bonusItem;
 	private ItemStack sourceItem;

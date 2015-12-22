@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.awt.Color;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
@@ -370,7 +373,7 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 			c = new BlockColor();
 			map.put(b, c);
 		}
-		if (c.colorInts.containsKey(meta) && !allowOverwrite)
+		if (c.colorInts[meta] != UNKNOWN_COLOR && !allowOverwrite)
 			throw new IllegalArgumentException("Cannot overwrite color mapping for "+b+":"+meta+"!");
 		c.addMetaColor(meta, color);
 	}
@@ -442,19 +445,23 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	}
 
 	private static class BlockColor {
-		private final HashMap<Integer, Integer> colorInts = new HashMap();
+		private final int[] colorInts = new int[16];
 		private boolean metaTag = false;
 
 		public BlockColor(int r, int g, int b) {
-			colorInts.put(0, ReikaColorAPI.RGBtoHex(r, g, b));
+			this(ReikaColorAPI.RGBtoHex(r, g, b));
 		}
 
 		public BlockColor(int rgb) {
-			colorInts.put(0, rgb);
+			colorInts[0] = rgb;
+
+			for (int i = 1; i < 16; i++) {
+				colorInts[i] = BlockColorMapper.UNKNOWN_COLOR;
+			}
 		}
 
 		public BlockColor() {
-
+			this(BlockColorMapper.UNKNOWN_COLOR);
 		}
 
 		public BlockColor addMetaColor(int meta, int r, int g, int b) {
@@ -463,21 +470,16 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 
 		public BlockColor addMetaColor(int meta, int rgb) {
 			metaTag = true;
-			colorInts.put(meta, rgb);
+			colorInts[meta] = rgb;
 			return this;
 		}
 
 		public int getColorInt(int meta) {
 			if (metaTag) {
-				if (colorInts.containsKey(meta)) {
-					return colorInts.get(meta);
-				}
-				else {
-					return BlockColorMapper.UNKNOWN_COLOR;
-				}
+				return colorInts[meta];
 			}
 			else {
-				return colorInts.get(0);
+				return colorInts[0];
 			}
 		}
 
@@ -501,5 +503,46 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	public void addModBlockColor(int blockID, int metadata, int color) {
 		this.addOrSetColorMapping(blockID, metadata, color, false);
 	}*/
+
+	public void loadFromConfig() {
+		String sg = this.getFullSavePath();
+		File f = new File(sg);
+		if (f.exists()) {
+			ArrayList<String> li = ReikaFileReader.getFileAsLines(f, false);
+			for (String s : li) {
+				this.parseLine(s);
+			}
+		}
+		else {
+			try {
+				f.getParentFile().mkdirs();
+				f.createNewFile();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				RotaryCraft.logger.logError("Could not create GPR color map config!");
+			}
+		}
+	}
+
+	private void parseLine(String s) { //[ID:meta]=0xRRGGBB
+		s = s.substring(1);
+		int idx = s.indexOf('=');
+		String key = s.substring(0, idx-1);
+		String color = s.substring(idx+2, s.length());
+		String[] parts = key.split(":");
+		int id = Integer.parseInt(parts[0]);
+		int meta = Integer.parseInt(parts[1]);
+		Block b = Block.getBlockById(id);
+		this.addOrSetColorMapping(b, meta, Integer.parseInt(color), false);
+	}
+
+	private final String getSaveFileName() {
+		return "RotaryCraft_CustomGPRColors.cfg";
+	}
+
+	private final String getFullSavePath() {
+		return RotaryCraft.config.getConfigFolder().getAbsolutePath()+"/"+this.getSaveFileName();
+	}
 
 }

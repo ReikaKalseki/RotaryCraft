@@ -16,12 +16,13 @@ import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
 import Reika.DragonAPI.Interfaces.Configuration.DecimalConfig;
 import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
 import Reika.DragonAPI.Interfaces.Configuration.SegmentedConfigList;
+import Reika.DragonAPI.Interfaces.Configuration.SelectiveConfig;
 import Reika.DragonAPI.Interfaces.Configuration.StringConfig;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
 
-public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig {
+public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	ENGINEVOLUME("Engine Volume", 1F),
@@ -108,7 +109,11 @@ public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, Boolea
 	RECIPEMOD("Allow Nonstandard Recipe Modifications", false),
 	STRONGRECIPEMOD("Strong Recipe Editing", false),
 	CORERECIPEMOD("Core Recipe Editing", "X"),
-	CRAFTERPROFILE("AutoCrafter Lag Profiling And Compensation", true);
+	CRAFTERPROFILE("AutoCrafter Lag Profiling And Compensation", true),
+	HSLAHARVEST("Increased Harvest Level for HSLA", false),
+	LATEDYNAMO("Rotational Dynamo Recipe Difficulty", 0),
+	BORERPOW("Borer Power Requirement Factor", 1F),
+	BEEYEAST("Use Forestry Bees To Produce Yeast", false);
 
 	private String label;
 	private boolean defaultState;
@@ -274,6 +279,10 @@ public enum ConfigRegistry implements SegmentedConfigList, IntegerConfig, Boolea
 			default:
 				return true;
 		}
+	}
+
+	public static float getBorerPowerMult() {
+		return MathHelper.clamp_float(BORERPOW.getFloat(), 0.5F, 8F);
 	}
 
 }

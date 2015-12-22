@@ -93,7 +93,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 			}
 			for (int i = 2; i < 4; i++) {
 				TileEntity te = this.getTileEntity(x, y+i, z);
-				if (te instanceof Shockable) {
+				if (te instanceof Shockable && ((Shockable)te).canDischargeLongRange()) {
 					this.dischargeToBlock(x, y+i, z, (Shockable)te);
 					return;
 				}

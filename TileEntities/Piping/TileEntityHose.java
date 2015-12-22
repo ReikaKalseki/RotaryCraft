@@ -116,7 +116,7 @@ public class TileEntityHose extends TileEntityPiping implements PumpablePipe {
 	public boolean canOutputToIFluidHandler(ForgeDirection side) {
 		return side.offsetY == 0;
 	}
-
+	/*
 	@Override
 	public boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
 		return p instanceof TileEntityHose;
@@ -127,7 +127,7 @@ public class TileEntityHose extends TileEntityPiping implements PumpablePipe {
 		((TileEntityHose)from).lubricant -= amt;
 		lubricant += amt;
 	}
-
+	 */
 	public void burn() {
 		this.burn(true);
 	}

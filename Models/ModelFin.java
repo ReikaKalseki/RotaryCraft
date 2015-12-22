@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin.FinSettings;
 
 public class ModelFin extends RotaryModelBase
 {
@@ -185,22 +186,9 @@ public class ModelFin extends RotaryModelBase
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
 		Shape1.render(te, f5);
-		Shape2.render(te, f5);
-		Shape2o.render(te, f5);
-		Shape2n.render(te, f5);
-		Shape2m.render(te, f5);
-		Shape2l.render(te, f5);
-		Shape2k.render(te, f5);
-		Shape2j.render(te, f5);
-		Shape2i.render(te, f5);
-		Shape2h.render(te, f5);
-		Shape2g.render(te, f5);
-		Shape2f.render(te, f5);
-		Shape2e.render(te, f5);
-		Shape2d.render(te, f5);
-		Shape2c.render(te, f5);
-		Shape2b.render(te, f5);
-		Shape2a.render(te, f5);
+
+		boolean flag1 = true;
+		boolean flag2 = true;
 
 		boolean inWorld = li != null && !li.isEmpty() ? (Boolean)li.get(0) : false;
 		if (inWorld) {
@@ -208,7 +196,34 @@ public class ModelFin extends RotaryModelBase
 			Shape3a.render(te, f5);
 			Shape3b.render(te, f5);
 			Shape3c.render(te, f5);
+
+			FinSettings s = (FinSettings)li.get(1);
+			flag1 = s != FinSettings.QUARTER;
+			flag2 = s == FinSettings.FULL;
 		}
+
+		if (flag1) {
+			if (flag2) {
+				Shape2.render(te, f5);
+				Shape2o.render(te, f5);
+				Shape2n.render(te, f5);
+				Shape2l.render(te, f5);
+				Shape2j.render(te, f5);
+				Shape2f.render(te, f5);
+				Shape2d.render(te, f5);
+				Shape2b.render(te, f5);
+			}
+
+			Shape2m.render(te, f5);
+			Shape2e.render(te, f5);
+		}
+
+		Shape2k.render(te, f5);
+		Shape2i.render(te, f5);
+		Shape2h.render(te, f5);
+		Shape2g.render(te, f5);
+		Shape2c.render(te, f5);
+		Shape2a.render(te, f5);
 	}
 
 	@Override

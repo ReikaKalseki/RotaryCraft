@@ -31,6 +31,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MulchMaterials;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFermenter;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -126,7 +127,8 @@ public class FermenterHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rcferment")) {
-			arecipes.add(new FermenterRecipe(ItemRegistry.YEAST.getStackOf()));
+			if (!ConfigRegistry.BEEYEAST.getState())
+				arecipes.add(new FermenterRecipe(ItemRegistry.YEAST.getStackOf()));
 			Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 			for (ItemStack is : li)
 				arecipes.add(new FermenterRecipe(is, ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, MulchMaterials.instance.getPlantValue(is))));
@@ -144,10 +146,14 @@ public class FermenterHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (result.getItem() == ItemRegistry.YEAST.getItemInstance() || ReikaItemHelper.matchStacks(result, ItemStacks.sludge)) {
+		if (ReikaItemHelper.matchStacks(result, ItemStacks.sludge)) {
 			arecipes.add(new FermenterRecipe(result));
 		}
-		if (ReikaItemHelper.matchStacks(result, ItemStacks.ethanolbucket))
+		else if (result.getItem() == ItemRegistry.YEAST.getItemInstance()) {
+			if (!ConfigRegistry.BEEYEAST.getState())
+				arecipes.add(new FermenterRecipe(result));
+		}
+		else if (ReikaItemHelper.matchStacks(result, ItemStacks.ethanolbucket))
 			arecipes.add(new FermenterRecipe(ItemStacks.sludge));
 	}
 
@@ -178,7 +184,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 			}
 		}
 		else if (this.isEthanolIngredient(ingredient) || this.isYeastIngredient(ingredient)) {
-			if (this.isYeastIngredient(ingredient))
+			if (this.isYeastIngredient(ingredient) && !ConfigRegistry.BEEYEAST.getState())
 				arecipes.add(new FermenterRecipe(ingredient, ItemRegistry.YEAST.getStackOf()));
 			else
 				arecipes.add(new FermenterRecipe(ingredient, ItemStacks.sludge.copy()));
