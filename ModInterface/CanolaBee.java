@@ -12,6 +12,8 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
+import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
 import Reika.DragonAPI.ModInteract.Bees.BasicGene;
@@ -87,6 +89,7 @@ public class CanolaBee extends BeeSpecies {
 									//world.scheduleBlockUpdate(dx, dy, dz, b, 20+rand.nextInt(20)); //was 20+rand(300)
 									if (rand.nextInt(3) == 0) {
 										b.updateTick(world, dx, dy, dz, rand);
+										BlockTickEvent.fire(world, dx, dy, dz, b, UpdateFlags.FORCED.flag);
 									}
 									flag = true;
 								}

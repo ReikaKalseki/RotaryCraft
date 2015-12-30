@@ -1190,7 +1190,7 @@ public class RotaryRecipes {
 		}
 
 		Object[] args = {
-				"BaB", "bRc", "BdB", 'B', ReikaItemHelper.stoneBricks, 'r', Items.redstone, 'a', obj1, 'b', obj2, 'c', obj3, 'd', obj4
+				"BaB", "brc", "BdB", 'B', ReikaItemHelper.stoneBricks, 'r', Items.redstone, 'a', obj1, 'b', obj2, 'c', obj3, 'd', obj4
 		};
 		return args;
 	}

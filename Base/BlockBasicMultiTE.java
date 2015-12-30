@@ -727,7 +727,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tr = (TileEntityReservoir)tile;
-			if (!tr.isEmpty() && e instanceof EntityLivingBase) {
+			if (!tr.isEmpty() && !tr.isCovered && e instanceof EntityLivingBase) {
 				if (tr.getFluid().equals(FluidRegistry.LAVA) || tr.getFluid().getTemperature(world, x, y, z) > 500) {
 					e.attackEntityFrom(DamageSource.lava, 4);
 					e.setFire(12);

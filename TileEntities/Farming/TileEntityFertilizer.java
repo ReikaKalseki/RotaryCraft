@@ -20,6 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
+import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -109,8 +111,10 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
 		if (id != Blocks.air && dd <= this.getRange()) {
 			int n = this.getConsecutiveUpdates();
-			for (int i = 0; i < n; i++)
+			for (int i = 0; i < n; i++) {
 				id.updateTick(world, dx, dy, dz, rand);
+				BlockTickEvent.fire(world, dx, dy, dz, id, UpdateFlags.FORCED.flag);
+			}
 			world.markBlockForUpdate(dx, dy, dz);
 			if (this.didSomething(world, dx, dy, dz)) {
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.FERTILIZER.getMinValue(), world, dx, dy, dz);

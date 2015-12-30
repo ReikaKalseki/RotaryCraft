@@ -459,11 +459,20 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(ItemStacks.tungsteningot);
 		SensitiveItemRegistry.instance.registerItem(ItemStacks.bedrockdust);
 		SensitiveItemRegistry.instance.registerItem(ItemStacks.bedingot);
+		SensitiveItemRegistry.instance.registerItem(ItemStacks.silumin);
 		SensitiveItemRegistry.instance.registerItem(ItemRegistry.UPGRADE.getItemInstance());
 
 		if (MTInteractionManager.isMTLoaded()) {
 			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.BLASTFURNACE.getCraftedProduct());
 			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.WORKTABLE.getCraftedProduct());
+
+			MTInteractionManager.instance.blacklistOreDictTagsFor(ItemStacks.steelingot);
+			MTInteractionManager.instance.blacklistOreDictTagsFor(ItemStacks.redgoldingot);
+			MTInteractionManager.instance.blacklistOreDictTagsFor(ItemStacks.tungsteningot);
+			MTInteractionManager.instance.blacklistOreDictTagsFor(ItemStacks.bedrockdust);
+			MTInteractionManager.instance.blacklistOreDictTagsFor(ItemStacks.bedingot);
+			MTInteractionManager.instance.blacklistOreDictTagsFor(ItemStacks.springingot);
+			MTInteractionManager.instance.blacklistOreDictTagsFor(ItemStacks.silumin);
 		}
 
 		SensitiveFluidRegistry.instance.registerFluid("rc jet fuel");

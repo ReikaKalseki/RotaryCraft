@@ -556,8 +556,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setBoolean("failed", failed);
 
@@ -569,13 +568,16 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		failed = NBT.getBoolean("failed");
 
 		readtorque = NBT.getIntArray("readtorque");
 		readomega = NBT.getIntArray("readomega");
+		if (readtorque.length != 2)
+			readtorque = new int[2];
+		if (readomega.length != 2)
+			readomega = new int[2];
 
 		crossphi1 = NBT.getFloat("cphi1");
 		crossphi2 = NBT.getFloat("cphi2");

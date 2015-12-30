@@ -22,6 +22,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
+import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -160,6 +162,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
 					//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 					id.updateTick(world, rx, i, rz, rand);
+					BlockTickEvent.fire(world, rx, i, rz, id, UpdateFlags.FORCED.flag);
 					world.markBlockForUpdate(rx, i, rz);
 				}
 			}

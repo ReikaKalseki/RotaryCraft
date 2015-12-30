@@ -237,7 +237,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
 				if (!world.isRemote) {
-					ReikaWorldHelper.forceGenAndPopulate(world, x+step*facing.offsetX, y, z+step*facing.offsetZ, meta, genRange);
+					ReikaWorldHelper.forceGenAndPopulate(world, x+step*facing.offsetX, z+step*facing.offsetZ, genRange);
 					this.safeDig(world, x, y, z, meta);
 					if (!isMiningAir) {
 						if (soundtick == 0) {

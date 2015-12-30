@@ -550,15 +550,17 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	}
 
 	private void parseLine(String s) { //[ID:meta]=0xRRGGBB
-		s = s.substring(1);
-		int idx = s.indexOf('=');
-		String key = s.substring(0, idx-1);
-		String color = s.substring(idx+2, s.length());
-		String[] parts = key.split(":");
-		int id = Integer.parseInt(parts[0]);
-		int meta = Integer.parseInt(parts[1]);
-		Block b = Block.getBlockById(id);
-		this.addOrSetColorMapping(b, meta, Integer.parseInt(color), false);
+		if (!s.startsWith("//")) {
+			s = s.substring(1);
+			int idx = s.indexOf('=');
+			String key = s.substring(0, idx-1);
+			String color = s.substring(idx+2, s.length());
+			String[] parts = key.split(":");
+			int id = Integer.parseInt(parts[0]);
+			int meta = Integer.parseInt(parts[1]);
+			Block b = Block.getBlockById(id);
+			this.addOrSetColorMapping(b, meta, Integer.parseInt(color), false);
+		}
 	}
 
 	private final String getSaveFileName() {

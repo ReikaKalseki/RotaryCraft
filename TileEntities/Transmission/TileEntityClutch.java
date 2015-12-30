@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Transmission;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -136,5 +137,21 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 
 	public boolean isOutputEnabled() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) == needsRedstone;
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT)
+	{
+		super.writeSyncTag(NBT);
+
+		NBT.setBoolean("redstone", needsRedstone);
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT)
+	{
+		super.readSyncTag(NBT);
+
+		needsRedstone = NBT.getBoolean("redstone");
 	}
 }
