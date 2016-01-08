@@ -87,9 +87,6 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 				tank.drain(1000, true);
 			}
 		}
-		else {
-			blocks.clear();
-		}
 	}
 
 	private Block getFluidID() {
