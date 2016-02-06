@@ -31,6 +31,7 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
@@ -63,8 +64,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(Blocks.pumpkin, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.pumpkin_seeds, 12), 100);
 		this.addRecipe(Items.wheat, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.wheat_seeds, 4), 100);
 		this.addRecipe(Blocks.gravel, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
-		this.addRecipe(ItemStacks.netherrackdust, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getDustProduct(ModOreList.SULFUR), 40);
-		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10, new ItemStack(Items.wheat_seeds), 2F, new ItemStack(Items.pumpkin_seeds), 0.125F, new ItemStack(Items.melon_seeds), 0.125F, new ItemStack(Blocks.sapling), 0.03125F, new ItemStack(Blocks.tallgrass), 0.0625F);
+		this.addRecipe(ItemStacks.netherrackdust, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 40);
+		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10, new ItemStack(Items.wheat_seeds), 2F, new ItemStack(Items.pumpkin_seeds), 0.125F, new ItemStack(Items.melon_seeds), 0.125F, new ItemStack(Blocks.sapling), 0.03125F, new ItemStack(Blocks.tallgrass, 1, 1), 0.0625F);
 		this.addRecipe(Items.blaze_powder, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
 		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 50), 60, RecipeLevel.PROTECTED, ItemStacks.slipperyPropolis, 80);
@@ -135,7 +136,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	public void addAPIRecipe(ItemStack item, FluidStack fs, float fc, Object... items)
 	{
-		this.addRecipe(item, fs, fc, RecipeLevel.API, items);
+		this.addRecipe(item, fs != null ? new FluidOut(fs, fc) : null, RecipeLevel.API, items);
 	}
 
 	private void addRecipe(ItemStack item, FluidStack fs, float fc, RecipeLevel rl, Object... items)
@@ -226,6 +227,14 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				out.manipulateChances(new ChanceRounder());
 				this.addRecipe(in, out, null, RecipeLevel.MODINTERACT);
 			}
+
+			ItemStack drop = new ItemStack(ForestryHandler.ItemEntry.HONEY.getItem());
+			ChancedOutputList out = new ChancedOutputList();
+			out.addItem(new ItemStack(ForestryHandler.ItemEntry.PROPOLIS.getItem()), 25);
+			this.addRecipe(drop, out, new FluidOut(new FluidStack(FluidRegistry.getFluid("for.honey"), 150), 100), RecipeLevel.MODINTERACT);
+
+			drop = new ItemStack(ForestryHandler.ItemEntry.HONEYDEW.getItem());
+			this.addRecipe(drop, new FluidStack(FluidRegistry.getFluid("for.honey"), 150), 100, RecipeLevel.MODINTERACT);
 		}
 
 		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {

@@ -79,6 +79,8 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	private TreeReader tree = new TreeReader();
 	private TreeReader treeCopy = new TreeReader();
 
+	private boolean cuttingTree;
+
 	private Comparator<Coordinate> inwardsComparator;
 	private Comparator<Coordinate> leafPriority;
 
@@ -186,6 +188,10 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 				}
 			}
 
+			if (!tree.isEmpty()) {
+				cuttingTree = true;
+			}
+
 			this.checkAndMatchInventory();
 
 			tree.sortBlocksByHeight();
@@ -212,7 +218,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 			return;
 		tickcount = 0;
 
-		if (!tree.isValidTree()) {
+		if (!cuttingTree && !tree.isValidTree()) {
 			tree.reset();
 			tree.clear();
 			return;
@@ -229,7 +235,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
 					this.cutBlock(world, x, y, z, c, mat);
 
-					if (c.yCoord == edity) {
+					if (c.yCoord == edity && mat == Material.wood) {
 						Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 						Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
@@ -311,12 +317,31 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	private Collection<ItemStack> getDrops(World world, int x, int y, int z, Block b, int meta) {
 		float f = this.getYield(b, meta);
 		if (ReikaRandomHelper.doWithChance(f)) {
-			Collection<ItemStack> ret = b.getDrops(world, x, y, z, meta, this.getEnchantment(Enchantment.fortune));
+			int fortune = this.getEnchantment(Enchantment.fortune);
+			Collection<ItemStack> ret = b.getDrops(world, x, y, z, meta, fortune);
 			if (tree.getTreeType() == ModWoodList.SLIME) {
 				Block log = tree.getTreeType().getLogID();
 				if (b == log) {
 					ret.clear();
 					ret.add(new ItemStack(Items.slime_ball));
+				}
+			}
+			else if (tree.getTreeType() == ReikaTreeHelper.OAK || tree.isDyeTree()) {
+				int n = 0;
+				if (fortune >= 5) {
+					n = 4;
+				}
+				else if (fortune >= 3) {
+					n = 6;
+				}
+				else if (fortune >= 2) {
+					n = 10;
+				}
+				else if (fortune >= 1) {
+					n = 20;
+				}
+				if (n > 0 && rand.nextInt(n) == 0) {
+					ret.add(new ItemStack(Items.apple));
 				}
 			}
 			return ret;
@@ -358,8 +383,10 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 		Collection<ItemStack> drops = this.getDrops(world, x, y, z, drop, dropmeta);
 		if (drop == logID && logID != null) {
-			if (rand.nextInt(3) == 0) {
-				drops.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust.copy(), 1+rand.nextInt(4)));
+			if (tree.getTreeType() != ModWoodList.SLIME) {
+				if (rand.nextInt(3) == 0) {
+					drops.add(ReikaItemHelper.getSizedItemStack(ItemStacks.sawdust.copy(), 1+rand.nextInt(4)));
+				}
 			}
 		}
 
@@ -590,6 +617,8 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 		NBT.setInteger("jam", jam);
 		NBT.setInteger("jamc", jamColor);
+
+		NBT.setBoolean("cutting", cuttingTree);
 	}
 
 	@Override
@@ -598,6 +627,8 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 		jam = NBT.getInteger("jam");
 		jamColor = NBT.getInteger("jamc");
+
+		cuttingTree = NBT.getBoolean("cutting");
 	}
 
 	@Override

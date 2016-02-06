@@ -315,6 +315,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
-		return Flow.INPUT;
+		return Flow.DUAL;
 	}
 }

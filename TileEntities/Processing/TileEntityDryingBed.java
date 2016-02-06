@@ -22,6 +22,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityDryingBed extends InventoriedRCFluidReceiver {
 
+	public static final int CAPACITY = 2000;
+
 	private StepTimer timer = new StepTimer(400);
 	public int progress;
 
@@ -41,6 +43,10 @@ public class TileEntityDryingBed extends InventoriedRCFluidReceiver {
 			timer.reset();
 		}
 		progress = timer.getTick();
+	}
+
+	public void addLiquid(Fluid f, int amt) {
+		tank.addLiquid(amt, f);
 	}
 
 	private boolean canMake(ItemStack is) {
@@ -106,7 +112,7 @@ public class TileEntityDryingBed extends InventoriedRCFluidReceiver {
 
 	@Override
 	public int getCapacity() {
-		return 2000;
+		return CAPACITY;
 	}
 
 	@Override

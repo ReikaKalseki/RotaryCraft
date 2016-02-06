@@ -455,12 +455,13 @@ PipeConnector, IFluidHandler, ToggleTile {
 				SoundRegistry.COIL.playSoundAtBlock(this);
 			if (!isCreative)
 				energy -= power;
-			if (energy <= 0) {
+			if (energy < 0)
 				energy = 0;
-				torque = 0;
-				omega = 0;
-				power = 0;
-			}
+		}
+		else {
+			torque = 0;
+			omega = 0;
+			power = 0;
 		}
 	}
 
@@ -789,10 +790,8 @@ PipeConnector, IFluidHandler, ToggleTile {
 		super.writeToNBT(NBT);
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < belts.length; i++)
-		{
-			if (belts[i] != null)
-			{
+		for (int i = 0; i < belts.length; i++) {
+			if (belts[i] != null) {
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)i);
 				belts[i].writeToNBT(nbttagcompound);
@@ -809,13 +808,11 @@ PipeConnector, IFluidHandler, ToggleTile {
 		NBTTagList nbttaglist = NBT.getTagList("Items", NBTTypes.COMPOUND.ID);
 		belts = new ItemStack[this.getSizeInventory()];
 
-		for (int i = 0; i < nbttaglist.tagCount(); i++)
-		{
+		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound.getByte("Slot");
 
-			if (byte0 >= 0 && byte0 < belts.length)
-			{
+			if (byte0 >= 0 && byte0 < belts.length) {
 				belts[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			}
 		}
@@ -874,8 +871,7 @@ PipeConnector, IFluidHandler, ToggleTile {
 		blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 
-		if (this.getBlockType() != Blocks.air)
-		{
+		if (this.getBlockType() != Blocks.air) {
 			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
 		}
 	}

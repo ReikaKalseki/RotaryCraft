@@ -335,8 +335,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 			power = 0;
 		}
 		else {
-			timer.setCap("fuel", type.getFuelUnitDuration());
 			if (!worldObj.isRemote || RotaryAux.getPowerOnClient) {
+				timer.setCap("fuel", type.getFuelUnitDuration());
 				this.initialize(world, x, y, z, meta);
 			}
 			power = (long)torque*(long)omega;
@@ -448,6 +448,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 
 		if (type.requiresLubricant())
 			lubricant.writeToNBT(NBT);
+
+		if (type.burnsFuel()) {
+			NBT.setInteger("fueltimer", timer.getCapOf("fuel"));
+		}
 	}
 
 	@Override
@@ -467,6 +471,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 			water.readFromNBT(NBT);
 		if (type.isEthanolFueled() || type.isJetFueled())
 			fuel.readFromNBT(NBT);
+
+		if (NBT.hasKey("fueltimer")) {
+			timer.setCap("fuel", NBT.getInteger("fueltimer"));
+		}
 	}
 
 	@Override
@@ -634,7 +642,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		if (type.isEthanolFueled())
 			if (p == MachineRegistry.FUELLINE && side == ForgeDirection.DOWN)
 				return true;
-		if (type.isWaterPiped() && p == MachineRegistry.PIPE) {
+		if (type.isWaterPiped() && p.isStandardPipe()) {
 			switch(side) {
 				case EAST:
 					return this.getBlockMetadata() == 0;

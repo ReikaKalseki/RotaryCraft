@@ -152,7 +152,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			//ReikaJavaLibrary.pConsole(terx+","+tery+","+terz, Side.SERVER);
 			if (terx == ax && tery == ay && terz == az) {
 				Block tid = MachineRegistry.PORTALSHAFT.getBlock();
-				int tmeta = MachineRegistry.PORTALSHAFT.getMachineMetadata();
+				int tmeta = MachineRegistry.PORTALSHAFT.getBlockMetadata();
 				//ReikaJavaLibrary.pConsole(tid+":"+tmeta);
 				age.setBlockToAir(dx, dy, dz);
 				age.setBlock(dx, dy, dz, tid, tmeta, 3);

@@ -91,7 +91,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		{
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
-			world.setBlock(x, y, z, m.getBlock(), m.getMachineMetadata(), 3);
+			world.setBlock(x, y, z, m.getBlock(), m.getBlockMetadata(), 3);
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
@@ -200,7 +200,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				RotaryAux.flipZMetadatas(world.getTileEntity(x, y, z));
 		}
 		else {
-			world.setBlockMetadataWithNotify(x, y, z, m.getMachineMetadata(), 3);
+			world.setBlockMetadataWithNotify(x, y, z, m.getBlockMetadata(), 3);
 
 			if (m.is6Sided())
 				te.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
@@ -257,7 +257,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 
 	@Override
 	public int getMetadata(int meta) {
-		return MachineRegistry.machineList.get(meta).getMachineMetadata();
+		return MachineRegistry.machineList.get(meta).getBlockMetadata();
 	}
 
 	@SideOnly(Side.CLIENT)

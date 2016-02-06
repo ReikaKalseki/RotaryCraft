@@ -30,12 +30,14 @@ public class FrictionHandler extends TemplateRecipeHandler {
 		private final ItemStack input;
 		private final ItemStack output;
 		public final int temperature;
+		public final int duration;
 
 		private FrictionHeaterRecipe(ItemStack in) {
 			input = in;
 			FrictionRecipe rec = RecipesFrictionHeater.getRecipes().getRecipeByInput(in);
 			output = rec != null ? rec.getOutput() : null;
 			temperature = rec != null ? rec.requiredTemperature : Integer.MIN_VALUE;
+			duration = rec != null ? rec.duration : Integer.MIN_VALUE;
 		}
 
 		@Override
@@ -114,7 +116,9 @@ public class FrictionHandler extends TemplateRecipeHandler {
 	public void drawExtras(int recipe) {
 		FrictionHeaterRecipe rec = (FrictionHeaterRecipe)arecipes.get(recipe);
 		String temp = String.format("Requires %dC", rec.temperature);
+		String time = String.format("Time: %.2fs", rec.duration/20D);
 		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, temp, 83, 65, 0);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, time, 83, 80, 0);
 	}
 
 }

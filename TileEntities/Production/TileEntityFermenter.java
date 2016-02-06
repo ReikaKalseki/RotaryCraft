@@ -71,7 +71,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (inv[0].getItem() == Items.sugar) {
 			if (this.hasWater())
 				if (ReikaItemHelper.matchStackWithBlock(inv[1], Blocks.dirt))
-					return ConfigRegistry.BEEYEAST.getState() ? null : new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
+					return ConfigRegistry.enableFermenterYeast() ? null : new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
 		}
 		if (inv[0].getItem() == ItemRegistry.YEAST.getItemInstance()) {
 			if (MulchMaterials.instance.isMulchable(inv[1]))
@@ -329,7 +329,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (i >= 2)
 			return false;
-		if (red || ConfigRegistry.BEEYEAST.getState()) {
+		if (red || !ConfigRegistry.enableFermenterYeast()) {
 			switch(i) {
 				case 0:
 					return is.getItem() == ItemRegistry.YEAST.getItemInstance();

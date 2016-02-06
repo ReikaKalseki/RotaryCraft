@@ -254,7 +254,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", this.torquein, this.omegain));
-			powerin[0][0] = torquein*omegain;
+			powerin[0][0] = (long)torquein*(long)omegain;
 			powerin[0][1] = torquein;
 			powerin[0][2] = omegain;
 		}
@@ -339,7 +339,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 				}
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", torquein, omegain));
-			powerin[1][0] = torquein*omegain;
+			powerin[1][0] = (long)torquein*(long)omegain;
 			powerin[1][1] = torquein;
 			powerin[1][2] = omegain;
 		}

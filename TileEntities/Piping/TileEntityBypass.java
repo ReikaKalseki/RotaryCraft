@@ -30,7 +30,7 @@ public class TileEntityBypass extends TileEntityPiping {
 
 	@Override
 	public IIcon getBlockIcon() {
-		return Blocks.nether_brick.getIcon(0, 0);
+		return Blocks.sandstone.getIcon(1, 0);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class TileEntityBypass extends TileEntityPiping {
 
 	@Override
 	public Block getPipeBlockType() {
-		return Blocks.nether_brick;
+		return Blocks.sandstone;
 	}
 
 	@Override

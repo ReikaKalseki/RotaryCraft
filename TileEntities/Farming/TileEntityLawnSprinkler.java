@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
@@ -29,6 +30,7 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
@@ -39,17 +41,35 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityLawnSprinkler extends SprinklerBlock {
 
+	private static int[] GROWTH_PATTERN = {8, 5, 3, 1, 1}; //tick distribution
+
+	private static WeightedRandom<Integer> radiusRandom = new WeightedRandom();
+
+	static {
+		for (int i = 0; i < GROWTH_PATTERN.length-1; i++) {
+			radiusRandom.addEntry(i+1, GROWTH_PATTERN[i]);
+		}
+		radiusRandom.addEntry(-1, GROWTH_PATTERN[GROWTH_PATTERN.length-1]);
+	}
+
 	private int speed;
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-		if (this.canPerformEffects()) {
-			if (speed < 24)
-				speed += 1;
-		}
-		else {
-			if (speed > 0)
-				speed--;
+
+	}
+
+	@Override
+	protected void doAnimations() {
+		if (worldObj.isRemote) {
+			if (this.canPerformEffects()) {
+				if (speed < 24)
+					speed += 1;
+			}
+			else {
+				if (speed > 0)
+					speed--;
+			}
 		}
 		phi += speed;
 	}
@@ -140,7 +160,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 	}
 
 	private void accelerateGrowth(World world, int x, int y, int z) {
-		int r = this.getRange();
+		int r = this.calcRange();
 		int rx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 		int rz = ReikaRandomHelper.getRandomPlusMinus(z, r);
 		for (int i = y; i > y-4; i--) {
@@ -151,22 +171,40 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 				i = -999;
 			}
-			else if (id != Blocks.air && id.isOpaqueCube())
+			else if (id != Blocks.air && id.isOpaqueCube()) {
 				i = -999;
-			else if (rand.nextInt(15) == 0) {
+			}
+			else if (rand.nextInt(8) == 0) {
 				ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 				ModCrop modcrop = ModCropList.getModCrop(id, meta);
 				if (crop != null && !crop.isRipe(meta)) {
 					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 				}
-				if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
+				else if (modcrop != null && !modcrop.isRipe(world, rx, i, rz) || true) {
 					//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 					id.updateTick(world, rx, i, rz, rand);
 					BlockTickEvent.fire(world, rx, i, rz, id, UpdateFlags.FORCED.flag);
 					world.markBlockForUpdate(rx, i, rz);
 				}
+				else if (this.shouldTick(world, x, y, z, id)) {
+					id.updateTick(world, rx, i, rz, rand);
+				}
 			}
 		}
+	}
+
+	private boolean shouldTick(World world, int x, int y, int z, Block id) {
+		ReikaPlantHelper p = ReikaPlantHelper.getPlant(id);
+		if (p != null && p.grows())
+			return true;
+		return false;
+	}
+
+	private int calcRange() {
+		int r = radiusRandom.getRandomEntry();
+		if (r == -1)
+			r = this.getMaxRange();
+		return r;
 	}
 
 	private void damageMobs(World world, int x, int y, int z) {
@@ -207,19 +245,17 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
-		NBT.setInteger("spd", speed);
+		//NBT.setInteger("spd", speed);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
-		speed = NBT.getInteger("speed");
+		//speed = NBT.getInteger("speed");
 	}
 
 	@Override

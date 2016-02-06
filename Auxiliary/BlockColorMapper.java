@@ -263,7 +263,7 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 			Block id = key.blockID;
 			int meta = key.metadata;
 			int color = BlockColorInterface.getColor(id, meta);
-			RotaryCraft.logger.log("Received mod request for block "+id+":"+meta+" to have color mapping "+color);
+			RotaryCraft.logger.log("Received mod request for block "+id+":"+meta+" to have color mapping "+Integer.toHexString(color));
 			this.addOrSetColorMapping(id, meta, color, false);
 		}
 	}

@@ -42,8 +42,10 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		if (!world.isRemote) {
-			List<ItemCallback> li = this.getItems(world, x, y, z);
-			this.sortItems(world, x, y, z, li);
+			if (power >= MINPOWER) {
+				List<ItemCallback> li = this.getItems(world, x, y, z);
+				this.sortItems(world, x, y, z, li);
+			}
 		}
 		//ReikaJavaLibrary.pConsole(this.getSide()+": "+Arrays.deepToString(mappings));
 	}

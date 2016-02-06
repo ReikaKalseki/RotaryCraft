@@ -32,8 +32,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
@@ -104,6 +102,7 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
@@ -148,9 +147,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		MachineRegistry m = te.getMachine();
 		if (te.hasIconOverride())
 			return te.getIconForSide(ForgeDirection.VALID_DIRECTIONS[s]);
-		int machine = m.getMachineMetadata();
+		int machine = m.getBlockMetadata();
 		//ReikaJavaLibrary.pConsole(s+": "+icons[machine][meta][s][te.getTextureStateForSide(s)].getIconName());
-		return OldTextureLoader.instance.loadOldTextures() ? OldTextureLoader.instance.getOldTexture(this, m.getMachineMetadata(), s) : icons[machine][meta][s][te.getTextureStateForSide(s)];
+		return OldTextureLoader.instance.loadOldTextures() ? OldTextureLoader.instance.getOldTexture(this, m.getBlockMetadata(), s) : icons[machine][meta][s][te.getTextureStateForSide(s)];
 	}
 
 	@Override
@@ -297,6 +296,48 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItem(is));
 							((TileEntityBase)te).syncAllData(true);
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		if (m == MachineRegistry.DRYING) {
+			TileEntityDryingBed tr = (TileEntityDryingBed)te;
+			if (!tr.isPlayerAccessible(ep))
+				return false;
+			if (is != null && FluidContainerRegistry.isFilledContainer(is)) {
+				boolean bucket = FluidContainerRegistry.isBucket(is);
+				FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+				if (f != null) {
+					Fluid fluid = f.getFluid();
+					int size = is.stackSize;
+					if (tr.getLevel()+(size-1)*f.amount <= tr.CAPACITY) {
+						if (tr.isEmpty()) {
+							tr.addLiquid(fluid, size*f.amount);
+							if (!ep.capabilities.isCreativeMode) {
+								if (bucket)
+									ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, size, 0));
+								else
+									ep.setCurrentItemOrArmor(0, null);
+							}
+							((TileEntityBase)te).syncAllData(true);
+							if (!world.isRemote)
+								ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
+							return true;
+						}
+						else if (f.getFluid().equals(tr.getFluid())) {
+							tr.addLiquid(fluid, size*f.amount);
+							if (!ep.capabilities.isCreativeMode) {
+								if (bucket)
+									ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, size, 0));
+								else
+									ep.setCurrentItemOrArmor(0, null);
+							}
+							((TileEntityBase)te).syncAllData(true);
+							if (!world.isRemote)
+								ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
 							return true;
 						}
 					}
@@ -630,8 +671,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 	}
 
 	@Override
-	public final boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata)
-	{
+	public final boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata) {
 		return false;
 	}
 
@@ -727,46 +767,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		}
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir tr = (TileEntityReservoir)tile;
-			if (!tr.isEmpty() && !tr.isCovered && e instanceof EntityLivingBase) {
-				if (tr.getFluid().equals(FluidRegistry.LAVA) || tr.getFluid().getTemperature(world, x, y, z) > 500) {
-					e.attackEntityFrom(DamageSource.lava, 4);
-					e.setFire(12);
-				}
-				else if (tr.getFluid().equals(FluidRegistry.WATER)) {
-					e.extinguish();
-				}
-				else if (tr.getFluid().equals(FluidRegistry.getFluid("rc ethanol"))) {
-					EntityLivingBase eb = (EntityLivingBase)e;
-					PotionEffect eff = eb.getActivePotionEffect(Potion.confusion);
-					int dura = 1;
-					if (eff != null) {
-						dura = eff.getDuration()+1;
-					}
-					if (dura > 600)
-						dura = 600;
-					eb.addPotionEffect(new PotionEffect(Potion.confusion.id, dura, 3));
-				}
-				else if (tr.getFluid().equals(FluidRegistry.getFluid("rc jet fuel"))) {
-					if (e instanceof EntityLivingBase) {
-						EntityLivingBase eb = (EntityLivingBase)e;
-						PotionEffect eff = eb.getActivePotionEffect(Potion.poison);
-						if (eff == null)
-							eb.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-					}
-				}
-				else if (tr.getFluid().getName().toLowerCase().contains("ammonia")) {
-					EntityLivingBase eb = (EntityLivingBase)e;
-					PotionEffect eff = eb.getActivePotionEffect(Potion.poison);
-					if (eff == null)
-						eb.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-				}
-				else {
-					Fluid f = tr.getFluid();
-					if (f.canBePlacedInWorld()) {
-						Block b = f.getBlock();
-						b.onEntityCollidedWithBlock(world, x, y, z, e);
-					}
-				}
+			if (e instanceof EntityLivingBase) {
+				tr.applyFluidEffectsToEntity((EntityLivingBase)e);
 			}
 		}
 	}

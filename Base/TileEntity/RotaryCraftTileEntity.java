@@ -171,7 +171,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	public boolean isSelfBlock() {
 		if (worldObj.getBlock(xCoord, yCoord, zCoord) != this.getTileEntityBlockID())
 			return false;
-		int meta = this.getMachine().getMachineMetadata();
+		int meta = this.getMachine().getBlockMetadata();
 		return meta == worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
@@ -236,7 +236,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		Block id2 = this.getTileEntityBlockID();
-		int meta2 = this.getMachine().getMachineMetadata();
+		int meta2 = this.getMachine().getBlockMetadata();
 		return id2 == id && meta2 == meta;
 	}
 

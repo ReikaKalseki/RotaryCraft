@@ -204,7 +204,7 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityWeatherController;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
-public enum MachineRegistry implements TileEnum<MachineRegistry> {
+public enum MachineRegistry implements TileEnum {
 
 	BEDROCKBREAKER(		"machine.bedrock", 			BlockDMMachine.class,		TileEntityBedrockBreaker.class,		0,	"RenderBedrockBreaker"),
 	ENGINE(				"machine.engine", 			BlockEngine.class,			TileEntityEngine.class,				0,	"RenderSEngine"),
@@ -513,7 +513,7 @@ public enum MachineRegistry implements TileEnum<MachineRegistry> {
 		return machineMappings.get(id, meta);
 	}
 
-	public int getMachineMetadata() {
+	public int getBlockMetadata() {
 		return meta;
 	}
 

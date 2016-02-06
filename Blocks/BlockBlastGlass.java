@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -87,9 +88,9 @@ public class BlockBlastGlass extends BlockBasic implements ConnectedTextureGlass
 		ItemStack item = ep.inventory.getCurrentItem();
 		if (item == null)
 			return false;
-		if (item.getItem() != Items.diamond_pickaxe && item.getItem() != ItemRegistry.BEDPICK.getItemInstance())
-			return false;
-		return true;
+		if (item.getItem() == Items.diamond_pickaxe || item.getItem() == ItemRegistry.BEDPICK.getItemInstance())
+			return true;
+		return item.getItem().canHarvestBlock(Blocks.obsidian, item);
 	}
 
 	/** This block can only be destroyed by the wither explosions - this in effect makes it witherproof */

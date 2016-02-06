@@ -10,17 +10,17 @@
 package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Base.GuiEngine;
 import Reika.RotaryCraft.Containers.Machine.ContainerSteam;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;
 
-public class GuiSteam extends GuiNonPoweredMachine
+public class GuiSteam extends GuiEngine
 {
 	private TileEntitySteamEngine Steam;
 
 	public GuiSteam(EntityPlayer p5ep, TileEntitySteamEngine te)
 	{
-		super(new ContainerSteam(p5ep, te), te);
+		super(new ContainerSteam(p5ep, te), te, p5ep);
 		Steam = te;
 		xSize = 176;
 		ySize = 79;
@@ -49,6 +49,26 @@ public class GuiSteam extends GuiNonPoweredMachine
 	@Override
 	protected String getGuiTexture() {
 		return "steamgui";
+	}
+
+	@Override
+	protected int getFuelBarXPos() {
+		return 48;
+	}
+
+	@Override
+	protected int getFuelBarYPos() {
+		return 16;
+	}
+
+	@Override
+	protected int getFuelBarXSize() {
+		return 6;
+	}
+
+	@Override
+	protected int getFuelBarYSize() {
+		return 55;
 	}
 
 }

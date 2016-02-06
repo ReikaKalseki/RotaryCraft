@@ -527,7 +527,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		World world = worldObj;
 		Block b = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		return b != this.getMachine().getBlock() || meta != this.getMachine().getMachineMetadata();
+		return b != this.getMachine().getBlock() || meta != this.getMachine().getBlockMetadata();
 	}
 
 	@Override

@@ -72,103 +72,103 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0://-z and +x -> -x
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.NORTH;
-			write = ForgeDirection.WEST;
-			write2 = null;
-			break;
-		case 1: //+z and +x -> -z
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.SOUTH;
-			write = ForgeDirection.NORTH;
-			write2 = null;
-			break;
-		case 2: //+z and -x -> +x
-			read = ForgeDirection.SOUTH;
-			read2 = ForgeDirection.WEST;
-			write = ForgeDirection.EAST;
-			write2 = null;
-			break;
-		case 3: //-z and -x -> +z
-			read = ForgeDirection.NORTH;
-			read2 = ForgeDirection.WEST;
-			write = ForgeDirection.SOUTH;
-			write2 = null;
-			break;
-		case 4://+z and +x -> -x
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.SOUTH;
-			write = ForgeDirection.WEST;
-			write2 = null;
-			break;
-		case 5: //+z and -x -> -z
-			read = ForgeDirection.WEST;
-			read2 = ForgeDirection.SOUTH;
-			write = ForgeDirection.NORTH;
-			write2 = null;
-			break;
-		case 6: //-z and -x -> +x
-			read = ForgeDirection.NORTH;
-			read2 = ForgeDirection.WEST;
-			write = ForgeDirection.EAST;
-			write2 = null;
-			break;
-		case 7: //-z and +x -> +z
-			read = ForgeDirection.NORTH;
-			read2 = ForgeDirection.EAST;
-			write = ForgeDirection.SOUTH;
-			write2 = null;
-			break;
-			//---------------------------SPLITTER-----------------------------------
-		case 8://-z and +x <- -x
-			read2 = null;
-			read = ForgeDirection.WEST;
-			write = ForgeDirection.EAST;
-			write2 = ForgeDirection.NORTH;
-			break;
-		case 9: //+z and +x <- -z
-			read = ForgeDirection.NORTH;
-			read2 = null;
-			write = ForgeDirection.SOUTH;
-			write2 = ForgeDirection.EAST;
-			break;
-		case 10: //+z and -x <- +x
-			read = ForgeDirection.EAST;
-			read2 = null;
-			write = ForgeDirection.WEST;
-			write2 = ForgeDirection.SOUTH;
-			break;
-		case 11: //-z and -x <- +z
-			read = ForgeDirection.SOUTH;
-			read2 = null;
-			write = ForgeDirection.NORTH;
-			write2 = ForgeDirection.WEST;
-			break;
-		case 12://+z and +x <- -x
-			read = ForgeDirection.WEST;
-			read2 = null;
-			write = ForgeDirection.EAST;
-			write2 = ForgeDirection.SOUTH;
-			break;
-		case 13: //+z and -x <- -z
-			read = ForgeDirection.NORTH;
-			read2 = null;
-			write = ForgeDirection.SOUTH;
-			write2 = ForgeDirection.WEST;
-			break;
-		case 14: //-z and -x <- +x
-			read = ForgeDirection.EAST;
-			read2 = null;
-			write = ForgeDirection.WEST;
-			write2 = ForgeDirection.NORTH;
-			break;
-		case 15: //-z and +x <- +z
-			read = ForgeDirection.SOUTH;
-			read2 = null;
-			write = ForgeDirection.NORTH;
-			write2 = ForgeDirection.EAST;
-			break;
+			case 0://-z and +x -> -x
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.NORTH;
+				write = ForgeDirection.WEST;
+				write2 = null;
+				break;
+			case 1: //+z and +x -> -z
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.SOUTH;
+				write = ForgeDirection.NORTH;
+				write2 = null;
+				break;
+			case 2: //+z and -x -> +x
+				read = ForgeDirection.SOUTH;
+				read2 = ForgeDirection.WEST;
+				write = ForgeDirection.EAST;
+				write2 = null;
+				break;
+			case 3: //-z and -x -> +z
+				read = ForgeDirection.NORTH;
+				read2 = ForgeDirection.WEST;
+				write = ForgeDirection.SOUTH;
+				write2 = null;
+				break;
+			case 4://+z and +x -> -x
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.SOUTH;
+				write = ForgeDirection.WEST;
+				write2 = null;
+				break;
+			case 5: //+z and -x -> -z
+				read = ForgeDirection.WEST;
+				read2 = ForgeDirection.SOUTH;
+				write = ForgeDirection.NORTH;
+				write2 = null;
+				break;
+			case 6: //-z and -x -> +x
+				read = ForgeDirection.NORTH;
+				read2 = ForgeDirection.WEST;
+				write = ForgeDirection.EAST;
+				write2 = null;
+				break;
+			case 7: //-z and +x -> +z
+				read = ForgeDirection.NORTH;
+				read2 = ForgeDirection.EAST;
+				write = ForgeDirection.SOUTH;
+				write2 = null;
+				break;
+				//---------------------------SPLITTER-----------------------------------
+			case 8://-z and +x <- -x
+				read2 = null;
+				read = ForgeDirection.WEST;
+				write = ForgeDirection.EAST;
+				write2 = ForgeDirection.NORTH;
+				break;
+			case 9: //+z and +x <- -z
+				read = ForgeDirection.NORTH;
+				read2 = null;
+				write = ForgeDirection.SOUTH;
+				write2 = ForgeDirection.EAST;
+				break;
+			case 10: //+z and -x <- +x
+				read = ForgeDirection.EAST;
+				read2 = null;
+				write = ForgeDirection.WEST;
+				write2 = ForgeDirection.SOUTH;
+				break;
+			case 11: //-z and -x <- +z
+				read = ForgeDirection.SOUTH;
+				read2 = null;
+				write = ForgeDirection.NORTH;
+				write2 = ForgeDirection.WEST;
+				break;
+			case 12://+z and +x <- -x
+				read = ForgeDirection.WEST;
+				read2 = null;
+				write = ForgeDirection.EAST;
+				write2 = ForgeDirection.SOUTH;
+				break;
+			case 13: //+z and -x <- -z
+				read = ForgeDirection.NORTH;
+				read2 = null;
+				write = ForgeDirection.SOUTH;
+				write2 = ForgeDirection.WEST;
+				break;
+			case 14: //-z and -x <- +x
+				read = ForgeDirection.EAST;
+				read2 = null;
+				write = ForgeDirection.WEST;
+				write2 = ForgeDirection.NORTH;
+				break;
+			case 15: //-z and +x <- +z
+				read = ForgeDirection.SOUTH;
+				read2 = null;
+				write = ForgeDirection.NORTH;
+				write2 = ForgeDirection.EAST;
+				break;
 		}
 		/*
 		if (write != null) {
@@ -408,11 +408,16 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				torque = torquein+torquein2;
 			}
 			else {
-				omega = ReikaMathLibrary.extrema(omegain, omegain2, "max");
-				if (omega == omegain)
-					torque = torquein;
-				else
-					torque = torquein2;
+				omega = omegain == 0 || omegain2 == 0 ? Math.max(omegain, omegain2) : rand.nextInt(Math.max(1+omegain, 1+omegain2));
+				if (omegain == 0 || omegain2 == 0) {
+					if (omega == omegain)
+						torque = torquein;
+					else
+						torque = torquein2;
+				}
+				else {
+					torque = rand.nextInt(Math.min(1+torquein, 1+torquein2));
+				}
 				if (omegain != 0 && omegain2 != 0) {
 					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.1F, 1F);
@@ -692,26 +697,26 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	public String getRatioForDisplay() {
 		switch(splitmode) {
-		case 32:
-			return "31:1 Inline";
-		case -32:
-			return "1:31 Bend";
-		case 16:
-			return "15:1 Inline";
-		case -16:
-			return "1:15 Bend";
-		case 8:
-			return "7:1 Inline";
-		case -8:
-			return "1:7 Bend";
-		case 4:
-			return "3:1 Inline";
-		case -4:
-			return "1:3 Bend";
-		case 1:
-			return "1:1 Even";
-		default:
-			return "ERROR";
+			case 32:
+				return "31:1 Inline";
+			case -32:
+				return "1:31 Bend";
+			case 16:
+				return "15:1 Inline";
+			case -16:
+				return "1:15 Bend";
+			case 8:
+				return "7:1 Inline";
+			case -8:
+				return "1:7 Bend";
+			case 4:
+				return "3:1 Inline";
+			case -4:
+				return "1:3 Bend";
+			case 1:
+				return "1:1 Even";
+			default:
+				return "ERROR";
 		}
 	}
 

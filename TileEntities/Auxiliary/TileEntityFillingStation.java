@@ -40,6 +40,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
+		super.updateTileEntity();
 		this.getIOSidesDefault(world, x, y, z, meta);
 		this.getPower(false);
 		if (power < MINPOWER)

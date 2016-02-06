@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
@@ -36,9 +37,11 @@ import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
+import Reika.DragonAPI.Auxiliary.Trackers.ConfigMatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.FurnaceFuelRegistry;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
@@ -46,6 +49,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
@@ -95,6 +99,7 @@ import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Items.ItemFuelTank;
+import Reika.RotaryCraft.ModInterface.AgriCanola;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.MachineAspectMapper;
 import Reika.RotaryCraft.ModInterface.OreForcer;
@@ -111,6 +116,10 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import com.InfinityRaider.AgriCraft.api.API;
+import com.InfinityRaider.AgriCraft.api.v1.APIv1;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -245,8 +254,6 @@ public class RotaryCraft extends DragonAPIMod {
 	public void preload(FMLPreInitializationEvent evt) {
 		this.startTiming(LoadPhase.PRELOAD);
 		this.verifyInstallation();
-		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
-		FMLCommonHandler.instance().bus().register(RotaryEventManager.instance);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 			MinecraftForge.EVENT_BUS.register(JetpackFuelOverlay.instance);
 
@@ -276,6 +283,9 @@ public class RotaryCraft extends DragonAPIMod {
 
 		this.setupClassFiles();
 
+		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
+		FMLCommonHandler.instance().bus().register(RotaryEventManager.instance);
+
 		if (!this.isLocked()) {
 			if (ConfigRegistry.ACHIEVEMENTS.getState()) {
 				achievements = new Achievement[RotaryAchievements.list.length];
@@ -304,6 +314,8 @@ public class RotaryCraft extends DragonAPIMod {
 		CompatibilityTracker.instance.registerIncompatibility(ModList.ROTARYCRAFT, ModList.GREGTECH, CompatibilityTracker.Severity.GLITCH, "The GT unifier registers HSLA steel as standard OreDict steel. This breaks the techtrees of mods like RailCraft and TConstruct.");
 
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
+
+		ConfigMatcher.instance.addConfigList(this, ConfigRegistry.optionList);
 
 		this.basicSetup(evt);
 		this.finishTiming();
@@ -491,7 +503,29 @@ public class RotaryCraft extends DragonAPIMod {
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.cokeblock, 12*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthrablock, 24*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 
+		if (ModList.AGRICRAFT.isLoaded()) {
+			this.addCanolaHandler();
+		}
+
 		this.finishTiming();
+	}
+
+	@ModDependent(ModList.AGRICRAFT)
+	private void addCanolaHandler() {
+		//Remove native handler for now
+		try {
+			Class c = Class.forName("com.InfinityRaider.AgriCraft.compatibility.ModHelper");
+			Field f = c.getDeclaredField("modHelpers");
+			f.setAccessible(true);
+			HashMap<String, Object> map = (HashMap<String, Object>)f.get(null);
+			map.remove(this.getModContainer().getModId());
+		}
+		catch (Exception e) {
+			ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.AGRICRAFT, e);
+			e.printStackTrace();
+		}
+
+		((APIv1)API.getAPI(2)).registerCropPlant(new AgriCanola());
 	}
 
 	@Override

@@ -70,6 +70,12 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 			}
 			liquid -= this.getWaterConsumption();
 		}
+
+		this.doAnimations();
+	}
+
+	protected void doAnimations() {
+
 	}
 
 	public final boolean canPerformEffects() {

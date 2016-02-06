@@ -421,7 +421,7 @@ public class MachineAspectMapper {
 			else {
 				ItemStack is = m.getCraftedProduct();
 				ReikaThaumHelper.addAspects(is, this.getAspects(m, 0));
-				ReikaThaumHelper.addAspectsToBlockMeta(m.getBlock(), m.getMachineMetadata(), this.getAspects(m, 0));
+				ReikaThaumHelper.addAspectsToBlockMeta(m.getBlock(), m.getBlockMetadata(), this.getAspects(m, 0));
 			}
 		}
 	}

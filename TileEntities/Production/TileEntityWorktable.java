@@ -60,7 +60,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 				this.coolJetpacks();
 				this.wingJetpacks();
 				this.makeBedjump();
-				this.makeNightHelmet();
+				this.makeHelmetUpgrades();
 			}
 
 			if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
@@ -74,15 +74,50 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		}
 	}
 
-	private void makeNightHelmet() {
+	private void makeHelmetUpgrades() {
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDHELM.getItemInstance(), inv);
-		int visslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.NVG.getItemInstance(), inv);
-		if (visslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
-			ItemStack is = inv[armorslot].copy();
-			inv[visslot] = null;
-			inv[armorslot] = null;
-			HelmetUpgrades.NIGHTVISION.enable(is, true);
-			inv[9] = is;
+		if (armorslot == -1)
+			ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDREVEAL.getItemInstance(), inv);
+		if (armorslot != -1) {
+			for (int i = 0; i < HelmetUpgrades.list.length; i++) {
+				HelmetUpgrades g = HelmetUpgrades.list[i];
+				if (g.isAvailable) {
+					ItemStack[] rec = g.getUpgradeItems();
+					boolean flag = false;
+					int itemslot = -1;
+					if (rec.length == 1) { //shapeless
+						itemslot = ReikaInventoryHelper.locateInInventory(rec[0], inv, false);
+						flag = itemslot != -1;
+					}
+					else if (armorslot == 4) {
+						boolean flag2 = true;
+						for (int k = 0; k < rec.length; k++) {
+							ItemStack is = rec[k];
+							ItemStack in = inv[k >= 4 ? k+1 : k];
+							if (!ReikaItemHelper.matchStacks(in, is)) {
+								flag2 = false;
+								break;
+							}
+						}
+						flag = flag2;
+					}
+					if (flag && ReikaInventoryHelper.isEmptyFrom(this, 9, 17)) {
+						ItemStack is = inv[armorslot].copy();
+						if (itemslot != -1) {
+							inv[itemslot] = null;
+							inv[armorslot] = null;
+						}
+						else {
+							for (int k = 0; k < 9; k++) {
+								ReikaInventoryHelper.decrStack(k, inv);
+							}
+							inv[armorslot] = null;
+						}
+						g.enable(is, true);
+						inv[9] = is;
+					}
+				}
+			}
 		}
 	}
 

@@ -102,7 +102,9 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 		}
 
 		if (is.stackTagCompound.hasKey("lube") && mat.needsLubricant()) {
-			par3List.add("Lubricant: "+is.stackTagCompound.getInteger("lube")+" mB");
+			int amt = is.stackTagCompound.getInteger("lube");
+			String s = is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/TileEntityGearbox.getMaxLubricant(mat)) : "Lubricant: "+amt+" mB";
+			par3List.add(s);
 		}
 	}
 

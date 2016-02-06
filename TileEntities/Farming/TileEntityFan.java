@@ -22,8 +22,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Interfaces.Registry.CropType.CropMethods;
+import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -132,7 +132,10 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 	private boolean isStoppedBy(World world, int x, int y, int z) {
 		Block b = world.getBlock(x, y, z);
-		if (b == Blocks.air)
+		if (b == Blocks.air || b.isAir(world, x, y, z))
+			return false;
+		int meta = world.getBlockMetadata(x, y, z);
+		if (ReikaCropHelper.isCrop(b) || ModCropList.isModCrop(b, meta))
 			return false;
 		if (b.isOpaqueCube() || b.renderAsNormalBlock())
 			return true;
@@ -361,54 +364,54 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		int maxz = 0;
 
 		switch (meta) {
-		case 0:
-			minx = xCoord-range;
-			maxx = xCoord;
-			miny = yCoord;
-			maxy = yCoord+1;
-			minz = zCoord;
-			maxz = zCoord+1;
-			break;
-		case 1:
-			minx = xCoord+1;
-			maxx = xCoord+range+1;
-			miny = yCoord;
-			maxy = yCoord+1;
-			minz = zCoord;
-			maxz = zCoord+1;
-			break;
-		case 2:
-			maxz = zCoord+range+1;
-			minz = zCoord+1;
-			miny = yCoord;
-			maxy = yCoord+1;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
-		case 3:
-			maxz = zCoord;
-			minz = zCoord-range;
-			miny = yCoord;
-			maxy = yCoord+1;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
-		case 4:
-			minz = zCoord;
-			maxz = zCoord+1;
-			miny = yCoord+1;
-			maxy = yCoord+range+1;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
-		case 5:
-			minz = zCoord;
-			maxz = zCoord+1;
-			maxy = yCoord;
-			miny = yCoord-range;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
+			case 0:
+				minx = xCoord-range;
+				maxx = xCoord;
+				miny = yCoord;
+				maxy = yCoord+1;
+				minz = zCoord;
+				maxz = zCoord+1;
+				break;
+			case 1:
+				minx = xCoord+1;
+				maxx = xCoord+range+1;
+				miny = yCoord;
+				maxy = yCoord+1;
+				minz = zCoord;
+				maxz = zCoord+1;
+				break;
+			case 2:
+				maxz = zCoord+range+1;
+				minz = zCoord+1;
+				miny = yCoord;
+				maxy = yCoord+1;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
+			case 3:
+				maxz = zCoord;
+				minz = zCoord-range;
+				miny = yCoord;
+				maxy = yCoord+1;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
+			case 4:
+				minz = zCoord;
+				maxz = zCoord+1;
+				miny = yCoord+1;
+				maxy = yCoord+range+1;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
+			case 5:
+				minz = zCoord;
+				maxz = zCoord+1;
+				maxy = yCoord;
+				miny = yCoord-range;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
 		}
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.0, 0.0, 0.0);
 	}

@@ -29,6 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -69,18 +70,18 @@ public class RenderFillingStation extends RotaryTERenderer
 
 		if (tile.isInWorld()) {
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 180;
-				break;
-			case 1:
-				var11 = 0;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 180;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
@@ -101,6 +102,7 @@ public class RenderFillingStation extends RotaryTERenderer
 			this.renderTileEntityFillingStationAt((TileEntityFillingStation)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			this.renderLiquid(tile, par2, par4, par6);
+			IORenderer.renderIO(tile, par2, par4, par6);
 		}
 		this.renderItem(tile, par2, par4, par6);
 	}
@@ -113,18 +115,18 @@ public class RenderFillingStation extends RotaryTERenderer
 		double ddx = 0;
 		double ddz = 0;
 		switch(tr.getBlockMetadata()) {
-		case 0:
-			dx = 0.25;
-			break;
-		case 1:
-			ddx = 0.25;
-			break;
-		case 2:
-			dz = 0.25;
-			break;
-		case 3:
-			ddz = 0.25;
-			break;
+			case 0:
+				dx = 0.25;
+				break;
+			case 1:
+				ddx = 0.25;
+				break;
+			case 2:
+				dz = 0.25;
+				break;
+			case 3:
+				ddz = 0.25;
+				break;
 		}
 		if (!tr.isEmpty() && tr.isInWorld()) {
 			Fluid f = tr.getFluid();
@@ -168,24 +170,24 @@ public class RenderFillingStation extends RotaryTERenderer
 
 		float var11 = 0;
 		switch(tile.getBlockMetadata()) {
-		case 0:
-			var11 = 180;
-			break;
-		case 1:
-			var11 = 0;
-			xoff = 1;
-			zoff = -1;
-			break;
-		case 2:
-			var11 = 270;
-			in = -in;
-			break;
-		case 3:
-			var11 = 90;
-			xoff = 1;
-			zoff = 1;
-			in = -in;
-			break;
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 0;
+				xoff = 1;
+				zoff = -1;
+				break;
+			case 2:
+				var11 = 270;
+				in = -in;
+				break;
+			case 3:
+				var11 = 90;
+				xoff = 1;
+				zoff = 1;
+				in = -in;
+				break;
 		}
 
 		GL11.glTranslated(par2, par4, par6);

@@ -36,8 +36,8 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 public class TorqueUsage {
 
 	private static int torque;
-	private static TileEntityCache<Boolean> TEMap = new TileEntityCache();
-	private static TileEntityCache<Double> TEMapR = new TileEntityCache();
+	private static final TileEntityCache<Boolean> TEMap = new TileEntityCache();
+	private static final TileEntityCache<Double> TEMapR = new TileEntityCache();
 	private static TileEntityFlywheel readingTile;
 
 	public static int getTorque(TileEntityFlywheel te) {

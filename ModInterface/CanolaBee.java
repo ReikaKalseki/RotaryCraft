@@ -12,13 +12,23 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Effect;
+import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Fertility;
+import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Flowering;
+import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Life;
+import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Speeds;
+import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Territory;
+import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Tolerance;
 import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
 import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -34,7 +44,13 @@ import forestry.api.genetics.IFlowerProvider;
 
 public class CanolaBee extends BeeSpecies {
 
+	private static final String LOGGER_ID = "CanolaBee";
+
 	private final AlleleCanola canola = new AlleleCanola();
+
+	static {
+		ModularLogger.instance.addLogger(RotaryCraft.instance, LOGGER_ID);
+	}
 
 	public CanolaBee() { //cultivated + meadows
 		super("Slippery", "bee.canola", "Mechanica Lubrica", "Reika");
@@ -43,7 +59,7 @@ public class CanolaBee extends BeeSpecies {
 		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 50);
 		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 12);
 		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 5);
-		if (ConfigRegistry.BEEYEAST.getState()) {
+		if (ConfigRegistry.enableBeeYeast()) {
 			this.addSpecialty(ItemRegistry.YEAST.getStackOf(), 20);
 		}
 	}
@@ -73,32 +89,35 @@ public class CanolaBee extends BeeSpecies {
 		 */
 		@Override
 		public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
+			if (ModularLogger.instance.isEnabled(LOGGER_ID))
+				ModularLogger.instance.log(LOGGER_ID, "Canola bee @ "+x+", "+y+", "+z+" running growFlower");
 			int r = 24;
+			int n = 4;
 			boolean flag = false;
-			for (int i = -r; i <= r; i++) {
-				for (int j = -r; j <= r; j++) {
-					for (int k = -r; k <= r; k++) {
-						int dx = x+i;
-						int dy = y+j;
-						int dz = z+k;
-						if (dy > 0) {
-							Block b = world.getBlock(dx, dy, dz);
-							int meta = world.getBlockMetadata(dx, dy, dz);
-							if (b == BlockRegistry.CANOLA.getBlockInstance()) {
-								if (meta < 9) {
-									//world.scheduleBlockUpdate(dx, dy, dz, b, 20+rand.nextInt(20)); //was 20+rand(300)
-									if (rand.nextInt(3) == 0) {
-										b.updateTick(world, dx, dy, dz, rand);
-										BlockTickEvent.fire(world, dx, dy, dz, b, UpdateFlags.FORCED.flag);
-									}
-									flag = true;
-								}
-							}
+			for (int i = 0; i < n; i++) {
+				//for (int i = -r; i <= r; i++) {
+				//	for (int j = -r; j <= r; j++) {
+				//		for (int k = -r; k <= r; k++) {
+				int dx = ReikaRandomHelper.getRandomPlusMinus(x, r);//x+i;
+				int dy = ReikaRandomHelper.getRandomPlusMinus(y, r);//y+j;
+				int dz = ReikaRandomHelper.getRandomPlusMinus(z, r);//z+k;
+				if (dy > 0) {
+					Block b = world.getBlock(dx, dy, dz);
+					int meta = world.getBlockMetadata(dx, dy, dz);
+					if (b == BlockRegistry.CANOLA.getBlockInstance()) {
+						if (meta < 9) {
+							//world.scheduleBlockUpdate(dx, dy, dz, b, 20+rand.nextInt(20)); //was 20+rand(300)
+							b.updateTick(world, dx, dy, dz, rand);
+							BlockTickEvent.fire(world, dx, dy, dz, b, UpdateFlags.FORCED.flag);
+							flag = true;
 						}
 					}
 				}
+				//		}
+				//	}
+				//}
 			}
-			return flag;
+			return true;//flag;
 		}
 
 		@Override
@@ -224,6 +243,11 @@ public class CanolaBee extends BeeSpecies {
 	@Override
 	public IAllele getEffectAllele() {
 		return Effect.NONE.getAllele();
+	}
+
+	@Override
+	public boolean isTolerantFlyer() {
+		return false;
 	}
 
 }

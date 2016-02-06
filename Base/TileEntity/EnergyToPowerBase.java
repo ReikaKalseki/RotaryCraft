@@ -293,8 +293,10 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 
 	protected final void updateSpeed() {
 		int maxspeed = this.getMaxSpeed();
+		float mult = 1;
 		boolean accel = omega <= maxspeed && this.hasEnoughEnergy();
 		if (accel) {
+			mult = 1.5F;
 			omega += 4*ReikaMathLibrary.logbase(maxspeed+1, 2);
 			if (omega > maxspeed)
 				omega = maxspeed;
@@ -307,15 +309,15 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		torque = this.getActualTorque();
 		power = (long)torque*(long)omega;
 		if (power > 0 && !worldObj.isRemote) {
-			this.usePower();
+			this.usePower(mult);
 			//if (worldObj.getTotalWorldTime()%(21-4*tier) == 0) {
 			//	tank.removeLiquid(1);
 			//}
 		}
 	}
 
-	protected void usePower() {
-		storedEnergy -= this.getConsumedUnitsPerTick();
+	protected void usePower(float mult) {
+		storedEnergy -= this.getConsumedUnitsPerTick()*mult;
 		if (storedEnergy < 0)
 			storedEnergy = 0;
 	}

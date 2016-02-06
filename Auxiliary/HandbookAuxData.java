@@ -58,6 +58,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecip
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
@@ -206,10 +207,12 @@ public final class HandbookAuxData {
 		ItemStack out;
 		ItemStack[] in = new ItemStack[2];
 		ItemStack[] args;
-		out = (ItemRegistry.YEAST.getStackOf());
-		in = new ItemStack[]{new ItemStack(Items.sugar), new ItemStack(Blocks.dirt)};
-		args = new ItemStack[]{out, in[0], in[1]};
-		fermenter.add(args);
+		if (ConfigRegistry.enableFermenterYeast()) {
+			out = (ItemRegistry.YEAST.getStackOf());
+			in = new ItemStack[]{new ItemStack(Items.sugar), new ItemStack(Blocks.dirt)};
+			args = new ItemStack[]{out, in[0], in[1]};
+			fermenter.add(args);
+		}
 
 		Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 		for (ItemStack plant : li) {

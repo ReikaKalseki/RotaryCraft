@@ -85,7 +85,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				return;
 			}
 			ReikaTextureHelper.bindTerrainTexture();
-			rb.renderBlockAsItem(m.getBlock(), m.getMachineMetadata(), 1F);
+			rb.renderBlockAsItem(m.getBlock(), m.getBlockMetadata(), 1F);
 			return;
 		}
 		float a = 0; float b = 0;
@@ -109,6 +109,8 @@ public class ItemMachineRenderer implements IItemRenderer {
 			gbx.setType(MaterialRegistry.matList[item.getItemDamage()%5]);
 			int amt = item.stackTagCompound != null ? item.stackTagCompound.getInteger("lube") : 0;
 			gbx.setLubricant(amt);
+			if (item.stackTagCompound != null)
+				gbx.setDataFromItemStackTag(item.stackTagCompound);
 			TileEntityRendererDispatcher.instance.renderTileEntityAt(gbx, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
 		}
 		else if (ItemRegistry.ADVGEAR.matchItem(item)) {
@@ -170,7 +172,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 					double d = 0.5;
 					GL11.glTranslated(d, d, d);
 				}
-				rb.renderBlockAsItem(BlockRegistry.PIPING.getBlockInstance(), machine.getMachineMetadata(), 1);
+				rb.renderBlockAsItem(BlockRegistry.PIPING.getBlockInstance(), machine.getBlockMetadata(), 1);
 			}
 			else if (machine.hasModel()) {
 				TileEntity te = this.getRenderingInstance(machine, 0);
@@ -196,7 +198,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				else if (RenderItem.renderInFrame && type == type.ENTITY) {
 					GL11.glRotated(90, 0, 1, 0);
 				}
-				rb.renderBlockAsItem(MachineRegistry.machineList.get(item.getItemDamage()).getBlock(), MachineRegistry.machineList.get(item.getItemDamage()).getMachineMetadata(), 1);
+				rb.renderBlockAsItem(MachineRegistry.machineList.get(item.getItemDamage()).getBlock(), MachineRegistry.machineList.get(item.getItemDamage()).getBlockMetadata(), 1);
 				if (enchant) {
 					GL11.glRotated(90, 0, 0, 1);
 					ReikaSpriteSheets.renderEffect(type, item);

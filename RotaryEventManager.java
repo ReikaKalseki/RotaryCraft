@@ -10,6 +10,7 @@
 package Reika.RotaryCraft;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -38,6 +39,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
 import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
@@ -46,6 +48,7 @@ import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
+import Reika.DragonAPI.Instantiable.Event.Client.PlayerInteractEventClient;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
@@ -82,9 +85,28 @@ public class RotaryEventManager {
 
 	public static final RotaryEventManager instance = new RotaryEventManager();
 
+	private static Method conduitGui;
+
 	private RotaryEventManager() {
 
 	}
+
+	@SubscribeEvent
+	@ModDependent(ModList.ENDERIO)
+	public void openConduitGUIWithScrewdriver(PlayerInteractEventClient evt) {
+		if (evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && ItemRegistry.SCREWDRIVER.matchItem(evt.entityPlayer.getCurrentEquippedItem())) {
+			Block b = evt.world.getBlock(evt.x, evt.y, evt.z);
+			if (b.getClass().getName().equals("crazypants.enderio.conduit.BlockConduitBundle")) {
+				try {
+					conduitGui.invoke(null, evt.world, evt.x, evt.y, evt.z, evt.entityPlayer);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	/*
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -381,7 +403,7 @@ public class RotaryEventManager {
 		}
 		world.setBlock(x, y, z, Blocks.air);
 		SoundRegistry.CRAFT.playSoundAtBlock(world, x, y, z);
-		world.setBlock(x, y-2, z, MachineRegistry.WORKTABLE.getBlock(), MachineRegistry.WORKTABLE.getMachineMetadata(), 3);
+		world.setBlock(x, y-2, z, MachineRegistry.WORKTABLE.getBlock(), MachineRegistry.WORKTABLE.getBlockMetadata(), 3);
 		return true;
 	}
 
@@ -456,6 +478,20 @@ public class RotaryEventManager {
 		catch (Exception ex) {
 			if (print)
 				ex.printStackTrace();
+		}
+	}
+
+	static {
+		if (ModList.ENDERIO.isLoaded()) {
+			try {
+				Class util = Class.forName("crazypants.enderio.conduit.ConduitUtil");
+				conduitGui = util.getMethod("openConduitGui", World.class, int.class, int.class, int.class, EntityPlayer.class);
+			}
+			catch (Exception e) {
+				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.ENDERIO, e);
+				RotaryCraft.logger.logError("Could not load EnderIO Conduit GUI method.");
+				e.printStackTrace();
+			}
 		}
 	}
 }

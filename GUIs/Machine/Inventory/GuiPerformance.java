@@ -10,46 +10,41 @@
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
-import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
-import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Base.GuiEngine;
 import Reika.RotaryCraft.Containers.Machine.ContainerPerformance;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityPerformanceEngine;
 
-public class GuiPerformance extends GuiNonPoweredMachine
+public class GuiPerformance extends GuiEngine
 {
 	private TileEntityPerformanceEngine engine;
-	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
-	int x;
-	int y;
-
-	public GuiPerformance(EntityPlayer p5ep, TileEntityPerformanceEngine te)
-	{
-		super(new ContainerPerformance(p5ep, te), te);
+	public GuiPerformance(EntityPlayer p5ep, TileEntityPerformanceEngine te) {
+		super(new ContainerPerformance(p5ep, te), te, p5ep);
 		engine = te;
 		xSize = 176;
 		ySize = 166;
-		ep = p5ep;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int a, int b)
-	{
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-		super.drawGuiContainerForegroundLayer(a, b);
-		int x = api.getMouseRealX();
-		int y = api.getMouseRealY();
-		if (api.isMouseInBox(j+81, j+88, k+16, k+71)) {
-			int time = engine.getFuelDuration();
-			String sg = String.format("Fuel: %s", ReikaFormatHelper.getSecondsAsClock(time));
-			api.drawTooltipAt(fontRendererObj, sg, x-j, y-k);
-		}
+	protected int getFuelBarXPos() {
+		return 81;
 	}
 
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
+	@Override
+	protected int getFuelBarYPos() {
+		return 16;
+	}
+
+	@Override
+	protected int getFuelBarXSize() {
+		return 7;
+	}
+
+	@Override
+	protected int getFuelBarYSize() {
+		return 55;
+	}
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{

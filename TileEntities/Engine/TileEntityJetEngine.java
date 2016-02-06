@@ -362,7 +362,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			if (!e.isDead && !(e instanceof EntityLivingBase && ((EntityLivingBase)e).getHealth() < 0))
 				SoundRegistry.INGESTION.playSoundAtBlock(world, x, y, z, 1, 1.4F);
 			e.attackEntityFrom(RotaryCraft.jetingest, 10000);
-			if (e instanceof EntityPlayer) {
+			if (e instanceof EntityPlayer && e == this.getPlacer()) {
 				RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)e);
 			}
 		}
@@ -501,15 +501,15 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			if (fuel.getLevel() < FUELCAP/12 && rand.nextInt(10) == 0) {
-				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
+				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this, 64);
 				this.backFire(world, x, y, z);
 			}
 			if (fuel.getLevel() < FUELCAP/4 && rand.nextInt(20) == 0) {
-				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
+				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this, 64);
 				this.backFire(world, x, y, z);
 			}
 			else if (rand.nextInt(40) == 0) {
-				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this);
+				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this, 64);
 				this.backFire(world, x, y, z);
 			}
 		}

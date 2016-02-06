@@ -25,7 +25,7 @@ public class TileEntitySuctionPipe extends TileEntityPiping {
 
 	@Override
 	public Block getPipeBlockType() {
-		return Blocks.sandstone;
+		return Blocks.nether_brick;
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class TileEntitySuctionPipe extends TileEntityPiping {
 
 	@Override
 	public IIcon getBlockIcon() {
-		return Blocks.sandstone.getIcon(1, 0);
+		return Blocks.nether_brick.getIcon(0, 0);
 	}
 
 	@Override

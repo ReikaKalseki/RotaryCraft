@@ -124,10 +124,10 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPne
 	}
 
 	@Override
-	protected void usePower() {
-		int amt = this.getAirPerTick();
+	protected void usePower(float mult) {
+		int amt = (int)(this.getAirPerTick()*mult);
 		if (ModList.PNEUMATICRAFT.isLoaded())
-			air.addAir(-amt, this.getConnection());//drain amt energy
+			air.addAir(-amt, this.getConnection()); //drain amt energy
 	}
 
 	public boolean isConnectedTo(ForgeDirection with) {
@@ -136,16 +136,16 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPne
 
 	private ForgeDirection getConnection() {
 		switch(this.getBlockMetadata()) {
-		case 0:
-			return ForgeDirection.NORTH;
-		case 1:
-			return ForgeDirection.WEST;
-		case 2:
-			return ForgeDirection.SOUTH;
-		case 3:
-			return ForgeDirection.EAST;
-		default:
-			return ForgeDirection.UNKNOWN;
+			case 0:
+				return ForgeDirection.NORTH;
+			case 1:
+				return ForgeDirection.WEST;
+			case 2:
+				return ForgeDirection.SOUTH;
+			case 3:
+				return ForgeDirection.EAST;
+			default:
+				return ForgeDirection.UNKNOWN;
 		}
 	}
 

@@ -15,6 +15,7 @@ import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
 import Reika.DragonAPI.Interfaces.Configuration.DecimalConfig;
 import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
+import Reika.DragonAPI.Interfaces.Configuration.MatchingConfig;
 import Reika.DragonAPI.Interfaces.Configuration.SegmentedConfigList;
 import Reika.DragonAPI.Interfaces.Configuration.SelectiveConfig;
 import Reika.DragonAPI.Interfaces.Configuration.StringConfig;
@@ -22,7 +23,7 @@ import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
 
-public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig {
+public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig, MatchingConfig {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	ENGINEVOLUME("Engine Volume", 1F),
@@ -113,7 +114,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	HSLAHARVEST("Increased Harvest Level for HSLA", false),
 	LATEDYNAMO("Rotational Dynamo Recipe Difficulty", 0),
 	BORERPOW("Borer Power Requirement Factor", 1F),
-	BEEYEAST("Use Forestry Bees To Produce Yeast", false);
+	BEEYEAST("Use Forestry Bees To Produce Yeast", 0);
 
 	private String label;
 	private boolean defaultState;
@@ -283,6 +284,46 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 
 	public static float getBorerPowerMult() {
 		return MathHelper.clamp_float(BORERPOW.getFloat(), 0.5F, 8F);
+	}
+
+	public static boolean enableFermenterYeast() {
+		return BEEYEAST.getValue() <= 1;
+	}
+
+	public static boolean enableBeeYeast() {
+		return BEEYEAST.getValue() >= 1;
+	}
+
+	@Override
+	public boolean enforceMatch() {
+		switch(this) {
+			case GPRORES:
+			case CRAFTABLEBEDROCK:
+			case MODORES:
+			case DIFFICULTY:
+			case TABLEMACHINES:
+			case ROTATEHOSE:
+			case HSLADICT:
+			case PREENCHANT:
+			case ALLOWTNTCANNON:
+			case ALLOWEMP:
+			case NOMINERS:
+			case PIPEHARDNESS:
+			case CONVERTERLOSS:
+			case ALLOWLIGHTBRIDGE:
+			case ALLOWITEMCANNON:
+			case ALLOWCHUNKLOADER:
+			case RECIPEMOD:
+			case STRONGRECIPEMOD:
+			case CORERECIPEMOD:
+			case LATEDYNAMO:
+			case BORERPOW:
+			case BEEYEAST:
+				//case BLASTGATE: Not a registry config
+				return true;
+			default:
+				return false;
+		}
 	}
 
 }

@@ -182,7 +182,7 @@ public enum ItemRegistry implements ItemEnum {
 	COMPACTS(6, true,				"item.compacts",			ItemMulti.class),
 	POWDERS(8, true,				"item.powder",				ItemMulti.class),
 	GEARUNITS(23, true,				"item.gearunits",			ItemMulti.class),
-	MODINTERFACE(14, true,			"item.modinterface",		ItemMulti.class),
+	MODINTERFACE(16, 2, true,		"item.modinterface",		ItemMulti.class),
 	MODEXTRACTS(-1, true,			"item.modextracts",			ItemModOre.class),
 	MODINGOTS(-1, true,				"item.modingots",			ItemModOre.class),
 	SPAWNER(0, false,				"item.spawner",				ItemSpawner.class),

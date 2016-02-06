@@ -26,7 +26,7 @@ public class BlockDMachine extends BlockBasicMultiTE {
 		if (RotaryCraft.instance.isLocked())
 			return;
 		//-------------Borer------------------------
-		int k = MachineRegistry.BORER.getMachineMetadata();
+		int k = MachineRegistry.BORER.getBlockMetadata();
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 4; j++)
 				icons[k][j][i][0] = ico.registerIcon("RotaryCraft:steel");
@@ -45,7 +45,7 @@ public class BlockDMachine extends BlockBasicMultiTE {
 		icons[k][3][3][0] = ico.registerIcon("RotaryCraft:borer_back");
 		icons[k][2][2][0] = ico.registerIcon("RotaryCraft:borer_back");
 
-		k = MachineRegistry.ARROWGUN.getMachineMetadata();
+		k = MachineRegistry.ARROWGUN.getBlockMetadata();
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 6; i++) {
 				icons[k][j][i][0] = ico.registerIcon("RotaryCraft:steel_dark");
@@ -64,17 +64,17 @@ public class BlockDMachine extends BlockBasicMultiTE {
 		icons[k][3][3][0] = ico.registerIcon("RotaryCraft:gun_back");
 		icons[k][2][2][0] = ico.registerIcon("RotaryCraft:gun_back");
 
-		k = MachineRegistry.SORTING.getMachineMetadata();
+		k = MachineRegistry.SORTING.getBlockMetadata();
 		String s = "RotaryCraft:sorter_side";
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				for (int n = 2; n < 6; n++) {
 					String tex = i > 0 ? String.format("%s%d", s, i) : s;
-					icons[MachineRegistry.SORTING.getMachineMetadata()][j][n][i] = ico.registerIcon(tex);
+					icons[MachineRegistry.SORTING.getBlockMetadata()][j][n][i] = ico.registerIcon(tex);
 				}
 			}
-			icons[MachineRegistry.SORTING.getMachineMetadata()][j][0][0] = ico.registerIcon("RotaryCraft:sorter_bottom");
-			icons[MachineRegistry.SORTING.getMachineMetadata()][j][1][0] = ico.registerIcon("RotaryCraft:sorter_top");
+			icons[MachineRegistry.SORTING.getBlockMetadata()][j][0][0] = ico.registerIcon("RotaryCraft:sorter_bottom");
+			icons[MachineRegistry.SORTING.getBlockMetadata()][j][1][0] = ico.registerIcon("RotaryCraft:sorter_top");
 		}
 
 		icons[k][1][4][0] = ico.registerIcon("RotaryCraft:sorter_input");
@@ -82,7 +82,7 @@ public class BlockDMachine extends BlockBasicMultiTE {
 		icons[k][2][2][0] = ico.registerIcon("RotaryCraft:sorter_input");
 		icons[k][3][3][0] = ico.registerIcon("RotaryCraft:sorter_input");
 
-		k = MachineRegistry.BUSCONTROLLER.getMachineMetadata();
+		k = MachineRegistry.BUSCONTROLLER.getBlockMetadata();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 4; j++) {
 				icons[k][j][i][0] = ico.registerIcon("RotaryCraft:buscontroller");
@@ -96,7 +96,7 @@ public class BlockDMachine extends BlockBasicMultiTE {
 		icons[k][3][3][0] = ico.registerIcon("RotaryCraft:borer_back");
 		icons[k][2][2][0] = ico.registerIcon("RotaryCraft:borer_back");
 
-		k = MachineRegistry.BLOWER.getMachineMetadata();
+		k = MachineRegistry.BLOWER.getBlockMetadata();
 		for (int j = 0; j < 6; j++) {
 			for (int i = 0; i < 6; i++) {
 				icons[k][j][i][0] = ico.registerIcon("RotaryCraft:steel_dark");

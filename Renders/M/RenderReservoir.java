@@ -25,6 +25,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -55,26 +56,24 @@ public class RenderReservoir extends RotaryTERenderer
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
-		if (tile.isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-			GL11.glEnable(GL11.GL_BLEND);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 0;	 //used to rotate the model about metadata
 
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			if (tile.getBlockMetadata() <= 3)
@@ -103,7 +102,6 @@ public class RenderReservoir extends RotaryTERenderer
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
@@ -111,17 +109,23 @@ public class RenderReservoir extends RotaryTERenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		TileEntityReservoir tr = (TileEntityReservoir)tile;
 		if (this.doRenderModel(tr)) {
 			this.renderTileEntityReservoirAt(tr, par2, par4, par6, par8);
+			GL11.glEnable(GL11.GL_BLEND);
+			BlendMode.DEFAULT.apply();
 			if (tr.isCovered) {
 				this.renderCover(tr, par2, par4, par6);
 			}
 		}
 
+		GL11.glEnable(GL11.GL_BLEND);
+		BlendMode.DEFAULT.apply();
 		if (MinecraftForgeClient.getRenderPass() == 1 || !((RotaryCraftTileEntity)tile).isInWorld()) {
 			this.renderLiquid(tile, par2, par4, par6);
 		}
+		GL11.glPopAttrib();
 	}
 
 	private void renderCover(TileEntityReservoir tr, double par2, double par4, double par6) {

@@ -97,11 +97,9 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 						boolean cansuck = true;
 						if (te instanceof ISidedInventory)
 							cansuck = ((ISidedInventory)te).canExtractItem(k, inslot, dir.getOpposite().ordinal());
-						if (inslot != null) {
-							if (this.canSuckStacks()) {
-								if (ReikaInventoryHelper.addToIInv(inslot.copy(), this)) {
-									ii.setInventorySlotContents(k, null);
-								}
+						if (cansuck) {
+							if (this.canSuckStacks() && ReikaInventoryHelper.addToIInv(inslot.copy(), this)) {
+								ii.setInventorySlotContents(k, null);
 							}
 							else {
 								int newsize = inslot.stackSize-1;

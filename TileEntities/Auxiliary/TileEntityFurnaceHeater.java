@@ -202,9 +202,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 						xp = MathHelper.ceiling_float_int(FurnaceRecipes.smelting().func_151398_b(smelt));
 					}
 					else if (special != null) {
+						ItemStack out2 = special.getOutput();
 						ReikaInventoryHelper.decrStack(0, tile, 1);
-						int amt = out != null ? out.stackSize+1 : 1;
-						out = ReikaItemHelper.getSizedItemStack(special.getOutput(), amt);
+						int amt = out != null ? out.stackSize+out2.stackSize : out2.stackSize;
+						out = ReikaItemHelper.getSizedItemStack(out2, amt);
 						tile.setInventorySlotContents(2, out);
 						xp = 1;
 					}

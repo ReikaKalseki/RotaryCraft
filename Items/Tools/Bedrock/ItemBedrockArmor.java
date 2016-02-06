@@ -20,32 +20,54 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.apiculture.IArmorApiarist;
 
-public class ItemBedrockArmor extends ItemRotaryArmor {
+@Strippable(value={"forestry.api.apiculture.IArmorApiarist"})
+public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist {
 
 	public ItemBedrockArmor(int tex, int render, int type) {
 		super(RotaryCraft.BEDROCK, render, type, tex);
 	}
 
 	public static enum HelmetUpgrades {
-		NIGHTVISION();
+		NIGHTVISION(),
+		APIARIST(ModList.FORESTRY);
 
-		private static final HelmetUpgrades[] list = values();
+		public static final HelmetUpgrades[] list = values();
+
+		public final boolean isAvailable;
+
+		private HelmetUpgrades() {
+			this(true);
+		}
+
+		private HelmetUpgrades(ModList mod) {
+			this(mod.isLoaded());
+		}
+
+		private HelmetUpgrades(boolean b) {
+			isAvailable = b;
+		}
 
 		public boolean existsOn(ItemStack is) {
 			return is.stackTagCompound != null && is.stackTagCompound.getBoolean(this.getNBT());
@@ -60,6 +82,16 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 				is.stackTagCompound = new NBTTagCompound();
 			is.stackTagCompound.setBoolean(this.getNBT(), set);
 		}
+
+		public ItemStack[] getUpgradeItems() {
+			switch(this) {
+				case NIGHTVISION:
+					return new ItemStack[]{ItemRegistry.NVG.getStackOf()};
+				case APIARIST:
+					return ReikaArrayHelper.getArrayOf(ForestryHandler.CraftingMaterials.WOVENSILK.getItem(), 8);
+			}
+			return null;
+		}
 	}
 
 	@Override
@@ -69,9 +101,33 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		ItemStack is = new ItemStack(id, 1, 0);
 		ReikaEnchantmentHelper.applyEnchantments(is, this.getDefaultEnchantments());
 		li.add(is);
-		ItemStack is2 = is.copy();
-		HelmetUpgrades.NIGHTVISION.enable(is2, true);
-		li.add(is2);
+
+		if (((ItemArmor)id).armorType == 0) {
+			ItemStack is3 = is.copy();
+
+			for (int i = 0; i < HelmetUpgrades.list.length; i++) {
+				HelmetUpgrades g = HelmetUpgrades.list[i];
+				ItemStack is2 = is.copy();
+				if (g.isAvailable) {
+					g.enable(is2, true);
+					g.enable(is3, true);
+					li.add(is2);
+				}
+			}
+
+			li.add(is3);
+		}
+	}
+
+	@Override
+	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean vb) {
+		super.addInformation(is, ep, li, vb);
+		for (int i = 0; i < HelmetUpgrades.list.length; i++) {
+			HelmetUpgrades g = HelmetUpgrades.list[i];
+			if (g.isAvailable && g.existsOn(is)) {
+				li.add("Upgraded: "+g.name());
+			}
+		}
 	}
 
 	@Override
@@ -86,19 +142,19 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 		HashMap<Enchantment, Integer> map = new HashMap();
 		if (ItemRegistry.getEntryByID(this).isBedrockArmor()) {
 			switch(armorType) {
-			case 0:
-				map.put(Enchantment.projectileProtection, 4);
-				map.put(Enchantment.respiration, 3);
-				break;
-			case 1:
-				map.put(Enchantment.blastProtection, 4);
-				break;
-			case 2:
-				map.put(Enchantment.fireProtection, 4);
-				break;
-			case 3:
-				map.put(Enchantment.featherFalling, 4);
-				break;
+				case 0:
+					map.put(Enchantment.projectileProtection, 4);
+					map.put(Enchantment.respiration, 3);
+					break;
+				case 1:
+					map.put(Enchantment.blastProtection, 4);
+					break;
+				case 2:
+					map.put(Enchantment.fireProtection, 4);
+					break;
+				case 3:
+					map.put(Enchantment.featherFalling, 4);
+					break;
 			}
 		}
 		return map;
@@ -182,6 +238,23 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
 		return this == ItemRegistry.BEDHELM.getItemInstance() && HelmetUpgrades.NIGHTVISION.existsOn(item) ? 48 : super.getItemSpriteIndex(item);
+	}
+
+	@Override
+	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
+		return ((ItemArmor)armor.getItem()).armorType == 0 ? HelmetUpgrades.APIARIST.existsOn(armor) : entity.getEquipmentInSlot(4) != null && HelmetUpgrades.APIARIST.existsOn(entity.getEquipmentInSlot(4));
+	}
+
+	@Override
+	@Deprecated
+	public boolean protectPlayer(EntityPlayer player, ItemStack armor, String cause, boolean doProtect) {
+		return this.protectEntity(player, armor, cause, doProtect);
+	}
+
+	@Override
+	public final void setDamage(ItemStack stack, int damage)
+	{
+
 	}
 
 }

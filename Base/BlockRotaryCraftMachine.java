@@ -23,9 +23,12 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.BlockTEBase;
+import Reika.DragonAPI.Interfaces.MachineRegistryBlock;
+import Reika.DragonAPI.Interfaces.Registry.TileEnum;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
-public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWailaDataProvider {
+public abstract class BlockRotaryCraftMachine extends BlockTEBase implements MachineRegistryBlock, IWailaDataProvider {
 
 	protected Random par5Random = new Random();
 
@@ -64,6 +67,10 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements IWa
 	@ModDependent(ModList.WAILA)
 	public final NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
 		return tag;
+	}
+
+	public final TileEnum getMachine(IBlockAccess world, int x, int y, int z) {
+		return MachineRegistry.getMachine(world, x, y, z);
 	}
 
 }

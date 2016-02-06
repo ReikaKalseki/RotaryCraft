@@ -51,16 +51,14 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 				++x;
 		}
 		boolean flag = false;
-		Block idbelow = world.getBlock(x, y-1, z);
-		if (ReikaWorldHelper.softBlocks(world, x, y, z) && BlockCanola.isValidFarmBlock(world, x, y, z, idbelow)) {
+		if (ReikaWorldHelper.softBlocks(world, x, y, z) && BlockCanola.isValidFarmBlock(world, x, y-1, z)) {
 			int minx = spread ? x-1 : x;
 			int maxx = spread ? x+1 : x;
 			int minz = spread ? z-1 : z;
 			int maxz = spread ? z+1 : z;
 			for (int xi = minx; xi <= maxx; xi++) {
 				for (int zi = minz; zi <= maxz; zi++) {
-					idbelow = world.getBlock(xi, y-1, zi);
-					if ((!ReikaWorldHelper.softBlocks(world.getBlock(xi, y, zi))) || !BlockCanola.isValidFarmBlock(world, xi, y, zi, idbelow)) {
+					if ((!ReikaWorldHelper.softBlocks(world.getBlock(xi, y, zi))) || !BlockCanola.isValidFarmBlock(world, xi, y-1, zi)) {
 						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemStacks.canolaSeeds);
 					}
 					else if (!player.canPlayerEdit(xi, y, zi, 0, items)) {

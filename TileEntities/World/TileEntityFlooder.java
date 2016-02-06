@@ -88,7 +88,7 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 			}
 		}
 		else {
-			blocks.clear();
+			//blocks.clear();
 		}
 	}
 

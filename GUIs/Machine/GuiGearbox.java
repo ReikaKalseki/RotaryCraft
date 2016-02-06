@@ -34,7 +34,8 @@ public class GuiGearbox extends GuiNonPoweredMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRendererObj.drawString("Lubricant", 5, 12, 4210752);
+		String s = gbx.isLiving() ? "Mana" : "Lubricant";
+		fontRendererObj.drawString(s, 5, 12, 4210752);
 
 		fontRendererObj.drawString("Damage:", 68, 60, 0x000000);
 		int damage = gbx.getDamagePercent();
@@ -66,7 +67,7 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		if (gbx.power >= 1000000)
 			fontRendererObj.drawString(String.format("%.1f MW", gbx.power/1000000D), 112, 48, 0x000000);
 
-		if (api.isMouseInBox(j+23, j+32, k+20, k+76)) {
+		if (!gbx.isLiving() && api.isMouseInBox(j+23, j+32, k+20, k+76)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
 			api.drawTooltipAt(fontRendererObj, String.format("%.1f/%d", gbx.getLubricant()/1000F, gbx.getMaxLubricant()/1000), mx-j, my-k);
@@ -85,7 +86,8 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		int i3 = 0;
 		if (i2 != 0)
 			i3 = 1;
-		this.drawTexturedModalRect(j + 24, ySize/2+k+34-i2, 176, 126-i2, 8, i2);
+		int u = gbx.isLiving() ? 186 : 176;
+		this.drawTexturedModalRect(j + 24, ySize/2+k+34-i2, u, 126-i2, 8, i2);
 	}
 
 	@Override

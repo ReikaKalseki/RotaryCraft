@@ -97,8 +97,8 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		if (i >= 9)
-			return false;
+		//if (i >= 9)
+		//	return false;
 		return i == 7 || i == 8;
 	}
 

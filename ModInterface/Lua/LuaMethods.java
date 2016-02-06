@@ -38,5 +38,6 @@ public class LuaMethods {
 	private static final LuaMethod toggleBlacklist = new LuaToggleBlacklist();
 	private static final LuaMethod getBlockAtPos = new LuaGetBlockAtPos();
 	private static final LuaMethod shiftPlane = new LuaShiftPlane();
+	private static final LuaMethod getCoreMagnet = new LuaCoreMagnetization();
 
 }

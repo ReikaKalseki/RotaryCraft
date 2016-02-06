@@ -108,7 +108,11 @@ public class RotaryNames {
 
 	public static final String[] interfaceNames = {
 		"interface.slipperycomb", "interface.slipperypropolis", "interface.gearcast", "interface.panelcast", "interface.shaftcast",
-		"interface.propcast", "interface.drillcast"
+		"interface.propcast", "interface.drillcast",
+		"Livingwood Gear", "Livingrock Gear",
+		"Livingwood 2x Gear Unit", "Livingrock 2x Gear Unit", "Livingwood 4x Gear Unit", "Livingrock 4x Gear Unit",
+		"Livingwood 8x Gear Unit", "Livingrock 8x Gear Unit", "Livingwood 16x Gear Unit", "Livingrock 16x Gear Unit",
+		"Livingwood Shaft Unit", "Livingrock Shaft Unit",
 	};
 
 	public static final String[] extractNames = {

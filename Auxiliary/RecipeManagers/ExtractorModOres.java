@@ -17,11 +17,13 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -147,50 +149,63 @@ public class ExtractorModOres {
 		return ItemRegistry.MODEXTRACTS.getStackOfMetadata(getFlakesIndex(ore));
 	}
 
+	public static boolean isOreFlake(ItemStack is) {
+		if (ItemRegistry.EXTRACTS.matchItem(is)) {
+			return ReikaMathLibrary.isValueInsideBoundsIncl(ItemStacks.coaloreflakes.getItemDamage(), ItemStacks.tungstenflakes.getItemDamage(), is.getItemDamage());
+		}
+		else if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
+			return is.getItemDamage()%4 == 3;
+		}
+		else if (ItemRegistry.CUSTOMEXTRACT.matchItem(is)) {
+			return is.getItemDamage()%4 == 3;
+		}
+		return false;
+	}
+
 	public static ItemStack getSmeltedIngot(ModOreList ore) {
 		switch(ore) {
-		case NETHERCOAL:
-			return new ItemStack(Items.coal);
-		case NETHERCOPPER:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.COPPER.ordinal());
-		case NETHERDIAMOND:
-			return new ItemStack(Items.diamond);
-		case NETHEREMERALD:
-			return new ItemStack(Items.emerald);
-		case NETHERGOLD:
-			return new ItemStack(Items.gold_ingot);
-		case NETHERIRON:
-			return new ItemStack(Items.iron_ingot);
-		case NETHERLAPIS:
-			return ReikaItemHelper.lapisDye.copy();
-		case NETHERLEAD:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.LEAD.ordinal());
-		case NETHERNICKEL:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.NICKEL.ordinal());
-		case NETHERNIKOLITE:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.NIKOLITE.ordinal());
-		case NETHERREDSTONE:
-			return new ItemStack(Items.redstone);
-		case NETHERSILVER:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.SILVER.ordinal());
-		case NETHERTIN:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.TIN.ordinal());
-		case NETHERPLATINUM:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.PLATINUM.ordinal());
-		case NETHERURANIUM:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.URANIUM.ordinal());
-		case NETHERIRIDIUM:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.IRIDIUM.ordinal());
-		case NETHERSULFUR:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.SULFUR.ordinal());
-		case NETHERTITANIUM:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.TITANIUM.ordinal());
-		case NETHEROSMIUM:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.OSMIUM.ordinal());
-		case NETHERSALTPETER:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.SALTPETER.ordinal());
-		default:
-			return ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal());
+			case NETHERCOAL:
+				return new ItemStack(Items.coal);
+			case NETHERCOPPER:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.COPPER.ordinal());
+			case NETHERDIAMOND:
+				return new ItemStack(Items.diamond);
+			case NETHEREMERALD:
+				return new ItemStack(Items.emerald);
+			case NETHERGOLD:
+				return new ItemStack(Items.gold_ingot);
+			case NETHERIRON:
+				return new ItemStack(Items.iron_ingot);
+			case NETHERLAPIS:
+				return ReikaItemHelper.lapisDye.copy();
+			case NETHERLEAD:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.LEAD.ordinal());
+			case NETHERNICKEL:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.NICKEL.ordinal());
+			case NETHERNIKOLITE:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.NIKOLITE.ordinal());
+			case NETHERREDSTONE:
+				return new ItemStack(Items.redstone);
+			case NETHERSILVER:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.SILVER.ordinal());
+			case NETHERTIN:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.TIN.ordinal());
+			case NETHERPLATINUM:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.PLATINUM.ordinal());
+			case NETHERURANIUM:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.URANIUM.ordinal());
+			case NETHERIRIDIUM:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.IRIDIUM.ordinal());
+			case NETHERSULFUR:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.SULFUR.ordinal());
+			case NETHERTITANIUM:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.TITANIUM.ordinal());
+			case NETHEROSMIUM:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.OSMIUM.ordinal());
+			case NETHERSALTPETER:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.SALTPETER.ordinal());
+			default:
+				return ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal());
 		}
 	}
 

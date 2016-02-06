@@ -20,7 +20,7 @@ import Reika.RotaryCraft.RotaryCraft;
 public abstract class BlockBasic extends Block implements SidedTextureIndex {
 
 	/** Icons by metadata 0-15 and side 0-6. Nonmetadata blocks can just set the first index to 0 at all times. */
-	public IIcon[][] icons = new IIcon[16][6];
+	protected final IIcon[][] icons = new IIcon[16][6];
 
 	public BlockBasic(Material par3Material) {
 		super(par3Material);

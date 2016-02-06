@@ -26,6 +26,7 @@ import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
@@ -34,6 +35,7 @@ import Reika.RotaryCraft.API.RecipeInterface.GrinderManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
@@ -77,8 +79,11 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15), RecipeLevel.PROTECTED);
 		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0), RecipeLevel.PROTECTED);
 
-		this.addRecipe(Blocks.log, this.getSizedSawdust(16), RecipeLevel.PERIPHERAL); //sawdust
-		this.addRecipe(Blocks.planks, this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
+		for (int i = 0; i < ReikaTreeHelper.treeList.length; i++) {
+			ReikaTreeHelper tree = ReikaTreeHelper.treeList[i];
+			this.addRecipe(tree.getLog(), this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
+			this.addRecipe(new ItemStack(Blocks.planks, 1, tree.ordinal()), this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
+		}
 		this.addRecipe(Blocks.noteblock, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.jukebox, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.fence, this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
@@ -86,6 +91,8 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.birch_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.spruce_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.jungle_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.acacia_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.dark_oak_stairs, this.getSizedSawdust(6), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.chest, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.crafting_table, this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.ladder, this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
@@ -272,6 +279,24 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 		this.addOreDictRecipe("netherrack", ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
 		this.addOreDictRecipe("soulsand", ItemStacks.tar, RecipeLevel.CORE); //create a tar
+
+		if (ModList.BOTANIA.isLoaded()) {
+			Item petal = GameRegistry.findItem(ModList.BOTANIA.modLabel, "petal");
+			Item dye = GameRegistry.findItem(ModList.BOTANIA.modLabel, "dye");
+			Block flower = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "flower");
+			Block tallflower1 = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower1");
+			Block tallflower2 = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower2");
+			for (int i = 0; i < 16; i++) {
+				Block tall = i >= 8 ? tallflower2 : tallflower1;
+				int tallm = i%8;
+				this.addRecipe(new ItemStack(flower, 1, i), new ItemStack(petal, 6, i), RecipeLevel.MODINTERACT);
+				this.addRecipe(new ItemStack(tall, 1, tallm), new ItemStack(petal, 12, i), RecipeLevel.MODINTERACT);
+				this.addRecipe(new ItemStack(petal, 1, i), new ItemStack(dye, 3, i), RecipeLevel.MODINTERACT);
+			}
+		}
+
+		this.addOreDictRecipe("cropCinderpearl", new ItemStack(Items.blaze_powder, 3, 0), RecipeLevel.MODINTERACT);
+		this.addOreDictRecipe("cropShimmerleaf", ReikaItemHelper.getSizedItemStack(ExtractorModOres.getSmeltedIngot(ModOreList.CINNABAR), 3), RecipeLevel.MODINTERACT);
 	}
 	/*
 	private void addMulchRecipes() {
@@ -308,7 +333,10 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			for (ItemStack is : li) {
 				ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
 				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), RecipeLevel.CORE);
-				RotaryCraft.logger.log("Adding "+(ore_rate)+"x grinder recipe for "+ore+" ore "+is);
+				int n = ore_rate;
+				if (ore.getRarity() == OreRarity.RARE)
+					n *= 3;
+				RotaryCraft.logger.log("Adding "+n+"x grinder recipe for "+ore+" ore "+is);
 			}
 		}
 	}

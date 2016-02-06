@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Steel;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -49,6 +50,11 @@ public class ItemSteelSickle extends ItemSickleBase {
 	@Override
 	public boolean getIsRepairable(ItemStack tool, ItemStack item) {
 		return tool.getItem() == this && ReikaItemHelper.matchStacks(item, ItemStacks.steelingot);
+	}
+
+	@Override
+	public int getItemEnchantability(ItemStack is) {
+		return Items.iron_pickaxe.getItemEnchantability(is);
 	}
 
 }

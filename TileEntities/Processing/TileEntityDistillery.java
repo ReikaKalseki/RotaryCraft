@@ -45,9 +45,9 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 	private boolean canMake(Conversion conv) {
 		if (conv == null)
 			return false;
-		if (power < MINPOWER)
+		if (power < conv.minPower)
 			return false;
-		if (torque < MINTORQUE)
+		if (torque < conv.minTorque)
 			return false;
 		return input.getLevel() >= conv.getRequiredAmount() && output.canTakeIn(conv.outputFluid, conv.getProductionAmount());
 	}
@@ -133,20 +133,26 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 	}
 
 	private static enum Conversion {
-		OIL("oil", "rc lubricant", 6),
-		ETHANOL1("bioethanol", "rc ethanol", 1),
-		ETHANOL2("biofuel", "rc ethanol", -2);
+		OIL("oil", "rc lubricant", 6, 2048, 8192),
+		ETHANOL1("bioethanol", "rc ethanol", 1, 512, 131072),
+		ETHANOL2("biofuel", "rc ethanol", -2, 512, 131072);
 
 		public final Fluid inputFluid;
 		public final Fluid outputFluid;
 		private final int conversionFactor;
 
+		public final long minPower;
+		public final int minTorque;
+
 		public static final Conversion[] list = values();
 
-		private Conversion(String in, String out, int factor) {
+		private Conversion(String in, String out, int factor, int mint, long minp) {
 			inputFluid = FluidRegistry.getFluid(in);
 			outputFluid = FluidRegistry.getFluid(out);
 			conversionFactor = factor;
+
+			minTorque = mint;
+			minPower = minp;
 		}
 
 		public int getProductionAmount() {
@@ -165,7 +171,7 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 		public String toString() {
 			String name1 = inputFluid.getLocalizedName();
 			String name2 = outputFluid.getLocalizedName();
-			return name1+" ("+this.getRequiredAmount()+" mB) -> "+name2+" ("+this.getProductionAmount()+" mB)";
+			return name1+" ("+this.getRequiredAmount()+" mB) + ["+minTorque+" Nm & "+minPower+"W] -> "+name2+" ("+this.getProductionAmount()+" mB)";
 		}
 	}
 

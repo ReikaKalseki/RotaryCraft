@@ -735,7 +735,7 @@ public class GuiHandbook extends GuiScreen
 			GL11.glRotatef(renderq, 1, 0, 0);
 			GL11.glRotatef(r, 0, 1, 0);
 			ReikaTextureHelper.bindTerrainTexture();
-			rb.renderBlockAsItem(m.getBlock(), m.getMachineMetadata(), 1);
+			rb.renderBlockAsItem(m.getBlock(), m.getBlockMetadata(), 1);
 		}
 		GL11.glPopMatrix();
 	}

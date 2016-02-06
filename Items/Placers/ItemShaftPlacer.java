@@ -78,7 +78,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				if (m == MachineRegistry.SHAFT) {
 					TileEntityShaft te = (TileEntityShaft)world.getTileEntity(dx, dy, dz);
 					if (te.isWritingToCoordinate(x, y, z)) {
-						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlock(), MachineRegistry.PORTALSHAFT.getMachineMetadata(), 3);
+						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlock(), MachineRegistry.PORTALSHAFT.getBlockMetadata(), 3);
 						TileEntityPortalShaft ps = new TileEntityPortalShaft();
 						world.setTileEntity(dx, dy, dz, ps);
 						ps.setBlockMetadata(te.getBlockMetadata());

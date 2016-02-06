@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Engine;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -40,12 +41,32 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	}
 
 	@Override
+	protected int getConsumedFuel() {
+		int amt = 10;
+		if (temperature >= 130) {
+			amt = 75;
+		}
+		else if (temperature >= 125) {
+			amt = 60;
+		}
+		else if (temperature >= 120) {
+			amt = 50;
+		}
+		else if (temperature >= 110) {
+			amt = 25;
+		}
+		if (worldObj.getBlock(xCoord, yCoord-1, zCoord) == Blocks.lava)
+			amt *= 4;
+		return amt;
+	}
+
+	@Override
 	protected void internalizeFuel() {
 		if (water.isEmpty() && temperature >= 100) {
 			dryTicks++;
 		}
 		else {
-			if (dryTicks > 900) {
+			if (dryTicks > 900 && !water.isEmpty()) {
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 				worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 6, false);
 			}
@@ -93,8 +114,9 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 			temperature++;
 		if (fire && biome == BiomeGenBase.hell)
 			temperature++; //Nether has 50% hotter fire
-		if (lava)
+		if (lava) {
 			temperature += 2;
+		}
 		if (Tamb < 0 && fire)
 			Tamb += 30;
 		if (temperature < Tamb)

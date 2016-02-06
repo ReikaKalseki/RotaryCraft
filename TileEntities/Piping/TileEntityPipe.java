@@ -211,7 +211,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	public void overheat(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
 		MachineRegistry m = this.getMachine();
-		blocks.recursiveAddWithMetadata(world, x, y, z, m.getBlock(), m.getMachineMetadata());
+		blocks.recursiveAddWithMetadata(world, x, y, z, m.getBlock(), m.getBlockMetadata());
 
 		for (int i = 0; i < blocks.getSize(); i++) {
 			Coordinate c = blocks.getNthBlock(i);

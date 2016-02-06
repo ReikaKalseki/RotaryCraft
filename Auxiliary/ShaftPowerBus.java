@@ -57,7 +57,7 @@ public class ShaftPowerBus {
 			int dz = z+dir.offsetZ;
 			MachineRegistry m = MachineRegistry.getMachine(hub.worldObj, dx, dy, dz);
 			if (m == MachineRegistry.POWERBUS) {
-				b.recursiveAddWithMetadata(hub.worldObj, dx, dy, dz, m.getBlock(), m.getMachineMetadata());
+				b.recursiveAddWithMetadata(hub.worldObj, dx, dy, dz, m.getBlock(), m.getBlockMetadata());
 			}
 		}
 		Iterator<TileEntityPowerBus> it = blocks.iterator();

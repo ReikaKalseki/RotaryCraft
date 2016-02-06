@@ -280,9 +280,9 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (b == MystCraftHandler.getInstance().crystalID)
 			return 20F;
 		if (b == TwilightForestHandler.BlockEntry.MAZESTONE.getBlock())
-			return 60F;
+			return 90F;
 		if (b == TwilightForestHandler.BlockEntry.DEADROCK.getBlock())
-			return 60F;
+			return 90F;
 		if (ModOreList.getModOreFromOre(b, meta) == ModOreList.MIMICHITE)
 			return 64F;
 		if (b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitFacade"))

@@ -127,7 +127,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rcferment")) {
-			if (!ConfigRegistry.BEEYEAST.getState())
+			if (ConfigRegistry.enableFermenterYeast())
 				arecipes.add(new FermenterRecipe(ItemRegistry.YEAST.getStackOf()));
 			Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 			for (ItemStack is : li)
@@ -150,7 +150,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 			arecipes.add(new FermenterRecipe(result));
 		}
 		else if (result.getItem() == ItemRegistry.YEAST.getItemInstance()) {
-			if (!ConfigRegistry.BEEYEAST.getState())
+			if (ConfigRegistry.enableFermenterYeast())
 				arecipes.add(new FermenterRecipe(result));
 		}
 		else if (ReikaItemHelper.matchStacks(result, ItemStacks.ethanolbucket))
@@ -184,8 +184,10 @@ public class FermenterHandler extends TemplateRecipeHandler {
 			}
 		}
 		else if (this.isEthanolIngredient(ingredient) || this.isYeastIngredient(ingredient)) {
-			if (this.isYeastIngredient(ingredient) && !ConfigRegistry.BEEYEAST.getState())
-				arecipes.add(new FermenterRecipe(ingredient, ItemRegistry.YEAST.getStackOf()));
+			if (this.isYeastIngredient(ingredient)) {
+				if (ConfigRegistry.enableFermenterYeast())
+					arecipes.add(new FermenterRecipe(ingredient, ItemRegistry.YEAST.getStackOf()));
+			}
 			else
 				arecipes.add(new FermenterRecipe(ingredient, ItemStacks.sludge.copy()));
 		}

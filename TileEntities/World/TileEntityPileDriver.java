@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.World;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -36,10 +37,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.GeoStrata.Registry.RockShapes;
 import Reika.GeoStrata.Registry.RockTypes;
@@ -66,13 +70,61 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	public static final int MINTIME = 1;
 	public static final int BASESPEED = 300;
 
-	public static int BITMETA = 4;
+	private static final BlockMap<Integer> HITS_PER_BLOCK = new BlockMap();
+	private static final BlockMap<BlockKey> BLOCK_CONVERSION = new BlockMap();
 
-	public void addNausea(World world, int x, int y, int z) {
+	private final HashMap<Coordinate, HitCount> numHits = new HashMap();
+
+	private static int BITMETA = 4;
+
+	static {
+		HITS_PER_BLOCK.put(Blocks.obsidian, 5);
+		HITS_PER_BLOCK.put(Blocks.netherrack, -2);
+		HITS_PER_BLOCK.put(Blocks.glass, -4);
+		HITS_PER_BLOCK.put(Blocks.glowstone, -3);
+		HITS_PER_BLOCK.put(Blocks.wool, -1);
+
+		BlockKey to = new BlockKey(Blocks.air);
+		BLOCK_CONVERSION.put(Blocks.bedrock, new BlockKey(Blocks.bedrock));
+		BLOCK_CONVERSION.put(Blocks.stone, new BlockKey(Blocks.cobblestone));
+		BLOCK_CONVERSION.put(BlockRegistry.DECO.getBlockInstance(), ItemStacks.shieldblock.getItemDamage(), new BlockKey(BlockRegistry.DECO.getBlockInstance(), ItemStacks.shieldblock.getItemDamage()));
+		BLOCK_CONVERSION.put(BlockRegistry.MININGPIPE.getBlockInstance(), 3, new BlockKey(BlockRegistry.MININGPIPE.getBlockInstance(), 3));
+		BLOCK_CONVERSION.put(Blocks.stonebrick, 0, new BlockKey(Blocks.stonebrick, 2));
+
+		if (ModList.GEOSTRATA.isLoaded()) {
+			for (int i = 0; i < RockTypes.rockList.length; i++) {
+				RockTypes r = RockTypes.rockList[i];
+				for (int k = 0; k < RockShapes.shapeList.length; k++) {
+					RockShapes s = RockShapes.shapeList[k];
+					ItemStack is = r.getItem(s);
+					Block b = Block.getBlockFromItem(is.getItem());
+					if (s != RockShapes.COBBLE) {
+						BLOCK_CONVERSION.put(b, is.getItemDamage(), new BlockKey(r.getItem(RockShapes.COBBLE)));
+					}
+					if (r == RockTypes.GRANITE || r == RockTypes.HORNFEL) {
+						HITS_PER_BLOCK.put(b, is.getItemDamage(), 3);
+					}
+					else if (r == RockTypes.PERIDOTITE || r == RockTypes.GNEISS || r == RockTypes.SCHIST) {
+						HITS_PER_BLOCK.put(b, is.getItemDamage(), 2);
+					}
+					else if (r == RockTypes.SHALE || r == RockTypes.LIMESTONE) {
+						HITS_PER_BLOCK.put(b, is.getItemDamage(), -1);
+					}
+				}
+			}
+		}
+	}
+
+	private static int getHitCount(Block b, int meta) {
+		Integer get = HITS_PER_BLOCK.get(b, meta);
+		return get != null ? get.intValue() : 0;
+	}
+
+	private void addNausea(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(15, 15, 15); // 5m radius
 		List<EntityPlayer> sick = world.getEntitiesWithinAABB(EntityPlayer.class, box);
 		for (EntityPlayer ep : sick) {
-			if (ep != null)
+			if (!ep.capabilities.isCreativeMode)
 				ep.addPotionEffect(new PotionEffect(Potion.confusion.id, 150, 10));
 		}
 	}
@@ -88,7 +140,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 			return;
 		}
 		if (power > minpower)
-			speed = ReikaMathLibrary.extrema(BASESPEED/((int)(power/minpower)), MINTIME, "max");
+			speed = Math.max(BASESPEED/((int)(power/minpower)), MINTIME);
 		tickcount++;
 
 		if (!this.drawPile3(world, x, y, z, speed) && step != 0)
@@ -104,7 +156,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		SoundRegistry.PILEDRIVER.playSoundAtBlock(world, x, y, z, 1, 1);
 	}
 
-	public void bounce(World world, int x, int y, int z) { //bounce entities
+	private void bounce(World world, int x, int y, int z) { //bounce entities
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-2, y, z-2, x+3, y+1, z+3).expand(24, 24, 24);
 		List<Entity> inzone = world.getEntitiesWithinAABB(Entity.class, zone);
 		for (Entity ent : inzone) {
@@ -118,18 +170,18 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 1:
-			read = ForgeDirection.EAST;
-			read2 = ForgeDirection.WEST;
-			break;
-		case 0:
-			read = ForgeDirection.NORTH;
-			read2 = ForgeDirection.SOUTH;
-			break;
+			case 1:
+				read = ForgeDirection.EAST;
+				read2 = ForgeDirection.WEST;
+				break;
+			case 0:
+				read = ForgeDirection.NORTH;
+				read2 = ForgeDirection.SOUTH;
+				break;
 		}
 	}
 
-	public void dealDamage(World world, int x, int y, int z) {
+	private void dealDamage(World world, int x, int y, int z) {
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(0.5, 2, 0.5);
 		List killed = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < killed.size(); i++) {
@@ -143,13 +195,16 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 	}
 
-	public void breakGlass(World world, int x, int y, int z) {
+	private void breakGlass(World world, int x, int y, int z) {
 		int range = 5;
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
 				for (int k = -range; k <= range; k++) {
 					Block b = world.getBlock(x+i, y+j, z+k);
-					this.breakGlass_do(world, x+i, y+j, z+k, b);
+					if (b != Blocks.air) {
+						//ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b);
+						this.breakGlass_do(world, x+i, y+j, z+k, b);
+					}
 				}
 			}
 		}
@@ -160,13 +215,13 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 	}
 
-	public void breakGlass_do(World world, int x, int y, int z, Block id) {
+	private void breakGlass_do(World world, int x, int y, int z, Block id) {
 		ItemStack drop = null;
 		int meta = world.getBlockMetadata(x, y, z);
 		if (id == Blocks.glass || id == Blocks.glass_pane || id == Blocks.glowstone) {
 			id.dropBlockAsItem(world, x, y, z, meta, 0);
 			world.setBlockToAir(x, y, z);
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
+			//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
 		}
 		if (id == Blocks.cactus || id == Blocks.reeds || id == Blocks.vine ||
 				id == Blocks.waterlily || id == Blocks.tallgrass || id == Blocks.sapling ||
@@ -176,7 +231,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		}
 		if (id == Blocks.ice) {
 			world.setBlock(x, y, z, Blocks.flowing_water);
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
+			//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 0.5F, 1F);
 			drop = new ItemStack(Blocks.ice);
 		}
 		if (id == Blocks.web) {
@@ -201,7 +256,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		world.spawnEntityInWorld(ent);
 	}
 
-	public void makeFall(World world, int x, int y, int z, BlockFalling id) {
+	private void makeFall(World world, int x, int y, int z, BlockFalling id) {
 		BlockFalling tofall = id;
 		if (tofall.func_149831_e(world, x, y-1, z)) {
 			byte var8 = 32;
@@ -231,44 +286,17 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		return b != null ? b.getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0) : new ArrayList();
 	}
 
-	public BlockKey getBlockProduct(World world, int x, int y, int z, Block id, int meta) {
-		BlockKey to = new BlockKey(Blocks.air);
-		if (id == Blocks.bedrock/* && !TileEntityBorer.isMineableBedrock(world, x, y, z)*/) //does not break bedrock unless TF
-			to = new BlockKey(id);
-		if (id == BlockRegistry.DECO.getBlockInstance() && meta == ItemStacks.shieldblock.getItemDamage()) {
-			to = new BlockKey(id, meta);
-		}
-		if (id == Blocks.stone)
-			to = new BlockKey(Blocks.cobblestone);
-		if (ModList.GEOSTRATA.isLoaded()) {
-			RockShapes s = RockShapes.getShape(id, meta);
-			RockTypes r = RockTypes.getTypeFromID(id);
-			if (s == RockShapes.SMOOTH) {
-				to = new BlockKey(r.getID(RockShapes.COBBLE), s.metadata);
-			}
-		}
-		if (id == Blocks.stonebrick && meta == 0) {
-			to = new BlockKey(id, 2);
-		}
-		if (id == Blocks.obsidian) {
-			if (meta < 4) {
-				to = new BlockKey(id, meta+1);
-			}
-			else {
-
-			}
-		}
-		if (id == Blocks.flowing_water || id == Blocks.water ||
-				id == Blocks.flowing_lava || id == Blocks.lava) {
-			to = new BlockKey(id, meta);
-		}
-		if (id == BlockRegistry.MININGPIPE.getBlockInstance() && meta == 3) {
+	private BlockKey getBlockProduct(World world, int x, int y, int z, Block id, int meta) {
+		BlockKey to = BLOCK_CONVERSION.get(id, meta);
+		if (to == null)
+			to = new BlockKey(Blocks.air);
+		if (ReikaBlockHelper.isLiquid(id)) {
 			to = new BlockKey(id, meta);
 		}
 		return to;
 	}
 
-	public boolean drawPile3(World world, int x, int y, int z, int speed) {
+	private boolean drawPile3(World world, int x, int y, int z, int speed) {
 		if (climbing && tickcount > speed) {
 			if (world.getBlock(x, y-step2-2, z) == BlockRegistry.MININGPIPE.getBlockInstance())
 				world.setBlockToAir(x, y-step2-2, z);
@@ -375,7 +403,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		return (step2 == step);
 	}
 
-	public boolean smash(World world, int x, int y, int z) {
+	private boolean smash(World world, int x, int y, int z) {
 		MinecraftForge.EVENT_BUS.post(new PileDriverImpactEvent(this, x, y, z));
 		boolean cleared = true;
 		smashed = true;
@@ -391,27 +419,15 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 								this.spawnSpawner(world, x+i, y, z+j, spw);
 							}
 						}
-						if (world.getBlock(x+i, y-1, z+j) == Blocks.netherrack) {
-							Blocks.netherrack.dropBlockAsItem(world, x+i, y-1, z+j, 0, 0);
-							world.setBlockToAir(x+i, y-1, z+j);
-							world.markBlockForUpdate(x+i, y-1, z+j);
-							//this.step++;
+						for (int h = 1; h <= 4; h++) {
+							Block id2 = world.getBlock(x+i, y-h, z+j);
+							int meta2 = world.getBlockMetadata(x+i, y-h, z+j);
+							int hits = this.getHitCount(id2, meta2);
+							if (hits < 0 && Math.abs(hits) >= h) {
+								this.checkIncrementAndBreak(world, x+i, y-h, z+j, id2, meta2);
+							}
 						}
-						if (world.getBlock(x+i, y-2, z+j) == Blocks.netherrack) {
-							Blocks.netherrack.dropBlockAsItem(world, x+i, y-2, z+j, 0, 0);
-							world.setBlockToAir(x+i, y-2, z+j);
-							world.markBlockForUpdate(x+i, y-2, z+j);
-							//this.step++;
-						}
-						BlockKey blockTo = this.getBlockProduct(world, x+i, y, z+j, id, meta);
-						ArrayList<ItemStack> li = this.getDrops(world, x+i, y, z+j);
-						if (!world.isRemote)
-							blockTo.place(world, x+i, y, z+j);
-						if (blockTo.blockID == Blocks.air) {
-							//Blocks.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
-							ReikaItemHelper.dropItems(world, x+i, y, z+j, li);
-						}
-						world.markBlockForUpdate(x+i, y, z+j);
+						this.checkIncrementAndBreak(world, x+i, y, z+j, id, meta);
 					}
 				}
 			}
@@ -430,7 +446,40 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 		return cleared;
 	}
 
-	public void spawnSpawner(World world, int x, int y, int z, TileEntityMobSpawner spw) {
+	private void checkIncrementAndBreak(World world, int x, int y, int z, Block id, int meta) {
+		Coordinate loc = new Coordinate(x, y, z);
+		HitCount c = numHits.get(loc);
+		boolean flag = false;
+		if (c != null) {
+			if (c.hit()) {
+				numHits.remove(loc);
+				flag = true;
+			}
+		}
+		else {
+			int ct = this.getHitCount(id, meta);
+			if (ct <= 0) {
+				flag = true;
+			}
+			else {
+				c = new HitCount(ct);
+				numHits.put(loc, c);
+			}
+		}
+		if (flag) {
+			BlockKey blockTo = this.getBlockProduct(world, x, y, z, id, meta);
+			ArrayList<ItemStack> li = this.getDrops(world, x, y, z);
+			if (!world.isRemote)
+				blockTo.place(world, x, y, z);
+			if (blockTo.blockID == Blocks.air) {
+				//Blocks.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
+				ReikaItemHelper.dropItems(world, x, y, z, li);
+			}
+			world.markBlockForUpdate(x, y, z);
+		}
+	}
+
+	private void spawnSpawner(World world, int x, int y, int z, TileEntityMobSpawner spw) {
 		if (world.isRemote)
 			return;
 		ItemStack is = ItemRegistry.SPAWNER.getStackOf();
@@ -485,6 +534,22 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	private static class HitCount {
+
+		private final int maxHits;
+		private int hits;
+
+		private HitCount(int max) {
+			maxHits = max;
+		}
+
+		private boolean hit() {
+			hits++;
+			return hits >= maxHits;
+		}
+
 	}
 
 }

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.World;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.ColumnArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -53,7 +55,8 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	private static final HashMap<BiomeStep, Integer> powerReqs = new HashMap();
 	private static final HashMap<BiomeStep, FluidStack> liquidReqs = new HashMap();
 
-	private ColumnArray coords = new ColumnArray();
+	private final ColumnArray coords = new ColumnArray();
+	private Comparator<Coordinate> positionComparator;
 
 	private BiomeGenBase target;
 
@@ -90,6 +93,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
 		this.getCoordsFromIAP(world, x, y, z);
+		positionComparator = new PositionComparator(this);
 	}
 
 	@Override
@@ -123,9 +127,9 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 		if (tickcount >= this.getOperationTime()) {
 			int index = rand.nextInt(coords.getSize());
-			int[] xz = coords.getNthColumn(index);
+			Coordinate xz = coords.getNthColumn(index);
 			if (!world.isRemote) {
-				if (this.setBiome(world, xz[0], xz[1])) {
+				if (this.setBiome(world, xz.xCoord, xz.zCoord)) {
 					//ReikaJavaLibrary.pConsole(Arrays.toString(xz), Side.SERVER);
 					//ReikaJavaLibrary.pConsole("Removing "+x+", "+z);
 					coords.remove(index);
@@ -145,12 +149,13 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			TileEntity te = world.getTileEntity(dx, dy, dz);
 			if (InterfaceCache.AREAPROVIDER.instanceOf(te)) {
 				IAreaProvider iap = (IAreaProvider)te;
-				for (int mx = iap.xMin()-1; mx <= iap.xMax()+1; mx++) {
-					for (int mz = iap.zMin()-1; mz <= iap.zMax()+1; mz++) {
-						this.addTile(mx, y, mz);
+				for (int mx = iap.xMin(); mx <= iap.xMax(); mx++) {
+					for (int mz = iap.zMin(); mz <= iap.zMax(); mz++) {
+						this.addCoordinate(mx, mz, false);
 					}
 				}
 				iap.removeFromWorld();
+				coords.sort(positionComparator);
 				return;
 			}
 		}
@@ -181,16 +186,19 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		return ConfigRegistry.BIOMEBLOCKS.getState() && ReikaInventoryHelper.checkForItem(Items.diamond, inv);
 	}
 
-	private void addCoordinate(int x, int z) {
+	private void addCoordinate(int x, int z, boolean sort) {
 		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
 			return;
 		BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
-		RotaryCraft.logger.debug("Added coordinate "+x+"x, "+z+"z to "+this);
-		coords.add(x, z);
+		if (coords.add(x, z)) {
+			RotaryCraft.logger.debug("Added coordinate "+x+"x, "+z+"z to "+this);
+			if (sort)
+				coords.sort(positionComparator);
+		}
 	}
 
 	public void addTile(int x, int y, int z) {
-		this.addCoordinate(x, z);
+		this.addCoordinate(x, z, true);
 	}
 
 	@Override
@@ -212,8 +220,10 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		BiomeStep li = new BiomeStep(from, to);
 		ArrayList<ItemStack> is = new ArrayList();
 		Collection<ItemReq> req = itemReqs.get(li);
-		for (ItemReq r : req) {
-			is.add(r.asItemStack());
+		if (req != null) {
+			for (ItemReq r : req) {
+				is.add(r.asItemStack());
+			}
 		}
 		return is;
 	}
@@ -232,16 +242,18 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 				return false;
 		}
 
-		for (ItemReq is : items) {
-			if (!ReikaInventoryHelper.checkForItemStack(is.itemID, is.metadata, inv))
-				return false;
-		}
+		if (items != null) {
+			for (ItemReq is : items) {
+				if (!ReikaInventoryHelper.checkForItemStack(is.itemID, is.metadata, inv))
+					return false;
+			}
 
-		//We have everything
-		for (ItemReq is : items) {
-			if (is.callAndConsume()) {
-				int slot = ReikaInventoryHelper.locateInInventory(is.itemID, is.metadata, inv);
-				ReikaInventoryHelper.decrStack(slot, inv);
+			//We have everything by this point
+			for (ItemReq is : items) {
+				if (is.callAndConsume()) {
+					int slot = ReikaInventoryHelper.locateInInventory(is.itemID, is.metadata, inv);
+					ReikaInventoryHelper.decrStack(slot, inv);
+				}
 			}
 		}
 		if (liq != null)
@@ -442,5 +454,27 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		public Collection<ItemReq> getItems() {
 			return Collections.unmodifiableCollection(items);
 		}
+	}
+
+	private static class PositionComparator implements Comparator<Coordinate> {
+
+		private final Coordinate origin;
+
+		private PositionComparator(TileEntityTerraformer te) {
+			origin = new Coordinate(te);
+		}
+
+		@Override
+		public int compare(Coordinate o1, Coordinate o2) {
+			if (o1.equals(o2))
+				return 0;
+			else if (o1.equals(origin))
+				return Integer.MAX_VALUE;
+			else if (o2.equals(origin))
+				return Integer.MIN_VALUE;
+			else
+				return (o1.xCoord+o1.zCoord)-(o2.xCoord+o2.zCoord);
+		}
+
 	}
 }

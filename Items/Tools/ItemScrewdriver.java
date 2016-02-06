@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Items.Tools;
 import ic2.api.tile.IWrenchable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import mrtjp.projectred.api.IScrewdriver;
 import net.minecraft.block.Block;
@@ -27,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import santa.api.interfaces.wrench.IWrench;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -68,8 +68,7 @@ import com.carpentersblocks.api.ICarpentersHammer;
 public class ItemScrewdriver extends ItemRotaryTool implements IToolWrench, IScrewdriver, IToolHammer,
 powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 {
-	public static HashMap<Block, Integer> maxdamage = new HashMap(); //Max damage values (or tileentity datas) for the block ids associated
-
+	private static final BlockMap<Integer> maxdamage = new BlockMap(); //Max damage values (or tileentity datas) for the block ids associated
 
 	public ItemScrewdriver(int tex) {
 		super(tex);
@@ -93,10 +92,14 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 		maxdamage.put(Blocks.quartz_stairs, 7);
 		maxdamage.put(Blocks.dropper, 5);
 		maxdamage.put(Blocks.lit_pumpkin, 3);
+		maxdamage.put(Blocks.hopper, 5);
 	}
 
 	@Override
 	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+		Block b = world.getBlock(x, y, z);
+		if (maxdamage.containsKey(b))
+			return false;
 		TileEntity te = world.getTileEntity(x, y, z);
 		return !(te instanceof RotaryCraftTileEntity || te instanceof Screwdriverable);
 	}

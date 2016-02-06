@@ -823,7 +823,7 @@
 	</pipe>
 	<fuelline>
 		<desc>
-			Fuel lines carry ethanol or jet fuel to the engines and furnaces that require it. Once connected to a source, they will automatically start to fill themselves from it, and if connected to a target, will automatically empty themselves into it. They have a nearly infinite capacity, so caution is recommended when breaking them, to avoid destroying large quantities of stored fuel.
+			Fuel lines carry ethanol or jet fuel to the engines and furnaces that require it. Once connected to a source, they will automatically start to fill themselves from it, and if connected to a target, will automatically empty themselves into it. They have a very high capacity, so caution is recommended when breaking them, to avoid destroying large quantities of stored fuel.
 		</desc>
 		<note>
 		</note>
@@ -945,8 +945,7 @@
 			The distiller is used to convert one fluid type to another. Simply pump the fluid upwards through the machine.
 		</desc>
 		<note>
-			Required power: %dW
-			Required torque: %d Nm
+			Required power and torque vary per fluid conversion
 			Power Input: Bottom
 			Valid Conversions:
 			%s

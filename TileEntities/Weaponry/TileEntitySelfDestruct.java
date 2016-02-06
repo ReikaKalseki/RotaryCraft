@@ -80,7 +80,7 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 			MachineRegistry m = this.getMachine();
 			MachineRegistry m2 = MachineRegistry.getMachine(world, x, y, z);
 			if (m != m2 && tickcount <= count) {
-				world.setBlock(x, y, z, m.getBlock(), m.getMachineMetadata(), 3);
+				world.setBlock(x, y, z, m.getBlock(), m.getBlockMetadata(), 3);
 				TileEntitySelfDestruct te = (TileEntitySelfDestruct)world.getTileEntity(x, y, z);
 				te.lastHasPower = true;
 				te.tickcount = tickcount;

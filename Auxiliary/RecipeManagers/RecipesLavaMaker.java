@@ -203,6 +203,12 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 
 			ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
 			this.addRecipe(cryo, "cryotheum", 250, -200, 2000, RecipeLevel.MODINTERACT);
+
+			ItemStack petro = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustPetrotheum", 1);
+			this.addRecipe(petro, "petrotheum", 250, 800, 12000000, RecipeLevel.MODINTERACT);
+
+			ItemStack aero = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustAerotheum", 1);
+			this.addRecipe(petro, "aerotheum", 250, 400, 40000, RecipeLevel.MODINTERACT);
 		}
 
 		this.addRecipe("shardCrystal", "potion crystal", 8000, 500, 80000, RecipeLevel.MODINTERACT);

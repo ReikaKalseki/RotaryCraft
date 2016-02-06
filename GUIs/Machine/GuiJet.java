@@ -12,25 +12,22 @@ package Reika.RotaryCraft.GUIs.Machine;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
-import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
+import Reika.RotaryCraft.Base.GuiEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Containers.Machine.ContainerJet;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 
-public class GuiJet extends GuiNonPoweredMachine
+public class GuiJet extends GuiEngine
 {
-	private final TileEntityEngine eng;
 	private final TileEntityJetEngine jet;
 	private boolean burn;
 
 	public GuiJet(EntityPlayer p5ep, TileEntityEngine te)
 	{
-		super(new ContainerJet(p5ep, te), te);
-		eng = te;
+		super(new ContainerJet(p5ep, te), te, p5ep);
 		xSize = 176;
 		ySize = 166;
 		ep = p5ep;
@@ -67,22 +64,37 @@ public class GuiJet extends GuiNonPoweredMachine
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
+		super.drawGuiContainerForegroundLayer(a, b);
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		super.drawGuiContainerForegroundLayer(a, b);
 		int x = api.getMouseRealX();
 		int y = api.getMouseRealY();
-		if (api.isMouseInBox(j+84, j+90, k+16, k+71)) {
-			int time = eng.getFuelDuration();
-			String sg = String.format("Fuel: %s", ReikaFormatHelper.getSecondsAsClock(time));
-			api.drawTooltipAt(fontRendererObj, sg, x-j, y-k);
-		}
 
 		if (jet != null) {
 			if (api.isMouseInBox(j+32, j+68, k+36, k+54)) {
 				api.drawTooltipAt(fontRendererObj, "Afterburner", x-j, y-k);
 			}
 		}
+	}
+
+	@Override
+	protected int getFuelBarXPos() {
+		return 84;
+	}
+
+	@Override
+	protected int getFuelBarYPos() {
+		return 16;
+	}
+
+	@Override
+	protected int getFuelBarXSize() {
+		return 6;
+	}
+
+	@Override
+	protected int getFuelBarYSize() {
+		return 55;
 	}
 
 	@Override

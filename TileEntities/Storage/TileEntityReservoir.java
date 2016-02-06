@@ -11,12 +11,19 @@ package Reika.RotaryCraft.TileEntities.Storage;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -33,6 +40,7 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.ReservoirAPI.TankHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -50,8 +58,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	private static final ArrayList<Fluid> creativeFluids = new ArrayList();
 
 	private static final Collection<TankHandler> tankHandlers = new HashSet();
+	private static final HashMap<String, FluidEffect> fluidEffects = new HashMap();
 
 	private final StepTimer flowTimer = new StepTimer(TileEntityPiping.getTickDelay());
+	private final StepTimer tempTimer = new StepTimer(20).stagger();
 
 	public boolean isCovered = false;
 
@@ -122,52 +132,63 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		//if (!world.isRemote && network != null)
 		//	network.tick();
 
+		tempTimer.setCap(isCovered ? 30 : 20);
 
-		if (!world.isRemote && !this.isEmpty() && rand.nextInt(this.getThermalTickChance()) == 0) {
-			int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-			int temp = tank.getActualFluid().getTemperature(world, x, y, z)-273;
-			int dT = temp-Tamb;
-			int r = 2;
-			for (int i = -r; i <= r; i++) {
-				for (int j = -r; j <= r; j++) {
-					for (int k = -r; k <= r; k++) {
-						double dd = ReikaMathLibrary.py3d(i, j, k)+1;
-						int hiT = (int)(Tamb+dT/dd/2D);
-						ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, hiT);
-						if (temp > 2500)
-							ReikaSoundHelper.playSoundAtBlock(world, x+i, y+j, z+k, "random.fizz", 0.2F, 1F);
+		tempTimer.update();
+		if (!world.isRemote && !this.isEmpty() && tempTimer.checkCap()) {
+			if (!this.isSurrounded()) {
+				int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+				int temp = tank.getActualFluid().getTemperature(world, x, y, z)-273;
+				int dT = temp-Tamb;
+				int r = 2;
+				for (int i = -r; i <= r; i++) {
+					for (int j = -r; j <= r; j++) {
+						for (int k = -r; k <= r; k++) {
+							double dd = ReikaMathLibrary.py3d(i, j, k)+1;
+							int hiT = (int)(Tamb+dT/dd/2D);
+							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, hiT);
+							if (temp > 2500)
+								ReikaSoundHelper.playSoundAtBlock(world, x+i, y+j, z+k, "random.fizz", 0.2F, 1F);
+						}
 					}
 				}
-			}
-			if (temp > 2500) {
-				world.setBlock(x, y, z, Blocks.flowing_lava);
-				world.setBlock(x+1, y, z, Blocks.flowing_lava);
-				world.setBlock(x-1, y, z, Blocks.flowing_lava);
-				world.setBlock(x, y, z+1, Blocks.flowing_lava);
-				world.setBlock(x, y, z-1, Blocks.flowing_lava);
-				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 0.4F, 1F);
-			}
+				if (temp > 2500) {
+					world.setBlock(x, y, z, Blocks.flowing_lava);
+					world.setBlock(x+1, y, z, Blocks.flowing_lava);
+					world.setBlock(x-1, y, z, Blocks.flowing_lava);
+					world.setBlock(x, y, z+1, Blocks.flowing_lava);
+					world.setBlock(x, y, z-1, Blocks.flowing_lava);
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz", 0.4F, 1F);
+				}
 
-			boolean hot = Tamb >= 300;
-			hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null;
-			hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null;
-			if (hot) {
-				Fluid f = tank.getActualFluid();
-				boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("rc jet fuel"));
-				flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
-				flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
-				flammable = flammable || f.equals(FluidRegistry.getFluid("biofuel")) || f.equals(FluidRegistry.getFluid("bioethanol"));
-				if (flammable) {
-					world.setBlockToAir(x, y, z);
-					world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
+				boolean hot = Tamb >= 300;
+				hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null;
+				hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null;
+				if (hot) {
+					Fluid f = tank.getActualFluid();
+					boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("rc jet fuel"));
+					flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
+					flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
+					flammable = flammable || f.equals(FluidRegistry.getFluid("biofuel")) || f.equals(FluidRegistry.getFluid("bioethanol"));
+					if (flammable) {
+						world.setBlockToAir(x, y, z);
+						world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
+					}
 				}
 			}
 		}
 
 	}
 
-	private int getThermalTickChance() {
-		return isCovered ? 20 : 10;
+	private boolean isSurrounded() {
+		for (int i = 2; i < 6; i++) {
+			TileEntity te = this.getAdjacentTileEntity(dirs[i]);
+			if (te instanceof TileEntityReservoir)
+				continue;
+			else
+				return false;
+		}
+		return true;
 	}
 	/*
 	public CompoundReservoir getCompound() {
@@ -402,6 +423,25 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		}
 	}
 	 */
+
+	public void applyFluidEffectsToEntity(EntityLivingBase e) {
+		if (!tank.isEmpty() && !isCovered) {
+			Fluid f = tank.getActualFluid();
+			FluidEffect eff = fluidEffects.get(f.getName());
+			if (eff != null) {
+				eff.applyEffect(e);
+			}
+			if (f.equals(FluidRegistry.LAVA) || f.getTemperature(worldObj, xCoord, yCoord, zCoord) > 500) {
+				e.attackEntityFrom(DamageSource.lava, 4);
+				e.setFire(12);
+			}
+			if (f.canBePlacedInWorld()) {
+				Block b = f.getBlock();
+				b.onEntityCollidedWithBlock(worldObj, xCoord, yCoord, zCoord, e);
+			}
+		}
+	}
+
 	@Override
 	public NBTTagCompound getTagsToWriteToStack() {
 		NBTTagCompound NBT = new NBTTagCompound();
@@ -459,6 +499,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	public ArrayList<NBTTagCompound> getCreativeModeVariants() {
 		ArrayList<NBTTagCompound> li = new ArrayList();
+		li.add(null);
 		for (int i = 0; i < creativeFluids.size(); i++) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("lvl", CAPACITY);
@@ -501,5 +542,75 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		addCreativeFluid("sewage");
 		addCreativeFluid("potion crystal");
 		addCreativeFluid("chroma");
+
+		fluidEffects.put("rc jet fuel", new PotionFluidEffect(Potion.poison, 0, 200));
+		fluidEffects.put("rc ammonia", new PotionFluidEffect(Potion.poison, 0, 200));
+		fluidEffects.put("ammonia", new PotionFluidEffect(Potion.poison, 0, 200));
+		fluidEffects.put("rc ethanol", new EthanolEffect());
+		fluidEffects.put("ethanol", new EthanolEffect());
+	}
+
+	public static void addFluidEffect(Fluid f, FluidEffect e) {
+		addFluidEffect(f.getName(), e);
+	}
+
+	public static void addFluidEffect(String f, FluidEffect e) {
+		FluidEffect g = fluidEffects.get(f);
+		if (g != null) {
+			RotaryCraft.logger.logError("Cannot add effect "+e+" for fluid "+f+"; fluid already mapped to "+g);
+		}
+		else {
+			fluidEffects.put(f, e);
+		}
+	}
+
+	public static interface FluidEffect {
+
+		public void applyEffect(EntityLivingBase e);
+
+	}
+
+	public static final class PotionFluidEffect implements FluidEffect {
+
+		public final int duration;
+		public final int level;
+		public final Potion potion;
+
+		public PotionFluidEffect(Potion p, int l, int d) {
+			potion = p;
+			level = l;
+			duration = d;
+		}
+
+		@Override
+		public void applyEffect(EntityLivingBase e) {
+			e.addPotionEffect(new PotionEffect(potion.id, duration, level));
+		}
+
+	}
+
+	public static class EthanolEffect implements FluidEffect {
+
+		@Override
+		public void applyEffect(EntityLivingBase e) {
+			PotionEffect eff = e.getActivePotionEffect(Potion.confusion);
+			int dura = 1;
+			if (eff != null) {
+				dura = eff.getDuration()+1;
+			}
+			if (dura > 600)
+				dura = 600;
+			e.addPotionEffect(new PotionEffect(Potion.confusion.id, dura, 3));
+		}
+
+	}
+
+	public static final class WaterEffect implements FluidEffect {
+
+		@Override
+		public void applyEffect(EntityLivingBase e) {
+			e.extinguish();
+		}
+
 	}
 }

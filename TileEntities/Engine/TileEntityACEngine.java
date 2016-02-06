@@ -15,10 +15,11 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.MagnetizationCore;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityACEngine extends TileEntityEngine {
+public class TileEntityACEngine extends TileEntityEngine implements MagnetizationCore {
 
 	/** Used in acPower */
 	private boolean[] lastPower = new boolean[3];
@@ -95,6 +96,11 @@ public class TileEntityACEngine extends TileEntityEngine {
 	@Override
 	protected void affectSurroundings(World world, int x, int y, int z, int meta) {
 
+	}
+
+	@Override
+	public int getCoreMagnetization() {
+		return inv[0] != null && inv[0].stackTagCompound != null ? inv[0].stackTagCompound.getInteger("magnet") : 0;
 	}
 
 }

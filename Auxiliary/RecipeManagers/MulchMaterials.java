@@ -16,7 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Exception.MisuseException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
@@ -84,13 +83,16 @@ public class MulchMaterials {
 	}
 
 	private void addValue(ItemStack is, int amt) {
-		try {
-			values.put(is, amt);
-		}
-		catch (MisuseException e) {
+		if (is == null || is.getItem() == null) {
 			RotaryCraft.logger.logError("Tried to add mulch recipe for a stack which does not exist!");
-			e.printStackTrace();
+			Thread.dumpStack();
+			return;
 		}
+		if (amt <= 0) {
+			RotaryCraft.logger.logError("Tried to add mulch recipe for "+is+" ("+is.getDisplayName()+") that produces zero sludge?!");
+			return;
+		}
+		values.put(is, amt);
 	}
 
 	public Collection<ItemStack> getAllValidPlants() {

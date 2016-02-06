@@ -215,6 +215,18 @@ public final class ItemStacks {
 	public static final ItemStack shaftCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(4);
 	public static final ItemStack propCast 			= ItemRegistry.MODINTERFACE.getStackOfMetadata(5);
 	public static final ItemStack drillCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(6);
+	public static final ItemStack livingwoodgear 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(7);
+	public static final ItemStack livingrockgear	= ItemRegistry.MODINTERFACE.getStackOfMetadata(8);
+	public static final ItemStack livingwood2x 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(9);
+	public static final ItemStack livingrock2x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(10);
+	public static final ItemStack livingwood4x 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(11);
+	public static final ItemStack livingrock4x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(12);
+	public static final ItemStack livingwood8x 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(13);
+	public static final ItemStack livingrock8x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(14);
+	public static final ItemStack livingwood16x 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(15);
+	public static final ItemStack livingrock16x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(16);
+	public static final ItemStack livingwoodrod 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(17);
+	public static final ItemStack livingrockrod		= ItemRegistry.MODINTERFACE.getStackOfMetadata(18);
 
 	public static final ItemStack canolaSeeds		= ItemRegistry.CANOLA.getStackOfMetadata(0);
 	public static final ItemStack denseCanolaSeeds	= ItemRegistry.CANOLA.getStackOfMetadata(1);

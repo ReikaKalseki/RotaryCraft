@@ -43,7 +43,8 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 
 		int rp = TileEntityCompactor.REQPRESS;
 		int rt = TileEntityCompactor.REQTEMP;
-		this.addRecipe(new ItemStack(Items.coal), ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 0), rp, rt, RecipeLevel.CORE); //No charcoal
+		this.addRecipe(new ItemStack(Items.coal), ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 0), rp, rt, RecipeLevel.CORE);
+		this.addRecipe(new ItemStack(Items.coal, 1, 1), ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep()*3/2, 0), rp, rt, RecipeLevel.CORE);
 		this.addRecipe(ItemStacks.anthracite, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 1), rp, rt, RecipeLevel.CORE);
 		this.addRecipe(ItemStacks.prismane, ItemRegistry.COMPACTS.getCraftedMetadataProduct(this.getNumberPerStep(), 2), rp, rt, RecipeLevel.CORE);
 		this.addRecipe(ItemStacks.lonsda, new ItemStack(Items.diamond, this.getNumberPerStep(), 0), rp, rt, RecipeLevel.CORE);

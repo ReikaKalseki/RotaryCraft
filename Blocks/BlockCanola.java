@@ -88,18 +88,13 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
-	{
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(this.getDrops(metadata, fortune));
+		ret.add(this.getDrops(metadata, fortune, rand));
 		return ret;
 	}
 
-	/**
-	 * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-	 */
-	public int getBlockTextureFromSideAndMetadata(int par1, int par2)
-	{
+	public int getBlockTextureFromSideAndMetadata(int par1, int par2) {
 		if (par2 < 0)
 		{
 			par2 = 9;
@@ -115,15 +110,12 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random par5Random) {
 		int l = world.getBlockLightValue(x, y, z);
-		if (l < 6 && !world.canBlockSeeTheSky(x, y, z)) {
-			this.die(world, x, y, z);
-		}
-		if (!world.getBlock(x, y-1, z).canSustainPlant(world, x, y-1, z, ForgeDirection.UP, this)) {
+		if (!this.canSurvive(world, x, y, z)) {
 			this.die(world, x, y, z);
 		}
 		else if (l >= 9)  {
 			int metadata = world.getBlockMetadata(x, y, z);
-			if (metadata < GROWN && isFertileSoil(world, x, y-1, z)) {
+			if (metadata < GROWN) {
 				if (par5Random.nextInt(3) == 0) {
 					metadata++;
 					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
@@ -137,14 +129,6 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 		ReikaItemHelper.dropItem(world, x, y, z, ItemStacks.canolaSeeds);
 	}
 
-	public ItemStack getDrops(int metadata, int fortune) {
-		int ndrops = metadata == GROWN ? (1+rand.nextInt(2))*(2+rand.nextInt(8)+rand.nextInt(5)) : 1;
-		if (metadata == GROWN && fortune > 0) {
-			ndrops = Math.max(ndrops, (int)(ndrops*rand.nextDouble()*(1+fortune)));
-		}
-		ItemStack items = ReikaItemHelper.getSizedItemStack(ItemStacks.canolaSeeds, ndrops);
-		return items;
-	}
 	/*
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer ep, int s, float f1, float f2, float f3) {
@@ -177,8 +161,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	}
 
 	public void testStable(World world, int x, int y, int z) {
-		Block idbelow = world.getBlock(x, y-1, z);
-		if ((world.getBlockLightValue(x, y, z) < 9 && !world.canBlockSeeTheSky(x, y, z)) || !this.isValidFarmBlock(world, x, y, z, idbelow)) {
+		if (!canSurvive(world, x, y, z)) {
 			this.die(world, x, y, z);
 		}
 	}
@@ -191,13 +174,8 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
-	{
-		int var5 = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
-		float var6 = var5/(float)GROWN;
-		if (var6 < 0.125F)
-			var6 = 0.125F;
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, var6, 1.0F);
+	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z) {
+		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, getPlantHeight(iba.getBlockMetadata(x, y, z)), 1.0F);
 	}
 
 	@Override
@@ -258,17 +236,6 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	@Override
 	public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
 		return GROWN;
-	}
-
-	public static boolean isValidFarmBlock(World world, int x, int y, int z, Block id) {
-		if (id == Blocks.farmland)
-			return true;
-		if (id == Blocks.air)
-			return false;
-		if (id == null)
-			return false;
-		return id.isFertile(world, x, y, z);
-		//return farmBlocks.contains(id);
 	}
 
 	public static void addFarmBlock(Block b) {
@@ -346,18 +313,6 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 		return tag;
 	}
 
-	public static boolean canGrowAt(World world, int x, int y, int z) {
-		return world.getBlockLightValue(x, y, z) >= 9 && isSoil(world, x, y-1, z) && isFertileSoil(world, x, y-1, z);
-	}
-
-	private static boolean isSoil(World world, int x, int y, int z) {
-		return world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, (BlockCanola)BlockRegistry.CANOLA.getBlockInstance());
-	}
-
-	private static boolean isFertileSoil(World world, int x, int y, int z) {
-		return world.getBlock(x, y, z) == Blocks.farmland ? world.getBlockMetadata(x, y, z) > 0 : true;
-	}
-
 	@Override //Can apply
 	public boolean func_149851_a(World world, int x, int y, int z, boolean client) {
 		return world.getBlockMetadata(x, y, z) < GROWN;
@@ -375,5 +330,45 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 			to = GROWN;
 		world.setBlockMetadataWithNotify(x, y, z, to, 3);
 		world.spawnParticle("happyVillager", x+rand.nextDouble(), y+rand.nextDouble(), z+rand.nextDouble(), 0, 0, 0);
+	}
+
+	public static boolean canSurvive(World world, int x, int y, int z) {
+		return (world.getBlockLightValue(x, y, z) >= 6 || world.canBlockSeeTheSky(x, y, z)) && isValidFarmBlock(world, x, y-1, z);
+	}
+
+	public static boolean canGrowAt(World world, int x, int y, int z) {
+		return world.getBlockLightValue(x, y, z) >= 9 && isValidFarmBlock(world, x, y-1, z);
+	}
+
+	public static boolean isValidFarmBlock(World world, int x, int y, int z) {
+		Block id = world.getBlock(x, y, z);
+		if (id == Blocks.air)
+			return false;
+		if (id == Blocks.farmland) {
+			return world.getBlockMetadata(x, y, z) > 0;
+		}
+		return id.isFertile(world, x, y, z) && world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, (IPlantable)BlockRegistry.CANOLA.getBlockInstance());
+		//return farmBlocks.contains(id);
+	}
+
+	public static ItemStack getDrops(int metadata, int fortune, Random rand) {
+		int ndrops = 1;
+		if (metadata == GROWN) {
+			ndrops = getDrops(fortune, rand);
+		}
+		ItemStack items = ReikaItemHelper.getSizedItemStack(ItemStacks.canolaSeeds, ndrops);
+		return items;
+	}
+
+	public static int getDrops(int fortune, Random rand) {
+		int ndrops = (1+rand.nextInt(2))*(2+rand.nextInt(8)+rand.nextInt(5));
+		if (fortune > 0) {
+			ndrops = Math.max(ndrops, (int)(ndrops*rand.nextDouble()*(1+fortune)));
+		}
+		return ndrops;
+	}
+
+	public static float getPlantHeight(int meta) {
+		return Math.max(0.125F, meta/(float)GROWN);
 	}
 }

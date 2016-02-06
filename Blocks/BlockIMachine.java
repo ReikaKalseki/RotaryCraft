@@ -27,57 +27,57 @@ public class BlockIMachine extends BlockBasicMultiTE {
 			return;
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 4; j++)
-				icons[MachineRegistry.FERMENTER.getMachineMetadata()][j][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][0][4][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][1][5][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][2][2][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][3][3][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][0][4][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][1][5][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][2][2][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][3][3][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][0][5][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][1][4][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][2][3][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
-		icons[MachineRegistry.FERMENTER.getMachineMetadata()][3][2][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
+				icons[MachineRegistry.FERMENTER.getBlockMetadata()][j][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][0][4][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][1][5][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][2][2][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][3][3][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_front");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][0][4][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][1][5][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][2][2][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][3][3][1] = par1IconRegister.registerIcon("RotaryCraft:ferm_front_active");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][0][5][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][1][4][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][2][3][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
+		icons[MachineRegistry.FERMENTER.getBlockMetadata()][3][2][0] = par1IconRegister.registerIcon("RotaryCraft:ferm_back");
 
 		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.FIREWORK.getMachineMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
-		icons[MachineRegistry.FIREWORK.getMachineMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:firew_top");
+			icons[MachineRegistry.FIREWORK.getBlockMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.FIREWORK.getBlockMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:firew_top");
 
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 4; j++)
-				icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][j][i][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_side");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][0][4][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][1][5][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][2][2][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][3][3][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][0][4][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][1][5][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][2][2][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
-		icons[MachineRegistry.BLASTFURNACE.getMachineMetadata()][3][3][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
+				icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][j][i][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_side");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][0][4][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][1][5][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][2][2][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][3][3][0] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][0][4][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][1][5][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][2][2][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
+		icons[MachineRegistry.BLASTFURNACE.getBlockMetadata()][3][3][1] = par1IconRegister.registerIcon("RotaryCraft:blastfurn_front_active");
 
 		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.IGNITER.getMachineMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:igniter");
+			icons[MachineRegistry.IGNITER.getBlockMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:igniter");
 
 		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.PURIFIER.getMachineMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
-		icons[MachineRegistry.PURIFIER.getMachineMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:purifier");
+			icons[MachineRegistry.PURIFIER.getBlockMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.PURIFIER.getBlockMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:purifier");
 
 		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.BUCKETFILLER.getMachineMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller");
-		icons[MachineRegistry.BUCKETFILLER.getMachineMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller_top");
-		icons[MachineRegistry.BUCKETFILLER.getMachineMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller_top");
+			icons[MachineRegistry.BUCKETFILLER.getBlockMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller");
+		icons[MachineRegistry.BUCKETFILLER.getBlockMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller_top");
+		icons[MachineRegistry.BUCKETFILLER.getBlockMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:bucketfiller_top");
 
 		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.WORKTABLE.getMachineMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:worktable");
-		icons[MachineRegistry.WORKTABLE.getMachineMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:worktable_top");
-		icons[MachineRegistry.WORKTABLE.getMachineMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:worktable_bottom");
+			icons[MachineRegistry.WORKTABLE.getBlockMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:worktable");
+		icons[MachineRegistry.WORKTABLE.getBlockMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:worktable_top");
+		icons[MachineRegistry.WORKTABLE.getBlockMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:worktable_bottom");
 
 		for (int i = 0; i < 6; i++)
-			icons[MachineRegistry.CRAFTER.getMachineMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel_dark");
-		icons[MachineRegistry.CRAFTER.getMachineMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:crafter_top");
-		icons[MachineRegistry.CRAFTER.getMachineMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
+			icons[MachineRegistry.CRAFTER.getBlockMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel_dark");
+		icons[MachineRegistry.CRAFTER.getBlockMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:crafter_top");
+		icons[MachineRegistry.CRAFTER.getBlockMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
 
 	}
 }

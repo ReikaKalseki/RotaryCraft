@@ -322,7 +322,10 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			if (gbx.getGearboxType().isDamageableGear()) {
 				currenttip.add(String.format("Damage: %d%s", gbx.getDamagePercent(), "%"));
 			}
-			currenttip.add(String.format("Lubricant: %d mB", gbx.getLubricant()));
+			if (gbx.getGearboxType().needsLubricant()) {
+				String s = gbx.isLiving() ? String.format("Mana: %d%%", gbx.getLubricant()*100/gbx.getMaxLubricant()) : String.format("Lubricant: %d mB", gbx.getLubricant());
+				currenttip.add(s);
+			}
 		}
 		if (te instanceof TileEntityAdvancedGear) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;

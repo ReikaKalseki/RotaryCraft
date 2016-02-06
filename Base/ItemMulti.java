@@ -310,7 +310,7 @@ public class ItemMulti extends ItemBasic {
 			case 8:
 				s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
 				break;
-			case 14:
+			case 16:
 				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
 				break;
 			case 10:
@@ -331,9 +331,7 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
-		int row = type+item.getItemDamage()/16;
-		while (row >= 16)
-			row -= 16;
+		int row = type%16+item.getItemDamage()/16;
 		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)
 			return 16*9+item.getItemDamage()-32;
 		if (ItemRegistry.ENGINECRAFT.matchItem(item) && item.getItemDamage() >= 16) {

@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
@@ -33,6 +34,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTieredResource;
+import Reika.DragonAPI.Interfaces.MachineRegistryBlock;
 import Reika.DragonAPI.Interfaces.Block.SemiUnbreakable;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
@@ -42,6 +44,7 @@ import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -82,6 +85,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public static final int OBSIDIANTORQUE = 512;
 
 	private static final int genRange = ConfigRegistry.BORERGEN.getValue();
+	public static final int ANTICIPATE = Math.max(2, Math.max(genRange, getServerViewDistance()));
 
 	private int step = 1;
 
@@ -97,6 +101,11 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	private int durability = ConfigRegistry.BORERMAINTAIN.getState() ? 256 : Integer.MAX_VALUE;
 
 	private int soundtick = 0;
+
+	private static int getServerViewDistance() {
+		MinecraftServer s = MinecraftServer.getServer();
+		return s != null ? s.getConfigurationManager().getViewDistance() : 0;
+	}
 
 	@Override
 	public int getTextureStateForSide(int s) {
@@ -237,7 +246,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
 				if (!world.isRemote) {
-					ReikaWorldHelper.forceGenAndPopulate(world, x+step*facing.offsetX, z+step*facing.offsetZ, genRange);
+					for (int i = 0; i <= ANTICIPATE; i++) {
+						ReikaWorldHelper.forceGenAndPopulate(world, x+(step+16*i)*facing.offsetX, z+(step+16*i)*facing.offsetZ, genRange);
+					}
 					this.safeDig(world, x, y, z, meta);
 					if (!isMiningAir) {
 						if (soundtick == 0) {
@@ -520,6 +531,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				BlockTieredResource bt = (BlockTieredResource)id;
 				boolean harvest = ep != null && bt.isPlayerSufficientTier(world, xread, yread, zread, ep);
 				items = harvest ? bt.getHarvestResources(world, xread, yread, zread, fortune, ep) : bt.getNoHarvestResources(world, xread, yread, zread, fortune, ep);
+			}
+			else if (id instanceof MachineRegistryBlock) {
+				items = ReikaJavaLibrary.makeListFrom(((MachineRegistryBlock)id).getMachine(world, xread, yread, zread).getCraftedProduct());
 			}
 			if (items != null) {
 				for (ItemStack is : items) {
