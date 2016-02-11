@@ -31,7 +31,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 
 	public static final int CAPACITY = 32000;
 
-	public static final int FUEL_PER_CRYSTAL = 250;
+	public static final int FUEL_PER_CRYSTAL = 1000;
 
 	public static final int INPUT_SLOT = 3;
 	public static final int FUEL_SLOT = 1;

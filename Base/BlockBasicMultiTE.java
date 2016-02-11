@@ -51,6 +51,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Interfaces.Block.FluidBlockSurrogate;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -123,7 +124,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
-public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
+public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implements FluidBlockSurrogate {
 
 	/** Icons by metadata 0-15 and side 0-6. Nonmetadata blocks can just set the first index to 0 at all times. */
 	public IIcon[][][][] icons = new IIcon[16][16][6][8];
@@ -898,6 +899,35 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine {
 		if (m == MachineRegistry.DYNAMO) {
 			TileEntityDynamo te = (TileEntityDynamo)world.getTileEntity(x, y, z);
 			return te.power > 0 ? 7 : 0;
+		}
+		return 0;
+	}
+
+	public final Fluid getFluid(World world, int x, int y, int z) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.RESERVOIR) {
+			return ((TileEntityReservoir)world.getTileEntity(x, y, z)).getFluid();
+		}
+		return null;
+	}
+
+	public final boolean supportsQuantization(World world, int x, int y, int z) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.RESERVOIR) {
+			return true;
+		}
+		return false;
+	}
+
+	public final int drain(World world, int x, int y, int z, Fluid f, int amt, boolean doDrain) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir te = (TileEntityReservoir)world.getTileEntity(x, y, z);
+			int ret = Math.min(amt, te.getLevel());
+			if (doDrain) {
+				te.removeLiquid(ret);
+			}
+			return ret;
 		}
 		return 0;
 	}

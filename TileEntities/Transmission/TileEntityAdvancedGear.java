@@ -443,7 +443,8 @@ PipeConnector, IFluidHandler, ToggleTile {
 			else if (!isCreative) {
 				long pwr = (long)torquein*(long)omegain;
 				//if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
-				energy += pwr;
+				if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
+					energy += pwr;
 			}
 		}
 		else if (energy > 0 && releaseTorque > 0 && releaseOmega > 0) {
@@ -470,7 +471,7 @@ PipeConnector, IFluidHandler, ToggleTile {
 	}
 
 	public int getChargingTorque() {
-		return energy >= 20 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy/20), 3)) : 1;
+		return energy >= 20 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy/20), 3))/2 : 1;
 	}
 
 	public int getTorqueCap() {

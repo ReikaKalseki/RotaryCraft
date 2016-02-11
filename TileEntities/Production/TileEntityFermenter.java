@@ -71,7 +71,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (inv[0].getItem() == Items.sugar) {
 			if (this.hasWater())
 				if (ReikaItemHelper.matchStackWithBlock(inv[1], Blocks.dirt))
-					return ConfigRegistry.enableFermenterYeast() ? null : new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
+					return !ConfigRegistry.enableFermenterYeast() ? null : new ItemStack(ItemRegistry.YEAST.getItemInstance(), 1, 0);
 		}
 		if (inv[0].getItem() == ItemRegistry.YEAST.getItemInstance()) {
 			if (MulchMaterials.instance.isMulchable(inv[1]))
