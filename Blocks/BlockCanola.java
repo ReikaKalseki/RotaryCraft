@@ -361,7 +361,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	}
 
 	public static int getDrops(int fortune, Random rand) {
-		int ndrops = (1+rand.nextInt(2))*(2+rand.nextInt(8)+rand.nextInt(5));
+		int ndrops = Math.max(fortune*2, (1+rand.nextInt(2))*(2+rand.nextInt(8)+rand.nextInt(5)));
 		if (fortune > 0) {
 			ndrops = Math.max(ndrops, (int)(ndrops*rand.nextDouble()*(1+fortune)));
 		}

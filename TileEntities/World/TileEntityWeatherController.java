@@ -78,17 +78,22 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 				world.addWeatherEffect(new EntityLightningBolt(world, xl, yl, zl));
 			}
 		}
+
 		if (cooldown > 0)
 			return;
+
 		rainmode = this.getRainMode();
-		//ReikaJavaLibrary.pConsole(this.rainmode);
+		//ReikaJavaLibrary.pConsole(rainmode);
 		if (rainmode.isRain() && ConfigRegistry.BANRAIN.getState())
 			rainmode = RainMode.NONE;
+
+		if (this.isAlready(world, rainmode))
+			return;
+
 		if (!rainmode.hasAction())
 			return;
+
 		boolean isThunder = world.isThundering();
-		if (this.isAlready(world))
-			return;
 		boolean rain = rainmode.isRain();
 		boolean thunder = rainmode.isThunder();
 		boolean storm = rainmode == RainMode.SUPERSTORM;
@@ -97,9 +102,9 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		MinecraftForge.EVENT_BUS.post(new WeatherControlEvent(this, rain, thunder, storm));
 	}
 
-	private boolean isAlready(World world) {
-		boolean rain = rainmode.isRain();
-		boolean thunder = rainmode.isThunder();
+	private boolean isAlready(World world, RainMode m) {
+		boolean rain = m.isRain();
+		boolean thunder = m.isThunder();
 		boolean rain2 = world.isRaining();
 		boolean thunder2 = world.isThundering();
 		return rain == rain2 && thunder == thunder2;
@@ -174,35 +179,35 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		else
 			rainmode = RainMode.NONE;
 		//ReikaJavaLibrary.pConsole(rainmode, Side.SERVER);
-		if (this.isAlready(worldObj))
+		if (this.isAlready(worldObj, rainmode))
 			return this.rainmode;
 		cooldown = 200+rand.nextInt(400);
 		if (rainmode.hasAction())
 			this.fire(is, is2);
 		int slot = -1;
 		switch(rainmode) {
-		case NONE:
-			break;
-		case SUN:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust, inv, false);
-			ReikaInventoryHelper.decrStack(slot, inv);
-			break;
-		case RAIN:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
-			ReikaInventoryHelper.decrStack(slot, inv);
-			break;
-		case THUNDER:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
-			ReikaInventoryHelper.decrStack(slot, inv);
-			slot = ReikaInventoryHelper.locateInInventory(Items.redstone, inv);
-			ReikaInventoryHelper.decrStack(slot, inv);
-			break;
-		case SUPERSTORM:
-			slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
-			ReikaInventoryHelper.decrStack(slot, inv);
-			slot = ReikaInventoryHelper.locateInInventory(Items.glowstone_dust, inv);
-			ReikaInventoryHelper.decrStack(slot, inv);
-			break;
+			case NONE:
+				break;
+			case SUN:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust, inv, false);
+				ReikaInventoryHelper.decrStack(slot, inv);
+				break;
+			case RAIN:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
+				ReikaInventoryHelper.decrStack(slot, inv);
+				break;
+			case THUNDER:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
+				ReikaInventoryHelper.decrStack(slot, inv);
+				slot = ReikaInventoryHelper.locateInInventory(Items.redstone, inv);
+				ReikaInventoryHelper.decrStack(slot, inv);
+				break;
+			case SUPERSTORM:
+				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.silveriodide, inv, false);
+				ReikaInventoryHelper.decrStack(slot, inv);
+				slot = ReikaInventoryHelper.locateInInventory(Items.glowstone_dust, inv);
+				ReikaInventoryHelper.decrStack(slot, inv);
+				break;
 		}
 		return rainmode;
 	}

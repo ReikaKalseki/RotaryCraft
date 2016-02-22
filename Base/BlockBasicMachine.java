@@ -223,7 +223,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			}
 			return is;
 		}
-		if (m.isPipe()) {
+		if (m != null && m.isPipe()) {
 			return ((TileEntityPiping)world.getTileEntity(x, y, z)).getMachine().getCraftedProduct();
 		}
 		return m.getCraftedProduct();

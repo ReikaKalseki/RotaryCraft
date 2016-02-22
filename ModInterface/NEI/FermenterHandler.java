@@ -12,7 +12,6 @@ package Reika.RotaryCraft.ModInterface.NEI;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Blocks;
@@ -25,7 +24,6 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -44,17 +42,13 @@ public class FermenterHandler extends TemplateRecipeHandler {
 		private ItemStack input;
 
 		private FermenterRecipe(ItemStack in, ItemStack out) {
-			this(out);
-			input = ReikaItemHelper.getSizedItemStack(in, 1);
-		}
-
-		private FermenterRecipe(ItemStack out) {
 			output = out;
+			input = ReikaItemHelper.getSizedItemStack(in, 1);
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack in = input != null ? input : this.getEntry(this.getBottomSlot());
+			ItemStack in = input;
 			int amt = MulchMaterials.instance.getPlantValue(in);
 			ItemStack is = output.getItem() == ItemRegistry.YEAST.getItemInstance() ? output : ReikaItemHelper.getSizedItemStack(output, amt);
 			return new PositionedStack(is, 111, 36);
@@ -65,14 +59,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			stacks.add(new PositionedStack(this.getTopSlot(), 50, 18));
-			if (input != null) {
-				stacks.add(new PositionedStack(input, 50, 54));
-			}
-			else {
-				//stacks.add(new PositionedStack(this.getMiddleSlot(), 50, 36));
-				List li = this.getBottomSlot();
-				stacks.add(new PositionedStack(this.getEntry(li), 50, 54));
-			}
+			stacks.add(new PositionedStack(this.getBottomSlot(), 50, 54));
 			return stacks;
 		}
 
@@ -80,12 +67,8 @@ public class FermenterHandler extends TemplateRecipeHandler {
 			return output.getItem() == ItemRegistry.YEAST.getItemInstance() ? new ItemStack(Items.sugar) : ItemRegistry.YEAST.getStackOf();
 		}
 
-		private List<ItemStack> getBottomSlot() {
-			return output.getItem() == ItemRegistry.YEAST.getItemInstance() ? ReikaJavaLibrary.makeListFrom(new ItemStack(Blocks.dirt)) : new ArrayList(MulchMaterials.instance.getAllValidPlants());
-		}
-
-		public ItemStack getEntry(List<ItemStack> li) {
-			return li.get((int)(System.nanoTime()/1000000000)%li.size());
+		private ItemStack getBottomSlot() {
+			return output.getItem() == ItemRegistry.YEAST.getItemInstance() ? new ItemStack(Blocks.dirt) : input;
 		}
 	}
 
@@ -128,7 +111,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rcferment")) {
 			if (ConfigRegistry.enableFermenterYeast())
-				arecipes.add(new FermenterRecipe(ItemRegistry.YEAST.getStackOf()));
+				arecipes.add(new FermenterRecipe(null, ItemRegistry.YEAST.getStackOf()));
 			Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 			for (ItemStack is : li)
 				arecipes.add(new FermenterRecipe(is, ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, MulchMaterials.instance.getPlantValue(is))));
@@ -146,15 +129,16 @@ public class FermenterHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		if (ReikaItemHelper.matchStacks(result, ItemStacks.sludge)) {
-			arecipes.add(new FermenterRecipe(result));
+		if (ReikaItemHelper.matchStacks(result, ItemStacks.sludge) || ReikaItemHelper.matchStacks(result, ItemStacks.ethanolbucket)) {
+			Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
+			for (ItemStack is : li) {
+				arecipes.add(new FermenterRecipe(is, ItemStacks.sludge.copy()));
+			}
 		}
 		else if (result.getItem() == ItemRegistry.YEAST.getItemInstance()) {
 			if (ConfigRegistry.enableFermenterYeast())
-				arecipes.add(new FermenterRecipe(result));
+				arecipes.add(new FermenterRecipe(null, result));
 		}
-		else if (ReikaItemHelper.matchStacks(result, ItemStacks.ethanolbucket))
-			arecipes.add(new FermenterRecipe(ItemStacks.sludge));
 	}
 
 	public boolean isEthanolIngredient(ItemStack is) {

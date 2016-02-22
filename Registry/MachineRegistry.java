@@ -649,6 +649,8 @@ public enum MachineRegistry implements TileEnum {
 			return 0.75F;
 		if (this == CENTRIFUGE)
 			return 0.375F;
+		if (this == FRICTION)
+			return 0.9375F;
 		return 1;
 	}
 

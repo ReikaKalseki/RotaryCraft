@@ -486,10 +486,18 @@ public final class HandbookAuxData {
 				DragonAPICore.logError(p+" to make "+p.outputItem()+" is an invalid (unrenderable) recipe!");
 			api.drawCenteredStringNoShadow(f, p.getRequiredTemperature()+"C", dx+54, dy+66, 0);
 		}
+		else if (h == HandbookRegistry.COKE) {
+			List<BlastRecipe> c = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(ItemStacks.coke);
+			int index = (int)((System.currentTimeMillis()/2000)%c.size());
+			BlastRecipe p = c.get(index);
+			MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, p);
+			api.drawCenteredStringNoShadow(f, p.temperature+"C", dx+54, dy+66, 0);
+		}
 		else if (h == HandbookRegistry.STEELINGOT) {
 			ItemStack is = ItemStacks.steelingot;
 			List<BlastRecipe> c = RecipesBlastFurnace.getRecipes().getAllRecipesMaking(is);
-			MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, c.get(0));
+			int index = (int)((System.currentTimeMillis()/2000)%c.size());
+			MachineRecipeRenderer.instance.drawBlastFurnace(dx+99, dy+18, dx+185, dy+36, c.get(index));
 		}
 	}
 

@@ -53,7 +53,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-				if (m == MachineRegistry.PIPE) {
+				if (m.isStandardPipe()) {
 					TileEntityPipe p = (TileEntityPipe)world.getTileEntity(dx, dy, dz);
 					p.setFluid(liquid);
 					p.addFluid(5);
@@ -97,7 +97,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.BEDPIPE || m == MachineRegistry.PIPE || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
+		return m == MachineRegistry.BEDPIPE || m.isStandardPipe() || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 
 	@Override

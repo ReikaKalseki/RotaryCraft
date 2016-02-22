@@ -72,18 +72,18 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				break;
 		}
 	}
 
@@ -130,7 +130,7 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override

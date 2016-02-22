@@ -158,7 +158,7 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.HOSE || m == MachineRegistry.PIPE || m == MachineRegistry.FUELLINE;
+		return m == MachineRegistry.HOSE || m.isStandardPipe() || m == MachineRegistry.FUELLINE;
 	}
 
 	@Override

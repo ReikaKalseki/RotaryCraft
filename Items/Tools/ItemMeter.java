@@ -152,7 +152,7 @@ public class ItemMeter extends ItemRotaryTool
 			else
 				ReikaChatHelper.writeString(String.format("%s contains %.3fB of %s of a capacity of %.3fB.", m.getName(), clicked.getLevel()/1000D, clicked.getFluid().getLocalizedName(), clicked.getCapacity()/1000D));
 		}
-		if (m == MachineRegistry.PIPE) {
+		if (m != null && m.isStandardPipe()) {
 			TileEntityPipe clicked = (TileEntityPipe)tile;
 			if (clicked == null)
 				return false;

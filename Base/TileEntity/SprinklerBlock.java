@@ -136,12 +136,12 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 
 	@Override
 	public final boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return side == this.getPipeDirection() ? p == MachineRegistry.PIPE : false;
+		return side == this.getPipeDirection() ? p.isStandardPipe() : false;
 	}
 
 	@Override

@@ -264,6 +264,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	OTHERSHAFT("Alternative Shafts"),
 	OTHERGEAR("Alternative Gearboxes"),
 	OTHERGEARUNIT("Alternative Gear Units"),
+	COKE("Coal Coke"),
 	NETHERDUST("Netherrack Dust and Tar"),
 	SAWDUST("Sawdust"),
 	BEDDUST("Bedrock Dust"),
@@ -757,6 +758,8 @@ public enum HandbookRegistry implements HandbookEntry {
 		//	return false;
 		if (this == ALLOYING)
 			return false;
+		if (this == COKE)
+			return false;
 		return true;
 	}
 
@@ -905,6 +908,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			}
 			return is;
 		}
+		if (this == COKE)
+			return ReikaJavaLibrary.makeListFrom(ItemStacks.coke);
 		if (this == AMMONIUM)
 			return ReikaJavaLibrary.makeListFrom(ItemStacks.nitrate);
 		if (this == SALT)
@@ -1071,6 +1076,8 @@ public enum HandbookRegistry implements HandbookEntry {
 		//	return ItemStacks.bedingot;
 		if (this == ALLOYING)
 			return ItemStacks.bedingot;
+		if (this == COKE)
+			return ItemStacks.coke;
 		if (this == ALERTS || this == PACKMODS)
 			;//return ItemStacks.steelgear;
 		return null;

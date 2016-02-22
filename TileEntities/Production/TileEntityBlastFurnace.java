@@ -305,12 +305,14 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				Tamb /= 4;
 			ReikaWorldHelper.changeAdjBlock(world, x, y, z, iceside, Blocks.flowing_water, 0);
 		}
+		int Tadd = 0;
 		if (RotaryAux.isNextToFire(world, x, y, z)) {
-			Tamb += Tamb >= 300 ? 100 : 200;
+			Tadd += Tamb >= 300 ? 100 : 200;
 		}
 		if (RotaryAux.isNextToLava(world, x, y, z)) {
-			Tamb += Tamb >= 300 ? 400 : 600;
+			Tadd += Tamb >= 300 ? 400 : 600;
 		}
+		Tamb += Tadd;
 
 		if (temperature > Tamb)
 			temperature--;

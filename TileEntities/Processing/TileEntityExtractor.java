@@ -477,7 +477,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	public int getOperationTime(int stage) {

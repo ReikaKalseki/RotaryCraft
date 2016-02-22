@@ -24,6 +24,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Base.AutoOreItem;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
@@ -162,6 +163,18 @@ public class ExtractorModOres {
 		return false;
 	}
 
+	public static OreType getOreFromExtract(ItemStack is) {
+		if (is.getItem() instanceof AutoOreItem)
+			return ((AutoOreItem)is.getItem()).getOreType(is);
+		else if (ItemRegistry.EXTRACTS.matchItem(is)) {
+			return ReikaOreHelper.oreList[is.getItemDamage()%ReikaOreHelper.oreList.length];
+		}
+		else if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
+			return ModOreList.oreList[(is.getItemDamage()/4)];
+		}
+		return null;
+	}
+
 	public static ItemStack getSmeltedIngot(ModOreList ore) {
 		switch(ore) {
 			case NETHERCOAL:
@@ -207,10 +220,6 @@ public class ExtractorModOres {
 			default:
 				return ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal());
 		}
-	}
-
-	public static ModOreList getOreFromExtract(ItemStack item) {
-		return ItemRegistry.MODEXTRACTS.matchItem(item) ? ModOreList.oreList[(item.getItemDamage()/4)] : null;
 	}
 
 	public static enum ExtractorStage {

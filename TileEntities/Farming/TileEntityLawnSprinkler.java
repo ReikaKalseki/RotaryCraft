@@ -31,6 +31,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
@@ -167,8 +168,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 			Block id = world.getBlock(rx, i, rz);
 			int meta = world.getBlockMetadata(rx, i, rz);
 			if (id == Blocks.farmland) {
-				if (meta < 8)
-					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
+				ReikaWorldHelper.hydrateFarmland(world, rx, i, rz, false);
 				i = -999;
 			}
 			else if (id != Blocks.air && id.isOpaqueCube()) {
@@ -180,7 +180,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				if (crop != null && !crop.isRipe(meta)) {
 					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 				}
-				else if (modcrop != null && !modcrop.isRipe(world, rx, i, rz) || true) {
+				else if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
 					//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
 					id.updateTick(world, rx, i, rz, rand);
 					BlockTickEvent.fire(world, rx, i, rz, id, UpdateFlags.FORCED.flag);

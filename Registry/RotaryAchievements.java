@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 
 public enum RotaryAchievements {
 
+	RCUSEBOOK(		-1, 1,	ItemRegistry.HANDBOOK,											null,			false),
 	MAKESTEEL(		0, 0,	ItemStacks.steelingot, 											null,			false),
 	MAKEYEAST(		2, -2,	ItemRegistry.YEAST,				 								MAKESTEEL,		false),
 	EXTRACTOR(		2, 0,	ItemStacks.goldoreflakes, 										MAKESTEEL,		false),
@@ -49,7 +50,7 @@ public enum RotaryAchievements {
 	SPRINKLER(		-6, -2,	MachineRegistry.SPRINKLER, 										PUMP,			false), //turn on
 	FLOODLIGHT(		-1, -1,	MachineRegistry.FLOODLIGHT, 									MAKESTEEL,		false), //turn on at Light 15
 	DAMAGEGEARS(	-4, -2,	ItemStacks.gearunit, 											STEELSHAFT,		false),
-	DIAMONDGEARS(	-4, -4,	MaterialRegistry.DIAMOND.getGearboxItem(8), 						DAMAGEGEARS,	false), //make
+	DIAMONDGEARS(	-4, -4,	MaterialRegistry.DIAMOND.getGearboxItem(8), 					DAMAGEGEARS,	false), //make
 	MRADS32(		2, -6,	ItemRegistry.METER,												JETFUEL,		true), //transmit power at 32Mrad/s
 	GIGAWATT(		6, 0,	Blocks.redstone_block, 											JETENGINE,		true), //transmit 1GW of power in one shaft w/o breaking
 	RAILDRAGON(		2, 8,	Blocks.dragon_egg, 												MAKERAILGUN,	true), //kill dragon with railgun

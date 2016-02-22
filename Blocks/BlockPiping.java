@@ -105,9 +105,9 @@ public class BlockPiping extends BlockBasicMultiTE {
 		iconBlocks[1][0] = ico.registerIcon("rotarycraft:steel");
 		iconBlocks[2][0] = Blocks.obsidian.getIcon(0, 0);
 		iconBlocks[4][0] = Blocks.redstone_block.getIcon(0, 0);
-		iconBlocks[5][0] = Blocks.nether_brick.getIcon(0, 0);
+		iconBlocks[5][0] = Blocks.sandstone.getIcon(0, 0);
 		iconBlocks[6][0] = Blocks.lapis_block.getIcon(0, 0);
-		iconBlocks[7][0] = Blocks.sandstone.getIcon(0, 0);
+		iconBlocks[7][0] = Blocks.nether_brick.getIcon(0, 0);
 		iconBlocks[8][0] = ico.registerIcon("rotarycraft:bedrock");
 
 		for (int i = 0; i < 9; i++) {

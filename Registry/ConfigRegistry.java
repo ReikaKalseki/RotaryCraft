@@ -114,7 +114,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	HSLAHARVEST("Increased Harvest Level for HSLA", false),
 	LATEDYNAMO("Rotational Dynamo Recipe Difficulty", 0),
 	BORERPOW("Borer Power Requirement Factor", 1F),
-	BEEYEAST("Use Forestry Bees To Produce Yeast", 0);
+	BEEYEAST("Use Forestry Bees To Produce Yeast", 0),
+	HARDCONVERTERS("Harder Converter Unit Recipes", false);
 
 	private String label;
 	private boolean defaultState;

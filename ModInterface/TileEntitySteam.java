@@ -122,7 +122,7 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE || super.canConnectToPipe(m);
+		return m.isStandardPipe() || super.canConnectToPipe(m);
 	}
 
 	@Override

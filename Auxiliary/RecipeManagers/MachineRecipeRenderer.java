@@ -46,7 +46,7 @@ public class MachineRecipeRenderer {
 
 	private int getIndex(List li) {
 		long time = System.currentTimeMillis();
-		int index = (int)((time/1000)%li.size());
+		int index = (int)((time/500)%li.size());
 		return index;
 	}
 

@@ -889,8 +889,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				return 0;
 			return 15;
 		}
-		if (m == MachineRegistry.PIPE) {
-			TileEntityPipe te = (TileEntityPipe)world.getTileEntity(x, y, z);
+		if (m != null && m.isPipe()) {
+			TileEntityPiping te = (TileEntityPiping)world.getTileEntity(x, y, z);
 			if (te.getFluidLevel() <= 0 || te.getFluidType() == null)
 				return 0;
 			Fluid f = te.getFluidType();

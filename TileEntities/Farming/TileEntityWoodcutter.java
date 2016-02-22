@@ -27,7 +27,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray.BlockTypePrioritizer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
@@ -37,7 +39,6 @@ import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -302,12 +303,11 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
 		this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
 		c.setBlock(world, Blocks.air);
-		ReikaSoundHelper.playBreakSound(world, c.xCoord, c.yCoord, c.zCoord, Blocks.log);
 
 		if (mat == Material.leaves)
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat(), 1F);
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat()*0.5F, 1F);
 		else
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat(), 1F);
+			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat()*0.5F, 1F);
 		if (tree.getTreeType() == ModWoodList.SLIME && c.getBlock(world) == tree.getTreeType().getLogID()) {
 			jam++;
 			jamColor = 0xff000000 | ReikaColorAPI.mixColors(ModWoodList.SLIME.logColor, 0xffffff, (float)jam/MAX_JAM);
@@ -318,7 +318,8 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		float f = this.getYield(b, meta);
 		if (ReikaRandomHelper.doWithChance(f)) {
 			int fortune = this.getEnchantment(Enchantment.fortune);
-			Collection<ItemStack> ret = b.getDrops(world, x, y, z, meta, fortune);
+			ArrayList<ItemStack> ret = b.getDrops(world, x, y, z, meta, fortune);
+			MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(x, y, z, world, b, meta, fortune, 1, ret, this.getPlacer(), false));
 			if (tree.getTreeType() == ModWoodList.SLIME) {
 				Block log = tree.getTreeType().getLogID();
 				if (b == log) {

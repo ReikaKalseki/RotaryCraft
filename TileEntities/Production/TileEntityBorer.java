@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
@@ -526,6 +527,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 			int fortune = this.getEnchantment(Enchantment.fortune);
 			Collection<ItemStack> items = id.getDrops(world, xread, yread, zread, meta, fortune);
+			MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(xread, yread, zread, world, id, meta, fortune, 1, (ArrayList<ItemStack>)items, this.getPlacer(), false));
 			if (id instanceof BlockTieredResource) {
 				EntityPlayer ep = this.getPlacer();
 				BlockTieredResource bt = (BlockTieredResource)id;

@@ -248,7 +248,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override

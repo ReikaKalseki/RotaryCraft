@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class ItemHandBook extends ItemRotaryTool {
 
@@ -26,6 +27,7 @@ public class ItemHandBook extends ItemRotaryTool {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer ep)
 	{
 		ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOK.ordinal(), world, 0, 0, 0);
+		RotaryAchievements.RCUSEBOOK.triggerAchievement(ep);
 		return itemstack;
 	}
 }

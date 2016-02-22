@@ -32,11 +32,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class AgriCanola implements ICropPlant {
 
-	public static int[] GAIN_FORTUNE_MAPPING = { 0, 1, 1, 1, 2, 2, 3, 4, 6, 10 };
+	private static final int[] GAIN_FORTUNE_MAPPING = { 0, 1, 1, 2, 2, 3, 4, 5, 7, 10 };
+	private static final int[] METADATA_CONVERSION = { 0, 1, 2, 4, 5, 6, 8, 9 };
 
 	@Override
 	public int tier() {
-		return 0;
+		return 2;
 	}
 
 	@Override
@@ -103,17 +104,17 @@ public class AgriCanola implements ICropPlant {
 
 	@Override
 	public boolean isMature(IBlockAccess world, int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z) == BlockCanola.GROWN;
+		return METADATA_CONVERSION[world.getBlockMetadata(x, y, z)] == BlockCanola.GROWN;
 	}
 
 	@Override
 	public float getHeight(int meta) {
-		return BlockCanola.getPlantHeight(meta);
+		return BlockCanola.getPlantHeight(METADATA_CONVERSION[meta]);
 	}
 
 	@Override
 	public IIcon getPlantIcon(int growthStage) {
-		return BlockRegistry.CANOLA.getBlockInstance().getIcon(2, growthStage);
+		return BlockRegistry.CANOLA.getBlockInstance().getIcon(2, METADATA_CONVERSION[growthStage]);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
@@ -109,9 +110,8 @@ public class TileEntitySprinkler extends SprinklerBlock {
 							return;
 						//ReikaWorldHelper.legacySetBlockWithNotify(world, x+i, 75, z+j, 20);
 						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", x+i, ytop, z+j));
-						int metaf = world.getBlockMetadata(x+i, ytop, z+j);
-						if (metaf < 8 && world.getBlock(x+i, ytop, z+j) == Blocks.farmland) //Wetness maxes at 8
-							world.setBlockMetadataWithNotify(x+i, ytop, z+j, metaf+1, 3);
+						if (world.getBlock(x+i, ytop, z+j) == Blocks.farmland)
+							ReikaWorldHelper.hydrateFarmland(world, x+i, ytop, z+j, false);
 					}
 				}
 				if (world.getBlock(x+i, ytop-2, z+j) == Blocks.farmland) {

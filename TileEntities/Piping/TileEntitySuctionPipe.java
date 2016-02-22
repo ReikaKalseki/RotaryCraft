@@ -35,7 +35,7 @@ public class TileEntitySuctionPipe extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry p) {
-		return p == MachineRegistry.HOSE || p == MachineRegistry.FUELLINE || p == MachineRegistry.PIPE;
+		return p == MachineRegistry.HOSE || p == MachineRegistry.FUELLINE || p.isStandardPipe();
 	}
 
 	@Override

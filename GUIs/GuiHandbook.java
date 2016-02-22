@@ -387,6 +387,8 @@ public class GuiHandbook extends GuiScreen
 		//	return PageType.BLASTFURNACE;
 		if (h == HandbookRegistry.ALLOYING)
 			return PageType.BLASTFURNACE;
+		if (h == HandbookRegistry.COKE)
+			return PageType.BLASTFURNACE;
 		if (h == HandbookRegistry.STRONGSPRING)
 			return PageType.BLASTFURNACE;
 

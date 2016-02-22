@@ -80,4 +80,15 @@ public enum PlantMaterials {
 		return item.copy();
 	}
 
+	public int[] getMetadatas() {
+		switch(this) {
+			case LEAVES:
+				return new int[]{0, 1, 2, 3};
+			case LEAVES2:
+				return new int[]{0, 1};
+			default:
+				return new int[]{0};
+		}
+	}
+
 }

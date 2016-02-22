@@ -203,7 +203,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	private boolean isValidTarget(BiomeGenBase from) {

@@ -192,7 +192,7 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override
@@ -217,12 +217,12 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 
 	@Override
 	public boolean canIntakeFromPipe(MachineRegistry p) {
-		return p == MachineRegistry.PIPE;
+		return p.isStandardPipe();
 	}
 
 	@Override
 	public boolean canOutputToPipe(MachineRegistry p) {
-		return p == MachineRegistry.PIPE;
+		return p.isStandardPipe();
 	}
 
 	@Override

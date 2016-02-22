@@ -23,6 +23,7 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.PlantMaterials;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MulchMaterials {
 
@@ -41,15 +42,32 @@ public class MulchMaterials {
 			this.addValue(TreeGetter.getRainbowLeaf(), 16);
 			this.addValue(TreeGetter.getRainbowSapling(), 8);
 		}
+
 		if (ModList.FORESTRY.isLoaded()) {
 			this.addValue(ForestryHandler.ItemEntry.SAPLING.getItem(), 2);
 			this.addValue(ForestryHandler.ItemEntry.HONEY.getItem(), 1);
 			this.addValue(ForestryHandler.ItemEntry.HONEYDEW.getItem(), 1);
 			this.addValue(ForestryHandler.BlockEntry.LEAF.getBlock(), 4);
 		}
+
 		if (ModList.EMASHER.isLoaded()) {
 			this.addValue(ModCropList.ALGAE.blockID, 3);
 		}
+
+		if (ModList.BOTANIA.isLoaded()) {
+			Item petal = GameRegistry.findItem(ModList.BOTANIA.modLabel, "petal");
+			Block flower = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "flower");
+			Block tallflower1 = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower1");
+			Block tallflower2 = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower2");
+			for (int i = 0; i < 16; i++) {
+				Block tall = i >= 8 ? tallflower2 : tallflower1;
+				int tallm = i%8;
+				this.addValue(new ItemStack(flower, 1, i), 4);
+				this.addValue(new ItemStack(tall, 1, tallm), 8);
+				this.addValue(new ItemStack(petal, 1, i), 2);
+			}
+		}
+
 		for (int i = 0; i < ModWoodList.woodList.length; i++) {
 			ModWoodList wood = ModWoodList.woodList[i];
 			if (wood.exists()) {
@@ -65,9 +83,10 @@ public class MulchMaterials {
 		}
 		for (int i = 0; i < PlantMaterials.plantList.length; i++) {
 			PlantMaterials plant = PlantMaterials.plantList[i];
-			for (int k = 0; k < 16; k++) {
+			int[] metas = plant.getMetadatas();
+			for (int k = 0; k < metas.length; k++) {
 				ItemStack is = plant.getPlantItem();
-				is.setItemDamage(k);
+				is.setItemDamage(metas[k]);
 				this.addValue(is, plant.getPlantValue());
 			}
 		}
@@ -191,6 +210,8 @@ public class MulchMaterials {
 			return 0;
 		if (wood.isRareTree())
 			return 32;
+		if (wood == ModWoodList.LIGHTED)
+			return 12;
 		ModList mod = wood.getParentMod();
 		if (mod == ModList.THAUMCRAFT)
 			return 4;

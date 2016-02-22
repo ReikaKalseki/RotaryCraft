@@ -561,12 +561,12 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return p == MachineRegistry.PIPE;
+		return p.isStandardPipe();
 	}
 
 	@Override

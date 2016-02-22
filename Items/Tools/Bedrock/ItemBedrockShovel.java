@@ -64,7 +64,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return toolClass.toLowerCase().contains("shovel") || toolClass.toLowerCase().contains("spade") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
+		return toolClass == null || toolClass.toLowerCase().contains("shovel") || toolClass.toLowerCase().contains("spade") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
 	}
 
 	@Override

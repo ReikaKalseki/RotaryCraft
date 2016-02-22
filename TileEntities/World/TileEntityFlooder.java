@@ -132,7 +132,7 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.PIPE;
+		return m.isStandardPipe();
 	}
 
 	@Override

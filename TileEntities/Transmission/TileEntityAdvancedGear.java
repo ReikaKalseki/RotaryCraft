@@ -943,7 +943,7 @@ PipeConnector, IFluidHandler, ToggleTile {
 	public long getMaxPower() {
 		if (this.getGearType() != GearType.COIL)
 			return 0;
-		return releaseOmega*releaseTorque;
+		return power > 0 ? releaseOmega*releaseTorque : 0;
 	}
 
 	@Override

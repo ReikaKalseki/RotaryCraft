@@ -78,4 +78,25 @@
 	<tungsten>
 		Tungsten is a byproduct of processing iron ore in the Extractor, and is used for high-temperature, high-strength, or high-pressure applications. It can only be smelted in a vanilla furnace above %dC.
 	</tungsten>
+	<coke>
+		Coal coke is a more efficienct carbon source when making steel. Because of this, it can also be used as a furnace fuel, with a greater efficiency than pure coal.
+	</coke>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
 </resource>

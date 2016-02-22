@@ -201,8 +201,8 @@ public enum ExtractorBonus {
 			ItemStack is = b.sourceItem;
 			ItemStack bon = b.getBonus();
 			if (bon != null) {
-				OreType in = ItemStacks.getOreFromExtractItem(is);
-				OreType out = ItemStacks.getOreFromExtractItem(bon);
+				OreType in = ExtractorModOres.getOreFromExtract(is);
+				OreType out = ExtractorModOres.getOreFromExtract(bon);
 				oremap.put(in, out);
 				backwards.addValue(out, in);
 				itemmap.put(is, bon);

@@ -59,7 +59,7 @@ public class ItemMulti extends ItemBasic {
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.compost) && !world.isRemote) {
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.compost)/* && !world.isRemote*/) {
 			ItemDye.applyBonemeal(is, world, x, y, z, ep);
 		}
 		else if (this.isProperBelt(m, is)) {

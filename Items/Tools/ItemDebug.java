@@ -100,7 +100,7 @@ public class ItemDebug extends ItemRotaryTool {
 				lgc.spawnDelay = 0;
 			}
 		}
-		if (m == MachineRegistry.PIPE) {
+		if (m != null && m.isStandardPipe()) {
 			TileEntityPipe tile = (TileEntityPipe)te;
 			if (tile != null) {
 				ReikaChatHelper.write(String.format("%s  %d  %d", tile.getFluidType().getLocalizedName(), tile.getFluidLevel(), tile.getPressure()));

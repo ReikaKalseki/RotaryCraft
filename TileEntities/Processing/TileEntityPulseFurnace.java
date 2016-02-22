@@ -382,7 +382,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE || m == MachineRegistry.PIPE;
+		return m == MachineRegistry.FUELLINE || m.isStandardPipe();
 	}
 
 	@Override
