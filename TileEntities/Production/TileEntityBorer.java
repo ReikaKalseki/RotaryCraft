@@ -52,7 +52,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
-import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.BorerDigEvent;
 import Reika.RotaryCraft.API.Interfaces.IgnoredByBorer;
@@ -86,7 +85,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	public static final int OBSIDIANTORQUE = 512;
 
 	private static final int genRange = ConfigRegistry.BORERGEN.getValue();
-	public static final int ANTICIPATE = Math.max(2, Math.max(genRange, getServerViewDistance()));
+
+	private static int anticipationDistance = -1;
 
 	private int step = 1;
 
@@ -103,7 +103,13 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	private int soundtick = 0;
 
-	private static int getServerViewDistance() {
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		if (anticipationDistance < 0)
+			anticipationDistance = Math.max(2, Math.max(genRange, this.getServerViewDistance()));
+	}
+
+	private int getServerViewDistance() {
 		MinecraftServer s = MinecraftServer.getServer();
 		return s != null ? s.getConfigurationManager().getViewDistance() : 0;
 	}
@@ -247,7 +253,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
 				if (!world.isRemote) {
-					for (int i = 0; i <= ANTICIPATE; i++) {
+					for (int i = 0; i <= anticipationDistance; i++) {
 						ReikaWorldHelper.forceGenAndPopulate(world, x+(step+16*i)*facing.offsetX, z+(step+16*i)*facing.offsetZ, genRange);
 					}
 					this.safeDig(world, x, y, z, meta);
@@ -519,7 +525,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(world, xread, yread, zread)) {
-				ItemStack is = new ItemStack(id, 1, this.getSilkTouchMetaDropped(id, meta));
+				ItemStack is = new ItemStack(id, 1, ReikaBlockHelper.getSilkTouchMetaDropped(id, meta));
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
 				}
@@ -546,34 +552,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 		}
 		return true;
-	}
-
-	private int getSilkTouchMetaDropped(Block id, int meta) {
-		if (id == Blocks.torch)
-			return 0;
-		if (id == Blocks.redstone_torch || id == Blocks.unlit_redstone_torch)
-			return 0;
-		if (id == Blocks.leaves || id == Blocks.log || id == Blocks.leaves2 || id == Blocks.log2)
-			return meta&3;
-		if (id == Blocks.sapling)
-			return meta&3;
-		if (id == Blocks.vine)
-			return 0;
-		if (id == Blocks.waterlily)
-			return 0;
-		if (id == Blocks.sticky_piston || id == Blocks.piston)
-			return 0;
-		if (ReikaBlockHelper.isStairBlock(id))
-			return 0;
-		ModWoodList wood = ModWoodList.getModWood(id, meta);
-		if (wood != null) {
-			return wood.getLogMetadatas().get(0);
-		}
-		wood = ModWoodList.getModWoodFromLeaf(id, meta);
-		if (wood != null) {
-			return wood.getLeafMetadatas().get(0);
-		}
-		return meta;
 	}
 
 	private boolean canSilk(World world, int x, int y, int z) {

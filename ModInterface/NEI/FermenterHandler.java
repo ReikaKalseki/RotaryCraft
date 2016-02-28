@@ -48,8 +48,7 @@ public class FermenterHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack in = input;
-			int amt = MulchMaterials.instance.getPlantValue(in);
+			int amt = input != null ? MulchMaterials.instance.getPlantValue(input) : 1;
 			ItemStack is = output.getItem() == ItemRegistry.YEAST.getItemInstance() ? output : ReikaItemHelper.getSizedItemStack(output, amt);
 			return new PositionedStack(is, 111, 36);
 		}

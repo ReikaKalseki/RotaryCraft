@@ -74,7 +74,7 @@ public class AgriCanola implements ICropPlant {
 
 	@Override
 	public boolean onHarvest(World world, int x, int y, int z, EntityPlayer player) {
-		return false;
+		return true;
 	}
 
 	@Override
