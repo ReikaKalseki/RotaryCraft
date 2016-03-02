@@ -95,6 +95,8 @@ public class ItemCustomModOre extends AutoOreItem implements GradientBlend {
 	}
 
 	public static CustomExtractEntry getExtractType(ItemStack is) {
+		if (CustomExtractLoader.instance.getEntries().isEmpty())
+			return null;
 		int idx = getEntryIndex(is);
 		return CustomExtractLoader.instance.getEntries().get(idx);
 	}

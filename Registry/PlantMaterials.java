@@ -86,6 +86,8 @@ public enum PlantMaterials {
 				return new int[]{0, 1, 2, 3};
 			case LEAVES2:
 				return new int[]{0, 1};
+			case SAPLING:
+				return new int[]{0, 1, 2, 3, 4, 5};
 			default:
 				return new int[]{0};
 		}

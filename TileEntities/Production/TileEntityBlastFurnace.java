@@ -9,7 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -372,7 +372,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		if (ItemRegistry.CRAFTPATTERN.matchItem(patt)) {
 			return slot >= 1 && slot <= 9 && this.patternMatches(slot-1, is, patt);
 		}
-		ArrayList<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
+		HashSet<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
 		if (!slots.isEmpty()) {
 			return slots.contains(slot);
 		}

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.ModInterface.NEI;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -18,6 +19,7 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -50,10 +52,12 @@ public class FractionHandler extends TemplateRecipeHandler {
 		@Override
 		public List<PositionedStack> getIngredients()
 		{
-			ItemStack[] in = TileEntityFractionator.getIngredients();
+			Collection<KeyedItemStack> in = TileEntityFractionator.getIngredients();
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-			for (int i = 0; i < in.length; i++) {
-				stacks.add(new PositionedStack(in[i], 21+(i%2)*18, 7+i/2*18));
+			int i = 0;
+			for (KeyedItemStack is : in) {
+				stacks.add(new PositionedStack(is.getItemStack(), 21+(i%2)*18, 7+i/2*18));
+				i++;
 			}
 			stacks.add(new PositionedStack(new ItemStack(Items.ghast_tear), 93, 25));
 			return stacks;

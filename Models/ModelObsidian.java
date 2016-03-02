@@ -84,19 +84,12 @@ public class ModelObsidian extends RotaryModelBase
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		this.setRenderPass();
-		boolean liq = (Boolean)li.get(0);
-		boolean solid = (Boolean)li.get(1);
-		if (solid) {
-			Shape1.render(te, f5);
-			Shape2.render(te, f5);
-			Shape2a.render(te, f5);
-			Shape3.render(te, f5);
-			Shape3a.render(te, f5);
-		}
-		if (liq)
-			Shape4.render(te, f5);
-		if (solid)
-			Shape5.render(te, f5);
+		Shape1.render(te, f5);
+		Shape2.render(te, f5);
+		Shape2a.render(te, f5);
+		Shape3.render(te, f5);
+		Shape3a.render(te, f5);
+
+		Shape5.render(te, f5);
 	}
 }

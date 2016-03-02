@@ -65,47 +65,48 @@ public class RenderFuelConverter extends RotaryTERenderer
 			this.renderTileEntityFuelConverterAt((TileEntityFuelConverter)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			this.renderFuels((TileEntityFuelConverter)tile, par2, par4, par6, ((TileEntityFuelConverter)tile).BC_FUEL);
-			this.renderFuels((TileEntityFuelConverter)tile, par2, par4, par6, ((TileEntityFuelConverter)tile).JET_FUEL);
+			this.renderFuels((TileEntityFuelConverter)tile, par2, par4, par6);
 		}
 	}
 
-	private void renderFuels(TileEntityFuelConverter tile, double par2, double par4, double par6, Fluid fuel) {
+	private void renderFuels(TileEntityFuelConverter tile, double par2, double par4, double par6) {
 
-		FluidStack liquid = new FluidStack(fuel, 1);
+		for (int i = 0; i <= 1; i++) {
+			Fluid f = i == 0 ? tile.getInputFluidType() : tile.getOutputFluidType();
+			int amount = i == 0 ? tile.getInputLevel() : tile.getOutputLevel();
+			if (f == null)
+				continue;
+			FluidStack liquid = new FluidStack(f, 1);
 
-		int amount = tile.getFuel(liquid);
-		if (amount == 0)
-			return;
+			int[] displayList = ReikaLiquidRenderer.getGLLists(liquid, tile.worldObj, false);
 
-		int[] displayList = ReikaLiquidRenderer.getGLLists(liquid, tile.worldObj, false);
+			if (displayList == null) {
+				return;
+			}
 
-		if (displayList == null) {
-			return;
+			GL11.glPushMatrix();
+			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_BLEND);
+			BlendMode.DEFAULT.apply();
+
+			ReikaLiquidRenderer.bindFluidTexture(f);
+			ReikaLiquidRenderer.setFluidColor(liquid);
+
+			GL11.glTranslated(par2, par4, par6);
+
+			GL11.glTranslated(0, tile.getLiquidModelOffset(i == 0), 0);
+
+			GL11.glTranslated(0, 0.001, 0);
+			GL11.glScaled(1, 1/3D, 1);
+			GL11.glScaled(0.99, 0.95, 0.99);
+
+			GL11.glCallList(displayList[(int)(amount / ((double)tile.CAPACITY) * (ReikaLiquidRenderer.LEVELS - 1))]);
+
+			GL11.glPopAttrib();
+			GL11.glPopMatrix();
 		}
-
-		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_BLEND);
-		BlendMode.DEFAULT.apply();
-
-		ReikaLiquidRenderer.bindFluidTexture(fuel);
-		ReikaLiquidRenderer.setFluidColor(liquid);
-
-		GL11.glTranslated(par2, par4, par6);
-
-		GL11.glTranslated(0, tile.getLiquidModelOffset(liquid), 0);
-
-		GL11.glTranslated(0, 0.001, 0);
-		GL11.glScaled(1, 1/3D, 1);
-		GL11.glScaled(0.99, 0.95, 0.99);
-
-		GL11.glCallList(displayList[(int)(amount / ((double)tile.CAPACITY) * (ReikaLiquidRenderer.LEVELS - 1))]);
-
-		GL11.glPopAttrib();
-		GL11.glPopMatrix();
 	}
 
 	@Override

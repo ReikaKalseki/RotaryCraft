@@ -219,20 +219,20 @@ public enum EngineType {
 	/** Returns ticks */
 	public int getFuelUnitDuration() {
 		switch(this) {
-		case STEAM:
-			return 18;
-		case GAS:
-			return 12;
-		case AC:
-			return 1200;
-		case SPORT:
-			return 6;
-		case MICRO:
-			return 48;
-		case JET:
-			return 2;
-		default:
-			return 0;
+			case STEAM:
+				return 18;
+			case GAS:
+				return 12;
+			case AC:
+				return 600;
+			case SPORT:
+				return 6;
+			case MICRO:
+				return 48;
+			case JET:
+				return 2;
+			default:
+				return 0;
 		}
 	}
 
@@ -250,45 +250,45 @@ public enum EngineType {
 
 	public boolean canReceiveFluid(Fluid fluid) {
 		switch(this) {
-		case STEAM:
-			if (fluid.equals(FluidRegistry.WATER))
-				return true;
-			break;
-		case GAS:
-			if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
-				return true;
-			break;
-		case SPORT:
-			if (fluid.equals(FluidRegistry.WATER))
-				return true;
-			if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
-				return true;
-			break;
-		case HYDRO:
-			if (fluid.equals(FluidRegistry.getFluid("rc lubricant")))
-				return true;
-			break;
-		case MICRO:
-		case JET:
-			if (fluid.equals(FluidRegistry.getFluid("rc jet fuel")))
-				return true;
-			break;
-		default:
-			return false;
+			case STEAM:
+				if (fluid.equals(FluidRegistry.WATER))
+					return true;
+				break;
+			case GAS:
+				if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
+					return true;
+				break;
+			case SPORT:
+				if (fluid.equals(FluidRegistry.WATER))
+					return true;
+				if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
+					return true;
+				break;
+			case HYDRO:
+				if (fluid.equals(FluidRegistry.getFluid("rc lubricant")))
+					return true;
+				break;
+			case MICRO:
+			case JET:
+				if (fluid.equals(FluidRegistry.getFluid("rc jet fuel")))
+					return true;
+				break;
+			default:
+				return false;
 		}
 		return false;
 	}
 
 	public Fluid getFuelType() {
 		switch(this) {
-		case GAS:
-		case SPORT:
-			return FluidRegistry.getFluid("rc ethanol");
-		case MICRO:
-		case JET:
-			return FluidRegistry.getFluid("rc jet fuel");
-		default:
-			return null;
+			case GAS:
+			case SPORT:
+				return FluidRegistry.getFluid("rc ethanol");
+			case MICRO:
+			case JET:
+				return FluidRegistry.getFluid("rc jet fuel");
+			default:
+				return null;
 		}
 	}
 
@@ -302,24 +302,24 @@ public enum EngineType {
 
 	public int getSizeInventory() {
 		switch(this) {
-		case STEAM:
-		case GAS:
-		case AC:
-			return 1;
-		case SPORT:
-			return 2;
-		default:
-			return 0;
+			case STEAM:
+			case GAS:
+			case AC:
+				return 1;
+			case SPORT:
+				return 2;
+			default:
+				return 0;
 		}
 	}
 
 	public boolean allowInventoryStacking() {
 		switch(this) {
-		case GAS:
-		case SPORT:
-			return true;
-		default:
-			return false;
+			case GAS:
+			case SPORT:
+				return true;
+			default:
+				return false;
 		}
 	}
 

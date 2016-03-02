@@ -589,7 +589,7 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			if (m == MachineRegistry.FUELENHANCER) {
 				TileEntityFuelConverter clicked = (TileEntityFuelConverter)tile;
-				ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel and %.3f m^3 of jet fuel.", clicked.getName(), clicked.getBCFuel()/1000D, clicked.getJetFuel()/1000D));
+				ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel and %.3f m^3 of jet fuel.", clicked.getName(), clicked.getInputLevel()/1000D, clicked.getOutputLevel()/1000D));
 			}
 		}
 		if (tile instanceof PowerSourceTracker) {

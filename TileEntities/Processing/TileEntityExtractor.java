@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HiddenInventorySlot;
@@ -438,7 +439,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (slot > 3 && slot < 9)
 			return false;
 		if (slot == 0)
-			return ReikaBlockHelper.isOre(is);
+			return ReikaBlockHelper.isOre(is) || CustomExtractLoader.instance.getEntryFromOreBlock(is) != null;
 		if (ItemRegistry.EXTRACTS.matchItem(is)) {
 			return slot == 1+is.getItemDamage()/8;
 		}

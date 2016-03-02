@@ -35,7 +35,7 @@ public class SlotExtractor1 extends Slot {
 	public boolean isItemValid(ItemStack is)
 	{
 		RotaryCraft.logger.debug("Mod ore: "+ModOreList.getModOreFromOre(is));
-		return ReikaBlockHelper.isOre(is);
+		return ReikaBlockHelper.isOre(is) || CustomExtractLoader.instance.getEntryFromOreBlock(is) != null;
 	}
 
 	/**

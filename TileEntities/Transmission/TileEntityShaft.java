@@ -269,6 +269,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			torque = 0;
 			omega = 0;
 			power = 0;
+
+			this.basicPowerReceiver();
 			return;
 		}
 		//this.testFailure();

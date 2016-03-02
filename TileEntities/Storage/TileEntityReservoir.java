@@ -137,8 +137,9 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		tempTimer.update();
 		if (!world.isRemote && !this.isEmpty() && tempTimer.checkCap()) {
 			if (!this.isSurrounded()) {
+				Fluid f = tank.getActualFluid();
 				int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-				int temp = tank.getActualFluid().getTemperature(world, x, y, z)-273;
+				int temp = f.getTemperature(world, x, y, z)-273;
 				int dT = temp-Tamb;
 				int r = 2;
 				for (int i = -r; i <= r; i++) {
@@ -165,12 +166,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 				hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null;
 				hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null;
 				if (hot) {
-					Fluid f = tank.getActualFluid();
-					boolean flammable = f.equals(FluidRegistry.getFluid("rc ethanol")) || f.equals(FluidRegistry.getFluid("rc jet fuel"));
-					flammable = flammable || f.equals(FluidRegistry.getFluid("oil")) || f.equals(FluidRegistry.getFluid("fuel"));
-					flammable = flammable || f.equals(FluidRegistry.getFluid("ethanol")) || f.equals(FluidRegistry.getFluid("creosote"));
-					flammable = flammable || f.equals(FluidRegistry.getFluid("biofuel")) || f.equals(FluidRegistry.getFluid("bioethanol"));
-					if (flammable) {
+					if (ReikaFluidHelper.isFlammable(f)) {
 						world.setBlockToAir(x, y, z);
 						world.newExplosion(null, x+0.5, y+0.5, z+0.5, 4, true, true);
 					}
@@ -434,6 +430,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			if (f.equals(FluidRegistry.LAVA) || f.getTemperature(worldObj, xCoord, yCoord, zCoord) > 500) {
 				e.attackEntityFrom(DamageSource.lava, 4);
 				e.setFire(12);
+			}
+			if (e.isBurning() && ReikaFluidHelper.isFlammable(f)) {
+				this.delete();
+				worldObj.newExplosion(e, e.posX, e.posY, e.posZ, 4F, true, true);
 			}
 			if (f.canBePlacedInWorld()) {
 				Block b = f.getBlock();

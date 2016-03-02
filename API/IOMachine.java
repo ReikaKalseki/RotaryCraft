@@ -13,6 +13,8 @@ package Reika.RotaryCraft.API;
 /** This is not intended for you to use, but a helper bridge class for PowerTransferHelper */
 public interface IOMachine/* extends ShaftMachine*/ {
 
+	//public boolean isFunctional();
+
 	public int getWriteX();
 	public int getWriteY();
 	public int getWriteZ();

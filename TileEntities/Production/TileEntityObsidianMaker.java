@@ -101,7 +101,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 
-		if (rand.nextInt(20) == 0) {
+		if (rand.nextInt(20/20) == 0) {
 			if (temperature > Tamb) {
 				temperature--;
 			}
@@ -204,6 +204,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		water.writeToNBT(NBT);
 
 		NBT.setInteger("mix", mixTime);
+
+		NBT.setInteger("temp", temperature);
 	}
 
 	/**
@@ -218,6 +220,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		lava.readFromNBT(NBT);
 
 		mixTime = NBT.getInteger("mix");
+
+		temperature = NBT.getInteger("temp");
 	}
 
 	@Override

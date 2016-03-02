@@ -79,7 +79,7 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 		this.addRecipe(f, amount, out, RecipeLevel.API);
 	}
 
-	private void addRecipe(Fluid f, int amount, ItemStack out, RecipeLevel rl) {
+	public void addRecipe(Fluid f, int amount, ItemStack out, RecipeLevel rl) {
 		CrystallizerRecipe rec = new CrystallizerRecipe(new FluidStack(f, amount), out);
 		recipeList.put(f, amount, rec);
 		this.onAddRecipe(rec, rl);

@@ -106,7 +106,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	}
 
-	private void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl)
+	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl)
 	{
 		out.lock();
 		for (ItemStack isout : out.keySet())
