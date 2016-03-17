@@ -52,6 +52,9 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import com.builtbroken.icbm.api.missile.IMissileEntity;
+
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 
@@ -214,7 +217,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 				tickcount = 0;
 			}
 			if (InterfaceCache.IMISSILE.instanceOf(threat)) {
-				threat.setDead();
+				((IMissileEntity)threat).destroyMissile(this, null, 1, false, true, true);
 				if (!world.isRemote)
 					world.createExplosion(null, x, y, z, 4F, true);
 				tickcount = 0;

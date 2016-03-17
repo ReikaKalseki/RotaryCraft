@@ -10,15 +10,12 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import forestry.api.arboriculture.IToolGrafter;
 
@@ -42,6 +39,7 @@ public class ItemBedrockGrafter extends ItemRotaryTool implements IToolGrafter {
 	@Override
 	public boolean onBlockDestroyed(ItemStack is, World world, Block b, int x, int y, int z, EntityLivingBase e)
 	{
+		/*
 		if (e instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)e;
 			if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
@@ -65,6 +63,7 @@ public class ItemBedrockGrafter extends ItemRotaryTool implements IToolGrafter {
 				}
 			}
 		}
+		 */
 		return false;
 	}
 

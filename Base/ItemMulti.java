@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Base;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -326,7 +327,7 @@ public class ItemMulti extends ItemBasic {
 				s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
 				break;
 		}
-		return ReikaStringParser.stripSpaces(s.toLowerCase());
+		return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override

@@ -47,14 +47,13 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 public class EntityRailGunShot extends EntityTurretShot {
 
 	private int power;
-	private TileEntityRailGun gun;
 
 	public EntityRailGunShot(World world) {
 		super(world);
 	}
 
 	public EntityRailGunShot(World world, double x, double y, double z, double vx, double vy, double vz, int pw, TileEntityRailGun r) {
-		super(world, x, y, z, 0, 0, 0);
+		super(world, x, y, z, 0, 0, 0, r);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;

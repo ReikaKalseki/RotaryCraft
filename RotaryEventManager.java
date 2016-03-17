@@ -12,6 +12,7 @@ package Reika.RotaryCraft;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -300,7 +301,7 @@ public class RotaryEventManager {
 						Entity attacker = evt.source.getSourceOfDamage();
 						if (attacker instanceof EntityPlayer) {
 							ItemStack held = ((EntityPlayer)attacker).getCurrentEquippedItem();
-							if (held != null && held.getItem().getClass().getSimpleName().toLowerCase().contains("rapier")) {
+							if (held != null && held.getItem().getClass().getSimpleName().toLowerCase(Locale.ENGLISH).contains("rapier")) {
 								evt.ammount = 0;
 								int dmg = held.getItem().getDamage(held);
 								held.getItem().setDamage(held, dmg+120);

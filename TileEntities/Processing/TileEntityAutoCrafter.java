@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.TileEntities.Processing;
 
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -28,7 +27,6 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
-import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.CraftCompleteCallback;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
@@ -37,24 +35,18 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import appeng.api.AEApi;
-import appeng.api.config.Actionable;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.IGridBlock;
 import appeng.api.networking.IGridHost;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.crafting.ICraftingLink;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
-import appeng.api.networking.crafting.ICraftingRequester;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AECableType;
-
-import com.google.common.collect.ImmutableSet;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-@Strippable(value={"appeng.api.networking.IGridHost", "appeng.api.networking.crafting.ICraftingRequester"})
-public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IGridHost, ICraftingRequester {
+@Strippable(value={"appeng.api.networking.IGridHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
+public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IGridHost/*, ICraftingRequester*/ {
 
 	public static final int SIZE = 18;
 
@@ -73,8 +65,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	private int tick;
 
 	private int threshold[] = new int[SIZE];
-	private final IdentityHashMap<ICraftingLink, Integer> locks = new IdentityHashMap();
-	private boolean[] lock = new boolean[SIZE];
+	//private final IdentityHashMap<ICraftingLink, Integer> locks = new IdentityHashMap();
+	//private boolean[] lock = new boolean[SIZE];
 
 	private CraftingMode mode = CraftingMode.REQUEST;
 
@@ -91,7 +83,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 			//}
 		}
 	}
-
+	/*
 	private class CraftingLock implements CraftCompleteCallback {
 
 		private final int slot;
@@ -114,7 +106,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		}
 
 	}
-
+	 */
 	public static enum CraftingMode {
 		REQUEST("Request", "Crafts one cycle per request.", 0xff0000, "2"),
 		CONTINUOUS("Continuous", "Crafts continuously as long as there are ingredients", 0x00aaff, "2"),
@@ -181,25 +173,28 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	private void craftMissingItems() {
 		if (ModList.APPENG.isLoaded() && network != null) {
 			for (int i = 0; i < SIZE; i++) {
-				if (this.canTryMaintaining(i)) {
-					ItemStack is = this.getSlotRecipeOutput(i);
-					if (is != null) {
-						long thresh = this.getThreshold(i);
-						long missing = thresh-network.getItemCount(is);
-						if (missing > 0) {
-							lock[i] = true;
-							network.triggerCrafting(worldObj, is, missing, null, new CraftingLock(i));
-						}
+				//if (this.canTryMaintaining(i)) {
+				ItemStack is = this.getSlotRecipeOutput(i);
+				if (is != null) {
+					long thresh = this.getThreshold(i);
+					long missing = thresh-network.getItemCount(is);
+					if (missing > 0) {
+						//lock[i] = true;
+						//network.triggerCrafting(worldObj, is, missing, null, new CraftingLock(i));
+
+						int num = Math.min(is.getMaxStackSize(), (int)Math.min(missing, Integer.MAX_VALUE));
+						this.attemptSlotCrafting(i, num);
 					}
 				}
+				//}
 			}
 		}
 	}
-
+	/*
 	private boolean canTryMaintaining(int i) {
 		return !lock[i];
 	}
-
+	 */
 	public int getThreshold(int i) {
 		return threshold[i];
 	}
@@ -312,7 +307,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 				else
 					network = new MESystemReader((IGridNode)aeGridNode, network);
 			}
-			network.setRequester(this);
+			//network.setRequester(this);
 		}
 	}
 
@@ -356,6 +351,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	}
 
 	private boolean attemptSlotCrafting(int i) {
+		return this.attemptSlotCrafting(i, 1);
+	}
+
+	private boolean attemptSlotCrafting(int i, int n) {
 		ItemStack is = inv[i];
 		if (is == null)
 			return false;
@@ -364,7 +363,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		//ReikaJavaLibrary.pConsole(is+":"+Arrays.toString(items)+":"+out);
 		if (items != null && out != null) {
 			//ReikaJavaLibrary.pConsole("crafting "+out+" from "+Arrays.toString(items));
-			return this.tryCrafting(i, out, items);
+			boolean flag = false;
+			for (int a = 0; a < n; a++)
+				flag |= this.tryCrafting(i, out, items);
+			return flag;
 		}
 		return false;
 	}
@@ -635,7 +637,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	public void securityBreak() {
 
 	}
-
+	/*
 	@Override
 	@ModDependent(ModList.APPENG)
 	public IGridNode getActionableNode() {
@@ -663,5 +665,5 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 			lock[get.intValue()] = false;
 		}
 	}
-
+	 */
 }

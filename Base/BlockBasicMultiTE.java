@@ -89,7 +89,6 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
-import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -105,6 +104,7 @@ import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
@@ -371,7 +371,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					}
 				}
 				else if (FluidContainerRegistry.isFilledContainer(is)) {
-					boolean bucket = FluidContainerRegistry.isBucket(is);
 					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
 					if (f != null) {
 						Fluid fluid = f.getFluid();
@@ -380,10 +379,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 							if (tr.isEmpty()) {
 								tr.addLiquid(size*f.amount, fluid);
 								if (!ep.capabilities.isCreativeMode) {
-									if (bucket)
-										ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, size, 0));
-									else
-										ep.setCurrentItemOrArmor(0, null);
+									ItemStack ret = FluidContainerRegistry.drainFluidContainer(is);
+									ep.setCurrentItemOrArmor(0, ret != null ? ReikaItemHelper.getSizedItemStack(ret, size) : null);
 								}
 								((TileEntityBase)te).syncAllData(true);
 								if (!world.isRemote)
@@ -393,10 +390,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 							else if (f.getFluid().equals(tr.getFluid())) {
 								tr.addLiquid(size*f.amount, fluid);
 								if (!ep.capabilities.isCreativeMode) {
-									if (bucket)
-										ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, size, 0));
-									else
-										ep.setCurrentItemOrArmor(0, null);
+									ItemStack ret = FluidContainerRegistry.drainFluidContainer(is);
+									ep.setCurrentItemOrArmor(0, ret != null ? ReikaItemHelper.getSizedItemStack(ret, size) : null);
 								}
 								((TileEntityBase)te).syncAllData(true);
 								if (!world.isRemote)

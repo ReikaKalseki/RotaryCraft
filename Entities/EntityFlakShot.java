@@ -28,20 +28,17 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAAGun;
 
 public class EntityFlakShot extends EntityTurretShot {
 
-	private TileEntityAAGun source;
-
 	public EntityFlakShot(World world) {
 		super(world);
 	}
 
 	public EntityFlakShot(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityAAGun te) {
-		super(world, x, y, z, 0, 0, 0);
+		super(world, x, y, z, 0, 0, 0, te);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
-		source = te;
 	}
 
 	@Override
@@ -78,7 +75,7 @@ public class EntityFlakShot extends EntityTurretShot {
 	@Override
 	protected void applyAttackEffectsToEntity(World world, Entity el) {
 		if (el instanceof TargetEntity) {
-			((TargetEntity)el).flakShot(source);
+			((TargetEntity)el).flakShot(gun);
 		}
 		if (el instanceof EntityLivingBase) {
 			el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());

@@ -28,8 +28,6 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 
 public class EntityExplosiveShell extends EntityTurretShot {
 
-	private TileEntityRailGun gun;
-
 	public static final float EXPLOSION = 8F;
 
 	public EntityExplosiveShell(World world) {
@@ -37,14 +35,13 @@ public class EntityExplosiveShell extends EntityTurretShot {
 	}
 
 	public EntityExplosiveShell(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityRailGun r) {
-		super(world, x, y, z, 0, 0, 0);
+		super(world, x, y, z, 0, 0, 0, r);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		//ReikaJavaLibrary.pConsole(vx+" , "+vy+" , "+vz);
 		if (!world.isRemote)
 			velocityChanged = true;
-		gun = r;
 	}
 
 	@Override

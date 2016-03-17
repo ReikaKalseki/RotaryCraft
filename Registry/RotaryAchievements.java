@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -126,7 +128,7 @@ public enum RotaryAchievements {
 			RotaryAchievements a = list[i];
 			int id = RotaryCraft.config.getAchievementID(i);
 			Achievement dep = a.hasDependency() ? a.dependency.get() : null;
-			Achievement ach = new Achievement(a.name().toLowerCase(), a.name().toLowerCase(), a.xPosition, a.yPosition, a.iconItem, dep);
+			Achievement ach = new Achievement(a.name().toLowerCase(Locale.ENGLISH), a.name().toLowerCase(Locale.ENGLISH), a.xPosition, a.yPosition, a.iconItem, dep);
 			//ReikaJavaLibrary.pConsole(a+":"+id+":"+StatList.getOneShotStat(id));
 			//if (StatList.getOneShotStat(id) != null)
 			//	throw new IDConflictException(RotaryCraft.instance, "The mod's achievement IDs are conflicting with another at ID "+id+" ("+a+" is trying to overwrite "+StatList.getOneShotStat(id).statName+").\nCheck the config file and change them.");

@@ -685,8 +685,12 @@ public class RotaryRecipes {
 
 		GameRegistry.addRecipe(ItemStacks.waterplate, new Object[]{
 				"PPP", "PPP", "SSS", 'P', ItemStacks.basepanel, 'S', ItemStacks.springingot});
+		
 		GameRegistry.addRecipe(ItemStacks.prop, new Object[]{
 				" S ", " I ", " P ", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'I', ItemStacks.steelingot});
+		GameRegistry.addRecipe(ItemStacks.prop, new Object[]{
+				" P ", " I ", " S ", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'I', ItemStacks.steelingot});
+		
 		GameRegistry.addRecipe(ItemStacks.hub, new Object[]{
 				"  B", " C ", "G  ", 'G', ItemStacks.steelgear, 'B', ItemStacks.bearing, 'C', ItemStacks.shaftcore});
 		GameRegistry.addRecipe(ItemStacks.mirror, new Object[]{

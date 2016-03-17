@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.util.Locale;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -38,8 +40,8 @@ public class RotaryRegistration {
 
 	public static void addTileEntities() {
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			String label = "RC"+MachineRegistry.machineList.get(i).name().toLowerCase().replaceAll("\\s","");
-			String aux = "RC"+MachineRegistry.machineList.get(i).getDefaultName().toLowerCase().replaceAll("\\s","");
+			String label = "RC"+MachineRegistry.machineList.get(i).name().toLowerCase(Locale.ENGLISH).replaceAll("\\s","");
+			String aux = "RC"+MachineRegistry.machineList.get(i).getDefaultName().toLowerCase(Locale.ENGLISH).replaceAll("\\s","");
 			if (label.equals(aux)) {
 				GameRegistry.registerTileEntity(MachineRegistry.machineList.get(i).getTEClass(), label);
 			}
@@ -49,7 +51,7 @@ public class RotaryRegistration {
 			ReikaJavaLibrary.initClass(MachineRegistry.machineList.get(i).getTEClass());
 		}
 		for (int i = 0; i < EngineType.engineList.length; i++) {
-			String label = "RC"+EngineType.engineList[i].name().toLowerCase().replaceAll("\\s","");
+			String label = "RC"+EngineType.engineList[i].name().toLowerCase(Locale.ENGLISH).replaceAll("\\s","");
 			GameRegistry.registerTileEntity(EngineType.engineList[i].engineClass, label);
 			ReikaJavaLibrary.initClass(EngineType.engineList[i].engineClass);
 		}

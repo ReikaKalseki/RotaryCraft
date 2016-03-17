@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.Locale;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -174,7 +176,7 @@ public enum MaterialRegistry {
 	}
 
 	public String getName() {
-		return StatCollector.translateToLocal("material."+this.name().toLowerCase());
+		return StatCollector.translateToLocal("material."+this.name().toLowerCase(Locale.ENGLISH));
 	}
 
 	public double getMaxShaftTorque() {

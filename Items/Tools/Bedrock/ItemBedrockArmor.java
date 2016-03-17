@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -74,7 +75,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 		}
 
 		private String getNBT() {
-			return this.name().toLowerCase();
+			return this.name().toLowerCase(Locale.ENGLISH);
 		}
 
 		public void enable(ItemStack is, boolean set) {

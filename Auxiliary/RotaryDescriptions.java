@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
@@ -197,16 +198,16 @@ public final class RotaryDescriptions {
 
 		for (int i = 0; i < parenttabs.size(); i++) {
 			HandbookRegistry h = parenttabs.get(i);
-			String desc = parents.getValueAtNode("categories:"+h.name().toLowerCase().substring(0, h.name().length()-4));
+			String desc = parents.getValueAtNode("categories:"+h.name().toLowerCase(Locale.ENGLISH).substring(0, h.name().length()-4));
 			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < machinetabs.size(); i++) {
 			HandbookRegistry h = machinetabs.get(i);
 			MachineRegistry m = h.getMachine();
-			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase()+DESC_SUFFIX);
-			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase()+NOTE_SUFFIX);
-			Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase()+NOTE_SUFFIX+SUBNOTE_SUFFIX);
+			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
+			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
+			Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
 			desc = String.format(desc, machineData.get(m));
 			aux = String.format(aux, machineNotes.get(m, 0));
 
@@ -246,8 +247,8 @@ public final class RotaryDescriptions {
 		for (int i = 0; i < transtabs.length; i++) {
 			HandbookRegistry h = transtabs[i];
 			MachineRegistry m = h.getMachine();
-			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase());
-			Collection<String> sub = trans.getNodesWithin("trans:"+h.name().toLowerCase()+SUBNOTE_SUFFIX);
+			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase(Locale.ENGLISH));
+			Collection<String> sub = trans.getNodesWithin("trans:"+h.name().toLowerCase(Locale.ENGLISH)+SUBNOTE_SUFFIX);
 
 			if (sub != null && !sub.isEmpty()) {
 				int k = 0;
@@ -281,8 +282,8 @@ public final class RotaryDescriptions {
 
 		for (int i = 0; i < tooltabs.length; i++) {
 			HandbookRegistry h = tooltabs[i];
-			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase());
-			Collection<String> sub = tools.getNodesWithin("tools:"+h.name().toLowerCase()+SUBNOTE_SUFFIX);
+			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase(Locale.ENGLISH));
+			Collection<String> sub = tools.getNodesWithin("tools:"+h.name().toLowerCase(Locale.ENGLISH)+SUBNOTE_SUFFIX);
 
 			if (sub != null && !sub.isEmpty()) {
 				int k = 0;
@@ -306,14 +307,14 @@ public final class RotaryDescriptions {
 
 		for (int i = 0; i < resourcetabs.length; i++) {
 			HandbookRegistry h = resourcetabs[i];
-			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase());
+			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase(Locale.ENGLISH));
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
 		for (int i = 0; i < misctabs.length; i++) {
 			HandbookRegistry h = misctabs[i];
-			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase());
+			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase(Locale.ENGLISH));
 			//ReikaJavaLibrary.pConsole(desc);
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
@@ -321,7 +322,7 @@ public final class RotaryDescriptions {
 
 		for (int i = 0; i < infotabs.length; i++) {
 			HandbookRegistry h = infotabs[i];
-			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase());
+			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase(Locale.ENGLISH));
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
@@ -333,16 +334,16 @@ public final class RotaryDescriptions {
 			Collection<String> sub = null;
 			if (i < EngineType.engineList.length) {
 				EngineType e = EngineType.engineList[i];
-				desc = engines.getValueAtNode("engines:"+e.name().toLowerCase()+DESC_SUFFIX);
-				aux = engines.getValueAtNode("engines:"+e.name().toLowerCase()+NOTE_SUFFIX);
-				sub = engines.getNodesWithin("engines:"+e.name().toLowerCase()+NOTE_SUFFIX+SUBNOTE_SUFFIX);
+				desc = engines.getValueAtNode("engines:"+e.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
+				aux = engines.getValueAtNode("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
+				sub = engines.getNodesWithin("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
 
 				desc = String.format(desc, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
 				aux = String.format(aux, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
 			}
 			else {
-				desc = engines.getValueAtNode("engines:"+"solar".toLowerCase()+DESC_SUFFIX);
-				aux = engines.getValueAtNode("engines:"+"solar".toLowerCase()+NOTE_SUFFIX);
+				desc = engines.getValueAtNode("engines:"+"solar".toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
+				aux = engines.getValueAtNode("engines:"+"solar".toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
 
 				desc = String.format(desc, TileEntitySolar.GENOMEGA);
 				aux = String.format(aux, TileEntitySolar.GENOMEGA);

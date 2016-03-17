@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Steel;
 
+import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -55,7 +57,7 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		if (ConfigRegistry.HSLAHARVEST.getState() && toolClass.toLowerCase().contains("pick")) {
+		if (ConfigRegistry.HSLAHARVEST.getState() && toolClass.toLowerCase(Locale.ENGLISH).contains("pick")) {
 			return 5;
 		}
 		else {

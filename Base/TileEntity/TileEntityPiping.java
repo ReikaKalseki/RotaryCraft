@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -203,7 +204,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				return true;
 			if (nonInteractableClasses.contains(c))
 				return false;
-			String name = c.getSimpleName().toLowerCase();
+			String name = c.getSimpleName().toLowerCase(Locale.ENGLISH);
 			if (name.contains("conduit") || name.contains("fluidduct") || name.contains("pipe") || name.contains("multipart")) {
 				nonInteractableClasses.add(c);
 				return false;

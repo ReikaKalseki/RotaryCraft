@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,7 +44,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
-import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -56,6 +56,7 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
@@ -160,7 +161,7 @@ public class ItemMeter extends ItemRotaryTool
 				RotaryAux.writeMessage("emptypipe");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getFluidLevel()/1000D, clicked.getFluidType().getLocalizedName().toLowerCase(), Variables.PRESSURE, clicked.getPressure()/1000D));
+			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getFluidLevel()/1000D, clicked.getFluidType().getLocalizedName().toLowerCase(Locale.ENGLISH), Variables.PRESSURE, clicked.getPressure()/1000D));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
@@ -505,7 +506,7 @@ public class ItemMeter extends ItemRotaryTool
 			if (m == MachineRegistry.DYNAMO) {
 				TileEntityDynamo clicked = (TileEntityDynamo)tile;
 				ReikaChatHelper.writeString(String.format("%s generating %d RF/t.", clicked.getName(), clicked.getGenRF()));
-				if ((clicked.torque > clicked.MAXTORQUE || clicked.omega > clicked.MAXOMEGA))
+				if ((clicked.torque > (clicked.isUpgraded() ? clicked.MAXTORQUE_UPGRADE : clicked.MAXTORQUE) || clicked.omega > clicked.MAXOMEGA))
 					ReikaChatHelper.writeString("Conversion limits exceeded; Power is being wasted.");
 			}
 			if (m == MachineRegistry.FLYWHEEL) {

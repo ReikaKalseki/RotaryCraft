@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Registry;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
@@ -496,7 +497,7 @@ public enum ItemRegistry implements ItemEnum {
 	}
 
 	public String getUnlocalizedName() {
-		return ReikaStringParser.stripSpaces(name).toLowerCase();
+		return ReikaStringParser.stripSpaces(name).toLowerCase(Locale.ENGLISH);
 	}
 
 	public Item getItemInstance() {

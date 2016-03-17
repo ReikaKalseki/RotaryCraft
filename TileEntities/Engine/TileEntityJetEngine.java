@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Engine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -129,7 +130,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			jetstarttimer.reset();
 			return false;
 		}
-		RotaryAchievements.JETENGINE.triggerAchievement(this.getPlacer());
+		if (power > 0)
+			RotaryAchievements.JETENGINE.triggerAchievement(this.getPlacer());
 		return true;
 	}
 
@@ -394,7 +396,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			return false;
 		if (ModList.THAUMCRAFT.isLoaded() && caught instanceof EntityWisp)
 			return false;
-		String name = caught.getCommandSenderName().toLowerCase();
+		String name = caught.getCommandSenderName().toLowerCase(Locale.ENGLISH);
 		if (name.contains("bird"))
 			return false;
 		if (name.contains("firefly"))
@@ -720,7 +722,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			}
 			else {
 				int temp = f.getTemperature(world, dx, y, dz);
-				if (f.getName().toLowerCase().contains("fuel")) {
+				if (f.getName().toLowerCase(Locale.ENGLISH).contains("fuel")) {
 					if (!isJetFailing && rand.nextInt(200) == 0) {
 						temperature = 900;
 						isJetFailing = true;

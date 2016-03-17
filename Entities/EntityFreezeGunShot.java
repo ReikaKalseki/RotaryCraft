@@ -28,20 +28,17 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityFreezeGun;
 
 public class EntityFreezeGunShot extends EntityTurretShot {
 
-	private TileEntityFreezeGun source;
-
 	public EntityFreezeGunShot(World world) {
 		super(world);
 	}
 
 	public EntityFreezeGunShot(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityFreezeGun te) {
-		super(world, x, y, z, 0, 0, 0);
+		super(world, x, y, z, 0, 0, 0, te);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
-		source = te;
 	}
 
 	@Override
@@ -77,7 +74,7 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 		if (el instanceof EntityPlayer && ((EntityPlayer)el).capabilities.isCreativeMode)
 			return;
 		if (el instanceof TargetEntity) {
-			((TargetEntity)el).onFreeze(source);
+			((TargetEntity)el).onFreeze(gun);
 		}
 		if (el instanceof EntityLivingBase)
 			((EntityLivingBase)el).addPotionEffect(TileEntityFreezeGun.getFreezeEffect(60000));

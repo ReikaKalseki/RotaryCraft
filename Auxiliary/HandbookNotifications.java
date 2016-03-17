@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -58,7 +59,7 @@ public class HandbookNotifications {
 	}
 
 	private void addAlert(EntityPlayer ep, ConfigRegistry c, Level lvl, String msg) {
-		Alert a = new Alert(c.name().toLowerCase(), c, lvl, msg);
+		Alert a = new Alert(c.name().toLowerCase(Locale.ENGLISH), c, lvl, msg);
 		ArrayList li = data.get(ep.getUniqueID());
 		if (li == null) {
 			li = new ArrayList();
@@ -119,7 +120,7 @@ public class HandbookNotifications {
 			NBTTagCompound nbt = eptag.hasKey(NBT_TAG) ? eptag.getCompoundTag(NBT_TAG) : new NBTTagCompound();
 			boolean empty = true;
 			for (ConfigRegistry cfg : data.keySet()) {
-				String tag = cfg.name().toLowerCase();
+				String tag = cfg.name().toLowerCase(Locale.ENGLISH);
 				boolean mark = nbt.getBoolean(tag);
 				boolean chg = this.isChanged(cfg);
 				if (chg != mark)

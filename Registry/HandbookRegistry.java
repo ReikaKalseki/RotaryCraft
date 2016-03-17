@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.init.Items;
@@ -576,7 +577,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	public String getTabImageFile() {
 		//return "/Reika/RotaryCraft/Textures/GUI/Handbook/tabs_"+this.getParent().name().toLowerCase()+".png";
-		return "/Reika/RotaryCraft/Textures/GUI/Handbook/tabs_"+TOC.getParent().name().toLowerCase()+".png";
+		return "/Reika/RotaryCraft/Textures/GUI/Handbook/tabs_"+TOC.getParent().name().toLowerCase(Locale.ENGLISH)+".png";
 	}
 
 	public int getTabRow() {

@@ -141,6 +141,7 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			return Result.ALLOW;
 		}
 		else if (b instanceof IShearable) {
+			((IShearable)b).onSheared(player.getCurrentEquippedItem(), world, x, y, z, 0);
 			return Result.ALLOW;
 		}
 		else if (b.getMaterial() == Material.plants) {

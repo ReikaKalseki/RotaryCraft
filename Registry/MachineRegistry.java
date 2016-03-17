@@ -77,7 +77,6 @@ import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
-import Reika.RotaryCraft.ModInterface.TileEntityFuelConverter;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntityMagnetic;
@@ -134,6 +133,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDistillery;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
@@ -292,7 +292,7 @@ public enum MachineRegistry implements TileEnum {
 	MULTICLUTCH(		"machine.multiclutch",		BlockTrans.class,			TileEntityMultiClutch.class,		4, 	"RenderMultiClutch"),
 	TERRAFORMER(		"machine.terraformer",		BlockMachine.class,			TileEntityTerraformer.class,		6),
 	SORTING(			"machine.sorting",			BlockDMachine.class,		TileEntitySorting.class,			2),
-	FUELENHANCER(		"machine.fuelenhancer",		BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter", ModList.BCENERGY),
+	FUELENHANCER(		"machine.fuelenhancer",		BlockMMachine.class,		TileEntityFuelConverter.class,		13, "RenderFuelConverter"),
 	ARROWGUN(			"machine.arrowgun",			BlockDMachine.class,		TileEntityMachineGun.class,			1),
 	BOILER(				"machine.frictionboiler", 	BlockMMachine.class, 		TileEntityBoiler.class, 			15, "RenderBoiler", PowerTypes.STEAM),
 	STEAMTURBINE(		"machine.steamturbine", 	BlockDMMachine.class, 		TileEntitySteam.class, 				10, "RenderSteam", PowerTypes.STEAM),
@@ -1366,6 +1366,7 @@ public enum MachineRegistry implements TileEnum {
 			case SMOKEDETECTOR:
 			case SPRINKLER:
 			case PULSEJET:
+			case PUMP:
 				return false;
 			default:
 				return true;

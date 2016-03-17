@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Items.Tools;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -70,7 +71,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		}
 
 		private String getNBT() {
-			return this.name().toLowerCase();
+			return this.name().toLowerCase(Locale.ENGLISH);
 		}
 
 		public void enable(ItemStack is, boolean set) {

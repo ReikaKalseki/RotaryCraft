@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -64,7 +65,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return toolClass == null || toolClass.toLowerCase().contains("shovel") || toolClass.toLowerCase().contains("spade") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
+		return toolClass == null || toolClass.toLowerCase(Locale.ENGLISH).contains("shovel") || toolClass.toLowerCase(Locale.ENGLISH).contains("spade") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
 	}
 
 	@Override

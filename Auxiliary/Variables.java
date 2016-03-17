@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.Locale;
+
 import net.minecraft.util.StatCollector;
 
 public enum Variables {
@@ -22,7 +24,7 @@ public enum Variables {
 	FUEL();
 
 	private String getText() {
-		return StatCollector.translateToLocal("label."+this.name().toLowerCase());
+		return StatCollector.translateToLocal("label."+this.name().toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override

@@ -9,25 +9,32 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public abstract class EntityTurretShot extends EntityFireball {
+public abstract class EntityTurretShot extends EntityFireball implements IEntityAdditionalSpawnData {
+
+	protected TileEntityAimedCannon gun;
 
 	public EntityTurretShot(World world) {
 		super(world);
 	}
 
-	public EntityTurretShot(World world, double x, double y, double z, double vx, double vy, double vz) {
+	public EntityTurretShot(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityAimedCannon te) {
 		super(world, x, y, z, 0, 0, 0);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
 		if (!world.isRemote)
 			velocityChanged = true;
+
+		gun = te;
 	}
 
 	@Override
@@ -46,5 +53,18 @@ public abstract class EntityTurretShot extends EntityFireball {
 	protected abstract int getAttackDamage();
 
 	protected abstract void applyAttackEffectsToEntity(World world, Entity el);
+
+	public final void writeSpawnData(ByteBuf buf) {
+		buf.writeInt(gun.xCoord);
+		buf.writeInt(gun.yCoord);
+		buf.writeInt(gun.zCoord);
+	}
+
+	public void readSpawnData(ByteBuf buf) {
+		int x = buf.readInt();
+		int y = buf.readInt();
+		int z = buf.readInt();
+		gun = (TileEntityAimedCannon)worldObj.getTileEntity(x, y, z);
+	}
 
 }

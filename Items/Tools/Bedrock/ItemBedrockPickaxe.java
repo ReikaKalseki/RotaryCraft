@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -125,7 +126,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return toolClass == null || toolClass.toLowerCase().contains("pick") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
+		return toolClass == null || toolClass.toLowerCase(Locale.ENGLISH).contains("pick") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
 	}
 
 	@Override
@@ -165,7 +166,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
 			if (ConfigRegistry.BEDPICKSPAWNERS.getState() && id == Blocks.mob_spawner) {
 				TileEntityMobSpawner spw = (TileEntityMobSpawner)world.getTileEntity(x, y, z);
-				if (ConfigRegistry.SPAWNERLEAK.getState())
+				if (ConfigRegistry.SPAWNERLEAK.getState() && !ReikaPlayerAPI.isFake(ep))
 					ReikaSpawnerHelper.forceSpawn(spw, 12+itemRand.nextInt(25));
 				ItemStack item = ItemRegistry.SPAWNER.getStackOf();
 				ReikaSpawnerHelper.addMobNBTToItem(item, spw);
