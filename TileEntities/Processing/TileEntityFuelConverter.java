@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
-import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -33,7 +33,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 	public static final int CAPACITY = 5*FluidContainerRegistry.BUCKET_VOLUME;
 
 	public static enum Conversions {
-		BCFUEL("fuel", "rc jet fuel", 2, 4, DifficultyEffects.CONSUMEFRAC.getChance()/32D/100D*8, new KeyedItemStack(Items.blaze_powder), new KeyedItemStack(ItemStacks.netherrackdust), new KeyedItemStack(ItemStacks.tar), new KeyedItemStack(Items.magma_cream)),
+		BCFUEL("fuel", "rc jet fuel", 2, 4, DifficultyEffects.CONSUMEFRAC.getChance()/32D/100D*8, new ItemMatch(Items.blaze_powder), new ItemMatch(ItemStacks.netherrackdust), new ItemMatch(ItemStacks.tar), new ItemMatch(Items.magma_cream)),
 		;
 
 		public final Fluid input;
@@ -44,14 +44,14 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 		public final double itemConsumptionChance;
 
-		private final KeyedItemStack[] ingredients;
+		private final ItemMatch[] ingredients;
 
 		private static final HashMap<String, Conversions> conversionMap = new HashMap();
 		private static final HashMap<String, Conversions> conversionOutputMap = new HashMap();
 
 		public static Conversions[] list = values();
 
-		private Conversions(String in, String out, int sp, int r, double f, KeyedItemStack... items) {
+		private Conversions(String in, String out, int sp, int r, double f, ItemMatch... items) {
 			input = FluidRegistry.getFluid(in);
 			output = FluidRegistry.getFluid(out);
 
@@ -78,13 +78,15 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		static {
 			for (int i = 0; i < list.length; i++) {
 				Conversions c = list[i];
-				conversionMap.put(c.input.getName(), c);
-				conversionOutputMap.put(c.output.getName(), c);
+				if (c.input != null && c.output != null) {
+					conversionMap.put(c.input.getName(), c);
+					conversionOutputMap.put(c.output.getName(), c);
+				}
 			}
 		}
 
-		public static void addRecipe(String name, String in, String out, int sp, int r, double f, KeyedItemStack... items) {
-			Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, KeyedItemStack[].class}, new Object[]{in, out, sp, r, f, items});
+		public static void addRecipe(String name, String in, String out, int sp, int r, double f, ItemMatch... items) {
+			Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, ItemMatch[].class}, new Object[]{in, out, sp, r, f, items});
 			conversionMap.put(in, c);
 			conversionOutputMap.put(out, c);
 			list = values();

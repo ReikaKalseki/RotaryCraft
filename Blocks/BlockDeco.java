@@ -82,6 +82,7 @@ public class BlockDeco extends BlockBasic {
 
 	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+		super.onBlockExploded(world, x, y, z, explosion);
 		if (world.getBlockMetadata(x, y, z) == ItemStacks.bedingotblock.getItemDamage())
 			world.setBlock(x, y, z, this, ItemStacks.bedingotblock.getItemDamage(), 3);
 	}

@@ -195,6 +195,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		this.addRecipe("dustRedstone", "redstone", 100, 600, 120000, RecipeLevel.MODINTERACT);
 		this.addRecipe(Blocks.redstone_block, "redstone", 900, 750, 1080000, RecipeLevel.MODINTERACT);
 		this.addRecipe(Items.ender_pearl, "ender", 250, 400, 240000, RecipeLevel.MODINTERACT);
+		this.addRecipe("blockEnder", "ender", 1000, 400, 240000, RecipeLevel.MODINTERACT);
 		this.addRecipe("dustCoal", "coal", 100, 300, 60000, RecipeLevel.MODINTERACT);
 
 		if (ModList.THERMALFOUNDATION.isLoaded()) {

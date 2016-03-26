@@ -268,6 +268,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		if (ModList.CHROMATICRAFT.isLoaded() && b instanceof CrystalBlock)
 			return 24F;
 
+		if (ThaumItemHelper.BlockEntry.TOTEMNODE.match(b, meta))
+			return 96F;
 		if (ThaumItemHelper.isTotemBlock(b, meta))
 			return 48F;
 		//if (b == MekanismHandler.getInstance().cableID)

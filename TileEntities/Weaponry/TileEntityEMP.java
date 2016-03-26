@@ -117,7 +117,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		addEntry("forestry.aboriculture.gadgets.TileTreeContainer", ModList.FORESTRY);
 		addEntry("forestry.factory.gadgets.TileWorktable", ModList.FORESTRY);
 
-		addEntry("Reika.FurryKingdoms.TileEntities.TileEntityFlag", ModList.FURRYKINGDOMS);
+		//addEntry("Reika.FurryKingdoms.TileEntities.TileEntityFlag", ModList.FURRYKINGDOMS);
 
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntity555", ModList.EXPANDEDREDSTONE);
 		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityBreaker", ModList.EXPANDEDREDSTONE);

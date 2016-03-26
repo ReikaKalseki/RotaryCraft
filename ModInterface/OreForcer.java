@@ -189,21 +189,27 @@ public final class OreForcer {
 	}
 
 	private void intercraftQuantum() {
-		ItemStack ore = new ItemStack(QuantumOreHandler.getInstance().dustID, 1, 0);
-		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.QUANTUM));
-		RotaryCraft.logger.log("RotaryCraft quantum dust can now be crafted into QCraft quantum dust!");
+		if (QuantumOreHandler.getInstance().dustID != null) {
+			ItemStack ore = new ItemStack(QuantumOreHandler.getInstance().dustID, 1, 0);
+			GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.QUANTUM));
+			RotaryCraft.logger.log("RotaryCraft quantum dust can now be crafted into QCraft quantum dust!");
+		}
 	}
 
 	private void intercraftDarkIron() {
-		ItemStack ingot = new ItemStack(FactorizationHandler.getInstance().ingotID, 1, 0);
-		GameRegistry.addShapelessRecipe(ingot, ItemStacks.getModOreIngot(ModOreList.DARKIRON));
-		RotaryCraft.logger.log("RotaryCraft dark iron ingots can now be crafted into Factorization equivalents!");
+		if (FactorizationHandler.getInstance().ingotID != null) {
+			ItemStack ingot = new ItemStack(FactorizationHandler.getInstance().ingotID, 1, 0);
+			GameRegistry.addShapelessRecipe(ingot, ItemStacks.getModOreIngot(ModOreList.DARKIRON));
+			RotaryCraft.logger.log("RotaryCraft dark iron ingots can now be crafted into Factorization equivalents!");
+		}
 	}
 
 	private void intercraftMimichite() {
-		ItemStack ore = new ItemStack(MimicryHandler.getInstance().itemID, 1, 0);
-		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.MIMICHITE));
-		RotaryCraft.logger.log("RotaryCraft mimichite items can now be crafted into Mimicry mimichite!");
+		if (MimicryHandler.getInstance().itemID != null) {
+			ItemStack ore = new ItemStack(MimicryHandler.getInstance().itemID, 1, 0);
+			GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.MIMICHITE));
+			RotaryCraft.logger.log("RotaryCraft mimichite items can now be crafted into Mimicry mimichite!");
+		}
 	}
 
 	private void registerEssence() {

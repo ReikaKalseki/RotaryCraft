@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.APIPacketHandler.PacketIDs;
 import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -161,7 +162,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 				ps.setBlockMetadata(te.getBlockMetadata());
 				ps.setPortalType(age, ax, ay, az);
 				ps.material = material;
-				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.TILEDELETE.ordinal(), ps);
+				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.TILEDELETE.ordinal(), ps, new PacketTarget.RadiusTarget(this, 32));
 			}
 		}
 		else if (m == MachineRegistry.PORTALSHAFT) {

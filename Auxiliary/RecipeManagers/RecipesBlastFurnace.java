@@ -75,7 +75,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe coke = new BlastRecipe(in1, in2, in3, ReikaJavaLibrary.makeListFrom(new ItemStack(Items.coal), new ItemStack(Items.coal, 1, 1)), ItemStacks.coke, false, 0, 400);
+		BlastRecipe coke = new BlastRecipe(in1, in2, in3, new ItemStack(Items.coal), ItemStacks.coke, false, 0, 400);
 		this.addRecipe(coke, RecipeLevel.CORE);
 
 		in1 = new BlastInput("dustAluminum", 25F, 1);

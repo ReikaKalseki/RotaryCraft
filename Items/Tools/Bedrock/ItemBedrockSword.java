@@ -13,6 +13,8 @@ import ic2.api.item.IElectricItem;
 
 import java.util.List;
 
+import mekanism.api.gas.GasStack;
+import mekanism.api.gas.IGasItem;
 import net.machinemuse.api.electricity.MuseElectricItem;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -120,6 +122,12 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 					ItemStack newarm = new ItemStack(id, 1, 0);
 					target.setCurrentItemOrArmor(i, newarm);
 				}
+				else if (InterfaceCache.GASITEM.instanceOf(item)) {
+					IGasItem ie = (IGasItem)item;
+					GasStack gas = ie.getGas(arm);
+					if (gas != null && gas.amount > 0)
+						ie.removeGas(arm, Math.max(1, gas.amount/4));
+				}
 				else if (item instanceof ItemBedrockArmor) {
 					//do nothing
 				}
@@ -142,7 +150,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 					ReikaEntityHelper.dropHead(target);
 				}
 				if (target instanceof EntityLiving) {
-					int xp = (int)(((EntityLiving)target).experienceValue*ReikaRandomHelper.getRandomBetween(1, 10));
+					int xp = ((EntityLiving)target).experienceValue*ReikaRandomHelper.getRandomBetween(1, 10);
 					ReikaWorldHelper.splitAndSpawnXP(target.worldObj, target.posX, target.posY+itemRand.nextDouble()*target.height, target.posZ, xp);
 				}
 			}

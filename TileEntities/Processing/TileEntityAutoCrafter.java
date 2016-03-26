@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
-import java.util.HashMap;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +21,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
+import Reika.DragonAPI.Instantiable.Data.Maps.CountMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -458,7 +457,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private boolean tryCraftIntermediates(int num, ItemStack is) {
 		int run = 0;
-		HashMap<Integer, Integer> ranSlots = new HashMap();
+		CountMap<Integer> ranSlots = new CountMap();
 		//for (ItemStack is : li) {
 		for (int i = 0; i < SIZE && run < num; i++) {
 			ItemStack out = this.getSlotRecipeOutput(i);
@@ -467,9 +466,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 				//ReikaJavaLibrary.pConsole("attempting slot "+i+", because "+out+" matches "+is);
 				while (run < num && this.attemptSlotCrafting(i)) {
 					run += out.stackSize;
-					Integer get = ranSlots.get(i);
-					int val = get != null ? get.intValue() : 0;
-					ranSlots.put(i, Math.min(num, val+out.stackSize));
+					ranSlots.set(i, Math.min(num, ranSlots.get(i)+out.stackSize));
 				}
 			}
 		}

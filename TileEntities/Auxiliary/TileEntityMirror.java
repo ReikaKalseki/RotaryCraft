@@ -19,6 +19,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -69,7 +70,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 				double m = ReikaEntityHelper.getEntityMass(e);
 				//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
 				if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
-					ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this);
+					ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
 					e.attackEntityFrom(DamageSource.cactus, 1);
 					this.breakMirror(world, x, y, z);
 				}
@@ -109,26 +110,26 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		int moon = worldObj.provider.getMoonPhase(worldObj.getWorldInfo().getWorldTime());
 		float phase;
 		switch(moon) {
-		case 0:
-			phase = 1;
-			break;
-		case 1:
-		case 7:
-			phase = 0.8F;
-			break;
-		case 2:
-		case 6:
-			phase = 0.5F;
-			break;
-		case 3:
-		case 5:
-			phase = 0.2F;
-			break;
-		case 4:
-			phase = 0.05F;
-			break;
-		default:
-			phase = 0;
+			case 0:
+				phase = 1;
+				break;
+			case 1:
+			case 7:
+				phase = 0.8F;
+				break;
+			case 2:
+			case 6:
+				phase = 0.5F;
+				break;
+			case 3:
+			case 5:
+				phase = 0.2F;
+				break;
+			case 4:
+				phase = 0.05F;
+				break;
+			default:
+				phase = 0;
 		}
 		//ReikaJavaLibrary.pConsole(phase);
 		return 15*0.2F*phase;

@@ -30,6 +30,7 @@ import Reika.DragonAPI.APIPacketHandler.PacketIDs;
 import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -149,7 +150,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 		if (this.getPressure() > this.getMaxPressure()) {
 			if (world.isRemote) {
-				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.EXPLODE.ordinal(), this);
+				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.EXPLODE.ordinal(), this, new PacketTarget.ServerTarget());
 			}
 			else {
 				this.overpressure(world, x, y, z);

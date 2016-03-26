@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -32,10 +33,13 @@ import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
 import Reika.DragonAPI.Interfaces.Item.MultiLayerItemSprite;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Interfaces.Fillable;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
@@ -106,15 +110,29 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	public void onArmorTick(World world, EntityPlayer player, ItemStack is)
 	{
 		boolean flying = this.useJetpack(player, is);
+		boolean fuel = this.getCurrentFillLevel(is) > 0;
 
 		if (!PackUpgrades.COOLING.existsOn(is)) {
-			if (this.getCurrentFillLevel(is) > 0) {
+			if (fuel) {
 				if (player.handleLavaMovement() && world.difficultySetting != EnumDifficulty.PEACEFUL) {
 					this.explode(world, player);
 				}
 				else if (player.isBurning() && world.difficultySetting.ordinal() > 1 && flying) {
 					this.explode(world, player);
 				}
+			}
+		}
+
+		if (flying && world.difficultySetting != EnumDifficulty.PEACEFUL && itemRand.nextInt(4) == 0) {
+			int x = MathHelper.floor_double(player.posX);
+			int y = MathHelper.floor_double(player.posY);
+			int z = MathHelper.floor_double(player.posZ);
+			int dx = ReikaRandomHelper.getRandomPlusMinus(x, 1);
+			int dz = ReikaRandomHelper.getRandomPlusMinus(z, 1);
+			int dy = ReikaRandomHelper.getRandomBetween(y-2, y);
+			Fluid f = ReikaWorldHelper.getFluid(world, dx, dy, dz);
+			if (f != null && ReikaFluidHelper.isFlammable(f)) {
+				ReikaWorldHelper.ignite(world, dx, dy, dz);
 			}
 		}
 	}

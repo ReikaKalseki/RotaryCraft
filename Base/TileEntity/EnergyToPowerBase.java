@@ -83,12 +83,21 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 
 	private boolean efficient = false;
 
+	private static final double[][] efficiencyTable = new double[2][TIERS];
+
+	static {
+		for (int i = 0; i < TIERS; i++) {
+			efficiencyTable[0][i] = 0.9-i*0.08;
+			efficiencyTable[1][i] = 1-Math.pow(i, 1.4)*0.04;
+		}
+	}
+
 	private RedstoneState getRedstoneState() {
 		return rsState != null ? rsState : RedstoneState.IGNORE;
 	}
 
 	private static double getEfficiency(int tier, boolean eff) {
-		return eff ? 1-tier*0.05 : 0.9-tier*0.08;
+		return efficiencyTable[eff ? 1 : 0][tier];
 	}
 
 	private static final long getTierPower(int tier) {
@@ -107,12 +116,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		return 1;
 	}
 
-	private final double getPowerLoss() {
-		return 1-this.getEfficiency();
-	}
-
 	private final double getConsumption() {
-		return 1+this.getPowerLoss();
+		return 1D/this.getEfficiency();
 	}
 
 	public final double getEfficiency() {

@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Interfaces.TileEntity.TriggerableAction;
@@ -189,7 +190,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		if (!n.isRest()) {
 			for (int i = 0; i < 3; i++)
 				n.play(worldObj, xCoord, yCoord, zCoord);
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this);
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
 		}
 		playDelay[channel] = n.length.tickLength;
 		playIndex[channel]++;

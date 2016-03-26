@@ -65,6 +65,7 @@ public final class ItemStacks {
 	public static final ItemStack hose 				= MachineRegistry.HOSE.getCraftedProduct();
 	public static final ItemStack pipe 				= MachineRegistry.PIPE.getCraftedProduct();
 	public static final ItemStack fuelline 			= MachineRegistry.FUELLINE.getCraftedProduct();
+	public static final ItemStack bedpipe 			= MachineRegistry.BEDPIPE.getCraftedProduct();
 
 	public static final ItemStack shaftcross 		= ItemRegistry.SHAFT.getStackOfMetadata(RotaryNames.getNumberShaftTypes()-1);
 
