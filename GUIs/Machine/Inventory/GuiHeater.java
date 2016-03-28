@@ -99,6 +99,8 @@ public class GuiHeater extends GuiMachine
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b)
 	{
+		super.drawGuiContainerForegroundLayer(a, b);
+
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		api.drawCenteredStringNoShadow(fontRendererObj, tile.getMultiValuedName(), xSize/2, 5, 4210752);

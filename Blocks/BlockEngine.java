@@ -28,6 +28,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
@@ -83,7 +84,8 @@ public class BlockEngine extends BlockModelledMachine {
 							tile.subtractFuel(1000);
 						}
 						else {
-							ReikaChatHelper.clearChat();
+							if (ConfigRegistry.CLEARCHAT.getState())
+								ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
 						}
 						return true;
@@ -94,7 +96,8 @@ public class BlockEngine extends BlockModelledMachine {
 							tile.subtractFuel(1000);
 						}
 						else {
-							ReikaChatHelper.clearChat();
+							if (ConfigRegistry.CLEARCHAT.getState())
+								ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
 						}
 						return true;
@@ -105,7 +108,8 @@ public class BlockEngine extends BlockModelledMachine {
 							tile.removeLubricant(1000);
 						}
 						else {
-							ReikaChatHelper.clearChat();
+							if (ConfigRegistry.CLEARCHAT.getState())
+								ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine does not have enough fuel to extract!");
 						}
 						return true;
@@ -119,7 +123,8 @@ public class BlockEngine extends BlockModelledMachine {
 							tile.addFuel(1000);
 						}
 						else {
-							ReikaChatHelper.clearChat();
+							if (ConfigRegistry.CLEARCHAT.getState())
+								ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine is too full to add fuel!");
 						}
 						return true;
@@ -133,7 +138,8 @@ public class BlockEngine extends BlockModelledMachine {
 							tile.addFuel(1000);
 						}
 						else {
-							ReikaChatHelper.clearChat();
+							if (ConfigRegistry.CLEARCHAT.getState())
+								ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine is too full to add fuel!");
 						}
 						return true;
@@ -147,7 +153,8 @@ public class BlockEngine extends BlockModelledMachine {
 							tile.addLubricant(1000);
 						}
 						else {
-							ReikaChatHelper.clearChat();
+							if (ConfigRegistry.CLEARCHAT.getState())
+								ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine is too full to add lubricant!");
 						}
 						return true;
@@ -161,7 +168,8 @@ public class BlockEngine extends BlockModelledMachine {
 							tile.addWater(1000);
 						}
 						else {
-							ReikaChatHelper.clearChat();
+							if (ConfigRegistry.CLEARCHAT.getState())
+								ReikaChatHelper.clearChat();
 							ReikaChatHelper.write("Engine is too full to add water!");
 						}
 						return true;
