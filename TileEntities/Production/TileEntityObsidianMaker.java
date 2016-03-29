@@ -101,17 +101,17 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 
-		if (rand.nextInt(20/20) == 0) {
-			if (temperature > Tamb) {
-				temperature--;
-			}
-			if (temperature < Tamb) {
-				temperature++;
-			}
-
-			if (!lava.isEmpty() && water.isEmpty())
-				temperature += 3;
+		//if (rand.nextInt(20/20) == 0) {
+		if (temperature > Tamb) {
+			temperature--;
 		}
+		if (temperature < Tamb) {
+			temperature++;
+		}
+
+		if (!lava.isEmpty() && water.isEmpty())
+			temperature += 3;
+		//}
 
 		if (temperature > MAXTEMP/2) { //500C
 			overred = 0.25F;

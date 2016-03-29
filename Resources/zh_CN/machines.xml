@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <machines>
 	<bedrockbreaker>
 		<desc>
@@ -36,7 +36,7 @@
 		</desc>
 		<note>
 			需求功率: %dW
-			动力输入: Back
+			动力输入: 后面
 		</note>
 	</floodlight>
 	<heatray>
@@ -45,19 +45,18 @@
 		</desc>
 		<note>
 			需求功率: %dW
-			范围 = 8+(Power-%d)W/%d m
-			动力输入: Back
+			范围 = 8+(功率-%d)W/%d m
+			动力输入: 后面
 		</note>
 	</heatray>
 	<borer>
 		<desc>
-			钻机是非常有趣的设备. 它会根据你所选择的方向挖掘出一套隧道.在gui里,你可以控制隧道的挖掘形状以及掉落的物品. 坚硬的方块需要更高的功率以及扭矩才能开采-每点硬度的方块需要功率%dW ,更硬的方块需要%dNm的扭矩才能开采 . 为预防隧道崩塌钻机会自动替换其顶部沙子和砂砾.传言这台机器可以帮你轻松征服一个神秘森林的地下迷宫,尽管你需要更高的扭矩才能破坏它
+			钻机是非常有趣的设备. 它会根据你所选择的方向挖掘出一套隧道.在gui里,你可以控制隧道的挖掘形状以及掉落的物品. 坚硬的方块需要更高的功率以及扭矩才能开采-每点硬度的方块需要功率%dW ,更硬的方块需要%dNm的扭矩才能开采 . 为预防隧道崩塌钻机会自动替换其顶部沙子和砂砾.传言这台机器可以帮你轻松征服一个暮色森林的地下迷宫,尽管你需要更高的扭矩才能破坏它
 		</desc>
 		<note>
 			需求功率: 任意
 			需求扭矩: 任意
 			动力输入: 后侧
-			如果提供足够的扭矩和功率,它也能破坏用于保护某些迷宫低层的人造基岩类方块
 		</note>
 	</borer>
 	<piledriver>
@@ -65,9 +64,9 @@
 			打桩机会反复锤击地面将其破坏,一点点深入挖掘,产生一个狭窄的竖井.它会贯穿沿途除了基岩外的方块以及流体. 破坏一些较硬的材料需要更大的冲击力,冲击会震落壁画,使树苗脱落以及眩晕玩家. 注意:你可以想象你站在它运作路径上会发生什么事.这台机器所需要的功率会随着挖掘的深度而增加 - 每米%dW.
 		</desc>
 		<note>
-			Required Power: %dW per meter
-			Required Torque: %dNm
-			Power Input: Back or Front
+			需求功率: %dW 每米
+			需求扭矩: %d Nm
+			动力输入: 后面或前面
 		</note>
 	</piledriver>
 	<aerosolizer>
@@ -75,8 +74,8 @@
 			药水雾化器内置九个储罐,每个储罐最多能够储存64瓶药水.药水的效果会弥漫在机器所处的空间内,并施加在其中的所有生物. 用同种药水填充多个槽可以提升药水的效果.
 		</desc>
 		<note>
-			Required Power: %dW
-			Power Input: Any horizontal side or bottom
+			需求功率: %dW
+			动力输入: 任意水平面或下面
 		</note>
 	</aerosolizer>
 	<lightbridge>
@@ -84,25 +83,25 @@
 			这台机器在满足了极大的功率需求后,会产生一条能让生物在上面行走或者能够放置各种物体的固体光桥.尽管光桥无坚不摧,但其会被任意非空气所阻挡. 注意的是机器上方需要有亮光 - 亦或是直视天空 - 才能制造出光桥.
 		</desc>
 		<note>
-			Required Power: %dW for full range, or %dW per meter
-			Power Input: Back
+			需求功率: %dW 每米, 或提供 %dW 到最大长度
+			动力输入: 后面
 		</note>
 	</lightbridge>
 	<extractor>
 		<desc>
-			提取机能从原矿中得到更多的副产物. 首先,它将矿物磨为粉末,再与水混合产生矿浆,将矿浆通过滤网压出矿液,之后烘烤获得矿屑.矿屑放入熔炉冶炼能获得原矿对应的产物. 每个阶段至少有50%%的几率实现双倍增产.提取机对动力的要求非常复杂,每个阶段各有不同, 但持续供水并提供%d Nm的扭矩和%drad/s的转速就能让四个步骤同时运作.
+			提取机能从原矿中得到更多的副产物. 首先,它将矿物磨为粉末,再与水混合产生矿浆,将矿浆通过滤网压出矿液,之后烘烤获得矿屑.矿屑放入熔炉冶炼能获得原矿对应的产物. 每个阶段至少有50%%的几率实现双倍增产.提取机对动力的要求非常复杂,每个阶段各有不同, 但持续供水并提供%d Nm的扭矩和%d rad/s的转速就能让四个步骤同时运作.
 		</desc>
 		<note>
 			阶段1功率: %dW
 			阶段2功率: %dW
 			阶段3功率: %dW
 			阶段4功率: %dW
-			阶段1扭矩: %dNm
-			阶段4扭矩: %dNm
-			阶段2速度: %drad/s
-			阶段3速度: %drad/s
+			阶段1扭矩: %d Nm
+			阶段4扭矩: %d Nm
+			阶段2速度: %d rad/s
+			阶段3速度: %d rad/s
 			动力输入: 底面
-			提示: 阶段2和3均需要水的供应
+			提示: 阶段2和3均需要水的供应;可以用基岩钻头升级
 		</note>
 	</extractor>
 	<pulsejet>
@@ -110,32 +109,32 @@
 			发动机燃炉是一台强力的炉子.然而它并不能进行原版的合成,但却可以把黑曜石熔为可以抵御TNT的玻璃,能将盔甲和工具重熔成锭,以及更高效率的生产钢.他它运作时会产生极高的温度,以至于点燃周围的可燃物-这也有了需要用水冷却的必要.尽管没有最小的功率要求,但需要极大的转速. 发动机燃炉运作时还需要提供航空燃油,并且会大量的消耗.而动力需要从它的底部输入.
 		</desc>
 		<note>
-			Required Speed: %d rad/s
-			Power Input: Bottom
-			Max Temperature: %dC
+			需求转速: %d rad/s
+			动力输入: 下面
+			最大温度: %dC
 		</note>
 	</pulsejet>
 	<pump>
 		<desc>
-			泵在动力充足时会从周围的环境中吸取流体,将它们泵入管道中.水常被作为冷却剂,多数情况下用于抽取岩浆输入到流体池,用于作为某些引擎的燃料.
+			泵在动力充足时会从周围的环境中吸取流体,将它们泵入管道中.水常被作为冷却剂,多数情况下用于抽取岩浆输入到蓄水池,用于作为某些引擎的燃料.
 		</desc>
 		<note>
-			Required Power: %d W
-			Required Torque: %d Nm
-			Power Input: Front or Back
+			需求功率: %d W
+			需求扭矩: %d Nm
+			动力输入: 前面或后面
 		</note>
 	</pump>
 	<reservoir>
 		<desc>
-			流体池用于装载各种流体,最多可以装载%d立方米(桶).用桶右击可以存入或取出流体,如果里面装满水,也可用玻璃瓶装水.此外,在水平面上相连可以形成一个更大的容器.
+			蓄水池用于装载各种流体,最多可以装载%d立方米(桶).用桶右击可以存入或取出流体,如果里面装满水,也可给玻璃瓶装水.此外,在水平面上相连可以形成一个更大的容器,上方可以用玻璃板覆盖.
 		</desc>
 		<note>
-			Capacity: %d m^3 per block
+			能力: %d m^3 每方块
 		</note>
 	</reservoir>
 	<fan>
 		<desc>
-			风扇会制造出能够吹走实体的气流.输入的功率够大的话可以吹走更重的实体,并且所有的实体都会加速得更快.需要最小功率为%d,由于气流的受限在功率没有强于%dW时不会有提升任何效果.风扇在高速运作时能够收割作物,扑灭-或转播-火势.
+			风扇会制造出能够吹走实体的气流.输入的功率够大的话可以吹走更重的实体,并且所有的实体都会加速得更快.需要最小功率为%dW,由于气流的受限在功率没有强于%dW时不会有提升任何效果.风扇在高速运作时能够收割作物,扑灭-或转播-火势.
 		</desc>
 		<note>
 			需求功率: %dW
@@ -156,7 +155,7 @@
 			需求温度: %dC
 			最大压强: %dkPa
 			最高温度: %dC
-			动力输入: Back
+			动力输入: 后面
 		</note>
 	</compactor>
 	<autobreeder>
@@ -164,9 +163,9 @@
 			自动饲养机会引诱动物,当它们靠近时会开始喂养直至动物们开始繁殖.依靠这台机器,你可以快速集聚兽群.每种动物均有它们想要的食物;如果没有,机器无法引诱或喂养动物.比如,狼喜欢猪肉.当动物进入繁殖模式时,食物会被消耗掉.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 8+(Power-%d)/%d m
-			Power Input: Bottom
+			需求功率: %dW
+			范围 = 8+(功率-%d)/%d m
+			动力输入: 下面
 		</note>
 	</autobreeder>
 	<baitbox>
@@ -174,9 +173,9 @@
 			引诱盒可以引诱或者驱赶怪物,只需放入合适的物品即可.例如,末影人会被草方块所吸引,靠近并企图带走它,但会被灵魂沙上那恐怖的哭脸所吓跑.用于吸引的物品不会被消耗.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 8+(Power-%d)/%d m
-			Power Input: Any side
+			需求功率: %dW
+			范围 = 8+(功率-%d)/%d m
+			动力输入: 任意
 		</note>
 	</baitbox>
 	<firework>
@@ -184,19 +183,19 @@
 			烟火发射器会在得到足够的动力后开始随机制作烟火并自动发射.如果提供的是烟火之星,机器会优先使用它.提供更多的动力可以让机器在原本同等耗材的基础上制作更多的烟火.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Any side
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 任意
 		</note>
 	</firework>
 	<fractionator>
 		<desc>
-			分馏器会蒸馏原料并精炼成用于一些引擎以及机器的航空燃油.精炼航空燃油需要沥青砂,下界石粉,煤炭,烈焰粉,乙醇以及岩浆膏.此外,恶魂之泪只作为加工的催化剂,并不会像其他材料那样被消耗掉. 航空然后只能从机器的顶部输出.
+			分馏器会蒸馏原料并精炼成用于一些引擎以及机器的航空燃油.精炼航空燃油需要沥青砂,下界石粉,煤炭,烈焰粉,乙醇以及岩浆膏.此外,恶魂之泪只作为加工的催化剂,并不会像其他材料那样被消耗掉. 航空燃油只能从机器的顶部输出.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Bottom
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 下面
 		</note>
 	</fractionator>
 	<gpr>
@@ -204,9 +203,9 @@
 			探地雷达能读取其下方各岩层的密度,性质间的差异,从而判断下方的方块.这使得它能够描绘出地洞,地下构造以及各方块材质的横截图. 提供更多的动力可以获得更广的探测视野,最大可达82格.
 		</desc>
 		<note>
-			Required Power: %dW
-			Field-of-View = 1+2*log_2(power-%d) m
-			Power Input: Any side
+			需求功率: %dW
+			可视探测范围 = 1+2*log_2(功率-%d) m
+			动力输入: 任意
 		</note>
 	</gpr>	
 	<heater>
@@ -214,21 +213,21 @@
 			总是因为把握不好温度而弄爆你的压缩机或是其他机器?当加热器被放置在一个机器的下方时,它会把自身温度维持在你所设定的温度值.它会消耗原版熔炉所能消耗的一切燃料,能量越好提供的温度越多, 比如岩浆桶可以让其升温至800C.
 		</desc>
 		<note>
-			Required Power: %dW
-			Max Attainable Temperature: %dC
-			Power Input: Bottom
+			需求功率: %dW
+			可达到的最大温度: %dC
+			动力输入: 下面
 		</note>
 	</heater>
 	<obsidian>
 		<desc>
-			黑曜石工厂会将泵入的水跟岩浆做成黑曜石.注意;如果机器仅残存岩浆过长时间,最终会因过而把机器熔毁.
+			黑曜石工厂会将泵入的水和岩浆做成黑曜石.注意;如果机器仅残存岩浆过长时间,最终会因过而把机器熔毁.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Maximum Temperature: %dC
-			Liquid Capacity: %d mB
-			Power Input: Bottom
+			需求功率: %dW
+			需求转速: %d rad/s
+			最大温度: %dC
+			接受液体能力: %d mB
+			动力输入: 下面
 		</note>
 	</obsidian>
 	<playerdetector>
@@ -236,9 +235,9 @@
 			玩家探测器功能如它的名字那样 - 当玩家进入其检测范围时,它会输出红石信号. 最大检测范围由输入的功率大小决定,同时机器的反应时间 - 玩家进入范围到信号输出之间的延迟 - 取决于转速的大小.
 		</desc>
 		<note>
-			Range = (Power)/%d m
-			Power Input: Bottom
-			Reaction Time: %d-(Speed/%d)
+			范围 = (功率)/%d m
+			动力输入: 下面
+			反应时间: %d-(转速/%d)
 		</note>
 	</playerdetector>
 	<spawnercontroller>
@@ -246,9 +245,9 @@
 			刷怪笼控制器能让你入侵刷怪笼的运作系统,让你能完全关闭它或按照你的需要调整刷怪频率.最小的刷怪速度由输入的转速决定.
 		</desc>
 		<note>
-			Required Power: %dW
-			Min Delay: %d-40*log_2(Speed)
-			Power Input: Spawner Block
+			需求功率: %dW
+			最小延迟: %d-40*log_2(转速)
+			动力输入: 刷怪笼
 		</note>
 	</spawnercontroller>
 	<sprinkler>
@@ -256,7 +255,7 @@
 			洒水器在提供水后,会将其喷射至下方的方块上,浇灌作物加快其生长,湿润土地以及扑灭火焰. 更高的水压 - 由导入泵内的功率决定 - 这会使得洒水器的作用范围更大.
 		</desc>
 		<note>
-			Range: Water Pressure/80
+			范围: 水压/80
 		</note>
 	</sprinkler>
 	<vacuum>
@@ -264,9 +263,9 @@
 			物品吸尘器会把物品以及经验吸向自己,并存入自身内部的储存空间里. 若要提取经验,只需手持螺丝刀潜行模式下右击即可.物品吸尘器会吸取与它水平面临近的容器(除了其他物品吸尘器).
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 8+(Power*4)/%d m
-			Power Input: Any side
+			需求功率: %dW
+			范围 = 8+(功率*4)/%d m
+			动力输入: 任意
 		</note>
 	</vacuum>
 	<woodcutter>
@@ -274,14 +273,14 @@
 			伐木机会砍伐树木的树干,使其的剩余部分掉落,若有树苗掉落将会自动补种.如果附魔无限,伐木机总能补种树苗.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Back
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 后面
 		</note>
 	</woodcutter>
 	<ecu>
 		<desc>
-			引擎控制单元能够控制靠燃料驱动的发动机的油门.关小油门时,保持正常模式下的扭矩输出,但速度会变小. 这样的好处是减慢燃料的消耗; 低转速比高转速更能提高燃料利用率,低速度比高速度拥有更好的效率, 为此航空引擎也不见得输出大一定是好事. 模式是通过手持螺丝刀右击ECU来切换.ECU还可以接受一个红石信号,使得它能完全关闭一个引擎.
+			引擎控制单元能够控制靠燃料驱动的发动机的油门.关小油门时,保持正常模式下的扭矩输出,但速度会变小. 这样的好处是减慢燃料的消耗; 低转速比高转速更能提高燃料利用率,低速度比高速度拥有更好的效率, 为此航空引擎也不见得输出大一定是好事. 模式是通过手持螺丝刀右击引擎控制单元来切换.引擎控制单元还可以接受一个红石信号,使得它能完全关闭一个引擎.
 		</desc>
 		<note>
 			可用模式:
@@ -293,17 +292,17 @@
 			怪物探测器能够探测其范围内的生物,并且不受方块阻挡. 它会在NSEW界面里显示生物的范围并用图标标记它们.如果你携带了运动跟踪器,探测器会渲染出一个HUD,提醒你附近怪物的位置.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 8+(Power-%d)/%d m
-			Power Input: Bottom
+			需求功率: %dW
+			范围 = 8+(功率-%d)/%d m
+			动力输入: 下面
 		</note>
 	</mobradar>
 	<winder>
 		<desc>
-			卷线器会用于盘卷弹簧线圈,使其充入机械能方便之后的使用.它也能让预先充能好的弹簧作为动力源,这使得物品形式的能源传输成为可能.
+			卷线器用于盘卷弹簧线圈,使其充入机械能方便之后的使用.它也能让预先充能好的弹簧作为动力源,这使得物品形式的能源传输成为可能.
 		</desc>
 		<note>
-			Maximum energy acheivable is proportional to torque input
+			能充入的最大能量与输入的扭矩成正比
 		</note>
 	</winder>
 	<tntcannon>
@@ -311,9 +310,9 @@
 			TNT卡农炮能进转填好的TNT以设定速度(指定的速度,发射仰角,发射方位),或一个特定的目标位置. 它需要持续提供TNT才能运作. 更斜的发射仰角需要更大的扭矩,更快的发射速度需要更大的转速, 而更远的距离则需要更大的动力输入.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Any horizontal side or bottom
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 任意水平面或下面
 		</note>
 	</tntcannon>
 	<sonicweapon>
@@ -321,13 +320,13 @@
 			超声波武器是一种防护设备,用于抵御那些敌对的生物以及玩家.随着音量的增大 (通过更大的扭矩输入来提到音量的上限),它会在对作用范围内造成越来越多的负面效果,从反胃到失明,眩晕甚至是死亡.这台机器遵循平方反比定律,因此声源的强度与影响效果会相应减弱.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 8+(Power-%d)/%d m
-			Blindness at: %d W/m^2
-			Confusion at: %d W/m^2
-			Drowning at: %d W/m^2
-			Lethality at: %d W/m^2
-			Power Input: Any side
+			需求功率: %dW
+			范围 = 8+(功率-%d)/%d m
+			造成失明: %d W/m^2
+			造成混乱: %d W/m^2
+			造成窒息: %d W/m^2
+			致死: %d W/m^2
+			动力输入: 任意
 		</note>
 	</sonicweapon>
 	<blastfurnace>
@@ -337,21 +336,20 @@
 		<note>
 			炼钢需求: 左侧槽位为煤/焦煤, 左下方为火药,左上方为沙子,铁锭在中间槽区.
 
-			增产: 几率随着填满格子的数量增加而递增,最大为百分之50
-			最大增产量: 填充的格子越多越大,,最大为百分之100
+			增产: 几率随着填满格子的数量增加而递增,最大为50%%
+			最大增产量: 填充的格子的数量增加而递增,最大为100%%
 
 			每个钢锭的经验数: %.2f
 		</note>
 	</blastfurnace>
 	<forcefield>
 		<desc>
-			立场发生器发射一个球状的立场体,用于抵御一切敌对的怪物以及弹射物.注意的是它只有一个方向是固态的 - 有威胁的对象离开立场后无法重新进入. 但由于立场内部的强大磁场,会使从内部射出的箭矢发射偏移.机器上方的选定工作半径区域内,只有那些能见度良好的范围才能达到最好效果
-
+			立场发生器发射一个球状的立场体,用于抵御一切敌对的怪物以及弹射物.注意的是它只有一个方向是固态的 - 有威胁的对象离开立场后无法重新进入. 但由于立场内部的强大磁场,会使从内部射出的箭矢发射偏移.机器上方的选定工作半径区域内,只有那些能见度良好的范围才能达到最好效果.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 2+(Power-%d)/%d m
-			Power Input: Any side
+			需求功率: %dW
+			范围 = 2+(功率-%d)/%d m
+			动力输入: 任意
 		</note>
 	</forcefield>
 	<musicbox>
@@ -359,20 +357,20 @@
 			音乐盒实质上是一个集成化的音符盒电路.只需给它编辑曲目 - 使用演示曲目或由自己编写, 并提供动力即可演奏音乐.红石信号会使曲子循环一次; 提供动力则会循环播放.
 		</desc>
 		<note>
-			Activation: Redstone for one cycle, shaft power for looped music
-			Loop Power: %d
-			Data Entry Mode: Sequential
-			Power Input: Any side
+			激活: 红石信号一次循环,轴功率持续循环
+			循环播放所需能量: %d
+			数据写入模式: 顺序
+			动力输入: 任意
 		</note>
 	</musicbox>
 	<mobharvester>
 		<desc>
-			生物屠宰机能像玩家那样屠宰生物,使得需要玩家击杀才能掉落物品可以架设自动化成为可能.机器会对站在上方的生物造成伤害,伤害大小取决于输入的功率
+			生物屠宰机能像玩家那样屠宰生物,使得需要玩家击杀才能掉落物品可以架设自动化成为可能.机器会对站在上方的生物造成伤害,伤害大小取决于输入的功率.
 		</desc>
 		<note>
-			Required Power: %dW
-			Damage Dealt: log_2((2+power/%d)^6)
-			Power Input: Any horizontal side or bottom
+			需求功率: %dW
+			伤害: log_2((2+功率/%d)^6)
+			动力输入: 任意水平面或下面
 		</note>
 	</mobharvester>
 	<projector>
@@ -380,8 +378,8 @@
 			投影仪会把图像投映在墙上.注意的是墙体大小必须为7格宽5格高,并且不能被方块所阻挡.
 		</desc>
 		<note>
-			Required Power: %dW
-			Power Input: Back
+			需求功率: %dW
+			动力输入: 后面
 		</note>
 	</projector>
 	<railgun>
@@ -389,9 +387,9 @@
 			轨道炮是极其强大的防御型设备.它依靠高强力磁场驱动重型金属弹头,给予目标巨大的伤害.注意的是炮弹越重伤害越大,对地形的破坏也随之增大.轨道炮会自动锁定最近的可见怪物;为发挥最佳效果, 可以把其放置在视野极佳的位置.你也可以把它倒置来瞄准下方而不是上方的目标.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: 512*SQRT(mass) Nm
-			Power Input: Bottom or top, orientation dependent
+			需求功率: %dW
+			需求扭矩: 512*SQRT(弹头重量) Nm
+			动力输入: 下面或顶面,取决于摆放的方向
 		</note>
 	</railgun>
 	<weathercontroller>
@@ -399,8 +397,8 @@
 			碘化银发射器/人工降雨机用于操纵天气. 它内置光感应装置来确定当前(所设定)的天气,会把相应的化学物质发射到天空中以改变天气.注意的是它拥有一个冷却时间,并且需要直视天空.
 		</desc>
 		<note>
-			Required Power: %dW
-			Power Input: Bottom
+			需求功率: %dW
+			动力输入: 下面
 			晴天: 木屑
 			雨天: 碘化银
 			雷雨: 红石+碘化银
@@ -412,9 +410,9 @@
 			物品刷新器能够保持附近的掉落物不会被清除.注意的是长时间维持存在的物品会因为机器的能源供应中断而消失.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 4+(Power-%d)/%d m
-			Power Input: Any side
+			需求功率: %dW
+			范围 = 4+(功率-%d)/%d m
+			动力输入: 任意
 		</note>
 	</refresher>
 	<cavescanner>
@@ -422,9 +420,9 @@
 			洞穴扫描仪的功能酷似三维激光扫描仪. 它会传输脉冲至地面并能检测空气与其他方块间的间痕,以便其效果呈现在世界上. 这使得你能在地面或者地底洞穴的情况. 它的侦测视野默认是16个区块, 并且可以通过右击该方块移动. 右击会让它往你所看的方向移动,而shift右击会使它往你所看的相反方向移动.洞穴的显示是以颜色的深浅呈现.
 		</desc>
 		<note>
-			Required Power: %dW
-			Move the selected region by right-clicking the block
-			Power Input: Any side
+			需求功率: %dW
+			右击方块让它往你所看的方向移动
+			动力输入: 任意
 		</note>
 	</cavescanner>
 	<scalechest>
@@ -432,10 +430,10 @@
 			可调储物箱能让你把物品存储在一个小空间内.它的库存大小取决于其所接受的功率, 最多能储存 %d 组物品. 如果动力减少或中断会导致储存格子的减少,如果这些格子存储了物品,会被暂时隐藏直至补足足够的能量.
 		</desc>
 		<note>
-			Required Power: %dW
-			Inventory Size: 9+(Power-%d)/%d slots
-			Max Size: %d
-			Power Input: Back
+			需求功率: %dW
+			物品槽数量: 9+(功率-%d)/%d 个槽
+			最大大小: %d
+			动力输入: 后面
 		</note>
 	</scalechest>
 	<spiller>
@@ -443,7 +441,7 @@
 			液体喷射器用于把坑洼之地用液体填满. 每桶液体相当于也可液体方块. 它会从最底下一层开始补填.
 		</desc>
 		<note>
-			Requires piped liquid to operate
+			需求输送液体使其运作
 		</note>
 	</spiller>
 	<smokedetector>
@@ -451,7 +449,7 @@
 			烟雾检测器会检测附近的一个火源方块并发出警报声响,当线圈给它持续功能时,它能持续发出警报声响.
 		</desc>
 		<note>
-			Requires a charged windspring as a power source
+			需要一个弹簧线圈作为能量源
 		</note>
 	</smokedetector>
 	<igniter>
@@ -459,10 +457,10 @@
 			点火器能让你大面积点燃一切可燃物,使得能方便清理大面积的森林与草丛.由于它能点燃生物,它也能作为一个强大且危险的防御设备
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = Temperature/50 m
-			Acceptable fuels: 煤, 烈焰粉, 木头, 岩浆, 铝热剂
-			Power Input: Any side
+			需求功率: %dW
+			范围 = 温度/50 m
+			可用燃料: 煤, 烈焰粉, 木头, 岩浆, 铝热剂
+			动力输入: 任意
 		</note>
 	</igniter>
 	<freezegun>
@@ -470,9 +468,9 @@
 			冰冻枪是一种非致命武器. 它会自动对威胁性生物,发动冷冻攻击,但并没有固定的伤害.冰块是比雪更好的弹药.类似轨道炮,它的基座能够安装在上部,能有效获得一个清晰的瞭望点. 注意的是被冰冻的怪物任然能进行近身攻击.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Bottom or top, orientation dependent
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 下面或顶面(取决于摆放的方向)
 		</note>
 	</freezegun>
 	<magnetizer>
@@ -480,9 +478,9 @@
 			磁化器使用一个快速旋转的轴使轴芯内产生出磁场.这是交流电引擎的关键部件.它需要交替的红石电流以及高转速.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Back
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 后面
 		</note>
 	</magnetizer>
 	<containment>
@@ -490,20 +488,20 @@
 			牵制立场发生器与立场发生器相对 - 后者把一切排除在外, 前者则将一切困在其中. 注意的是敌对生物的火焰弹,或是骷髅,凋零依然能攻击立场外的目标.这台机器的上方需要一个良好的视野高度,取决于其所选定的半径.
 		</desc>
 		<note>
-			Required Power: %dW
-			Range = 2+(Power-%d)/%d m
-			Power Input: Any side
-			Requires %dW 能困住凋零,%dW 能困住末影龙
+			需求功率: %dW
+			范围 = 2+(功率-%d)/%d m
+			动力输入: 任意
+			到达 %dW 能困住凋零,%dW 能困住末影龙
 		</note>
 	</containment>
 	<screen>
 		<desc>
-			CCYV监控屏能通过CCTV闭路摄像仪进行监控. 只需填入三个染料进行与存在于世界上的一个航 拍摄像仪进行颜色频道的匹配,对着监视屏按住shift右击即可使用.
+			CCTV监控屏能通过CCTV闭路摄像仪进行监控. 只需填入三个染料进行与存在于世界上的一个航拍摄像仪进行颜色频道的匹配,对着监视屏按住shift右击即可使用.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Bottom
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 下面
 		</note>
 	</screen>
 	<cctv>
@@ -511,7 +509,7 @@
 			CCTV检测仪能让你随意观察是否存在你无法安全访问的区域.只需要提供一个充能好的弹簧与三个染料做出的编码,其观察镜头你可以通过CCTV监控屏来查看.要退出相机模式只需要按 "\". 该检测器可以通过螺丝刀调节(按住shift右击以倾斜).
 		</desc>
 		<note>
-			Requires a charged windspring as a power source
+			需要一个弹簧线圈作为能量源
 		</note>
 	</cctv>
 	<purifier>
@@ -519,10 +517,10 @@
 			钢材精炼器能把一些低级的钢材转化为HSLA钢(高强度合金钢),就像高炉一样,它需要提供火药以及沙子,温度要求超过 %dC.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Required Temperature: %dC
-			Power Input: Any Side
+			需求功率: %dW
+			需求扭矩: %d Nm
+			需求温度: %dC
+			动力输入: 任意
 		</note>
 	</purifier>
 	<lasergun>
@@ -530,8 +528,8 @@
 			激光炮是另一台强大的防御或进攻武器.就像轨道炮一样,它能对离它最近的怪物或者非白名单上的玩家进行攻击,其光束所扫射的过的地方会点燃目标,熔化岩石而造成破坏
 		</desc>
 		<note>
-			Required Power: %dW
-			Power Input: Bottom or top, orientation dependent
+			需求功率: %dW
+			动力输入: 下面或顶面,取决于摆放的方向
 		</note>
 	</lasergun>
 	<itemcannon>
@@ -539,9 +537,9 @@
 			物品加农炮能在不破坏地形的前提下远距离发射物品,使得远距离的物品传输成为可能.注意的是你需要到另一个物品加农器所在的位置接收物品.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Back
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 后面
 		</note>
 	</itemcannon>
 	<friction>
@@ -549,9 +547,9 @@
 			摩擦加热器是一个不需要燃料就能加热熔炉的设备.高扭矩高转速即可实现高温度,但要注意,长时间的高温维持会把熔炉给熔化掉,同时高温能让熔炉快速烧制物品.高温熔炉是唯一能把的钨碎片加热成钨锭的途径. 注意的是尽管温度是根据输入的功率决定,但是分配好合适的扭矩与转速能获得更好的效率.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Back
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 后面
 		</note>
 	</friction>
 	<landmine>
@@ -559,7 +557,7 @@
 			地雷是一种能埋在地下一格位置的陷阱.它需要弹簧线圈,线圈的损耗越多,其自爆的风险就越高. 也可以在右侧放入TNT,烈焰粉,蜘蛛眼,玻璃来产生一些额外的效果,左侧的火药越多爆炸威力越强.
 		</desc>
 		<note>
-			Requires a charged windspring as a power source
+			需要一个弹簧线圈作为能量源
 		</note>
 	</landmine>
 	<bucketfiller>
@@ -567,9 +565,9 @@
 			桶装器会从侧面抽取流体,顶部接收空桶,然后自动填满这些桶.它也能用反其道而行;用装满的桶来提供流体.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Any side
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 任意
 		</note>
 	</bucketfiller>
 	<blockcannon>
@@ -577,17 +575,17 @@
 			方块加农炮能把方块以投射物的形式发射出去,让你的目标一团糟.若要发射液体,只需在里面提供空桶
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: Goes up with block mass
-			Power Input: Any side or bottom
+			需求功率: %dW
+			需求扭矩: 随方块重量上升
+			动力输入: 任意或下面
 		</note>
 	</blockcannon>
 	<spycam>
 		<desc>
-			航拍摄像仪能让你从高空观察一个大区域,以便得知怪物与方块的位置.像CCTV检测仪一样,它需要一个弹簧线圈以及三色“信号频道”.
+			航拍摄像仪能让你从高空观察一个大区域,以便得知怪物与方块的位置.像CCTV检测仪一样,它需要一个弹簧线圈以及三色"信号频道".
 		</desc>
 		<note>
-			Requires a charged windspring as a power source
+			需要一个弹簧线圈作为能量源
 		</note>
 	</spycam>
 	<mirror>
@@ -595,7 +593,7 @@
 			反射镜是太阳能塔的关键部件.更多的镜子意味着有更多的效率.请注意,它们需要一个直视天空,如果太阳的亮度不是全亮的,它将会降低效率.此外,如果有重物如玩家或史莱姆在上面时,它很容易损坏.
 		</desc>
 		<note>
-			Requires a clear view of the sky
+			需要在清晰可见天空的地方
 		</note>
 	</mirror>
 	<selfdestruct>
@@ -603,8 +601,8 @@
 			自毁装置会检测一个动力源,若动力源出现变动会把所积聚的能量释放出来形成大爆炸.
 		</desc>
 		<note>
-			Detonates on power loss
-			Power Input: Any side
+			动力下降时会产生爆炸
+			动力输入: 任意
 		</note>
 	</selfdestruct>
 	<coolingfin>
@@ -620,25 +618,36 @@
 			工作台是除高炉或其本身以外所有机器加工出来的地方. 使用方法与原版合成台一样.给它红石信号或点击右侧物品即可.工作台也可给需要线圈的工具进行充能.只需在左侧放入工具与线圈即可,并在右侧取出.跟原版合成台不同的是,它能暂时储存物品.
 		</desc>
 		<note>
-			Required to craft any machines
+			任何机器都需在该工作台上制作
 		</note>
 	</worktable>
 	<compressor>
 		<desc>
-			空气压缩机能用轴来压缩空气,通过导能管道能给Buildcraft的机器供能.如果提供过量的动力,它会爆炸.
+			空气压缩机能用轴来压缩空气,通过导能管道能给BuildCraft的机器供能.如果提供过量的动力,它会爆炸.
 		</desc>
 		<note>
-			Maximum pressure before detonation: %d kPa
-			Orientation and Output: Like BuildCraft engines
-			Power Input: Back
+			在爆炸前所能达到的最大压力: %d kPa
+			朝向与输出: 与BC引擎类似
+			动力输入: 后面
 		</note>
 	</compressor>
 	<pneuengine>
 		<desc>
-			气动引擎使用涡轮将BC导能管道的能量转为轴功率.使用它的GUI即可选择输出的转速.输出的动力越大就需要越高的气压.(每tick更多的MJ).
+			气动引擎使用涡轮将压缩空气从PneumaticCraft的管道转为轴功率.使用它的GUI即可选择输出的转速.输出的动力越大就需要越高的气压和气流.
 		</desc>
 		<note>
-			Conductive Pipe Input: Back
+			<sub>
+				<s1>
+					空气输入: 后面
+
+					过热临界温度: %dC
+
+					级别从0-5.每个级别将会输出额外的动力,但会削弱利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</pneuengine>
 	<liquidconverter>
@@ -646,7 +655,7 @@
 			压力平衡器用于将高压管道,管道,以及燃料管线与标准的流体管道连接在一起.
 		</desc>
 		<note>
-			Supports: Water, Lava, Lubricant, Jet Fuel
+			支持: 水, 岩浆, 润滑油, 航空燃油
 		</note>
 	</liquidconverter>
 	<display>
@@ -662,7 +671,7 @@
 			灯会照亮周围一片区域,只要其中还放着一个充能的弹簧.
 		</desc>
 		<note>
-			Maximum Range: %d m
+			最大范围: %d m
 		</note>
 	</lamp>
 	<terraformer>
@@ -673,6 +682,7 @@
 			用Tile选择工具选择要转化的tile
 			只有与机器所在群系相同的方块才能被转化
 			动力输入: 任意水平面
+			需要红石信号来激活
 		</note>
 	</terraformer>
 	<fuelenhancer>
@@ -680,9 +690,9 @@
 			燃料增强器可以把石油所加工而成燃油进行进一步的精炼,直至提炼成航空燃油.请注意,净化过程会导致四倍的燃料损耗,同时机器需要岩浆膏,烈焰粉,下界石粉与沥青砂.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Bottom
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 下面
 		</note>
 	</fuelenhancer>
 	<emp>
@@ -690,7 +700,8 @@
 			电磁脉冲器在启动时会永久停止附近一切脆弱的机器.而像轴这样的则不受其影响,因为它们没有电子或红石的部件,而那些更加复杂的如刷怪笼,引擎或是电池盒则会被破坏掉.传言说它所发出的强力脉冲甚至能扰乱一种特殊存在的平衡-魔法中那名为"节点"的不可见之物.
 		</desc>
 		<note>
-			纯机械的方块如轴不受其影响
+			纯机械的方块,如轴不受其影响
+			激活所需能量: %dJ
 			动力输入: 底面
 		</note>
 	</emp>
@@ -699,7 +710,7 @@
 			方块撞锤会推动一排的方块,好比一个增强的活塞.只要给它提供建筑方块它就会将它们推出去,直到遇到基岩,箱子,刷怪笼或机器这样的障碍物为止.它的最大上限为512米. 
 		</desc>
 		<note>
-			Power Input: Back
+			动力输入: 后面
 		</note>
 	</linebuilder>
 	<arrowgun>
@@ -719,7 +730,7 @@
 			摩擦锅炉使用轴功率加热泵入其中的水.一旦沸腾,水就会变为水蒸气从锅炉顶部排出.机器在制造蒸汽前有一段预热时间.注意该机器可能会过热而损坏.
 		</desc>
 		<note>
-			Power Input: Bottom
+			动力输入: 下面
 		</note>
 	</boiler>
 	<steamturbine>
@@ -727,7 +738,18 @@
 			蒸汽轮机会从后方的任何管道或储罐中获取蒸汽,利用蒸汽来驱动轴转动.使用它的GUI可以选择使用功率(以及蒸汽消耗).
 		</desc>
 		<note>
-			Steam Input: Back
+			<sub>
+				<s1>
+					蒸汽输入: 后面
+
+					过热临界温度: %dC
+
+					级别从0-5.每个级别将会输出额外的动力,但会削弱利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</steamturbine>
 	<beammirror>
@@ -745,9 +767,9 @@
 			施肥机,提供磷灰石或骨粉时,会加速附近作物,树苗以及其他植物的生长.为了溶解肥料,该机器还需要液态水.
 		</desc>
 		<note>
-			Power Input: Bottom
-			Range: 2*log_2(torque)
-			Required Power: %dW
+			动力输入: 下面
+			范围: 2*log_2(扭矩)
+			需求功率: %dW
 		</note>
 	</fertilizer>
 	<lavamaker>
@@ -755,15 +777,15 @@
 			岩石熔化机利用摩擦产热的方式来熔化岩石制作成岩浆.地狱岩产出的岩浆最多,圆石则最少.
 		</desc>
 		<note>
-			Power Input: Bottom
+			动力输入: 下面
 		</note>
 	</lavamaker>
 	<generator>
 		<desc>
-			发电机利用旋转功力产出IC2特有的电力 转化率为 %.0f W/EU.EU的电流包数与大小会随着动力的输入而变化.
+			发电机利用旋转动力产出IC2特有的电力 转化率为 %.0f W/EU.EU的电流包数与大小会随着动力的输入而变化.
 		</desc>
 		<note>
-			Power Input: Back
+			动力输入: 后面
 		</note>
 	</generator>
 	<electricmotor>
@@ -771,7 +793,18 @@
 			电动引擎能把IC2的电力转化为旋转功力.右击打开GUI能设定其输出转速.更高的能量输出则需要更多的电力,更强的电压.
 		</desc>
 		<note>
-			Wire Connection: Back
+			<sub>
+				<s1>
+					电线连接位置: 后面
+
+					过热临界温度: %dC
+
+					级别从0-5.每个级别将会输出额外的动力,但会削弱利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</electricmotor>
 	<hose>
@@ -783,21 +816,21 @@
 	</hose>
 	<pipe>
 		<desc>
-			管道用于将流体从泵输送到机器或流体池.一节管道能无限制地容纳流体,但一次只能有一种,并且必须在流体种类变化之前清空.由于腐蚀性问题,该管道不能输送航空燃油或含氟的流体.
+			管道用于将流体从泵输送到机器或蓄水池.一节管道能几乎无限制地容纳流体,但一次只能有一种,并且必须在流体种类变化之前清空.由于腐蚀性问题,该管道不能输送航空燃油或含氟的流体.
 		</desc>
 		<note>
 		</note>
 	</pipe>
 	<fuelline>
 		<desc>
-			燃料管线将乙醇或航空燃油输给需要它们的引擎和炉子中.一旦连接到了源头,它们就会开始自动抽取流体充入自身.一旦连接到了目标,也会自动将内部的流体输入其中.它们有无限的容量,所以在破坏它们的时候最好多加小心,以防流失内部大量的燃料..
+			燃料管线将乙醇或航空燃油输给需要它们的引擎和炉子中.一旦连接到了源头,它们就会开始自动抽取流体充入自身.一旦连接到了目标,也会自动将内部的流体输入其中.它们有几乎无限的容量,所以在破坏它们的时候最好多加小心,以防流失内部大量的燃料..
 		</desc>
 		<note>
 		</note>
 	</fuelline>
 	<valve>
 		<desc>
-			阀门管道,就和其他类型的管道一样,若放在流体池下方就会抽出其中的流体.然而它在没有红石信号的时候是不工作的.
+			阀门管道,就和其他类型的管道一样,若放在蓄水池下方就会抽出其中的流体.然而它在没有红石信号的时候是不工作的.
 		</desc>
 		<note>
 		</note>
@@ -829,19 +862,19 @@
 			露点集雨器能从水汽中收集到水.如果可能的话,会输出到临近的容器或管道.这台机器可以被放置在下界,虽然它的速度会十分缓慢.它必须被冷却到低于环境温度的温度.更高的扭矩意味着在每一个间隔能获得更多的水,而更高的转速能缩短其间隔.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Bottom
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 下面
 		</note>
 	</aggregator>
 	<fuelengine>
 		<desc>
-			燃油引擎能够利用Buildcraft的燃油来产生旋转动力.它的运作产出方式类似其他mod的发电机.它需要润滑油以及冷切水,引擎在过热时会减速.
+			燃油引擎能够利用Buildcraft的燃油来产生旋转动力.它的运作产出方式类似其他mod的发电机.它需要润滑油以及冷却水,引擎在过热时会减速.
 		</desc>
 		<note>
-			Torque Produced: %d Nm
-			Rotational Speed: %d rad/s
-			Power Produced: %dW
+			扭矩: %d Nm
+			转速: %d rad/s
+			功率: %dW
 		</note>
 	</fuelengine>
 	<airgun>
@@ -849,9 +882,9 @@
 			空气压缩炮就是一个机器版的升级震退枪.它使用输入的动力形成气压,当有生物靠近时,它就会将其以高速轰飞.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Back
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 后面
 		</note>
 	</airgun>
 	<sonicborer>
@@ -859,9 +892,9 @@
 			超声钻机利用超声波来挖掘隧道.方向能自行选择并且拥有比一般钻机更快的速度.唯一的缺点是超声钻机所挖掘的方块会掉落在原位置,而不是被运输到机器附近方便收集.如果你输入的动力过大,机器会遭受一次猛烈的爆炸
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Back
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 后面
 		</note>
 	</sonicborer>
 	<sorting>
@@ -869,7 +902,7 @@
 			分类机会将掉落物品分至三个输出面之一(红绿蓝).对于大量物品,它每tick能传输一个物品(因此一整组需要3秒才能完全分类).
 		</desc>
 		<note>
-			Required power: %dW
+			需求功率: %dW
 		</note>
 	</sorting>
 	<fillingstation>
@@ -877,8 +910,8 @@
 			灌装机可以给为某些物品填充燃料,比如喷气背包.
 		</desc>
 		<note>
-			Required power: %dW
-			Power Input: Back
+			需求功率: %dW
+			动力输入: 后面
 		</note>
 	</fillingstation>
 	<vandegraff>
@@ -894,17 +927,17 @@
 			去生物化机器用于快速清理大面积的植物.如果其运作范围内有生物也有可能导致其致死.
 		</desc>
 		<note>
-			Required power: %dW
-			Power Input: Bottom
+			需求功率: %dW
+			动力输入: 下面
 		</note>
 	</defoliator>
 	<bigfurnace>
 		<desc>
-			岩浆冶炼厂能够同时进行多大18个物品的烧制.然而,其内部需要填充岩浆,至少有400度的高温,它还需要提供轴功率
+			岩浆冶炼厂最多能够同时进行18个物品的烧制.然而,其内部需要填充岩浆,至少有400度的高温,它还需要提供轴功率.
 		</desc>
 		<note>
-			Required power: %dW
-			Power Input: Bottom
+			需求功率: %dW
+			动力输入: 下面
 		</note>
 	</bigfurnace>
 	<distiller>
@@ -912,10 +945,9 @@
 			液体蒸馏器用于把一种液体转化为另一种液体.只需要在机器上方提取即可
 		</desc>
 		<note>
-			Required power: %dW
-			Required torque: %d Nm
-			Power Input: Bottom
-			Valid Conversions:
+			需求功率和扭矩取决于转换的液体种类
+			动力输入: 下面
+			有效的转换:
 			%s
 		</note>
 	</distiller>
@@ -928,11 +960,11 @@
 	</suction>
 	<dynamo>
 		<desc>
-			旋转动力发电机能将旋转工艺的动力转化为热力膨胀的红石通量.由于磁场内部的显示, 它最多只能接受的扭矩为 %d Nm ,最大转速为 %d rad/s.多余的能量不会造成危险,但会被浪费掉.
+			旋转动力发电机能将旋转工艺的动力转化为热力膨胀的红石通量.由于磁场内部的显示, 它最多只能接受的扭矩为 %d Nm (升级后为 %d Nm ),最大转速为 %d rad/s.多余的能量不会造成危险,但会被浪费掉.
 		</desc>
 		<note>
-			Orientation and Output: Like ThermalExpansion Dynamos
-			Power Input: Back
+			方向和输出: 和热力膨胀的发电机一样
+			动力输入: 后面
 		</note>
 	</dynamo>
 	<magnetic>
@@ -940,7 +972,18 @@
 			静磁引擎的功能类似气动发电机.它能将RF转化为旋转动力,它的输出转速取决于所选择的速度大小.跟其他转换引擎一样,它需要冷却剂.
 		</desc>
 		<note>
-			Conduit Input: Back
+			<sub>
+				<s1>
+					能量输入: 后面
+
+					过热临界温度: %dC
+
+					级别从0-5.每个级别将会输出额外的动力,但会削弱利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</magnetic>
 	<crystallizer>
@@ -948,9 +991,9 @@
 			结晶器能将流体冻结.请注意,它必须比流体的冰点低.
 		</desc>
 		<note>
-			Power Input: Back
-			Required Power: %dW
-			Required Speed: %d rad/s
+			动力输入: 后面
+			需求功率: %dW
+			需求转速: %d rad/s
 		</note>
 	</crystallizer>
 	<particle>
@@ -972,10 +1015,10 @@
 			磨石通过打磨的方式在不消耗任何额外材料的情况下修复工具.这会减少工具的材料量,使得它无法完全修改一个工具,并且工具耐久上限会逐渐降低,直至无法被修复.
 		</desc>
 		<note>
-			Power Input: Back
-			Required Power: %dW
-			Required Torque: %d Nm
-			Requires water
+			动力输入: 后面
+			需求功率: %dW
+			需求扭矩: %d Nm
+			需要水
 		</note>
 	</grindstone>
 	<blower>
@@ -983,9 +1026,9 @@
 			气动物品泵用于在容器之间快速传输物品.如果一个物品泵的背后有容器,它就会检测前方是否有有效的容器.如果它发现了另一个泵则会照着它的正面继续进行这一过程.该系统让你能在任意距离下几乎瞬间传输物品.每kW的输入功率使它能每tick传输1个物品;因此,若要传输整组,只需提供65kW的功率.功率越大传输越多,传输速率没有上限
 		</desc>
 		<note>
-			Power Input: Any side
-			Required Power: %dW
-			Required Speed: %d rad/s
+			动力输入: 任意
+			需求功率: %dW
+			需求转速: %d rad/s
 		</note>
 	</blower>
 	<refrigerator>
@@ -993,9 +1036,9 @@
 			冷却单元用于冷却空气来使其中的某些成分分离出来,然后将其浓缩.这就是获取液氮和干冰的途径.注意它需要冰来辅助冷却.
 		</desc>
 		<note>
-			Power Input: Back
-			Required Power: %dW
-			Required Torque: %d Nm
+			动力输入: 后面
+			需求功率: %dW
+			需求扭矩: %d Nm
 		</note>
 	</refrigerator>
 	<composter>
@@ -1003,7 +1046,7 @@
 			堆肥器会将废弃食物,植物物质,以及其他有机物分解为特别的肥料,对你来说或许难以接受,但对植物而言却是有益的.它的运行需要酵母.
 		</desc>
 		<note>
-			Required Temperature: Between %dC and %dC
+			需求温度: 介于 %dC 和 %dC 之间
 		</note>
 	</composter>
 	<gastank>
@@ -1011,19 +1054,20 @@
 			流体压缩室可以储存多大一百万桶的任何流体.更高的扭矩允许更高的压力,如果你的扭矩不够高,将无法泵入更多流体.气体与液体都是可以储存的,但液体需要比储存气体更多的扭矩.
 		</desc>
 		<note>
-			Power Input: Bottom
-			Required Power: %dW
-			Required Torque: %d Nm
-			Storage Capacity: f*10^(0.5*log_2(torque))/40 mB, f = 1 for liquids and 8 for gases
+			动力输入: 下面
+			需求功率: %dW
+			需求扭矩: %d Nm
+			储存能力: f*10^(0.5*log_2(扭矩))/40 mB, 对于流体而言f=1而气体则是8
 		</note>
 	</gastank>
 	<crafter>
 		<desc>
-			自动合成器使你能自动化合成任何工作台或原版合成台可用的配方,它有着无限的原料容量.并且有两种模式: 自发模式下,只要原料足够就会持续合成;需求模式下.它会按照你的需求合成物品然后停止.原料可从任意面输入,产物也能从任意面输出.原料只能从底部抽出.该机器最多能储存54个合成配方.
+			自动合成器使你能自动化合成任何工作台或原版合成台可用的配方.他有三种模式: 在自动模式下,只要原料足够就会持续合成;需求模式下.它会按照你的需求合成物品然后停止.他可以自动输入在它上方的容器,它也可以接受Applied Energistics网络的物品供应.这台机器可以储存18个配方,并且这18个配方可以同时合成.在第三个模式,维持模式,它可以在ME系统中将指定的物品维持为一定数量.
 		</desc>
 		<note>
-			Power Input: Any Side
-			Required Power: %dW
+			动力输入: 任意
+			需求功率: %dW
+			维持模式需要使用AE的合成处理器
 		</note>
 	</crafter>
 	<antiair>
@@ -1031,19 +1075,19 @@
 			这是一个廉价版本的轨道炮,防空炮用于将废料射向飞行的怪物,作为一种基础的防御设备.造成的伤害只有一颗心,但每秒能发射至少三次,弹药也比轨道炮便宜.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Torque: %d Nm
-			Power Input: Bottom or top, orientation dependent
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 下面或顶部,取决于摆放的方向
 		</note>
 	</antiair>
 	<pipepump>
 		<desc>
-			管道泵有助于泵入流体通过管道，减少吸入端管道的流体量,增加总流速。更快的输入速度意味着需要更快的管道泵,请注意,泵入过多的液体进入管道将导致它爆裂.
+			管道泵有助于泵入流体通过管道，减少吸入端管道的流体量,增加总流速.更快的输入速度意味着需要更快的管道泵,请注意,泵入过多的液体进入管道将导致它爆裂.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Any side
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 任意
 		</note>
 	</pipepump>
 	<centrifuge>
@@ -1051,9 +1095,9 @@
 			离心机利用其强大的离心力分离物品的组成成分,或者物品中压榨出液体.如果你养蜂,也可使用它来处理蜂巢.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Bottom
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 下面
 		</note>
 	</centrifuge>
 	<drying>
@@ -1069,9 +1113,9 @@
 			液化器能把一个物品混合在某种液体当中,使之加工成不同的物品.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Bottom
+			需求功率: %dW
+			需求转速: %d rad/s
+			动力输入: 下面
 		</note>
 	</wetter>
 	<chunkloader>
@@ -1079,9 +1123,9 @@
 			区块加载器的运作需要非常之高的转速-依靠极端的高转速-基于相对论效应原理,使得能扭曲周围的时间,保持区块的持续加载.
 		</desc>
 		<note>
-			Required Speed: %d rad/s
-			Power Input: Bottom
-			Radius In Chunks: %d+((Power-%d)/%d)
+			需求转速: %d rad/s
+			动力输入: 下面
+			加载区块半径: %d+((功率-%d)/%d)
 		</note>
 	</chunkloader>
 </machines>
