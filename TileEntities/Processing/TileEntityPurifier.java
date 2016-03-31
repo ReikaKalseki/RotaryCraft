@@ -111,9 +111,8 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	private boolean isModSteel(ItemStack is) {
 		if (is == null)
 			return false;
-		List steel = ItemStacks.getModSteels();
-		for (int i = 0; i < steel.size(); i++) {
-			ItemStack s = (ItemStack)steel.get(i);
+		List<ItemStack> steel = ItemStacks.getModSteels();
+		for (ItemStack s : steel) {
 			if (is.getItem() == s.getItem() && (is.getItemDamage() == s.getItemDamage() || !s.getHasSubtypes()))
 				return true;
 		}

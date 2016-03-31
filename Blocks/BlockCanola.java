@@ -45,6 +45,8 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public final class BlockCanola extends BlockBasic implements IPlantable, IGrowable, IWailaDataProvider {
@@ -212,6 +214,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister par1IconRegister) {
 		if (RotaryCraft.instance.isLocked())
 			return;

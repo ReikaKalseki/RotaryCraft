@@ -44,6 +44,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
 import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
+import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
@@ -81,6 +82,8 @@ import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class RotaryEventManager {
 
@@ -91,8 +94,19 @@ public class RotaryEventManager {
 	private RotaryEventManager() {
 
 	}
-
+	/*
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void showScrapValue(ItemSizeTextEvent evt) {
+		if (ReikaItemHelper.matchStacks(evt.getItem(), ItemStacks.scrap)) {
+			int val = ItemStacks.getScrapValue(evt.getItem());
+			//evt.newString = String.format("Value: %d + %d/9 ingots", val/9, val%9);
+			evt.newString = String.format("%d.%d", val/9, val%9);
+		}
+	}
+	 */
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	@ModDependent(ModList.ENDERIO)
 	public void openConduitGUIWithScrewdriver(PlayerInteractEventClient evt) {
 		if (evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && ItemRegistry.SCREWDRIVER.matchItem(evt.entityPlayer.getCurrentEquippedItem())) {
@@ -156,6 +170,12 @@ public class RotaryEventManager {
 	public void stopHijackedFurnaces(FurnaceUpdateEvent.Pre evt) {
 		if (TileEntityFurnaceHeater.isHijacked(evt.furnace))
 			evt.setCanceled(true);
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void preventControlledDespawns(LivingFarDespawnEvent evt) {
+		if (TileEntitySpawnerController.isFlaggedNoDespawn(evt.entity))
+			evt.setResult(Result.DENY);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

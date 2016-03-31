@@ -1063,7 +1063,7 @@ public enum MachineRegistry implements TileEnum {
 			return true;
 		if (requirement != null && !requirement.isLoaded())
 			return true;
-		if (powertype != null && !powertype.exists())
+		if (powertype != null && !powertype.isLoaded())
 			return true;
 		return false;
 	}
@@ -1250,7 +1250,7 @@ public enum MachineRegistry implements TileEnum {
 	public boolean isCraftable() {
 		if (requirement != null && !requirement.isLoaded())
 			return false;
-		if (powertype != null && !powertype.exists())
+		if (powertype != null && !powertype.isLoaded())
 			return false;
 		return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
 	}

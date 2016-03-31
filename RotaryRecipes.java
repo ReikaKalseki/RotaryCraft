@@ -56,6 +56,7 @@ import Reika.ReactorCraft.Auxiliary.ReactorStacks;
 import Reika.ReactorCraft.Registry.CraftingItems;
 import Reika.RotaryCraft.Auxiliary.DecoTankSettingsRecipe;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecyclingRecipe;
 import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
@@ -133,7 +134,7 @@ public class RotaryRecipes {
 				ItemStack from = in.get(h);
 				ItemStack to = ItemStacks.getModOreIngot(ore);
 				if (!ItemRegistry.MODINGOTS.matchItem(from))
-					GameRegistry.addShapelessRecipe(to, from);
+					GameRegistry.addShapelessRecipe(to.copy(), from.copy());
 			}
 		}
 	}
@@ -685,12 +686,12 @@ public class RotaryRecipes {
 
 		GameRegistry.addRecipe(ItemStacks.waterplate, new Object[]{
 				"PPP", "PPP", "SSS", 'P', ItemStacks.basepanel, 'S', ItemStacks.springingot});
-		
+
 		GameRegistry.addRecipe(ItemStacks.prop, new Object[]{
 				" S ", " I ", " P ", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'I', ItemStacks.steelingot});
 		GameRegistry.addRecipe(ItemStacks.prop, new Object[]{
 				" P ", " I ", " S ", 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'I', ItemStacks.steelingot});
-		
+
 		GameRegistry.addRecipe(ItemStacks.hub, new Object[]{
 				"  B", " C ", "G  ", 'G', ItemStacks.steelgear, 'B', ItemStacks.bearing, 'C', ItemStacks.shaftcore});
 		GameRegistry.addRecipe(ItemStacks.mirror, new Object[]{
@@ -966,6 +967,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(new ReservoirComboRecipe());
 		GameRegistry.addShapelessRecipe(MachineRegistry.RESERVOIR.getCraftedProduct(), MachineRegistry.RESERVOIR.getCraftedProduct()); //empty
 
+		//GameRegistry.addRecipe(new ScrapCombinationRecipe());
 
 		GameRegistry.addRecipe(ReikaItemHelper.oakWood, new Object[]{
 				"WW", "WW", 'W', ItemStacks.sawdust});
@@ -992,18 +994,18 @@ public class RotaryRecipes {
 
 		RecipesBlastFurnace.getRecipes().add3x3Crafting(ItemStacks.bedrockdrill, 1000, 8, 0, "BBB", "BBB", " B ", 'B', ItemStacks.bedingot);
 
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 45/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.steelgear);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 48), ItemStacks.gearunit);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 114), ItemStacks.gearunit4);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 180), ItemStacks.gearunit8);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 244), ItemStacks.gearunit16);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 27/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.shaftitem);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 27/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.basepanel);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 45/DifficultyEffects.PARTCRAFT.getInt()+2*27/DifficultyEffects.PARTCRAFT.getInt()), ItemStacks.wormgear);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.ballbearing, ItemStacks.ballbearing, ItemStacks.ballbearing, ItemStacks.ballbearing);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 9), ItemStacks.mount);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 15), ItemStacks.shaftcore);
-		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 81), ItemStacks.waterplate);
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.steelgear, 45/DifficultyEffects.PARTCRAFT.getInt()));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit, 48));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit4, 114));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit8, 180));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit16, 244));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.shaftitem, 27/DifficultyEffects.PARTCRAFT.getInt()));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.basepanel, 27/DifficultyEffects.PARTCRAFT.getInt()));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.wormgear, 45/DifficultyEffects.PARTCRAFT.getInt()+2*27/DifficultyEffects.PARTCRAFT.getInt()));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.ballbearing, 2));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.mount, 9));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.shaftcore, 15));
+		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.waterplate, 81));
 
 		for (int i = 0; i < MaterialRegistry.matList.length; i++) {
 			MaterialRegistry mat = MaterialRegistry.matList[i];
@@ -1248,6 +1250,8 @@ public class RotaryRecipes {
 
 		//ReikaRecipeHelper.addSmelting(ItemStacks.scrap, ItemStacks.steelingot, 0.4F);
 		ReikaRecipeHelper.addSmelting(ItemStacks.ironscrap, new ItemStack(Items.iron_ingot), 0.4F);
+
+		//RecipesBlastFurnace.getRecipes().addRecipe(ItemStacks.scrap, 600, new ScrapMeltingRecipe(), 1, 0);
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {

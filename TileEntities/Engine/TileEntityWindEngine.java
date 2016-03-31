@@ -19,11 +19,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityWindEngine extends TileEntityEngine {
 
@@ -35,18 +38,18 @@ public class TileEntityWindEngine extends TileEntityEngine {
 		else
 			a = 1;
 		switch (meta) {
-		case 0:
-			c = 1;
-			break;
-		case 1:
-			c = -1;
-			break;
-		case 2:
-			d = 1;
-			break;
-		case 3:
-			d = -1;
-			break;
+			case 0:
+				c = 1;
+				break;
+			case 1:
+				c = -1;
+				break;
+			case 2:
+				d = 1;
+				break;
+			case 3:
+				d = -1;
+				break;
 		}
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x+c, y, z+d, x+1+c, y+1, z+1+d).expand(a, 1, b);
 		List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
@@ -101,18 +104,18 @@ public class TileEntityWindEngine extends TileEntityEngine {
 		else
 			a = 1;
 		switch (meta) {
-		case 0:
-			c = 1;
-			break;
-		case 1:
-			c = -1;
-			break;
-		case 2:
-			d = 1;
-			break;
-		case 3:
-			d = -1;
-			break;
+			case 0:
+				c = 1;
+				break;
+			case 1:
+				c = -1;
+				break;
+			case 2:
+				d = 1;
+				break;
+			case 3:
+				d = -1;
+				break;
 		}
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
@@ -160,5 +163,12 @@ public class TileEntityWindEngine extends TileEntityEngine {
 	@Override
 	protected void affectSurroundings(World world, int x, int y, int z, int meta) {
 		this.dealBladeDamage(world, x, y, z, meta);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox()
+	{
+		return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(1, 1, 1);
 	}
 }

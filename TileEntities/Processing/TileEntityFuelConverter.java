@@ -234,7 +234,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	@Override
 	public boolean canIntakeFromPipe(MachineRegistry p) {
-		return p == MachineRegistry.PIPE;
+		return p.isStandardPipe();
 	}
 
 	@Override

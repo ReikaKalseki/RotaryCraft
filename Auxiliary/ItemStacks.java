@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.init.Items;
@@ -244,8 +245,8 @@ public final class ItemStacks {
 	public static final PreferentialItemStack enderium = new PreferentialItemStack(ItemStacks.bedingot, "ingotEnderium");
 	public static final PreferentialItemStack electrum = new PreferentialItemStack(ItemStacks.redgoldingot, "ingotElectrum");
 
-	public static List getModSteels() {
-		return modsteel;
+	public static List<ItemStack> getModSteels() {
+		return Collections.unmodifiableList(modsteel);
 	}
 
 	public static void registerSteels() {
@@ -264,4 +265,23 @@ public final class ItemStacks {
 	public static ItemStack getFlake(ModOreList ore) {
 		return ExtractorModOres.getFlakeProduct(ore);
 	}
+
+	/** In nuggets. *//*
+	public static int getScrapValue(ItemStack is) {
+		return is.stackTagCompound != null ? is.stackTagCompound.getInteger("value") : 1;
+	}
+
+	/** In nuggets. *//*
+	public static void setScrapValue(ItemStack is, int value) {
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setInteger("value", value);
+	}
+
+	/** In nuggets. *//*
+	public static ItemStack getScrap(int value) {
+		ItemStack is = scrap.copy();
+		setScrapValue(is, value);
+		return is;
+	}
+	 */
 }

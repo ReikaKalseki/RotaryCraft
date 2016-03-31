@@ -115,7 +115,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	LATEDYNAMO("Rotational Dynamo Recipe Difficulty", 0),
 	BORERPOW("Borer Power Requirement Factor", 1F),
 	BEEYEAST("Use Forestry Bees To Produce Yeast", 0),
-	HARDCONVERTERS("Harder Converter Unit Recipes", false);
+	HARDCONVERTERS("Harder Converter Unit Recipes", false),
+	OREALUDUST("Allow other mods' aluminum dust to make Aluminum Alloy", false);
 
 	private String label;
 	private boolean defaultState;

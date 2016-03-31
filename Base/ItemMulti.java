@@ -183,6 +183,13 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
+		/*
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.scrap)) {
+			int val = ItemStacks.getScrapValue(is);
+			par3List.add(String.format("Value: %d + %d/9 ingots each", val/9, val%9));
+			return;
+		}
+		 */
 		if (is.stackTagCompound == null)
 			return;
 		par3List.add("Additional Data Present.");

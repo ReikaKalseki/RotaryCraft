@@ -31,6 +31,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.BlastFurnaceManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -66,11 +67,13 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		BlastRecipe bedrock = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, 1, ItemStacks.bedingot, false, 0, TileEntityBlastFurnace.BEDROCKTEMP);
 		this.addRecipe(bedrock.setAlloy(), RecipeLevel.CORE);
 
+
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, false, 0, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(scrap, RecipeLevel.PROTECTED);
+
 
 		in1 = new BlastInput((ItemStack)null, 0, 1);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
@@ -78,7 +81,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		BlastRecipe coke = new BlastRecipe(in1, in2, in3, new ItemStack(Items.coal), ItemStacks.coke, false, 0, 400);
 		this.addRecipe(coke, RecipeLevel.CORE);
 
-		in1 = new BlastInput("dustAluminum", 25F, 1);
+		in1 = ConfigRegistry.OREALUDUST.getState() ? new BlastInput("dustAluminum", 25F, 1) : new BlastInput(ItemStacks.aluminumpowder, 25F, 1);
 		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);
 		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 700);
