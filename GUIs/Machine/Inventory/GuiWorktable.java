@@ -102,7 +102,7 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 		int u = rollout <= 8 ? 240 : 176;
 		this.drawTexturedModalRect(j+176, k+78, u, 78, rollout, 64);
 		 */
-		if (!table.craftable)
+		if (!table.craftable || !table.isReadyToCraft())
 			return;
 		this.drawTexturedModalRect(j+79, k+35, 176, 35, 18, 15);
 		api.drawItemStackWithTooltip(itemRender, fontRendererObj, table.getToCraft(), j+116, k+35);

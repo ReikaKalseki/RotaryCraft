@@ -116,7 +116,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	BORERPOW("Borer Power Requirement Factor", 1F),
 	BEEYEAST("Use Forestry Bees To Produce Yeast", 0),
 	HARDCONVERTERS("Harder Converter Unit Recipes", false),
-	OREALUDUST("Allow other mods' aluminum dust to make Aluminum Alloy", false);
+	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false);
 
 	private String label;
 	private boolean defaultState;

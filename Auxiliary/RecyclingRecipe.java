@@ -1,35 +1,41 @@
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
 
 public class RecyclingRecipe implements IRecipe {
 
-	private final ItemStack input;
+	private final IRecipe input;
 	public final int scrapValue;
 
-	public RecyclingRecipe(ItemStack is, int value) {
+	public RecyclingRecipe(int value, ItemStack... recipe) {
+		this(ReikaRecipeHelper.getShapelessRecipeFor(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, value), recipe), value);
+	}
+
+	public RecyclingRecipe(ItemStack in, int value) {
+		this(value, in);
+	}
+
+	public RecyclingRecipe(int value, ItemStack in, int amt) {
+		this(value, ReikaArrayHelper.getArrayOf(in, amt));
+	}
+
+	public RecyclingRecipe(IRecipe is, int value) {
 		input = is;
 		scrapValue = value;
 	}
 
 	@Override
 	public boolean matches(InventoryCrafting ics, World world) {
-		int num = 0;
-		for (int i = 0; i < ics.getSizeInventory(); i++) {
-			ItemStack is = ics.getStackInSlot(i);
-			if (is != null) {
-				if (ReikaItemHelper.matchStacks(is, input))
-					num++;
-				else
-					return false;
-			}
-		}
-		return num == 1;
+		return input.matches(ics, world);
 	}
 
 	@Override
@@ -44,7 +50,18 @@ public class RecyclingRecipe implements IRecipe {
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return ItemStacks.scrap;
+		return ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, scrapValue);//ItemStacks.scrap;
+	}
+
+	public ArrayList<ItemStack> getSplitOutput() {
+		ArrayList<ItemStack> li = new ArrayList();
+		int val = scrapValue;
+		while (val > 0) {
+			int num = Math.min(val, ItemStacks.scrap.getMaxStackSize());
+			li.add(ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, num));
+			val -= num;
+		}
+		return li;
 	}
 
 }

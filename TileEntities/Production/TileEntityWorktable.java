@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +30,7 @@ import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
@@ -41,6 +43,7 @@ import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityWorktable extends InventoriedRCTileEntity implements TriggerableAction {
@@ -53,22 +56,24 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote) {
-			if (this.getTicksExisted()%4 == 0) {
-				this.chargeTools();
-				this.makeJetplate();
-				this.makeJetPropel();
-				this.coolJetpacks();
-				this.wingJetpacks();
-				this.makeBedjump();
-				this.makeHelmetUpgrades();
-			}
-
-			if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
-				if (!this.craft()) {
-					if (this.canUncraft())
-						this.uncraft();
+			if (this.isReadyToCraft()) {
+				if (this.getTicksExisted()%4 == 0) {
+					this.chargeTools();
+					this.makeJetplate();
+					this.makeJetPropel();
+					this.coolJetpacks();
+					this.wingJetpacks();
+					this.makeBedjump();
+					this.makeHelmetUpgrades();
 				}
-				this.uncraftJetplate();
+
+				if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
+					if (!this.craft()) {
+						if (this.canUncraft())
+							this.uncraft();
+					}
+					this.uncraftJetplate();
+				}
 			}
 			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		}
@@ -189,25 +194,46 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		InventoryCrafting cm = new InventoryCrafting(cw, 3, 3);
 		for (int i = 0; i < 9; i++)
 			cm.setInventorySlotContents(i, this.getStackInSlot(i));
-		ItemStack is = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
-		if (is != null) {
-			for (int i = 0; i < 9; ++i) {
-				ItemStack item = this.getStackInSlot(i);
-				if (item != null) {
-					//noUpdate = true;
-					if (item.stackSize == 1)
-						this.setInventorySlotContents(i, null);
-					else
-						this.getStackInSlot(i).stackSize--;
-				}
-			}
-			is.onCrafting(worldObj, ep, is.stackSize);
-			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
-			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
-			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, is));
+		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
+		if (wr != null) {
+			this.handleCrafting(wr, ep);
 			return true;
 		}
 		return false;
+	}
+
+	public boolean isReadyToCraft() {
+		for (int i = 9; i < 18; i++) {
+			if (inv[i] != null)
+				return false;
+		}
+		return true;
+	}
+
+	public void handleCrafting(WorktableRecipe wr, EntityPlayer ep) {
+		if (wr.isRecycling()) {
+			ArrayList<ItemStack> li = wr.getRecycling().getSplitOutput();
+			int i = 9;
+			for (ItemStack is : li) {
+				ReikaInventoryHelper.addOrSetStack(is, inv, i);
+				i++;
+			}
+			RotaryAchievements.RECYCLE.triggerAchievement(ep);
+		}
+		else {
+			ItemStack is = wr.getOutput();
+			is.onCrafting(worldObj, ep, is.stackSize);
+			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
+			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, is));
+		}
+		for (int i = 0; i < 9; ++i) {
+			ItemStack item = this.getStackInSlot(i);
+			if (item != null) {
+				//noUpdate = true;
+				ReikaInventoryHelper.decrStack(i, inv);
+			}
+		}
+		SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
 	}
 
 	private void makeBedjump() {

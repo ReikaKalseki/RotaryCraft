@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Engine;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,7 +45,9 @@ import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Effects.EntityBlockTexFX;
 import Reika.DragonAPI.Instantiable.Effects.EntityLiquidParticleFX;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -55,6 +58,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.JetEngineEnterFailureEvent;
 import Reika.RotaryCraft.API.Event.JetEngineExplosionEvent;
 import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
@@ -143,10 +147,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		if (isJetFailing)
 			this.jetEngineDetonation(world, x, y, z, meta);
 		else if (FOD > 0 && rand.nextInt(DifficultyEffects.JETFAILURE.getInt()*(9-FOD)) == 0) {
-			RotaryCraft.logger.warn("WARNING: "+this+" just entered failure mode!");
-			isJetFailing = true;
-			RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
-			MinecraftForge.EVENT_BUS.post(new JetEngineEnterFailureEvent(this));
+			this.triggerJetFailing(world, x, y, z);
 		}
 	}
 
@@ -319,7 +320,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 				if (this.itemDestroysEngine(is)) {
 					e.setDead();
 					FOD = 2;
-					isJetFailing = true;
+					this.triggerJetFailing(world, x, y, z);
 				}
 			}
 		}
@@ -366,6 +367,57 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			e.attackEntityFrom(RotaryCraft.jetingest, 10000);
 			if (e instanceof EntityPlayer && e == this.getPlacer()) {
 				RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)e);
+			}
+		}
+	}
+
+	private void triggerJetFailing(World world, int x, int y, int z) {
+		RotaryCraft.logger.warn(this+" just entered failure mode!");
+		isJetFailing = true;
+
+		RotaryAchievements.JETFAIL.triggerAchievement(this.getPlacer());
+		MinecraftForge.EVENT_BUS.post(new JetEngineEnterFailureEvent(this));
+		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 2, 0.75F);
+		SoundRegistry.INGESTION.playSoundAtBlock(this, 0.5F, 1);
+
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).addCoord(x+write.offsetX*8, y, z+write.offsetZ*8).expand(3, 3, 3);
+		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		HashSet<Integer> idSet = new HashSet();
+		for (EntityLivingBase e : li) {
+			e.attackEntityFrom(DamageSource.generic, 8);
+			idSet.add(e.getEntityId());
+		}
+		box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(4, 4, 4);
+		li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase e : li) {
+			if (!idSet.contains(e.getEntityId()))
+				e.attackEntityFrom(DamageSource.generic, 4);
+		}
+
+		if (world.isRemote) {
+
+			for (int i = 0; i < 24; i++) {
+				EntityItem ei = new EntityItem(world, x+0.5+write.offsetX, y+0.5, z+0.5+write.offsetZ, ItemStacks.scrap);
+				double v = ReikaRandomHelper.getRandomBetween(0.8D, 2D);
+				ei.motionX = write.offsetX*v;
+				ei.motionZ = write.offsetZ*v;
+				ei.motionX = ReikaRandomHelper.getRandomPlusMinus(ei.motionX, 0.25);
+				ei.motionZ = ReikaRandomHelper.getRandomPlusMinus(ei.motionZ, 0.25);
+				ei.motionY = ReikaRandomHelper.getRandomPlusMinus(0, 0.25);
+				ei.lifespan = ReikaRandomHelper.getRandomBetween(10, 30);
+				world.spawnEntityInWorld(ei);
+			}
+
+			int r = 8;
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						int dx = x+i;
+						int dy = y+j;
+						int dz = z+k;
+						ReikaRenderHelper.spawnDropParticles(world, x, y, z, world.getBlock(dx, dy, dz), world.getBlockMetadata(dx, dy, dz));
+					}
+				}
 			}
 		}
 	}

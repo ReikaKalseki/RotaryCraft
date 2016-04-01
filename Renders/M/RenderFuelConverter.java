@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Renders.M;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -104,6 +105,7 @@ public class RenderFuelConverter extends RotaryTERenderer
 			GL11.glScaled(1, 1/3D, 1);
 			GL11.glScaled(0.99, 0.95, 0.99);
 
+			amount = MathHelper.clamp_int(amount, 0, tile.CAPACITY);
 			GL11.glCallList(displayList[(int)(amount / ((double)tile.CAPACITY) * (ReikaLiquidRenderer.LEVELS - 1))]);
 
 			GL11.glPopAttrib();

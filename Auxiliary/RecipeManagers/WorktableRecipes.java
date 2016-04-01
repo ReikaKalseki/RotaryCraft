@@ -30,6 +30,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.RecyclingRecipe;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -50,6 +51,10 @@ public class WorktableRecipes extends RecipeHandler {
 
 	public void addAPIRecipe(IRecipe recipe) {
 		this.addRecipe(recipe, RecipeLevel.API);
+	}
+
+	public void addRecyclingRecipe(RecyclingRecipe recipe) {
+		this.addRecipe(recipe, RecipeLevel.PERIPHERAL);
 	}
 
 	public void addRecipe(IRecipe recipe, RecipeLevel rl) {
@@ -174,7 +179,7 @@ public class WorktableRecipes extends RecipeHandler {
 		this.addRecipe(new ShapelessRecipes(output, li), rl);
 	}
 
-	public ItemStack findMatchingRecipe(InventoryCrafting ic, World world) {
+	public WorktableRecipe findMatchingRecipe(InventoryCrafting ic, World world) {
 		int i = 0;
 		ItemStack is = null;
 		ItemStack is1 = null;
@@ -200,7 +205,7 @@ public class WorktableRecipes extends RecipeHandler {
 			IRecipe ir = wr.recipe;
 
 			if (ir.matches(ic, world))
-				return wr.output.copy();//ir.getCraftingResult(ic);
+				return wr;//ir.getCraftingResult(ic);
 		}
 
 		return null;
@@ -274,6 +279,14 @@ public class WorktableRecipes extends RecipeHandler {
 			ArrayList<ItemStack> li = new ArrayList(ReikaRecipeHelper.getAllItemsInRecipe(recipe));
 			li.add(output);
 			return li;
+		}
+
+		public boolean isRecycling() {
+			return recipe instanceof RecyclingRecipe;
+		}
+
+		public RecyclingRecipe getRecycling() {
+			return this.isRecycling() ? (RecyclingRecipe)recipe : null;
 		}
 
 	}

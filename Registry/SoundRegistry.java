@@ -59,7 +59,7 @@ public enum SoundRegistry implements SoundEnum {
 	FAN("#fan"),
 	SPARK("spark"),
 	DYNAMO("#dynamo"),
-	JETDAMAGE("jetdamage"),
+	//JETDAMAGE("jetdamage"),
 	INGESTION("ingest_short"),
 	FRIDGE("#fridge"),
 	JETSTART("#jetstart"),
@@ -143,7 +143,11 @@ public enum SoundRegistry implements SoundEnum {
 	}
 
 	public void playSoundAtBlock(TileEntity te) {
-		this.playSoundAtBlock(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+		this.playSoundAtBlock(te, 1, 1);
+	}
+
+	public void playSoundAtBlock(TileEntity te, float vol, float pitch) {
+		this.playSoundAtBlock(te.worldObj, te.xCoord, te.yCoord, te.zCoord, vol, pitch);
 	}
 
 	public void playSoundAtBlock(WorldLocation loc) {
@@ -189,7 +193,7 @@ public enum SoundRegistry implements SoundEnum {
 
 	@Override
 	public boolean canOverlap() {
-		return this == JETPACK || this == JETDAMAGE || this == RUMBLE;
+		return this == JETPACK || /*this == JETDAMAGE || */this == RUMBLE;
 	}
 
 	private boolean isEngineSound() {

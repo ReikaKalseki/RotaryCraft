@@ -994,18 +994,18 @@ public class RotaryRecipes {
 
 		RecipesBlastFurnace.getRecipes().add3x3Crafting(ItemStacks.bedrockdrill, 1000, 8, 0, "BBB", "BBB", " B ", 'B', ItemStacks.bedingot);
 
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.steelgear, 45/DifficultyEffects.PARTCRAFT.getInt()));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit, 48));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit4, 114));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit8, 180));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.gearunit16, 244));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.shaftitem, 27/DifficultyEffects.PARTCRAFT.getInt()));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.basepanel, 27/DifficultyEffects.PARTCRAFT.getInt()));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.wormgear, 45/DifficultyEffects.PARTCRAFT.getInt()+2*27/DifficultyEffects.PARTCRAFT.getInt()));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.ballbearing, 2));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.mount, 9));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.shaftcore, 15));
-		GameRegistry.addRecipe(new RecyclingRecipe(ItemStacks.waterplate, 81));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.steelgear, 45/DifficultyEffects.PARTCRAFT.getInt()));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.gearunit, 48));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.gearunit4, 114));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.gearunit8, 180));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.gearunit16, 244));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.shaftitem, 27/DifficultyEffects.PARTCRAFT.getInt()));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.basepanel, 27/DifficultyEffects.PARTCRAFT.getInt()));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.wormgear, 45/DifficultyEffects.PARTCRAFT.getInt()+2*27/DifficultyEffects.PARTCRAFT.getInt()));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(9, ItemStacks.ballbearing, 4));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.mount, 9));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.shaftcore, 15));
+		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.waterplate, 81));
 
 		for (int i = 0; i < MaterialRegistry.matList.length; i++) {
 			MaterialRegistry mat = MaterialRegistry.matList[i];

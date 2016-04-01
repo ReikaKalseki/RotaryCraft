@@ -31,6 +31,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -178,23 +179,24 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 
 		public ItemStack getRecipe(InventoryCrafting ic, World world) {
 			switch(this) {
-			case CRAFTING:
-				List<IRecipe> li = CraftingManager.getInstance().getRecipeList();
-				for (IRecipe ir : li)  {
-					if (ir.matches(ic, null)) {
-						return ir.getRecipeOutput();
+				case CRAFTING:
+					List<IRecipe> li = CraftingManager.getInstance().getRecipeList();
+					for (IRecipe ir : li)  {
+						if (ir.matches(ic, null)) {
+							return ir.getRecipeOutput();
+						}
 					}
-				}
-				return null;
-			case BLASTFURN:
-				for (BlastCrafting ir : RecipesBlastFurnace.getRecipes().getAllCraftingRecipes())  {
-					if (ir.matches(ic, Integer.MAX_VALUE)) {
-						return ir.outputItem();
+					return null;
+				case BLASTFURN:
+					for (BlastCrafting ir : RecipesBlastFurnace.getRecipes().getAllCraftingRecipes())  {
+						if (ir.matches(ic, Integer.MAX_VALUE)) {
+							return ir.outputItem();
+						}
 					}
-				}
-				return null;
-			case WORKTABLE:
-				return WorktableRecipes.getInstance().findMatchingRecipe(ic, null);
+					return null;
+				case WORKTABLE:
+					WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(ic, null);
+					return wr != null ? wr.getOutput() : null;
 			}
 			return null;
 		}

@@ -18,14 +18,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.Slot.SlotApprovedItems;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 
 public class ContainerWorktable extends CoreContainer {
@@ -99,12 +97,13 @@ public class ContainerWorktable extends CoreContainer {
 		this.onCraftMatrixChanged(craftMatrix);
 		InventoryPlayer ip = ep.inventory;
 		//ReikaJavaLibrary.pConsole(ip.getItemStack());
-		if (tile.craftable && slot == 13) {
+		if (tile.craftable && tile.isReadyToCraft() && slot == 13) {
 			ItemStack drop = ip.getItemStack();
-			ItemStack craft = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
+			WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
+			ItemStack craft = wr.isRecycling() ? wr.getRecycling().getRecipeOutput() : wr.getOutput();
 			if (drop != null && (!ReikaItemHelper.matchStacks(drop, craft) || drop.stackSize+craft.stackSize > drop.getMaxStackSize()))
 				return is;
-			this.craft();
+			this.craft(wr, ep);
 			craft.onCrafting(world, ep, craft.stackSize);
 			if (drop == null)
 				ip.setItemStack(tile.getStackInSlot(13));
@@ -115,25 +114,8 @@ public class ContainerWorktable extends CoreContainer {
 		return is;
 	}
 
-	private void craft() {
-		ItemStack is = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
-		ItemStack slot13 = tile.getStackInSlot(13);
-		if (slot13 != null)
-			tile.setInventorySlotContents(13, ReikaItemHelper.getSizedItemStack(slot13, slot13.stackSize+is.stackSize));
-		else
-			tile.setInventorySlotContents(13, is);
-		for (int i = 0; i < 9; ++i) {
-			ItemStack item = tile.getStackInSlot(i);
-			if (item != null) {
-				//noUpdate = true;
-				if (item.stackSize == 1)
-					tile.setInventorySlotContents(i, null);
-				else
-					tile.getStackInSlot(i).stackSize--;
-			}
-		}
-		SoundRegistry.CRAFT.playSoundAtBlock(world, tile.xCoord, tile.yCoord, tile.zCoord, 0.3F, 1.5F);
-		MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(tile, ep, false, is));
+	private void craft(WorktableRecipe wr, EntityPlayer ep) {
+		tile.handleCrafting(wr, ep);
 		this.updateCraftMatrix();
 		tile.craftable = false;
 	}
@@ -148,12 +130,13 @@ public class ContainerWorktable extends CoreContainer {
 			noUpdate = false;
 			return;
 		}
-		ItemStack is = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
-		if (is == null) {
+		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
+		if (wr == null) {
 			tile.craftable = false;
 			tile.setToCraft(null);
 			return;
 		}
+		ItemStack is = wr.isRecycling() ? wr.getRecycling().getRecipeOutput() : wr.getOutput();
 		ItemStack slot13 = tile.getStackInSlot(13);
 		if (slot13 != null) {
 			if (is.getItem() != slot13.getItem())

@@ -95,6 +95,8 @@ public enum PacketRegistry {
 			return 4;
 		if (this == CRAFTER)
 			return 2;
+		if (this == ENGINEBACKFIRE)
+			return 0;
 		return 1;
 	}
 
