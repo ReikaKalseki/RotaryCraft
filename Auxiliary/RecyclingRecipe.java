@@ -6,12 +6,13 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Interfaces.CustomToStringRecipe;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
 
-public class RecyclingRecipe implements IRecipe {
+public class RecyclingRecipe implements IRecipe, CustomToStringRecipe {
 
 	private final IRecipe input;
 	public final int scrapValue;
@@ -62,6 +63,11 @@ public class RecyclingRecipe implements IRecipe {
 			val -= num;
 		}
 		return li;
+	}
+
+	@Override
+	public String toString() {
+		return scrapValue+" X scrap = "+ReikaRecipeHelper.toString(input);
 	}
 
 }

@@ -176,7 +176,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 				ItemStack is = this.getSlotRecipeOutput(i);
 				if (is != null) {
 					long thresh = this.getThreshold(i);
-					long missing = thresh-network.getItemCount(is);
+					long missing = thresh-network.getItemCount(is, false);
 					if (missing > 0) {
 						//lock[i] = true;
 						//network.triggerCrafting(worldObj, is, missing, null, new CraftingLock(i));
@@ -448,7 +448,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
 		count += ingredients.getItemCount(is);
 		if (ModList.APPENG.isLoaded() && network != null) {
-			count += network.removeItem(ReikaItemHelper.getSizedItemStack(is, Integer.MAX_VALUE), true);
+			count += network.removeItem(ReikaItemHelper.getSizedItemStack(is, Integer.MAX_VALUE), true, false);
 		}
 		//}
 
@@ -504,7 +504,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 							if (diff > 0 && network != null) {
 								ItemStack is2c = is2.copy();
 								is2c.stackSize = diff;
-								dec -= network.removeItem(is2, false);//network.removeFromMESystem(is2, diff);
+								dec -= network.removeItem(is2, false, false);//network.removeFromMESystem(is2, diff);
 							}
 						}
 					}
@@ -519,7 +519,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 					if (diff > 0 && network != null) {
 						ItemStack isc = is.copy();
 						isc.stackSize = diff;
-						network.removeItem(isc, false);//network.removeFromMESystem(is, diff);
+						network.removeItem(isc, false, false);//network.removeFromMESystem(is, diff);
 					}
 				}
 			}

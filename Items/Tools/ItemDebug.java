@@ -103,7 +103,10 @@ public class ItemDebug extends ItemRotaryTool {
 		if (m != null && m.isStandardPipe()) {
 			TileEntityPipe tile = (TileEntityPipe)te;
 			if (tile != null) {
-				ReikaChatHelper.write(String.format("%s  %d  %d", tile.getFluidType().getLocalizedName(), tile.getFluidLevel(), tile.getPressure()));
+				if (tile.getFluidType() != null)
+					ReikaChatHelper.write(String.format("%s  %d  %d", tile.getFluidType().getLocalizedName(), tile.getFluidLevel(), tile.getPressure()));
+				else
+					ReikaChatHelper.write("Pipe is empty.");
 			}
 		}
 		if (m == MachineRegistry.PUMP) {

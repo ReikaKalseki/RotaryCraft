@@ -130,7 +130,7 @@ public class ItemFireballLauncher extends ItemChargedTool {
 			return is;
 		}
 		this.warnCharge(is);
-		if (!ReikaPlayerAPI.playerHasOrIsCreative(ep, Items.fire_charge, -1))
+		if (!ReikaPlayerAPI.playerHasOrIsCreative(ep, Items.fire_charge))
 			return is;
 		ep.setItemInUse(is, this.getMaxItemUseDuration(is));
 		return is;

@@ -288,8 +288,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 90F;
 		if (ModOreList.getModOreFromOre(b, meta) == ModOreList.MIMICHITE)
 			return 64F;
-		if (b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitFacade"))
-			return 32F;
+		if (b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitFacade") || b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitBundle"))
+			return 24F;
 
 		if (ReikaBlockHelper.isOre(b, meta))
 			return 24F;

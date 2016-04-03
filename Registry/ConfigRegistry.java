@@ -19,11 +19,12 @@ import Reika.DragonAPI.Interfaces.Configuration.MatchingConfig;
 import Reika.DragonAPI.Interfaces.Configuration.SegmentedConfigList;
 import Reika.DragonAPI.Interfaces.Configuration.SelectiveConfig;
 import Reika.DragonAPI.Interfaces.Configuration.StringConfig;
+import Reika.DragonAPI.Interfaces.Configuration.UserSpecificConfig;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
 
 
-public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig, MatchingConfig {
+public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig, MatchingConfig, UserSpecificConfig {
 
 	ENGINESOUNDS("Engine Running Sounds", true),
 	ENGINEVOLUME("Engine Volume", 1F),
@@ -169,17 +170,17 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 		return type == float.class;
 	}
 
-	@Override
-	public boolean isString() {
-		return type == String.class;
-	}
-
 	public Class getPropertyType() {
 		return type;
 	}
 
 	public String getLabel() {
 		return label;
+	}
+
+	@Override
+	public boolean isString() {
+		return type == String.class;
 	}
 
 	public boolean getState() {
@@ -322,6 +323,32 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 			case BORERPOW:
 			case BEEYEAST:
 				//case BLASTGATE: Not a registry config
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	@Override
+	public boolean isUserSpecific() {
+		switch(this) {
+			case ENGINESOUNDS:
+			case ENGINEVOLUME:
+			case MACHINEVOLUME:
+			case RENDERFORCEFIELD:
+			case BANRAIN:
+			case PROJECTORLINES:
+			case GRAVELPLAYER:
+			case DYNAMICHANDBOOK:
+			case COLORBLIND:
+			case SPRINKLER:
+			case LOGBLOCKS:
+			case CLEARCHAT:
+			case KICKFLYING:
+			case TUTORIAL:
+			case POWERCLIENT:
+			case BORERGEN:
+			case CHUNKLOADERSIZE:
 				return true;
 			default:
 				return false;
