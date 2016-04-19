@@ -33,7 +33,7 @@ public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
 	public final int renderID;
 	private static final ForgeDirection[] dirs = ForgeDirection.values();
 
-	public int renderPass = 0;
+	public static int renderPass = 0;
 
 	public ConnectedGlassRenderer(int ID) {
 		renderID = ID;

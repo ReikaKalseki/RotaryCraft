@@ -25,6 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Interfaces.Block.ConnectedTextureGlass;
+import Reika.RotaryCraft.ConnectedGlassRenderer;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -75,6 +76,12 @@ public class BlockBlastGlass extends BlockBasic implements ConnectedTextureGlass
 	@Override
 	public int getRenderType() {
 		return RotaryCraft.proxy.connectedRender;
+	}
+
+	@Override
+	public boolean canRenderInPass(int pass) {
+		ConnectedGlassRenderer.renderPass = pass;
+		return pass == 0;
 	}
 
 	@Override

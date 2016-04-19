@@ -336,19 +336,12 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 			case ENGINEVOLUME:
 			case MACHINEVOLUME:
 			case RENDERFORCEFIELD:
-			case BANRAIN:
 			case PROJECTORLINES:
-			case GRAVELPLAYER:
 			case DYNAMICHANDBOOK:
 			case COLORBLIND:
 			case SPRINKLER:
-			case LOGBLOCKS:
 			case CLEARCHAT:
-			case KICKFLYING:
-			case TUTORIAL:
 			case POWERCLIENT:
-			case BORERGEN:
-			case CHUNKLOADERSIZE:
 				return true;
 			default:
 				return false;

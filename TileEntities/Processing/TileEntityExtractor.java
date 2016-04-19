@@ -355,6 +355,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 			ore = ModOreList.getModOreFromOre(is);
 			if (ore != null)
 				return ore;
+			ore = CustomExtractLoader.instance.getEntryFromOreBlock(is);
+			if (ore != null)
+				return ore;
 		}
 		return null;
 	}

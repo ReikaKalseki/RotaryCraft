@@ -126,6 +126,10 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 				}
 			}
 		}
+		Block b = world.getBlock(x, y, z);
+		if (!ep.isSneaking() && b.rotateBlock(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[s])) {
+			return true;
+		}
 		return false;
 	}
 
@@ -429,7 +433,7 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 
 	@Override
 	public boolean canWrench(EntityPlayer player, int x, int y, int z) {
-		return true;//buildcraft
+		return true;//buildcraft & AE
 	}
 
 	@Override

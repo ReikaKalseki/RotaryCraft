@@ -81,7 +81,7 @@ Connectable, BreakAction {
 		if (power > 0)
 			this.playSound(world, x, y, z);
 
-		if (world.isRaining() && world.canBlockSeeTheSky(x, y+1, z) && world.getTotalWorldTime()%1024 == 0)
+		if (world.isRaining() && world.canLightningStrikeAt(x, y, z) && world.getTotalWorldTime()%1024 == 0)
 			this.makeWet();
 
 		if (wetTimer > 0 && power > 0)
@@ -299,15 +299,15 @@ Connectable, BreakAction {
 
 	public final boolean isValidDirection(ForgeDirection dir) {
 		switch(this.getBlockMetadata()%6) {
-		case 0:
-		case 1:
-			return dir.offsetX == 0;
-		case 2:
-		case 3:
-			return dir.offsetZ == 0;
-		case 4:
-		case 5:
-			return dir.offsetY == 0;
+			case 0:
+			case 1:
+				return dir.offsetX == 0;
+			case 2:
+			case 3:
+				return dir.offsetZ == 0;
+			case 4:
+			case 5:
+				return dir.offsetY == 0;
 		}
 		return false;
 	}

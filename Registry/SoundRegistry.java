@@ -207,6 +207,6 @@ public enum SoundRegistry implements SoundEnum {
 
 	@Override
 	public boolean preload() {
-		return false;
+		return this == JETSTART;
 	}
 }

@@ -72,18 +72,18 @@ public class RenderProjector extends RotaryTERenderer {
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			GL11.glRotatef((float)var11+180, 0.0F, 1.0F, 0.0F);
@@ -139,26 +139,26 @@ public class RenderProjector extends RotaryTERenderer {
 		if (!te.canShow())
 			return;
 		switch(te.getBlockMetadata()) {
-		case 0:
-			a = d;
-			b = 2;
-			c = 3;
-			break;
-		case 1:
-			a = -d;
-			b = 2;
-			c = 3;
-			break;
-		case 2:
-			a = 3;
-			b = 2;
-			c = d;
-			break;
-		case 3:
-			a = 3;
-			b = 2;
-			c = -d;
-			break;
+			case 0:
+				a = d;
+				b = 2;
+				c = 3;
+				break;
+			case 1:
+				a = -d;
+				b = 2;
+				c = 3;
+				break;
+			case 2:
+				a = 3;
+				b = 2;
+				c = d;
+				break;
+			case 3:
+				a = 3;
+				b = 2;
+				c = -d;
+				break;
 		}
 		double voffset = b;
 
@@ -183,7 +183,7 @@ public class RenderProjector extends RotaryTERenderer {
 		ReikaRenderHelper.exitGeoDraw();
 		ReikaRenderHelper.disableLighting();
 		if (te.channel == -2)
-			ReikaTextureHelper.bindRawTexture(RotaryCraft.class, te.getCustomImagePath());
+			ReikaTextureHelper.bindRawTexture(te.getCustomImagePath());
 		else
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/Projector/image"+String.valueOf(te.channel)+".png");
 		GL11.glTranslated(0, voffset, 0);
@@ -391,30 +391,30 @@ public class RenderProjector extends RotaryTERenderer {
 		GL11.glTranslated(0, voffset, 0);
 
 		switch(te.getBlockMetadata()) {
-		case 0:
-			p.setMirror(false);
-			p.setFlip(false);
-			p.setPlane(false);
-			p.setPosition(p2-a, p4+b+1, p6+c-6);
-			break;
-		case 1:
-			p.setMirror(true);
-			p.setFlip(true);
-			p.setPlane(false);
-			p.setPosition(p2-a, p4+b+1, p6+c-6);
-			break;
-		case 2:
-			p.setMirror(false);
-			p.setFlip(false);
-			p.setPlane(true);
-			p.setPosition(p2+c-6, p4+b+1, p6-a);
-			break;
-		case 3:
-			p.setMirror(true);
-			p.setFlip(true);
-			p.setPlane(true);
-			p.setPosition(p2+c-6, p4+b+1, p6-a);
-			break;
+			case 0:
+				p.setMirror(false);
+				p.setFlip(false);
+				p.setPlane(false);
+				p.setPosition(p2-a, p4+b+1, p6+c-6);
+				break;
+			case 1:
+				p.setMirror(true);
+				p.setFlip(true);
+				p.setPlane(false);
+				p.setPosition(p2-a, p4+b+1, p6+c-6);
+				break;
+			case 2:
+				p.setMirror(false);
+				p.setFlip(false);
+				p.setPlane(true);
+				p.setPosition(p2+c-6, p4+b+1, p6-a);
+				break;
+			case 3:
+				p.setMirror(true);
+				p.setFlip(true);
+				p.setPlane(true);
+				p.setPosition(p2+c-6, p4+b+1, p6-a);
+				break;
 		}
 		if (te.getBlockMetadata() == 2)
 			GL11.glTranslated(te.getRange()+3, 0, -0.001-te.getRange()+3);
@@ -579,102 +579,102 @@ public class RenderProjector extends RotaryTERenderer {
 		}
 		else {
 			switch(meta) {
-			case 0:
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2, p4+0.5, p6+0.4375);
-				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2, p4+0.5, p6+0.5625);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2, p4+0.375, p6+0.5625);
-				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2, p4+0.375, p6+0.4375);
-				v5.addVertex(p2-a, vo+p4-b, p6-c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-				v5.addVertex(p2-a, vo+p4-b, p6-c);
-				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-				v5.draw();
-				break;
-			case 1:
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+1, p4+0.5, p6+0.4375);
-				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+1, p4+0.5, p6+0.5625);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+1, p4+0.375, p6+0.5625);
-				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+1, p4+0.375, p6+0.4375);
-				v5.addVertex(p2-a, vo+p4-b, p6-c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2-a, vo+p4+b+1, p6-c);
-				v5.addVertex(p2-a, vo+p4-b, p6-c);
-				v5.addVertex(p2-a, vo+p4-b, p6+1+c);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
-				v5.draw();
-				break;
-			case 2:
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.5625, p4+0.5, p6+1);
-				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.4375, p4+0.5, p6+1);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.5625, p4+0.375, p6+1);
-				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.4375, p4+0.375, p6+1);
-				v5.addVertex(p2-a, vo+p4-b, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-				v5.addVertex(p2-a, vo+p4-b, p6+c);
-				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-				v5.draw();
-				break;
-			case 3:
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.5625, p4+0.5, p6);
-				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.4375, p4+0.5, p6);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.5625, p4+0.375, p6);
-				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2+0.4375, p4+0.375, p6);
-				v5.addVertex(p2-a, vo+p4-b, p6+c);
-				v5.draw();
-				v5.startDrawing(GL11.GL_LINE_LOOP);
-				v5.addVertex(p2-a, vo+p4+b+1, p6+c);
-				v5.addVertex(p2-a, vo+p4-b, p6+c);
-				v5.addVertex(p2+a+1, vo+p4-b, p6+c);
-				v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
-				v5.draw();
-				break;
+				case 0:
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2, p4+0.5, p6+0.4375);
+					v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2, p4+0.5, p6+0.5625);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2, p4+0.375, p6+0.5625);
+					v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2, p4+0.375, p6+0.4375);
+					v5.addVertex(p2-a, vo+p4-b, p6-c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+					v5.addVertex(p2-a, vo+p4-b, p6-c);
+					v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+					v5.draw();
+					break;
+				case 1:
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+1, p4+0.5, p6+0.4375);
+					v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+1, p4+0.5, p6+0.5625);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+1, p4+0.375, p6+0.5625);
+					v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+1, p4+0.375, p6+0.4375);
+					v5.addVertex(p2-a, vo+p4-b, p6-c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2-a, vo+p4+b+1, p6-c);
+					v5.addVertex(p2-a, vo+p4-b, p6-c);
+					v5.addVertex(p2-a, vo+p4-b, p6+1+c);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+1+c);
+					v5.draw();
+					break;
+				case 2:
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.5625, p4+0.5, p6+1);
+					v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.4375, p4+0.5, p6+1);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.5625, p4+0.375, p6+1);
+					v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.4375, p4+0.375, p6+1);
+					v5.addVertex(p2-a, vo+p4-b, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+					v5.addVertex(p2-a, vo+p4-b, p6+c);
+					v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+					v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+					v5.draw();
+					break;
+				case 3:
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.5625, p4+0.5, p6);
+					v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.4375, p4+0.5, p6);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.5625, p4+0.375, p6);
+					v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2+0.4375, p4+0.375, p6);
+					v5.addVertex(p2-a, vo+p4-b, p6+c);
+					v5.draw();
+					v5.startDrawing(GL11.GL_LINE_LOOP);
+					v5.addVertex(p2-a, vo+p4+b+1, p6+c);
+					v5.addVertex(p2-a, vo+p4-b, p6+c);
+					v5.addVertex(p2+a+1, vo+p4-b, p6+c);
+					v5.addVertex(p2+a+1, vo+p4+b+1, p6+c);
+					v5.draw();
+					break;
 			}
 		}
 	}

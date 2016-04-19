@@ -30,7 +30,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Interfaces.Block.ConnectedTextureGlass;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.ClientProxy;
+import Reika.RotaryCraft.ConnectedGlassRenderer;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Items.ItemBlockDecoTank;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -135,7 +135,7 @@ public class BlockDecoTank extends Block implements ConnectedTextureGlass {
 	{
 		if (RotaryCraft.instance.isLocked())
 			return false;
-		ClientProxy.connected.renderPass = pass;
+		ConnectedGlassRenderer.renderPass = pass;
 		return true;
 	}
 

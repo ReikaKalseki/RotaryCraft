@@ -116,7 +116,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 			this.detonate(world, x, y, z);
 		}
 
-		if (world.isRaining() && world.canBlockSeeTheSky(x, y+1, z)) {
+		if (world.isRaining() && world.canLightningStrikeAt(x, y, z)) {
 			charge *= 0.5;
 		}
 	}

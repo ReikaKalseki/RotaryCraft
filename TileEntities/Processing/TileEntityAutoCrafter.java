@@ -421,15 +421,17 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 					}
 				}
 				for (ItemStack is : counts.keySet()) {
-					int req = counts.get(is);
-					int has = this.getAvailableIngredients(is);
-					int missing = req-has;
-					//ReikaJavaLibrary.pConsole("need "+req+" / have "+has+" '"+is+" ("+is.getDisplayName()+")'; making '"+out+" ("+out.getDisplayName()+")'");
-					if (missing > 0) {
-						//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
-						if (!this.tryCraftIntermediates(missing, is)) {
-							//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
-							return false;
+					if (!ReikaItemHelper.matchStacks(out, is)) {
+						int req = counts.get(is);
+						int has = this.getAvailableIngredients(is);
+						int missing = req-has;
+						//ReikaJavaLibrary.pConsole("need "+req+" / have "+has+" '"+is+" ("+is.getDisplayName()+")'; making '"+out+" ("+out.getDisplayName()+")'");
+						if (missing > 0) {
+							//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
+							if (!this.tryCraftIntermediates(missing, is)) {
+								//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
+								return false;
+							}
 						}
 					}
 				}

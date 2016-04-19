@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
@@ -34,6 +35,8 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 
 	@Override
 	protected void transferPower(World world, int x, int y, int z, int meta) {
+		if (world.isRemote && !RotaryAux.getPowerOnClient)
+			return;
 		omegain = torquein = 0;
 		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;
 		int dx = x+read.offsetX;

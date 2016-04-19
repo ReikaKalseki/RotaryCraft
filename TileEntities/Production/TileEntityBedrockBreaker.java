@@ -62,7 +62,10 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		this.readPower(false);
 		this.getIOSides(world, x, y, z, meta);
 		if (power >= MINPOWER && torque >= MINTORQUE) {
-			if (tickcount >= this.getOperationTime()) {
+			int time = this.getOperationTime();
+			if (time <= 1)
+				RotaryAchievements.INSTANTBED.triggerAchievement(this.getPlacer());
+			if (tickcount >= time) {
 				this.process(world, x, y, z, meta);
 				tickcount = 0;
 			}

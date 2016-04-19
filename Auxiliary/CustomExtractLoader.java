@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -94,18 +95,12 @@ public class CustomExtractLoader {
 		}
 
 		@Override
-		public boolean isNether() {
-			return false;
-		}
-
-		@Override
-		public boolean isEnd() {
-			return false;
-		}
-
-		@Override
 		public boolean canGenerateIn(Block b) {
 			return false;
+		}
+
+		public EnumSet<OreLocation> getOreLocations() {
+			return EnumSet.noneOf(OreLocation.class);
 		}
 
 		@Override

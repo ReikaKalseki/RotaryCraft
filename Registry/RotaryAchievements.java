@@ -44,7 +44,7 @@ public enum RotaryAchievements {
 	STEAMENGINE(	-8, 0,	EngineType.STEAM.getCraftedProduct(), 							PUMP,			false), //turn on
 	STEELSHAFT(		-2, -2,	MaterialRegistry.STEEL.getShaftItem(), 							MAKESTEEL,		false), //make
 	CVT(			-2, -4,	MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(1), 	STEELSHAFT,		false), //make
-	BEDROCKSHAFT(	-4, 4,	MaterialRegistry.BEDROCK.getShaftItem(), 						BEDROCKBREAKER,	false), //make
+	BEDROCKSHAFT(	-4, 6,	MaterialRegistry.BEDROCK.getShaftItem(), 						BEDROCKBREAKER,	false), //make
 	BEDROCKTOOLS(	-6, 2,	ItemRegistry.BEDPICK,			 								BEDROCKBREAKER, false), //make
 	JETCHICKEN(		8, -4,	Items.feather, 													JETENGINE,		false), //suck 50 chickens into jet engine
 	JETFAIL(		8, -2,	Blocks.fire, 													JETENGINE,		false), //cause violent failure
@@ -67,7 +67,8 @@ public enum RotaryAchievements {
 	MASSIVEHIT(		0, -8,	Items.flint,													GRAVELGUN,		true),
 	OVERPRESSURE(	-8, 2,	MachineRegistry.COOLINGFIN,										STEAMENGINE,	false),
 	DOUBLEKILL(		-2, -6, Items.arrow,													GRAVELGUN,		true),
-	INSANITY(		2, 2,	MachineRegistry.EXTRACTOR,										EXTRACTOR,		true);
+	INSANITY(		2, 2,	MachineRegistry.EXTRACTOR,										EXTRACTOR,		true),
+	INSTANTBED(		-6, 4,	MachineRegistry.BEDROCKBREAKER,									BEDROCKBREAKER,	true),
 	;
 	public static final RotaryAchievements[] list = values();
 

@@ -196,6 +196,7 @@ public class TileEntityFluidCompressor extends TileEntityPowerReceiver implement
 
 	public ArrayList<NBTTagCompound> getCreativeModeVariants() {
 		ArrayList<NBTTagCompound> li = new ArrayList();
+		li.add(null);
 		for (int i = 0; i < creativeFluids.size(); i++) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("lvl", 1000000000);

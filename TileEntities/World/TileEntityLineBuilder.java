@@ -81,30 +81,30 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			read = ForgeDirection.EAST;
-			dir = ForgeDirection.WEST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			dir = ForgeDirection.EAST;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			dir = ForgeDirection.NORTH;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			dir = ForgeDirection.SOUTH;
-			break;
-		case 4:	//moving up
-			read = ForgeDirection.DOWN;
-			dir = ForgeDirection.UP;
-			break;
-		case 5:	//moving down
-			read = ForgeDirection.UP;
-			dir = ForgeDirection.DOWN;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				dir = ForgeDirection.WEST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				dir = ForgeDirection.EAST;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				dir = ForgeDirection.NORTH;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				dir = ForgeDirection.SOUTH;
+				break;
+			case 4:	//moving up
+				read = ForgeDirection.DOWN;
+				dir = ForgeDirection.UP;
+				break;
+			case 5:	//moving down
+				read = ForgeDirection.UP;
+				dir = ForgeDirection.DOWN;
+				break;
 		}
 	}
 
@@ -149,7 +149,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		ItemStack is = ReikaInventoryHelper.getNextBlockInInventory(inv, true);
 		if (is == null)
 			return null;
-		return new ItemStack(ReikaItemHelper.getWorldBlockIDFromItem(is), 1, ReikaItemHelper.getWorldBlockMetaFromItem(is));
+		return ReikaItemHelper.getWorldBlockFromItem(is).asItemStack();
 	}
 
 	@Override
