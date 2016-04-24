@@ -20,6 +20,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -170,7 +171,7 @@ public abstract class GuiMachine extends GuiContainer {
 		if (this.renderSlot(slot)) {
 			super.func_146977_a(slot);
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_TAB)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_TAB) && DragonOptions.TABNBT.getState()) {
 			ReikaTextureHelper.bindFontTexture();
 			fontRendererObj.drawString(String.format("%d", slot.getSlotIndex()), slot.xDisplayPosition+1, slot.yDisplayPosition+1, 0x888888);
 		}

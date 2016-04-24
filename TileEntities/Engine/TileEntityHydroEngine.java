@@ -12,9 +12,6 @@ package Reika.RotaryCraft.TileEntities.Engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,6 +43,8 @@ import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityHydroEngine extends TileEntityEngine {
 

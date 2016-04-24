@@ -346,6 +346,10 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		if (nbt != null) {
 			tier = nbt.getInteger("tier");
 			efficient = nbt.getBoolean("efficient");
+			storedEnergy = nbt.getInteger("energy");
+			int c = nbt.getInteger("coolant");
+			if (c > 0)
+				tank.addLiquid(c, FluidRegistry.getFluid("rc liquid nitrogen"));
 		}
 	}
 
@@ -392,6 +396,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("tier", tier);
 		nbt.setBoolean("efficient", efficient);
+		nbt.setInteger("energy", storedEnergy);
+		nbt.setInteger("coolant", tank.getLevel());
 		return nbt;
 	}
 

@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import vazkii.botania.api.mana.IManaReceiver;
+import Reika.ChromatiCraft.API.Interfaces.Repairable;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
@@ -53,8 +54,8 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Strippable(value="vazkii.botania.api.mana.IManaReceiver")
-public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTMachine, IManaReceiver {
+@Strippable(value={"vazkii.botania.api.mana.IManaReceiver", "Reika.ChromatiCraft.API.Interfaces.Repairable"})
+public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTMachine, IManaReceiver, Repairable {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
@@ -722,5 +723,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public boolean canRecieveManaFromBursts() {
 		return this.isLiving() && this.getGearboxType() == MaterialRegistry.STONE && !this.isFull();
+	}
+
+	@Override
+	public void repair(World world, int x, int y, int z, int tier) {
+		this.repair((int)Math.sqrt(tier));
 	}
 }

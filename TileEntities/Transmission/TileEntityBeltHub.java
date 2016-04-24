@@ -81,7 +81,7 @@ Connectable, BreakAction {
 		if (power > 0)
 			this.playSound(world, x, y, z);
 
-		if (world.isRaining() && world.canLightningStrikeAt(x, y, z) && world.getTotalWorldTime()%1024 == 0)
+		if (world.isRaining() && world.canLightningStrikeAt(x, y+1, z) && world.getTotalWorldTime()%1024 == 0)
 			this.makeWet();
 
 		if (wetTimer > 0 && power > 0)

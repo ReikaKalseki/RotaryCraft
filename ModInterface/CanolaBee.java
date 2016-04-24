@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
@@ -67,7 +68,7 @@ public class CanolaBee extends BeeSpecies {
 	private final class AlleleCanola extends BasicGene implements IAlleleFlowers {
 
 		public AlleleCanola() {
-			super("flower.canola", "Canola");
+			super("flower.canola", "Canola", EnumBeeChromosome.FLOWER_PROVIDER);
 		}
 
 		@Override
