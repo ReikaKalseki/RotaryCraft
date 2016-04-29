@@ -44,6 +44,7 @@ import Reika.RotaryCraft.Containers.Machine.ContainerCompactor;
 import Reika.RotaryCraft.Containers.Machine.ContainerComposter;
 import Reika.RotaryCraft.Containers.Machine.ContainerCrystallizer;
 import Reika.RotaryCraft.Containers.Machine.ContainerDefoliator;
+import Reika.RotaryCraft.Containers.Machine.ContainerDropProcessor;
 import Reika.RotaryCraft.Containers.Machine.ContainerDryingBed;
 import Reika.RotaryCraft.Containers.Machine.ContainerEthanol;
 import Reika.RotaryCraft.Containers.Machine.ContainerExtractor;
@@ -111,6 +112,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCompactor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiComposter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDefoliator;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDropProcessor;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDryer;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiEthanol;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiExtractor;
@@ -168,6 +170,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
@@ -369,6 +372,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityWetter) {
 			return new ContainerWetter(player, (TileEntityWetter) te);
+		}
+		if (te instanceof TileEntityDropProcessor) {
+			return new ContainerDropProcessor(player, (TileEntityDropProcessor) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -601,6 +607,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityWetter) {
 			return new GuiWetter(player, (TileEntityWetter) te);
+		}
+		if (te instanceof TileEntityDropProcessor) {
+			return new GuiDropProcessor(player, (TileEntityDropProcessor) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

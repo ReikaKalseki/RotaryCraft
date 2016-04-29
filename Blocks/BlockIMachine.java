@@ -79,5 +79,17 @@ public class BlockIMachine extends BlockBasicMultiTE {
 		icons[MachineRegistry.CRAFTER.getBlockMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:crafter_top");
 		icons[MachineRegistry.CRAFTER.getBlockMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
 
+		for (int i = 0; i < 6; i++)
+			for (int j = 0; j < 4; j++)
+				icons[MachineRegistry.DROPS.getBlockMetadata()][j][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][0][4][0] = par1IconRegister.registerIcon("RotaryCraft:drops_front");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][1][5][0] = par1IconRegister.registerIcon("RotaryCraft:drops_front");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][2][2][0] = par1IconRegister.registerIcon("RotaryCraft:drops_front");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][3][3][0] = par1IconRegister.registerIcon("RotaryCraft:drops_front");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][0][5][0] = par1IconRegister.registerIcon("RotaryCraft:drops_back");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][1][4][0] = par1IconRegister.registerIcon("RotaryCraft:drops_back");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][2][3][0] = par1IconRegister.registerIcon("RotaryCraft:drops_back");
+		icons[MachineRegistry.DROPS.getBlockMetadata()][3][2][0] = par1IconRegister.registerIcon("RotaryCraft:drops_back");
+
 	}
 }

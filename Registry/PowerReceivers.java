@@ -101,7 +101,8 @@ public enum PowerReceivers {
 	PIPEPUMP(1, 4096, 4096),
 	CHAIN(),
 	CENTRIFUGE(1, 4096, 16384),
-	WETTER(1, 1024, 4096);
+	WETTER(1, 1024, 4096),
+	DROPS(32, 1, 1024);
 
 	private final int minT;
 	private final int minS;

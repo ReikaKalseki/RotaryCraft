@@ -27,7 +27,6 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater.FrictionRecipe;
@@ -121,48 +120,38 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (!this.isActive())
 			return;
 
-		if (!this.hasFurnace(world)) {
-			if (this.hasHeatable(world)) {
-				this.heatMachine(world, x, y, z);
-			}
-			else {
-				TileEntity te = this.getTileEntity(fx, fy, fz);
-				if (te instanceof ThermalMachine) {
-					ThermalMachine tm = (ThermalMachine)te;
-					if (tm.canBeFrictionHeated()) {
-						int tdiff = temperature-tm.getTemperature();
-						if (tdiff > 0)
-							tm.addTemperature(tdiff);
-						if (tm.getTemperature() > tm.getMaxTemperature()) {
-							tm.onOverheat(world, fx, fy, fz);
-						}
-					}
-				}
+		if (this.hasFurnace(world)) {
+			this.hijackFurnace(world, x, y, z, meta);
+		}
+		else {
+			TileEntity te = this.getTileEntity(fx, fy, fz);
+			if (te instanceof ThermalMachine) {
+				this.heatMachine(world, x, y, z, (ThermalMachine)te);
 			}
 		}
-		else
-			this.hijackFurnace(world, x, y, z, meta);
 	}
 
 	public boolean isActive() {
 		return power >= MINPOWER && torque >= MINTORQUE;
 	}
 
-	private void heatMachine(World world, int x, int y, int z) {
-		FrictionHeatable te = (FrictionHeatable)this.getTileEntity(fx, fy, fz);
-		int tdiff = Math.min(te.getMaxTemperature(), temperature)-te.getTemperature();
-		te.addTemperature(tdiff);
-		te.resetAmbientTemperatureTimer();
+	private void heatMachine(World world, int x, int y, int z, ThermalMachine te) {
+		if (te.canBeFrictionHeated()) {
+			int tdiff = Math.min(te.getMaxTemperature(), temperature)-te.getTemperature();
+			if (tdiff > 0)
+				te.addTemperature(Math.max(1, (int)(tdiff*te.getMultiplier())));
+			te.resetAmbientTemperatureTimer();
 
-		soundtick++;
-		if (soundtick > 49) {
-			SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.1F : 0.5F, 1);
-			soundtick = 0;
+			if (te.getTemperature() > te.getMaxTemperature()) {
+				te.onOverheat(world, fx, fy, fz);
+			}
+
+			soundtick++;
+			if (soundtick > 49) {
+				SoundRegistry.FRICTION.playSoundAtBlock(world, x, y, z, RotaryAux.isMuffled(this) ? 0.1F : 0.5F, 1);
+				soundtick = 0;
+			}
 		}
-	}
-
-	private boolean hasHeatable(World world) {
-		return this.getTileEntity(fx, fy, fz) instanceof FrictionHeatable;
 	}
 
 	private boolean canTileMake(TileEntityFurnace tile, ItemStack is) {

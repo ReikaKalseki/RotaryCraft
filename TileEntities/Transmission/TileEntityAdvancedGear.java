@@ -44,6 +44,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.Interfaces.CVTController;
+import Reika.RotaryCraft.API.Interfaces.CVTController.CVTControllable;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -61,7 +62,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PartialTank,
-PipeConnector, IFluidHandler, ToggleTile {
+PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 	private boolean isReleasing = false;
 	private int releaseTorque = 0;

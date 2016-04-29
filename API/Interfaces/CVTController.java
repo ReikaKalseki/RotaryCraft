@@ -12,7 +12,7 @@ package Reika.RotaryCraft.API.Interfaces;
 import net.minecraft.tileentity.TileEntity;
 
 /** If you have an object that wishes to control a CVT, use this interface. You are responsible for getting the TileEntity instance yourself.
- * The TileEntityAdvancedGear has a setController method. Only one controller per CVT, or you may get strange behavior. */
+ * The TileEntityAdvancedGear/CVTControllable has a setController method. Only one controller per CVT, or you may get strange behavior. */
 public interface CVTController {
 
 	/** Fetch the CVT instance */
@@ -26,5 +26,13 @@ public interface CVTController {
 
 	/** True for torque mode, false for speed mode */
 	public boolean isTorque();
+
+
+	/** The TileEntityAdvancedGear will implement this. */
+	public static interface CVTControllable {
+
+		public void setController(CVTController c);
+
+	}
 
 }

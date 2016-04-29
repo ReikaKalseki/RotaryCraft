@@ -141,6 +141,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	CENTRIFUGE(MachineRegistry.CENTRIFUGE),
 	DRYING(MachineRegistry.DRYING),
 	WETTER(MachineRegistry.WETTER),
+	DROPS(MachineRegistry.DROPS),
 
 	FARMMACHINEDESC("Farming Machines", "Farming"),
 	FAN(MachineRegistry.FAN),

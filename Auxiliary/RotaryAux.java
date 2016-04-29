@@ -255,7 +255,7 @@ public class RotaryAux {
 		Block b = world.getBlock(x, y-1, z);
 		if (b instanceof EnvironmentalHeatSource) {
 			EnvironmentalHeatSource ehs = (EnvironmentalHeatSource)b;
-			return ehs.isActive(world, x, y, z) && ehs.getSourceType(world, x, y, z) == SourceType.ICY;
+			return ehs.isActive(world, x, y, z) && ehs.getSourceType(world, x, y, z).isCold();
 		}
 		return false;
 	}

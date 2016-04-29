@@ -21,6 +21,7 @@ public interface ControllableSpawner {
 
 	public int getCurrentSpawnDelay();
 
+	/** Set the cooldown. Can be zero, but not negative. */
 	public void setCurrentSpawnDelay(int delay);
 
 	/** Run a full spawn cycle, spawning mobs, particles, any any other operations.

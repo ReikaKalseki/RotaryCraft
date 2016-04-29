@@ -35,7 +35,8 @@ public enum DurationRegistry {
 	GRINDSTONE(MachineRegistry.GRINDSTONE,		80, 6),
 	REFRIGERATOR(MachineRegistry.REFRIGERATOR,	1000, 80),
 	RAM(MachineRegistry.LINEBUILDER,			40, 2),
-	CENTRIFUGE(MachineRegistry.CENTRIFUGE,		1200, 60);
+	CENTRIFUGE(MachineRegistry.CENTRIFUGE,		1200, 60),
+	DROPS(MachineRegistry.DROPS,				300, 20);
 
 	private final MachineRegistry machine;
 	private final MathExpression[] exps;

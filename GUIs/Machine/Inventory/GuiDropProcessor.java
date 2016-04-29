@@ -16,16 +16,16 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerGrinder;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
+import Reika.RotaryCraft.Containers.Machine.ContainerDropProcessor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 
-public class GuiGrinder extends GuiMachine
+public class GuiDropProcessor extends GuiMachine
 {
-	private TileEntityGrinder grin;
+	private TileEntityDropProcessor drop;
 
-	public GuiGrinder(EntityPlayer p5ep, TileEntityGrinder Grinder) {
-		super(new ContainerGrinder(p5ep, Grinder), Grinder);
-		grin = Grinder;
+	public GuiDropProcessor(EntityPlayer p5ep, TileEntityDropProcessor te) {
+		super(new ContainerDropProcessor(p5ep, te), te);
+		drop = te;
 		ep = p5ep;
 	}
 
@@ -35,14 +35,6 @@ public class GuiGrinder extends GuiMachine
 		int k = (height - ySize) / 2;
 
 		super.drawGuiContainerForegroundLayer(a, b);
-
-		fontRendererObj.drawString("Lubricant", 5, 11, 4210752);
-
-		if (api.isMouseInBox(j+23, j+32, k+20, k+76)) {
-			int mx = api.getMouseRealX();
-			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", grin.getLevel(), grin.MAXLUBE), mx-j, my-k);
-		}
 	}
 
 	@Override
@@ -52,14 +44,8 @@ public class GuiGrinder extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = Math.min(48, grin.getCookProgressScaled(48));
-		this.drawTexturedModalRect(j + 99, k + 34, 176, 14, 1*(i1)+1, 16);
-
-		int i2 = grin.getLubricantScaled(55);
-		int i3 = 0;
-		if (i2 != 0)
-			i3 = 1;
-		this.drawTexturedModalRect(j + 24, ySize/2+k-7-i2, 176, 126-i2, 8, i2);
+		int i1 = Math.min(48, drop.getProgressScaled(48));
+		this.drawTexturedModalRect(j + 99-24, k + 34, 176, 14, 1*(i1)+1, 16);
 	}
 
 	@Override
@@ -69,17 +55,17 @@ public class GuiGrinder extends GuiMachine
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 		this.drawTexturedModalRect(xSize+var5, var6+4, 0, 4, 42, ySize-4);
 
-		long frac = (grin.power*29L)/grin.MINPOWER;
+		long frac = (drop.power*29L)/drop.MINPOWER;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-144, 0, 0, (int)frac, 4);
 
-		frac = (int)(grin.omega*29L)/grin.MINSPEED;
+		frac = (int)(drop.omega*29L)/drop.MINSPEED;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-84, 0, 0, (int)frac, 4);
 
-		frac = (int)(grin.torque*29L)/grin.MINTORQUE;
+		frac = (int)(drop.torque*29L)/drop.MINTORQUE;
 		if (frac > 29)
 			frac = 29;
 		this.drawTexturedModalRect(xSize+var5+5, ySize+var6-24, 0, 0, (int)frac, 4);
@@ -92,6 +78,6 @@ public class GuiGrinder extends GuiMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "grindergui";
+		return "dropgui";
 	}
 }

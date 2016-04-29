@@ -472,4 +472,19 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public void resetAmbientTemperatureTimer() {
 		tempTimer.reset();
 	}
+
+	@Override
+	public float getMultiplier() {
+		return 1;
+	}
+
+	@Override
+	public void onOverheat(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public boolean canBeFrictionHeated() {
+		return true;
+	}
 }

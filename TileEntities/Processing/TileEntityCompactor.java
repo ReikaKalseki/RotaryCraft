@@ -553,4 +553,19 @@ MultiOperational, ConditionalOperation {
 	public void resetAmbientTemperatureTimer() {
 		tempTick = 5;
 	}
+
+	@Override
+	public float getMultiplier() {
+		return 0.75F;
+	}
+
+	@Override
+	public void onOverheat(World world, int x, int y, int z) {
+
+	}
+
+	@Override
+	public boolean canBeFrictionHeated() {
+		return true;
+	}
 }

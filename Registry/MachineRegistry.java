@@ -131,6 +131,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDistillery;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
@@ -334,7 +335,8 @@ public enum MachineRegistry implements TileEnum {
 	CENTRIFUGE(			"machine.centrifuge",		BlockMIMachine.class,		TileEntityCentrifuge.class,			25, "RenderCentrifuge"),
 	BEDPIPE(			"machine.bedpipe", 			BlockPiping.class,			TileEntityBedrockPipe.class,		8,	"PipeRenderer"),
 	DRYING(				"machine.drying",			BlockMIMachine.class,		TileEntityDryingBed.class,			26, "RenderDryingBed"),
-	WETTER(				"machine.wetter",			BlockMIMachine.class,		TileEntityWetter.class,				27, "RenderWetter");
+	WETTER(				"machine.wetter",			BlockMIMachine.class,		TileEntityWetter.class,				27, "RenderWetter"),
+	DROPS(				"machine.drops",			BlockIMachine.class,		TileEntityDropProcessor.class,		8);
 
 	private final String name;
 	private final Class te;
@@ -834,6 +836,7 @@ public enum MachineRegistry implements TileEnum {
 			case CRYSTALLIZER:
 			case BUSCONTROLLER:
 			case REFRIGERATOR:
+			case DROPS:
 				return true;
 			default:
 				return false;

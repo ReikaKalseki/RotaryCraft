@@ -14,21 +14,20 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import Reika.RotaryCraft.Base.ContainerIOMachine;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 
-public class ContainerGrinder extends ContainerIOMachine
+public class ContainerDropProcessor extends ContainerIOMachine
 {
-	private TileEntityGrinder grinder;
-	private int lastGrinderCookTime;
+	private TileEntityDropProcessor drops;
+	private int lastdropProcessTime;
 
-	public ContainerGrinder(EntityPlayer player, TileEntityGrinder te)
+	public ContainerDropProcessor(EntityPlayer player, TileEntityDropProcessor te)
 	{
 		super(player, te);
-		lastGrinderCookTime = 0;
-		grinder = te;
-		this.addSlotToContainer(new Slot(te, 0, 76, 35));
-		this.addSlotToContainer(new SlotFurnace(player, te, 1, 136, 35));
-		this.addSlotToContainer(new Slot(te, 2, 35, 60));
+		lastdropProcessTime = 0;
+		drops = te;
+		this.addSlotToContainer(new Slot(te, 0, 52, 35));
+		this.addSlotToContainer(new SlotFurnace(player, te, 1, 112, 35));
 
 		this.addPlayerInventory(player);
 	}
@@ -45,22 +44,20 @@ public class ContainerGrinder extends ContainerIOMachine
 		{
 			ICrafting icrafting = (ICrafting)crafters.get(i);
 
-			if (lastGrinderCookTime != grinder.grinderCookTime)
+			if (lastdropProcessTime != drops.dropProcessTime)
 			{
-				icrafting.sendProgressBarUpdate(this, 0, grinder.grinderCookTime);
+				icrafting.sendProgressBarUpdate(this, 0, drops.dropProcessTime);
 			}
-			icrafting.sendProgressBarUpdate(this, 1, grinder.getLevel());
 		}
 
-		lastGrinderCookTime = grinder.grinderCookTime;
+		lastdropProcessTime = drops.dropProcessTime;
 	}
 
 	@Override
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-			case 1: grinder.setLevel(par2); break;
-			case 0: grinder.grinderCookTime = par2; break;
+			case 0: drops.dropProcessTime = par2; break;
 		}
 	}
 }
