@@ -43,6 +43,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 		World world = ep.worldObj;
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		boolean ignoreMeta = ep.isSneaking();
 		ModCrop mod = ModCropList.getModCrop(id, meta);
 		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
 		ReikaPlantHelper plant = ReikaPlantHelper.getPlant(id);
@@ -77,7 +78,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					for (int k = -r; k <= r; k++) {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == TreeGetter.getNaturalDyeLeafID() || id2 == TreeGetter.getHeldDyeLeafID()) {
+						if ((id2 == TreeGetter.getNaturalDyeLeafID() || id2 == TreeGetter.getHeldDyeLeafID()) && (ignoreMeta || meta2 == meta)) {
 							Block b2 = id2;
 							b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);
@@ -116,7 +117,6 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 			return true;
 		}
 		else if (ModList.CHROMATICRAFT.isLoaded() && id == TreeGetter.getDyeFlowerID()) {
-			;
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = this.getPlantRange();
 			for (int i = -r; i <= r; i++) {
@@ -124,7 +124,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					for (int k = -r; k <= r; k++) {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == TreeGetter.getDyeFlowerID()) {
+						if (id2 == TreeGetter.getDyeFlowerID() && (ignoreMeta || meta2 == meta)) {
 							Block b2 = id2;
 							b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);
@@ -145,7 +145,28 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					for (int k = -r; k <= r; k++) {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (BoPBlockHandler.getInstance().isCoral(id2)) {
+						if (BoPBlockHandler.getInstance().isCoral(id2) && (ignoreMeta || meta2 == meta)) {
+							Block b2 = id2;
+							b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);
+							world.setBlockToAir(x+i, y+j, z+k);
+						}
+					}
+				}
+			}
+			if (this.isBreakable())
+				is.damageItem(1, ep);
+			return true;
+		}
+		else if (ModList.BOP.isLoaded() && BoPBlockHandler.getInstance().isFlower(id)) {
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			int r = this.getPlantRange();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						Block id2 = world.getBlock(x+i, y+j, z+k);
+						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+						if (BoPBlockHandler.getInstance().isFlower(id2) && (ignoreMeta || meta2 == meta)) {
 							Block b2 = id2;
 							b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);
@@ -205,7 +226,6 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 			return true;
 		}
 		else if (plant != null) {
-			;
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = this.getPlantRange();
 			for (int i = -r; i <= r; i++) {
@@ -242,7 +262,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 					for (int k = -r; k <= r; k++) {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if (id2 == id && meta2 == meta) {
+						if (id2 == id && (ignoreMeta || meta2 == meta)) {
 							Block b2 = id2;
 							b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);

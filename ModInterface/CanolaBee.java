@@ -54,7 +54,7 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	public CanolaBee() { //cultivated + meadows
-		super("Slippery", "bee.canola", "Mechanica Lubrica", "Reika");
+		super("Slippery", "bee.canola", "Mechanica Lubrica", "Reika", new BeeBranch("branch.rotary", "Mechanica", "Mechanica", "These bees seem to be made to aid mechanical devices."));
 		this.addSpecialty(ItemStacks.slipperyComb, 20);
 		this.addSpecialty(ItemStacks.canolaSeeds, 25);
 		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 50);
