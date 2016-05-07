@@ -20,9 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
-
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -95,6 +92,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		if (power < MINPOWER)
 			return;
 		if (isCustomAim) {
+			/*
 			if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 				phi--;
 			}
@@ -119,6 +117,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 					this.fire(worldObj, tg);
 				}
 			}
+			 */
 			return;
 		}
 		else {

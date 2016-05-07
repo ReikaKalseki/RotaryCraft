@@ -25,6 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import Reika.ChromatiCraft.API.TreeGetter;
+import Reika.ChromatiCraft.Block.Dye.BlockDyeLeaf;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -140,6 +143,9 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 		else if (b == Blocks.web) {
 			return Result.ALLOW;
 		}
+		else if (ModList.CHROMATICRAFT.isLoaded() && b instanceof BlockDyeLeaf) {
+			return Result.DEFAULT;
+		}
 		else if (b instanceof IShearable) {
 			((IShearable)b).onSheared(player.getCurrentEquippedItem(), world, x, y, z, 0);
 			return Result.ALLOW;
@@ -155,6 +161,8 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 	public static int getDroppedMeta(Block id, int meta) {
 		if (id == Blocks.leaves || id == Blocks.leaves2)
 			return meta&3;
+		if (ModList.CHROMATICRAFT.isLoaded() && id == TreeGetter.getRainbowLeafID())
+			return 0;
 		if (id == Blocks.vine)
 			return 0;
 		if (id == Blocks.waterlily)
