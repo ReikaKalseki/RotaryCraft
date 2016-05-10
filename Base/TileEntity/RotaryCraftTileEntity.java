@@ -90,11 +90,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return this.getMachine().ordinal();
 	}
 
-	@Override
-	public final String getName() {
-		return this.getMachine().getName();
-	}
-
 	public final String getMultiValuedName() {
 		if (this.getMachine().isMultiNamed())
 			return this.getMachine().getMultiName(this);
@@ -189,7 +184,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		MachineRegistry m = this.getMachine();
 		if (m.isMultiNamed())
 			return m.getMultiName(this);
-		return this.getName();
+		return m.getName();
 	}
 
 	public boolean isShutdown() {

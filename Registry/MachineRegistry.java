@@ -734,15 +734,15 @@ public enum MachineRegistry implements TileEnum {
 			throw new RuntimeException("Machine "+this.getName()+" has no multi name and yet was called for it!");
 		if (this == GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)tile;
-			return RotaryNames.getGearboxName(gbx.getBlockMetadata()/4*5+gbx.getGearboxType().ordinal());
+			return gbx.getGearboxType() != null ? RotaryNames.getGearboxName(gbx.getBlockMetadata()/4*5+gbx.getGearboxType().ordinal()) : this.getName();
 		}
 		if (this == ENGINE) {
 			TileEntityEngine eng = (TileEntityEngine)tile;
-			return RotaryNames.getEngineName(eng.getEngineType().ordinal());
+			return eng.getEngineType() != null ? RotaryNames.getEngineName(eng.getEngineType().ordinal()) : this.getName();
 		}
 		if (this == SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)tile;
-			return RotaryNames.getShaftName(sha.getShaftType().ordinal());
+			return sha.getShaftType() != null ? RotaryNames.getShaftName(sha.getShaftType().ordinal()) : this.getName();
 		}
 		if (this == FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)tile;
