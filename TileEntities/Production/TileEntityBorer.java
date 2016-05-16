@@ -525,7 +525,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 			}
 			if (this.getEnchantment(Enchantment.silkTouch) > 0 && this.canSilk(world, xread, yread, zread)) {
-				ItemStack is = new ItemStack(id, 1, ReikaBlockHelper.getSilkTouchMetaDropped(id, meta));
+				ItemStack is = ReikaBlockHelper.getSilkTouch(world, xread, yread, zread, id, meta, this.getPlacer(), false);//new ItemStack(id, 1, ReikaBlockHelper.getSilkTouchMetaDropped(id, meta));
 				if (!this.chestCheck(world, x, y, z, is)) {
 					ReikaItemHelper.dropItem(world, x+0.5, y+1.125, z+0.5, is, 3);
 				}

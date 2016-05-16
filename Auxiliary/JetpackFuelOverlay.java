@@ -74,7 +74,7 @@ public class JetpackFuelOverlay {
 						v5.addVertexWithUV(12,	height/2-32+f*64, 	0, 	u+w, f*h);
 						v5.addVertexWithUV(4, 	height/2-32+f*64, 	0, 	u, f*h);
 						v5.draw();
-						Minecraft.getMinecraft().fontRenderer.drawString(String.format("%d%s", (int)(frac*100), "%"), 1, height/2-40, 0xffffff);
+						Minecraft.getMinecraft().fontRenderer.drawString(String.format("%d%s", Math.round(frac*100), "%"), 1, height/2-40, 0xffffff);
 						Minecraft.getMinecraft().fontRenderer.drawString(String.format("%dmB", fuel), 1, height/2+33, 0xffffff);
 						ReikaTextureHelper.bindHUDTexture();
 						//GL11.glDisable(GL11.GL_BLEND);

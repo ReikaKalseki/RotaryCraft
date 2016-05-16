@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import ic2.api.recipe.Recipes;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,10 +20,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
@@ -47,6 +51,9 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 
+		if (world.isRemote)
+			return;
+
 		this.getIOSidesDefault(world, x, y, z, meta);
 		this.getPower(false);
 		boolean flag1 = false;
@@ -66,7 +73,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	private boolean doOperation(World world, int x, int y, int z, boolean multiple) {
 		if (inv[1] == null) {
 			if (overflow.isEmpty()) {
-				if (inv[0] != null && ReikaItemHelper.isBlock(inv[0])) {
+				if (inv[0] != null && this.isValid(inv[0])) {
 					dropProcessTime++;
 					if (multiple || dropProcessTime >= this.getOperationTime()) {
 						dropProcessTime = 0;
@@ -91,13 +98,26 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 	}
 
+	private boolean isValid(ItemStack is) {
+		if (ReikaItemHelper.isBlock(is))
+			return true;
+		if (ModList.IC2.isLoaded() && is.getItem() == IC2Handler.getInstance().scrapBoxID)
+			return true;
+		return false;
+	}
+
 	private void processItem(World world, int x, int y, int z) {
-		Block b = Block.getBlockFromItem(inv[0].getItem());
-		ArrayList<ItemStack> li = b.getDrops(world, x, y, z, inv[0].getItemDamage(), this.getEnchantment(Enchantment.fortune));
-		li = ReikaItemHelper.collateItemList(li);
-		if (!li.isEmpty()) {
-			inv[1] = li.remove(0);
-			overflow.addAll(li);
+		if (ReikaItemHelper.isBlock(inv[0])) {
+			Block b = Block.getBlockFromItem(inv[0].getItem());
+			ArrayList<ItemStack> li = b.getDrops(world, x, y, z, inv[0].getItemDamage(), this.getEnchantment(Enchantment.fortune));
+			li = ReikaItemHelper.collateItemList(li);
+			if (!li.isEmpty()) {
+				inv[1] = li.remove(0);
+				overflow.addAll(li);
+			}
+		}
+		else if (ModList.IC2.isLoaded() && inv[0].getItem() == IC2Handler.getInstance().scrapBoxID) {
+			inv[1] = Recipes.scrapboxDrops.getDrop(inv[0], false);
 		}
 		ReikaInventoryHelper.decrStack(0, inv);
 	}
@@ -109,7 +129,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return ReikaItemHelper.isBlock(is) && slot == 0;
+		return this.isValid(is) && slot == 0;
 	}
 
 	@Override

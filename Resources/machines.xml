@@ -1128,4 +1128,14 @@
 			Radius In Chunks: %d+((Power-%d)/%d)
 		</note>
 	</chunkloader>
+	<drops>
+		<desc>
+			The drop processor can convert blocks into their drops, to save the need to place and break them. It can also process IC2 scrap boxes into their randomized outputs.
+		</desc>
+		<note>
+			Required Power: %dW
+			Required Torque: %d Nm
+			Power Input: Back
+		</note>
+	</drops>
 </machines>

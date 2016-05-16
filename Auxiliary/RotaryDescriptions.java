@@ -559,6 +559,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.CENTRIFUGE, PowerReceivers.CENTRIFUGE.getMinPower(), PowerReceivers.CENTRIFUGE.getMinSpeed());
 		addNotes(MachineRegistry.WETTER, PowerReceivers.WETTER.getMinPower(), PowerReceivers.WETTER.getMinSpeed());
 		addNotes(MachineRegistry.CHUNKLOADER, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.BASE_RADIUS, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.FALLOFF);
+		addNotes(MachineRegistry.DROPS, PowerReceivers.DROPS.getMinPower(), PowerReceivers.DROPS.getMinTorque());
 
 		addNotes(MachineRegistry.MAGNETIC, EnergyToPowerBase.MAXTEMP);
 		addNotes(MachineRegistry.PNEUENGINE, EnergyToPowerBase.MAXTEMP);

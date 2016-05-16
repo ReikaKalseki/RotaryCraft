@@ -12,6 +12,11 @@ package Reika.RotaryCraft.ModInterface;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
+
+import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,15 +26,22 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
+import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
+import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 //@Strippable(value = {"universalelectricity.api.electricity.IVoltageOutput", "universalelectricity.api.energy.IEnergyInterface"})
 @Strippable(value = {"ic2.api.energy.tile.IEnergySource"})
-public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnergySource, RCToModConverter {
+public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnergySource, RCToModConverter, UpgradeableMachine, NBTMachine {
 
 	//public static final int OUTPUT_VOLTAGE = 24000;
 	//public static final float POWER_FACTOR = 0.875F;
@@ -37,6 +49,8 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 	private ForgeDirection facingDir;
 
 	public static final boolean hardModeEU = ConfigRegistry.HARDEU.getState();
+
+	private boolean upgraded;
 
 	public ForgeDirection getFacing() {
 		return facingDir != null ? facingDir : ForgeDirection.EAST;
@@ -75,6 +89,19 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 			else {
 				if (power > 0) {
 					tank.removeLiquid(1);
+
+					int t = upgraded ? 4096 : 1024;
+					if (torque > t) {
+						if (ReikaRandomHelper.doWithChance((torque-t)/20000D)) {
+							if (rand.nextInt(upgraded ? 16 : 4) == 0) {
+								this.delete();
+								world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3, true, true);
+							}
+							else {
+								ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.fizz");
+							}
+						}
+					}
 				}
 			}
 		}
@@ -84,18 +111,18 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			facingDir = ForgeDirection.NORTH;
-			break;
-		case 1:
-			facingDir = ForgeDirection.WEST;
-			break;
-		case 2:
-			facingDir = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			facingDir = ForgeDirection.EAST;
-			break;
+			case 0:
+				facingDir = ForgeDirection.NORTH;
+				break;
+			case 1:
+				facingDir = ForgeDirection.WEST;
+				break;
+			case 2:
+				facingDir = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				facingDir = ForgeDirection.EAST;
+				break;
 		}
 		read = facingDir;
 		write = read.getOpposite();
@@ -108,7 +135,12 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 
 	@Override
 	public double getOfferedEnergy() {
-		return power/ReikaEUHelper.getWattsPerEU()*ConfigRegistry.getConverterEfficiency();
+		return (power-this.getPowerLoss())/ReikaEUHelper.getWattsPerEU()*ConfigRegistry.getConverterEfficiency();
+	}
+
+	private double getPowerLoss() {
+		int t = upgraded ? 512 : 128;
+		return torque > t ? ReikaMathLibrary.intpow2(torque-t, 2)*(upgraded ? 0.0625 : 0.125) : 0;
 	}
 
 	@Override
@@ -166,5 +198,55 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 	@Override
 	public int getCapacity() {
 		return 6000;
+	}
+
+	@Override
+	public void upgrade(ItemStack is) {
+		upgraded = true;
+	}
+
+	public boolean isUpgraded() {
+		return upgraded;
+	}
+
+	@Override
+	public boolean canUpgradeWith(ItemStack item) {
+		return !upgraded && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.FLUX.ordinal();
+	}
+
+	public final void setDataFromItemStackTag(NBTTagCompound nbt) {
+		if (nbt != null) {
+			upgraded = nbt.getBoolean("upgrade");
+		}
+	}
+
+	public final NBTTagCompound getTagsToWriteToStack() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("upgrade", upgraded);
+		return nbt;
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+
+		NBT.setBoolean("upgrade", upgraded);
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+
+		upgraded = NBT.getBoolean("upgrade");
+	}
+
+	@Override
+	public ArrayList<NBTTagCompound> getCreativeModeVariants() {
+		return new ArrayList();
+	}
+
+	@Override
+	public ArrayList<String> getDisplayTags(NBTTagCompound NBT) {
+		return new ArrayList();
 	}
 }

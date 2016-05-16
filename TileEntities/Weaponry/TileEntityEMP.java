@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +30,7 @@ import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.nodes.INode;
@@ -37,6 +40,8 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
@@ -257,6 +262,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			else
 				this.shutdownTE(te);
 		}
+		this.affectEntities(world, x, y, z);
 		world.setBlockToAir(x, y, z);
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		if (ReikaRandomHelper.doWithChance(50)) {
@@ -272,6 +278,29 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		}
 		else {
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 8+rand.nextInt(16)));
+		}
+	}
+
+	private void affectEntities(World world, int x, int y, int z) {
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).expand(128, 64, 128);
+		List<Entity> li = world.getEntitiesWithinAABB(Entity.class, box);
+		for (Entity e : li) {
+			if (InterfaceCache.BCROBOT.instanceOf(e)) {
+				world.createExplosion(e, e.posX, e.posY, e.posZ, 3, false);
+				e.setDead();
+			}
+			else if (e instanceof EntityLivingBase) {
+				if (ReikaEntityHelper.isEntityWearingPoweredArmor((EntityLivingBase)e)) {
+					for (int i = 1; i <= 4; i++) {
+						e.setCurrentItemOrArmor(i, null);
+					}
+					float f = (float)ReikaRandomHelper.getRandomBetween(3D, 10D);
+					world.newExplosion(e, e.posX, e.posY, e.posZ, f, true, true);
+					e.motionX += ReikaRandomHelper.getRandomPlusMinus(0, 1.5);
+					e.motionZ += ReikaRandomHelper.getRandomPlusMinus(0, 1.5);
+					e.motionY += -ReikaRandomHelper.getRandomBetween(0.125, 1);
+				}
+			}
 		}
 	}
 

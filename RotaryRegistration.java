@@ -108,6 +108,7 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("coke", ItemStacks.coke);
 
 		OreDictionary.registerOre("sourceVegetableOil", ItemRegistry.CANOLA.getStackOf());
+		OreDictionary.registerOre("seed", ItemRegistry.CANOLA.getStackOf());
 		/*
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];

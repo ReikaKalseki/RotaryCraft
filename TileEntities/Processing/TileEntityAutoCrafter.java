@@ -26,7 +26,6 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
-import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.SourceType;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
@@ -36,16 +35,16 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import appeng.api.AEApi;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.IGridBlock;
-import appeng.api.networking.IGridHost;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
+import appeng.api.networking.security.IActionHost;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AECableType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-@Strippable(value={"appeng.api.networking.IGridHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
-public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IGridHost/*, ICraftingRequester*/ {
+@Strippable(value={"appeng.api.networking.IActionHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
+public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/ {
 
 	public static final int SIZE = 18;
 
@@ -302,7 +301,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 				if (aeGridNode == null)
 					network = null;
 				else if (network == null)
-					network = new MESystemReader((IGridNode)aeGridNode, SourceType.MACHINE);
+					network = new MESystemReader((IGridNode)aeGridNode, this);
 				else
 					network = new MESystemReader((IGridNode)aeGridNode, network);
 			}
@@ -665,4 +664,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		}
 	}
 	 */
+	@Override
+	@ModDependent(ModList.APPENG)
+	public IGridNode getActionableNode() {
+		return (IGridNode)aeGridNode;
+	}
 }
