@@ -249,7 +249,7 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 			if (m == MachineRegistry.FAN) {
 				if (ep.isSneaking()) {
 					TileEntityFan tf = (TileEntityFan)te;
-					tf.wideArea = !tf.wideArea;
+					tf.wideAreaHarvest = !tf.wideAreaHarvest;
 					return true;
 				}
 			}

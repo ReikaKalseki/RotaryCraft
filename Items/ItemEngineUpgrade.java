@@ -16,11 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
-import Reika.DragonAPI.Base.TileEntityBase;
-import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,23 +37,6 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 	@Override
 	public String getUnlocalizedName(ItemStack is) {
 		return super.getUnlocalizedName(is)+"."+is.getItemDamage();
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
-		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof UpgradeableMachine) {
-			UpgradeableMachine u = (UpgradeableMachine)te;
-			if (u.canUpgradeWith(is)) {
-				u.upgrade(is);
-				if (te instanceof TileEntityBase)
-					((TileEntityBase)te).syncAllData(true);
-				if (!ep.capabilities.isCreativeMode)
-					is.stackSize--;
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override

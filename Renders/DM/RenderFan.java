@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Renders.DM;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
@@ -39,7 +40,7 @@ public class RenderFan extends RotaryTERenderer
 		ModelFan var14;
 		var14 = FanModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fantex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -51,24 +52,24 @@ public class RenderFan extends RotaryTERenderer
 
 		if (tile.isInWorld()) {
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
-			case 4:
-				var11 = 270;
-				break;
-			case 5:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
+				case 4:
+					var11 = 270;
+					break;
+				case 5:
+					var11 = 90;
+					break;
 			}
 
 			if (tile.getBlockMetadata() <= 3)
@@ -101,15 +102,16 @@ public class RenderFan extends RotaryTERenderer
 		if (te.isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(te, par2, par4, par6);
 
-			ReikaAABBHelper.renderAABB(te.getBlowZone(te.getBlockMetadata(), te.getRange()), par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 0, 127, 255, true);
-			if (te.wideArea) {
-				ReikaAABBHelper.renderAABB(te.getWideBlowZone(te.getBlockMetadata(), te.getRange()), par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 0, 192, 255, true);
-			}
+			AxisAlignedBB box = te.getBlowZone(te.getBlockMetadata(), te.getRange());
+			AxisAlignedBB wide = te.getWideBlowZone(te.getBlockMetadata(), te.getRange());
+
+			ReikaAABBHelper.renderAABB(te.wideAreaBlow ? wide : box, par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 32, 192, 255, true);
+			ReikaAABBHelper.renderAABB(te.wideAreaHarvest ? wide : box, par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 255, 255, 255, true);
 		}
 	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "fantex.png";
+		return ((TileEntityFan)te).wideAreaBlow ? "fantex_wide.png" : "fantex.png";
 	}
 }

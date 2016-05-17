@@ -138,10 +138,11 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Range = 8+(Power-MINPOWER*2)/%d m
+			Range = 8+(Power-MINPOWER)/%d m
 			Power Input: Back
 			Harvesting Speed: %d rad/s
 			Fire Extinguish Speed: %d rad/s
+			Can be upgraded with a diffuser to increase AOE, but this reduces efficiency 50%%
 		</note>
 	</fan>
 	<compactor>

@@ -16,11 +16,14 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -120,5 +123,22 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	public String getItemStackDisplayName(ItemStack is) {
 		ItemRegistry ir = ItemRegistry.getEntry(is);
 		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		if (te instanceof UpgradeableMachine) {
+			UpgradeableMachine u = (UpgradeableMachine)te;
+			if (u.canUpgradeWith(is)) {
+				u.upgrade(is);
+				if (te instanceof TileEntityBase)
+					((TileEntityBase)te).syncAllData(true);
+				if (!ep.capabilities.isCreativeMode)
+					is.stackSize--;
+				return true;
+			}
+		}
+		return false;
 	}
 }

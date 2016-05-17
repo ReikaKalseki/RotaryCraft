@@ -180,6 +180,8 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
+		if (super.onItemUse(is, ep, world, x, y, z, s, a, b, c))
+			return true;
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (m == MachineRegistry.ENGINE) {

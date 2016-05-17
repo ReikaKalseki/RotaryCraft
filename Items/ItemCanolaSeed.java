@@ -32,10 +32,12 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack items, EntityPlayer player, World world, int x, int y, int z, int side, float a, float b, float c) {
-		if (items.getItemDamage() > 1)
+	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int side, float a, float b, float c) {
+		if (super.onItemUse(is, ep, world, x, y, z, side, a, b, c))
+			return true;
+		if (is.getItemDamage() > 1)
 			return false;
-		boolean spread = items.getItemDamage() == 1;
+		boolean spread = is.getItemDamage() == 1;
 		if (!ReikaWorldHelper.softBlocks(world, x, y, z)) {
 			if (side == 0)
 				--y;
@@ -61,7 +63,7 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 					if ((!ReikaWorldHelper.softBlocks(world.getBlock(xi, y, zi))) || !BlockCanola.isValidFarmBlock(world, xi, y-1, zi)) {
 						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemStacks.canolaSeeds);
 					}
-					else if (!player.canPlayerEdit(xi, y, zi, 0, items)) {
+					else if (!ep.canPlayerEdit(xi, y, zi, 0, is)) {
 						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemStacks.canolaSeeds);
 					}
 					else {
@@ -70,8 +72,8 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 					}
 				}
 			}
-			if (!player.capabilities.isCreativeMode) {
-				--items.stackSize;
+			if (!ep.capabilities.isCreativeMode) {
+				is.stackSize--;
 			}
 		}
 		return flag;

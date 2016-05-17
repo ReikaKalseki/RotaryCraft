@@ -17,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -24,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.Registry.CropType.CropMethods;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
+import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -32,22 +34,24 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
 import Reika.RotaryCraft.API.Interfaces.CustomFanEntity;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 
-public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect {
+public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect, UpgradeableMachine, BreakAction {
 
 	public int distancelimit = Math.max(32, ConfigRegistry.FANRANGE.getValue());
 
 	public static final long MAXPOWER = 2097152;
-	/** Rate of conversion - one power++ = 1/falloff ++ light levels */
-	public static final int FALLOFF = 1024; //1kW a light level right now
+	public static final int FALLOFF = 1024;
+	public static final int FALLOFF_WIDE = 2048;
 	public static final double AXISSPEEDCAP = 1; //40 m/s
 	public static final double BASESPEED = 0.000125;
 
@@ -61,7 +65,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 	private final StepTimer sound = new StepTimer(27);
 
-	public boolean wideArea = true;
+	public boolean wideAreaHarvest = true;
+	public boolean wideAreaBlow = false;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -124,7 +129,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		if (power < MINPOWER)
 			return 0;
 		long power2 = Math.min(power - MINPOWER, MAXPOWER);
-		int range = 8+(int)(power2-MINPOWER)/FALLOFF;
+		int range = 8+(int)(power2-MINPOWER)/(wideAreaBlow ? FALLOFF_WIDE : FALLOFF);
 		if (range > this.getMaxRange())
 			range = this.getMaxRange();
 		return range;
@@ -160,7 +165,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 				range = i;
 			}
 		}
-		AxisAlignedBB zone = this.getBlowZone(meta, range);
+		AxisAlignedBB zone = wideAreaBlow ? this.getWideBlowZone(meta, range) : this.getBlowZone(meta, range);
 		List<Entity> inzone = world.getEntitiesWithinAABB(Entity.class, zone);
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", inzone.size()));
 		for (Entity caught : inzone) {
@@ -175,7 +180,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 						multiplier = 0;
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
-					double base = multiplier*power2*BASESPEED;
+					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
 					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
 					double a = facing.offsetX > 0 ? 0.004 : 0;
 					caught.motionX = facing.offsetX*speedstep+a;
@@ -189,7 +194,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 						multiplier = 0;
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
-					double base = multiplier*power2*BASESPEED;
+					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
 					caught.motionY = facing.offsetY*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
 				}
 				if (caught.motionZ < AXISSPEEDCAP && facing.offsetZ != 0) {
@@ -201,7 +206,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 						multiplier = 0;
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
-					double base = multiplier*power2*BASESPEED;
+					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
 					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
 					double a = facing.offsetZ > 0 ? 0.004 : 0;
 					caught.motionZ = facing.offsetZ*speedstep+a;
@@ -238,7 +243,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 			this.rip2(world, editx, edity, editz);
 			this.enhanceFinPower(world, editx, edity, editz);
 
-			if (wideArea) {
+			if (wideAreaHarvest) {
 				editx = -1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
 				this.rip2(world, editx, edity, editz);
 				editx = -1*a+x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
@@ -457,4 +462,39 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public void upgrade(ItemStack item) {
+		if (ReikaItemHelper.matchStacks(item, ItemStacks.diffuser)) {
+			wideAreaBlow = true;
+		}
+	}
+
+	@Override
+	public boolean canUpgradeWith(ItemStack item) {
+		return ReikaItemHelper.matchStacks(item, ItemStacks.diffuser);
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+
+		NBT.setBoolean("wideh", wideAreaHarvest);
+		NBT.setBoolean("wideb", wideAreaBlow);
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+
+		wideAreaBlow = NBT.getBoolean("wideb");
+		wideAreaHarvest = NBT.getBoolean("wideh");
+	}
+
+	@Override
+	public void breakBlock() {
+		if (wideAreaBlow) {
+			ReikaItemHelper.dropItem(worldObj, xCoord, yCoord, zCoord, ItemStacks.diffuser);
+		}
+	}
 }

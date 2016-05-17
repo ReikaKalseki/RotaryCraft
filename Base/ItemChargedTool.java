@@ -33,7 +33,9 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	public abstract ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep);
 
 	@Override
-	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
+		if (super.onItemUse(is, ep, world, x, y, z, s, a, b, c))
+			return true;
 		return false;
 	}
 

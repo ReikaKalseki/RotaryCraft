@@ -80,8 +80,10 @@ public class ItemMeter extends ItemRotaryTool
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c)
 	{
+		if (super.onItemUse(is, ep, world, x, y, z, s, a, b, c))
+			return true;
 		if (ConfigRegistry.CLEARCHAT.getState())
 			ReikaChatHelper.clearChat();
 		int ratioclicked = 1;
@@ -93,7 +95,7 @@ public class ItemMeter extends ItemRotaryTool
 		int damage = -1;
 		int lube = -453;
 		TileEntity tile = world.getTileEntity(x, y, z);
-		Block b = world.getBlock(x, y, z);
+		Block bk = world.getBlock(x, y, z);
 		String name;
 		if (tile instanceof RotaryCraftTileEntity)
 			name = ((RotaryCraftTileEntity)tile).getMultiValuedName();
@@ -118,8 +120,8 @@ public class ItemMeter extends ItemRotaryTool
 			//flag = tile instanceof ShaftPowerEmitter;
 			//flag1 = tile instanceof ShaftPowerReceiver;
 		}
-		else if (b instanceof Transducerable) {
-			ArrayList<String> li = ((Transducerable)b).getMessages(world, x, y, z, s);
+		else if (bk instanceof Transducerable) {
+			ArrayList<String> li = ((Transducerable)bk).getMessages(world, x, y, z, s);
 			if (li != null) {
 				for (int i = 0; i < li.size(); i++)
 					ReikaChatHelper.writeString(li.get(i));
