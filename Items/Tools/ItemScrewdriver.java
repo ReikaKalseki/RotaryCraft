@@ -344,8 +344,10 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 			}
 			if (m == MachineRegistry.CRAFTER) {
 				TileEntityAutoCrafter clicked = (TileEntityAutoCrafter)te;
-				if (ep.isSneaking())
+				if (ep.isSneaking()) {
 					clicked.incrementMode();
+					ReikaChatHelper.sendChatToPlayer(ep, "Mode is now "+clicked.getMode().label);
+				}
 				return true;
 			}
 			if (m == MachineRegistry.GEARBOX) {
