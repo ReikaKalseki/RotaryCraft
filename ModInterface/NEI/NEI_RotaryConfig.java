@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -166,6 +167,11 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 					API.hideItem(out);
 				RotaryCraft.logger.log("Hiding ore "+ore+" Extractor products from NEI, as the ore is unused or does not exist.");
 			}
+		}
+
+		if (CustomExtractLoader.instance.getEntries().isEmpty()) {
+			API.hideItem(ItemRegistry.CUSTOMEXTRACT.getStackOfMetadata(0));
+			API.hideItem(ItemRegistry.CUSTOMINGOT.getStackOfMetadata(0));
 		}
 
 		RotaryCraft.logger.log("Done loading NEI compatibility.");

@@ -25,6 +25,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
@@ -67,14 +68,17 @@ public class EntityRailGunShot extends EntityTurretShot {
 	public void onUpdate() {
 		ticksExisted++;
 		boolean hit = false;
-		Block id = worldObj.getBlock((int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ));
+		int x = MathHelper.floor_double(posX);
+		int y = MathHelper.floor_double(posY);
+		int z = MathHelper.floor_double(posZ);
+		Block id = worldObj.getBlock(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, posX, posY, posZ);
 		List mobs = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().expand(1, 1, 1));
 		//ReikaJavaLibrary.pConsole("ID: "+id+" and "+mobs.size()+" mobs");
-		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != Blocks.air && !ReikaWorldHelper.softBlocks(worldObj, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ))));
+		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != Blocks.air && !ReikaWorldHelper.softBlocks(worldObj, x, y, z)));
 		//ReikaJavaLibrary.pConsole(hit+"   by "+id+"  or mobs "+mobs.size());
-		if (ReikaWorldHelper.softBlocks(id) && !(id instanceof BlockLiquid || id instanceof BlockFluidBase) && ConfigRegistry.ATTACKBLOCKS.getState())
-			ReikaWorldHelper.recursiveBreakWithinSphere(worldObj, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ), id, -1, (int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ), 4);
+		if (ReikaWorldHelper.softBlocks(worldObj, x, y, z) && !(id instanceof BlockLiquid || id instanceof BlockFluidBase) && ConfigRegistry.ATTACKBLOCKS.getState())
+			ReikaWorldHelper.recursiveBreakWithinSphere(worldObj, x, y, z, id, -1, x, y, z, 4);
 		if (hit) {
 			//ReikaChatHelper.write("HIT  @  "+ticksExisted+"  by "+(mobs.size() > 0));
 			this.onImpact(null);

@@ -52,7 +52,7 @@ public class ItemUltrasound extends ItemChargedTool {
 				silver = true;
 				ReikaChatHelper.write("Silverfish Detected!");
 			}
-			if (id != Blocks.air && !ReikaWorldHelper.softBlocks(id))
+			if (id != Blocks.air && !ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]))
 				caveready = true;
 			if ((id == Blocks.water || id == Blocks.flowing_water) && !liq) {
 				liq = true;

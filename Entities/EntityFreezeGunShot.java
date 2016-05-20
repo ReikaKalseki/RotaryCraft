@@ -17,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -84,15 +85,18 @@ public class EntityFreezeGunShot extends EntityTurretShot {
 	public void onUpdate() {
 		ticksExisted++;
 		boolean hit = false;
-		Block id = worldObj.getBlock((int)posX, (int)posY, (int)posZ);
+		int x = MathHelper.floor_double(posX);
+		int y = MathHelper.floor_double(posY);
+		int z = MathHelper.floor_double(posZ);
+		Block id = worldObj.getBlock(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, posX, posY, posZ);
 		List mobs = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().expand(1, 1, 1));
-		hit = (mobs.size() > 0 || (m != MachineRegistry.FREEZEGUN && id != Blocks.air && !ReikaWorldHelper.softBlocks(id)));
+		hit = (mobs.size() > 0 || (m != MachineRegistry.FREEZEGUN && id != Blocks.air && !ReikaWorldHelper.softBlocks(worldObj, x, y, z)));
 		if (hit) {
 			this.onImpact(null);
 			return;
 		}
-		if (!worldObj.isRemote && (shootingEntity != null && shootingEntity.isDead || !worldObj.blockExists((int)posX, (int)posY, (int)posZ)))
+		if (!worldObj.isRemote && (shootingEntity != null && shootingEntity.isDead || !worldObj.blockExists(x, y, z)))
 			this.setDead();
 		else {
 			if (ticksExisted > 80 && !worldObj.isRemote)

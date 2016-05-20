@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -86,11 +87,14 @@ public class EntityExplosiveShell extends EntityTurretShot {
 	public void onUpdate() {
 		ticksExisted++;
 		boolean hit = false;
-		Block id = worldObj.getBlock((int)posX, (int)posY, (int)posZ);
+		int x = MathHelper.floor_double(posX);
+		int y = MathHelper.floor_double(posY);
+		int z = MathHelper.floor_double(posZ);
+		Block id = worldObj.getBlock(x, y, z);
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, posX, posY, posZ);
 		List mobs = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().expand(1, 1, 1));
 		//ReikaJavaLibrary.pConsole("ID: "+id+" and "+mobs.size()+" mobs");
-		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != Blocks.air && !ReikaWorldHelper.softBlocks(id)));
+		hit = (mobs.size() > 0 || (m != MachineRegistry.RAILGUN && id != Blocks.air && !ReikaWorldHelper.softBlocks(worldObj, x, y, z)));
 		//ReikaJavaLibrary.pConsole(hit+"   by "+id+"  or mobs "+mobs.size());
 		if (hit) {
 			//ReikaChatHelper.write("HIT  @  "+ticksExisted+"  by "+(mobs.size() > 0));
@@ -99,7 +103,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 			return;
 		}
 
-		if (!worldObj.isRemote && (shootingEntity != null && shootingEntity.isDead || !worldObj.blockExists((int)posX, (int)posY, (int)posZ)))
+		if (!worldObj.isRemote && (shootingEntity != null && shootingEntity.isDead || !worldObj.blockExists(x, y, z)))
 			this.setDead();
 		else {
 			if (ticksExisted > 80 && !worldObj.isRemote)

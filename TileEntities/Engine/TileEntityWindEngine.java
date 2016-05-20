@@ -119,8 +119,7 @@ public class TileEntityWindEngine extends TileEntityEngine {
 		}
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				Block id = world.getBlock(x+a*i+c, y+j, z+b*i+d);
-				if (!ReikaWorldHelper.softBlocks(id)) {
+				if (!ReikaWorldHelper.softBlocks(world, x+a*i+c, y+j, z+b*i+d)) {
 					omega = 0;
 					return false;
 				}

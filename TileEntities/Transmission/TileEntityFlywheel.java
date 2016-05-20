@@ -531,4 +531,9 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public void fail() {
 		this.fail(worldObj, xCoord, yCoord, zCoord, ReikaPhysicsHelper.getEnergyFromExplosion(4));
 	}
+
+	@Override
+	public final int getItemMetadata() {
+		return this.getTypeOrdinal();
+	}
 }

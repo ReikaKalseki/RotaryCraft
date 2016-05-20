@@ -87,7 +87,6 @@ public class HandbookNotifications {
 			this.addEntry(ConfigRegistry.BANRAIN, Level.WARNING, "The Silver Iodide Cannon's ability to make rain has been disabled.");
 			this.addEntry(ConfigRegistry.BEDPICKSPAWNERS, Level.WARNING, "The bedrock pickaxe's ability to harvest spawners has been disabled.");
 			this.addEntry(ConfigRegistry.DIFFICULTY, Level.SEVERE, "The mod difficulty has been changed from the default.");
-			this.addEntry(ConfigRegistry.ENGINESOUNDS, Level.SEVERE, "Engine sounds have been disabled.");
 			this.addEntry(ConfigRegistry.EXTRACTORMAINTAIN, Level.SEVERE, "The Extractor has been set to require drill maintenance.");
 			this.addEntry(ConfigRegistry.GRAVELPLAYER, Level.WARNING, "Gravel Gun PvP has been disabled.");
 			this.addEntry(ConfigRegistry.HARDGRAVELGUN, Level.SEVERE, "Gravel Gun damage has been reduced.");

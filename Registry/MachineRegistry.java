@@ -24,6 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import Reika.ChromatiCraft.Auxiliary.Interfaces.NBTTile;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
@@ -948,6 +949,16 @@ public enum MachineRegistry implements TileEnum {
 			return ItemRegistry.GEARBOX.getStackOfMetadata(metadata);
 		}
 		return this.getCraftedProduct();
+	}
+
+	public ItemStack getCraftedProduct(TileEntity te) {
+		ItemStack is = this.getCraftedMetadataProduct(((RotaryCraftTileEntity)te).getItemMetadata());
+		if (te instanceof NBTTile) {
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			((NBTTile)te).getTagsToWriteToStack(is.stackTagCompound);
+		}
+		return is;
 	}
 
 	public boolean isEnchantable() {

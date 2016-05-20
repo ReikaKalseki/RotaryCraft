@@ -90,7 +90,7 @@ public class ItemStunGun extends ItemChargedTool {
 			if (id != Blocks.air && !(id instanceof BlockLiquid || id instanceof BlockFluidBase) && (id == Blocks.web || id == Blocks.red_mushroom ||
 					id == Blocks.gravel ||  id == Blocks.monster_egg  || id == Blocks.brown_mushroom ||
 					id == Blocks.waterlily || id == Blocks.flower_pot ||
-					ReikaBlockHelper.isOre(id, meta) || (ReikaWorldHelper.softBlocks(id) && id != Blocks.snow))) {
+					ReikaBlockHelper.isOre(id, meta) || (ReikaWorldHelper.softBlocks(world, x, y, z) && id != Blocks.snow))) {
 				for (int k = 0; k < 64; k++)
 					world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
 				ReikaWorldHelper.recursiveBreak(world, x, y, z, id, -1);

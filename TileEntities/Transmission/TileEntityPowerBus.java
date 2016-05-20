@@ -127,6 +127,14 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 		return 0;
 	}
 
+	public boolean insertItem(ItemStack is, ForgeDirection side) {
+		if (this.getRatioFromItem(is) > 0 && inv[side.ordinal()-2] == null) {
+			inv[side.ordinal()-2] = is.copy();
+			return true;
+		}
+		return false;
+	}
+
 	public boolean isSideSpeedMode(ForgeDirection dir) {
 		return modes.get(dir);
 	}

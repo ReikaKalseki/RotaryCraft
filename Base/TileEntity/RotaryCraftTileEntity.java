@@ -250,4 +250,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			return this instanceof TileEntityBeltHub ? Visibility.Neighbors : Visibility.Network;
 	}
 
+	public int getItemMetadata() {
+		return 0;
+	}
+
 }

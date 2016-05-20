@@ -23,6 +23,8 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -119,6 +121,28 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("dustGold", ItemStacks.goldoreflakes);
 		OreDictionary.registerOre("dustIron", ItemStacks.ironoreflakes);
 		 */
+	}
+
+	public static void auxRegistration() {
+		ReikaItemHelper.registerItemMass(ItemRegistry.STEELBOOTS.getItemInstance(), ReikaEngLibrary.rhoiron, 4);
+		ReikaItemHelper.registerItemMass(ItemRegistry.STEELCHEST.getItemInstance(), ReikaEngLibrary.rhoiron, 8);
+		ReikaItemHelper.registerItemMass(ItemRegistry.STEELLEGS.getItemInstance(), ReikaEngLibrary.rhoiron, 7);
+		ReikaItemHelper.registerItemMass(ItemRegistry.STEELHELMET.getItemInstance(), ReikaEngLibrary.rhoiron, 5);
+
+		double packFactor = 1.5;
+		double springFactor = 1.0625;
+
+		ReikaItemHelper.registerItemMass(ItemRegistry.STEELPACK.getItemInstance(), ReikaEngLibrary.rhoiron*packFactor, 8);
+		ReikaItemHelper.registerItemMass(ItemRegistry.JUMP.getItemInstance(), ReikaEngLibrary.rhoiron*springFactor, 4);
+
+		double bedFactor = 1.25;
+		ReikaItemHelper.registerItemMass(ItemRegistry.BEDBOOTS.getItemInstance(), ReikaEngLibrary.rhoiron*bedFactor, 4);
+		ReikaItemHelper.registerItemMass(ItemRegistry.BEDCHEST.getItemInstance(), ReikaEngLibrary.rhoiron*bedFactor, 8);
+		ReikaItemHelper.registerItemMass(ItemRegistry.BEDLEGS.getItemInstance(), ReikaEngLibrary.rhoiron*bedFactor, 7);
+		ReikaItemHelper.registerItemMass(ItemRegistry.BEDHELM.getItemInstance(), ReikaEngLibrary.rhoiron*bedFactor, 5);
+
+		ReikaItemHelper.registerItemMass(ItemRegistry.BEDPACK.getItemInstance(), ReikaEngLibrary.rhoiron*bedFactor*packFactor, 8);
+		ReikaItemHelper.registerItemMass(ItemRegistry.BEDJUMP.getItemInstance(), ReikaEngLibrary.rhoiron*bedFactor*springFactor, 4);
 	}
 
 	public static void setupLiquids() {

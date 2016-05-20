@@ -181,8 +181,7 @@ public class ItemEnginePlacer extends ItemBlockPlacer {
 							d = -1;
 							break;
 					}
-					Block id = world.getBlock(x+a*i+c, y+j, z+b*i+d);
-					if (!ReikaWorldHelper.softBlocks(id))
+					if (!ReikaWorldHelper.softBlocks(world, x+a*i+c, y+j, z+b*i+d))
 						return false;
 				}
 			}

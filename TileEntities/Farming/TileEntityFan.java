@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -171,6 +172,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		for (Entity caught : inzone) {
 			if (this.canBlowEntity(caught)) {
 				double mass = ReikaEntityHelper.getEntityMass(caught);
+				if (caught instanceof EntityLivingBase)
+					mass += ReikaEntityHelper.getCarriedMass((EntityLivingBase)caught);
 				if (caught.motionX < AXISSPEEDCAP && facing.offsetX != 0) {
 					double d = caught.posX-x;
 					if (d == 0)

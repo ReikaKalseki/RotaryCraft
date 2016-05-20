@@ -729,4 +729,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	public void repair(World world, int x, int y, int z, int tier) {
 		this.repair((int)Math.sqrt(tier));
 	}
+
+	@Override
+	public int getItemMetadata() {
+		int ratio = (int)ReikaMathLibrary.logbase(this.ratio, 2)-1;
+		return 5*ratio+type.ordinal();
+	}
 }

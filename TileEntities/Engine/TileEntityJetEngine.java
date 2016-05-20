@@ -298,7 +298,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 				ItemStack is = ((EntityItem) e).getEntityItem();
 				e.setDead();
 				int trycount = 0;
-				while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
+				while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world, dumpx, y, dumpz)) {
 					if (dumpvx == 1)
 						dumpx++;
 					if (dumpvx == -1)
@@ -329,7 +329,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 				int xp = ((EntityXPOrb)e).getXpValue();
 				e.setDead();
 				int trycount = 0;
-				while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world.getBlock(dumpx, y, dumpz))) {
+				while (trycount < 1 && !ReikaWorldHelper.nonSolidBlocks(world, dumpx, y, dumpz)) {
 					if (dumpvx == 1)
 						dumpx++;
 					if (dumpvx == -1)

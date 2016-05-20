@@ -119,6 +119,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityCaveFinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
@@ -270,6 +271,17 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 						return true;
 					}
 				}
+			}
+		}
+		if (m == MachineRegistry.POWERBUS) {
+			TileEntityPowerBus tile = (TileEntityPowerBus)te;
+			if (is != null && ep.isSneaking()) {
+				if (tile.insertItem(is, ForgeDirection.VALID_DIRECTIONS[side])) {
+					if (!ep.capabilities.isCreativeMode)
+						is.stackSize--;
+				}
+				((TileEntityBase)te).syncAllData(true);
+				return true;
 			}
 		}
 		if (m == MachineRegistry.FUELENGINE) {

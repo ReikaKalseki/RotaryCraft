@@ -851,4 +851,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	public final void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
 		c.add(this.getAdjacentTileEntity(write));
 	}
+
+	@Override
+	public final int getItemMetadata() {
+		return type.ordinal();
+	}
 }

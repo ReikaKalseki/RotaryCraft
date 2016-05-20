@@ -100,8 +100,6 @@ public enum SoundRegistry implements SoundEnum {
 		float vol = ConfigRegistry.MACHINEVOLUME.getFloat();
 		if (this.isEngineSound()) {
 			vol *= ConfigRegistry.ENGINEVOLUME.getFloat();
-			if (!ConfigRegistry.ENGINESOUNDS.getState())
-				vol = 0;
 		}
 		if (vol < 0)
 			vol = 0;

@@ -656,4 +656,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			super.getAllOutputs(c, dir);
 		}
 	}
+
+	@Override
+	public int getItemMetadata() {
+		return type.ordinal();
+	}
 }

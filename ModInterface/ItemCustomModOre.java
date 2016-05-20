@@ -51,27 +51,37 @@ public class ItemCustomModOre extends AutoOreItem implements GradientBlend {
 
 	@Override
 	public int getItemSpriteIndex(ItemStack item) {
+		if (CustomExtractLoader.instance.getEntries().isEmpty())
+			return 0;
 		int base = this.getRootIndex();
 		return this == ItemRegistry.CUSTOMEXTRACT.getItemInstance() ? base+item.getItemDamage()%4 : base+this.getOreType(item).type.ordinal();
 	}
 
 	@Override
 	public int getColorOne(ItemStack is) {
+		if (CustomExtractLoader.instance.getEntries().isEmpty())
+			return 0xffffff;
 		return this.getOreType(is).color2;
 	}
 
 	@Override
 	public int getColorTwo(ItemStack is) {
+		if (CustomExtractLoader.instance.getEntries().isEmpty())
+			return 0xffffff;
 		return this.getOreType(is).color1;
 	}
 
 	@Override
 	public int getColorThree(ItemStack is) {
+		if (CustomExtractLoader.instance.getEntries().isEmpty())
+			return 0xffffff;
 		return this.getOreType(is).color1;
 	}
 
 	@Override
 	public int getColorFour(ItemStack is) {
+		if (CustomExtractLoader.instance.getEntries().isEmpty())
+			return 0xffffff;
 		return this.getOreType(is).color1;
 	}
 

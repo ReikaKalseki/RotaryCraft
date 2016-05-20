@@ -60,7 +60,7 @@ public class ItemCanolaSeed extends ItemBasic implements IPlantable {
 			int maxz = spread ? z+1 : z;
 			for (int xi = minx; xi <= maxx; xi++) {
 				for (int zi = minz; zi <= maxz; zi++) {
-					if ((!ReikaWorldHelper.softBlocks(world.getBlock(xi, y, zi))) || !BlockCanola.isValidFarmBlock(world, xi, y-1, zi)) {
+					if ((!ReikaWorldHelper.softBlocks(world, xi, y, zi)) || !BlockCanola.isValidFarmBlock(world, xi, y-1, zi)) {
 						ReikaItemHelper.dropItem(world, xi+0.5, y+0.5, zi+0.5, ItemStacks.canolaSeeds);
 					}
 					else if (!ep.canPlayerEdit(xi, y, zi, 0, is)) {

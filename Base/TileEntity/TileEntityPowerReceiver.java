@@ -224,7 +224,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (m == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				ForgeDirection dir = read.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
 			}
@@ -308,7 +308,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (m == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
-				ForgeDirection dir = this.getInputForgeDirection();
+				ForgeDirection dir = read2.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
 				//ReikaJavaLibrary.pConsole(omegain, doublesided && this.getSide() == Side.SERVER);
@@ -418,7 +418,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (id1 == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te1;
-				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				ForgeDirection dir = read.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
 			}
@@ -485,7 +485,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (id2 == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
-				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				ForgeDirection dir = read2.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
 			}
@@ -552,7 +552,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (id3 == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te3;
-				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				ForgeDirection dir = read3.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
 			}
@@ -619,7 +619,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 			}
 			if (id4 == MachineRegistry.POWERBUS) {
 				TileEntityPowerBus pwr = (TileEntityPowerBus)te4;
-				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
+				ForgeDirection dir = read4.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
 			}

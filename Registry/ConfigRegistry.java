@@ -26,7 +26,6 @@ import Reika.RotaryCraft.RotaryCraft;
 
 public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig, MatchingConfig, UserSpecificConfig {
 
-	ENGINESOUNDS("Engine Running Sounds", true),
 	ENGINEVOLUME("Engine Volume", 1F),
 	GPRORES("GPR Renders Ores", true),
 	INSTACUT("Instant Woodcutter", true),
@@ -332,7 +331,6 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	@Override
 	public boolean isUserSpecific() {
 		switch(this) {
-			case ENGINESOUNDS:
 			case ENGINEVOLUME:
 			case MACHINEVOLUME:
 			case RENDERFORCEFIELD:
