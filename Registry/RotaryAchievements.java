@@ -24,6 +24,8 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RCAchievementPage;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public enum RotaryAchievements {
 
@@ -110,7 +112,7 @@ public enum RotaryAchievements {
 	public void triggerAchievement(EntityPlayer ep) {
 		if (!ConfigRegistry.ACHIEVEMENTS.getState())
 			return;
-		if (ep == null) {
+		if (ep == null && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			//ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
 			//ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
 			RotaryCraft.logger.debug("Player does not exist to receive their achievement \""+this+"\"!");
