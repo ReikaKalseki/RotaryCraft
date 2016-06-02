@@ -109,6 +109,8 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 	}
 
 	private boolean canMakeAllOf(Collection<ItemStack> out) {
+		if (out.size() > 9)
+			return ReikaInventoryHelper.isEmptyFrom(this, 1, 9);
 		IInventory temp = new TemporaryInventory(9);
 		for (int i = 0; i < 9; i++) {
 			ItemStack in = inv[i+1];

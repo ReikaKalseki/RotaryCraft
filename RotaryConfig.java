@@ -11,7 +11,6 @@ package Reika.RotaryCraft;
 
 import java.util.ArrayList;
 
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
@@ -36,9 +35,6 @@ public class RotaryConfig extends ControlledConfig {
 
 	public static final EnumDifficulty EASIEST = EnumDifficulty.EASY;
 	public static final EnumDifficulty HARDEST = EnumDifficulty.HARD;
-
-	@Deprecated
-	public static final int MILLIBUCKET = FluidContainerRegistry.BUCKET_VOLUME;
 
 	public RotaryConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id) {
 		super(mod, option, id);

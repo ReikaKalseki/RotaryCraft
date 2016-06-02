@@ -101,7 +101,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	private boolean isValid(ItemStack is) {
 		if (ReikaItemHelper.isBlock(is))
 			return true;
-		if (ModList.IC2.isLoaded() && is.getItem() == IC2Handler.getInstance().scrapBoxID)
+		if (ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.SCRAPBOX.match(is))
 			return true;
 		return false;
 	}
@@ -116,7 +116,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 				overflow.addAll(li);
 			}
 		}
-		else if (ModList.IC2.isLoaded() && inv[0].getItem() == IC2Handler.getInstance().scrapBoxID) {
+		else if (ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.SCRAPBOX.match(inv[0])) {
 			inv[1] = Recipes.scrapboxDrops.getDrop(inv[0], false);
 		}
 		ReikaInventoryHelper.decrStack(0, inv);

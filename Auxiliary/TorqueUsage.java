@@ -64,6 +64,8 @@ public class TorqueUsage {
 	}
 
 	private static void recursiveFind(World world, TileEntity tile, TileEntityFlywheel reader) {
+		if (TEMap.containsKey(tile))
+			return;
 		TEMap.put(tile, true);
 		if (tile instanceof TileEntityTransmissionMachine) { //true if the considered tile is a Transmission tile and is getting power from an already examined block
 			if (tile instanceof TileEntitySplitter) { //check if splitter

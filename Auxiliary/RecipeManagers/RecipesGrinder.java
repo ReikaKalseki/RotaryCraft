@@ -312,6 +312,26 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	 */
 
 	private void addOreRecipes() {
+
+		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
+			ReikaOreHelper ore = ReikaOreHelper.oreList[i];
+			Collection<ItemStack> li = ore.getAllOreBlocks();
+			for (ItemStack is : li) {
+				if (recipes.containsKey(is)) {
+					ReikaOreHelper mod = ReikaOreHelper.oreList[recipes.get(is).output.getItemDamage()];
+					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for grinder registration as "+ore+" as it is already registered to "+mod);
+				}
+				else {
+					ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
+					this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), RecipeLevel.CORE);
+					int n = ore_rate;
+					if (ore.getRarity() == OreRarity.RARE)
+						n *= 3;
+					RotaryCraft.logger.log("Adding "+n+"x grinder recipe for "+ore+" ore "+is);
+				}
+			}
+		}
+
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
 			Collection<ItemStack> li = ore.getAllOreBlocks();
@@ -321,22 +341,15 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			else if (ore.getRarity() == OreRarity.RARE)
 				n *= 3;
 			for (ItemStack is : li) {
-				ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, n), RecipeLevel.CORE);
-				RotaryCraft.logger.log("Adding "+(n)+"x grinder recipe for "+ore+" ore "+is);
-			}
-		}
-
-		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
-			ReikaOreHelper ore = ReikaOreHelper.oreList[i];
-			Collection<ItemStack> li = ore.getAllOreBlocks();
-			for (ItemStack is : li) {
-				ItemStack flake = ItemRegistry.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24+ore.ordinal());
-				this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, ore_rate), RecipeLevel.CORE);
-				int n = ore_rate;
-				if (ore.getRarity() == OreRarity.RARE)
-					n *= 3;
-				RotaryCraft.logger.log("Adding "+n+"x grinder recipe for "+ore+" ore "+is);
+				if (recipes.containsKey(is)) {
+					ModOreList mod = (ModOreList)ExtractorModOres.getOreFromExtract(recipes.get(is).output);
+					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for grinder registration as "+ore+" as it is already registered to "+mod);
+				}
+				else {
+					ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
+					this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, n), RecipeLevel.CORE);
+					RotaryCraft.logger.log("Adding "+(n)+"x grinder recipe for "+ore+" ore "+is);
+				}
 			}
 		}
 	}

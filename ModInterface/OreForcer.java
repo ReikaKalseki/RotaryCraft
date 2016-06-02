@@ -229,13 +229,12 @@ public final class OreForcer {
 	}
 
 	private void convertUranium() {
-		ItemStack u = IC2Handler.getInstance().getPurifiedCrushedUranium();
+		ItemStack u = IC2Handler.IC2Stacks.PURECRUSHEDU.getItem();
 		if (u == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.IC2, "Null ItemStack for Uranium");
-		if (IC2Handler.getInstance().iridiumID == null)
+		if (IC2Handler.IC2Stacks.IRIDIUM.getItem() == null)
 			throw new ModReflectionException(RotaryCraft.instance, ModList.IC2, "Null Item for Iridium");
-		ItemStack ir = new ItemStack(IC2Handler.getInstance().iridiumID, 1, 0);
-		GameRegistry.addShapelessRecipe(ir, ItemStacks.getModOreIngot(ModOreList.IRIDIUM));
+		GameRegistry.addShapelessRecipe(IC2Handler.IC2Stacks.IRIDIUM.getItem(), ItemStacks.getModOreIngot(ModOreList.IRIDIUM));
 		RotaryCraft.logger.log("RotaryCraft iridium ingots can now be crafted into IC2 Iridium items!");
 		GameRegistry.addShapelessRecipe(u, ItemStacks.getModOreIngot(ModOreList.URANIUM));
 		RotaryCraft.logger.log("RotaryCraft uranium ingots can now be crafted into IC2 purified crushed uranium!");

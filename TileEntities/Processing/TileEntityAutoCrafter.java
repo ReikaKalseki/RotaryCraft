@@ -230,6 +230,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (ModList.APPENG.isLoaded()) {
 			if (network != null)
 				network.tick();
+			if (aeGridBlock != null && !world.isRemote) {
+				((BasicAEInterface)aeGridBlock).setPowerCost(power >= MINPOWER ? 4 : 1);
+			}
 		}
 
 		if (power >= MINPOWER) {
@@ -313,7 +316,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (power >= MINPOWER) {
 			ItemStack out = this.getSlotRecipeOutput(slot);
 			if (out != null)
-				this.attemptSlotCrafting(slot);
+				this.attemptSlotCrafting(slot, 0);
 		}
 	}
 
@@ -344,15 +347,15 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private void attemptAllSlotCrafting() {
 		for (int i = 0; i < SIZE; i++) {
-			this.attemptSlotCrafting(i);
+			this.attemptSlotCrafting(i, 0);
 		}
 	}
 
-	private boolean attemptSlotCrafting(int i) {
-		return this.attemptSlotCrafting(i, 1);
+	private boolean attemptSlotCrafting(int i, int d) {
+		return this.attemptSlotCrafting(i, 1, d);
 	}
 
-	private boolean attemptSlotCrafting(int i, int n) {
+	private boolean attemptSlotCrafting(int i, int n, int d) {
 		ItemStack is = inv[i];
 		if (is == null)
 			return false;
@@ -363,7 +366,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 			//ReikaJavaLibrary.pConsole("crafting "+out+" from "+Arrays.toString(items));
 			boolean flag = false;
 			for (int a = 0; a < n; a++)
-				flag |= this.tryCrafting(i, out, items);
+				flag |= this.tryCrafting(i, out, items, d);
 			return flag;
 		}
 		return false;
@@ -406,7 +409,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		}
 	}
 
-	private boolean tryCrafting(int i, ItemStack out, ItemStack[] items) {
+	private boolean tryCrafting(int i, ItemStack out, ItemStack[] items, int d) {
 		int slot = i+OUTPUT_OFFSET;
 		int size = inv[slot] != null ? inv[slot].stackSize : 0;
 		if (inv[slot] == null || (ReikaItemHelper.matchStacks(out, inv[slot]) && size+out.stackSize <= out.getMaxStackSize())) {
@@ -425,9 +428,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 						int has = this.getAvailableIngredients(is);
 						int missing = req-has;
 						//ReikaJavaLibrary.pConsole("need "+req+" / have "+has+" '"+is+" ("+is.getDisplayName()+")'; making '"+out+" ("+out.getDisplayName()+")'");
-						if (missing > 0) {
+						if (missing > 0 && d < 40) {
 							//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
-							if (!this.tryCraftIntermediates(missing, is)) {
+							if (!this.tryCraftIntermediates(missing, is, d+1)) {
 								//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
 								return false;
 							}
@@ -456,7 +459,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		return count;
 	}
 
-	private boolean tryCraftIntermediates(int num, ItemStack is) {
+	private boolean tryCraftIntermediates(int num, ItemStack is, int d) {
 		int run = 0;
 		CountMap<Integer> ranSlots = new CountMap();
 		//for (ItemStack is : li) {
@@ -465,7 +468,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 			//ReikaJavaLibrary.pConsole(i+":"+out+" & "+is);
 			if (out != null && ReikaItemHelper.matchStacks(is, out)) {
 				//ReikaJavaLibrary.pConsole("attempting slot "+i+", because "+out+" matches "+is);
-				while (run < num && this.attemptSlotCrafting(i)) {
+				while (run < num && this.attemptSlotCrafting(i, d)) {
 					run += out.stackSize;
 					ranSlots.set(i, Math.min(num, ranSlots.get(i)+out.stackSize));
 				}
