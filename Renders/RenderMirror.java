@@ -56,7 +56,7 @@ public class RenderMirror extends RotaryTERenderer {
 		}
 		GL11.glTranslated(0, var12, 0);
 		GL11.glScaled(1, var11, 1);
-		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.broken), -tile.phi, 0);
+		var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.broken), -tile.phi, -tile.theta/2);
 		GL11.glScaled(1, var11, 1);
 		GL11.glTranslated(0, -var12, 0);
 

@@ -112,10 +112,12 @@ public enum RotaryAchievements {
 	public void triggerAchievement(EntityPlayer ep) {
 		if (!ConfigRegistry.ACHIEVEMENTS.getState())
 			return;
-		if (ep == null && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			//ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
-			//ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
-			RotaryCraft.logger.debug("Player does not exist to receive their achievement \""+this+"\"!");
+		if (ep == null) {
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+				//ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
+				//ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
+				RotaryCraft.logger.debug("Player does not exist to receive their achievement \""+this+"\"!");
+			}
 		}
 		else {
 			ep.triggerAchievement(this.get());

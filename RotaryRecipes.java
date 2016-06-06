@@ -971,6 +971,7 @@ public class RotaryRecipes {
 
 		GameRegistry.addRecipe(new ReservoirComboRecipe());
 		GameRegistry.addShapelessRecipe(MachineRegistry.RESERVOIR.getCraftedProduct(), MachineRegistry.RESERVOIR.getCraftedProduct()); //empty
+		GameRegistry.addShapelessRecipe(ItemRegistry.CRAFTPATTERN.getStackOf(), ItemRegistry.CRAFTPATTERN.getStackOf()); //empty
 
 		//GameRegistry.addRecipe(new ScrapCombinationRecipe());
 

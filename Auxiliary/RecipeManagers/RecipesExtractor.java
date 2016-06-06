@@ -20,6 +20,7 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -60,7 +61,13 @@ public class RecipesExtractor
 			ModOreList ore = ModOreList.oreList[i];
 			Collection<ItemStack> c = ore.getAllOreBlocks();
 			for (ItemStack is : c) {
-				this.addRecipe(is, ExtractorModOres.getDustProduct(ore));
+				if (recipeList.containsKey(is)) {
+					ModOreList mod = (ModOreList)ExtractorModOres.getOreFromExtract(recipeList.get(is));
+					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for Extractor registration as "+ore+" as it is already registered to "+mod);
+				}
+				else {
+					this.addRecipe(is, ExtractorModOres.getDustProduct(ore));
+				}
 			}
 			this.addRecipe(ExtractorModOres.getDustProduct(ore), ExtractorModOres.getSlurryProduct(ore));
 			this.addRecipe(ExtractorModOres.getSlurryProduct(ore), ExtractorModOres.getSolutionProduct(ore));
@@ -72,7 +79,12 @@ public class RecipesExtractor
 			CustomExtractEntry e = li.get(i);
 			Collection<ItemStack> c = e.getAllOreBlocks();
 			for (ItemStack is : c) {
-				this.addRecipe(is, ItemCustomModOre.getItem(i, ExtractorStage.DUST));
+				if (recipeList.containsKey(is)) {
+					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for Extractor registration as "+e+" as it is already registered to "+recipeList.get(is));
+				}
+				else {
+					this.addRecipe(is, ItemCustomModOre.getItem(i, ExtractorStage.DUST));
+				}
 			}
 			this.addRecipe(ItemCustomModOre.getItem(i, ExtractorStage.DUST), ItemCustomModOre.getItem(i, ExtractorStage.SLURRY));
 			this.addRecipe(ItemCustomModOre.getItem(i, ExtractorStage.SLURRY), ItemCustomModOre.getItem(i, ExtractorStage.SOLUTION));

@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -37,6 +38,9 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.MultiBlockMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades.SodiumSolarOutput;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades.SodiumSolarReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -50,8 +54,15 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	private int numberMirrors = 0;
 
 	private float lightMultiplier = 0;
+	private float overallBrightness;
+	private int size;
+	private int topLocation = -1;
 
 	public static final int GENOMEGA = 512;
+	public static final int GENOMEGA_SODIUM = 4096;
+
+	public static final int MAXTORQUE = 16384;
+	public static final int MAXTORQUE_SODIUM = 65536;
 
 	private final HybridTank tank = new HybridTank("solar", 4000);
 
@@ -74,20 +85,27 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		int temp = (int)(15*this.getArraySize()*this.getArrayOverallBrightness());
-		for (int i = -3; i <= 3; i++) {
-			for (int j = -3; j <= 3; j++) {
-				if (ConfigRegistry.BLOCKDAMAGE.getState()) {
-					ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, Math.min(temp, 1750));
-					if (temp >= 1500) {
-						this.delete();
-						world.setBlock(x, y, z, Blocks.flowing_lava);
+		topLocation = this.getTopOfTower();
+		size = this.getArraySize();
+		overallBrightness = this.getArrayOverallBrightness();
+		if (!world.isRemote) {
+			int temp = (int)(5*size*overallBrightness);
+			for (int i = -3; i <= 3; i++) {
+				for (int j = -3; j <= 3; j++) {
+					if (ConfigRegistry.BLOCKDAMAGE.getState()) {
+						ReikaWorldHelper.temperatureEnvironment(world, x+i, y+1, z+j, Math.min(temp, 1750));
+						if (temp >= 1500) {
+							this.delete();
+							world.setBlock(x, y, z, Blocks.flowing_lava);
+						}
 					}
 				}
-				AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+i, y+1, z+j, x+i+1, y+2, z+j+1);
+			}
+			if (temp > 400) {
+				AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x-3, y+1, z-3, x+4, y+2, z+4);
 				List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, above);
 				for (EntityLivingBase e : in) {
-					if (temp > 400)
+					if (!e.isPotionActive(Potion.fireResistance))
 						e.setFire(3);
 				}
 			}
@@ -99,8 +117,16 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		else {
 			write = null;
 		}
-		if (world.getBlock(x, y+1, z) != Blocks.air)
+		if (world.getBlock(x, y+1, z) != Blocks.air && !(world.getTileEntity(x, y+1, z) instanceof SodiumSolarUpgrades))
 			return;
+
+		TileEntity top = world.getTileEntity(x, topLocation+1, z);
+		if (top instanceof SodiumSolarReceiver) {
+			SodiumSolarReceiver ss = (SodiumSolarReceiver)top;
+			if (ss.isActive()) {
+				ss.tick(size, overallBrightness);
+			}
+		}
 
 		mirrorTimer.update();
 		if (mirrorTimer.checkCap()) {
@@ -114,7 +140,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 					if (m == MachineRegistry.MIRROR) {
 						TileEntityMirror te = (TileEntityMirror)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
 						te.targetloc = new Coordinate(x, y, z);
-						float light = te.getLightLevel();
+						float light = te.getLightLevel()*te.getAimingAccuracy();
 						lightMultiplier += light;
 					}
 					else numberMirrors--;
@@ -131,22 +157,40 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	private void generatePower(World world, int x, int y, int z) {
 		this.getTowerWater(world, x, y, z);
+		int amt = this.getConsumedWater();
 		write = ForgeDirection.DOWN;
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
-		omega = GENOMEGA;
+		omega = tank.getActualFluid() == FluidRegistry.WATER ? GENOMEGA : GENOMEGA_SODIUM;
 		torque = this.getGenTorque(world, x, y, z);
-		if (this.getArraySize() <= 0 || torque == 0 || tank.getLevel() < this.getConsumedWater()) {
+		if (size <= 0 || torque == 0 || tank.getLevel() < amt) {
 			omega = 0;
 			torque = 0;
 		}
 		power = (long)omega*(long)torque;
-		if (power > 0 && tank.getLevel() > 0) {
-			tank.removeLiquid(this.getConsumedWater());
+		if (tank.getActualFluid() == FluidRegistry.getFluid("rc sodium")) {
+			amt *= power/((long)GENOMEGA_SODIUM*MAXTORQUE_SODIUM);
+		}
+		if (power > 0 && tank.getLevel() > 0 && amt > 0) {
+			TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+			if (te instanceof SodiumSolarOutput) {
+				SodiumSolarOutput ss = (SodiumSolarOutput)te;
+				if (ss.isActive()) {
+					amt = ss.receiveSodium(amt);
+				}
+			}
+			if (amt > 0)
+				tank.removeLiquid(amt);
 		}
 	}
 
 	private int getGenTorque(World world, int x, int y, int z) {
-		return Math.min(16384, (int)(this.getArrayOverallBrightness()*Math.min(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64)*(this.getArraySize()+1)));
+		if (tank.isEmpty())
+			return 0;
+		boolean water = tank.getActualFluid() == FluidRegistry.WATER;
+		int cap = water ? MAXTORQUE : MAXTORQUE_SODIUM;
+		float f = water ? 1 : 1.75F;
+		float p = water ? 1 : 1.5F;
+		return Math.min(cap, (int)(f*overallBrightness*Math.min(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64)*(Math.pow(size+1, p))));
 	}
 
 	public int getConsumedWater() {
@@ -156,11 +200,14 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			rnd = 1000;
 		else if (base >= 100)
 			rnd = 100;
-		return ReikaMathLibrary.roundUpToX(rnd, base);
+		int ret = ReikaMathLibrary.roundUpToX(rnd, base);
+		if (tank.getActualFluid() == FluidRegistry.getFluid("rc sodium"))
+			ret *= 0.00390625;
+		return ret;
 	}
 
 	public int getTowerHeight() {
-		return this.getTopOfTower()-yCoord;
+		return topLocation-yCoord;
 	}
 
 	@Override
@@ -189,14 +236,14 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	public int getArraySize() {
-		TileEntity tile = worldObj.getTileEntity(xCoord, this.getTopOfTower(), zCoord);
+		TileEntity tile = worldObj.getTileEntity(xCoord, topLocation, zCoord);
 		if (tile == null)
 			return 0;
 		return ((TileEntitySolar)tile).numberMirrors;
 	}
 
 	public float getArrayOverallBrightness() {
-		TileEntity tile = worldObj.getTileEntity(xCoord, this.getTopOfTower(), zCoord);
+		TileEntity tile = worldObj.getTileEntity(xCoord, topLocation, zCoord);
 		if (tile == null)
 			return 0;
 		return ((TileEntitySolar)tile).lightMultiplier;
@@ -210,16 +257,30 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		return y-1;
 	}
 
-	public void getTowerWater(World world, int x, int y, int z) {
-		int water = tank.getLevel();
+	public int getBottomOfTower() {
+		int y = yCoord;
+		while (MachineRegistry.getMachine(worldObj, xCoord, y, zCoord) == MachineRegistry.SOLARTOWER) {
+			y--;
+		}
+		return y+1;
+	}
+
+	private void getTowerWater(World world, int x, int y, int z) {
+		int lvl = tank.getLevel();
+		Fluid f = tank.getActualFluid();
 		int cy = y+1;
 		while (MachineRegistry.getMachine(world, x, cy, z) == MachineRegistry.SOLARTOWER) {
-			TileEntitySolar tile = (TileEntitySolar)(world.getTileEntity(x, cy, z));
-			water += tile.tank.getLevel();
-			tile.tank.empty();
+			TileEntitySolar tile = (TileEntitySolar)world.getTileEntity(x, cy, z);
+			Fluid f2 = tile.tank.getActualFluid();
+			if (f == null && f2 != null)
+				f = f2;
+			if (f2 != null && f.equals(f2)) {
+				lvl += tile.tank.getLevel();
+				tile.tank.empty();
+			}
 			cy++;
 		}
-		tank.setContents(water, FluidRegistry.WATER);
+		tank.setContents(lvl, f);
 	}
 
 	@Override
@@ -236,14 +297,6 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
-	}
-
-	public int getBottomOfTower() {
-		int y = yCoord;
-		while (MachineRegistry.getMachine(worldObj, xCoord, y, zCoord) == MachineRegistry.SOLARTOWER) {
-			y--;
-		}
-		return y+1;
 	}
 
 	@Override
@@ -291,7 +344,17 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(FluidRegistry.WATER);
+		return fluid.equals(FluidRegistry.WATER) || (fluid.equals(FluidRegistry.getFluid("rc sodium")) && this.canUseSodium());
+	}
+
+	private boolean canUseSodium() {
+		int y = this.getTopOfTower()+1;
+		TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
+		if (te instanceof SodiumSolarReceiver) {
+			SodiumSolarReceiver ss = (SodiumSolarReceiver)te;
+			return ss.isActive();
+		}
+		return false;
 	}
 
 	@Override

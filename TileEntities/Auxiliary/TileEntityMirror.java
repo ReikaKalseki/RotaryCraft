@@ -14,6 +14,7 @@ import java.util.List;
 import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -23,6 +24,7 @@ import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
@@ -42,9 +44,19 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 
 	@SideOnly(Side.CLIENT)
 	public float theta;
+
+	@SideOnly(Side.CLIENT)
+	private float targetTheta;
+	@SideOnly(Side.CLIENT)
+	private float targetPhi;
+
 	public Coordinate targetloc;
 
 	public boolean broken;
+	private boolean rotatingLarge;
+
+	private float aimFactor = 1;
+	private float lastAimFactor;
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -56,12 +68,17 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		return MachineRegistry.MIRROR;
 	}
 
+	public float getAimingAccuracy() {
+		return aimFactor;
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (broken)
 			return;
-		if (world.isRemote)
+		if (world.isRemote && (this.getTicksExisted() < 400 || rotatingLarge || Math.abs(world.getTotalWorldTime()%8) == Math.abs(System.identityHashCode(this)%8))) {
 			this.adjustAim(world, x, y, z, meta);
+		}
 
 		if (!world.isRemote) {
 			AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
@@ -73,6 +90,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 					ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
 					e.attackEntityFrom(DamageSource.cactus, 1);
 					this.breakMirror(world, x, y, z);
+					break;
 				}
 			}
 		}
@@ -142,28 +160,27 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		float finalphi;
 		float finaltheta;
 
-		int time = (int)(world.getWorldTime()%12000);
-		float sunphi = 90;
+		long tot = world.getWorldTime();
+		int time = (int)(tot%12000);
+
+		time = this.forceDuskDawnAiming(tot, time);
+
+		float sunphi = time >= 6000 ? -90 : 90;
 		float suntheta = ReikaWorldHelper.getSunAngle(world);
-		if (time >= 6000) {
-			sunphi = -90;
-		}
 
 		//rises in +90 sets in 270 (+x, -x)
 		float movespeed = 0.5F;
 
-		float targetphi = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc.xCoord, y-targetloc.yCoord, z-targetloc.zCoord)[2];
-		float targettheta = (float)ReikaPhysicsHelper.cartesianToPolar(x-targetloc.xCoord, y-targetloc.yCoord, z-targetloc.zCoord)[1];
+		double[] angs = ReikaPhysicsHelper.cartesianToPolar(x-targetloc.xCoord, y-targetloc.yCoord, z-targetloc.zCoord);
+		float targetphi = (float)angs[2];
+		float targettheta = (float)angs[1];
 
 		targettheta = Math.abs(targettheta)-90;
 		targettheta *= 0.5;
 
 		sunphi = this.clampPhi(sunphi, time);
-		boolean bool;
-		if (time < 6000)
-			bool = (targetphi > 270);
-		else
-			bool = true;
+		boolean bool = time >= 6000 || targetphi > 270;
+
 		//ReikaJavaLibrary.pConsole(targetphi+" clamped to "+this.clampPhi(targetphi, time)+"  :  "+bool);
 		if (bool)
 			targetphi = this.clampPhi(targetphi, time);
@@ -174,13 +191,11 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		else {
 			finalphi = sunphi + (targetphi-sunphi)/2F; //These are mathematically equivalent...
 		}
-		float sunangle = (float)Math.cos(Math.toRadians(time*90D/6000D));
-		if (time >= 6000) {
-			sunangle = (float)(1-Math.cos(Math.toRadians((time-6000)*90D/6000D)));
-		}
+
+		float sunangle = time >= 6000 ? (float)(1-Math.cos(Math.toRadians((time-6000)*90D/6000D))) : (float)Math.cos(Math.toRadians(time*90D/6000D));
+
 
 		finalphi = (finalphi*sunangle + (1-sunangle)*targetphi);
-
 		finalphi = this.clampPhi(finalphi, time);
 
 		finaltheta = targettheta + (suntheta - targettheta)/2F;
@@ -191,24 +206,54 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 			finalphi = (finalphi*sunangle + (1-sunangle)*targetphi);
 		}
 
-		//ReikaJavaLibrary.pConsole(String.format("TIME: %d     SUN: %.3f    TARGET: %.3f     FINAL: %.3f", time, sunphi, targetphi, finalphi));
-
 		finalphi = this.adjustPhiForClosestPath(finalphi);
 		if (Math.abs(sunphi - targetphi) == 180) {
 			//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
 			finalphi = targetphi;
-			finaltheta = (float)ReikaMathLibrary.extremad(60-suntheta, finaltheta, "max");
+			finaltheta = Math.max(60-suntheta, finaltheta);
 		}
 
-		if (phi < finalphi)
+		if (finalphi - phi > 180)
+			finalphi -= 360;
+
+		//ReikaJavaLibrary.pConsole(String.format("TIME: %d     SUN: %.3f    TARGET: %.3f     FINAL: %.3f", time, sunphi, targetphi, finalphi));
+
+		targetTheta = finaltheta;
+		targetPhi = finalphi;
+
+		if (phi < targetPhi)
 			phi += movespeed;
-		if (phi > finalphi)
+		if (phi > targetPhi)
 			phi -= movespeed;
 
-		if (theta < finaltheta)
+		if (theta < targetTheta)
 			theta += movespeed;
-		if (theta > finaltheta)
+		if (theta > targetTheta)
 			theta -= movespeed;
+
+		float aim = (float)Math.max(0, 1-ReikaMathLibrary.py3d(theta-targetTheta, 0, phi-targetPhi)/20D);
+		if (Math.abs(aimFactor-aim) > 0.05) {
+			lastAimFactor = aimFactor;
+			aimFactor = aim;
+			ReikaPacketHelper.sendSyncPacket(RotaryCraft.packetChannel, this, "aimFactor", true);
+		}
+
+		//ReikaJavaLibrary.pConsole(targetPhi+":"+phi);
+		if (rotatingLarge) {
+			rotatingLarge = Math.abs(targetPhi-phi) > 2;
+		}
+		else {
+			rotatingLarge = Math.abs(targetPhi-phi) > 10;
+		}
+	}
+
+	private int forceDuskDawnAiming(long tot, int time) {
+		int day = (int)(tot%24000);
+		if (ReikaMathLibrary.isValueInsideBoundsIncl(12000, 13000, day))
+			return 11999;
+		if (ReikaMathLibrary.isValueInsideBoundsIncl(23000, 24000, day))
+			return 0;
+		return time;
 	}
 
 	public void breakMirror(World world, int x, int y, int z) {
@@ -216,7 +261,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getMachine().getBlock(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
 		}
-		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.glass", 1, 1);
+		ReikaSoundHelper.playBreakSound(world, x, y, z, Blocks.glass);
 	}
 
 	public void repair(World world, int x, int y, int z) {
