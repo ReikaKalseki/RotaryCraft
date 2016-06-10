@@ -160,7 +160,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		int amt = this.getConsumedWater();
 		write = ForgeDirection.DOWN;
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
-		omega = tank.getActualFluid() == FluidRegistry.WATER ? GENOMEGA : GENOMEGA_SODIUM;
+		boolean water = tank.getActualFluid() == FluidRegistry.WATER;
+		omega = water ? GENOMEGA : GENOMEGA_SODIUM;
 		torque = this.getGenTorque(world, x, y, z);
 		if (size <= 0 || torque == 0 || tank.getLevel() < amt) {
 			omega = 0;
@@ -171,11 +172,13 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			amt *= power/((long)GENOMEGA_SODIUM*MAXTORQUE_SODIUM);
 		}
 		if (power > 0 && tank.getLevel() > 0 && amt > 0) {
-			TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
-			if (te instanceof SodiumSolarOutput) {
-				SodiumSolarOutput ss = (SodiumSolarOutput)te;
-				if (ss.isActive()) {
-					amt = ss.receiveSodium(amt);
+			if (!water) {
+				TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+				if (te instanceof SodiumSolarOutput) {
+					SodiumSolarOutput ss = (SodiumSolarOutput)te;
+					if (ss.isActive()) {
+						amt = ss.receiveSodium(amt);
+					}
 				}
 			}
 			if (amt > 0)

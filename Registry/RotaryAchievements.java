@@ -61,7 +61,7 @@ public enum RotaryAchievements {
 	RAILDRAGON(		2, 8,	Blocks.dragon_egg, 												MAKERAILGUN,	true), //kill dragon with railgun
 	RAILKILLED(		0, 10,	new ItemStack(Items.skull, 1, 0), 								MAKERAILGUN,	false), //kill self with railgun
 	GRAVELGUN(		0, -4,	ItemRegistry.GRAVELGUN,											MAKESTEEL,		false), //one hit kill with
-	LANDMINE(		2, 2,	MachineRegistry.LANDMINE, 										MAKESTEEL,		false), //step on
+	LANDMINE(		2, 3,	MachineRegistry.LANDMINE, 										MAKESTEEL,		false), //step on
 	NETHERHEATRAY(	4, -2,	MachineRegistry.HEATRAY, 										JETFUEL,		true), //dig 500m with heat ray in nether
 	GPRSPAWNER(		-2, 6,	ItemRegistry.SPAWNER, 											GPR,			true),
 	GPRENDPORTAL(	-2, 8,	Blocks.end_portal_frame, 										GPRSPAWNER,		true), //gpr thru end portal
