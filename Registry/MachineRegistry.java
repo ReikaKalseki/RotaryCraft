@@ -89,6 +89,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
 import Reika.RotaryCraft.TileEntities.TileEntityGrindstone;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
@@ -337,7 +338,8 @@ public enum MachineRegistry implements TileEnum {
 	BEDPIPE(			"machine.bedpipe", 			BlockPiping.class,			TileEntityBedrockPipe.class,		8,	"PipeRenderer"),
 	DRYING(				"machine.drying",			BlockMIMachine.class,		TileEntityDryingBed.class,			26, "RenderDryingBed"),
 	WETTER(				"machine.wetter",			BlockMIMachine.class,		TileEntityWetter.class,				27, "RenderWetter"),
-	DROPS(				"machine.drops",			BlockIMachine.class,		TileEntityDropProcessor.class,		8);
+	DROPS(				"machine.drops",			BlockIMachine.class,		TileEntityDropProcessor.class,		8),
+	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9);
 
 	private final String name;
 	private final Class te;

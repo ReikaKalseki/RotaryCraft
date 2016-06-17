@@ -349,7 +349,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 			storedEnergy = nbt.getInteger("energy");
 			int c = nbt.getInteger("coolant");
 			if (c > 0)
-				tank.addLiquid(c, FluidRegistry.getFluid("rc liquid nitrogen"));
+				tank.setContents(c, FluidRegistry.getFluid("rc liquid nitrogen"));
 		}
 	}
 

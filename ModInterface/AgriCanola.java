@@ -9,22 +9,33 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 
-import com.InfinityRaider.AgriCraft.api.v1.ICropPlant;
+import com.InfinityRaider.AgriCraft.api.API;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v2.APIv2;
+import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -137,6 +148,53 @@ public class AgriCanola implements ICropPlant {
 	@SideOnly(Side.CLIENT)
 	public void renderPlantInCrop(IBlockAccess world, int x, int y, int z, RenderBlocks renderer) {
 
+	}
+
+	public static void register() {
+		//Remove native handler for now
+		try {
+			Class c = Class.forName("com.InfinityRaider.AgriCraft.compatibility.ModHelper");
+			Field f = c.getDeclaredField("modHelpers");
+			f.setAccessible(true);
+			HashMap<String, Object> map = (HashMap<String, Object>)f.get(null);
+			map.remove(RotaryCraft.instance.getModContainer().getModId());
+		}
+		catch (Exception e) {
+			ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.AGRICRAFT, e);
+			e.printStackTrace();
+		}
+
+		((APIv2)API.getAPI(2)).registerCropPlant(new AgriCanola());
+	}
+
+	@Override
+	public IAdditionalCropData getInitialCropData(World world, int x, int y, int z, ICrop crop) {
+		return null;
+	}
+
+	@Override
+	public IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag) {
+		return null;
+	}
+
+	@Override
+	public void onValidate(World world, int x, int y, int z, ICrop crop) {
+
+	}
+
+	@Override
+	public void onInvalidate(World world, int x, int y, int z, ICrop crop) {
+
+	}
+
+	@Override
+	public void onChunkUnload(World world, int x, int y, int z, ICrop crop) {
+
+	}
+
+	@Override
+	public IGrowthRequirement getGrowthRequirement() {
+		return ((APIv2)API.getAPI(2)).createDefaultGrowthRequirement();
 	}
 
 }

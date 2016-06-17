@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
@@ -37,7 +36,6 @@ import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
@@ -49,7 +47,6 @@ import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
-import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
@@ -116,10 +113,6 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
-
-import com.InfinityRaider.AgriCraft.api.API;
-import com.InfinityRaider.AgriCraft.api.v1.APIv1;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -478,28 +471,10 @@ public class RotaryCraft extends DragonAPIMod {
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthrablock, 24*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 
 		if (ModList.AGRICRAFT.isLoaded()) {
-			this.addCanolaHandler();
+			AgriCanola.register();
 		}
 
 		this.finishTiming();
-	}
-
-	@ModDependent(ModList.AGRICRAFT)
-	private void addCanolaHandler() {
-		//Remove native handler for now
-		try {
-			Class c = Class.forName("com.InfinityRaider.AgriCraft.compatibility.ModHelper");
-			Field f = c.getDeclaredField("modHelpers");
-			f.setAccessible(true);
-			HashMap<String, Object> map = (HashMap<String, Object>)f.get(null);
-			map.remove(this.getModContainer().getModId());
-		}
-		catch (Exception e) {
-			ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.AGRICRAFT, e);
-			e.printStackTrace();
-		}
-
-		((APIv1)API.getAPI(2)).registerCropPlant(new AgriCanola());
 	}
 
 	@Override

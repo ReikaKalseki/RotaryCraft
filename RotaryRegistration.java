@@ -173,12 +173,12 @@ public class RotaryRegistration {
 		RotaryCraft.logger.log("Loading Liquid Icons");
 
 		if (event.map.getTextureType() == 0) {
-			IIcon jeticon = event.map.registerIcon("RotaryCraft:jetfuel_anim");
-			IIcon lubeicon = event.map.registerIcon("RotaryCraft:lubricant_anim");
-			IIcon ethanolicon = event.map.registerIcon("RotaryCraft:ethanol_anim");
-			IIcon nitrogenicon = event.map.registerIcon("RotaryCraft:nitrogen_anim");
-			IIcon hslastill = event.map.registerIcon("RotaryCraft:hsla_still");
-			IIcon hslaflow = event.map.registerIcon("RotaryCraft:hsla_flow");
+			IIcon jeticon = event.map.registerIcon("RotaryCraft:fluid/jetfuel_anim");
+			IIcon lubeicon = event.map.registerIcon("RotaryCraft:fluid/lubricant_anim");
+			IIcon ethanolicon = event.map.registerIcon("RotaryCraft:fluid/ethanol_anim");
+			IIcon nitrogenicon = event.map.registerIcon("RotaryCraft:fluid/nitrogen_anim");
+			IIcon hslastill = event.map.registerIcon("RotaryCraft:fluid/hsla_still");
+			IIcon hslaflow = event.map.registerIcon("RotaryCraft:fluid/hsla_flow");
 			RotaryCraft.jetFuelFluid.setIcons(jeticon);
 			RotaryCraft.lubeFluid.setIcons(lubeicon);
 			RotaryCraft.ethanolFluid.setIcons(ethanolicon);

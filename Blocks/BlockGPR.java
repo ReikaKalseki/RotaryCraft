@@ -146,7 +146,7 @@ public class BlockGPR extends BlockBasicMachine {
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < biome.length; j++) {
 				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:steel");
-				icons[j][1] = par1IconRegister.registerIcon("RotaryCraft:gpr_top_"+biome[j]);
+				icons[j][1] = par1IconRegister.registerIcon("RotaryCraft:gpr/gpr_top_"+biome[j]);
 			}
 	}
 

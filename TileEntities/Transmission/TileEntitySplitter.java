@@ -40,6 +40,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	private int torquein2;
 	private int omegain2;
 	private int splitmode = 1;
+	private boolean processingSecondary;
 
 	public boolean failed;
 	private boolean bedrock;
@@ -292,6 +293,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					if (m == MachineRegistry.SPLITTER) {
 						TileEntitySplitter devicein = (TileEntitySplitter)te;
 						if (devicein.isSplitting()) {
+							processingSecondary = false;
 							this.readFromSplitter(world, x, y, z, devicein);
 						}
 						else if (devicein.isWritingTo(this)) {
@@ -352,6 +354,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 					if (m2 == MachineRegistry.SPLITTER) {
 						TileEntitySplitter devicein2 = (TileEntitySplitter)te2;
 						if (devicein2.isSplitting()) {
+							processingSecondary = true;
 							this.readFromSplitter(world, x, y, z, devicein2);
 						}
 						else if (devicein2.isWritingTo(this)) {
@@ -479,6 +482,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				if (m == MachineRegistry.SPLITTER) {
 					TileEntitySplitter devicein = (TileEntitySplitter)te;
 					if (devicein.isSplitting()) {
+						processingSecondary = false;
 						this.readFromSplitter(world, x, y, z, devicein);
 						torque = torquein;
 						omega = omegain;
@@ -586,7 +590,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	@Override
 	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl) { //Complex enough to deserve its own function
-		omegain = spl.omega; //omegain always constant
+		this.assignOmega(spl.omega); //omegain always constant
 		int ratio = spl.getRatioFromMode();
 		if (ratio == 0)
 			return;
@@ -597,34 +601,48 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		}
 		if (x == spl.getWriteX() && z == spl.getWriteZ()) { //We are the inline
 			if (ratio == 1) { //Even split, favorbent irrelevant
-				torquein = spl.torque/2;
+				this.assignTorque(spl.torque/2);
 				return;
 			}
 			if (favorbent) {
-				torquein = spl.torque/ratio;
+				this.assignTorque(spl.torque/ratio);
 			}
 			else {
-				torquein = (int)(spl.torque*((ratio-1D)/(ratio)));
+				this.assignTorque((int)(spl.torque*((ratio-1D)/(ratio))));
 			}
 		}
 		else if (x == spl.getWriteX2() && z == spl.getWriteZ2()) { //We are the bend
-			omegain = spl.omega; //omegain always constant
+			this.assignOmega(spl.omega); //omegain always constant
 			if (ratio == 1) { //Even split, favorbent irrelevant
-				torquein = spl.torque/2;
+				this.assignTorque(spl.torque/2);
 				return;
 			}
 			if (favorbent) {
-				torquein = (int)(spl.torque*((ratio-1D)/(ratio)));
+				this.assignTorque((int)(spl.torque*((ratio-1D)/(ratio))));
 			}
 			else {
-				torquein = spl.torque/ratio;
+				this.assignTorque(spl.torque/ratio);
 			}
 		}
 		else { //We are not one of its write-to blocks
-			torquein = 0;
-			omegain = 0;
+			this.assignTorque(0);
+			this.assignOmega(0);
 			return;
 		}
+	}
+
+	private void assignTorque(int val) {
+		if (processingSecondary)
+			torquein2 = val;
+		else
+			torquein = val;
+	}
+
+	private void assignOmega(int val) {
+		if (processingSecondary)
+			omegain2 = val;
+		else
+			omegain = val;
 	}
 
 	@Override

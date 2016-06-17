@@ -60,7 +60,7 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 		{
 			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
 		}
-		this.onInventoryChanged();
+		//this.onInventoryChanged();
 	}
 
 	public int getInventoryStackLimit()

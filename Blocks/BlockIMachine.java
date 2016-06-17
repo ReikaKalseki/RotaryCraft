@@ -91,5 +91,10 @@ public class BlockIMachine extends BlockBasicMultiTE {
 		icons[MachineRegistry.DROPS.getBlockMetadata()][2][3][0] = par1IconRegister.registerIcon("RotaryCraft:drops_back");
 		icons[MachineRegistry.DROPS.getBlockMetadata()][3][2][0] = par1IconRegister.registerIcon("RotaryCraft:drops_back");
 
+		for (int i = 0; i < 6; i++)
+			icons[MachineRegistry.ITEMFILTER.getBlockMetadata()][0][i][0] = par1IconRegister.registerIcon("RotaryCraft:steel_dark");
+		icons[MachineRegistry.ITEMFILTER.getBlockMetadata()][0][1][0] = par1IconRegister.registerIcon("RotaryCraft:filter_top");
+		icons[MachineRegistry.ITEMFILTER.getBlockMetadata()][0][0][0] = par1IconRegister.registerIcon("RotaryCraft:steel");
+
 	}
 }

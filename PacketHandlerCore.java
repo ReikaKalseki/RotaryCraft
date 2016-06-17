@@ -27,6 +27,7 @@ import Reika.DragonAPI.Auxiliary.PacketTypes;
 import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.DataPacket;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -41,6 +42,8 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
+import Reika.RotaryCraft.TileEntities.TileEntityItemFilter.MatchData;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
@@ -92,6 +95,7 @@ public class PacketHandlerCore implements PacketHandler {
 		double dy = 0;
 		double dz = 0;
 		boolean readinglong = false;
+		NBTTagCompound NBT = null;
 		String stringdata = null;
 		UUID id = null;
 		//System.out.print(packet.length);
@@ -189,6 +193,9 @@ public class PacketHandlerCore implements PacketHandler {
 						data[i] = inputStream.readInt();
 					break;
 				case NBT:
+					control = inputStream.readInt();
+					pack = PacketRegistry.getEnum(control);
+					NBT = ((DataPacket)packet).asNBT();
 					break;
 				case STRINGINT:
 					stringdata = packet.readString();
@@ -585,6 +592,14 @@ public class PacketHandlerCore implements PacketHandler {
 					break;
 				case CRAFTPATTERNMODE:
 					ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
+					break;
+				case FILTERSETTING:
+					x = NBT.getInteger("posX");
+					y = NBT.getInteger("posY");
+					z = NBT.getInteger("posZ");
+					te = world.getTileEntity(x, y, z);
+					MatchData dat = MatchData.createFromNBT(NBT);
+					((TileEntityItemFilter)te).setData(dat);
 					break;
 			}
 		}

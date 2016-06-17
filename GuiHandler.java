@@ -56,6 +56,7 @@ import Reika.RotaryCraft.Containers.Machine.ContainerGearbox;
 import Reika.RotaryCraft.Containers.Machine.ContainerGrinder;
 import Reika.RotaryCraft.Containers.Machine.ContainerHeater;
 import Reika.RotaryCraft.Containers.Machine.ContainerItemCannon;
+import Reika.RotaryCraft.Containers.Machine.ContainerItemFilter;
 import Reika.RotaryCraft.Containers.Machine.ContainerJet;
 import Reika.RotaryCraft.Containers.Machine.ContainerLandmine;
 import Reika.RotaryCraft.Containers.Machine.ContainerObsidian;
@@ -123,6 +124,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFridge;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiHeater;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemCannon;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemFilter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiLandmine;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiObsidian;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiParticle;
@@ -150,6 +152,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
+import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySorting;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;
@@ -375,6 +378,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityDropProcessor) {
 			return new ContainerDropProcessor(player, (TileEntityDropProcessor) te);
+		}
+		if (te instanceof TileEntityItemFilter) {
+			return new ContainerItemFilter(player, (TileEntityItemFilter) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -610,6 +616,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityDropProcessor) {
 			return new GuiDropProcessor(player, (TileEntityDropProcessor) te);
+		}
+		if (te instanceof TileEntityItemFilter) {
+			return new GuiItemFilter(player, (TileEntityItemFilter) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

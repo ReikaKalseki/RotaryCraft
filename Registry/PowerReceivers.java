@@ -102,7 +102,8 @@ public enum PowerReceivers {
 	CHAIN(),
 	CENTRIFUGE(1, 4096, 16384),
 	WETTER(1, 1024, 4096),
-	DROPS(32, 1, 1024);
+	DROPS(32, 1, 1024),
+	ITEMFILTER(1024);
 
 	private final int minT;
 	private final int minS;

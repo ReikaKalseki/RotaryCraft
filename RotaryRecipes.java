@@ -649,6 +649,8 @@ public class RotaryRecipes {
 		MachineRegistry.CHUNKLOADER.addCrafting("sSs", "BSB", "PGP", 'B', ItemStacks.steelingot, 'S', ItemStacks.bedrockshaft, 's', Items.nether_star, 'P', ItemStacks.basepanel, 'G', ItemStacks.bedrock16x);
 
 		MachineRegistry.DROPS.addCrafting("PSP", "PDP", "PSP", 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'P', ItemStacks.basepanel);
+
+		MachineRegistry.ITEMFILTER.addCrafting("sSs", "CCC", "PRP", 's', ItemStacks.steelingot, 'S', ItemStacks.screen, 'C', ItemStacks.pcb, 'R', Items.redstone, 'P', ItemStacks.basepanel);
 	}
 
 	private static void addCraftItems() {

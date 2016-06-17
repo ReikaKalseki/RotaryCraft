@@ -51,7 +51,8 @@ public enum PacketRegistry {
 	CRAFTER(70, 72),
 	POWERSYNC(73),
 	AFTERBURN(74),
-	CRAFTPATTERNMODE(75);
+	CRAFTPATTERNMODE(75),
+	FILTERSETTING(76);
 
 	private int min;
 	private int max;

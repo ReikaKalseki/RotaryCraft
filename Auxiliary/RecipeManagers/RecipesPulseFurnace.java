@@ -24,6 +24,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
@@ -240,6 +241,61 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 				RotaryCraft.logger.logError("No item found for Redstone Arsenal fluxed ingot crafting!");
 			else
 				this.addSmelting(fluxdust, fluxingot, RecipeLevel.MODINTERACT);
+		}
+
+		if (ModList.IC2.isLoaded()) {
+			ItemStack[] items = {
+					IC2Handler.IC2Stacks.BRONZEAXE.getItem(),
+					IC2Handler.IC2Stacks.BRONZEPICK.getItem(),
+					IC2Handler.IC2Stacks.BRONZEHOE.getItem(),
+					IC2Handler.IC2Stacks.BRONZESWORD.getItem(),
+					IC2Handler.IC2Stacks.BRONZESHOVEL.getItem(),
+					IC2Handler.IC2Stacks.BRONZEHELMET.getItem(),
+					IC2Handler.IC2Stacks.BRONZECHESTPLATE.getItem(),
+					IC2Handler.IC2Stacks.BRONZELEGGINGS.getItem(),
+					IC2Handler.IC2Stacks.BRONZEBOOTS.getItem(),
+			};
+
+			int[] n = {
+					3, 3, 2, 2, 1, 5, 8, 7, 4
+			};
+
+			ItemStack out = OreDictionary.getOres("ingotBronze").get(0);
+			for (int i = 0; i < items.length; i++) {
+				if (items[i] != null) {
+					this.addSmelting(items[i], ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+				}
+			}
+		}
+
+		if (ModList.RAILCRAFT.isLoaded()) {
+			Object[] items = {
+					"tool.steel.pickaxe",
+					"tool.steel.axe",
+					"tool.steel.sword",
+					"tool.steel.hoe",
+					"tool.steel.shovel",
+					"armor.steel.helmet",
+					"armor.steel.plate",
+					"armor.steel.legs",
+					"armor.steel.boots",
+					"tool.steel.shears",
+			};
+
+			int[] n = {
+					3, 3, 2, 2, 1, 5, 8, 7, 4, 2
+			};
+
+			for (int i = 0; i < items.length; i++) {
+				items[i] = ReikaItemHelper.lookupItem(ModList.RAILCRAFT, (String)items[i], 0);
+			}
+
+			ItemStack out = ReikaItemHelper.lookupItem(ModList.RAILCRAFT, "ingot", 0);
+			for (int i = 0; i < items.length; i++) {
+				if (items[i] != null) {
+					this.addSmelting((ItemStack)items[i], ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+				}
+			}
 		}
 	}
 
