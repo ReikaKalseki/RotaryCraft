@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.TileEntities;
+package Reika.RotaryCraft.TileEntities.World;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +25,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
@@ -36,10 +42,8 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
-public class TileEntityAerosolizer extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation {
+public class TileEntityAerosolizer extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation, IFluidHandler {
 
 	public static final int MAXRANGE = Math.max(64, ConfigRegistry.AERORANGE.getValue());
 	public static final int CAPACITY = 64;
@@ -62,7 +66,7 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
+		return itemstack.getItem() == Items.glass_bottle;
 	}
 
 	@Override
@@ -100,7 +104,7 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 	}
 
 	private void consumeBottlesAndStorePotions() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+		if (worldObj.isRemote)
 			return;
 		for (int i = 0; i < 9; i++) {
 			ItemStack inslot = this.getStackInSlot(i);
@@ -108,16 +112,22 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 				PotionApplication eff = this.getEffectFromItem(inslot);
 				if (eff != null) {
 					int num = inslot.stackSize*eff.amount;
-					if (this.matchEffects(eff, potions[i]) && potionLevel[i]+num <= CAPACITY) {
-						potions[i] = eff;
-						potionLevel[i] += num;
+					if (this.tryAddPotionToSlot(i, num, eff))
 						this.setInventorySlotContents(i, new ItemStack(Items.glass_bottle, inslot.stackSize, 0));
-						if (potionLevel[i] > CAPACITY)
-							potionLevel[i] = CAPACITY;
-					}
 				}
 			}
 		}
+	}
+
+	private boolean tryAddPotionToSlot(int i, int num, PotionApplication eff) {
+		if (this.matchEffects(eff, potions[i]) && potionLevel[i]+num <= CAPACITY) {
+			potions[i] = eff;
+			potionLevel[i] += num;
+			if (potionLevel[i] > CAPACITY)
+				potionLevel[i] = CAPACITY;
+			return true;
+		}
+		return false;
 	}
 
 	private boolean matchEffects(PotionApplication eff1, PotionApplication eff2) {
@@ -427,5 +437,50 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 			return (amount | (potionLevel << 8)) << 16 | effects.hashCode();
 		}
 
+	}
+
+	public boolean isValidFluid(Fluid f) {
+		return f == FluidRegistry.getFluid("poison") || f == FluidRegistry.getFluid("rc chlorine");
+	}
+
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return from != ForgeDirection.UP;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (doFill && this.canFill(from, resource.getFluid())) {
+			for (int i = 0; i < 9; i++) {
+				PotionApplication eff = this.getEffectFromItem(ReikaPotionHelper.getPotionItem(Potion.poison, false, false, false));
+				if (this.tryAddPotionToSlot(i, resource.amount, eff))
+					return resource.amount;
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return this.isValidFluid(fluid) && this.canReceiveFrom(from);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return null;
 	}
 }

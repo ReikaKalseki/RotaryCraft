@@ -207,7 +207,12 @@ public class TileEntityDefoliator extends InventoriedPowerLiquidReceiver impleme
 
 	@Override
 	public Fluid getInputFluid() {
-		return FluidRegistry.getFluid("poison");
+		return null;
+	}
+
+	@Override
+	public boolean isValidFluid(Fluid f) {
+		return f == FluidRegistry.getFluid("poison") || f == FluidRegistry.getFluid("rc chlorine");
 	}
 
 	@Override

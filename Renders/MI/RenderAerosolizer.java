@@ -23,7 +23,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelAerosolizer;
-import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
+import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 
 public class RenderAerosolizer extends RotaryTERenderer
 {

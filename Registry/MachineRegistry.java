@@ -83,7 +83,6 @@ import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
 import Reika.RotaryCraft.ModInterface.TileEntityMagnetic;
 import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
 import Reika.RotaryCraft.ModInterface.TileEntitySteam;
-import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
@@ -192,10 +191,12 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySelfDestruct;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
+import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityBeamMirror;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
+import Reika.RotaryCraft.TileEntities.World.TileEntityGroundHydrator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityIgniter;
 import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.World.TileEntityLightBridge;
@@ -339,7 +340,8 @@ public enum MachineRegistry implements TileEnum {
 	DRYING(				"machine.drying",			BlockMIMachine.class,		TileEntityDryingBed.class,			26, "RenderDryingBed"),
 	WETTER(				"machine.wetter",			BlockMIMachine.class,		TileEntityWetter.class,				27, "RenderWetter"),
 	DROPS(				"machine.drops",			BlockIMachine.class,		TileEntityDropProcessor.class,		8),
-	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9);
+	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9),
+	HYDRATOR(			"machine.hydrator",			BlockMMachine.class,		TileEntityGroundHydrator.class,		21, "RenderHydrator");
 
 	private final String name;
 	private final Class te;
@@ -1131,6 +1133,7 @@ public enum MachineRegistry implements TileEnum {
 			case BLASTFURNACE:
 			case DRYING:
 			case COMPOSTER:
+			case HYDRATOR:
 				return true;
 			default:
 				return false;

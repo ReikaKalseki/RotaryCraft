@@ -12,7 +12,7 @@ package Reika.RotaryCraft.Containers.Machine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import Reika.RotaryCraft.Base.ContainerIOMachine;
-import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
+import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 
 public class ContainerAerosolizer extends ContainerIOMachine
 {

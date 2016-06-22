@@ -15,7 +15,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -23,6 +22,7 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
@@ -179,10 +179,12 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final Item[] items = new Item[ItemRegistry.itemList.length];
 
 	public static Achievement[] achievements;
-	public static Entity fallblock;
 
 	public static FreezePotion freeze;
 	public static PotionDeafness deafness;
+
+	public static IIcon hydratorOverlay;
+	public static IIcon woodLattice;
 
 	public static String currentVersion = "v@MAJOR_VERSION@@MINOR_VERSION@";
 
@@ -694,6 +696,10 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryRegistration.setupLiquidIcons(event);
 		if (OldTextureLoader.instance.loadOldTextures())
 			OldTextureLoader.instance.reloadOldTextures(event.map);
+		if (event.map.getTextureType() == 0) {
+			hydratorOverlay = event.map.registerIcon("rotarycraft:wateroverlay");
+			woodLattice = event.map.registerIcon("rotarycraft:woodlattice");
+		}
 	}
 
 	@Override

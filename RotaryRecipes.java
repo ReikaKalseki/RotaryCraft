@@ -651,6 +651,8 @@ public class RotaryRecipes {
 		MachineRegistry.DROPS.addCrafting("PSP", "PDP", "PSP", 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'P', ItemStacks.basepanel);
 
 		MachineRegistry.ITEMFILTER.addCrafting("sSs", "CCC", "PRP", 's', ItemStacks.steelingot, 'S', ItemStacks.screen, 'C', ItemStacks.pcb, 'R', Items.redstone, 'P', ItemStacks.basepanel);
+
+		MachineRegistry.HYDRATOR.addOreRecipe("sls", "p p", "PpP", 's', ItemStacks.steelingot, 'p', "plankWood", 'l', Blocks.ladder, 'P', ItemStacks.basepanel);
 	}
 
 	private static void addCraftItems() {

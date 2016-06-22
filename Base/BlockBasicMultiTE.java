@@ -52,6 +52,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Block.FluidBlockSurrogate;
+import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -832,9 +833,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 	public final void onNeighborBlockChange(World world, int x, int y, int z, Block id) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m != null) {
+			TileEntity te = world.getTileEntity(x, y, z);
 			if (m.cachesConnections()) {
-				CachedConnection te = (CachedConnection)world.getTileEntity(x, y, z);
-				te.recomputeConnections(world, x, y, z);
+				CachedConnection tc = (CachedConnection)te;
+				tc.recomputeConnections(world, x, y, z);
 			}
 
 			if (m == MachineRegistry.SMOKEDETECTOR) {
@@ -853,9 +855,13 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				}
 			}
 
+			if (te instanceof AdjacentUpdateWatcher) {
+				((AdjacentUpdateWatcher)te).onAdjacentUpdate(world, x, y, z, id);
+			}
+
 			if (m.hasTemperature()) {
-				TemperatureTE te = (TemperatureTE)world.getTileEntity(x, y, z);
-				int temp = Math.min(te.getTemperature(), 800);
+				TemperatureTE tr = (TemperatureTE)te;
+				int temp = Math.min(tr.getTemperature(), 800);
 				//ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temp);
 			}
 		}

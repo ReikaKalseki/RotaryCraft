@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
@@ -23,6 +24,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import appeng.api.AEApi;
@@ -36,6 +38,12 @@ import cpw.mods.fml.relauncher.Side;
 
 @Strippable(value={"appeng.api.networking.IActionHost"})
 public class TileEntityItemFilter extends InventoriedPowerReceiver implements IActionHost {
+
+	private static final String LOGGER_ID = "ItemFilter";
+
+	static {
+		ModularLogger.instance.addLogger(RotaryCraft.instance, LOGGER_ID);
+	}
 
 	private MatchData data;
 
@@ -154,9 +162,17 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 			if (network != null && data != null) {
 				MEStacks.clear();
+				if (ModularLogger.instance.isEnabled(LOGGER_ID))
+					ModularLogger.instance.log(LOGGER_ID, "Found raw ME: "+network.getRawMESystemContents());
 				for (ItemStack is : network.getRawMESystemContents()) {
 					if (this.matchItem(is)) {
+						if (ModularLogger.instance.isEnabled(LOGGER_ID))
+							ModularLogger.instance.log(LOGGER_ID, "@ "+this+" ["+worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)+"], "+is.getDisplayName()+":"+is.getItemDamage()+" {"+is.stackTagCompound+"}"+" matches "+data);
 						MEStacks.add(ReikaItemHelper.getSizedItemStack(is, 1));
+					}
+					else {
+						if (ModularLogger.instance.isEnabled(LOGGER_ID))
+							ModularLogger.instance.log(LOGGER_ID, is.getDisplayName()+" does not match.");
 					}
 				}
 			}
@@ -658,6 +674,11 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			}
 			ReikaNBTHelper.combineNBT(repl, NBTMatch.asTag("#"+idx, NBT));
 			ReikaNBTHelper.replaceTag(parent, idx, repl);
+		}
+
+		@Override
+		public String toString() {
+			return matchID+"/"+matchMetadata+"/"+matchMod+"/"+doCheckOre+"/"+doCheckNBT+" = "+itemID+" / "+metadata+" / "+modID+" / "+Arrays.toString(oreDict)+" / "+Arrays.toString(matchOre)+" / "+matchNBT;
 		}
 	}
 

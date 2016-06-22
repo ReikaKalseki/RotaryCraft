@@ -80,6 +80,21 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (m != null && m.canBeFrictionHeated())
 			return true;
 		TileEntity te = this.getTileEntity(fx, fy, fz);
+		/*
+		if (ModList.THAUMICTINKER.isLoaded()) {
+			TileEntity relay = TransvectorHandler.getRelayedTile(te);
+			while (relay != te && relay != null) {
+				te = relay;
+				relay = TransvectorHandler.getRelayedTile(te);
+			}
+			te = relay;
+			if (te != null) {
+				fx = te.xCoord;
+				fy = te.yCoord;
+				fz = te.zCoord;
+			}
+		}
+		 */
 		return te instanceof ThermalMachine;
 	}
 
@@ -125,6 +140,21 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		}
 		else {
 			TileEntity te = this.getTileEntity(fx, fy, fz);
+			/*
+			if (ModList.THAUMICTINKER.isLoaded()) {
+				TileEntity relay = TransvectorHandler.getRelayedTile(te);
+				while (relay != te && relay != null) {
+					te = relay;
+					relay = TransvectorHandler.getRelayedTile(te);
+				}
+				te = relay;
+				if (te != null) {
+					fx = te.xCoord;
+					fy = te.yCoord;
+					fz = te.zCoord;
+				}
+			}
+			 */
 			if (te instanceof ThermalMachine) {
 				this.heatMachine(world, x, y, z, (ThermalMachine)te);
 			}
