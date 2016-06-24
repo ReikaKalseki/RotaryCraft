@@ -263,7 +263,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		}
 
 		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : new ItemStack(Blocks.tallgrass);
-		this.addRecipe(new ItemStack(Blocks.clay), new FluidStack(FluidRegistry.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.dirt), 100, ItemStacks.ironoreflakes, 0.5F, ItemStacks.goldoreflakes, 0.2F, is, 2.5F);
+		this.addRecipe(new ItemStack(Blocks.clay), new FluidStack(FluidRegistry.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.dirt), 100, ItemStacks.silicondust, 75, ItemStacks.ironoreflakes, 0.5F, ItemStacks.goldoreflakes, 0.2F, is, 2.5F);
 
 	}
 

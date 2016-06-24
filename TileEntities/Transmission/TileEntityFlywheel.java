@@ -55,8 +55,6 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	private int oppTorque = 0;
 	private int updateticks = 0;
-	private int count = 0;
-	private int ticks = 0;
 
 	public static int[] getLimitLoads() {
 		double r = 0.75;
@@ -308,19 +306,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		double h = 0.4;
 		double iner = (h*r*r*Math.PI)*this.getDensity()*r*r/2; //standard inertial moment formula for a cylinder with its rotor on the central axis
 		updateticks = 0;
-		ticks++;
 		if (torquein >= this.getMinTorque()) {
-			if (!world.isRemote) {
-				int count2 = TorqueUsage.recursiveCount(this);
-				if (count != count2) {
-					count = count2;
-					oppTorque = TorqueUsage.getTorque(this);
-				}
-			}
-			if (ticks > 10) {
-				count = 0;
-				ticks = 0;
-			}
+			oppTorque = TorqueUsage.getTorque(this);
 			if (oppTorque <= torquein) {
 				if (omega <= omegain) {
 					if ((torquein-oppTorque)/iner < 1 && (torquein-oppTorque) > 0) { //making up for the fact that numbers are integers
@@ -381,15 +368,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 				tickcount = 0;
 			}
 			else { //same as before, but without input
-				int count2 = TorqueUsage.recursiveCount(this);
-				if (count != count2) {
-					count = count2;
-					oppTorque = TorqueUsage.getTorque(this);
-				}
-				if (ticks > 10) {
-					count = 0;
-					ticks = 0;
-				}
+				oppTorque = TorqueUsage.getTorque(this);
 				if (oppTorque/iner < 1 && oppTorque > 0) {
 					int i = 1;
 					while ((oppTorque/iner*i) < 1) {

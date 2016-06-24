@@ -105,44 +105,67 @@ public class ItemPump extends ItemChargedTool {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (ep.isSneaking())
 			return true;
-		if (is.stackTagCompound != null) {
-			if (te instanceof IFluidHandler) {
-				IFluidHandler fl = (IFluidHandler)te;
+		if (te instanceof IFluidHandler) {
+			IFluidHandler fl = (IFluidHandler)te;
+			int amt = is.stackTagCompound != null ? is.stackTagCompound.getInteger("lvl") : 0;
+			if (this.getMode(is) == Modes.PLACE) {
+				Fluid f = is.stackTagCompound != null ? ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound) : null;
+				FluidStack f2 = fl.drain(ForgeDirection.VALID_DIRECTIONS[s], 1, false);
+				if (f2 != null) {
+					if (f == null || f == f2.getFluid()) {
+						int space = TileEntityReservoir.CAPACITY-amt;
+						FluidStack fs = fl.drain(ForgeDirection.VALID_DIRECTIONS[s], space, true);
+						if (fs != null) {
+							if (is.stackTagCompound == null)
+								is.stackTagCompound = new NBTTagCompound();
+							is.stackTagCompound.setInteger("lvl", amt+fs.amount);
+							ReikaNBTHelper.writeFluidToNBT(is.stackTagCompound, fs.getFluid());
+						}
+					}
+				}
+			}
+			else {
+				if (amt > 0) {
+					Fluid f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
+					for (int i = 0; i < 6; i++) {
+						int d = fl.fill(ForgeDirection.VALID_DIRECTIONS[i], new FluidStack(f, amt), true);
+						amt -= d;
+					}
+					is.stackTagCompound.setInteger("lvl", amt);
+				}
+			}
+			return true;
+		}
+		else if (this.getMode(is) == Modes.PLACE) {
+			if (is.getItemDamage() > 0) {
+				this.warnCharge(is);
 				int amt = is.stackTagCompound.getInteger("lvl");
 				Fluid f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
-				for (int i = 0; i < 6; i++) {
-					int d = fl.fill(ForgeDirection.VALID_DIRECTIONS[i], new FluidStack(f, amt), true);
-					amt -= d;
-				}
-				is.stackTagCompound.setInteger("lvl", amt);
-				return true;
-			}
-			else if (this.getMode(is) == Modes.PLACE) {
-				if (is.getItemDamage() > 0) {
-					this.warnCharge(is);
-					int amt = is.stackTagCompound.getInteger("lvl");
-					Fluid f = ReikaNBTHelper.getFluidFromNBT(is.stackTagCompound);
-					if (f != null && amt >= 1000) {
-						Block b = f.getBlock();
-						if (b != null) {
-							ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[s];
-							int dx = x+dir.offsetX;
-							int dy = y+dir.offsetY;
-							int dz = z+dir.offsetZ;
-							if (world.getBlock(dx, dy, dz).isAir(world, dx, dy, dz)) {
-								world.setBlock(dx, dy, dz, b);
-								is.stackTagCompound.setInteger("lvl", amt-1000);
-								is.setItemDamage(is.getItemDamage()-1);
-								world.markBlockForUpdate(dx, dy, dz);
-								b.onNeighborBlockChange(world, dx, dy, dz, b);
+				if (f != null && amt >= 1000) {
+					Block b = f.getBlock();
+					if (b != null) {
+						ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[s];
+						int dx = x+dir.offsetX;
+						int dy = y+dir.offsetY;
+						int dz = z+dir.offsetZ;
+						if (world.getBlock(dx, dy, dz).isAir(world, dx, dy, dz) || (world.getBlock(dx, dy, dz) == b && !ReikaWorldHelper.isLiquidSourceBlock(world, dx, dy, dz))) {
+							world.setBlock(dx, dy, dz, b);
+							is.stackTagCompound.setInteger("lvl", amt-1000);
+							is.setItemDamage(is.getItemDamage()-1);
+							for (int i = -1; i <= 1; i++) {
+								for (int k = -1; k <= 1; k++) {
+									world.markBlockForUpdate(dx+i, dy, dz+k);
+									world.getBlock(dx+i, dy, dz+k).onNeighborBlockChange(world, dx+i, dy, dz+k, b);
+									ReikaWorldHelper.causeAdjacentUpdates(world, dx+i, dy, dz+k);
+								}
 							}
 						}
 					}
 				}
-				else {
-					ReikaChatHelper.clearChat(); //clr
-					this.noCharge();
-				}
+			}
+			else {
+				ReikaChatHelper.clearChat(); //clr
+				this.noCharge();
 			}
 		}
 		return false;

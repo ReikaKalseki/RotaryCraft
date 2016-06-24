@@ -263,7 +263,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			ItemStack out = OreDictionary.getOres("ingotBronze").get(0);
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
-					this.addSmelting(items[i], ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+					this.addSmelting(items[i].getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
 				}
 			}
 		}
@@ -293,7 +293,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			ItemStack out = ReikaItemHelper.lookupItem(ModList.RAILCRAFT, "ingot", 0);
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
-					this.addSmelting((ItemStack)items[i], ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
 				}
 			}
 		}
