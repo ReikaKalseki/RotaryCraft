@@ -103,8 +103,6 @@ public class ItemPump extends ItemChargedTool {
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10) {
 		TileEntity te = world.getTileEntity(x, y, z);
-		if (ep.isSneaking())
-			return true;
 		if (te instanceof IFluidHandler) {
 			IFluidHandler fl = (IFluidHandler)te;
 			int amt = is.stackTagCompound != null ? is.stackTagCompound.getInteger("lvl") : 0;

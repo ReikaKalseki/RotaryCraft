@@ -66,7 +66,8 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 			AxisAlignedBB box = this.getBox();
 			List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, box);
 			for (EntityItem ei : items) {
-				li.add(new EntityItemCallback(ei));
+				if (!ei.isDead)
+					li.add(new EntityItemCallback(ei));
 			}
 		}
 		return li;

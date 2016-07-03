@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
+import minechem.api.RecipeAPI;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -41,6 +42,7 @@ import Reika.DragonAPI.Instantiable.Formula.MathExpression;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.MoleculeHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
@@ -70,6 +72,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesDryingBed;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
@@ -378,6 +381,21 @@ public class RotaryRecipes {
 			gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(16));
 			gear.stackTagCompound.setBoolean("living", true);
 			MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', livingrockslab, 'G', ItemStacks.livingrock16x});
+		}
+
+		if (ModList.MINECHEM.isLoaded()) {
+			RecipeAPI.addDecompositionRecipe(ItemRegistry.ETHANOL.getStackOf(), "8 ethanol");
+			RecipeAPI.addDecompositionRecipe(ItemStacks.steelingot.copy(), "8 Fe", "1 S", "0.25 P", "1 C", "0.5 Si");
+			RecipeAPI.addDecompositionRecipe(ItemStacks.aluminumpowder.copy(), "1 Al");
+			MoleculeHelper.addMoleculeWithDecomposition("octane", "8 C", "18 H");
+			MoleculeHelper.addMoleculeWithDecomposition("hexane", "6 C", "14 H");
+			MoleculeHelper.addMoleculeWithDecomposition("decane", "10 C", "22 H");
+			MoleculeHelper.addMoleculeWithDecomposition("methylhexane", "7 C", "16 H");
+			MoleculeHelper.addMoleculeWithDecomposition("cyclohexane", "6 C", "12 H");
+			MoleculeHelper.addMoleculeWithDecomposition("methylcyclohexane", "7 C", "14 H");
+			MoleculeHelper.addMoleculeWithDecomposition("benzene", "6 C", "6 H");
+			MoleculeHelper.addMoleculeWithDecomposition("napthalene", "10 C", "8 H");
+			RecipeAPI.addDecompositionFluidRecipe(new FluidStack(FluidRegistry.getFluid("rc jet fuel"), 100), "4 octane", "2.2 hexane", "2.1 decane", "3.7 methylhexane", "1.2 cyclohexane", "2.3 methylcyclohexane", "0.5 benzene", "1.3 toluene", "0.5 napthalene");
 		}
 	}
 
@@ -1330,6 +1348,7 @@ public class RotaryRecipes {
 		loadRecipeHandler(RecipesLavaMaker.getRecipes());
 		loadRecipeHandler(RecipesPulseFurnace.getRecipes());
 		loadRecipeHandler(RecipesWetter.getRecipes());
+		loadRecipeHandler(RecipesMagnetizer.getRecipes());
 	}
 
 	private static void loadRecipeHandler(RecipeHandler handler) {

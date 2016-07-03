@@ -52,7 +52,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 		int k = (height - ySize) / 2;
 		String tex = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
 
-		targets = terra.getValidTargetBiomes(terra.getCentralBiome());
+		targets = new ArrayList(terra.getValidTargetBiomes(terra.getCentralBiome()));
 
 		for (int i = 0; i < this.getNumberBiomesOnPage(); i++) {
 			BiomeGenBase b = targets.get(i+offset);

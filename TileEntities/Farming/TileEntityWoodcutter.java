@@ -701,7 +701,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 	@Override
 	public DamageSource getDamageType() {
-		return DamageSource.generic;
+		return RotaryCraft.grind;
 	}
 
 	private static class LeafPrioritizer extends BlockTypePrioritizer {

@@ -31,7 +31,6 @@ import Reika.RotaryCraft.API.Interfaces.ControllableSpawner;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController, DiscreteFunction, ConditionalOperation {
@@ -69,7 +68,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			control = null;
 			return;
 		}
-		this.getOffsetPower4Sided(0, -1, 0); //The spawner itself is the power input
+		this.getOffsetPower4Sided(0, -1, 0, true); //The spawner itself is the power input
 		if (power >= MINPOWER)
 			this.applyToSpawner(world, x, y, z);
 	}
@@ -115,7 +114,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	private int getSpawnLimit() {
-		return Math.max(24, ConfigRegistry.SPAWNERLIMIT.getValue());
+		return 99;//Math.max(24, ConfigRegistry.SPAWNERLIMIT.getValue());
 	}
 
 	public boolean isValidLocation(World world, int x, int y, int z) {
@@ -241,6 +240,8 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		int y = tile.yCoord;
 		int z = tile.zCoord;
 		MobSpawnerBaseLogic lgc = tile.func_145881_a();
+		lgc.maxNearbyEntities = Integer.MAX_VALUE;
+		lgc.activatingRangeFromPlayer = Integer.MAX_VALUE;
 
 		if (world.isRemote) {
 			double var1 = x+world.rand.nextFloat();

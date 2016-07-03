@@ -1556,4 +1556,40 @@ public enum MachineRegistry implements TileEnum {
 	public boolean canDoMultiPerTick() {
 		return this == EXTRACTOR || MultiOperational.class.isAssignableFrom(this.getTEClass());
 	}
+
+	public boolean isSolidBottom() {
+		switch(this) {
+			case COMPOSTER:
+			case SHAFT:
+			case CLUTCH:
+			case GEARBOX:
+			case FLYWHEEL:
+			case ADVANCEDGEARS:
+			case RESERVOIR:
+			case ENGINE:
+			case AIRGUN:
+			case MAGNETIC:
+			case GENERATOR:
+			case ELECTRICMOTOR:
+			case STEAMTURBINE:
+			case BLOCKCANNON:
+			case TNTCANNON:
+			case ITEMCANNON:
+			case FRICTION:
+			case DYNAMOMETER:
+			case HEATRAY:
+			case GRINDER:
+			case MAGNETIZER:
+			case GRINDSTONE:
+			case REFRIGERATOR:
+			case CRYSTALLIZER:
+			case DISPLAY:
+			case SONICBORER:
+			case WINDER:
+			case PROJECTOR:
+				return true;
+			default:
+				return false;
+		}
+	}
 }

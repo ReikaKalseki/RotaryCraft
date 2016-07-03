@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -337,7 +336,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		target = tg;
 	}
 
-	public List<BiomeGenBase> getValidTargetBiomes(BiomeGenBase start) {
+	public Collection<BiomeGenBase> getValidTargetBiomes(BiomeGenBase start) {
 		return transforms.getChildren(start);
 	}
 

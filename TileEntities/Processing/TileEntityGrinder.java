@@ -29,7 +29,7 @@ import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Auxiliary.GrinderDamage;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
@@ -389,6 +389,6 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public DamageSource getDamageType() {
-		return new GrinderDamage();
+		return RotaryCraft.grind;
 	}
 }
