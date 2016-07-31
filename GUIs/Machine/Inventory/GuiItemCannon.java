@@ -14,9 +14,7 @@ import java.io.DataOutputStream;
 
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
-
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -31,11 +29,14 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 	private GuiTextField input;
 	private GuiTextField input2;
 	private GuiTextField input3;
+	private GuiTextField input4; //dim
 
-	private int[] target = new int[3];
+	private WorldLocation target;
 
-	int x;
-	int y;
+	private int targetDim;
+	private int targetX;
+	private int targetY;
+	private int targetZ;
 
 	public GuiItemCannon(EntityPlayer p5ep, TileEntityItemCannon ItemCannon)
 	{
@@ -43,7 +44,7 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		ica = ItemCannon;
 		ySize = 236;
 		ySize = 170;
-		target = ica.target;
+		target = ica.getTarget();
 		ep = p5ep;
 	}
 
@@ -53,15 +54,18 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 		//this.buttonList.add(new GuiButton(0, j+xSize/2-48, -1+k+32, 80, 20, "Trajectory"));
-		input = new GuiTextField(fontRendererObj, j+xSize/2, k+26, 46, 16);
+		input = new GuiTextField(fontRendererObj, j+xSize/2+25, k+26, 46, 16);
 		input.setFocused(false);
 		input.setMaxStringLength(6);
-		input2 = new GuiTextField(fontRendererObj, j+xSize/2, k+42, 46, 16);
+		input2 = new GuiTextField(fontRendererObj, j+xSize/2+25, k+42, 46, 16);
 		input2.setFocused(false);
 		input2.setMaxStringLength(6);
-		input3 = new GuiTextField(fontRendererObj, j+xSize/2, k+58, 46, 16);
+		input3 = new GuiTextField(fontRendererObj, j+xSize/2+25, k+58, 46, 16);
 		input3.setFocused(false);
 		input3.setMaxStringLength(6);
+		input4 = new GuiTextField(fontRendererObj, j+xSize/4-30-6, k+50, 26, 16);
+		input4.setFocused(false);
+		input4.setMaxStringLength(6);
 	}
 
 	@Override
@@ -70,6 +74,7 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		input.textboxKeyTyped(c, i);
 		input2.textboxKeyTyped(c, i);
 		input3.textboxKeyTyped(c, i);
+		input4.textboxKeyTyped(c, i);
 	}
 
 	@Override
@@ -78,20 +83,20 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		input.mouseClicked(i, j, k);
 		input2.mouseClicked(i, j, k);
 		input3.mouseClicked(i, j, k);
+		input4.mouseClicked(i, j, k);
 	}
 
-	public void sendPacket(int a) {
+	private void sendPacket() {
+		target = new WorldLocation(targetDim, targetX, targetY, targetZ);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(24); // 6 ints
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-			outputStream.writeInt(a);
-			if (a == PacketRegistry.ITEMCANNON.getMinValue())
-				outputStream.writeInt(target[0]);
-			if (a == PacketRegistry.ITEMCANNON.getMinValue()+1)
-				outputStream.writeInt(target[1]);
-			if (a == PacketRegistry.ITEMCANNON.getMinValue()+2)
-				outputStream.writeInt(target[2]);
+			outputStream.writeInt(PacketRegistry.ITEMCANNON.getMinValue());
+			outputStream.writeInt(target.dimensionID);
+			outputStream.writeInt(target.xCoord);
+			outputStream.writeInt(target.yCoord);
+			outputStream.writeInt(target.zCoord);
 			outputStream.writeInt(ica.xCoord);
 			outputStream.writeInt(ica.yCoord);
 			outputStream.writeInt(ica.zCoord);
@@ -110,9 +115,8 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		boolean valid1 = true;
 		boolean valid2 = true;
 		boolean valid3 = true;
-		x = Mouse.getX();
-		y = Mouse.getY();
-		if (input.getText().isEmpty() && input2.getText().isEmpty() && input3.getText().isEmpty()) {
+		boolean valid4 = true;
+		if (input.getText().isEmpty() && input2.getText().isEmpty() && input3.getText().isEmpty() && input4.getText().isEmpty()) {
 			return;
 		}
 		if (input.getText().isEmpty())
@@ -121,25 +125,33 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 			valid2 = false;
 		if (input3.getText().isEmpty())
 			valid3 = false;
+		if (input4.getText().isEmpty())
+			valid4 = false;
 		if (!input.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input.getText())) {
-			target[0] = 0;
+			targetX = 0;
 			input.deleteFromCursor(-1);
-			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue());
+			this.sendPacket();
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input2.getText())) {
-			target[1] = 0;
+			targetY = 0;
 			input2.deleteFromCursor(-1);
-			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+1);
+			this.sendPacket();
 			valid2 = false;
 		}
 		if (!input3.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input3.getText())) {
-			target[2] = 0;
+			targetZ = 0;
 			input3.deleteFromCursor(-1);
-			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+2);
-			valid2 = false;
+			this.sendPacket();
+			valid3 = false;
 		}
-		if (!valid1 && !valid2 && !valid3)
+		if (!input4.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input4.getText())) {
+			targetDim = 0;
+			input4.deleteFromCursor(-1);
+			this.sendPacket();
+			valid4 = false;
+		}
+		if (!valid1 && !valid2 && !valid3 && !valid4)
 			return;
 		if (input.getText().contentEquals("-"))
 			valid1 = false;
@@ -147,17 +159,23 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 			valid2 = false;
 		if (input3.getText().contentEquals("-"))
 			valid3 = false;
+		if (input4.getText().contentEquals("-"))
+			valid4 = false;
 		if (valid1) {
-			target[0] = ReikaJavaLibrary.safeIntParse(input.getText());
-			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue());
+			targetX = ReikaJavaLibrary.safeIntParse(input.getText());
+			this.sendPacket();
 		}
 		if (valid2) {
-			target[1] = ReikaJavaLibrary.safeIntParse(input2.getText());
-			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+1);
+			targetY = ReikaJavaLibrary.safeIntParse(input2.getText());
+			this.sendPacket();
 		}
 		if (valid3) {
-			target[2] = ReikaJavaLibrary.safeIntParse(input3.getText());
-			this.sendPacket(PacketRegistry.ITEMCANNON.getMinValue()+2);
+			targetZ = ReikaJavaLibrary.safeIntParse(input3.getText());
+			this.sendPacket();
+		}
+		if (valid4) {
+			targetDim = ReikaJavaLibrary.safeIntParse(input4.getText());
+			this.sendPacket();
 		}
 	}
 
@@ -172,16 +190,19 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		fontRendererObj.drawString("Target X", xSize/3-20, 18, 4210752);
-		fontRendererObj.drawString("Target Y", xSize/3-20, 34, 4210752);
-		fontRendererObj.drawString("Target Z", xSize/3-20, 51, 4210752);
+		fontRendererObj.drawString("Target X", xSize/3+10, 18, 4210752);
+		fontRendererObj.drawString("Target Y", xSize/3+10, 34, 4210752);
+		fontRendererObj.drawString("Target Z", xSize/3+10, 51, 4210752);
+		fontRendererObj.drawString("Target Dim", xSize/4-32-6, 26, 4210752);
 
 		if (!input.isFocused())
-			fontRendererObj.drawString(String.format("%d", target[0]), 100, 18, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", targetX), 125, 18, 0xffffffff);
 		if (!input2.isFocused())
-			fontRendererObj.drawString(String.format("%d", target[1]), 100, 34, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", targetY), 125, 34, 0xffffffff);
 		if (!input3.isFocused())
-			fontRendererObj.drawString(String.format("%d", target[2]), 100, 50, 0xffffffff);
+			fontRendererObj.drawString(String.format("%d", targetZ), 125, 50, 0xffffffff);
+		if (!input4.isFocused())
+			fontRendererObj.drawString(String.format("%d", targetDim), 20, 42, 0xffffffff);
 	}
 
 	/**
@@ -195,6 +216,7 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		input.drawTextBox();
 		input2.drawTextBox();
 		input3.drawTextBox();
+		input4.drawTextBox();
 	}
 
 	@Override

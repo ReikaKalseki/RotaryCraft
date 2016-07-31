@@ -36,6 +36,7 @@ import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
@@ -60,6 +61,7 @@ import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ItemStackRepository;
@@ -113,6 +115,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+import appeng.api.config.PowerUnits;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -371,6 +374,8 @@ public class RotaryCraft extends DragonAPIMod {
 		}
 		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", BlockRegistry.BLASTGLASS.getStackOf());
 
+		FMLInterModComms.sendMessage("Randomod", "blacklist", this.getModContainer().getModId());
+
 		DonatorController.instance.registerMod(this, DonatorController.reikaURL);
 
 		if (!this.isLocked())
@@ -472,12 +477,25 @@ public class RotaryCraft extends DragonAPIMod {
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthracite, 24);
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.cokeblock, 12*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthrablock, 24*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
+		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.sawdust, 0.25F);
 
 		if (ModList.AGRICRAFT.isLoaded()) {
 			AgriCanola.register();
 		}
 
+		if (ModList.APPENG.isLoaded()) {
+			this.fixAEPowerRatio();
+		}
+
 		this.finishTiming();
+	}
+
+	@ModDependent(ModList.APPENG)
+	private void fixAEPowerRatio() {
+		double f = 1/11526D;
+		if (ReikaMathLibrary.isValueInsideBoundsIncl(f-0.005, f+0.005, PowerUnits.WA.conversionRatio)) {
+			PowerUnits.WA.conversionRatio = 1/1040D;
+		}
 	}
 
 	@Override
@@ -555,6 +573,7 @@ public class RotaryCraft extends DragonAPIMod {
 				//mat.registerPatternBuilder(ItemStacks.bedingot);
 				mat.registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
 
+
 				id = ExtraConfigIDs.HSLAID.getValue();
 				mat = TinkerMaterialHelper.instance.createMaterial(id, this, "HSLA");
 				mat.durability = 600;
@@ -603,12 +622,14 @@ public class RotaryCraft extends DragonAPIMod {
 
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 96);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.TOOL, 96);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.MINE, 48);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.TOOL, 80);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.HARVEST, 20);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDSWORD.getStackOf(), Aspect.TOOL, 80);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHEARS.getStackOf(), Aspect.TOOL, 80);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), Aspect.TOOL, 72);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDSICKLE.getStackOf(), Aspect.TOOL, 96);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.TOOL, 80);
+				ReikaThaumHelper.addAspects(ItemRegistry.BEDSICKLE.getStackOf(), Aspect.HARVEST, 20);
 				if (ModList.MULTIPART.isLoaded())
 					ReikaThaumHelper.addAspects(ItemRegistry.BEDSAW.getStackOf(), Aspect.TOOL, 80);
 				if (ModList.FORESTRY.isLoaded())
@@ -616,12 +637,14 @@ public class RotaryCraft extends DragonAPIMod {
 
 				ReikaThaumHelper.addAspects(ItemRegistry.STEELAXE.getStackOf(), Aspect.TOOL, 18);
 				ReikaThaumHelper.addAspects(ItemRegistry.STEELPICK.getStackOf(), Aspect.TOOL, 18);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELPICK.getStackOf(), Aspect.MINE, 9);
 				ReikaThaumHelper.addAspects(ItemRegistry.STEELHOE.getStackOf(), Aspect.TOOL, 16);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELHOE.getStackOf(), Aspect.HARVEST, 4);
 				ReikaThaumHelper.addAspects(ItemRegistry.STEELSWORD.getStackOf(), Aspect.TOOL, 14);
 				ReikaThaumHelper.addAspects(ItemRegistry.STEELSHEARS.getStackOf(), Aspect.TOOL, 14);
 				ReikaThaumHelper.addAspects(ItemRegistry.STEELSHOVEL.getStackOf(), Aspect.TOOL, 12);
 				ReikaThaumHelper.addAspects(ItemRegistry.STEELSICKLE.getStackOf(), Aspect.TOOL, 18);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELHOE.getStackOf(), Aspect.TOOL, 14);
+				ReikaThaumHelper.addAspects(ItemRegistry.STEELSICKLE.getStackOf(), Aspect.HARVEST, 4);
 
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDLEGS.getStackOf(), Aspect.ARMOR, 140);
 				ReikaThaumHelper.addAspects(ItemRegistry.BEDHELM.getStackOf(), Aspect.ARMOR, 100);
@@ -648,6 +671,8 @@ public class RotaryCraft extends DragonAPIMod {
 				ReikaThaumHelper.addAspects(ItemStacks.sawdust, Aspect.TREE, 1);
 				ReikaThaumHelper.addAspects(ItemStacks.anthracite, Aspect.FIRE, 4, Aspect.ENERGY, 4);
 				ReikaThaumHelper.addAspects(ItemStacks.coke, Aspect.FIRE, 2, Aspect.MECHANISM, 2);
+
+				ReikaThaumHelper.addAspects(ItemRegistry.HANDBOOK.getStackOf(), Aspect.MIND, 4, Aspect.MECHANISM, 3, Aspect.TREE, 1);
 
 				MachineAspectMapper.instance.register();
 			}

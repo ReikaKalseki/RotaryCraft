@@ -21,6 +21,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
+import Reika.ChromatiCraft.Registry.ChromaItems;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
@@ -101,5 +105,20 @@ public class ItemSpringBoots extends ItemChargedArmor {
 		ItemRegistry ir = ItemRegistry.getEntry(is);
 		if (ir.isAvailableInCreativeInventory())
 			li.add(is);
+	}
+
+	public static boolean isSpringBoots(ItemStack is) {
+		return is.getItem() instanceof ItemSpringBoots || (ModList.CHROMATICRAFT.isLoaded() && checkFloatstoneBoots(is));
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private static boolean checkFloatstoneBoots(ItemStack is) {
+		if (ChromaItems.FLOATBOOTS.matchWith(is)) {
+			ItemStack in = ItemFloatstoneBoots.getSpecialItem(is);
+			if (in != null) {
+				return in.getItem() instanceof ItemSpringBoots;
+			}
+		}
+		return false;
 	}
 }

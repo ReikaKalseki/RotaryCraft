@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Farming;
 
 import java.util.List;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -18,10 +19,12 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -32,6 +35,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.MobRepellent;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -68,7 +72,27 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 				}
 			}
 		}
+		if (rand.nextInt(20) == 0)
+			this.doEggIncubation(world, x, y, z);
 		tickcount = 0;
+	}
+
+	private void doEggIncubation(World world, int x, int y, int z) {
+		int slot = ReikaInventoryHelper.locateIDInInventory(Items.egg, this);
+		if (slot >= 0) {
+			if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null) {
+				if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null) {
+					EntityChicken ec = new EntityChicken(world);
+					ec.setLocationAndAngles(x+rand.nextDouble(), y+rand.nextDouble()+0.5, z+rand.nextDouble(), rand.nextFloat()*90, rand.nextFloat()*360);
+					if (!world.isRemote)
+						world.spawnEntityInWorld(ec);
+				}
+				else {
+					ReikaInventoryHelper.addToIInv(new ItemStack(Items.cooked_chicken), this, true);
+				}
+				ReikaInventoryHelper.decrStack(slot, inv);
+			}
+		}
 	}
 
 	private int maxMobs() { //Omega + config file

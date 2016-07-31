@@ -168,5 +168,5 @@ public class BlockBedrockSlice extends BlockBasic
 			return oldBlock != newBlock;
 		}
 
-}*/
+	}*/
 }

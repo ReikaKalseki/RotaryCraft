@@ -171,7 +171,7 @@
 	</autobreeder>
 	<baitbox>
 		<desc>
-			The bait box will attract or repel mobs of all kinds, provided it contains the appropriate items to do so. For example, Endermen are attracted by grass blocks and the opportunity to take them, but are repelled by the faces on soul sand staring back at them. These items are not consumed.
+			The bait box will attract or repel mobs of all kinds, provided it contains the appropriate items to do so. For example, Endermen are attracted by grass blocks and the opportunity to take them, but are repelled by the faces on soul sand staring back at them. These items are not consumed. It can also incubate eggs if gently heated.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -459,7 +459,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Range = Temperature/50 m
+			Range = 16+SQRT(2*Temperature)
 			Acceptable fuels: Coal, Blaze Powder, Wood, Lava, Thermite
 			Power Input: Any side
 		</note>

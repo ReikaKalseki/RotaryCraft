@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
@@ -50,6 +51,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final CentrifugeHandler centrifuge = new CentrifugeHandler();
 	private static final DryingBedHandler dryingbed = new DryingBedHandler();
 	private static final WetterHandler wetter = new WetterHandler();
+	private static final FuelEnhancerHandler fuelenhancer = new FuelEnhancerHandler();
 
 	private static final NEITabOccluder occlusion = new NEITabOccluder();
 
@@ -120,6 +122,9 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		API.registerRecipeHandler(wetter);
 		API.registerUsageHandler(wetter);
 
+		API.registerRecipeHandler(fuelenhancer);
+		API.registerUsageHandler(fuelenhancer);
+
 		RotaryCraft.logger.log("Hiding technical blocks from NEI!");
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {
 			if (BlockRegistry.blockList[i].isTechnical())
@@ -150,7 +155,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		if (RotaryCraft.instance.isLocked()) {
 			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 				ItemRegistry ir = ItemRegistry.itemList[i];
-				API.hideItem(new ItemStack(ir.getItemInstance()));
+				API.hideItem(new ItemStack(ir.getItemInstance(), 1, OreDictionary.WILDCARD_VALUE));
 			}
 		}
 
@@ -162,7 +167,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 				API.hideItem(ExtractorModOres.getSolutionProduct(ore));
 				API.hideItem(ExtractorModOres.getFlakeProduct(ore));
 
-				ItemStack out = ExtractorModOres.getSmeltedIngot(ore);
+				ItemStack out = ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal()); //NOT SMELTED INGOT!
 				if (!ReikaItemHelper.isVanillaItem(out))
 					API.hideItem(out);
 				RotaryCraft.logger.log("Hiding ore "+ore+" Extractor products from NEI, as the ore is unused or does not exist.");
@@ -178,7 +183,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	}
 
 	private void hideBlock(Block b) {
-		API.hideItem(new ItemStack(b));
+		API.hideItem(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE));
 	}
 
 	@Override

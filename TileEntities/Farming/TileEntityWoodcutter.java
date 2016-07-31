@@ -35,6 +35,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray.BlockTypePriorit
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Interfaces.Registry.TreeType;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -135,56 +136,15 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 		if (tree.isEmpty() && this.hasWood()) {
 			tree.reset();
-			ModWoodList wood = ModWoodList.getModWood(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
-			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			TreeType type = ReikaTreeHelper.getTree(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			if (type == null)
+				type = ModWoodList.getModWood(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 
-			for (int i = -1; i <= 1; i++) {
-				for (int j = -1; j <= 1; j++) {
-					tree.checkAndAddDyeTree(world, editx+i, edity, editz+j);
-					if (tree.isEmpty() || !tree.isValidTree())
-						tree.clear();
-				}
-			}
-			if (tree.isEmpty()) {
+			if (type != null) {
+				tree.setTree(type);
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
-						tree.checkAndAddRainbowTree(world, editx+i, edity, editz+j);
-						if (tree.isEmpty() || !tree.isValidTree())
-							tree.clear();
-					}
-				}
-			}
-
-			if (tree.isEmpty()) {
-
-				if (wood == ModWoodList.SEQUOIA) {
-					for (int i = -32; i < 255; i += 16)
-						tree.addSequoia(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood == ModWoodList.DARKWOOD) {
-					tree.addDarkForest(world, editx, edity, editz, editx-8, editx+8, editz-8, editz+8, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood == ModWoodList.IRONWOOD) {
-					for (int i = -2; i < 128; i += 16)
-						tree.addIronwood(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood != null) {
-					for (int i = -1; i <= 1; i++) {
-						for (int j = -1; j <= 1; j++) {
-							//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-							tree.setTree(wood);
-							tree.addModTree(world, editx+i, edity, editz+j);
-						}
-						//ReikaJavaLibrary.pConsole(tree, Side.SERVER);
-					}
-				}
-				else if (vanilla != null) {
-					for (int i = -1; i <= 1; i++) {
-						for (int j = -1; j <= 1; j++) {
-							//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-							tree.setTree(vanilla);
-							tree.addTree(world, editx+i, edity, editz+j);
-						}
+						tree.addTree(world, editx+i, edity, editz+j);
 					}
 				}
 			}
@@ -430,6 +390,8 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 			return null;
 		if (treeCopy.isDyeTree())
 			return new ItemStack(TreeGetter.getSaplingID(), 1, treeCopy.getDyeTreeMeta());
+		else if (treeCopy.isRainbowTree())
+			return new ItemStack(TreeGetter.getRainbowSaplingID());
 		else if (treeCopy.getTreeType() != null)
 			return treeCopy.getSapling();
 		else

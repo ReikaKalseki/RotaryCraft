@@ -98,6 +98,8 @@ public enum PacketRegistry {
 			return 2;
 		if (this == ENGINEBACKFIRE)
 			return 0;
+		if (this == ITEMCANNON)
+			return 4;
 		return 1;
 	}
 

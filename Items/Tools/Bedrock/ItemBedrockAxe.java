@@ -32,6 +32,7 @@ import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
+import Reika.DragonAPI.Interfaces.Registry.TreeType;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -128,17 +129,17 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		World world = ep.worldObj;
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		ModWoodList wood = ModWoodList.getModWood(id, meta);
-		ReikaTreeHelper tree2 = ReikaTreeHelper.getTree(id, meta);
+		TreeType type = ReikaTreeHelper.getTree(id, meta);
+		if (type == null)
+			type = ModWoodList.getModWood(id, meta);
 		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 		TreeReader tree = new TreeReader();
-		if (wood != ModWoodList.SEQUOIA) {
-			tree.setWorld(world);
-			tree.checkAndAddRainbowTree(world, x, y, z);
-			if (tree.isEmpty() || !tree.isValidTree())
-				tree.clear();
-			tree.checkAndAddDyeTree(world, x, y, z);
-		}
+		tree.setWorld(world);
+		tree.setTree(type);
+
+		tree.addTree(world, x, y, z);
+		if (!tree.isRainbowTree() && !tree.isDyeTree())
+			tree.clear();
 		if (id == TwilightForestHandler.BlockEntry.ROOT.getBlock()) {
 			int r = 2;
 			for (int i = -r; i <= r; i++) {
@@ -178,15 +179,8 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			return true;
 		}
 		else if (!world.isRemote) {
-			if (wood != null) {
-				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, wood);
-				b.player = ep;
-				b.fortune = fortune;
-				ProgressiveRecursiveBreaker.instance.addCoordinate(world, b);
-				return true;
-			}
-			else if (tree2 != null) {
-				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, tree2);
+			if (type != null) {
+				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, type);
 				b.player = ep;
 				b.fortune = fortune;
 				ProgressiveRecursiveBreaker.instance.addCoordinate(world, b);

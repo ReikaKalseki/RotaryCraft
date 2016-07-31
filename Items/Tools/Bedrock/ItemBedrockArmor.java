@@ -28,8 +28,11 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
+import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -225,15 +228,36 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 	public static boolean isWearingFullSuitOf(EntityLivingBase e) {
 		for (int i = 1; i < 5; i++) {
 			ItemStack is = e.getEquipmentInSlot(i);
-			if (is == null)
-				return false;
-			ItemRegistry ir = ItemRegistry.getEntry(is);
-			if (ir == null)
-				return false;
-			if (!ir.isBedrockTypeArmor())
+			if (!checkItem(is))
 				return false;
 		}
 		return true;
+	}
+
+	private static boolean checkItem(ItemStack is) {
+		if (is == null)
+			return false;
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			if (checkFloatstoneBoots(is))
+				return true;
+		}
+		ItemRegistry ir = ItemRegistry.getEntry(is);
+		if (ir == null)
+			return false;
+		if (!ir.isBedrockTypeArmor())
+			return false;
+		return true;
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private static boolean checkFloatstoneBoots(ItemStack is) {
+		if (ChromaItems.FLOATBOOTS.matchWith(is)) {
+			ItemStack in = ItemFloatstoneBoots.getSpecialItem(is);
+			if (in != null) {
+				return checkItem(in);
+			}
+		}
+		return false;
 	}
 
 	@Override

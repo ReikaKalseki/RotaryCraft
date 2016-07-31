@@ -222,7 +222,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		}
 
 		if (!world.isRemote && power == 0 && this.isLiving() && rand.nextInt(20) == 0) {
-			if (!type.needsLubricant() || tank.getLevel() >= 25) {
+			if (damage > 0 && (!type.needsLubricant() || tank.getLevel() >= 25)) {
 				this.repair(1);
 				if (type.needsLubricant()) {
 					tank.removeLiquid(25);
