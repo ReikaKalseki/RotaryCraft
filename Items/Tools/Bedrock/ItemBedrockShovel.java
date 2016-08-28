@@ -117,7 +117,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	}
 
 	public boolean isAcceleratedOn(Block b) {
-		return field_150914_c.contains(b);
+		return field_150914_c.contains(b) || b.getMaterial() == Material.grass || b.getMaterial() == Material.ground || b.getMaterial() == Material.sand;
 	}
 
 	public String getTextureFile() {

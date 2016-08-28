@@ -684,6 +684,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		return temperature;
 	}
 
+	public boolean allowExternalHeating() {
+		return false;
+	}
+
 	@Override
 	public final void onEMP() {
 		if (type.isEMPImmune())

@@ -653,8 +653,13 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		return false;
 	}
 
-	public final void setTemperature(int temp) {
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
+	}
 
+	public final void setTemperature(int temp) {
+		temperature = temp;
 	}
 
 	@Override

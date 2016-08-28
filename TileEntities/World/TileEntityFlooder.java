@@ -81,7 +81,9 @@ public class TileEntityFlooder extends RotaryCraftTileEntity implements IFluidHa
 			else if (tickcount > 1 && !blocks.isEmpty()) {
 				tickcount = 0;
 				Coordinate c = blocks.getNextAndMoveOn();
-				c.setBlock(world, this.getFluidID());
+				Block b = this.getFluidID();
+				c.setBlock(world, b);
+				b.onBlockAdded(world, c.xCoord, c.yCoord, c.zCoord);
 				//ReikaJavaLibrary.pConsole(c.xCoord+" "+c.yCoord+" "+c.zCoord);
 				world.markBlockForUpdate(c.xCoord, c.yCoord, c.zCoord);
 				tank.drain(1000, true);

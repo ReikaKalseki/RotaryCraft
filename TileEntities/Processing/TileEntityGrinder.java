@@ -214,23 +214,23 @@ ConditionalOperation, DamagingContact {
 			}
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
+		ItemStack out = RecipesGrinder.getRecipes().getGrindingResult(inv[0]);
 
-		if (flag && itemstack == null)
+		if (flag && out == null)
 			return true;
-		if (itemstack == null)
+		if (out == null)
 			return false;
 
 		if (inv[1] == null)
 			return true;
 
-		if (!inv[1].isItemEqual(itemstack))
+		if (!inv[1].isItemEqual(out))
 			return false;
 
 		if (inv[1].stackSize < this.getInventoryStackLimit() && inv[1].stackSize < inv[1].getMaxStackSize())
 			return true;
 
-		return inv[1].stackSize < itemstack.getMaxStackSize();
+		return inv[1].stackSize+out.stackSize <= out.getMaxStackSize();
 	}
 
 	public int getLubricantScaled(int par1) {
@@ -245,12 +245,12 @@ ConditionalOperation, DamagingContact {
 			tank.addLiquid((int)(DifficultyEffects.CANOLA.getInt()*num), FluidRegistry.getFluid("rc lubricant"));
 		}
 
-		ItemStack itemstack = RecipesGrinder.getRecipes().getGrindingResult(is);
-		if (itemstack != null) {
+		ItemStack out = RecipesGrinder.getRecipes().getGrindingResult(is);
+		if (out != null) {
 			if (inv[1] == null)
-				inv[1] = itemstack.copy();
-			else if (inv[1].getItem() == itemstack.getItem())
-				inv[1].stackSize += itemstack.stackSize;
+				inv[1] = out.copy();
+			else if (inv[1].getItem() == out.getItem())
+				inv[1].stackSize += out.stackSize;
 		}
 
 		is.stackSize--;

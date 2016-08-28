@@ -11,8 +11,10 @@ package Reika.RotaryCraft.TileEntities.Processing;
 
 import ic2.api.recipe.Recipes;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -21,11 +23,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
@@ -35,6 +39,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
 public class TileEntityDropProcessor extends InventoriedPowerReceiver implements ConditionalOperation, MultiOperational, EnchantableMachine {
+
+	private static Class lootBagClass;
+	private static Method generateBagLoot;
 
 	private final ArrayList<ItemStack> overflow = new ArrayList();
 
@@ -103,6 +110,8 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 			return true;
 		if (ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.SCRAPBOX.match(is))
 			return true;
+		if (is.getItem().getClass() == lootBagClass)
+			return true;
 		return false;
 	}
 
@@ -118,6 +127,27 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 		else if (ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.SCRAPBOX.match(inv[0])) {
 			inv[1] = Recipes.scrapboxDrops.getDrop(inv[0], false);
+		}
+		else if (inv[0].getItem().getClass() == lootBagClass) {
+			ArrayList<ItemStack> li = new ArrayList();
+			int n = 8 + rand.nextInt(5);
+			for (int i = 0; i < n; i++) {
+				try {
+					ItemStack is = (ItemStack)generateBagLoot.invoke(null, inv[0].getItemDamage(), rand);
+					if (is != null) {
+						li.add(is);
+					}
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+					this.writeError(e);
+				}
+			}
+			li = ReikaItemHelper.collateItemList(li);
+			if (!li.isEmpty()) {
+				inv[1] = li.remove(0);
+				overflow.addAll(li);
+			}
 		}
 		ReikaInventoryHelper.decrStack(0, inv);
 	}
@@ -287,6 +317,26 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	{
 		//ReikaChatHelper.writeInt(this.tickcount);
 		return (dropProcessTime * par1)/2 / this.getOperationTime();
+	}
+
+	public void dropCache() {
+		ReikaItemHelper.dropItems(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, overflow);
+		overflow.clear();
+	}
+
+	static {
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			try {
+				lootBagClass = Class.forName("thaumcraft.common.items.ItemLootBag");
+				Class c = Class.forName("thaumcraft.common.lib.utils.Utils");
+				generateBagLoot = c.getMethod("generateLoot", int.class, Random.class);
+			}
+			catch (Exception e) {
+				RotaryCraft.logger.logError("Could not initialize TC loot bag processing:");
+				e.printStackTrace();
+				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.THAUMCRAFT, e);
+			}
+		}
 	}
 
 }

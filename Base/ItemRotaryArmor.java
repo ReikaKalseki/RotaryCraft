@@ -54,7 +54,7 @@ public abstract class ItemRotaryArmor extends ItemArmor implements IndexedItemSp
 
 	@Override
 	public final ItemStack onItemRightClick(ItemStack is, World par2World, EntityPlayer par3Entity) {
-		return is;
+		return super.onItemRightClick(is, par2World, par3Entity);
 	}
 
 	@Override

@@ -535,7 +535,7 @@
 	</lasergun>
 	<itemcannon>
 		<desc>
-			The item cannon can fire items across the map without harming them, which allows for near-instant long-distance item transport. Note that you must enter the coordinates of another item cannon to receive the items.
+			The item cannon can fire items across the map without harming them, which allows for near-instant long-distance item transport. Note that you must enter the coordinates of another item cannon to receive the items. Give it %dW, and it can move entire stacks.
 		</desc>
 		<note>
 			Required Power: %dW

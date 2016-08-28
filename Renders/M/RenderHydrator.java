@@ -28,7 +28,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelReservoir;
-import Reika.RotaryCraft.TileEntities.World.TileEntityGroundHydrator;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityGroundHydrator;
 
 public class RenderHydrator extends RotaryTERenderer
 {

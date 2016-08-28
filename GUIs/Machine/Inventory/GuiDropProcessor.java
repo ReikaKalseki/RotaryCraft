@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerDropProcessor;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerDropProcessor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 
 public class GuiDropProcessor extends GuiMachine

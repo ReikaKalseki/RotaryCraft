@@ -16,6 +16,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import Reika.ChromatiCraft.API.TreeGetter;
@@ -23,6 +24,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
@@ -30,12 +32,43 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
+
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+
 import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public abstract class ItemSickleBase extends ItemRotaryTool {
 
 	public ItemSickleBase(int index) {
 		super(index);
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
+		if (ModList.AGRICRAFT.isLoaded()) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			if (te instanceof ICrop) {
+				int r = this.getCropRange();
+				for (int i = -r; i <= r; i++) {
+					for (int k = -r; k <= r; k++) {
+						int dx = x+i;
+						int dz = z+k;
+						TileEntity te2 = world.getTileEntity(dx, y, dz);
+						if (te2 instanceof ICrop) {
+							ICrop ic = (ICrop)te2;
+							if (ic.hasWeed()) {
+								ic.clearWeed();
+								ReikaSoundHelper.playBreakSound(world, dx, y, dz, Blocks.tallgrass);
+								double ch = this.isBreakable() ? 40 : 80;
+								if (ReikaRandomHelper.doWithChance(ch))
+									ReikaItemHelper.dropItem(world, dx+0.5, y+0.5, dz+0.5, ReikaItemHelper.tallgrass.copy());
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

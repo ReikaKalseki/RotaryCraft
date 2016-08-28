@@ -423,6 +423,11 @@ TemperatureTE {
 		return false;
 	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}

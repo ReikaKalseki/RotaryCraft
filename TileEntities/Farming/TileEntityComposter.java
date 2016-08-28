@@ -272,6 +272,11 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 		return true;
 	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return true;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}

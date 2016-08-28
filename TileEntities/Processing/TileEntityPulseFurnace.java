@@ -519,7 +519,12 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}
 
 	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
 	}
 
 	@Override

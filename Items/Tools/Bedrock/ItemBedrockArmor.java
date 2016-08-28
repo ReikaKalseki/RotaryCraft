@@ -17,6 +17,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -140,6 +141,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 			ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
 			ReikaEntityHelper.setNoPotionParticles(ep);
 		}
+		ep.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(Double.MAX_VALUE);
 	}
 
 	public HashMap<Enchantment, Integer> getDefaultEnchantments() {

@@ -360,7 +360,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return wx && wy && wz;
 	}
 
-	private boolean matchTile(PowerSourceTracker te, ForgeDirection dir) {
+	protected final boolean matchTile(PowerSourceTracker te, ForgeDirection dir) {
 		if (dir == null)
 			return false;
 		int dim = te.getWorld().provider.dimensionId;
@@ -376,7 +376,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return !out.isInvalid() && out.worldObj.provider.dimensionId == dim && out.xCoord == tx && out.yCoord == ty && out.zCoord == tz;
 	}
 
-	public final boolean isWritingTo(PowerSourceTracker te) {
+	public boolean isWritingTo(PowerSourceTracker te) {
 		return this.matchTile(te, write);
 	}
 

@@ -551,10 +551,6 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		this.deleteFromAdjacentConnections(worldObj, xCoord, yCoord, zCoord);
 	}
 
-	public final void setTemperature(int temp) {
-
-	}
-
 	@Override
 	public final boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
 		return p instanceof TileEntityPiping && this.canConnectToPipe(((TileEntityPiping)p).getMachine());

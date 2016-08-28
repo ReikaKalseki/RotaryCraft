@@ -76,7 +76,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (inv[0].getItem() == ItemRegistry.YEAST.getItemInstance()) {
 			if (MulchMaterials.instance.isMulchable(inv[1]))
 				if (this.hasWater())
-					return ItemStacks.sludge.copy();
+					return ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, MulchMaterials.instance.getPlantValue(inv[1]));
 		}
 		return null;
 	}
@@ -144,20 +144,6 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (product.getItem() != ItemRegistry.YEAST.getItemInstance() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
 			return;
 
-		/*
-		boolean red = world.isBlockIndirectlyGettingPowered(x, y, z);
-		if (red) {
-			if (product.getItem() == ItemRegistry.YEAST.getItemInstance()) {
-				//return;
-			}
-		}
-		else {
-			if (ReikaItemHelper.matchStacks(product, ItemStacks.sludge)) {
-				//return;
-			}
-		}
-		 */
-
 		if (inv[2] != null) {
 			if (product.getItem() != inv[2].getItem()) {
 				fermenterCookTime = 0;
@@ -166,7 +152,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		}
 		idle = false;
 		if (inv[2] != null) {
-			if (inv[2].stackSize >= inv[2].getMaxStackSize()) {
+			if (inv[2].stackSize+product.stackSize > inv[2].getMaxStackSize()) {
 				fermenterCookTime = 0;
 				return;
 			}
@@ -186,10 +172,10 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 		if (product.getItem() != ItemRegistry.YEAST.getItemInstance() && !ReikaItemHelper.matchStacks(product, ItemStacks.sludge))
 			return false;
 		if (inv[2] != null) {
-			if (inv[2].stackSize >= inv[2].getMaxStackSize()) {
+			if (product.getItem() != inv[2].getItem()) {
 				return false;
 			}
-			if (product.getItem() != inv[2].getItem()) {
+			if (inv[2].stackSize+product.stackSize > inv[2].getMaxStackSize()) {
 				return false;
 			}
 		}
@@ -215,12 +201,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 				ReikaInventoryHelper.decrStack(1, inv);
 		}
 		if (ReikaItemHelper.matchStacks(product, ItemStacks.sludge)) {
-			int num = MulchMaterials.instance.getPlantValue(inv[1]);
 			if (inv[2] == null)
-				inv[2] = ReikaItemHelper.getSizedItemStack(ItemStacks.sludge, num);
+				inv[2] = product.copy();
 			else if (ReikaItemHelper.matchStacks(inv[2], ItemStacks.sludge)) {
 				if (inv[2].stackSize < inv[2].getMaxStackSize())
-					inv[2].stackSize += num;
+					inv[2].stackSize += product.stackSize;
 				else
 					return;
 			}
@@ -422,6 +407,11 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean canBeCooledWithFins() {
+		return true;
+	}
+
+	@Override
+	public boolean allowExternalHeating() {
 		return true;
 	}
 

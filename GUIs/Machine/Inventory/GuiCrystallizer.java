@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerCrystallizer;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
 public class GuiCrystallizer extends GuiMachine

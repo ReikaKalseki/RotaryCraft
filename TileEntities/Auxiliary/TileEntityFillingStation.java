@@ -151,6 +151,8 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 		if (tank.isEmpty())
 			return false;
 		ItemStack is = inv[0];
+		if (is == null)
+			return false;
 		Fillable i = (Fillable)is.getItem();
 		int current = i.getCurrentFillLevel(is);
 		int max = i.getCapacity(is);

@@ -264,6 +264,11 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 		return false;
 	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return true;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}

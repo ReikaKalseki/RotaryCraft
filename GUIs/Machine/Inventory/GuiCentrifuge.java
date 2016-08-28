@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerCentrifuge;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 
 public class GuiCentrifuge extends GuiMachine

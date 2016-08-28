@@ -392,7 +392,12 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
 	}
 
 	public static boolean isHijacked(TileEntityFurnace furn) {

@@ -231,7 +231,12 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 	}
 
 	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
 	}
 
 	@Override

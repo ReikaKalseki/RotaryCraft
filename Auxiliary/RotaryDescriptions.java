@@ -40,6 +40,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
+import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
@@ -475,6 +476,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.GENERATOR, ReikaEUHelper.getWattsPerEU());
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXTORQUE_UPGRADE, TileEntityDynamo.MAXOMEGA);
+		addData(MachineRegistry.ITEMCANNON, TileEntityItemCannon.STACKPOWER);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

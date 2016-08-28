@@ -11,7 +11,7 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiEngine;
-import Reika.RotaryCraft.Containers.Machine.ContainerEthanol;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerEthanol;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityGasEngine;
 
 public class GuiEthanol extends GuiEngine

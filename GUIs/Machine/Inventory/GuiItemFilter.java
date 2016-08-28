@@ -19,7 +19,7 @@ import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerItemFilter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerItemFilter;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
 import Reika.RotaryCraft.TileEntities.TileEntityItemFilter.MatchData;

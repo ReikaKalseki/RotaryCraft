@@ -663,6 +663,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		return true;
 	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}

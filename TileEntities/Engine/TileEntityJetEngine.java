@@ -211,8 +211,10 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			int dz = z+write.offsetZ*i;
 			TileEntity te = this.getTileEntity(dx, y, dz);
 			if (te instanceof TemperatureTE) {
-				int dT = T-((TemperatureTE)te).getTemperature();
-				((TemperatureTE)te).addTemperature(dT);
+				if (((TemperatureTE)te).allowExternalHeating()) {
+					int dT = T-((TemperatureTE)te).getTemperature();
+					((TemperatureTE)te).addTemperature(dT);
+				}
 			}
 			else if (te instanceof ThermalMachine) {
 				((ThermalMachine)te).setTemperature(T);

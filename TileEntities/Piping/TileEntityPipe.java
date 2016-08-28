@@ -255,4 +255,13 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	public boolean canBeCooledWithFins() {
 		return false;
 	}
+
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
+	}
+
+	public final void setTemperature(int temp) {
+		temperature = temp;
+	}
 }

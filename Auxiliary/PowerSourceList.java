@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -115,7 +116,19 @@ public class PowerSourceList implements PowerTracker {
 		}
 		catch (StackOverflowError e) {
 			//e.printStackTrace();
-			RotaryCraft.logger.logError("PowerSourceList SOE!");
+			RotaryCraft.logger.logError("PowerSourceList SOE @ "+pwr+", called from "+caller+"!");
+			if (caller != null) {
+				caller.fail();
+			}
+			else {
+				try {
+					world.setBlock(x, y, z, Blocks.air);
+					world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3, false);
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 			return pwr;
 		}
 	}

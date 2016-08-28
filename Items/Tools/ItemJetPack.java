@@ -156,7 +156,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 
 		boolean canFly = !hoverMode || (!ep.onGround && ep.motionY < 0);
 		if (isFlying && canFly) {
-			if (!ep.worldObj.isRemote && !ep.capabilities.isCreativeMode) {
+			if (!ep.worldObj.isRemote && !ep.capabilities.isCreativeMode && !ep.capabilities.isFlying) {
 				if (ep.worldObj.getTotalWorldTime()%2 == 0)
 					this.use(is, (hoverMode ? 2 : 1)*this.getFuelUsageMultiplier());
 			}

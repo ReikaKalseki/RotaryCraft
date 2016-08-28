@@ -520,6 +520,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					this.readFromSplitter(world, x, y, z, devicein);
 					omegain = omega;
 					torquein = torque;
+
+					if (!type.isInfiniteStrength())
+						this.testFailure();
+
 					return;
 				}
 				else if (devicein.isWritingTo(this)) {

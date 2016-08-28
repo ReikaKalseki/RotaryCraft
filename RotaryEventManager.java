@@ -26,6 +26,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -337,7 +338,7 @@ public class RotaryEventManager {
 			if (e instanceof EntityPlayer) {
 				if (ItemBedrockArmor.isWearingFullSuitOf(e)) {
 					evt.ammount = Math.min(evt.ammount, 5);
-					if (evt.ammount <= 1) {
+					if (evt.ammount <= 1 && evt.source != DamageSource.drown && evt.source != DamageSource.starve) {
 						evt.ammount = 0;
 						return;
 					}

@@ -315,6 +315,7 @@ public class RotaryCraft extends DragonAPIMod {
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
 
 		ConfigMatcher.instance.addConfigList(this, ConfigRegistry.optionList);
+		ConfigMatcher.instance.addConfigList(this, ExtraConfigIDs.idList);
 
 		this.basicSetup(evt);
 		this.finishTiming();
@@ -591,7 +592,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 				mat.register(true).registerTexture("tinkertools/hsla/hsla", false);
 				mat.registerRepairMaterial(ItemStacks.steelingot);
-				//mat.registerPatternBuilder(ItemStacks.bedingot);
+				//mat.registerPatternBuilder(ItemStacks.steelingot);
 				mat.registerWeapons(ItemStacks.steelblock, 8, 0.75F, 2F, 2.5F, 8F, 0.015F);
 				mat.registerSmelteryCasting(ItemStacks.steelingot, hslaFluid, 750, ItemStacks.steelblock);
 			}

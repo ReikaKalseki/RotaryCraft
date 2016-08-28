@@ -103,6 +103,7 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
@@ -741,6 +742,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IInventory && !(te instanceof TileEntityScaleableChest))
 			ReikaItemHelper.dropInventory(world, x, y, z);
+		if (te instanceof TileEntityDropProcessor)
+			((TileEntityDropProcessor)te).dropCache();
 		if (te instanceof BreakAction) {
 			((BreakAction)te).breakBlock();
 		}

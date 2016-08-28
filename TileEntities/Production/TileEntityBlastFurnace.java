@@ -14,6 +14,7 @@ import java.util.HashSet;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -188,15 +189,15 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		xp += rec.xp*num;
 
 		for (int i = 0; i < rec.primary.numberToUse; i++) {
-			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.primary.chanceToUse*made)))
+			if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.primary.chanceToUse, made)))
 				ReikaInventoryHelper.decrStack(0, inv);
 		}
 		for (int i = 0; i < rec.secondary.numberToUse; i++) {
-			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.secondary.chanceToUse*made)))
+			if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.secondary.chanceToUse, made)))
 				ReikaInventoryHelper.decrStack(11, inv);
 		}
 		for (int i = 0; i < rec.tertiary.numberToUse; i++) {
-			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.tertiary.chanceToUse*made)))
+			if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.tertiary.chanceToUse, made)))
 				ReikaInventoryHelper.decrStack(14, inv);
 		}
 
@@ -209,6 +210,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			a.triggerAchievement(this.getPlacer());
 
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	private float getConsumptionFactor(float base, int made) {
+		return MathHelper.clamp_float(base*made*DifficultyEffects.BLASTCONSUME.getChance(), base, 1);
 	}
 
 	private int getProducedFor(BlastRecipe rec) {
@@ -485,6 +490,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public boolean canBeFrictionHeated() {
+		return true;
+	}
+
+	@Override
+	public boolean allowExternalHeating() {
 		return true;
 	}
 }

@@ -90,7 +90,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 					if (fs == null || tank.canTakeIn(fs)) {
 						for (ItemStack is : items) {
 							//ReikaInventoryHelper.addOrSetStack(out.get(i).copy(), inv, i+1);
-							double ch = out.getItemChance(is);
+							double ch = out.getNormalizedItemChance(is);
 							if (ReikaRandomHelper.doWithChance(ch)) {
 								ReikaInventoryHelper.addToIInv(is, this, true, 1, this.getSizeInventory());
 							}

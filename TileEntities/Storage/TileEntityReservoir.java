@@ -194,7 +194,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 		tempTimer.update();
 		if (!world.isRemote && !this.isEmpty() && tempTimer.checkCap()) {
-			if (!this.isSurrounded()) {
+			if (!this.isSurrounded(false)) {
 				Fluid f = tank.getActualFluid();
 				int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 				int temp = f.getTemperature(world, x, y, z)-273;
@@ -205,6 +205,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 						for (int k = -r; k <= r; k++) {
 							double dd = ReikaMathLibrary.py3d(i, j, k)+1;
 							int hiT = (int)(Tamb+dT/dd/2D);
+							//ReikaJavaLibrary.pConsole(e+":"+tracer.isClearLineOfSight(world)+" of "+e.height, e instanceof EntityChicken);
 							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, hiT);
 							if (temp > 2500)
 								ReikaSoundHelper.playSoundAtBlock(world, x+i, y+j, z+k, "random.fizz", 0.2F, 1F);
@@ -234,8 +235,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	}
 
-	private boolean isSurrounded() {
-		return adjacent[2] && adjacent[4] && adjacent[6] && adjacent[8];
+	private boolean isSurrounded(boolean reservoirOnly) {
+		return (adjacent[2] && adjacent[4] && adjacent[6] && adjacent[8]) || (!reservoirOnly && ReikaWorldHelper.isBlockSurroundedBySolid(worldObj, xCoord, yCoord, zCoord, false));
 	}
 	/*
 	public CompoundReservoir getCompound() {

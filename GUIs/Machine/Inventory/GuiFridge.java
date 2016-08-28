@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerFridge;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFridge;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 
 public class GuiFridge extends GuiMachine

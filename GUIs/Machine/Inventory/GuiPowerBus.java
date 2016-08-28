@@ -20,7 +20,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerPowerBus;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerPowerBus;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 

@@ -184,4 +184,9 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 	public int getMaxTemperature() {
 		return 100;
 	}
+
+	@Override
+	public boolean allowExternalHeating() {
+		return true;
+	}
 }

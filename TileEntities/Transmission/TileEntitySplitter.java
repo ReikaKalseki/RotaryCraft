@@ -699,11 +699,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			caller = this;
 		if (!this.isSplitting()) { //merge
 			if (read != null) {
-				PowerSourceList in = pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+				PowerSourceList in = PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 				pwr.addAll(in);
 			}
 			if (read2 != null) {
-				PowerSourceList in = pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
+				PowerSourceList in = PowerSourceList.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
 				pwr.addAll(in);
 			}
 			return pwr;

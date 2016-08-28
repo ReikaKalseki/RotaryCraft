@@ -270,6 +270,11 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 		return true;
 	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return true;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}
