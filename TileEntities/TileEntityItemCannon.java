@@ -20,10 +20,11 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.LocationTarget;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation {
+public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation, LocationTarget {
 
 	private WorldLocation target;
 
@@ -167,7 +168,12 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 	}
 
 	public void selectNewTarget(int dim, int x, int y, int z) {
-		target = new WorldLocation(dim, x, y, z);
+		this.setTarget(new WorldLocation(dim, x, y, z));
+	}
+
+	@Override
+	public void setTarget(WorldLocation loc) {
+		target = loc;
 	}
 
 	public WorldLocation getTarget() {

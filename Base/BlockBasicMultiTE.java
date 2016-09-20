@@ -108,6 +108,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityAggregator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
@@ -328,21 +329,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				if (f != null) {
 					Fluid fluid = f.getFluid();
 					int size = is.stackSize;
-					if (tr.getLevel()+(size-1)*f.amount <= tr.CAPACITY) {
-						if (tr.isEmpty()) {
-							tr.addLiquid(fluid, size*f.amount);
-							if (!ep.capabilities.isCreativeMode) {
-								if (bucket)
-									ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, size, 0));
-								else
-									ep.setCurrentItemOrArmor(0, null);
-							}
-							((TileEntityBase)te).syncAllData(true);
-							if (!world.isRemote)
-								ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
-							return true;
-						}
-						else if (f.getFluid().equals(tr.getFluid())) {
+					if (tr.getLevel()+size*f.amount <= tr.CAPACITY) {
+						if (tr.isEmpty() || f.getFluid().equals(tr.getFluid())) {
 							tr.addLiquid(fluid, size*f.amount);
 							if (!ep.capabilities.isCreativeMode) {
 								if (bucket)
@@ -478,10 +466,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.PULSEJET) {
 			TileEntityPulseFurnace ex = (TileEntityPulseFurnace)te;
 			int f = ex.getFuel();
-			if (f+1000 <= ex.MAXFUEL && is != null && ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
-				ex.addFuel(1000);
+			if (is != null && f+1000*is.stackSize <= ex.MAXFUEL && ReikaItemHelper.matchStacks(is, ItemStacks.fuelbucket)) {
+				ex.addFuel(1000*is.stackSize);
 				if (!ep.capabilities.isCreativeMode) {
-					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+					ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, is.stackSize, 0));
 				}
 				((TileEntityBase)te).syncAllData(true);
 				return true;
@@ -1060,6 +1048,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		}
 		if (te instanceof TileEntityBorer) {
 			currenttip.add(((TileEntityBorer)te).getCurrentRequiredPower());
+		}
+		if (te instanceof TileEntityAggregator) {
+			currenttip.add(String.format("Producing %d mB per tick", ((TileEntityAggregator)te).getProductionPerTick(acc.getWorld().getBiomeGenForCoords(te.xCoord, te.zCoord))));
 		}
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();

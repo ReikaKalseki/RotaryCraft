@@ -43,6 +43,7 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
+import Reika.DragonAPI.Instantiable.Event.EnderLookAggroEvent;
 import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FarmlandTrampleEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
@@ -97,14 +98,24 @@ public class RotaryEventManager {
 
 	}
 
+	@SubscribeEvent
+	public void enderVisor(EnderLookAggroEvent evt) {
+		ItemStack is = evt.entityPlayer.inventory.armorInventory[3];
+		if (is != null && (is.getItem() == ItemRegistry.BEDREVEAL.getItemInstance() || is.getItem() == ItemRegistry.BEDHELM.getItemInstance())) {
+			if (ItemBedrockArmor.HelmetUpgrades.VISOR.existsOn(is)) {
+				evt.setResult(Result.DENY);
+			}
+		}
+	}
+
 	@SubscribeEvent(priority=EventPriority.HIGHEST, receiveCanceled = true)
 	public void chaosProtection(LivingHurtEvent evt) {
 		if (evt.entity instanceof EntityPlayer) {
 			if (ItemBedrockArmor.isWearingFullSuitOf(evt.entityLiving)) {
 				String n = evt.source.damageType.toLowerCase(Locale.ENGLISH);
 				if (evt.source.damageType.startsWith("chaos") || evt.source.damageType.startsWith("damage.de.") || evt.source.damageType.startsWith("de.")) {
-					float f = 1-0.1F*Math.min(8, evt.ammount);
-					evt.ammount = Math.min(10, evt.ammount*f);
+					float f = 1-0.08F*Math.min(8, evt.ammount);
+					evt.ammount = Math.min(12, evt.ammount*f);
 				}
 			}
 		}

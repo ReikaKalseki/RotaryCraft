@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -60,6 +61,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	TRANSFER("Basics of Power Transfer"),
 	TIERS("Machine Tiers"),
 	TIMING("Duration Time"),
+	MUFFLING("Sounds and Muffling"),
+	INTERDIM("Interdimensional Power Transport"),
 	ALERTS("Config Alerts"),
 	PACKMODS("Modpack Changes"),
 	//---------------------MISC--------------------//
@@ -153,6 +156,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	HARVESTER(MachineRegistry.MOBHARVESTER),
 	FERTILIZER(MachineRegistry.FERTILIZER),
 	LAWNSPRINKLER(MachineRegistry.LAWNSPRINKLER),
+	HYDRATOR(MachineRegistry.HYDRATOR),
 
 	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
 	HOSE(MachineRegistry.HOSE.getName(), MachineRegistry.HOSE),
@@ -232,6 +236,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	GASTANK(MachineRegistry.GASTANK),
 	CRAFTER(MachineRegistry.CRAFTER),
 	CHUNKLOADER(MachineRegistry.CHUNKLOADER),
+	FILLER(MachineRegistry.FILLER),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),
@@ -996,6 +1001,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return new ItemStack(Items.enchanted_book);
 		if (this == TIMING)
 			return new ItemStack(Items.clock);
+		if (this == MUFFLING)
+			return ReikaItemHelper.whiteWool;
 		if (this == COMPUTERCRAFT)
 			return ItemStacks.pcb;
 		if (this == TRANSFER)

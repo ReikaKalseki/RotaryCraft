@@ -194,6 +194,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
 import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityBeamMirror;
+import Reika.RotaryCraft.TileEntities.World.TileEntityBlockFiller;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
@@ -341,7 +342,8 @@ public enum MachineRegistry implements TileEnum {
 	WETTER(				"machine.wetter",			BlockMIMachine.class,		TileEntityWetter.class,				27, "RenderWetter"),
 	DROPS(				"machine.drops",			BlockIMachine.class,		TileEntityDropProcessor.class,		8),
 	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9),
-	HYDRATOR(			"machine.hydrator",			BlockMMachine.class,		TileEntityGroundHydrator.class,		21, "RenderHydrator");
+	HYDRATOR(			"machine.hydrator",			BlockMMachine.class,		TileEntityGroundHydrator.class,		21, "RenderHydrator"),
+	FILLER(				"machine.filler", 			BlockMachine.class,			TileEntityBlockFiller.class,		9);
 
 	private final String name;
 	private final Class te;
@@ -1210,6 +1212,18 @@ public enum MachineRegistry implements TileEnum {
 			}
 		}
 		//this.addOreRecipe(obj);
+	}
+
+	public void addNBTCrafting(NBTTagCompound NBT, Object... obj) {
+		if (this.isCraftable()) {
+			ItemStack is = this.getCraftedProduct();
+			is.stackTagCompound = (NBTTagCompound)NBT.copy();
+			WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(is, obj);
+			}
+		}
+		//this.addSizedOreRecipe(num, obj);
 	}
 
 	public void addSizedNBTCrafting(NBTTagCompound NBT, int num, Object... obj) {

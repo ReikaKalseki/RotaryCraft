@@ -8,9 +8,10 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.MagnetizerManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PowerReceivers;
 
 
 
@@ -101,6 +102,15 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 			return "Magnetizing "+fullID(item)+" @ speed "+minSpeed+" to "+speedPeruT+"/rads @ "+timeFactor+"x time factor";
 		}
 
+	}
+
+	public String getRecipesAsString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Required Speeds:\n\n");
+		for (MagnetizerRecipe mr : recipes.values()) {
+			sb.append(mr.item.getDisplayName()+" @ "+Math.max(PowerReceivers.MAGNETIZER.getMinSpeed(), mr.minSpeed)+" rad/s\n");
+		}
+		return sb.toString();
 	}
 
 }

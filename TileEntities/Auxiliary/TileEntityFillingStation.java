@@ -191,7 +191,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE || m.isStandardPipe();
+		return m == MachineRegistry.FUELLINE || m.isStandardPipe() || m == MachineRegistry.HOSE;
 	}
 
 	@Override

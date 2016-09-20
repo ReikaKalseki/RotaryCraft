@@ -44,11 +44,13 @@ import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.IntegratedGearboxable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Items.Tools.ItemIntegratedGearbox;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -56,7 +58,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 
 public abstract class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
-PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
+PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, IntegratedGearboxable {
 
 	/** Water capacity */
 	public static final int CAPACITY = 60*1000;
@@ -87,6 +89,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	private boolean isOn;
 
 	protected long lastpower = 0;
+
+	private int integratedGear = 0;
 
 	protected ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
 
@@ -205,9 +209,23 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	}
 
 	private void setPowerData(World world, int x, int y, int z, int meta) {
-		int speed = this.getMaxSpeed(world, x, y, z, meta);
+		int speed = this.getIntegratedGearSpeed(this.getMaxSpeed(world, x, y, z, meta), integratedGear);
 		this.updateSpeed(speed, speed >= omega && (omega > 0 || this.canStart()));
-		torque = this.getGenTorque(world, x, y, z, meta);
+		torque = this.getIntegratedGearTorque(this.getGenTorque(world, x, y, z, meta), integratedGear);
+	}
+
+	static int getIntegratedGearTorque(int torque, int gear) {
+		if (gear != 0) {
+			return gear > 0 ? gear*torque : -torque/gear;
+		}
+		return torque;
+	}
+
+	static int getIntegratedGearSpeed(int speed, int gear) {
+		if (gear != 0) {
+			return gear < 0 ? -gear*speed : speed/gear;
+		}
+		return speed;
 	}
 
 	protected boolean canStart() {
@@ -452,6 +470,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		if (type.burnsFuel()) {
 			NBT.setInteger("fueltimer", timer.getCapOf("fuel"));
 		}
+
+		NBT.setInteger("gear", integratedGear);
 	}
 
 	@Override
@@ -475,6 +495,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 		if (NBT.hasKey("fueltimer")) {
 			timer.setCap("fuel", NBT.getInteger("fueltimer"));
 		}
+
+		integratedGear = NBT.getInteger("gear");
 	}
 
 	@Override
@@ -859,5 +881,24 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank {
 	@Override
 	public final int getItemMetadata() {
 		return type.ordinal();
+	}
+
+	public final void breakBlock() {
+		if (integratedGear != 0) {
+			ItemStack is = ItemIntegratedGearbox.getIntegratedGearItem(integratedGear, null);
+			ReikaItemHelper.dropItem(worldObj, xCoord+rand.nextDouble(), yCoord+rand.nextDouble(), zCoord+rand.nextDouble(), is);
+		}
+	}
+
+	public final boolean applyIntegratedGear(ItemStack is) {
+		if (is == null || !ItemRegistry.GEARUPGRADE.matchItem(is))
+			return false;
+		if (integratedGear != 0)
+			return false;
+		if (omega > 0 || power > 0)
+			return false;
+		integratedGear = ItemIntegratedGearbox.getRatioFromIntegratedGearItem(is, true);
+		this.syncAllData(true);
+		return integratedGear != 0;
 	}
 }

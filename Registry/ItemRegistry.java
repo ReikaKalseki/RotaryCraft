@@ -44,9 +44,7 @@ import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemDisk;
-import Reika.RotaryCraft.Items.ItemEngineUpgrade;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
-import Reika.RotaryCraft.Items.ItemFuelTank;
 import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemModOre;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
@@ -60,9 +58,12 @@ import Reika.RotaryCraft.Items.Placers.ItemShaftPlacer;
 import Reika.RotaryCraft.Items.Tools.ItemCannonKey;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade;
 import Reika.RotaryCraft.Items.Tools.ItemFuelLubeBucket;
+import Reika.RotaryCraft.Items.Tools.ItemFuelTank;
 import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
+import Reika.RotaryCraft.Items.Tools.ItemIntegratedGearbox;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
@@ -191,6 +192,7 @@ public enum ItemRegistry implements ItemEnum {
 	CUSTOMEXTRACT(240, true,		"item.customextract",		ItemCustomModOre.class),
 	CUSTOMINGOT(244, true,			"item.customingot",			ItemCustomModOre.class),
 	RANGEFINDER(42, 1, true,		"item.rangefinder",			ItemRangeFinder.class),
+	GEARUPGRADE(65, 1, true,		"item.gearupgrade",			ItemIntegratedGearbox.class),
 	;//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
 
 	private final int index;
@@ -608,6 +610,8 @@ public enum ItemRegistry implements ItemEnum {
 				return RotaryNames.interfaceNames.length;
 			case GEARUNITS:
 				return RotaryNames.gearUnitNames.length;
+			case GEARUPGRADE:
+				return 5;
 			case SHAFT:
 				return RotaryNames.getNumberShaftTypes();
 			case ENGINE:
@@ -674,6 +678,7 @@ public enum ItemRegistry implements ItemEnum {
 			case KEY:
 			case TILESELECTOR:
 			case UPGRADE:
+			case GEARUPGRADE:
 				return true;
 			case PUMP:
 				return is.stackTagCompound != null;

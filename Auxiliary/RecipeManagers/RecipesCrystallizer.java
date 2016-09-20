@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -18,10 +19,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
+import Reika.DragonAPI.ModInteract.RecipeHandlers.SmelteryRecipeHandler;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CrystallizerManager;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -153,6 +157,20 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 		this.addRecipe("redstone", 100, new ItemStack(Items.redstone), RecipeLevel.MODINTERACT);
 		this.addRecipe("glowstone", 250, new ItemStack(Items.glowstone_dust), RecipeLevel.MODINTERACT);
 		this.addRecipe("coal", 100, new ItemStack(Items.coal), RecipeLevel.MODINTERACT);
+
+		if (ModList.TINKERER.isLoaded()) {
+			List li = SmelteryRecipeHandler.getCastingRecipes();
+			if (li != null) {
+				for (Object o : li) {
+					ItemStack cast = SmelteryRecipeHandler.getRecipeCast(o);
+					if (ReikaItemHelper.matchStacks(cast, TinkerToolHandler.getInstance().getIngotCast())) {
+						ItemStack out = SmelteryRecipeHandler.getRecipeOutput(o);
+						FluidStack fs = SmelteryRecipeHandler.getRecipeFluid(o);
+						this.addRecipe(fs.getFluid(), fs.amount, out, RecipeLevel.MODINTERACT);
+					}
+				}
+			}
+		}
 	}
 
 	@Override

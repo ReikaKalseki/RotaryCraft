@@ -19,13 +19,12 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 
-public class TileEntityAggregator extends PoweredLiquidProducer implements TemperatureTE, DiscreteFunction {
+public class TileEntityAggregator extends PoweredLiquidProducer implements TemperatureTE {
 
 	public static final int CAPACITY = 128000;
 
@@ -54,16 +53,11 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		if (temperature >= this.getMaxTemperature())
 			return;
 
-		tickcount++;
-		if (tickcount < this.getOperationTime())
-			return;
-		tickcount = 0;
-
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temperature < Tamb) {
 			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 			//float h = biome.rainfall; //Not used by any biome
-			int amt = this.getWaterProduced(biome);
+			int amt = this.getProductionPerTick(biome);
 			tank.addLiquid(amt, FluidRegistry.WATER);
 		}
 	}
@@ -93,11 +87,18 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		}
 	}
 
-	public int getOperationTime() {
-		return Math.max(0, (int)(80-5*ReikaMathLibrary.logbase(omega+1-MINSPEED, 2)));
+	public int getProductionPerTick(BiomeGenBase biome) {
+		if (omega < MINSPEED || power < MINPOWER)
+			return 0;
+		int n = Math.max(1, this.getOriginalOperationTime());
+		return this.getOriginalWaterProduced(biome)/n;
 	}
 
-	private int getWaterProduced(BiomeGenBase biome) {
+	private int getOriginalOperationTime() {
+		return Math.max(0, (int)(80-5*ReikaMathLibrary.logbase(omega+1/*-MINSPEED*/, 2)));
+	}
+
+	private int getOriginalWaterProduced(BiomeGenBase biome) {
 		return Math.max(2, (int)(torque*torque*ReikaBiomeHelper.getBiomeHumidity(biome)));
 	}
 

@@ -76,7 +76,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
-import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -463,6 +463,9 @@ public class RotaryRecipes {
 		MachineRegistry.GRINDER.addCrafting("B B", "SGS", "PPP", 'B', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'P', ItemStacks.basepanel, 'S', ItemStacks.saw);
 
 		MachineRegistry.RESERVOIR.addCrafting("B B", "B B", "BBB", 'B', ItemStacks.basepanel);
+		nbt = new NBTTagCompound();
+		nbt.setBoolean("cover", true);
+		MachineRegistry.RESERVOIR.addNBTCrafting(nbt, "BPB", "B B", "BBB", 'B', ItemStacks.basepanel, 'P', Blocks.glass_pane);
 
 		MachineRegistry.FIREWORK.addCrafting("BEB", "BDB", "BRB", 'B', ItemStacks.basepanel, 'R', Items.redstone, 'E', Items.ender_eye, 'D', Blocks.dispenser);
 
@@ -533,6 +536,8 @@ public class RotaryRecipes {
 		MachineRegistry.SCALECHEST.addCrafting("sss", "scs", "sss", 'c', Blocks.chest, 's', ItemStacks.steelingot);
 
 		MachineRegistry.SPILLER.addCrafting("sps", "s s", 'p', ItemStacks.pipe, 's', ItemStacks.steelingot);
+
+		MachineRegistry.FILLER.addCrafting("sss", "sps", "s s", 'p', Blocks.chest, 's', ItemStacks.steelingot);
 
 		MachineRegistry.SMOKEDETECTOR.addCrafting(" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab, 'R', Items.redstone, 'N', Blocks.noteblock);
 
@@ -978,6 +983,13 @@ public class RotaryRecipes {
 
 		if (!ModList.REACTORCRAFT.isLoaded())
 			ItemRegistry.UPGRADE.addMetaBlastRecipe(2000, 32, Upgrades.EFFICIENCY.ordinal(), "IGI", "FTF", "BPB", 'G', ItemStacks.generator, 'I', ItemStacks.redgoldingot, 'B', ItemStacks.waterplate, 'P', ItemStacks.power, 'F', ItemStacks.bedingot, 'T', ItemStacks.tungsteningot);
+
+		ItemRegistry.GEARUPGRADE.addMetaBlastRecipe(1200, 2, 0, "sSS", "SsS", "SSG", 'S', ItemStacks.steelingot, 'G', Blocks.glass_pane, 's', ItemStacks.bedrockshaft);
+
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(1), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock2x));
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(2), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock4x));
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(3), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock8x));
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(4), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock16x));
 	}
 
 	private static void addMisc() {
@@ -1043,6 +1055,7 @@ public class RotaryRecipes {
 			//anything else is not an even split
 			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(4), 2), mat.getGearUnitItem(16));
 			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(2), 2), mat.getGearUnitItem(4));
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearItem(), 2), mat.getGearUnitItem(2));
 		}
 
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);

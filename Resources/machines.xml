@@ -442,6 +442,9 @@
 			The liquid spiller is designed to fill a depression with liquid piped into it. Each bucket worth pumped in equates to one placed liquid block. It will fill the lowest layers first.
 		</desc>
 		<note>
+			Required Power: %dW
+			Power Input: Any side
+			
 			Requires piped liquid to operate
 		</note>
 	</spiller>
@@ -479,9 +482,16 @@
 			The magnetizer uses a rapidly rotating shaft to create a magnetic field inside a shaft core. This is one of the critical components of an AC Electric Engine. It requires an AC redstone current and high speed.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Back
+			<sub>
+				<s1>
+					Required Power: %dW
+					Required Speed: %d rad/s
+					Power Input: Back
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</magnetizer>
 	<containment>
@@ -860,7 +870,7 @@
 	</bedpipe>
 	<aggregator>
 		<desc>
-			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed. It must be cooled to below ambient temperature to function. More torque means more water per cycle while more speed means faster cycles.
+			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed. It must be cooled to below ambient temperature to function.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -1139,4 +1149,55 @@
 			Power Input: Back
 		</note>
 	</drops>
+	<filler>
+		<desc>
+			The block filler will fill a contiguous area below it with any block fed into it, much like the liquid spiller. Denser materials need slightly more power to move.
+		</desc>
+		<note>
+			Required Power: %dW
+			Power Input: Any side
+			
+			Can pull items from a Botania Black Hole Talisman
+		</note>
+	</filler>
+	<hydrator>
+		<desc>
+			This machine spreads water pumped into it into the soil around it, hydrating farmland - without the need for water source blocks - and accelerating crop growth. It can also slow or reverse humus decay, and can accelerate the conversion of bog earth to peat.
+		</desc>
+		<note>
+			
+		</note>
+	</hydrator>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
 </machines>

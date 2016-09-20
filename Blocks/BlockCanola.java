@@ -220,7 +220,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 			return;
 		for (int j = 0; j <= GROWN; j++) {
 			for (int i = 0; i < 6; i++) {
-				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:canola"+String.valueOf(j));
+				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:canola/"+j);
 			}
 		}
 	}

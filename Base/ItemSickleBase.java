@@ -10,19 +10,28 @@
 package Reika.RotaryCraft.Base;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.IShearable;
 import Reika.ChromatiCraft.API.TreeGetter;
+import Reika.ChromatiCraft.Registry.ChromaBlocks;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -41,6 +50,25 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 
 	public ItemSickleBase(int index) {
 		super(index);
+	}
+
+	@Override
+	public final boolean onLeftClickEntity(ItemStack is, EntityPlayer ep, Entity e) {
+		if (e instanceof EntityLivingBase) {
+			EntityLivingBase elb = (EntityLivingBase)e;
+			AxisAlignedBB box = ReikaAABBHelper.getEntityCenteredAABB(e, 2).expand(2, 0, 2);
+			List<EntityLivingBase> li = ep.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+			Class<? extends EntityLivingBase> cat = ReikaEntityHelper.getEntityCategoryClass(elb);
+			for (EntityLivingBase e2 : li) {
+				if (e2 != e && e2 != ep && ReikaEntityHelper.getEntityCategoryClass(e2) == cat) {
+					e2.attackEntityFrom(DamageSource.causePlayerDamage(ep), damageVsEntity);
+				}
+			}
+			if (this.isBreakable()) {
+				is.damageItem(20, ep);
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -147,6 +175,33 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 			if (this.isBreakable())
 				is.damageItem(1, ep);
 			ReikaItemHelper.dropItems(world, x, y, z, items);
+			return true;
+		}
+		else if (ModList.CHROMATICRAFT.isLoaded() && id == ChromaBlocks.DECOFLOWER.getBlockInstance()) {
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			int r = this.getPlantRange();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						Block id2 = world.getBlock(x+i, y+j, z+k);
+						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+						if (id2 == id && (ignoreMeta || meta2 == meta)) {
+							Block b2 = id2;
+							if (this.canActAsShears()) {
+								ArrayList<ItemStack> li = ((IShearable)b2).onSheared(is, world, x+i, y+j, z+k, fortune);
+								ReikaItemHelper.dropItems(world, x+i+itemRand.nextDouble(), y+j+itemRand.nextDouble(), z+k+itemRand.nextDouble(), li);
+							}
+							else {
+								b2.dropBlockAsItem(world, x+i, y+j, z+k, meta2, fortune);
+							}
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);
+							world.setBlockToAir(x+i, y+j, z+k);
+						}
+					}
+				}
+			}
+			if (this.isBreakable())
+				is.damageItem(1, ep);
 			return true;
 		}
 		else if (ModList.CHROMATICRAFT.isLoaded() && id == TreeGetter.getDyeFlowerID()) {

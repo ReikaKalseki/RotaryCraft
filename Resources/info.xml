@@ -49,4 +49,10 @@
 	<timing>
 		Machines which perform discrete operations often take less time per operation as the input speed increases. Hover over a machine to get its timing data. The "x" in these formulae is the input speed, and the times are in ticks (0.05s per tick).
 	</timing>
+	<muffling>
+		Many machines make significant amounts of noise as a side-effect of their operation. This is especially true for engines or anything performing combustion reactions. To help reduce the noise, it is possible to put an arch of wool or similar over the top and sides of the machine. Should space not permit this, it is also possible to place it above and below.
+	</muffling>
+	<interdim>
+		Shafts will function if stuck through portals, provided that the portals are in the same location - accounting for different scaling between some dimensions - and the directionality of the shafts is correct. Both sides must also be chunkloaded. This works with Nether, End, Twilight Forest, and MystCraft portals.
+	</interdim>
 </info>

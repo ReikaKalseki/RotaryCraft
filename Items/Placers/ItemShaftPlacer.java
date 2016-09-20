@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Items.Placers;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,7 +25,6 @@ import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -35,7 +33,6 @@ import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -62,31 +59,6 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			if (side == 5)
 				++x;
 			this.clearBlocks(world, x, y, z);
-			Block b = world.getBlock(x, y, z);
-			if (ReikaBlockHelper.isPortalBlock(world, x, y, z)) {
-				TileEntityShaft sha = new TileEntityShaft();
-				sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
-				sha.getIOSides(world, x, y, z, sha.getBlockMetadata());
-				sha.setWorldObj(world);
-				sha.xCoord = x;
-				sha.yCoord = y;
-				sha.zCoord = z;
-				int dx = x+sha.getReadDirection().offsetX;
-				int dy = y+sha.getReadDirection().offsetY;
-				int dz = z+sha.getReadDirection().offsetZ;
-				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-				if (m == MachineRegistry.SHAFT) {
-					TileEntityShaft te = (TileEntityShaft)world.getTileEntity(dx, dy, dz);
-					if (te.isWritingToCoordinate(x, y, z)) {
-						world.setBlock(dx, dy, dz, MachineRegistry.PORTALSHAFT.getBlock(), MachineRegistry.PORTALSHAFT.getBlockMetadata(), 3);
-						TileEntityPortalShaft ps = new TileEntityPortalShaft();
-						world.setTileEntity(dx, dy, dz, ps);
-						ps.setBlockMetadata(te.getBlockMetadata());
-						ps.setPortalType(world, x, y, z);
-						ps.material = te.getShaftType();
-					}
-				}
-			}
 			if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava)
 				return false;
 		}

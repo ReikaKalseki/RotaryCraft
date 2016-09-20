@@ -185,7 +185,10 @@ public class TorqueUsage {
 				manageBus((TileEntityBusController)tile, reader, activeRatio);
 			}
 			else {
-				int min = pwr.getMachine().isModConversionEngine() ? 1024 : 1;
+				int min = 1;
+				if (pwr.getMachine().isModConversionEngine()) {
+					min = Math.max(1, (int)Math.min(Integer.MAX_VALUE, pwr.power/256D));
+				}
 				requiredTorque += Math.max(activeRatio*pwr.MINTORQUE, min);
 			}
 		}

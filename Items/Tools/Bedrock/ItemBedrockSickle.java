@@ -33,6 +33,8 @@ public class ItemBedrockSickle extends ItemSickleBase {
 
 	public ItemBedrockSickle(int index) {
 		super(index);
+
+		damageVsEntity = 6;
 	}
 
 	@Override

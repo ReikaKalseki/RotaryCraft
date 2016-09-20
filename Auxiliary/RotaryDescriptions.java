@@ -29,6 +29,7 @@ import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
@@ -562,6 +563,8 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.WETTER, PowerReceivers.WETTER.getMinPower(), PowerReceivers.WETTER.getMinSpeed());
 		addNotes(MachineRegistry.CHUNKLOADER, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.BASE_RADIUS, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.FALLOFF);
 		addNotes(MachineRegistry.DROPS, PowerReceivers.DROPS.getMinPower(), PowerReceivers.DROPS.getMinTorque());
+		addNotes(MachineRegistry.SPILLER, PowerReceivers.SPILLER.getMinPower());
+		addNotes(MachineRegistry.FILLER, PowerReceivers.FILLER.getMinPower());
 
 		addNotes(MachineRegistry.MAGNETIC, EnergyToPowerBase.MAXTEMP);
 		addNotes(MachineRegistry.PNEUENGINE, EnergyToPowerBase.MAXTEMP);
@@ -574,6 +577,8 @@ public final class RotaryDescriptions {
 		addSubNotes(MachineRegistry.PNEUENGINE, 1, EnergyToPowerBase.getTiersAsString());
 		addSubNotes(MachineRegistry.ELECTRICMOTOR, 1, EnergyToPowerBase.getTiersAsString());
 		addSubNotes(MachineRegistry.STEAMTURBINE, 1, EnergyToPowerBase.getTiersAsString());
+
+		addSubNotes(MachineRegistry.MAGNETIZER, 1, RecipesMagnetizer.getRecipes().getRecipesAsString());
 
 		addSubNotes(MachineRegistry.ADVANCEDGEARS, 1, TileEntityAdvancedGear.getMaxStorageCapacity(false), TileEntityAdvancedGear.getMaxStorageCapacityFormatted(false), TileEntityAdvancedGear.getMaxStorageCapacity(true), TileEntityAdvancedGear.getMaxStorageCapacityFormatted(true));
 		addSubNotes(MachineRegistry.ADVANCEDGEARS, 2, TileEntityAdvancedGear.getRequiredInputTorque(), TileEntityAdvancedGear.getRequiredInputPower());

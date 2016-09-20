@@ -25,7 +25,10 @@ import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler.Materials;
+import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler.Tools;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.PulseFurnaceManager;
@@ -294,6 +297,74 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
 					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+				}
+			}
+		}
+
+		if (ModList.ENDERIO.isLoaded()) {
+			Object[] items = {
+					"item.darkSteel_pickaxe",
+					"item.darkSteel_axe",
+					"item.darkSteel_sword",
+					"item.darkSteel_helmet",
+					"item.darkSteel_chestplate",
+					"item.darkSteel_leggings",
+					"item.darkSteel_boots",
+					"item.darkSteel_shears",
+			};
+
+			int[] n = {
+					3, 3, 2, 5, 8, 7, 4, 2
+			};
+
+			for (int i = 0; i < items.length; i++) {
+				items[i] = ReikaItemHelper.lookupItem(ModList.ENDERIO, (String)items[i], 0);
+			}
+
+			ItemStack out = ReikaItemHelper.lookupItem(ModList.ENDERIO, "itemAlloy", 6);
+			for (int i = 0; i < items.length; i++) {
+				if (items[i] != null) {
+					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+				}
+			}
+		}
+
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			Object[] items = {
+					"ItemPickThaumium",
+					"ItemAxeThaumium",
+					"ItemSwordThaumium",
+					"ItemHoeThaumium",
+					"ItemShovelThaumium",
+					"ItemHelmetThaumium",
+					"ItemChestplateThaumium",
+					"ItemLeggingsThaumium"
+			};
+
+			int[] n = {
+					3, 3, 2, 2, 1, 5, 8, 7
+			};
+
+			for (int i = 0; i < items.length; i++) {
+				items[i] = ReikaItemHelper.lookupItem(ModList.THAUMCRAFT, (String)items[i], 0);
+			}
+
+			ItemStack out = ThaumItemHelper.ItemEntry.THAUMIUM.getItem();
+			for (int i = 0; i < items.length; i++) {
+				if (items[i] != null) {
+					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+				}
+			}
+		}
+
+		if (ModList.MEKANISM.isLoaded()) {
+			for (Materials m : Materials.values()) {
+				ItemStack out = m.getRawMaterial();
+				for (Tools t : Tools.values()) {
+					Item i = m.getItem(t);
+					if (i != null) {
+						this.addSmelting(i, ReikaItemHelper.getSizedItemStack(out, t.getNumberIngots(m)), RecipeLevel.MODINTERACT);
+					}
 				}
 			}
 		}

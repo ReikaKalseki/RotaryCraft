@@ -97,7 +97,7 @@ import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
 import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
-import Reika.RotaryCraft.Items.ItemFuelTank;
+import Reika.RotaryCraft.Items.Tools.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.AgriCanola;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.MachineAspectMapper;

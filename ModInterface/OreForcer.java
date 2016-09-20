@@ -18,6 +18,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.ModHandlerBase;
 import Reika.DragonAPI.Exception.ModReflectionException;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.FactorizationHandler;
@@ -149,13 +150,23 @@ public final class OreForcer {
 			case GALACTICRAFT:
 				this.intercraftSilicon();
 				break;
+			case DRACONICEVO:
+				this.intercraftDraconium();
+				break;
 		}
+	}
+
+	private void intercraftDraconium() {
+		ItemStack dust = ReikaItemHelper.lookupItem(ModList.DRACONICEVO, "draconiumDust", 0);
+		if (dust == null)
+			throw new ModReflectionException(RotaryCraft.instance, ModList.DRACONICEVO, "Null Item for Draconium");
+		GameRegistry.addShapelessRecipe(dust, ItemStacks.getModOreIngot(ModOreList.DRACONIUM));
 	}
 
 	private void intercraftSilicon() {
 		Item id = GalacticCraftHandler.getInstance().basicItemID;
 		if (id == null)
-			throw new ModReflectionException(RotaryCraft.instance, ModList.FORESTRY, "Null Item for Silicon");
+			throw new ModReflectionException(RotaryCraft.instance, ModList.GALACTICRAFT, "Null Item for Silicon");
 		ItemStack silicon = new ItemStack(id, 1, GalacticCraftHandler.siliconMeta);
 		GameRegistry.addShapelessRecipe(silicon, ItemStacks.getModOreIngot(ModOreList.SILICON));
 	}

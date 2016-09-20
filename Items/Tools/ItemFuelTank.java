@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Items;
+package Reika.RotaryCraft.Items.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.Fillable;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;

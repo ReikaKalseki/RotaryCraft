@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -29,6 +30,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
 import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
@@ -56,6 +58,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 
 	public static enum HelmetUpgrades {
 		NIGHTVISION(),
+		VISOR(),
 		APIARIST(ModList.FORESTRY);
 
 		public static final HelmetUpgrades[] list = values();
@@ -92,6 +95,8 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 			switch(this) {
 				case NIGHTVISION:
 					return new ItemStack[]{ItemRegistry.NVG.getStackOf()};
+				case VISOR:
+					return new ItemStack[]{new ItemStack(Blocks.stained_glass, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.diamond), new ItemStack(Blocks.stained_glass, 1, OreDictionary.WILDCARD_VALUE)};
 				case APIARIST:
 					return ReikaArrayHelper.getArrayOf(ForestryHandler.CraftingMaterials.WOVENSILK.getItem(), 8);
 			}

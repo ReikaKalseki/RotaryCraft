@@ -537,6 +537,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public void setDataFromItemStackTag(NBTTagCompound NBT) {
 		if (NBT == null) {
 			tank.empty();
+			isCovered = false;
 			return;
 		}
 		Fluid f = ReikaNBTHelper.getFluidFromNBT(NBT);

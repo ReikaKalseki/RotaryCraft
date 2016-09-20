@@ -27,10 +27,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.ModInteract.PositionedStackWithTooltip;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.ModInteract.Instantiable.PositionedStackWithTooltip;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCentrifuge;
