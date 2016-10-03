@@ -120,19 +120,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private void addRecipe(ItemStack in, FluidOut fs, RecipeLevel rl, Object... items)
 	{
-		ChancedOutputList li = new ChancedOutputList();
-		for (int i = 0; i < items.length; i += 2) {
-			Object is1 = items[i];
-			if (is1 instanceof Item)
-				is1 = new ItemStack((Item)is1);
-			else if (is1 instanceof Block)
-				is1 = new ItemStack((Block)is1);
-			Object chance = items[i+1];
-			if (chance instanceof Integer)
-				chance = new Float((Integer)chance);
-			li.addItem((ItemStack)is1, (Float)chance);
-		}
-		this.addRecipe(in, li, fs, rl);
+		this.addRecipe(in, ChancedOutputList.parseFromArray(true, items), fs, rl);
 	}
 
 	public void addAPIRecipe(ItemStack item, FluidStack fs, float fc, Object... items)
@@ -230,12 +218,50 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			}
 
 			ItemStack drop = new ItemStack(ForestryHandler.ItemEntry.HONEY.getItem());
-			ChancedOutputList out = new ChancedOutputList();
+			ChancedOutputList out = new ChancedOutputList(true);
 			out.addItem(new ItemStack(ForestryHandler.ItemEntry.PROPOLIS.getItem()), 25);
 			this.addRecipe(drop, out, new FluidOut(new FluidStack(FluidRegistry.getFluid("for.honey"), 150), 100), RecipeLevel.MODINTERACT);
 
 			drop = new ItemStack(ForestryHandler.ItemEntry.HONEYDEW.getItem());
 			this.addRecipe(drop, new FluidStack(FluidRegistry.getFluid("for.honey"), 150), 100, RecipeLevel.MODINTERACT);
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 0); //enchanting
+			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
+				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT, ItemStacks.lapisoreflakes, 2);
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 1); //intellect
+			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(15);
+				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 4); //lux
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("glowstone");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 5); //endearing
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("ender");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
+			/* progression problem
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 1); //intellect
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("chroma");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 20), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+			 */
 		}
 
 		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {

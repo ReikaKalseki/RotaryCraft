@@ -1,4 +1,4 @@
-ï»¿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <machines>
 	<bedrockbreaker>
 		<desc>
@@ -1029,7 +1029,7 @@
 	</grindstone>
 	<blower>
 		<desc>
-			La pneumatic item pump es usada para transferir objetos rapidamente entre inventarios. Si una item pump tiene un inventario tras de sí, comprobara un inventario receptor en frente. Si encuentra otra pump, sigue la direccion frontal de esa pump y repite el proceso. Este sistema te permite transportar objetos a traves de cualquier distancia casi instantaneamente. La pump puede transmitir un objeto por tick por cada kW de potencia de entrada; por lo tanto, para transmitir stacks enteros, suministra 65kW de potencia. Mas potencia transmitira multiples stacks, ya que no hay limite en el ratio de transferencia.
+			La pneumatic item pump es usada para transferir objetos rapidamente entre inventarios. Si una item pump tiene un inventario tras de si, comprobara un inventario receptor en frente. Si encuentra otra pump, sigue la direccion frontal de esa pump y repite el proceso. Este sistema te permite transportar objetos a traves de cualquier distancia casi instantaneamente. La pump puede transmitir un objeto por tick por cada kW de potencia de entrada; por lo tanto, para transmitir stacks enteros, suministra 65kW de potencia. Mas potencia transmitira multiples stacks, ya que no hay limite en el ratio de transferencia.
 		</desc>
 		<note>
 			Entrada de potencia: Cualquier lado

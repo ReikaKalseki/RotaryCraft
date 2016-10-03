@@ -274,7 +274,9 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 
 	@Override
 	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
-		return ((ItemArmor)armor.getItem()).armorType == 0 ? HelmetUpgrades.APIARIST.existsOn(armor) : entity.getEquipmentInSlot(4) != null && HelmetUpgrades.APIARIST.existsOn(entity.getEquipmentInSlot(4));
+		ItemStack head = entity.getEquipmentInSlot(4);
+		ItemRegistry ir = head != null ? ItemRegistry.getEntry(head) : null;
+		return ir != null && ir.isBedrockArmor() && HelmetUpgrades.APIARIST.existsOn(head);
 	}
 
 	@Override
@@ -284,8 +286,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 	}
 
 	@Override
-	public final void setDamage(ItemStack stack, int damage)
-	{
+	public final void setDamage(ItemStack stack, int damage) {
 
 	}
 

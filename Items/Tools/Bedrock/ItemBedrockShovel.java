@@ -190,7 +190,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	private static void addDrop(Block b, int meta, ItemStack is, float chance) {
 		ChancedOutputList co = extraDrops.get(b, meta);
 		if (co == null) {
-			co = new ChancedOutputList();
+			co = new ChancedOutputList(false);
 			extraDrops.put(b, meta, co);
 		}
 		co.addItem(is, chance);

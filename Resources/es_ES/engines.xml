@@ -1,4 +1,4 @@
-ï»¿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <engines>
 	<dc>
 		<desc>
@@ -81,7 +81,7 @@
 	</sport>
 	<hydro>
 		<desc>
-			El motor hidrokinetico convierte la energia de las caidas de agua en potencia en el eje. Notese que esta maquina solo puede rotar en el sentido contrario a las agujas del reloj, por lo que la caida de agua tiene que posicionarse acorde. Adicionalmente, bloques cercanos pueden obstruir las paletas. Finalmente, la potencia de salida de este motor depende de la altura de la caída de agua. Una caida de 3 bloques  producira una potencia minima, pero una caida de 64 bloques o mas puede producir  %d Nm a %d rad/s, el mayor par de todos los motores, produciendo %.3fkW. Estos motores tambien pueden ser encadenados, sumando su par. Este motor debe ser lubricado para su funcionamiento.
+		    El motor hidrokinetico convierte la energia de las caidas de agua en potencia en el eje. Notese que esta maquina solo puede rotar en el sentido contrario a las agujas del reloj, por lo que la caida de agua tiene que posicionarse acorde. Adicionalmente, bloques cercanos pueden obstruir las paletas. Finalmente, la potencia de salida de este motor depende de la altura de la caida de agua. Una caida de 3 bloques  producira una potencia minima, pero una caida de 64 bloques o mas puede producir  %d Nm a %d rad/s, el mayor par de todos los motores, produciendo %.3fkW. Estos motores tambien pueden ser encadenados, sumando su par. Este motor debe ser lubricado para su funcionamiento.
 		</desc>
 		<note>
 			<sub>

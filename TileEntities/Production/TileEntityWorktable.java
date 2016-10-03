@@ -82,11 +82,11 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	private void makeHelmetUpgrades() {
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDHELM.getItemInstance(), inv);
 		if (armorslot == -1)
-			ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDREVEAL.getItemInstance(), inv);
+			armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDREVEAL.getItemInstance(), inv);
 		if (armorslot != -1) {
 			for (int i = 0; i < HelmetUpgrades.list.length; i++) {
 				HelmetUpgrades g = HelmetUpgrades.list[i];
-				if (g.isAvailable) {
+				if (g.isAvailable && !g.existsOn(inv[armorslot])) {
 					ItemStack[] rec = g.getUpgradeItems();
 					boolean flag = false;
 					int itemslot = -1;

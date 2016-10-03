@@ -14,6 +14,7 @@ import ic2.api.recipe.Recipes;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -28,7 +29,9 @@ import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -112,6 +115,9 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 			return true;
 		if (is.getItem().getClass() == lootBagClass)
 			return true;
+		if (ModList.MYSTCRAFT.isLoaded() && is.getItem() == MystCraftHandler.getInstance().folderID) {
+			return true;
+		}
 		return false;
 	}
 
@@ -127,6 +133,13 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 		else if (ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.SCRAPBOX.match(inv[0])) {
 			inv[1] = Recipes.scrapboxDrops.getDrop(inv[0], false);
+		}
+		else if (ModList.MYSTCRAFT.isLoaded() && inv[0].getItem() == MystCraftHandler.getInstance().folderID) {
+			List<ItemStack> li = ReikaMystcraftHelper.getPagesInFolder(this.getPlacer(), inv[0], true);
+			if (!li.isEmpty()) {
+				inv[1] = li.remove(0);
+				overflow.addAll(li);
+			}
 		}
 		else if (inv[0].getItem().getClass() == lootBagClass) {
 			ArrayList<ItemStack> li = new ArrayList();

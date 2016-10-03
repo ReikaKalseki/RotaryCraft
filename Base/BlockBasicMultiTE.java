@@ -1028,7 +1028,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			int ticks = ((DiscreteFunction)te).getOperationTime();
 			float sec = Math.max(0.05F, ticks/20F);
 			currenttip.add(String.format("Operation Time: %.2fs", sec));
-			if (te instanceof MultiOperational) {
+			if (te instanceof MultiOperational && sec <= 0.05F) {
 				int num = ((MultiOperational)te).getNumberConsecutiveOperations();
 				currenttip.add(String.format("%d Operations Per Tick", num));
 			}

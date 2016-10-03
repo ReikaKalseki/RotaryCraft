@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -29,6 +30,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.ChromatiCraft.API.RitualAPI;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
 import Reika.DragonAPI.Interfaces.Item.MultiLayerItemSprite;
@@ -50,8 +52,10 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.apiculture.IArmorApiarist;
 
-public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayerItemSprite {
+@Strippable(value={"forestry.api.apiculture.IArmorApiarist"})
+public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayerItemSprite, IArmorApiarist {
 
 	public ItemJetPack(ArmorMaterial mat, int tex, int render) {
 		super(mat, render, 1, tex);
@@ -452,5 +456,22 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	@Override
 	public boolean getIsRepairable(ItemStack tool, ItemStack item) {
 		return tool.getItem() == this && this.isSteel() && ReikaItemHelper.matchStacks(item, ItemStacks.steelingot);
+	}
+
+	@Override
+	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
+		ItemStack head = entity.getEquipmentInSlot(4);
+		return head != null && head.getItem() instanceof IArmorApiarist && ((IArmorApiarist)head.getItem()).protectEntity(entity, head, cause, doProtect);
+	}
+
+	@Override
+	@Deprecated
+	public boolean protectPlayer(EntityPlayer player, ItemStack armor, String cause, boolean doProtect) {
+		return this.protectEntity(player, armor, cause, doProtect);
+	}
+
+	@Override
+	public final void setDamage(ItemStack stack, int damage) {
+
 	}
 }

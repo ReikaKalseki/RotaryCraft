@@ -109,7 +109,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 			return false;
 		if (inv[0] == null)
 			return true;
-		return ReikaItemHelper.canCombineStacks(toMake, inv[0]);
+		return ReikaItemHelper.areStacksCombinable(toMake, inv[0], this.getInventoryStackLimit());
 	}
 
 	public int getFreezingPoint() {

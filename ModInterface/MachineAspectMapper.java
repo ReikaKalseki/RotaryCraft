@@ -303,6 +303,12 @@ public class MachineAspectMapper {
 
 		this.addAspect(MachineRegistry.ITEMFILTER, Aspect.MIND, 4);
 		this.addAspect(MachineRegistry.ITEMFILTER, Aspect.EXCHANGE, 2);
+
+		this.addAspect(MachineRegistry.HYDRATOR, Aspect.WATER, 4);
+		this.addAspect(MachineRegistry.HYDRATOR, Aspect.CROP, 4);
+
+		this.addAspect(MachineRegistry.FILLER, Aspect.MINE, 4);
+		this.addAspect(MachineRegistry.FILLER, Aspect.EXCHANGE, 4);
 	}
 
 	private void addAspect(MachineRegistry m, Aspect a, int amt) {

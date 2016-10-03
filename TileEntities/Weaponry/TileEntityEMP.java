@@ -38,6 +38,7 @@ import thaumcraft.api.nodes.NodeType;
 import Reika.ChromatiCraft.TileEntity.Networking.TileEntityCrystalPylon;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Collections.ClassNameCache;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -60,7 +61,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	private List<TileEntity> blocks = new ArrayList<TileEntity>();
 	private BlockArray check  = new BlockArray();
 
-	private static List<Class<? extends TileEntity>> blacklist = new ArrayList<Class<? extends TileEntity>>();
+	private static ClassNameCache blacklist = new ClassNameCache();
 
 	private static HashSet<WorldLocation> shutdownLocations = new HashSet();
 
@@ -90,79 +91,30 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 		addEntry("codechicken.enderstorage.common.TileFrequencyOwner", ModList.ENDERSTORAGE);
 
-		addEntry("thaumcraft.common.tiles.TileAlembic", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileAlembicAdvanced", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileTileArcaneBore", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileArcaneBoreBase", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileArcaneFurnace", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileOwned", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileMagicWorkbench", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileBellows", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileChestHungry", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileCrucible", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileCrucibleAdvanced", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileCrystal", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileCrystalCapacitor", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileCrystalCore", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileMemory", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileLifter", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileMarker", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileMirror", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileNitor", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileResearchTable", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileSensor", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileTable", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileEtherealBloom", ModList.THAUMCRAFT);
-		addEntry("thaumcraft.common.tiles.TileThaumcraft", ModList.THAUMCRAFT);
+		addEntry("thaumcraft.common.tiles.*", ModList.THAUMCRAFT);
 
-		addEntry("forestry.core.gadgets.TileNaturalistChest", ModList.FORESTRY);
-		addEntry("forestry.core.gadgets.TileMill", ModList.FORESTRY);
-		addEntry("forestry.apiculture.gadgets.TileAlveary", ModList.FORESTRY);
-		addEntry("forestry.apiculture.gadgets.TileBeehouse", ModList.FORESTRY);
-		addEntry("forestry.aboriculture.gadgets.TileTreeContainer", ModList.FORESTRY);
-		addEntry("forestry.factory.gadgets.TileWorktable", ModList.FORESTRY);
+		addEntry("forestry.core.tiles.TileNaturalistChest", ModList.FORESTRY);
+		addEntry("forestry.core.tiles.TileMill", ModList.FORESTRY);
+		addEntry("forestry.apiculture.multiblock.TileAlvearyPlain", ModList.FORESTRY);
+		addEntry("forestry.apiculture.tiles.*", ModList.FORESTRY);
+		addEntry("forestry.aboriculture.tiles.TileTreeContainer", ModList.FORESTRY);
+		addEntry("forestry.factory.tiles.TileWorktable", ModList.FORESTRY);
 
 		//addEntry("Reika.FurryKingdoms.TileEntities.TileEntityFlag", ModList.FURRYKINGDOMS);
 
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntity555", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityBreaker", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityBUD", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityCamo", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityChestReader", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityDriver", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityEffector", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityEmitter", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityPlacer", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityProximity", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityReceiver", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityToggle", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityWeather", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityRedstonePump", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityHopperTicker", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntitySignalScaler", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityColumnDecrementer", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityAnalogTransmitter", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityAnalogReceiver", ModList.EXPANDEDREDSTONE);
-		addEntry("Reika.ExpandedRedstone.TileEntities.TileEntityEqualizer", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ExpandedRedstone.TileEntities.*", ModList.EXPANDEDREDSTONE);
 	}
 
 	private static void addEntry(Class<? extends TileEntity> cl) {
-		blacklist.add(cl);
-		RotaryCraft.logger.log("Adding "+cl.getCanonicalName()+" to the EMP immunity list");
+		blacklist.add(cl.getName());
+		RotaryCraft.logger.log("Adding "+cl.getName()+" to the EMP immunity list");
 	}
 
 	private static void addEntry(String name, ModList mod) {
-		Class cl;
 		if (!mod.isLoaded())
 			return;
-		try {
-			cl = Class.forName(name);
-			blacklist.add(cl);
-			RotaryCraft.logger.log("Adding "+name+" to the EMP immunity list");
-		}
-		catch (ClassNotFoundException e) {
-			RotaryCraft.logger.logError("Could not add EMP blacklist for "+name+": Class not found!");
-		}
+		blacklist.add(name);
+		RotaryCraft.logger.log("Adding "+name+" to the EMP immunity list");
 	}
 
 	private boolean fired = false;
@@ -351,13 +303,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	private boolean isBlacklisted(TileEntity te) {
-		Class c = te.getClass();
-		for (int i = 0; i < blacklist.size(); i++) {
-			Class b = blacklist.get(i);
-			if (b.isAssignableFrom(c))
-				return true;
-		}
-		return false;
+		return blacklist.contains(te.getClass());
 	}
 
 	private void shutdownFallback(TileEntity te) {

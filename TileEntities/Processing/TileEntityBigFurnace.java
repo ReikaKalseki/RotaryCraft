@@ -85,7 +85,7 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 						add = true;
 					}
 					else {
-						if (ReikaItemHelper.canCombineStacks(to, inv[i+n])) {
+						if (ReikaItemHelper.areStacksCombinable(to, inv[i+n], this.getInventoryStackLimit())) {
 							add = true;
 							inv[i+n].stackSize += to.stackSize;
 						}

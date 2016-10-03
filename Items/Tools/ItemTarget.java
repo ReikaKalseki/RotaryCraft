@@ -18,7 +18,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 
 public class ItemTarget extends ItemRotaryTool {
 
@@ -48,8 +48,8 @@ public class ItemTarget extends ItemRotaryTool {
 				for (int j = -range; j <= range; j++) {
 					for (int k = -range; k <= range; k++) {
 						TileEntity te = world.getTileEntity((int)ep.posX+i, (int)ep.posY+j, (int)ep.posZ+k);
-						if (te instanceof TileEntityTNTCannon) {
-							TileEntityTNTCannon tc = (TileEntityTNTCannon)te;
+						if (te instanceof TileEntityLaunchCannon) {
+							TileEntityLaunchCannon tc = (TileEntityLaunchCannon)te;
 							if (tc.targetMode) {
 								tc.target[0] = x;
 								tc.target[1] = y;

@@ -227,10 +227,7 @@ ConditionalOperation, DamagingContact {
 		if (!inv[1].isItemEqual(out))
 			return false;
 
-		if (inv[1].stackSize < this.getInventoryStackLimit() && inv[1].stackSize < inv[1].getMaxStackSize())
-			return true;
-
-		return inv[1].stackSize+out.stackSize <= out.getMaxStackSize();
+		return inv[1].stackSize+out.stackSize <= Math.min(this.getInventoryStackLimit(), out.getMaxStackSize());
 	}
 
 	public int getLubricantScaled(int par1) {

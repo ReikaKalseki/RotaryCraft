@@ -550,7 +550,7 @@
 		<note>
 			Required Power: %dW
 			Required Torque: %d Nm
-			Power Input: Back
+			Power Input: Bottom
 		</note>
 	</itemcannon>
 	<friction>
