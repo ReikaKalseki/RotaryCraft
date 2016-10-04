@@ -228,6 +228,8 @@ public class RotaryRecipes {
 			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.shaftCast, ItemStacks.shaftitem, bk, temp, f, base*3/DifficultyEffects.PARTCRAFT.getInt(), 80);
 			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.propCast, ItemStacks.prop, bk, temp, f, base*3, 80);
 
+			SmelteryRecipeHandler.addMelting(ItemStacks.ironscrap, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
+
 			//Bedrock parts
 			int id = ExtraConfigIDs.BEDROCKID.getValue();
 			int id2 = ExtraConfigIDs.HSLAID.getValue();

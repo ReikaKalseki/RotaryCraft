@@ -139,6 +139,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 				ReikaWorldHelper.ignite(world, dx, dy, dz);
 			}
 		}
+
+		player.getEntityData().setBoolean("jetpack", flying);
 	}
 
 	private boolean useJetpack(EntityPlayer ep, ItemStack is) {
@@ -156,6 +158,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		if (propel)
 			thrust *= hoverMode ? 2 : 4;
 		if (jetbonus)
+			thrust *= 1.25F;
+		if (ep.ridingEntity != null)
 			thrust *= 1.25F;
 
 		boolean canFly = !hoverMode || (!ep.onGround && ep.motionY < 0);
@@ -177,6 +181,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 					if (jetbonus && !horiz) {
 						deltav *= 1.5;
 					}
+					if (ep.ridingEntity != null)
+						deltav *= 1.5;
 					ep.motionY = Math.min(ep.motionY+deltav, maxSpeed);
 				}
 
@@ -240,6 +246,14 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 				ep.motionZ += vz;
 			}
 		}
+
+		if (isFlying && ep.ridingEntity != null) {
+			ep.ridingEntity.motionX = ep.motionX;
+			ep.ridingEntity.motionY = ep.motionY;
+			ep.ridingEntity.motionZ = ep.motionZ;
+			ep.ridingEntity.fallDistance = ep.fallDistance;
+		}
+
 		return isFlying;
 	}
 
