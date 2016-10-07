@@ -35,7 +35,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -70,8 +69,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	private StepTimer tempTimer = new StepTimer(20);
 
 	private static final int MAX_DAMAGE = 480;
-
-	private boolean lastPower;
 
 	private boolean isLiving;
 
@@ -202,6 +199,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	@Override
+	protected void onPositiveRedstoneEdge() {
+		//ratio = -ratio;
+		//reduction = !reduction; DO NOT DO
+	}
+
+	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		tickcount++;
@@ -209,9 +212,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 		if ((world.getWorldTime()&31) == 0)
 			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
-
-		if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
-			ratio = -ratio;
 
 		this.transferPower(world, x, y, z, meta);
 		power = (long)omega*(long)torque;
@@ -231,7 +231,6 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		}
 
 		this.basicPowerReceiver();
-		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 	}
 
 	private void getLubeAndApplyDamage(World world, int x, int y, int z, int metadata) {

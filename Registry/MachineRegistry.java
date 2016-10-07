@@ -24,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import Reika.ChromatiCraft.ChromatiCraft;
 import Reika.ChromatiCraft.Auxiliary.Interfaces.NBTTile;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
@@ -1565,7 +1564,7 @@ public enum MachineRegistry implements TileEnum {
 			Block id = m.getBlock();
 			int meta = m.meta;
 			if (machineMappings.containsKey(id, meta))
-				throw new RegistrationException(ChromatiCraft.instance, "ID/Meta conflict @ "+id+"/"+meta+": "+m+" & "+machineMappings.get(id, meta));
+				throw new RegistrationException(RotaryCraft.instance, "ID/Meta conflict @ "+id+"/"+meta+": "+m+" & "+machineMappings.get(id, meta));
 			machineMappings.put(id, meta, m);
 		}
 	}

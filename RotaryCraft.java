@@ -99,6 +99,7 @@ import Reika.RotaryCraft.Items.Tools.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.AgriCanola;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
 import Reika.RotaryCraft.ModInterface.OreForcer;
+import Reika.RotaryCraft.ModInterface.RotaryAspectManager;
 import Reika.RotaryCraft.ModInterface.Minetweaker.FrictionTweaker;
 import Reika.RotaryCraft.ModInterface.Minetweaker.GrinderTweaker;
 import Reika.RotaryCraft.ModInterface.Minetweaker.PulseJetTweaker;

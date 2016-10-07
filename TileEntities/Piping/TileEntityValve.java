@@ -65,7 +65,7 @@ public class TileEntityValve extends TileEntityPiping {
 
 	@Override
 	protected boolean interactsWithMachines() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		return this.hasRedstoneSignal();
 	}
 
 	@Override

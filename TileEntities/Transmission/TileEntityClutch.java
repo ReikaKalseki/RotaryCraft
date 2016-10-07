@@ -136,7 +136,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	}
 
 	public boolean isOutputEnabled() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) == needsRedstone;
+		return this.hasRedstoneSignal() == needsRedstone;
 	}
 
 	@Override

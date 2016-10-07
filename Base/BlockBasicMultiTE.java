@@ -447,7 +447,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.EXTRACTOR) {
 			TileEntityExtractor ex = (TileEntityExtractor)te;
 			if (is != null) {
-				if (is.getItem() == Items.water_bucket && ex.getLevel()+1000 <= ex.CAPACITY) {
+				if (is.getItem() == Items.water_bucket && is.stackSize == 1 && ex.getLevel()+1000 <= ex.CAPACITY) {
 					ex.addLiquid(1000);
 					if (!ep.capabilities.isCreativeMode) {
 						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
@@ -822,6 +822,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 
 	@Override
 	public final void onNeighborBlockChange(World world, int x, int y, int z, Block id) {
+		super.onNeighborBlockChange(world, x, y, z, id);
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m != null) {
 			TileEntity te = world.getTileEntity(x, y, z);

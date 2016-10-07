@@ -92,7 +92,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	}
 
 	private boolean matchItem(ItemStack is) {
-		return data != null && data.match(is) != worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		return data != null && data.match(is) != this.hasRedstoneSignal();
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				for (ItemStack is : network.getRawMESystemContents()) {
 					if (this.matchItem(is)) {
 						if (ModularLogger.instance.isEnabled(LOGGER_ID))
-							ModularLogger.instance.log(LOGGER_ID, "@ "+this+" ["+worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)+"], "+is.getDisplayName()+":"+is.getItemDamage()+" {"+is.stackTagCompound+"}"+" matches "+data);
+							ModularLogger.instance.log(LOGGER_ID, "@ "+this+" ["+this.hasRedstoneSignal()+"], "+is.getDisplayName()+":"+is.getItemDamage()+" {"+is.stackTagCompound+"}"+" matches "+data);
 						MEStacks.add(ReikaItemHelper.getSizedItemStack(is, 1));
 					}
 					else {

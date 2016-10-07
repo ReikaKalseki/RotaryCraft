@@ -70,8 +70,6 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	/** Stored energy, in joules */
 	private long energy;
 
-	private boolean lastPower;
-
 	public static final int WORMRATIO = 16;
 
 	private CVTController controller;
@@ -369,8 +367,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 	private int getCVTRatio() {
 		if (isRedstoneControlled) {
-			boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-			int ratio = this.getCVTState(red).gearRatio;
+			int ratio = this.getCVTState(this.hasRedstoneSignal()).gearRatio;
 			return (int)Math.signum(ratio)*Math.min(Math.abs(ratio), this.getMaxRatio());
 		}
 		else {
@@ -415,7 +412,6 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
 
 		this.basicPowerReceiver();
-		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 
 		if (this.getGearType().storesEnergy()) {
 			redstoneTimer.update();
@@ -430,7 +426,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 	private void store(World world, int x, int y, int z, int meta) {
 		this.transferPower(world, x, y, z, meta);
-		isReleasing = enabled && world.isBlockIndirectlyGettingPowered(x, y, z);
+		isReleasing = enabled && this.hasRedstoneSignal();
 		//ReikaJavaLibrary.pConsole(energy/20+"/"+this.getMaxStorageCapacity(), Side.SERVER);
 		if (!isCreative && !world.isRemote && energy/20 >= this.getMaxStorageCapacity()) {
 			this.overChargeExplosion(world, x, y, z);

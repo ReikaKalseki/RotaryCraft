@@ -12,6 +12,7 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
@@ -27,6 +28,7 @@ import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Tolerance;
 import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
 import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
+import Reika.DragonAPI.ModInteract.ItemHandlers.AgriCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -40,6 +42,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
+import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerProvider;
 
@@ -77,7 +80,7 @@ public class CanolaBee extends BeeSpecies {
 		}
 	}
 
-	private final class FlowerProviderCanola extends BasicFlowerProvider {
+	private final class FlowerProviderCanola extends BasicFlowerProvider implements IFlowerAcceptableRule {
 
 		private FlowerProviderCanola() {
 			super(BlockRegistry.CANOLA.getBlockInstance(), "canola");
@@ -131,6 +134,16 @@ public class CanolaBee extends BeeSpecies {
 			return new ItemStack[]{BlockRegistry.CANOLA.getStackOf()};
 		}
 		 */
+		@Override
+		public boolean isAcceptableFlower(String flowerType, World world, int x, int y, int z) {
+			if (super.isAcceptedFlower(world, x, y, z))
+				return true;
+			if (!ModList.AGRICRAFT.isLoaded())
+				return false;
+			Block b = world.getBlock(x, y, z);
+			int meta = world.getBlockMetadata(x, y, z);
+			return AgriCraftHandler.getInstance().isCrop(b, meta) && AgriCraftHandler.getInstance().getCropObject(world, x, y, z) == AgriCanola.instance;
+		}
 	}
 
 	@Override

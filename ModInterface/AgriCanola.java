@@ -46,6 +46,12 @@ public class AgriCanola implements ICropPlant {
 	private static final int[] GAIN_FORTUNE_MAPPING = { 0, 1, 1, 2, 2, 3, 4, 5, 7, 10 };
 	private static final int[] METADATA_CONVERSION = { 0, 1, 2, 4, 5, 6, 8, 9 };
 
+	public static final AgriCanola instance = new AgriCanola();
+
+	private AgriCanola() {
+
+	}
+
 	@Override
 	public int tier() {
 		return 2;
@@ -164,7 +170,7 @@ public class AgriCanola implements ICropPlant {
 			e.printStackTrace();
 		}
 
-		((APIv2)API.getAPI(2)).registerCropPlant(new AgriCanola());
+		((APIv2)API.getAPI(2)).registerCropPlant(instance);
 	}
 
 	@Override

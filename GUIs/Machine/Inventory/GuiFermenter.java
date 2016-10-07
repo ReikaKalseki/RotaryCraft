@@ -40,7 +40,7 @@ public class GuiFermenter extends GuiMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		boolean red = ferm.worldObj.isBlockIndirectlyGettingPowered(ferm.xCoord, ferm.yCoord, ferm.zCoord);
+		boolean red = ferm.hasRedstoneSignal();
 		int sx = 154;
 		int sy = 6;
 		if (red) {

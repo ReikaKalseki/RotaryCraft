@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
 import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
@@ -33,6 +34,7 @@ import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import forestry.api.apiculture.IArmorApiarist;
 
+@Strippable(value={"forestry.api.apiculture.IArmorApiarist"})
 public class ItemSpringBoots extends ItemChargedArmor implements IArmorApiarist {
 
 	public final int JUMP_LEVEL = 3;

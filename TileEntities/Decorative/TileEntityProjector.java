@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -32,8 +31,6 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	public int channel = 0;
 	public boolean on = false;
 	public boolean emptySlide = true;
-
-	private boolean lastPower = false;
 
 	public boolean canProject(int x2, int y2, int z2) {
 
@@ -61,9 +58,11 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 			//this.cycleInv();
 		}
 		this.getChannelFromActiveSlide();
-		if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower))
-			this.cycleInv();
-		lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
+	}
+
+	@Override
+	protected void onPositiveRedstoneEdge() {
+		this.cycleInv();
 	}
 
 	private void getChannelFromActiveSlide() {
@@ -110,18 +109,18 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 2:
-			read = ForgeDirection.NORTH;
-			break;
-		case 3:
-			read = ForgeDirection.SOUTH;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 2:
+				read = ForgeDirection.NORTH;
+				break;
+			case 3:
+				read = ForgeDirection.SOUTH;
+				break;
 		}
 	}
 
@@ -144,28 +143,28 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	public int getRange() {
 		int x; int z;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			x = xCoord-1;
-			while (x >= xCoord-12 && worldObj.getBlock(x, yCoord, zCoord) == Blocks.air)
-				x--;
-			return x-xCoord+1;
-		case 1:
-			x = xCoord+1;
-			while (x <= xCoord+12+1 && (worldObj.getBlock(x, yCoord, zCoord) == Blocks.air ||worldObj.getBlock(x, yCoord, zCoord).isAir(worldObj, x, yCoord, zCoord)))
-				x++;
-			return -(x-xCoord);
-		case 2:
-			z = zCoord+1;
-			while (z <= zCoord+1+12 && worldObj.getBlock(xCoord, yCoord, z) == Blocks.air)
-				z++;
-			return -(z-zCoord);
-		case 3:
-			z = zCoord-1;
-			while (z >= zCoord-12 && worldObj.getBlock(xCoord, yCoord, z) == Blocks.air)
-				z--;
-			return z-zCoord+1;
-		default:
-			return 0;
+			case 0:
+				x = xCoord-1;
+				while (x >= xCoord-12 && worldObj.getBlock(x, yCoord, zCoord) == Blocks.air)
+					x--;
+				return x-xCoord+1;
+			case 1:
+				x = xCoord+1;
+				while (x <= xCoord+12+1 && (worldObj.getBlock(x, yCoord, zCoord) == Blocks.air ||worldObj.getBlock(x, yCoord, zCoord).isAir(worldObj, x, yCoord, zCoord)))
+					x++;
+				return -(x-xCoord);
+			case 2:
+				z = zCoord+1;
+				while (z <= zCoord+1+12 && worldObj.getBlock(xCoord, yCoord, z) == Blocks.air)
+					z++;
+				return -(z-zCoord);
+			case 3:
+				z = zCoord-1;
+				while (z >= zCoord-12 && worldObj.getBlock(xCoord, yCoord, z) == Blocks.air)
+					z--;
+				return z-zCoord+1;
+			default:
+				return 0;
 		}
 	}
 
@@ -176,37 +175,37 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 		int z = zCoord;
 		int a = 0; int b = 0;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			x += r-1;
-			a = 1;
-			break;
-		case 1:
-			x -= r;
-			a = 1;
-			break;
-		case 2:
-			z -= r;
-			b = 1;
-			break;
-		case 3:
-			z += r-1;
-			b = 1;
-			break;
+			case 0:
+				x += r-1;
+				a = 1;
+				break;
+			case 1:
+				x -= r;
+				a = 1;
+				break;
+			case 2:
+				z -= r;
+				b = 1;
+				break;
+			case 3:
+				z += r-1;
+				b = 1;
+				break;
 		}
 		int x2 = x; int z2 = z;
 		switch(this.getBlockMetadata()) {
-		case 0:
-			x2++;
-			break;
-		case 1:
-			x2--;
-			break;
-		case 2:
-			z2--;
-			break;
-		case 3:
-			z2++;
-			break;
+			case 0:
+				x2++;
+				break;
+			case 1:
+				x2--;
+				break;
+			case 2:
+				z2--;
+				break;
+			case 3:
+				z2++;
+				break;
 		}
 		World world = worldObj;
 		for (int k = 0; k <= 4; k++) {

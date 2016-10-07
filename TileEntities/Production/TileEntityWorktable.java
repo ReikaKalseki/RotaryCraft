@@ -26,7 +26,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
@@ -50,7 +49,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 
 	public boolean craftable = false;
 	private ItemStack toCraft;
-	private boolean lastPower;
 	//private boolean hasProgram;
 
 	@Override
@@ -66,16 +64,18 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 					this.makeBedjump();
 					this.makeHelmetUpgrades();
 				}
-
-				if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
-					if (!this.craft()) {
-						if (this.canUncraft())
-							this.uncraft();
-					}
-					this.uncraftJetplate();
-				}
 			}
-			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
+		}
+	}
+
+	@Override
+	protected void onPositiveRedstoneEdge() {
+		if (!worldObj.isRemote) {
+			if (!this.craft()) {
+				if (this.canUncraft())
+					this.uncraft();
+			}
+			this.uncraftJetplate();
 		}
 	}
 
@@ -476,8 +476,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
-
-		NBT.setBoolean("lastpwr", lastPower);
 		//NBT.setBoolean("prog", hasProgram);
 	}
 
@@ -485,8 +483,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
-
-		lastPower = NBT.getBoolean("lastpwr");
 		//hasProgram = NBT.getBoolean("prog");
 	}
 

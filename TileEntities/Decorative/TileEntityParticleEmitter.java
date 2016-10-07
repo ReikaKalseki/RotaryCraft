@@ -36,7 +36,7 @@ public class TileEntityParticleEmitter extends TileEntitySpringPowered implement
 	public boolean canEmit(World world, int x, int y, int z) {
 		if (!this.hasCoil())
 			return false;
-		return !useRedstone || world.isBlockIndirectlyGettingPowered(x, y, z);
+		return !useRedstone || this.hasRedstoneSignal();
 	}
 
 	@Override

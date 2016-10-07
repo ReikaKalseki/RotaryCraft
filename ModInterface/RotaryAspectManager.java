@@ -7,13 +7,13 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft;
+package Reika.RotaryCraft.ModInterface;
 
 import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.ModInterface.MachineAspectMapper;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 

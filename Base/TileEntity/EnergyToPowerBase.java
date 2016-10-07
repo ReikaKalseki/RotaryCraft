@@ -263,9 +263,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 		if (!enabled)
 			return false;
 		if (this.isRedstoneControlEnabled()) {
-			boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			RedstoneState rs = this.getRedstoneState();
-			return red ? rs == RedstoneState.HI : rs == RedstoneState.LOW;
+			return this.hasRedstoneSignal() ? rs == RedstoneState.HI : rs == RedstoneState.LOW;
 		}
 		else
 			return true;

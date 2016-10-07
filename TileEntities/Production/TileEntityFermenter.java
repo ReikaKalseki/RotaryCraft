@@ -311,10 +311,9 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
-		boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (i >= 2)
 			return false;
-		if (red || !ConfigRegistry.enableFermenterYeast()) {
+		if (this.hasRedstoneSignal() || !ConfigRegistry.enableFermenterYeast()) {
 			switch(i) {
 				case 0:
 					return is.getItem() == ItemRegistry.YEAST.getItemInstance();
