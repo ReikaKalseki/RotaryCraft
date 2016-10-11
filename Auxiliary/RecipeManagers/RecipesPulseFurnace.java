@@ -357,7 +357,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			}
 		}
 
-		if (ModList.MEKANISM.isLoaded()) {
+		if (ModList.MEKTOOLS.isLoaded()) {
 			for (Materials m : Materials.values()) {
 				ItemStack out = m.getRawMaterial();
 				for (Tools t : Tools.values()) {

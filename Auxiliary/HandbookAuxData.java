@@ -661,7 +661,7 @@ public final class HandbookAuxData {
 					int x = posX+k*18+10;
 					int y = posY+n*18+29;
 
-					api.drawItemStack(item, font, is, x, y);
+					api.drawItemStackWithTooltip(item, font, is, x, y);
 
 					GL11.glColor4f(1, 1, 1, 1);
 					if (api.isMouseInBox(x, x+17, y, y+17)) {

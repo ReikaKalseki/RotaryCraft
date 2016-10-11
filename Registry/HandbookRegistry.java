@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -644,7 +645,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	public static List<HandbookRegistry> getEntriesForScreen(int screen) {
 		//ReikaJavaLibrary.pConsole(screen);
-		List<HandbookRegistry> li = new ArrayList<HandbookRegistry>();
+		List<HandbookRegistry> li = new ArrayList();
 		for (int i = 0; i < tabList.length; i++) {
 			if (tabList[i].getScreen() == screen/* && !tabList[i].isDummiedOut()*/) {
 				li.add(tabList[i]);
@@ -689,6 +690,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	}
 
 	public String getTitle() {
+		if (this == TOC)
+			return "Info";
 		if (isParent)
 			return title;
 		if (this.getParent() == ENGINEDESC) {
@@ -1003,6 +1006,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return new ItemStack(Items.clock);
 		if (this == MUFFLING)
 			return ReikaItemHelper.whiteWool;
+		if (this == INTERDIM)
+			return new ItemStack(Blocks.portal);
 		if (this == COMPUTERCRAFT)
 			return ItemStacks.pcb;
 		if (this == TRANSFER)

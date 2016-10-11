@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
@@ -104,7 +105,7 @@ public class TileEntityGroundHydrator extends RotaryCraftTileEntity implements P
 	}
 
 	private int getTickRate(World world) {
-		return ReikaMystcraftHelper.isMystAge(world) && ReikaMystcraftHelper.isSymbolPresent(world, "EnvAccel") ? 1 : 2;
+		return ModList.MYSTCRAFT.isLoaded() && ReikaMystcraftHelper.isMystAge(world) && ReikaMystcraftHelper.isSymbolPresent(world, "EnvAccel") ? 1 : 2;
 	}
 
 	private boolean refreshHumus(World world, int x, int y, int z, int meta) {

@@ -300,6 +300,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			Tamb /= 2;
 		}
 		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
+		if (iceside == null)
+			iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.packed_ice);
 		if (iceside != null) {
 			if (Tamb > 0)
 				Tamb /= 4;
@@ -326,6 +328,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			temperature = MAXTEMP;
 		if (temperature > 100) {
 			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
+			if (side == null)
+				side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow_layer);
 			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.air, 0);
 			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
