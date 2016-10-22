@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <machines>
 	<bedrockbreaker>
 		<desc>
@@ -478,9 +478,17 @@
 			磁化器使用一个快速旋转的轴使轴芯内产生出磁场.这是交流电引擎的关键部件.它需要交替的红石电流以及高转速.
 		</desc>
 		<note>
-			需求功率: %dW
-			需求转速: %d rad/s
-			动力输入: 后面
+			<sub>
+				<s1>
+					需求功率: %dW
+					需求转速: %d rad/s
+					动力输入: 后面
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+
 		</note>
 	</magnetizer>
 	<containment>
@@ -1128,4 +1136,65 @@
 			加载区块半径: %d+((功率-%d)/%d)
 		</note>
 	</chunkloader>
+	<drops>
+		<desc>
+			方块掉落处理装置可以将方块处理成它们的凋落物,一般用来节省放置再挖掉它们的时间(砂砾). 同时它也可以拆开IC2的废料盒.
+		</desc>
+		<note>
+			需求功率: %dW
+			需求扭矩: %d Nm
+			动力输入: 后方
+		</note>
+	</drops>
+	<filler>
+		<desc>
+			方块填充器可以用方块填充下方连续的空白区域,类似于流体填装器.更重的方块需要更高的功率带动
+		</desc>
+		<note>
+			需求功率: %dW
+			动力输入: 任意
+			
+			支持使用Botania的黑洞护符
+		</note>
+	</filler>
+	<hydrator>
+		<desc>
+			这台机器将液泵送来的水散发到土壤中,使得耕地方块湿润而不需要水方块,还能加速作物生长.不仅如此,它还能延缓甚至逆转腐殖土的沙化,加速沼泽土变成泥炭的速度.
+		</desc>
+		<note>
+			
+		</note>
+	</hydrator>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
 </machines>
