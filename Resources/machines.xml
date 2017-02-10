@@ -958,6 +958,7 @@
 		<note>
 			Required power and torque vary per fluid conversion
 			Power Input: Bottom
+			
 			Valid Conversions:
 			%s
 		</note>
@@ -1168,14 +1169,18 @@
 			
 		</note>
 	</hydrator>
-	<name>
+	<gatling>
 		<desc>
-			
+			A gatling gun fires small projectile rounds - in this case ball bearings - at targets, rapidly destroying them. Due to its design, it will continue firing - and consuming ammunition - as long as it has a target; that, combined with its less-than-perfect aim, means that running this near friendly targets or fragile materials is ill-advised.
 		</desc>
 		<note>
+			Required Power: %dW
+			Required Speed: %d rad/s
+			Power Input: Bottom or top, orientation dependent
 			
+			Substantially less effective against slimes
 		</note>
-	</name>
+	</gatling>
 	<name>
 		<desc>
 			

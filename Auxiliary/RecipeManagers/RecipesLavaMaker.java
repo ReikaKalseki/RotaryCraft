@@ -24,6 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
@@ -221,6 +223,22 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipeList.removeValue((MeltingRecipe)recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
+		LuaBlock fluid = lb.getChild("output_fluid");
+		String s = fluid.getString("type");
+		Fluid f = FluidRegistry.getFluid(s);
+		if (f == null)
+			throw new IllegalArgumentException("Fluid '"+s+"' does not exist!");
+		this.verifyOutputFluid(f);
+		FluidStack fs = new FluidStack(f, fluid.getInt("amount"));
+		int temp = lb.getInt("temperature");
+		long energy = lb.getLong("energy");
+		this.addRecipe(in, fs, temp, energy, RecipeLevel.CUSTOM);
+		return true;
 	}
 
 }

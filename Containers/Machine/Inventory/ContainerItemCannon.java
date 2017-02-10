@@ -37,4 +37,9 @@ public class ContainerItemCannon extends ContainerIOMachine
 		for (int j = 0; j < 9; j++)
 			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, dy));
 	}
+
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+	}
 }

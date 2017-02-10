@@ -29,6 +29,7 @@ import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.ChromatiCraft.Block.Dye.BlockDyeLeaf;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTieredResource;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -145,6 +146,9 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 		}
 		else if (ModList.CHROMATICRAFT.isLoaded() && b instanceof BlockDyeLeaf) {
 			return Result.DEFAULT;
+		}
+		else if (world.getTileEntity(x, y, z) instanceof TileEntityBase) {
+			return Result.DENY;
 		}
 		else if (b instanceof IShearable) {
 			((IShearable)b).onSheared(player.getCurrentEquippedItem(), world, x, y, z, 0);

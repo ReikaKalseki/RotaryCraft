@@ -47,7 +47,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	static {
 		ingredients.add(new KeyedItemStack(Items.blaze_powder).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(Items.coal).setIgnoreMetadata(false).setSimpleHash(true));
+		ingredients.add(new KeyedItemStack(new ItemStack(Items.coal, 1, 0)).setIgnoreMetadata(false).setSimpleHash(true));
 		ingredients.add(new KeyedItemStack(Items.magma_cream).setSimpleHash(true));
 		ingredients.add(new KeyedItemStack(ItemRegistry.ETHANOL.getStackOf()).setIgnoreMetadata(false).setSimpleHash(true));
 		ingredients.add(new KeyedItemStack(ItemStacks.netherrackdust).setSimpleHash(true));
@@ -160,13 +160,16 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 	private boolean getAllIngredients() {
+		HashSet<KeyedItemStack> check = new HashSet(ingredients);
 		for (int i = 0; i < ingredients.size(); i++) {
 			if (inv[i] == null)
 				return false;
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ingredients[i.getItem, ingredients[i].getItemDamage()));
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", i)+String.valueOf(this.haveIngredient(ingredients[i.getItem, ingredients[i].getItemDamage())));
-			if (!ingredients.contains(new KeyedItemStack(inv[i]).setSimpleHash(true)))
+			KeyedItemStack ks = new KeyedItemStack(inv[i]).setSimpleHash(true);
+			if (!check.contains(ks))
 				return false;
+			check.remove(ks);
 		}
 		return true;
 	}

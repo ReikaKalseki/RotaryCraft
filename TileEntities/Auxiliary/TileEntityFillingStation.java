@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -108,7 +107,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 		}
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[FUEL_SLOT]);
 		tank.addLiquid(fs.amount, fs.getFluid());
-		inv[FUEL_SLOT] = new ItemStack(Items.bucket);
+		inv[FUEL_SLOT] = FluidContainerRegistry.drainFluidContainer(inv[FUEL_SLOT]);
 	}
 
 	private void fill() {

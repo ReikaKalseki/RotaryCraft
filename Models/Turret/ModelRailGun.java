@@ -215,6 +215,9 @@ public class ModelRailGun extends RotaryModelBase
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
 		Shape5.render(te, f5);
+
+		GL11.glPushMatrix();
+
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 0, 1, 0);
 		GL11.glTranslated(0, -1, 0);
@@ -227,6 +230,7 @@ public class ModelRailGun extends RotaryModelBase
 		Shape7e.render(te, f5);
 		Shape7f.render(te, f5);
 		Shape7g.render(te, f5);
+
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(theta, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);
@@ -245,13 +249,8 @@ public class ModelRailGun extends RotaryModelBase
 		Shape2a1.render(te, f5);
 		Shape4.render(te, f5);
 		Shape4a.render(te, f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-phi, 0, 1, 0);
-		GL11.glTranslated(0, -1, 0);
 
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-theta, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
+		GL11.glPopMatrix();
 	}
 
 	@Override

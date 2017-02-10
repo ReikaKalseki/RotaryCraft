@@ -22,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -322,6 +324,16 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			}
 		}
 
+		ItemStack dust = ReikaItemHelper.lookupItem("exnihilo:dust");
+		if (dust != null) {
+			this.addRecipe(Blocks.sand, dust, RecipeLevel.MODINTERACT);
+		}
+
+		ItemStack endDust = ReikaItemHelper.lookupItem("exnihilo:exnihilo.gravel_ender");
+		if (endDust != null) {
+			this.addRecipe(Blocks.end_stone, endDust, RecipeLevel.MODINTERACT);
+		}
+
 		this.addOreDictRecipe("cropCinderpearl", new ItemStack(Items.blaze_powder, 3, 0), RecipeLevel.MODINTERACT);
 		this.addOreDictRecipe("cropShimmerleaf", ReikaItemHelper.getSizedItemStack(ExtractorModOres.getSmeltedIngot(ModOreList.CINNABAR), 3), RecipeLevel.MODINTERACT);
 	}
@@ -388,5 +400,14 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipes.removeValue((GrinderRecipe)recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		this.addCustomRecipe(in, out);
+		return true;
 	}
 }

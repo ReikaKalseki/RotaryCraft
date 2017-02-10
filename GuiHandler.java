@@ -66,6 +66,7 @@ import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerHeater;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerItemCannon;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerItemFilter;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerLandmine;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerMultiCannon;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerObsidian;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerPerformance;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerPowerBus;
@@ -126,6 +127,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiHeater;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemFilter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiLandmine;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiMultiCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiObsidian;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiParticle;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPerformance;
@@ -201,6 +203,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
@@ -381,6 +384,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityItemFilter) {
 			return new ContainerItemFilter(player, (TileEntityItemFilter) te);
+		}
+		if (te instanceof TileEntityMultiCannon) {
+			return new ContainerMultiCannon(player, (TileEntityMultiCannon) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -619,6 +625,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityItemFilter) {
 			return new GuiItemFilter(player, (TileEntityItemFilter) te);
+		}
+		if (te instanceof TileEntityMultiCannon) {
+			return new GuiMultiCannon(player, (TileEntityMultiCannon) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

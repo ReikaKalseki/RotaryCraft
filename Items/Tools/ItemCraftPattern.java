@@ -67,7 +67,7 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 				li.add("Crafts "+item.stackSize+" "+item.getDisplayName());//+" with:");
 			}
 			else {
-				li.add("No Output.");
+				li.add("Items, No Output.");
 			}
 		}
 		li.add("Recipe Mode: "+this.getMode(is).displayName);
@@ -106,8 +106,7 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		ItemStack out = getMode(is).getRecipe(ic, world);
-		if (out == null)
-			return;
+		boolean valid = out != null;
 		NBTTagCompound recipe = new NBTTagCompound();
 		for (int i = 0; i < 9; i++) {
 			ItemStack in = ic.getStackInSlot(i);
@@ -118,10 +117,12 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 			}
 		}
 		is.stackTagCompound.setTag("recipe", recipe);
-		NBTTagCompound outt = new NBTTagCompound();
-		if (out != null)
+		is.stackTagCompound.setBoolean("valid", valid);
+		if (valid) {
+			NBTTagCompound outt = new NBTTagCompound();
 			out.writeToNBT(outt);
-		is.stackTagCompound.setTag("output", outt);
+			is.stackTagCompound.setTag("output", outt);
+		}
 		//ReikaJavaLibrary.pConsole(Arrays.toString(items)+" -> "+out);
 	}
 

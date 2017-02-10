@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
@@ -692,5 +693,10 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public String getUpdateCheckURL() {
 		return CommandableUpdateChecker.reikaURL;
+	}
+
+	@Override
+	public File getConfigFolder() {
+		return config.getConfigFolder();
 	}
 }

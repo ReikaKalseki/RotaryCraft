@@ -28,6 +28,8 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceExponentiator;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
@@ -237,6 +239,22 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
 			}
 
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 2); //redstone
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("redstone");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 3); //coal
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("coal");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
 			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 4); //lux
 			if (drop != null) {
 				Fluid f = FluidRegistry.getFluid("glowstone");
@@ -333,5 +351,34 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			return fluid.amount+" mB of "+fluid.getFluid().getName()+" ("+chance+"%)";
 		}
 
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
+		FluidOut fo = null;
+		ChancedOutputList co = new ChancedOutputList(false);
+		if (lb.hasChild("output_fluid")) {
+			LuaBlock fluid = lb.getChild("output_fluid");
+			String s = fluid.getString("type");
+			Fluid f = FluidRegistry.getFluid(s);
+			if (f == null)
+				throw new IllegalArgumentException("Fluid '"+s+"' does not exist!");
+			this.verifyOutputFluid(f);
+			FluidStack fs = new FluidStack(f, fluid.getInt("amount"));
+			fo = new FluidOut(fs, (float)fluid.getDouble("chance"));
+		}
+		if (lb.hasChild("output_items")) {
+			LuaBlock items = lb.getChild("output_items");
+			for (LuaBlock entry : items.getChildren()) {
+				ItemStack is = crl.parseItemString(entry.getString("item"), entry.getChild("nbt"), true);
+				this.verifyOutputItem(is);
+				if (is != null) {
+					co.addItem(is, (float)entry.getDouble("chance"));
+				}
+			}
+		}
+		this.addRecipe(in, co, fo, RecipeLevel.CUSTOM);
+		return true;
 	}
 }

@@ -9,13 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
-import ic2.api.item.IElectricItem;
-
 import java.util.List;
 
-import mekanism.api.gas.GasStack;
-import mekanism.api.gas.IGasItem;
-import net.machinemuse.api.electricity.MuseElectricItem;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -30,7 +25,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -42,13 +36,10 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
-import cofh.api.energy.IEnergyContainerItem;
 
 import com.google.common.collect.Multimap;
 
@@ -103,47 +94,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	@Override
 	public boolean hitEntity(ItemStack is, EntityLivingBase target, EntityLivingBase player)
 	{
-		for (int i = 1; i < 5; i++) {
-			ItemStack arm = target.getEquipmentInSlot(i);
-			if (arm != null && this.canDamageArmorOf(target)) {
-				Item item = arm.getItem();
-				if (InterfaceCache.MUSEELECTRICITEM.instanceOf(item)) {
-					MuseElectricItem ms = (MuseElectricItem)item;
-					ms.extractEnergy(arm, 5000, false);
-				}
-				else if (InterfaceCache.RFENERGYITEM.instanceOf(item)) {
-					IEnergyContainerItem ie = (IEnergyContainerItem)item;
-					ie.extractEnergy(arm, 5000, false);
-				}
-				else if (InterfaceCache.IELECTRICITEM.instanceOf(item)) {
-					IElectricItem ie = (IElectricItem)item;
-					///???
-					Item id = ie.getEmptyItem(arm);
-					ItemStack newarm = new ItemStack(id, 1, 0);
-					target.setCurrentItemOrArmor(i, newarm);
-				}
-				else if (InterfaceCache.GASITEM.instanceOf(item)) {
-					IGasItem ie = (IGasItem)item;
-					GasStack gas = ie.getGas(arm);
-					if (gas != null && gas.amount > 0)
-						ie.removeGas(arm, Math.max(1, gas.amount/4));
-				}
-				else if (item instanceof ItemBedrockArmor) {
-					//do nothing
-				}
-				else if (item instanceof ItemRotaryArmor && !((ItemRotaryArmor)item).canBeDamaged()) {
-					//do nothing
-				}
-				else {
-					arm.damageItem(100, target);
-					if (arm.getItemDamage() > arm.getMaxDamage() || arm.stackSize <= 0) {
-						arm = null;
-						target.setCurrentItemOrArmor(i, null);
-					}
-					target.playSound("random.break", 0.1F, 0.8F);
-				}
-			}
-		}
+		ReikaEntityHelper.damageArmor(target, 100);
 		if (player instanceof EntityPlayer && (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake((EntityPlayer)player))) {
 			if (target.isDead || target.getHealth() <= 0) {
 				if (itemRand.nextInt(5) == 0) {
@@ -156,11 +107,6 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 			}
 		}
 		return true;
-	}
-
-	private boolean canDamageArmorOf(EntityLivingBase target) {
-		MinecraftServer ms = MinecraftServer.getServer();
-		return target instanceof EntityPlayer ? ms != null && ms.isPVPEnabled() : true;
 	}
 
 	@Override

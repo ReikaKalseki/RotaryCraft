@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -25,7 +26,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Interfaces.Block.SemiUnbreakable;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -79,12 +82,16 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 		world.spawnParticle("hugeexplosion", x+0.5, y+0.5, z+0.5, 0, 0, 0);
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 1, 1);
 		for (int i = 1; i < 6; i++) {
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x-i, y, z, world.getBlock(x-1, y, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x+i, y, z, world.getBlock(x+1, y, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y-i, z, world.getBlock(x, y-1, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y+i, z, world.getBlock(x, y+1, z), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z-i, world.getBlock(x, y, z-1), -1, x, y, z, 4);
-			ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z+i, world.getBlock(x, y, z+1), -1, x, y, z, 4);
+			for (int k = 0; k < 6; k++) {
+				ForgeDirection dir = dirs[k];
+				int dx = x+dir.offsetX;
+				int dy = y+dir.offsetY;
+				int dz = z+dir.offsetZ;
+				Block b = world.getBlock(dx, dy, dz);
+				if (b instanceof SemiUnbreakable && ((SemiUnbreakable)b).isUnbreakable(world, dx, dy, z, world.getBlockMetadata(dx, dy, dz)))
+					continue;
+				ReikaWorldHelper.recursiveBreakWithinSphere(world, dx, dy, dz, world.getBlock(dx, dy, dz), -1, x, y, z, 4);
+			}
 			this.chainedExplosion(world, x, y, z);
 		}
 	}
@@ -194,20 +201,20 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		switch (i) {
-		case 0:
-			return super.isItemValidForSlot(i, is);
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			return is.getItem() == Items.gunpowder;
-		case 5:
-		case 6:
-		case 7:
-		case 8:
-			return this.isModifier(is);
-		default:
-			return false;
+			case 0:
+				return super.isItemValidForSlot(i, is);
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				return is.getItem() == Items.gunpowder;
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+				return this.isModifier(is);
+			default:
+				return false;
 		}
 	}
 

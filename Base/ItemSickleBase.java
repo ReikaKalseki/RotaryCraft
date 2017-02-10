@@ -302,8 +302,12 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 						if (mod == mod2) {
 							if (mod2.isRipe(world, x+i, y+j, z+k)) {
 								Block b2 = id2;
-								ReikaItemHelper.dropItems(world, x+i+0.5, y+j+0.5, z+k+0.5, b2.getDrops(world, x, y, z, meta2, fortune));
-								world.setBlockToAir(x+i, y+j, z+k);
+								//ReikaItemHelper.dropItems(world, x+i+0.5, y+j+0.5, z+k+0.5, b2.getDrops(world, x, y, z, meta2, fortune));
+								ReikaItemHelper.dropItems(world, x+i+0.5, y+j+0.5, z+k+0.5, mod2.getDrops(world, x, y, z, fortune));
+								if (mod2.destroyOnHarvest())
+									world.setBlockToAir(x+i, y+j, z+k);
+								else
+									mod2.setHarvested(world, x+i, y+j, z+k);
 							}
 						}
 					}

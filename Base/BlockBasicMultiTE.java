@@ -103,6 +103,7 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityBigFurnace;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCentrifuge;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
@@ -769,6 +770,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			TileEntityReservoir tr = (TileEntityReservoir)tile;
 			if (e instanceof EntityLivingBase) {
 				tr.applyFluidEffectsToEntity((EntityLivingBase)e);
+			}
+		}
+		if (m == MachineRegistry.CENTRIFUGE) {
+			TileEntityCentrifuge tr = (TileEntityCentrifuge)tile;
+			if (tr.omega > 0 && world.isRemote) {
+			
 			}
 		}
 	}

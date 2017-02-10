@@ -21,6 +21,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
@@ -190,5 +192,20 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 			recipeList.remove(is);
 		}
 		return flag;
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		String fluid = lb.getString("input_fluid");
+		Fluid f = FluidRegistry.getFluid(fluid);
+		if (f == null)
+			throw new IllegalArgumentException("Fluid '"+fluid+"' does not exist!");
+		int amt = lb.getInt("input_amount");
+		int time = lb.getInt("duration");
+		this.addRecipe(in, f, amt, out, time, RecipeLevel.CUSTOM);
+		return true;
 	}
 }

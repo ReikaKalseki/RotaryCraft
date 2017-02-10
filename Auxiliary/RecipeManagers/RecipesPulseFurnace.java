@@ -22,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
@@ -373,5 +375,14 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipes.removeValue((PulseJetRecipe)recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		this.addCustomRecipe(in, out);
+		return true;
 	}
 }

@@ -40,5 +40,6 @@ public class LuaMethods {
 	private static final LuaMethod shiftPlane = new LuaShiftPlane();
 	private static final LuaMethod getCoreMagnet = new LuaCoreMagnetization();
 	private static final LuaMethod setCannonCoord = new LuaSetCannonCoord();
+	private static final LuaMethod afterburner = new LuaSetAfterburner();
 
 }

@@ -16,6 +16,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
@@ -147,5 +149,14 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipes.removeValue((CompactingRecipe)recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		this.addRecipe(in, out, lb.getInt("pressure"), lb.getInt("temperature"), RecipeLevel.CUSTOM);
+		return true;
 	}
 }

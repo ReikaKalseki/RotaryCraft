@@ -12,6 +12,7 @@ package Reika.RotaryCraft.GUIs.Machine;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -25,12 +26,11 @@ public class GuiGPR extends GuiPowerOnlyMachine
 
 	private TileEntityGPR gpr;
 
-	int x;
-	int y;
 	public static final int UNIT = 2;
 
 	private boolean pressL;
 	private boolean pressR;
+	private boolean pressC;
 
 	public GuiGPR(EntityPlayer p5ep, TileEntityGPR GPR) {
 		super(new CoreContainer(p5ep, GPR), GPR);
@@ -45,6 +45,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 
 		boolean keyL = Keyboard.isKeyDown(Keyboard.KEY_LBRACKET);
 		boolean keyR = Keyboard.isKeyDown(Keyboard.KEY_RBRACKET);
+		boolean keyC = Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH);
 
 		if (keyL && !pressL) {
 			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 1);
@@ -62,6 +63,15 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		}
 		else if (keyR && pressR) {
 			pressR = false;
+		}
+
+		if (keyC && !pressC) {
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 0);
+			gpr.shift(gpr.getGuiDirection(), 0);
+			pressC = true;
+		}
+		else if (keyC && pressC) {
+			pressC = false;
 		}
 	}
 
@@ -82,6 +92,14 @@ public class GuiGPR extends GuiPowerOnlyMachine
 				this.drawRect(a+7+UNIT*j, b+16+UNIT*i, a+7+UNIT+UNIT*j, b+16+UNIT*i+UNIT, color);
 			}
 		}
+
+		GL11.glPushMatrix();
+		double d = 0.5;
+		GL11.glScaled(d, d, d);
+		String s = gpr.getLookDirection().toString();
+		int w = fontRendererObj.getStringWidth(s);
+		fontRendererObj.drawString(s, (int)((a+w/2)/d), (int)((b+16)/d), 0xffffff);
+		GL11.glPopMatrix();
 	}
 
 	@Override

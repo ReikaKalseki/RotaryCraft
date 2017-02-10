@@ -33,10 +33,12 @@ import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.EngineType.EngineClass;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -47,7 +49,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidHandler, SimpleProvider, PowerGenerator, IPipeConnection,
+public class TileEntityFuelEngine extends TileEntityIOMachine implements IFluidHandler, PipeConnector, SimpleProvider, PowerGenerator, IPipeConnection,
 TemperatureTE {
 
 	public static final int GEN_OMEGA = 256;
@@ -464,6 +466,21 @@ TemperatureTE {
 	@Override
 	public int getMaxTemperature() {
 		return MAXTEMP;
+	}
+
+	@Override
+	public final boolean canConnectToPipe(MachineRegistry m) {
+		return m.isStandardPipe() || m == MachineRegistry.HOSE || m == MachineRegistry.FUELLINE;
+	}
+
+	@Override
+	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
+		return this.canConnectToPipe(p) && side == ForgeDirection.DOWN;
+	}
+
+	@Override
+	public Flow getFlowForSide(ForgeDirection side) {
+		return side == ForgeDirection.DOWN ? Flow.INPUT : Flow.NONE;
 	}
 
 }

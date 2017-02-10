@@ -20,6 +20,7 @@ import net.minecraft.block.BlockWorkbench;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -50,9 +51,9 @@ import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
+import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
-import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.PlayerInteractEventClient;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -79,6 +80,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -104,6 +106,21 @@ public class RotaryEventManager {
 		if (is != null && (is.getItem() == ItemRegistry.BEDREVEAL.getItemInstance() || is.getItem() == ItemRegistry.BEDHELM.getItemInstance())) {
 			if (ItemBedrockArmor.HelmetUpgrades.VISOR.existsOn(is)) {
 				evt.setResult(Result.DENY);
+			}
+		}
+	}
+
+	@SubscribeEvent(priority=EventPriority.HIGHEST)
+	public void chaosProtection(LivingDropsEvent evt) {
+		if (evt.entity instanceof EntitySlime) {
+			int rounds = evt.entity.getEntityData().getInteger(TileEntityMultiCannon.SLIME_NBT);
+			if (rounds > 0) {
+				int drop = (int)(rounds/TileEntityMultiCannon.AMMO_PER_SHOT);
+				while (drop > 0) {
+					int amt = Math.min(64, drop);
+					ReikaItemHelper.dropItem(evt.entity, ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, amt));
+					drop -= amt;
+				}
 			}
 		}
 	}

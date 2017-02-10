@@ -13,6 +13,8 @@ import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.MagnetizerManager;
@@ -120,6 +122,16 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 			sb.append(mr.item.getDisplayName()+" @ "+Math.max(PowerReceivers.MAGNETIZER.getMinSpeed(), mr.minSpeed)+" rad/s\n");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
+		int speed = lb.getInt("min_speed");
+		int spuT = lb.getInt("speed_per_microtesla");
+		int time = lb.getInt("time_factor");
+		this.addRecipe(in, speed, spuT, time, RecipeLevel.CUSTOM);
+		return true;
 	}
 
 }

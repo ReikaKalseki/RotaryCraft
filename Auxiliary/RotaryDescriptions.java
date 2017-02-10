@@ -549,7 +549,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.SORTING, PowerReceivers.SORTING.getMinPower());
 		addNotes(MachineRegistry.DEFOLIATOR, PowerReceivers.DEFOLIATOR.getMinPower());
 		addNotes(MachineRegistry.BIGFURNACE, PowerReceivers.BIGFURNACE.getMinPower());
-		addNotes(MachineRegistry.DISTILLER, PowerReceivers.DISTILLER.getMinPower(), PowerReceivers.DISTILLER.getMinTorque(), TileEntityDistillery.getValidConversions());
+		addNotes(MachineRegistry.DISTILLER, TileEntityDistillery.getValidConversions());
 		addNotes(MachineRegistry.CRYSTALLIZER, PowerReceivers.CRYSTALLIZER.getMinPower(), PowerReceivers.CRYSTALLIZER.getMinSpeed());
 		addNotes(MachineRegistry.GRINDSTONE, PowerReceivers.GRINDSTONE.getMinPower(), PowerReceivers.GRINDSTONE.getMinTorque());
 		addNotes(MachineRegistry.BLOWER, PowerReceivers.BLOWER.getMinPower(), PowerReceivers.BLOWER.getMinSpeed());
@@ -565,6 +565,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.DROPS, PowerReceivers.DROPS.getMinPower(), PowerReceivers.DROPS.getMinTorque());
 		addNotes(MachineRegistry.SPILLER, PowerReceivers.SPILLER.getMinPower());
 		addNotes(MachineRegistry.FILLER, PowerReceivers.FILLER.getMinPower());
+		addNotes(MachineRegistry.GATLING, PowerReceivers.GATLING.getMinPower(), PowerReceivers.GATLING.getMinSpeed());
 
 		addNotes(MachineRegistry.MAGNETIC, EnergyToPowerBase.MAXTEMP);
 		addNotes(MachineRegistry.PNEUENGINE, EnergyToPowerBase.MAXTEMP);

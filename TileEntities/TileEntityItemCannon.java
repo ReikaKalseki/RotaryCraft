@@ -174,6 +174,7 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 	@Override
 	public void setTarget(WorldLocation loc) {
 		target = loc;
+		this.syncAllData(true);
 	}
 
 	public WorldLocation getTarget() {

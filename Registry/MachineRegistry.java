@@ -187,6 +187,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLaserGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMachineGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySelfDestruct;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
@@ -343,7 +344,8 @@ public enum MachineRegistry implements TileEnum {
 	DROPS(				"machine.drops",			BlockIMachine.class,		TileEntityDropProcessor.class,		8),
 	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9),
 	HYDRATOR(			"machine.hydrator",			BlockMMachine.class,		TileEntityGroundHydrator.class,		21, "RenderHydrator"),
-	FILLER(				"machine.filler", 			BlockMachine.class,			TileEntityBlockFiller.class,		9);
+	FILLER(				"machine.filler", 			BlockMachine.class,			TileEntityBlockFiller.class,		9),
+	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon");
 
 	private final String name;
 	private final Class te;

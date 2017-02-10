@@ -61,11 +61,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 
+		this.getIOSides(world, x, y, z, meta);
 		if (failed) {
 			omega = torque = 0;
 		}
 		else {
-			this.getIOSides(world, x, y, z, meta);
 			this.transferPower(world, x, y, z, meta, true, true);
 		}
 		power = (long)omega*(long)torque;
