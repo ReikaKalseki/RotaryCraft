@@ -135,7 +135,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.recipes.RecipeManagers;
 
 
-@Mod( modid = "RotaryCraft", name="RotaryCraft", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
+@Mod( modid = "RotaryCraft", name="RotaryCraft", version = "v@MAJOR_VERSION@@MINOR_VERSION@", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
 
 public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";

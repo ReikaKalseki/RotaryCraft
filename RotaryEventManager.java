@@ -51,9 +51,9 @@ import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
-import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
+import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.PlayerInteractEventClient;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -305,8 +305,7 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent
-	public void bonemealEvent(BonemealEvent event)
-	{
+	public void bonemealEvent(BonemealEvent event) {
 		if (!event.world.isRemote)  {
 			if (event.block == BlockRegistry.CANOLA.getBlockInstance()) {
 				World world = event.world;

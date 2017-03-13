@@ -374,7 +374,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	private boolean getSlotForItem(int slot, ItemStack is) {
 		ItemStack patt = inv[PATTERN_SLOT];
 		if (ItemRegistry.CRAFTPATTERN.matchItem(patt)) {
-			return slot >= 1 && slot <= 9 && this.patternMatches(slot-1, is, patt);
+			return slot >= 1 && slot <= 9 && ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot-1, is, patt);
 		}
 		HashSet<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
 		if (!slots.isEmpty()) {
@@ -394,10 +394,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			default:
 				return false;
 		}
-	}
-
-	private boolean patternMatches(int slot, ItemStack is, ItemStack p) {
-		return ItemCraftPattern.getMode(p) == RecipeMode.BLASTFURN && ReikaItemHelper.matchStacks(is, ItemCraftPattern.getItems(p)[slot]);
 	}
 
 	@Override

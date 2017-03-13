@@ -196,8 +196,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			cm.setInventorySlotContents(i, this.getStackInSlot(i));
 		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
 		if (wr != null) {
-			this.handleCrafting(wr, ep);
-			return true;
+			return this.handleCrafting(wr, ep);
 		}
 		return false;
 	}
@@ -210,7 +209,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		return true;
 	}
 
-	public void handleCrafting(WorktableRecipe wr, EntityPlayer ep) {
+	public boolean handleCrafting(WorktableRecipe wr, EntityPlayer ep) {
 		if (wr.isRecycling()) {
 			ArrayList<ItemStack> li = wr.getRecycling().getSplitOutput();
 			int i = 9;
@@ -222,6 +221,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		}
 		else {
 			ItemStack is = wr.getOutput();
+			if (inv[13] != null && inv[13].stackSize+is.stackSize > is.getMaxStackSize())
+				return false;
 			is.onCrafting(worldObj, ep, is.stackSize);
 			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
 			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, is));
@@ -234,6 +235,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			}
 		}
 		SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
+		return true;
 	}
 
 	private void makeBedjump() {
@@ -447,11 +449,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		if (i >= 9)
 			return false;
 		//return hasProgram ? inv[i+18] != null && ReikaItemHelper.matchStacks(inv[i+18], itemstack) : true;
-		return ItemRegistry.CRAFTPATTERN.matchItem(inv[18]) ? this.patternMatches(i, itemstack, inv[18]) : true;
-	}
-
-	private boolean patternMatches(int slot, ItemStack is, ItemStack p) {
-		return ItemCraftPattern.getMode(p) == RecipeMode.WORKTABLE && ReikaItemHelper.matchStacks(is, ItemCraftPattern.getItems(p)[slot]);
+		return ItemRegistry.CRAFTPATTERN.matchItem(inv[18]) ? ItemCraftPattern.checkPatternForMatch(this, RecipeMode.WORKTABLE, i, i, itemstack, inv[18]) : true;
 	}
 
 	@Override

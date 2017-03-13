@@ -84,7 +84,7 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 				if (!ep.isSneaking()) {
 					boolean flag2 = super.onItemUse(is, ep, world, dx, y, dz, s, ax, bx, cx);
 					flag = flag2 || flag;
-					if (flag2) {
+					if (flag2 && world.getBlock(dx, y, dz) == Blocks.farmland) {
 						world.setBlockMetadataWithNotify(dx, y, dz, 2, 3);
 						//ReikaItemHelper.dropItem(world, dx+0.5, y+1.2, dz+0.5, new ItemStack(Items.wheat_seeds));
 					}

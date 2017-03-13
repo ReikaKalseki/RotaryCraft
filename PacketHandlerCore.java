@@ -585,7 +585,11 @@ public class PacketHandlerCore implements PacketHandler {
 					((TileEntityJetEngine)te).setBurnerActive(data[0] > 0);
 					break;
 				case CRAFTPATTERNMODE:
-					ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
+					if (control == PacketRegistry.CRAFTPATTERNMODE.getMinValue())
+						ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
+					else if (control == PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1) {
+						ItemCraftPattern.changeStackLimit(ep.getCurrentEquippedItem(), data[0]);
+					}
 					break;
 				case FILTERSETTING:
 					x = NBT.getInteger("posX");
