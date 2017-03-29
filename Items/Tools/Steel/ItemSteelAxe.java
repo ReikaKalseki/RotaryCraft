@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -56,6 +57,8 @@ public class ItemSteelAxe extends ItemAxe implements IndexedItemSprites {
 	public float getDigSpeed(ItemStack stack, Block block, int meta)
 	{
 		float amt = super.getDigSpeed(stack, block, meta);
+		if (ReikaBlockHelper.isLeaf(block, meta))
+			amt *= 6;
 		return amt > 1 ? amt*1.2F : 1;
 	}
 

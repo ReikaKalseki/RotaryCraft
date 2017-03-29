@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemBedrockShears extends ItemShears implements IndexedItemSprites {
 
@@ -173,11 +174,14 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			return 0;
 		if (id == Blocks.sapling)
 			return meta&3;
+		if (id.getClass().getName().equals("vazkii.botania.common.block.BlockModDoubleFlower")) {
+			meta &= 7;
+			if (id == GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower2"))
+				meta += 8;
+			return meta;
+		}
 		if (id instanceof BlockDoublePlant)
 			return meta%BlockDoublePlant.field_149892_a.length;
-		if (id.getClass().getName().equals("vazkii.botania.common.block.BlockModFlower")) {
-			return id.damageDropped(meta);
-		}
 		ModWoodList wood = ModWoodList.getModWoodFromLeaf(id, meta);
 		if (wood != null) {
 			return wood.getLeafMetadatas().get(0);

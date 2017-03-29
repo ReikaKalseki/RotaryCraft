@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -81,7 +80,6 @@ public class ItemStunGun extends ItemChargedTool {
 		if (is.getItemDamage() < 8192 && !ep.capabilities.isCreativeMode)
 			return false;
 		if (!world.isRemote) {
-			MovingObjectPosition mov = new MovingObjectPosition(x, y, z, side, ep.getLookVec());
 			//ReikaChatHelper.write(mov);
 			//ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
 			Block id = world.getBlock(x, y, z);

@@ -52,6 +52,7 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 	private static final DryingBedHandler dryingbed = new DryingBedHandler();
 	private static final WetterHandler wetter = new WetterHandler();
 	private static final FuelEnhancerHandler fuelenhancer = new FuelEnhancerHandler();
+	private static final DropProcessorHandler dropprocessor = new DropProcessorHandler();
 
 	private static final NEITabOccluder occlusion = new NEITabOccluder();
 
@@ -124,6 +125,9 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 
 		API.registerRecipeHandler(fuelenhancer);
 		API.registerUsageHandler(fuelenhancer);
+
+		API.registerRecipeHandler(dropprocessor);
+		API.registerUsageHandler(dropprocessor);
 
 		RotaryCraft.logger.log("Hiding technical blocks from NEI!");
 		for (int i = 0; i < BlockRegistry.blockList.length; i++) {

@@ -74,7 +74,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
 		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE); //create a tar
 
-		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 4), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 3), RecipeLevel.PERIPHERAL);
 		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), RecipeLevel.CORE);
 
 		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), RecipeLevel.PROTECTED);//, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));

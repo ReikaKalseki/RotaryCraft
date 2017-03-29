@@ -309,10 +309,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 		int Tadd = 0;
 		if (RotaryAux.isNextToFire(world, x, y, z)) {
-			Tadd += Tamb >= 300 ? 100 : 200;
+			Tadd += Tamb >= 100 ? 100 : 200;
 		}
 		if (RotaryAux.isNextToLava(world, x, y, z)) {
-			Tadd += Tamb >= 300 ? 400 : 600;
+			Tadd += Tamb >= 100 ? 400 : 600;
 		}
 		Tamb += Tadd;
 
