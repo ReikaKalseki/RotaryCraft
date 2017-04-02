@@ -106,7 +106,7 @@ public class RotaryRecipes {
 		if (ModList.THERMALEXPANSION.isLoaded())
 			addThermalExpansion();
 		if (ModList.BCENERGY.isLoaded()) {
-			FuelManager.INSTANCE.addFuel(FluidRegistry.getFluid("rc ethanol"), ReikaBuildCraftHelper.getFuelRFPerTick()*3/2, 3000); //ethanol generates about 50% more power, but burns fast
+			FuelManager.INSTANCE.addFuel(FluidRegistry.getFluid("rc ethanol"), ReikaBuildCraftHelper.getFuelRFPerTick()*3/2, 1500); //ethanol generates about 50% more power, but burns fast
 			CoolantManager.INSTANCE.addCoolant(FluidRegistry.getFluid("rc liquid nitrogen"), 0.01F);
 		}
 	}
@@ -681,6 +681,8 @@ public class RotaryRecipes {
 		MachineRegistry.HYDRATOR.addOreRecipe("sls", "p p", "PpP", 's', ItemStacks.steelingot, 'p', "plankWood", 'l', Blocks.ladder, 'P', ItemStacks.basepanel);
 
 		MachineRegistry.GATLING.addCrafting("PPG", " GA", "  B", 'B', ItemStacks.railbase, 'A', ItemStacks.railaim, 'G', ItemStacks.steelgear, 'P', ItemStacks.cylinder);
+
+		MachineRegistry.SPILLWAY.addCrafting("S  ", "PSP", "PpP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe);
 	}
 
 	private static void addCraftItems() {

@@ -265,6 +265,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 10F;
 		if (b == Blocks.iron_door)
 			return 18F;
+		if (b == Blocks.bookshelf)
+			return 8F;
 		if (ModList.CHROMATICRAFT.isLoaded() && b instanceof CrystalBlock)
 			return 24F;
 

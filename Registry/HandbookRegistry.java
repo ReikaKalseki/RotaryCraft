@@ -239,6 +239,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	CRAFTER(MachineRegistry.CRAFTER),
 	CHUNKLOADER(MachineRegistry.CHUNKLOADER),
 	FILLER(MachineRegistry.FILLER),
+	SPILLWAY(MachineRegistry.SPILLWAY),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),

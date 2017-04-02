@@ -60,7 +60,7 @@ public abstract class TileEntityAreaFiller extends TileEntityPowerReceiver imple
 							blocks.recursiveAddWithBoundsNoFluidSource(world, x, y-1, z, bk.blockID, x-r, 0, z-r, x+r, y-1, z+r);
 					}
 					blocks.sort(distanceComparator);
-					blocks.sortBlocksByHeight();
+					blocks.sortBlocksByHeight(false);
 				}
 				if (tickcount >= this.getOperationTime() && !blocks.isEmpty()) {
 					tickcount = 0;

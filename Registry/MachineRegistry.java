@@ -153,6 +153,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
+import Reika.RotaryCraft.TileEntities.Production.TileEntitySpillway;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
@@ -345,7 +346,8 @@ public enum MachineRegistry implements TileEnum {
 	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9),
 	HYDRATOR(			"machine.hydrator",			BlockMMachine.class,		TileEntityGroundHydrator.class,		21, "RenderHydrator"),
 	FILLER(				"machine.filler", 			BlockMachine.class,			TileEntityBlockFiller.class,		9),
-	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon");
+	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon"),
+	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway");
 
 	private final String name;
 	private final Class te;
@@ -706,6 +708,7 @@ public enum MachineRegistry implements TileEnum {
 			case FAN:
 			case PROJECTOR:
 			case SCALECHEST:
+			case SPILLWAY:
 				return true;
 			default:
 				return false;
@@ -846,6 +849,7 @@ public enum MachineRegistry implements TileEnum {
 			case BUSCONTROLLER:
 			case REFRIGERATOR:
 			case DROPS:
+			case SPILLWAY:
 				return true;
 			default:
 				return false;

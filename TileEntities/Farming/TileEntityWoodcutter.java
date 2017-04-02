@@ -83,7 +83,6 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 	private boolean cuttingTree;
 
-	private Comparator<Coordinate> inwardsComparator;
 	private Comparator<Coordinate> leafPriority;
 
 	private static final int MAX_JAM = 20;
@@ -110,7 +109,6 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
 		leafPriority = new LeafPrioritizer(world);
-		inwardsComparator = new InwardsComparator();
 	}
 
 	@Override
@@ -155,9 +153,9 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 			this.checkAndMatchInventory();
 
-			tree.sortBlocksByHeight();
+			tree.sortBlocksByHeight(false);
 			tree.reverseBlockOrder();
-			tree.sort(inwardsComparator);
+			tree.sortBlocksByDistance(new Coordinate(this));
 			tree.sort(leafPriority);
 			treeCopy = (TreeReader)tree.copy();
 		}
@@ -702,15 +700,6 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 			if (ModWoodList.isModLeaf(bk.blockID, bk.metadata))
 				return true;
 			return false;
-		}
-
-	}
-
-	private class InwardsComparator implements Comparator<Coordinate> {
-
-		@Override
-		public int compare(Coordinate o1, Coordinate o2) {
-			return (int)Math.signum(o2.getDistanceTo(editx, edity, editz)-o1.getDistanceTo(editx, edity, editz));
 		}
 
 	}

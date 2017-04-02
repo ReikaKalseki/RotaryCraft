@@ -39,6 +39,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CentrifugeManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -294,6 +295,10 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
 				this.addRecipe(berry, fs, 100, RecipeLevel.MODINTERACT);
 			}
+
+			ItemStack chaff = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
+			ItemStack blueslime = ReikaItemHelper.lookupItem("TConstruct:strangeFood");
+			this.addRecipe(ModWoodList.SLIME.getSaplingID(), null, RecipeLevel.MODINTERACT, new ItemStack(Items.slime_ball), 70, blueslime, 20, chaff, 100);
 		}
 
 		if (ModList.MAGICCROPS.isLoaded()) {

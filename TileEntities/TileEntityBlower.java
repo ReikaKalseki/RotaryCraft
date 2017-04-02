@@ -64,7 +64,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 				dualityField = c.getDeclaredField("duality");
 				dualityField.setAccessible(true);
 			}
-			catch(Exception e) {
+			catch (Exception e) {
 				RotaryCraft.logger.logError("Could not add Item Pump AE pattern interfacing!");
 				e.printStackTrace();
 				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.APPENG, e);
@@ -183,7 +183,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 	}
 
 	@ModDependent(ModList.APPENG)
-	private IInventory getPatterns(TileEntity target) throws Exception {
+	public static IInventory getPatterns(TileEntity target) throws Exception {
 		return (IInventory)getPatterns.invoke(dualityField.get(target));
 	}
 

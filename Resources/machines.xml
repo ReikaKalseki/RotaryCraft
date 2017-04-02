@@ -1181,14 +1181,14 @@
 			Substantially less effective against slimes
 		</note>
 	</gatling>
-	<name>
+	<spillway>
 		<desc>
-			
+			The spillway draws liquid from bodies of water connected to it; if connected to a flowing stream, it will provide an infinite supply of fresh water. Connected to a stagnant pool or pond, and it will rapidly drain it, allowing for easily drying large areas.
 		</desc>
 		<note>
 			
 		</note>
-	</name>
+	</spillway>
 	<name>
 		<desc>
 			
