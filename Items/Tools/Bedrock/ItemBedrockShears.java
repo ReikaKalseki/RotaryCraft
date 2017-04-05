@@ -177,7 +177,7 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 		if (id.getClass().getName().equals("vazkii.botania.common.block.BlockModDoubleFlower")) {
 			meta &= 7;
 			if (id == GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower2"))
-				meta += 8;
+				;//meta += 8;
 			return meta;
 		}
 		if (id instanceof BlockDoublePlant)

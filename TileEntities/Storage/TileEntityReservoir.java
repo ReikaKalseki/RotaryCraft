@@ -35,6 +35,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Interfaces.TileEntity.OpenTopTank;
 import Reika.DragonAPI.Interfaces.TileEntity.PlaceNotification;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
@@ -54,7 +55,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine, BreakAction, AdjacentUpdateWatcher, PlaceNotification {
+public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine, BreakAction,
+AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 
 	public static final int CAPACITY = 64000;
 
@@ -691,5 +693,15 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			e.extinguish();
 		}
 
+	}
+
+	@Override
+	public int addLiquid(Fluid f, int amt, boolean doAdd) {
+		if (!tank.isEmpty() && tank.getActualFluid() != f)
+			return 0;
+		amt = Math.min(amt, tank.getRemainingSpace());
+		if (doAdd)
+			tank.addLiquid(amt, f);
+		return amt;
 	}
 }

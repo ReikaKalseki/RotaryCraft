@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.ModInterface;
+package Reika.RotaryCraft.ModInterface.Conversion;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;

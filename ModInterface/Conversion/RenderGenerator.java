@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.ModInterface;
+package Reika.RotaryCraft.ModInterface.Conversion;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -18,17 +18,17 @@ import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.ModInterface.ModelGenerator;
 
-public class RenderPneumatic extends RotaryTERenderer
+public class RenderGenerator extends RotaryTERenderer
 {
 
-	private ModelPneumatic PneumaticModel = new ModelPneumatic();
-	//private ModelPneumaticV PneumaticModelV = new ModelPneumaticV();
+	private ModelGenerator GeneratorModel = new ModelGenerator();
 
 	/**
 	 * Renders the TileEntity for the position.
 	 */
-	public void renderTileEntityPneumaticEngineAt(TileEntityPneumaticEngine tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityGeneratorAt(TileEntityGenerator tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -37,10 +37,10 @@ public class RenderPneumatic extends RotaryTERenderer
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelPneumatic var14;
-		var14 = PneumaticModel;
+		ModelGenerator var14;
+		var14 = GeneratorModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pneutex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/generatortex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -61,8 +61,8 @@ public class RenderPneumatic extends RotaryTERenderer
 			break;
 		}
 
-		GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
-		var14.renderAll(tile, null, -tile.phi, 0);
+		GL11.glRotatef(var11+180, 0.0F, 1.0F, 0.0F);
+		var14.renderAll(tile, null, 0, 0);
 
 		this.closeGL(tile);
 	}
@@ -71,7 +71,7 @@ public class RenderPneumatic extends RotaryTERenderer
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
-			this.renderTileEntityPneumaticEngineAt((TileEntityPneumaticEngine)tile, par2, par4, par6, par8);
+			this.renderTileEntityGeneratorAt((TileEntityGenerator)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
 		}
@@ -79,6 +79,6 @@ public class RenderPneumatic extends RotaryTERenderer
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "pneutex.png";
+		return "generatortex.png";
 	}
 }

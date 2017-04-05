@@ -45,6 +45,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
@@ -74,15 +75,15 @@ import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
-import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
-import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
-import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
-import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
-import Reika.RotaryCraft.ModInterface.TileEntityMagnetic;
-import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.ModInterface.TileEntitySteam;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityBoiler;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityElectricMotor;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityGenerator;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityMagnetic;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityPneumaticEngine;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
@@ -438,6 +439,8 @@ public enum MachineRegistry implements TileEnum {
 
 	public String getRenderPackage() {
 		if (this.hasPrerequisite() || BlockModEngine.class.isAssignableFrom(blockClass)) {
+			if (EnergyToPowerBase.class.isAssignableFrom(te) || RCToModConverter.class.isAssignableFrom(te))
+				return "Reika.RotaryCraft.ModInterface.Conversion";
 			return "Reika.RotaryCraft.ModInterface";
 		}
 
