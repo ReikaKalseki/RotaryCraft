@@ -350,7 +350,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 		if (id == Blocks.farmland) {
 			return world.getBlockMetadata(x, y, z) > 0;
 		}
-		return id.isFertile(world, x, y, z) && world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, (IPlantable)BlockRegistry.CANOLA.getBlockInstance());
+		return id.isFertile(world, x, y, z) && id.canSustainPlant(world, x, y, z, ForgeDirection.UP, (IPlantable)BlockRegistry.CANOLA.getBlockInstance());
 		//return farmBlocks.contains(id);
 	}
 

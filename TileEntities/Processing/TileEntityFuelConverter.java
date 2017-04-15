@@ -89,8 +89,8 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 			}
 		}
 
-		public static void addRecipe(String name, String in, String out, int sp, int r, double f, ItemMatch... items) {
-			Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, ItemMatch[].class}, new Object[]{in, out, sp, r, f, items});
+		public static void addRecipe(String name, String in, String out, int speed, int fluidRatio, double itemConsumeChance, ItemMatch... items) {
+			Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, ItemMatch[].class}, new Object[]{in, out, speed, fluidRatio, itemConsumeChance, items});
 			conversionMap.put(in, c);
 			conversionOutputMap.put(out, c);
 			list = values();

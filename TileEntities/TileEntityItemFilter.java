@@ -11,6 +11,8 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import net.minecraft.item.Item;
@@ -31,6 +33,7 @@ import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.RotaryCraft.RotaryCraft;
@@ -262,12 +265,14 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 		private final MatchType[] matchOre;
 		private final NBTTagCompound matchNBT; //compound and list matches if has tag, not tag.equals(); everything else equals
+		private final HashMap<String, MatchType> matchClass;
 
 		public final Item itemID;
 		public final int metadata;
 		public final String modID;
 		private final String[] oreDict;
 		private final NBTTagCompound nbt;
+		private final Collection<String> classList;
 
 		private MatchData(ItemStack is) {
 			itemID = is.getItem();
@@ -283,9 +288,31 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			else {
 				matchNBT = null;
 			}
+			classList = this.calcClasses(is.getItem());
+			matchClass = new HashMap();
+			for (String s : classList) {
+				matchClass.put(s, MatchType.MATCH);
+			}
 		}
 
-		private MatchData(Item itemID, int metadata, String modID, NBTTagCompound nbt, String[] oreDict, MatchType matchID, MatchType matchMetadata, MatchType matchMod, MatchType doCheckNBT, MatchType doCheckOre, MatchType[] matchOre, NBTTagCompound matchNBT) {
+		private Collection<String> calcClasses(Item item) {
+			ArrayList<String> li = new ArrayList();
+			Class c = item.getClass();
+			int n = 0;
+			do {
+				String s = ReikaStringParser.getNOf(">", n);
+				li.add(s+c.getSimpleName());
+				Class[] ints = c.getInterfaces();
+				for (int i = 0; i < ints.length; i++) {
+					li.add(s+"%"+ints[i].getSimpleName());
+				}
+				c = c.getSuperclass();
+				n++;
+			} while (c != null && c != Item.class); //no point in showing Item (or Object)
+			return li;
+		}
+
+		private MatchData(Item itemID, int metadata, String modID, NBTTagCompound nbt, String[] oreDict, Collection<String> classList, MatchType matchID, MatchType matchMetadata, MatchType matchMod, MatchType doCheckNBT, MatchType doCheckOre, MatchType[] matchOre, NBTTagCompound matchNBT, HashMap<String, MatchType> matchClass) {
 			if (matchNBT.hasNoTags())
 				matchNBT = null;
 			if (nbt.hasNoTags())
@@ -295,6 +322,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			this.modID = modID;
 			this.nbt = nbt;
 			this.oreDict = oreDict;
+			this.classList = classList;
 			this.matchID = matchID;
 			this.matchMetadata = matchMetadata;
 			this.matchMod = matchMod;
@@ -302,6 +330,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			this.doCheckOre = doCheckOre;
 			this.matchOre = matchOre;
 			this.matchNBT = matchNBT;
+			this.matchClass = matchClass;
 		}
 
 		public MatchData loadFrom(MatchData data) {
@@ -330,6 +359,14 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			settings.setTag("ores", ore2);
 			if (nbt != null)
 				settings.setTag("nbt", matchNBT);
+
+			NBTTagCompound classes = new NBTTagCompound();
+			for (String s : matchClass.keySet()) {
+				MatchType m = matchClass.get(s);
+				classes.setInteger(s, m.ordinal());
+			}
+			settings.setTag("classes", classes);
+
 			tag.setTag("settings", settings);
 
 			NBTTagCompound val = new NBTTagCompound();
@@ -344,6 +381,12 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				ore.appendTag(new NBTTagString(oreDict[i]));
 			}
 			val.setTag("ores", ore);
+			NBTTagList classTypes = new NBTTagList();
+			for (String s : classList) {
+				classTypes.appendTag(new NBTTagString(s));
+			}
+			val.setTag("classes", classTypes);
+
 			return tag;
 		}
 
@@ -361,6 +404,12 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				li.add(s.func_150285_a_());
 			}
 			String[] oreDict = li.toArray(new String[li.size()]);
+			NBTTagList classTypes = val.getTagList("classes", NBTTypes.STRING.ID);
+			ArrayList<String> classList = new ArrayList();
+			for (Object o : classTypes.tagList) {
+				String s = ((NBTTagString)o).func_150285_a_();
+				classList.add(s);
+			}
 
 			NBTTagCompound settings = tag.getCompoundTag("settings");
 			MatchType matchID = MatchType.list[settings.getInteger("item")];
@@ -374,7 +423,14 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				matchOre[i] = MatchType.list[ore2.getInteger(oreDict[i])];
 			}
 			NBTTagCompound matchNBT = settings.getCompoundTag("nbt");
-			return new MatchData(itemID, metadata, modID, nbt, oreDict, matchID, matchMetadata, matchMod, doCheckNBT, doCheckOre, matchOre, matchNBT);
+			NBTTagCompound classes = settings.getCompoundTag("classes");
+			HashMap<String, MatchType> matchClasses = new HashMap();
+			for (Object o : classes.func_150296_c()) {
+				String s = (String)o;
+				MatchType m = MatchType.list[classes.getInteger(s)];
+				matchClasses.put(s, m);
+			}
+			return new MatchData(itemID, metadata, modID, nbt, oreDict, classList, matchID, matchMetadata, matchMod, doCheckNBT, doCheckOre, matchOre, matchNBT, matchClasses);
 		}
 
 		private void incrementSetting(MatchDisplay m) {
@@ -416,6 +472,9 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					int i = Integer.parseInt(m.displayName);
 					matchOre[i] = matchOre[i].getNext();
 					break;
+				case CLASS:
+					matchClass.put(m.displayName, matchClass.get(m.displayName).getNext());
+					break;
 			}
 		}
 
@@ -433,6 +492,29 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			ArrayList<MatchDisplay> li = new ArrayList();
 			for (int i = 0; i < oreDict.length; i++) {
 				li.add(new MatchDisplay(this, SettingType.ORE, String.valueOf(i), oreDict[i], matchOre[i]));
+			}
+			return li;
+		}
+
+		public ArrayList<MatchDisplay> getClassDisplay() {
+			ArrayList<MatchDisplay> li = new ArrayList();
+			for (String s : classList) {
+				String orig = s;
+				String id = "Item Class";
+				if (s.startsWith(">")) {
+					int n = 0;
+					while (s.startsWith(">")) {
+						s = s.substring(1);
+						n++;
+					}
+					id = "Parent Class x"+n;
+				}
+				if (s.startsWith("%")) {
+					s = s.substring(1);
+					id = "Interface";
+				}
+				String val = s;
+				li.add(new MatchDisplay(this, SettingType.CLASS, id, val, matchClass.get(orig)));
 			}
 			return li;
 		}
@@ -517,6 +599,25 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 						return false;
 				}
 			}
+			Item item = is.getItem();
+			Class c1 = itemID.getClass();
+			Class c2 = item.getClass();
+			int n = 0;
+			do {
+				String s = ReikaStringParser.getNOf(">", n);
+				MatchType m = matchClass.get(s+c1.getSimpleName());
+				if (m.check(c1 == c2))
+					return false;
+				Class[] ints1 = c1.getInterfaces();
+				Class[] ints2 = c2.getInterfaces();
+				for (int i = 0; i < ints1.length; i++) {
+					m = matchClass.get(s+ints1[i].getSimpleName());
+					if (m.check(ints1[i] == ints2[i]))
+						return false;
+				}
+				c1 = c1.getSuperclass();
+				n++;
+			} while (c1 != null && c1 != Item.class && c2 != null && c2 != Item.class);
 			if (doCheckNBT != MatchType.IGNORE) {
 				if (nbt == is.stackTagCompound)
 					if (doCheckNBT.check(true))
@@ -791,7 +892,8 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	public static enum SettingType {
 		BASIC(),
 		ORE(),
-		NBT();
+		NBT(),
+		CLASS();
 
 		private static final SettingType[] list = values();
 

@@ -142,7 +142,7 @@ public class DropProcessorHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadTransferRects() {
-		transferRects.add(new RecipeTransferRect(new Rectangle(39, 16, 40, 40), "rcdrops"));
+		transferRects.add(new RecipeTransferRect(new Rectangle(71, 16, 25, 40), "rcdrops"));
 	}
 
 	@Override

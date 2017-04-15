@@ -66,6 +66,9 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 				case ORE:
 					display = match.getOreDisplay();
 					break;
+				case CLASS:
+					display = match.getClassDisplay();
+					break;
 			}
 			if (display != null) {
 				int max = Math.min(nbtListPos+display.size(), nbtListPos+5);

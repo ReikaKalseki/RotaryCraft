@@ -77,7 +77,7 @@ public class ItemSpringBoots extends ItemChargedArmor implements IArmorApiarist 
 			if (pot == null || pot.getAmplifier() < SPEED_LEVEL) {
 				ep.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 1, SPEED_LEVEL));
 			}
-			ep.stepHeight = Math.max(ep.stepHeight, 1.45F); //1.25F
+			ep.stepHeight = ep.isSneaking() ? 0.5F : Math.max(ep.stepHeight, 1.45F); //1.25F
 			if (itemRand.nextInt(320) == 0) {
 				if (is.getItem() != ItemRegistry.BEDJUMP.getItemInstance()) {
 					ep.setCurrentItemOrArmor(1, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1));
