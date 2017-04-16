@@ -1,0 +1,86 @@
+﻿<?xml version="1.0"?>
+<trans>
+	<shaft>
+		The most basic power-transmission device is the shaft. Nothing fancy, just carries the power from one place to another, with no changes to either the torque or the speed. Pay attention, though, to the direction to avoid headaches. Different materials of shaft have different strengths and thus different limits on maximum torque and speed.
+	</shaft>
+	<gearbox>
+		Gearboxes are used to change the ratio of torque to speed, while keeping the power constant. They come in 4 ratios - 2:1, 4:1, 8:1, and 16:1, and will affect the torque and speed accordingly. Reduction gears increase the torque and decrease the speed; acceleration gears do the opposite. Be warned: these need to be lubricated to work at their full potential; most unlubricated gearboxes will gradually wear down, and reduce the transmitted torque accordingly. Like shafts, gearboxes are subject to material failure under excessive loads. Gearboxes can be repaired with gear items.
+	</gearbox>
+	<bevel>
+		Bevel gears are used to change the direction of power transmission without changing the torque or speed. Unlike their inline cousins, they do not need lubricant, and will operate continuously and losslessly.
+	</bevel>
+	<splitter>
+		<sub>
+			<s0>
+				The shaft junction does exactly what it sounds like. In 'merge' mode, it will take two engines' outputs and combine them, outputting the sum of the torques at the input speed. Note that trying to combine inputs of different speeds will merely result in a shower of sparks, and combining too many engines' power will overload the junction. In 'split' mode, they will take an input and send some torque each way, at the input speed. To swap modes, shift-right-click with the screwdriver.
+			</s0>
+			<s1>
+				Shaft junctions can merge at most four times the average of the input power. Exceeding that load will cause them to break. Junctions upgraded with a bedrock 2x gear unit are not subject to this limit.
+			</s1>
+		</sub>
+	</splitter>
+	<clutch>
+		The clutch is basically a gated shaft - when powered by redstone, it transmits its input torque and speed unchanged. Unpower it, and it outputs nothing.
+	</clutch>
+	<dyna>
+		The dynamometer will display its input torque, speed, and power while outputting them to the other side.
+	</dyna>
+	<flywheel>
+		Flywheels store rotational kinetic energy. They take some time to spin up to the input speed, but when they do, they keep spinning for some time, providing a more steady power output to a machine than a shaft hooked up to a varying input. Heavier materials make better, more efficient - and more powerful - flywheels, but take more torque to start moving. Spinning one of these too rapidly will result in a violent and destructive failure. Flywheel deceleration is based on the torque requirement of what they are running. Unconnected, they spin forever.
+	</flywheel>
+	<worm>
+		The worm gear is a fast way to increase shaft torque without using a large number of intermediate gears, creating an equivalent 16:1 ratio. However, worm gears are inefficient and will lose some of their power, leading to a much slower output speed. This loss rate goes up as the input speed does.
+	</worm>
+	<cvt>
+		A CVT (continuously variable transmission) Unit is essentially a dynamic gearbox. Rather than using toothed wheels, it uses a series of belts to change the gear ratio. This gives them the advantage of being efficient and highly flexible, allowing you to select the desired gear ratio on demand. Note that higher ratios require more belts, with each power of 2 doubling the maximum ratio (capped at 32:1). This machine also requires lubricant, but will not consume it.
+	</cvt>
+	<coil>
+		<sub>
+			<s0>
+				The industrial coil stores energy in a large spring that can be unwound on command with redstone. Since its output torque and speed can be chosen nearly at will, it can be used to store energy for later or as a sort of capacitor, to store energy accumulated over a long time and then release it in one powerful burst. Note that each coil type has a maximum capacity, and that exceeding it will result in an extremely violent release of all stored energy. This machine cannot simultaneously charge and release power; any power input while discharging is wasted. As the coil charges, the torque and power required to do so rises.
+			</s0>
+			<s1>
+				Energy storage limits:
+
+				Steel: %d J (%s)
+				Bedrock: %d J (%s)
+			</s1>
+			<s2>
+				Input requirements:
+
+				Torque: %s
+				Power: %s
+			</s2>
+			<s3>
+				Output limits:
+
+				Cap:
+				Steel: %d rad/s x %d Nm
+				Bedrock: %d rad/s x %d Nm
+				
+				Function: %s
+			</s3>
+			<s4>
+				Outputs a redstone comparator signal in proportion to its fill state
+			</s4>
+		</sub>
+	</coil>
+	<higear>
+		The high-ratio gear allows you to create the effect of multiple chained gearboxes in a more compact space. Creating an enormous ratio of 256:1, it requires a large amount of lubricant to be able to turn, and must be made of bedrock to withstand the high stresses. Like a normal gearbox, it can be flipped between torque and speed by shift-right-clicking with the screwdriver.
+	</higear>
+	<multi>
+		The multi-clutch allows you to redirect power according to a redstone signal. Simply choose an output side for each signal strength from 0 to 15.
+	</multi>
+	<belt>
+		The belt hub can be used to transport power cheaply over a large distance. Simply place two hubs such that they are able to connect (clear line of sight and in-plane connection). To connect belts, right-click one with a stack of belts, then right-click the other with the same stack. For each meter travelled, you need one additional belt item (up to a maximum of 64 blocks). The belt can only transmit so much power without slipping; it can only carry, at maximum, %d Nm of torque at %d rad/s before losses become apparent, and less when wet. Belts can only be connected if one is in output mode.
+	</belt>
+	<buscontroller>
+		The shaft power bus controller is the brain of a shaft power bus unit. This multiblock structure can distribute power intelligently depending on the number of selected outputs. This makes it far easier to use one engine for multiple machines. Each selected output receives an equal fraction of the input torque, at the input speed. The bus requires lubricant to function.
+	</buscontroller>
+	<bus>
+		The power bus pieces actually distribute the power depending on their selected options. Each side has a corresponding item slot; put a shaft or gear unit there to control the outputted speed and torque. Invalid or missing items cause the side to be ignored. Use the adjecent buttons to control the torque(τ)/speed(ω) options.
+	</bus>
+	<chain>
+		The chain drive is a more advanced version of the belt hub. It can take twice as much torque, at up to 65536 rad/s before it fails. It is also impervious to rain.
+	</chain>
+</trans>

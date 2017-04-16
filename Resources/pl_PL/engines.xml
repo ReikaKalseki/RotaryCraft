@@ -1,0 +1,144 @@
+﻿<?xml version="1.0"?>
+<engines>
+	<dc>
+		<desc>
+			Silnik prądu stałego (DC) jest najprostszym silnikiem do stworzenia i operowania. Wszystko czego wymaga to sygnał czerwonego proszku o dowolnym natężeniu. Wraz z tym, że silnik ten jest najtańszy do stworzenia, jest także najsłabszy, dając %d Nm Momentu Obrotowego przy %d rad/s dla %.dfkW mocy.
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fkW
+			Źródło Zasilania: Czerwony Proszek
+			Wymaga Materiałów Eksplotacyjnych: Nie
+			Ryzyka: Brak
+		</note>
+	</dc>
+	<wind>
+		<desc>
+			Turbina wiatrowe używa wiatru do generowania siły. W związku z małą gęstością powietrza, nie generuje ona zbyt dużo momentu obrotowego (tylko %d Nm), ale jej kształt wpływa na to, że może obracać się z prędkością %d rad/s, produkując %.3fkW przy maksymalnej wydajności. Wydajność turbiny wzrasta wraz z wysokością na której ona się znajduję, a także ze względu na to, jak bardzo otwarty jest otaczający ją teren. Objekty i bloki mogą blokować łopatki.		
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fkW
+			Źródło Zasilania: Wiatr
+			Wymaga Materiałów Eksplotacyjnych: Nie
+			Ryzyka: Obracające się płaty
+			Adnotacje: Wymaga 16 bloków wolnego miejsca na froncie łopat, optymalna wydajność przy wysokości większej niż 80 metrów
+		</note>
+	</wind>
+	<steam>
+		<desc>
+			Silnik parowy pracuje ciągle jeżeli znaduje się pod nim źródło ciepła oraz dostarczana jest woda. Jest mocniejszy od poprzednich silników, daje %d Nm przy %d rad/s (%.3fkW).
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fkW
+			Źródło Zasilania: Woda i Ciepło
+			Wymaga Materiałów Eksplotacyjnych: Woda
+			Ryzyka: Przegrzanie przy 150C
+		</note>
+	</steam>
+	<gas>
+		<desc>
+			Silnik spalinowy używa etanolu. Wystarczy załadować kryształy etanolu i obserwować jak pracuję produkując %d Nm momoentu obrotowego przy %d rad/s (%.3fkW mocy).
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fkW
+			Źródło Zasilania: Etanol
+			Wymaga Materiałów Eksplotacyjnych: Etanol
+			Ryzyka: Brak
+		</note>
+	</gas>
+	<ac>
+		<desc>
+			Silnik prądu przemiennego (AC), podobnie jak jego kuzyn (silnik prądu stałego) wymaga sygnału czerwonego proszku do działania. Jednak ten silnik wymaga pulsującego sygnału, ze specjalnego zegaru. Im większa częstokliwość sygnału, tym większa będzie moc silnika, z dwoma zegarami dającymi stałe zasilanie %d Nm przy %d rad/s (%.3fkW). Ten silnik wymaga namagnetyzowanego wału, który stopniowo będzie rozmagnetyzowywany.
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fkW
+			Źródło Zasilania: Zegar Czerwonego Proszku, Namagnetyzowany Wał
+			Wymaga Materiałów Eksplotacyjnych: Magnetyzacja Wału
+			Ryzyka: Brak
+		</note>
+	</ac>
+	<sport>
+		<desc>
+			Wydajny silnik, który tak jak silnik spalinowy używa etanolu, a ponadto chłodzenia wodnego i może uzyskać maksymalną wydajność kiedy spełnione są odpowiednie warunki paliwowe - czerwony proszek, proch strzelniczy, płomienny proszek, każdy z nich jest lepszy od poprzedniego. W pełni załadowany i przygotowany produkuję %d Nm momentu obrotowego przy %d rad/s, uzyskując moc %.3fkW.
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fkW
+			Źródło Zasilania: Etanol i dodatki
+			Wymaga Materiałów Eksplotacyjnych: Etanol i Czerwony Proszek/Proch Strzelniczy/Płomienny Proszek
+			Ryzyka: Przegrzanie przy 240C
+		</note>
+	</sport>
+	<hydro>
+		<desc>
+			Silnik hydrokinetyczny zamienia energię spadającej wody w pracę mechaniczną. Warto zwrócić uwagę, że wał obraca się tylko w kierunku przeciwnym do ruchu zegara, w związku z tym wodospad musi być upozycjonowany w odpowiedni sposób. Dodatkowo sąsiednie bloki mogą blokować łopatki. Moc silnika jest zależna od tego na jaką odległość spada woda. Przy wodospadzie z 3 bloków osiąga minimalną moc, ale przy wodospadzie z ponad 64 bloków produkuję %d Nm przy %d rad/s, największy moment obrotowy spośród wszystkich silników, osiągając moc %.3fkW. Te silniki mogą być połączone, sumując momenty obrotowe razem. Silnik używa lubrykantu do poprawnego działania.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Maksymalny Moment Obrotowy: %d Nm
+					Maksymalna Prędkość: %d rad/s
+					Maksymalna Moc: %.3fkW
+					Źródło Zasilania: Wodospad
+					Wymaga Materiałów Eksplotacyjnych: Lubrykant
+					Ryzyka: Obracające się Łopatki
+					Adnotacje: Wymaga wysokich wodospadów do osiągnięcia maksymalnej mocy
+				</s1>
+				<s2>
+					4 silniki mogą być połączone zanim moment obrotowy przeciąży wał
+
+					Może zostać ulepszony do wału ze skały macierzystej aby zwiększyć limit silników do 16
+				</s2>
+			</sub>
+		</note>
+	</hydro>
+	<micro>
+		<desc>
+			Mikroturbina jest unikalnym silnikiem. Przy stałym zaopatrzeniu w paliwo, daję bardzo mały moment obrotowy (%d Nm), ale w zamian dużą prędkość, bo aż %d rad/s, dając moc ponad dwóch megawatów (%.3fMW).
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fMW
+			Źródło Zasilania: Paliwo Odrzutowe
+			Wymaga Materiałów Eksplotacyjnych: Paliwo Odrzutowe
+			Ryzyka: Brak
+		</note>
+	</micro>
+	<jet>
+		<desc>
+			Jest najmocniejszym silnikiem, turbina gazowa to spory potwór, dając moc porównywalną do silnika samolotu odrzutowego. Silniki te, gdy są w pełni napełnione paliwem, produkują %d Nm momentu obrotowego przy %d rad/s (%.3fMW). Uważaj, ponieważ w łatwy sposób możesz dowiedzieć się jak to jest być wciągniętym do silnika, zachowaj DUŻY dystans od frontu silnika gdy pracuję! W przeciwnym razie twój silnik może zamienić się w spory pożar.
+		</desc>
+		<note>
+			Moment Obrotowy: %d Nm
+			Prędkość: %d rad/s
+			Moc: %.3fMW
+			Źródło Zasilania: Paliwo Odrzutowe
+			Wymaga Materiałów Eksplotacyjnych: Paliwo Odrzutowe
+			Ryzyka: Możliwe wciągnięcie do silnika; Możliwość awarii przy uszkodzeniu
+		</note>
+	</jet>
+	<solar>
+		<desc>
+			Panele słoneczne są unikalne w swoim rozmiarze, w związku z tym także w swoim wyjściu, które jest skalowalne. Wystarczy zbudować wieżę z bloków wieżowych i otoczyć ją bazą lustrami. Więcej luster i wyższe wieże dają więcej mocy. Warto zauważyć, że wyjście mocy znajduje się u dołu wieży, a woda powinna zostać dostarczona. Lustra muszą być połączone (możliwe za pomocą innych luster) do wieży w celu poprawnego funkcjonowania.
+		</desc>
+		<note>
+			Moment Obrotowy: Skalowalna
+			Prędkość: %d rad/s
+			Moc: Skalowalna
+			Źródło Zasilania: Światło Słoneczne
+			Wymaga Materiałów Eksplotacyjnych: Woda
+			Ryzyka: Samozapłon łatwopalnych bloków w pobliżu
+		</note>
+	</solar>
+</engines>
