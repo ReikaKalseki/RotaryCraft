@@ -1,85 +1,85 @@
 ﻿<?xml version="1.0"?>
 <resource>
 	<steelingot>
-		The steel ingot, made by smelting an iron ingot in a blast or pulse jet furnace, is the basis for all the machines, as only steel has sufficient tensile and shear strength to handle the loads applied by the machines.
+		Sztabka stali, otrzymana po przetopieniu sztabki żelaza w piecu hutniczym lub piecu z silnikiem pulsacyjnym, jest podstawowym materiałem używanym do konstruowania wszystkich maszyn, także ze względu na jej wytryzmałość, ma zastosowanie jako materiał do tworzenia wałów.
 	</steelingot>
 	<othershaft>
-		Shafts can also be crafted from wood, stone, diamond, or bedrock. Use a stick as the shaft part in a wood shaft. Bedrock varieties are crafting in the blast furnace like bedrock tools. Stronger materials allow for more torque to be transmitted at higher speeds. Overloading a shaft will cause it to violently fail.
+		Wały utworzone mogą być również z drewna, kamienia, diamentu, skały macierzystej. Użyj patyka jako część wału dla drewnianego wału. Odmiany skały macierzystej tworzone są w piecu hutniczym tak jak narzędzia ze skały macierzystej. Mocniejsze materiały pozwalają na obciążanie większą ilością momentu obrotowego przy wyższych prędkościach. Przeciążanie wałów skutuję ich awarią.
 	</othershaft>
 	<othergearunit>
-		Gear units can be made of the alternative gear types. Stronger gears wear down more slowly, and bedrock gears do not wear down at all. Simply craft them using the same base materials as a shaft, but subtituting a gear unit for the rod/shaft.
+		Przekładnie mogą być stworzone z alternatywnych typów kół zębatych. Tworzy się je używając materiału bazowego jako wał, ale dodając element koła zębatego.
 	</othergearunit>
 	<othergear>
-		Gears can be crafted from materials other than steel. Wood, Stone, Diamond, and Bedrock can also be used. Different materials consume lubricant and acquire damage at different rates. Bedrock gears do not require lubricant. Bedrock varieties are crafted in the blast furnace like bedrock tools.
+		Przekładnie mogą być tworzone z materiałów innych niż stal. Drewno, Kamień, Diament i Skała Macierzysta mogą zostać użyte. Inne materiały konsumują różne ilości lubrykantu i różnią się podatnością na awarię. Przekładnie ze skały macierzystej nie wymagają lubrykantu. Odmiany ze skały macierzystej tworzone są w piecu hutniczym jak narzędzia ze skały macierzystej.
 	</othergear>
 	<netherdust>
-		Netherrack dust is made from grinding netherrack blocks in the grinder, while tar is made by grinding soul sand. Both of these are required constituents of jet fuel due to their hydrocarbon content.
+		Proszek ze Skały Netheru tworzy się po zmieleniu Skały Netheru w młynku. Smołę tworzy się po zmieleniu piasku dusz. Obydwa te produkty używane są do produkcji paliwa odrzutowego.
 	</netherdust>
 	<sawdust>
-		Make 20 stacks of wooden stairs? No problem; various wood items can be put in the grinder and ground into sawdust, which can be made back into wood or, to save sugarcane, into paper. Dye can be added to get alternate wood types.
+		Wytworzenie 20 staków drewnianych schodów nie jest problemem! Różne odmiany drewna mogą być umieszczonę w młynku i zmielonę na trociny, które mogą być ponownie użytę do tworzenia drewna, lub papieru. Użycie barwnika pozwala na uzyskanie innych typów drewna.
 	</sawdust>
 	<beddust>
-		Bedrock dust is produced when bedrock breakers completely grind away a bedrock block. This is an essential part of some machines, as bedrock is the only material hard enough to withstand the enormous pressures and temperatures. Additionally, it can be used to craft Bedrock Tools and Armor, and the best tier of shafts and gearboxes.
+		Proszek ze Skały Macierzystej otrzymuje się ze skały macierzystej z użyciem odpowiedniego wiertła. Jest to podstawowy składnik większości maszyn, ponieważ skała macierzysta jest bardzo wytrzymałym materiałem na różne ciśnienia i temperatury. Dodatkowo, może być użyty do wytwarzania narzędzi i elementów obrony, lub jako najlepszy materiał na wały i przekładnie.
 	</beddust>
 	<extracts>
-		Ore dust, slurry, and solution are intermediate products of the extractor. Slurry and solution require high input shaft speeds and a constant water supply, while the dust requires high input torque. None of these items has any other use.
+		Proszek z rudy, papka, roztwór - są to produkty ekstraktora. Papki oraz roztwory wymagają dużej prędkości oraz stałego dostępu do wody, a proszek wymaga wysokiego momentu obrotowego.
 	</extracts>
 	<flakes>
-		Ore flakes are the fourth stage output of the extractor. These can be smelted in an ordinary furnace to make ingots or gems of the source ore's material. Creation of this product requires high torque. Occasionally, the smelted product will need to be crafted into usable items of the target ore, such as with apatite, force, monazit/forcicium, and certus quartz.
+		Płatki rud są otrzymywanę przy czwartym etapie pracy ekstraktora. Mogą być przepalone w piecu na sztabki lub klejnoty (w zależności od materiału). Wytworzenie tego produktu wymaga wysokiego momentu obrotowego.
 	</flakes>
 	<compacts>
-		Anthracite, Prismane, and Lonsdaleite are intermediate stages of the coal compression process. Anthracite and Lonsdaleite can also be crafted into decorative blocks.
+		Anthracite, Prismane, Lonsdaleite - są to pośrednie etapy podczas przetwarzania węgla. Anthracite i Londsaleite mogą zostać użyte również jako bloki dekoracyjne.
 	</compacts>
 	<decoblocks>
-		Decorative blocks are made from 9 units of the respective materials, such as steel, anthracite, or lonsdaleite.
+		Bloki dekoracyjne tworzy się z 9 sztuk odpowiedniego materiału, takiego jak stal, anthracite, londsaleite.
 	</decoblocks>
 	<glass>
-		Blast Glass is made by smelting obsidian in a pulse jet furnace, and while transparent like glass, will resist nearly any explosion. Like ordinary glass, the blocks can also be crafted into blast glass panes.
+		Szkło Pancerne tworzy się z obsydianu w piecu z silnikiem pulsacyjnych, jest przezroczyste jak zwykłe szkło, ale jest odporne na eksplozję. Podobnie jak zwykłe szkło, może zostać użyte do stworzenia szklanych paneli. 
 	</glass>
 	<spawners>
-		If you are lucky enough to dig through a dungeon, mineshaft, or stronghold with a Boring machine or Pile Driver, the spawner, rather than being completely destroyed, will drop as a usable item, and will retain its mob type. This is an invaluable asset for mob farms, especially when combined with the spawner controller.
+		Używając Nudnej maszyny lub sterownika kafar, spawner, zamiast zostać kompletnie zniszczony, wyrzuci użyteczny przedmiot oraz zwróci typ moba. Jest to bezwartościowy element mob-farmek, zwłaszcza w połączeniu z kontrolerem spawnera.
 	</spawners>
 	<yeast>
-		Yeast is cultivated in the fermenter by adding sugar and water to dirt. It grows best at temperatures between 20 and 40 degrees, peaking at 25 degrees. Outside this range, it will grow slowly or not at all. Be careful - at temperatures above 60C, yeast will die. Ethanol sludge is made from adding yeast to plant matter and water. It is created most rapidly at around 35C.
+		Drożdże uprawiane są w fermenterach po dodaniu cukru i wody do ziemi. Rosną najlepiej w temperaturze pomiędzy 20 a 40 stopni, szczytując przy 25 stopniach. Poza tym zakresem, będąc rosnąc powoli lub nie do końca. Bądź ostrożny - przy temperaturze powyżej 60C, drożdżę obumierają. Osad etanolowy tworzony jest z drożdży, materiału roślinnego i wody. Tworzony jest najszybciej przy około 35C.
 	</yeast>
 	<ethanol>
-		Ethanol crystals can be made by drying out ethanol sludge in a furnace. These crystals can then be used as fuel in the ethanol and performance engines.
+		Kryształy etanolu mogą być utworzone po wysuszeniu etanolowego osadu w piecu. Kryształy te używane są jako paliwo.
 	</ethanol>
 	<bedingot>
-		A bedrock ingot is used in the crafting of bedrock tools, armor, and some machines.
+		Sztabka ze Skały Macierzystej wykorzystywana jest do tworzenia przedmiotów ze skały macierzystej, a także elementów obrony i wymagany do stworzenia niektórych maszym.
 	</bedingot>
 	<alloying>
-		Some items and machines need special metal alloys, which are usually made in the Blast Furnace by adding the constituent ingredients into the main grid, and reaching the necessary temperature.
+		Niektóre przedmioty i maszyny wymagają specjalnych metalowych stopów, które zazawyczaj tworzone są w Piecu Hutniczym dodając do niego odpowiednie składniki, przy działaniu odpowiedniej temperatury.
 	</alloying>
 	<silveringot>
-		Silver ingots are used to make silver compounds. Silver is an occasional bonus from the extractor when processing gold.
+		Srebrne sztabki używane są do tworzenia srebrnych mieszanek. Srebro jest okazjonalnych bonusemz przetwarzania złota z ekstraktorze.
 	</silveringot>
 	<salt>
-		Salt is made from seawater, and is a source of iodine.
+		Sól tworzona jest z wody morskiej, jest źródłem jodu.
 	</salt>
 	<ammonium>
-		Ammonium Nitrate is a useful ingredient in explosives such as the shells for the railgun.
+		Azotan Amonoy jest użytecznym składnikiem wybuchowym, podobnie jak naboje do railguna.
 	</ammonium>
 	<silveriodide>
-		Silver iodide is made from silver and iodine (from salt), and is used by the machine of the same name to induce rain.
+		Jodek srebra tworzony jest ze srebra i jodu (z soli), używany jest do indukowania deszczu za pomoca odpowiedniej maszyny.
 	</silveriodide>
 	<aluminum>
-		Aluminum powder can be used with iron ingots to start a thermite reaction in the firestarter, providing more heat than any other fuel. It is an occasional bonus from the extractor when processing redstone. It can also be smelted into aluminum ingots.
+		Proszek z Aluminium używany jest w połączeniu ze sztabkami żelaza do rozpoczęcia reakcji termicznej, dając więcej ciepła niż każde inne paliwo. Jest on okazjonalnym bonusem z ekstraktora podczas przetwarzania czerwonego proszku. Może być także użyty do przepalenia na aluminiowe sztabki.
 	</aluminum>
 	<railgunammo>
-		Railgun ammunition is made from a ferromagnetic core and surrounded with heavy materials. Denser materials mean a more damaging impact. Each tier is crafted from adding mass to the previous one.
+		Amunicja dla railguna zrobiona jest z ferromagnetycznych rdzeni otoczonych ciężkimi materiałami. Gęstsze materiały zadają więcej obrażeń. Ulepszanie polega na dodawaniu masy do istniejących amunicji.
 	</railgunammo>
 	<slides>
-		Projector Slides are inserted into the projector to display images. They can be crafted with dyes to create each other.
+		Za pomocą slajdów można wyświetlić obrazy używając projektora.
 	</slides>
 	<explosives>
-		Explosive Shells are alternative ammunition for the railgun. They are cheaper to make, but deal less damage to entities hit by them, and are more destructive to the terrain around them.
+		Wybuchające Naboje są alternatywną amunicją dla railguna. Są tanie do wytworzenia, ale zadają mniej obrażeń i są bardziej destruktywne dla otoczenia.
 	</explosives>
 	<tungsten>
-		Tungsten is a byproduct of processing iron ore in the Extractor, and is used for high-temperature, high-strength, or high-pressure applications. It can only be smelted in a vanilla furnace above %dC.
+		Wolfram jest produktem ubocznym z przetwarzania rudy żelaza w Ekstraktorze, jest odporny na wysokie temperatury, ma dużą wytrzymałość, jest odporny na duże ciśnienie. Może zostać przepalony tylko w standardowym piecu rozgrzanym do ponad %dC.
 	</tungsten>
 	<coke>
-		Coal coke is a more efficient carbon source when making steel. Because of this, it can also be used as a furnace fuel, with a greater efficiency than pure coal.
+		Koks węglowy jest bardziej wydajnym źródłem węgla przy tworzeniu stali. Oprócz tego, może zostać użyty jako paliwo do pieca, będąc bardziej wydajnym paliwem niż czysty węgiel.
 	</coke>
 	<name>
 		
