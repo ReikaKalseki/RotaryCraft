@@ -5,7 +5,7 @@ The source code to my tech mod RotaryCraft.
 
 @author Reika
 
-Copyright 2013-2016
+Copyright 2013-2017
 
 All rights reserved.
 Distribution of the software in any form is only allowed with
