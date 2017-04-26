@@ -27,6 +27,13 @@ public class ContainerItemFilter extends CoreContainer {
 		this.addSlot(0, 8, 8);
 		this.addSlotNoClick(1, 8, 104);
 
+		int s = (int)Math.sqrt(filter.BLACKLIST_SLOTS);
+		for (int i = 0; i < filter.BLACKLIST_SLOTS; i++) {
+			int dx = 176+i%s*18;
+			int dy = 135+i/s*18;
+			this.addSlot(2+i, dx, dy);
+		}
+
 		this.addPlayerInventoryWithOffset(player, 0, 51);
 	}
 

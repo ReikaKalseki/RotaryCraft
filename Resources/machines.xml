@@ -1189,14 +1189,14 @@
 			
 		</note>
 	</spillway>
-	<name>
+	<itemfilter>
 		<desc>
-			
+			The item filter can, once given a template item, compare all other items that pass through it based on which parameters have been chosen to be used and their settings. Only items matching those parameters can be inserted and then extracted to be sent to the target destination.
 		</desc>
 		<note>
-			
+			Can be connected directly to an ME system, which it will try to extract from
 		</note>
-	</name>
+	</itemfilter>
 	<name>
 		<desc>
 			

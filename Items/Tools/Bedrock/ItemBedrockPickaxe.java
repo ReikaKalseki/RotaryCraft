@@ -170,6 +170,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 					ReikaSpawnerHelper.forceSpawn(spw, 12+itemRand.nextInt(25));
 				ItemStack item = ItemRegistry.SPAWNER.getStackOf();
 				ReikaSpawnerHelper.addMobNBTToItem(item, spw);
+				if (ReikaSpawnerHelper.hasCustomLogic(spw))
+					ReikaSpawnerHelper.setSpawnerItemNBT(is, spw.func_145881_a(), true);
 				ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);
 				//world.setBlockToAir(x, y, z);
 				//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 1.25F);

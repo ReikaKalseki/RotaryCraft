@@ -220,9 +220,6 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	}
 
-	private static int spawnCount = 4;
-	private static int spawnRange = 4;
-
 	public static final String CONTROLLED_SPAWN_TAG = "ControllerSpawned";
 
 	private static void flagNoDespawn(Entity e) {
@@ -253,16 +250,16 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			lgc.field_98287_c = (lgc.field_98287_c+1000D / (lgc.spawnDelay+200))%360;
 		}
 		else {
-			for (int i = 0; i < spawnCount; i++) {
+			for (int i = 0; i < lgc.spawnCount; i++) {
 				Entity toSpawn = EntityList.createEntityByName(lgc.getEntityNameToSpawn(), world);
 
 				// This is the max-6 code
 				//int var4 = world.getEntitiesWithinAABB(var13.getClass(), AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(spawnRange*2, 4, spawnRange*2)).size();
 
 				if (toSpawn != null) {
-					double ex = x+(world.rand.nextDouble()-world.rand.nextDouble())*spawnRange;
+					double ex = x+(world.rand.nextDouble()-world.rand.nextDouble())*lgc.spawnRange;
 					double ey = y+world.rand.nextInt(3)-1;
-					double ez = z+(world.rand.nextDouble()-world.rand.nextDouble())*spawnRange;
+					double ez = z+(world.rand.nextDouble()-world.rand.nextDouble())*lgc.spawnRange;
 					EntityLiving livingSpawn = toSpawn instanceof EntityLiving ? (EntityLiving)toSpawn : null;
 					toSpawn.setLocationAndAngles(ex, ey, ez, world.rand.nextFloat()*360, 0);
 

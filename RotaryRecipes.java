@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import ic2.api.recipe.ISemiFluidFuelManager.BurnProperty;
+import ic2.api.recipe.Recipes;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -33,6 +37,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
@@ -77,6 +82,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.ModInterface.BedrockRevealingInfusion;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -85,11 +91,14 @@ import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+import blusunrize.immersiveengineering.api.energy.DieselHandler;
+import blusunrize.immersiveengineering.api.energy.DieselHandler.SqueezerRecipe;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import forestry.api.fuels.GeneratorFuel;
 
 public class RotaryRecipes {
 
@@ -105,9 +114,23 @@ public class RotaryRecipes {
 
 		if (ModList.THERMALEXPANSION.isLoaded())
 			addThermalExpansion();
+		Fluid ethanol = FluidRegistry.getFluid("rc ethanol");
 		if (ModList.BCENERGY.isLoaded()) {
-			FuelManager.INSTANCE.addFuel(FluidRegistry.getFluid("rc ethanol"), ReikaBuildCraftHelper.getFuelRFPerTick()*3/2, 1500); //ethanol generates about 50% more power, but burns fast
+			FuelManager.INSTANCE.addFuel(ethanol, ReikaBuildCraftHelper.getFuelRFPerTick()*3/2, 1500); //ethanol generates about 50% more power, but burns fast
 			CoolantManager.INSTANCE.addCoolant(FluidRegistry.getFluid("rc liquid nitrogen"), 0.01F);
+		}
+		if (ModList.FORESTRY.isLoaded()) {
+			int power = forestry.api.fuels.FuelManager.generatorFuel.get(FluidRegistry.getFluid("bioethanol")).eu*36/32; //36/32 (1.125x) forestry ethanol
+			forestry.api.fuels.FuelManager.generatorFuel.put(ethanol, new GeneratorFuel(new FluidStack(ethanol, 1), power, 3)); //25% less burn time
+		}
+		if (ModList.IC2.isLoaded()) {
+			double power = Recipes.semiFluidGenerator.getBurnProperties().get("bioethanol").power*18/16; //1.125x again
+			BurnProperty fuel = Recipes.semiFluidGenerator.getBurnProperties().get("fuel");
+			power = Math.max(power, fuel.power*3/2); //50% more than fuel
+			Recipes.semiFluidGenerator.addFluid(ethanol.getName(), Math.max(8, fuel.amount*4), power);
+		}
+		if (ModList.IMMERSIVEENG.isLoaded()) {
+			DieselHandler.squeezerList.add(new SqueezerRecipe(ItemRegistry.CANOLA.getStackOf(), 15, new FluidStack(FluidRegistry.getFluid("plantoil"), 20), null)); //4x less but 6x faster
 		}
 	}
 
@@ -153,7 +176,7 @@ public class RotaryRecipes {
 		//ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);
 
 		ThermalRecipeHelper.addCoolant(RotaryCraft.nitrogenFluid, 40000);
-		ThermalRecipeHelper.addCompressionFuel(RotaryCraft.ethanolFluid, 125000); //1/4 of forestry
+		ThermalRecipeHelper.addCompressionFuel(RotaryCraft.ethanolFluid, 250000); //1/2 of forestry
 	}
 
 	public static void addPostLoadRecipes() {
@@ -279,49 +302,7 @@ public class RotaryRecipes {
 		}
 
 		if (ModList.THAUMCRAFT.isLoaded()) {
-			ReikaThaumHelper.addBookCategory(new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png"), "rotarycraft");
-
-			MathExpression cost = new MathExpression() {
-				@Override
-				public double evaluate(double arg) throws ArithmeticException {
-					return arg/5D;
-				}
-
-				@Override
-				public double getBaseValue() {
-					return 0;
-				}
-
-				@Override
-				public String toString() {
-					return "/5";
-				}
-			};
-
-			ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
-			ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
-			ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
-			AspectList al = new AspectList();
-			al.add(Aspect.MIND, 10);
-			al.add(Aspect.SENSES, 25);
-			al.add(Aspect.AURA, 10);
-			al.add(Aspect.ARMOR, 25);
-			al.add(Aspect.MAGIC, 25);
-			ItemStack[] recipe = {
-					meter,
-					new ItemStack(Items.gold_ingot),
-					ThaumItemHelper.ItemEntry.SALIS.getItem(),
-					ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
-					meter,
-					new ItemStack(Items.gold_ingot),
-					ThaumItemHelper.ItemEntry.SALIS.getItem(),
-					ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
-
-			};
-			String desc = "Combining the protection of bedrock with the power of a Thaumometer";
-			InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
-			String page = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? RotaryDescriptions.getParentPage()+"thaum.xml" : "";
-			ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page);
+			addThaumcraft();
 		}
 
 		if (ModList.BOTANIA.isLoaded()) {
@@ -400,6 +381,55 @@ public class RotaryRecipes {
 			MoleculeHelper.addMoleculeWithDecomposition("napthalene", "10 C", "8 H");
 			RecipeAPI.addDecompositionFluidRecipe(new FluidStack(FluidRegistry.getFluid("rc jet fuel"), 100), "4 octane", "2.2 hexane", "2.1 decane", "3.7 methylhexane", "1.2 cyclohexane", "2.3 methylcyclohexane", "0.5 benzene", "1.3 toluene", "0.5 napthalene");
 		}
+	}
+
+	@ModDependent(ModList.THAUMCRAFT)
+	private static void addThaumcraft() {
+		ReikaThaumHelper.addBookCategory(new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png"), "rotarycraft");
+
+		MathExpression cost = new MathExpression() {
+			@Override
+			public double evaluate(double arg) throws ArithmeticException {
+				return arg/5D;
+			}
+
+			@Override
+			public double getBaseValue() {
+				return 0;
+			}
+
+			@Override
+			public String toString() {
+				return "/5";
+			}
+		};
+
+		//ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
+		//ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
+		ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
+		AspectList al = new AspectList();
+		al.add(Aspect.MIND, 10);
+		al.add(Aspect.SENSES, 25);
+		al.add(Aspect.AURA, 10);
+		al.add(Aspect.ARMOR, 25);
+		al.add(Aspect.MAGIC, 25);
+		ItemStack[] recipe = {
+				meter,
+				new ItemStack(Items.gold_ingot),
+				ThaumItemHelper.ItemEntry.SALIS.getItem(),
+				ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+				meter,
+				new ItemStack(Items.gold_ingot),
+				ThaumItemHelper.ItemEntry.SALIS.getItem(),
+				ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+
+		};
+		String desc = "Combining the protection of bedrock with the power of a Thaumometer";
+		//InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
+		InfusionRecipe ir = new BedrockRevealingInfusion(7, al, recipe);
+		ThaumcraftApi.getCraftingRecipes().add(ir);
+		String page = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? RotaryDescriptions.getParentPage()+"thaum.xml" : "";
+		ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page).setParents("GOGGLES");
 	}
 
 	public static ItemStack getConverterGatingItem() {

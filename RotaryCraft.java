@@ -21,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
@@ -88,6 +89,7 @@ import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
+import Reika.RotaryCraft.Auxiliary.RotaryASMHandler;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RotaryIntegrationManager;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -698,5 +700,10 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public File getConfigFolder() {
 		return config.getConfigFolder();
+	}
+
+	@Override
+	protected Class<? extends IClassTransformer> getASMClass() {
+		return RotaryASMHandler.ASMExecutor.class;
 	}
 }

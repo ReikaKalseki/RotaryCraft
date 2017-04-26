@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
-import Reika.DragonAPI.Instantiable.IO.PacketTarget.ServerTarget;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -68,7 +68,7 @@ public class GuiCraftingPattern extends GuiContainer {
 				RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
 				ItemCraftPattern.setMode(this.getItem(), next);
 				((ContainerCraftingPattern)player.openContainer).clearRecipe();
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), new ServerTarget(), next.ordinal());
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), PacketTarget.server, next.ordinal());
 			}
 		}
 		else if (b.id == 1 || b.id == 2) {
@@ -78,7 +78,7 @@ public class GuiCraftingPattern extends GuiContainer {
 			if (amt > 1 && ItemCraftPattern.getStackInputLimit(this.getItem()) == 1)
 				amt--;
 			ItemCraftPattern.changeStackLimit(this.getItem(), amt);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1, new ServerTarget(), amt);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1, PacketTarget.server, amt);
 		}
 		this.initGui();
 	}

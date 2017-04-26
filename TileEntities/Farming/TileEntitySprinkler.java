@@ -14,12 +14,14 @@ import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Interfaces.Registry.CropType;
@@ -29,12 +31,19 @@ import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.ReactorCraft.Entities.EntityRadiation;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntitySprinkler extends SprinklerBlock {
+
+	private static final String LOGGER_ID = "sprinkler_apple";
+
+	static {
+		ModularLogger.instance.addLogger(RotaryCraft.instance, LOGGER_ID);
+	}
 
 	@Override
 	public void performEffects(World world, int x, int y, int z) {
@@ -106,27 +115,35 @@ public class TileEntitySprinkler extends SprinklerBlock {
 							String n = b.getClass().getName().toLowerCase(Locale.ENGLISH);
 							if (n.startsWith("growthcraft.apples")) {
 								if (n.endsWith("leaves")) {
+									if (ModularLogger.instance.isEnabled(LOGGER_ID))
+										ModularLogger.instance.log(LOGGER_ID, "Found leaf @ "+dx+", "+dy+", "+dz);
 									Block b2 = world.getBlock(dx, dy-1, dz);
-									if (b2.isOpaqueCube()) {
+									if (this.isOpaque(b2)) {
 										flag2 = true;
 									}
 									else if (b2.isAir(world, dx, dy-1, dz)) { //space for an apple; only stop moving down if this
 										if (!world.isRemote) {
 											b.updateTick(world, dx, dy, dz, rand);
 											BlockTickEvent.fire(world, dx, dy, dz, b, UpdateFlags.FORCED.flag);
+											if (ModularLogger.instance.isEnabled(LOGGER_ID))
+												ModularLogger.instance.log(LOGGER_ID, "Ticked apple leaf @ "+dx+", "+dy+", "+dz);
 										}
 										flag2 = true;
 									}
-									drip = b2 != b && !b2.isOpaqueCube();
+									drip = b2 != b && !this.isOpaque(b2);
 								}
 								else if (n.endsWith("apple") && !world.isRemote) {
 									b.updateTick(world, dx, dy, dz, rand);
 									BlockTickEvent.fire(world, dx, dy, dz, b, UpdateFlags.FORCED.flag);
 									flag2 = true;
+									if (ModularLogger.instance.isEnabled(LOGGER_ID))
+										ModularLogger.instance.log(LOGGER_ID, "Ticked apple block @ "+dx+", "+dy+", "+dz);
 								}
+								if (ModularLogger.instance.isEnabled(LOGGER_ID))
+									ModularLogger.instance.log(LOGGER_ID, "Read GC block '"+n+"', flag2="+flag2);
 							}
 						}
-						flag = b.isOpaqueCube() || flag2;
+						flag = this.isOpaque(b) || flag2;
 					}
 					if (!flag)
 						dy--;
@@ -141,6 +158,10 @@ public class TileEntitySprinkler extends SprinklerBlock {
 				}
 			}
 		}
+	}
+
+	private boolean isOpaque(Block b) {
+		return b.isOpaqueCube() && !(b instanceof BlockLeavesBase);
 	}
 
 	public void spawnParticles(World world, int x, int y, int z) {

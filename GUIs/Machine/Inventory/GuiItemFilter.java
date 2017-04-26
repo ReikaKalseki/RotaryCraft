@@ -92,6 +92,8 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 	@Override
 	protected void actionPerformed(GuiButton b) {
 		super.actionPerformed(b);
+		if (this.isClickTooSoon())
+			return;
 
 		if (b.id == -1) {
 			page = page.previous();
@@ -116,7 +118,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 			nbt.setInteger("posX", tile.xCoord);
 			nbt.setInteger("posY", tile.yCoord);
 			nbt.setInteger("posZ", tile.zCoord);
-			ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.getMinValue(), nbt, new PacketTarget.ServerTarget());
+			ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.getMinValue(), nbt, PacketTarget.server);
 		}
 		this.initGui();
 	}
@@ -127,6 +129,10 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
+
+		int dx = this.inventoryLabelLeft() ? 176 : xSize-50;
+		fontRendererObj.drawString("Blacklist", dx, (ySize - 96) + 3, 4210752);
+
 		int x = api.getMouseRealX();
 		int y = api.getMouseRealY();
 
@@ -189,6 +195,6 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "filtergui";
+		return "filtergui2";
 	}
 }

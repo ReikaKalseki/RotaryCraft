@@ -12,7 +12,6 @@ package Reika.RotaryCraft.ModInterface.Conversion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
@@ -23,7 +22,7 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyStorage;
 
-@Strippable(value = {"cofh.api.energy.IEnergyHandler"})
+//@Strippable(value = {"cofh.api.energy.IEnergyHandler"})
 public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHandler { //Handler because EnderIO uses it
 
 	@Override

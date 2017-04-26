@@ -59,7 +59,7 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id == 0)
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.VACUUM.getMinValue(), vac, new PacketTarget.ServerTarget());
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.VACUUM.getMinValue(), vac, PacketTarget.server);
 	}
 
 	/**

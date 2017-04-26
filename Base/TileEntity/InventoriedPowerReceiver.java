@@ -25,7 +25,7 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 
 	protected ItemStack[] inv = new ItemStack[this.getSizeInventory()];
 
-	protected void onInventoryChanged() {
+	protected void onInventoryChanged(int slot) {
 
 	}
 
@@ -35,7 +35,7 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 
 	public final void setInventorySlotContents(int par1, ItemStack is) {
 		inv[par1] = is;
-		this.onInventoryChanged();
+		this.onInventoryChanged(par1);
 	}
 
 	public final String getInventoryName() {
@@ -70,13 +70,13 @@ public abstract class InventoriedPowerReceiver extends TileEntityPowerReceiver i
 
 	public final ItemStack decrStackSize(int par1, int par2) {
 		ItemStack ret = ReikaInventoryHelper.decrStackSize(this, par1, par2);
-		this.onInventoryChanged();
+		this.onInventoryChanged(par1);
 		return ret;
 	}
 
 	public final ItemStack getStackInSlotOnClosing(int par1) {
 		ItemStack ret = ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
-		this.onInventoryChanged();
+		this.onInventoryChanged(par1);
 		return ret;
 	}
 

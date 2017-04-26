@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import net.minecraft.item.Item;
@@ -28,6 +29,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
@@ -68,6 +70,9 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 	private final ArrayList<ItemStack> MEStacks = new ArrayList();
 
+	public static final int BLACKLIST_SLOTS = 16;
+	private final HashSet<KeyedItemStack> blacklist = new HashSet();
+
 	public TileEntityItemFilter() {
 		if (ModList.APPENG.isLoaded()) {
 			aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
@@ -86,7 +91,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 	@Override
 	public int getSizeInventory() {
-		return 2;
+		return 2+BLACKLIST_SLOTS;
 	}
 
 	@Override
@@ -95,7 +100,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	}
 
 	private boolean matchItem(ItemStack is) {
-		return data != null && data.match(is) != this.hasRedstoneSignal();
+		return data != null && !blacklist.contains(new KeyedItemStack(is).setSimpleHash(true)) && data.match(is) != this.hasRedstoneSignal();
 	}
 
 	@Override
@@ -104,8 +109,20 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	}
 
 	@Override
-	protected void onInventoryChanged() {
+	protected void onInventoryChanged(int slot) {
 		this.reloadData();
+
+		if (slot >= 2) {
+			this.rebuildBlacklist();
+		}
+	}
+
+	private void rebuildBlacklist() {
+		blacklist.clear();
+		for (int i = 2; i < inv.length; i++) {
+			if (inv[i] != null)
+				blacklist.add(new KeyedItemStack(inv[i]).setSimpleHash(true).setIgnoreNBT(false).setSized(false));
+		}
 	}
 
 	public void reloadData() {
@@ -151,7 +168,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 		}
 
 		if (data == null && inv[0] != null) {
-			this.onInventoryChanged();
+			this.onInventoryChanged(0);
 		}
 	}
 
@@ -228,6 +245,8 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 		if (NBT.hasKey("data")) {
 			data = MatchData.createFromNBT(NBT.getCompoundTag("data"));
 		}
+
+		this.rebuildBlacklist();
 	}
 
 	@Override
@@ -473,7 +492,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					matchOre[i] = matchOre[i].getNext();
 					break;
 				case CLASS:
-					matchClass.put(m.displayName, matchClass.get(m.displayName).getNext());
+					matchClass.put(m.value, matchClass.get(m.value).getNext());
 					break;
 			}
 		}
@@ -606,28 +625,38 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			do {
 				String s = ReikaStringParser.getNOf(">", n);
 				MatchType m = matchClass.get(s+c1.getSimpleName());
-				if (m.check(c1 == c2))
+				if (!m.check(c1 == c2))
 					return false;
 				Class[] ints1 = c1.getInterfaces();
 				Class[] ints2 = c2.getInterfaces();
 				for (int i = 0; i < ints1.length; i++) {
-					m = matchClass.get(s+ints1[i].getSimpleName());
-					if (m.check(ints1[i] == ints2[i]))
+					m = matchClass.get(s+"%"+ints1[i].getSimpleName());
+					if (!m.check(ints1[i] == ints2[i]))
 						return false;
 				}
 				c1 = c1.getSuperclass();
+				c2 = c2.getSuperclass();
 				n++;
 			} while (c1 != null && c1 != Item.class && c2 != null && c2 != Item.class);
 			if (doCheckNBT != MatchType.IGNORE) {
-				if (nbt == is.stackTagCompound)
+				if (nbt == is.stackTagCompound) {
 					if (doCheckNBT.check(true))
 						return true;
-				if (nbt == null && is.stackTagCompound != null)
+					if (doCheckNBT == MatchType.MISMATCH)
+						return false;
+				}
+				if (nbt == null && is.stackTagCompound != null) {
 					if (!doCheckNBT.check(false))
 						return false;
-				if (nbt != null && is.stackTagCompound == null)
+					if (doCheckNBT == MatchType.MISMATCH)
+						return true;
+				}
+				if (nbt != null && is.stackTagCompound == null) {
 					if (!doCheckNBT.check(false))
 						return false;
+					if (doCheckNBT == MatchType.MISMATCH)
+						return true;
+				}
 				if (!this.tryMatchNBT(is.stackTagCompound, nbt, matchNBT))
 					return false;
 			}

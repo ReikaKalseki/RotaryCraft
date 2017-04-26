@@ -83,7 +83,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	@Override
-	protected void onInventoryChanged() {
+	protected void onInventoryChanged(int slot) {
 		isFull = false;
 	}
 
