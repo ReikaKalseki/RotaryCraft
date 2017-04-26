@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<misc>
+	<lube>
+		Most inline gearboxes need to be lubricated to maintain their ability to transmit power. Operated without lubricant, they will gradually wear down and transmit less and less torque, and thus less power. To keep them lubricated, simply run a line of lubricant hose from a grinder to the gearbox, put some seeds in the grinder, and watch the hose transmit the oil (or just use buckets to carry it). Most gearboxes do consume the lubricant, and more of it at higher speeds, so keep an eye on the meter in the GUI. Other machines may also require lubricant to function.
+	</lube>
+	<canola>
+		Find some canola seeds in tall grass, plant them on farmland, and watch them grow. When covered in little yellow flowers, the plants are ready to be harvested and will drop seeds. They share the same requirements as wheat in terms of light level, water supply, and so on. Canola plants require lots of water, so do not be surprised if they die on dry farmland. Canola seeds can also be compacted into a dense clump for easier storage.
+	</canola>
+	<meter>
+		The angular transducer is an indispensable tool for those with large or complex shaft systems. Right click any engine, gearbox, or machine with it, and you will be informed of the power and speed going in or out. Most machines will also have additional info.
+	</meter>
+	<screw>
+		This is for reorienting machines which were either misplaced or were difficult to place correctly. Shift-clicking will often perform a different function, like toggling between split and merge modes on the shaft junction. The screwdriver will also reorient pistons and stairs.
+	</screw>
+	<modinterface>
+		These are the conversion ratios and behaviors between shaft-powered machines and other mods' machines and items.
+
+		RF/t to Watts: 1 RF/t = %.3f %sW
+
+		Extractor Duplication Rates:
+		Normal Ores: %d percent chance per step
+		Nether Ores: %d percent chance per step
+		Rare Ores: %d percent chance per step
+	</modinterface>
+	<enchanting>
+		Some machines can be enchanted. Doing this will add features or functionality similar to the effects of the enchantments on their normal target items. For example, the Borer can receive Silk Touch, Fortune, and Efficiency, with each doing the same to the machine as they do to a tool. To enchant a machine, right-click it with an enchanted book.
+
+		The following machines can be enchanted: %s
+	</enchanting>
+	<computercraft>
+		If you have ComputerCraft or OpenComputers installed, you can use them to read and sometimes control various machines. Simply use the machine as you would any other peripheral, and call one of the listed methods. Note that not all machines have access to all methods; for example, the Reservoir has no inventory, power, or range methods, as they would be meaningless.
+	</computercraft>
+</misc>

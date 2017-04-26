@@ -1,0 +1,42 @@
+﻿<?xml version="1.0"?>
+<categories>
+	<misc>
+		Kilka podstawowych informacji na temat operowania maszynami oraz podstawowymi narzędziami.
+	</misc>
+	<engine>
+		Silnik jest typem maszyny zamieniającym energię na pracę mechaniczną. Każdy silnik posiada swój moment obrotowy i prędkość, jednak większość z nich posiada dużą prędkość i niski moment obrotowy. Każdy silnik posiada własne wymagania co do energii zasilającej go, a niektóre z nich posiadają także własne dziwaczne wymagania, które warto znać.
+	</engine>
+	<trans>
+		Możliwości były by ograniczone jeżeli produkowana praca mechaniczna musiałaby być wykorzystana tuż przy jej źródle. Na szczęście w bardzo prosty sposób możemy transportować tę energię, prawie bez strat, na dowolny dystans. Ważną rzeczą na temat transporterów energii jest to, że trzeba ustawić je w odpowiednim kierunku - transportują energię tylko w jednym kierunku. Transportery wyrenderują zielony blok przy wejściu energii, a czerwony blok przy wyjściu energii.
+	</trans>
+	<procmachine>
+		Maszyny te wykorzystywane są do przetwarzania i tworzenia nowych minerałów, zwiększania ich ilości, lub do konwersji przedmiotów pomiędzy różnymi modyfikacjami.
+	</procmachine>
+	<utilmachine>
+		Maszyny te posiadają specyficzne zastosowania, które trudno przydzielić do konkretnej kategorii.
+	</utilmachine>
+	<prodmachine>
+		Maszyny te wykorzystywane są do produkcji podstawowych surowców, także z surowców bezpośrednio wykopanych i surowych składników.
+	</prodmachine>
+	<survmachine>
+		Maszyny te używane są do badania otoczenia, ostrzegają przed potencjalnymi zagrożeniami.
+	</survmachine>
+	<wepmachine>
+		Bronie oraz środki obrony, które używane są do atakowania przeciwników - zarówno mobów jak i graczy - oraz do własnej obrony przed ich atakiem.
+	</wepmachine>
+	<farmmachine>
+		Maszyny te zostały zaprojektowane aby zastąpić tradycyjne metody rolnicze.
+	</farmmachine>
+	<cosmachine>
+		Maszyny te wprowadzają kosmetyczne zmiany, poprawiające wygląd danego miejsca.
+	</cosmachine>
+	<accmachine>
+		Maszyny te same w sobie są mało użytecznę, jednak w połączeniu z innymi maszynami można zwiększyć ich funkcjonalność.
+	</accmachine>
+	<tool>
+		Narzędzia te zasilane są zwojnicami. Ich zwojnice zużywają się z każdym użyciem. Aby je zregenerować, należy umieścić narzędzie i nową zwojnicę w stole rzemieślniczym, otrzymując przy tym starą zwojnicę, która może być użyta ponownie.
+	</tool>
+	<resource>
+		Są to różnego rodzaju surowce, używane w różnych celach.
+	</resource>
+</categories>
