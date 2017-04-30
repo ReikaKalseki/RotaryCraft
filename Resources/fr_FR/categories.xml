@@ -1,0 +1,43 @@
+﻿<?xml version="1.0"?>
+<categories>
+	<misc>
+		Quelques informations importantes sur le fonctionnement de quelques machines et de quelques outils essentiels.
+	</misc>
+	<engine>
+		Peut-être la plus cruciale de toutes les machines, les moteurs sont utilisés pour fournir la puissance. Chacun a son propre moment de torsion et sa caractéristique de vitesse, mais ils ont généralement tous un moment de torsion faible à grande vitesse. Chaque moteur a aussi ses propres exigences en termes d'approvisionnement en énergie et certains moteurs ont leurs propres bizarreries spéciales qu'il est sage de connaître.
+	</engine>
+	<trans>
+		Les possibilités seraient plutôt limitées si l'énergie produite par les moteurs avait été consommé à la source. Heureusement, il est simple et facile de transporter cette énergie, presque sans perte, à travers n'importe quelle distance à laquelle sans vous souciez. L'une des chose les plus importante à noter
+		about many of these is that they are directional - they transmit power in only one direction. Machines will render a green cage around their input block(s) and a red one around their output block(s).
+	</trans>
+	<procmachine>
+		These machines are used to process materials, either creating new materials, increasing yields, or converting items between mods.
+	</procmachine>
+	<utilmachine>
+		Ce sont des machines qui remplissent des buts spécifique pas facilement catégorisable dans les autres groupes.
+	</utilmachine>
+	<prodmachine>
+		Ce sont des machines utilisées pour produite les ressources de base, soit directement du minnage soit d'ingrédients bruts.
+	</prodmachine>
+	<survmachine>
+		Ces machines sont utilisées pour évaluer votre environnement, pour devenir plus conscient de dangers potentiels ou des articles de valeur.
+	</survmachine>
+	<wepmachine>
+		Machines Weaponry- and Protection-type machines are used to attack opponents - either mobs or players - and defend yourself from their attacks.
+	</wepmachine>
+	<farmmachine>
+		Ces machines sont conçues, soit pour remplacer, soit pour améliorer des fermes traditionnelles.
+	</farmmachine>
+	<cosmachine>
+		Les machines cosmétiques ne fournissent que peu de bonus utiles, mais elles fournissent des attraits visuels ou acoustiques.
+	</cosmachine>
+	<accmachine>
+		Pas terriblement utiles seules, ces machines sont concue pour fonctionner avec d'autres afin d'en augmenter leurs fonctionnalités.
+	</accmachine>
+	<tool>
+		Ce sont les outils énergisés par des bobines enroulées dessus. Leur bobine épuise légèrement à chaque utilisation. Pour les recharger, fabriquez les avec une nouvelle bobine et vous aurez la vieille bobine en retour, qui pourra être encore réutilisée.
+	</tool>
+	<resource>
+		Ce sont des éléments de type ressource, utilisés pour des buts divers.
+	</resource>
+</categories>

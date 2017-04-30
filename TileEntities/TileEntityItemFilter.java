@@ -492,25 +492,25 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					matchOre[i] = matchOre[i].getNext();
 					break;
 				case CLASS:
-					matchClass.put(m.value, matchClass.get(m.value).getNext());
+					matchClass.put(m.internalID, matchClass.get(m.internalID).getNext());
 					break;
 			}
 		}
 
 		public ArrayList<MatchDisplay> getMainDisplay() {
 			ArrayList<MatchDisplay> li = new ArrayList();
-			li.add(new MatchDisplay(this, SettingType.BASIC, "Item ID", Item.itemRegistry.getNameForObject(itemID), matchID));
-			li.add(new MatchDisplay(this, SettingType.BASIC, "Metadata", String.valueOf(metadata), matchMetadata));
-			li.add(new MatchDisplay(this, SettingType.BASIC, "Mod ID", modID, matchMod));
-			li.add(new MatchDisplay(this, SettingType.BASIC, "NBT Overall", "", doCheckNBT));
-			li.add(new MatchDisplay(this, SettingType.BASIC, "OreDict Overall", Arrays.toString(oreDict), doCheckOre));
+			li.add(new MatchDisplay(this, SettingType.BASIC, "Item ID", Item.itemRegistry.getNameForObject(itemID), "id", matchID));
+			li.add(new MatchDisplay(this, SettingType.BASIC, "Metadata", String.valueOf(metadata), "meta", matchMetadata));
+			li.add(new MatchDisplay(this, SettingType.BASIC, "Mod ID", modID, "mod", matchMod));
+			li.add(new MatchDisplay(this, SettingType.BASIC, "NBT Overall", "", "nbt", doCheckNBT));
+			li.add(new MatchDisplay(this, SettingType.BASIC, "OreDict Overall", Arrays.toString(oreDict), "ore", doCheckOre));
 			return li;
 		}
 
 		public ArrayList<MatchDisplay> getOreDisplay() {
 			ArrayList<MatchDisplay> li = new ArrayList();
 			for (int i = 0; i < oreDict.length; i++) {
-				li.add(new MatchDisplay(this, SettingType.ORE, String.valueOf(i), oreDict[i], matchOre[i]));
+				li.add(new MatchDisplay(this, SettingType.ORE, String.valueOf(i), oreDict[i], oreDict[i], matchOre[i]));
 			}
 			return li;
 		}
@@ -533,7 +533,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					id = "Interface";
 				}
 				String val = s;
-				li.add(new MatchDisplay(this, SettingType.CLASS, id, val, matchClass.get(orig)));
+				li.add(new MatchDisplay(this, SettingType.CLASS, id, val, orig, matchClass.get(orig)));
 			}
 			return li;
 		}
@@ -552,21 +552,21 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				NBTTagCompound match = matchRef.getCompoundTag(s);
 				MatchType m = MatchType.list[match.getInteger("type")];
 				if (b instanceof NBTTagList) {
-					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", m);
+					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", "", m);
 					md.tags = new LinkedList(tags);
 					li.add(md);
 					tags.add(s);
 					li.addAll(this.getNBTDisplay((NBTTagList)b, match, tags));
 				}
 				else if (b instanceof NBTTagCompound) {
-					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", m);
+					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", "", m);
 					md.tags = new LinkedList(tags);
 					li.add(md);
 					tags.add(s);
 					li.addAll(this.getNBTDisplay((NBTTagCompound)b, match, tags));
 				}
 				else {
-					li.add(new MatchDisplay(this, SettingType.NBT, s, b, tags, m));
+					li.add(new MatchDisplay(this, SettingType.NBT, s, b, tags, "", m));
 				}
 			}
 			if (!tags.isEmpty())
@@ -582,21 +582,21 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				NBTTagCompound match = matchRef.getCompoundTag(s);
 				MatchType m = MatchType.list[match.getInteger("type")];
 				if (b instanceof NBTTagList) {
-					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", m);
+					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", "", m);
 					md.tags = new LinkedList(tags);
 					li.add(md);
 					tags.add(s);
 					li.addAll(this.getNBTDisplay((NBTTagList)b, match, tags));
 				}
 				else if (b instanceof NBTTagCompound) {
-					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", m);
+					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", "", m);
 					md.tags = new LinkedList(tags);
 					li.add(md);
 					tags.add(s);
 					li.addAll(this.getNBTDisplay((NBTTagCompound)b, match, tags));
 				}
 				else {
-					li.add(new MatchDisplay(this, SettingType.NBT, s, b, tags, m));
+					li.add(new MatchDisplay(this, SettingType.NBT, s, b, tags, "", m));
 				}
 			}
 			if (!tags.isEmpty())
@@ -862,17 +862,20 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 		public final String displayName;
 		public final String value;
 
-		private MatchDisplay(MatchData src, SettingType type, String s, String val, MatchType m) {
+		private final String internalID;
+
+		private MatchDisplay(MatchData src, SettingType type, String s, String val, String id, MatchType m) {
 			setting = m;
 			displayName = s;
 			value = val;
 			source = src;
 			this.type = type;
 			tags = null;
+			internalID = id;
 		}
 
-		private MatchDisplay(MatchData src, SettingType type, String s, NBTBase b, LinkedList<String> li, MatchType m) {
-			this(src, type, s, b.toString(), m);
+		private MatchDisplay(MatchData src, SettingType type, String s, NBTBase b, LinkedList<String> li, String id, MatchType m) {
+			this(src, type, s, b.toString(), id, m);
 			tags = new LinkedList(li);
 		}
 

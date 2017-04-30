@@ -25,7 +25,6 @@ import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -94,7 +93,6 @@ public abstract class GuiMachine extends GuiContainer {
 
 	protected final boolean isClickTooSoon() {
 		boolean flag = System.currentTimeMillis()-lastClick < 250;
-		ReikaJavaLibrary.pConsole(flag+", "+(System.currentTimeMillis()-lastClick));
 		if (!flag)
 			lastClick = System.currentTimeMillis();
 		return flag;

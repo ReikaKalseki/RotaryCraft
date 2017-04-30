@@ -1,0 +1,59 @@
+﻿<?xml version="1.0"?>
+<info>
+	<terms>
+		W/kW/MW - Waty/Kilowaty/Megawaty - jednostki mocy (energia przez jednostkę czasu). 1W = 1 Dżul na sekundę
+
+		Nm - Niutonometry - jednostka momentu obrotowego (moc razy dystans)
+
+		rad/s - Radiany na sekundę. Jednostka kątowa prędkości. 1 rad/s = 9.55 obrotów na minutę.
+
+		Radian - Jednostka kąta, równa 180/pi (57.3) stopni; 6.28 radianów znajduje się w pełnym okręgu.
+	</terms>
+	<physics>
+		Moment obrotowy jest 'siłą' obrotu; większy moment obrotowy przekłada się na większą masę. W związku z tym, maszyna potrzebująca więcej siły aby działać, taka jak Kompaktor, będzie potrzebować więcej momentu obrotowego niż Drwal.
+
+		Prędkość kątowa określa prędkość obrotową. Na przykład, maszyna, która miesza szybko, taka jak Frakcjoner, będzie potrzebować więcej prędkości, niż ta, która miesza wolniej, przykładowo Fermenter.
+	</physics>
+	<material>
+		Różne materiały mają różną wytrzymałość, co przekłada się na awaryjność wałów i kół w zależności od użytego materiału do ich stworzenia. Awarie kół zamachowych związane są z gęstością i wytrzymałością na rozciąganie (TS), a awaryjność wałów związana jest z rozciągalnością lub przeciążenia (SS).
+
+		Drewno: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Kamień: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Żelazo: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Stal: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Złoto: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Diament: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+	</material>
+	<shafts>
+		Poniżej znajdują się limity dla wałów i przekładni. Ich przeciążenie może spowodować awarie.
+		
+		Drewno: %dNm at %d rad/s
+		Kamień: %dNm at %d rad/s
+		Stal: %dNm at %d rad/s
+		Diament: %dNm at %d rad/s
+		Skała Macierzysta: Brak Limitów
+	</shafts>
+	<flywheels>
+		Poniżej znajdują się maksymalne prędkości dla koła zamachowego, których przekroczenie skutkuję awarią.
+
+		Drewno: %d rad/s
+		Kamień: %d rad/s
+		Żelazo: %d rad/s
+		Złoto: %d rad/s
+	</flywheels>
+	<transfer>
+		Siła zachowuje się zupełnie inaczej niż energia elektryczna, pneumatyczna, czy każda inna tradycyjna forma energii. Przykładowo, aktywny silnik produkuję pewną siłę, i bez względu na to, czy ta energia jest wykorzystywana, czy nie, to i tak nie ma to wpływu na pobór paliwa.
+	</transfer>
+	<tiers>
+		Nie wszystkie maszyny są łatwe do obsługi; niektóre z nich mogą okazać się bardzo trudne do obsługi od innych. Różnicą jest również pobór energii.
+	</tiers>
+	<timing>
+		Maszyny, które wykonują mniej skomplikowane operację zazwyczaj potrzebują mniej czasu na pełen cykl. 
+	</timing>
+	<muffling>
+		Niektóre maszyny okazują się być bardzo głośne. Dotyczy to głównie silników i innych maszyn wykonujących reakcję spalania. Aby pomóc w redukcji hałasu, można użyć wełny jako izolatora dźwięku, kładąc ją sąsiednio do maszyny.
+	</muffling>
+	<interdim>
+		Bez względu na wymiar w którym się znajdujesz, maszyny nadal będą działać, zakłądając, że portale znajdują się w tej samej lokacji. Działa to z piekłem, kresem, Twilight Forest oraz portalami z MystCraft. Możliwe jest także użycie chunk loaderów.
+	</interdim>
+</info>

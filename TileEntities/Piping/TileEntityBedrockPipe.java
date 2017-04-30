@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -33,6 +34,11 @@ public class TileEntityBedrockPipe extends TileEntityPipe {
 	@Override
 	public IIcon getBlockIcon() {
 		return BlockRegistry.DECO.getBlockInstance().getIcon(0, 4);
+	}
+
+	@Override
+	public boolean isValidFluid(Fluid f) {
+		return true;
 	}
 	/*
 	@Override

@@ -20,7 +20,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -30,29 +29,23 @@ import Reika.ChromatiCraft.Block.Dye.BlockDyeLeaf;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Base.TileEntityBase;
-import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
-import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.ItemRotaryShears;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ItemBedrockShears extends ItemShears implements IndexedItemSprites {
+public class ItemBedrockShears extends ItemRotaryShears {
 
 	private static final HashSet<Block> noDrops = new HashSet();
 
-	private int index;
-
 	public ItemBedrockShears(int tex) {
-		this.setIndex(tex);
-		maxStackSize = 1;
-		this.setMaxDamage(0);
+		super(tex);
 		this.setNoRepair();
-		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
+		this.setMaxDamage(0);
 	}
 
 	@Override
@@ -66,38 +59,12 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 	}
 
 	@Override
-	public boolean isItemTool(ItemStack is) {
-		return true;
-	}
-
-	private void setIndex(int tex) {
-		index = tex;
-	}
-
-	@Override
-	public int getItemSpriteIndex(ItemStack is) {
-		return index;
-	}
-
-	@Override
-	public String getTexture(ItemStack is) {
-		return "/Reika/RotaryCraft/Textures/Items/items2.png";
-	}
-
-	@Override
-	public Class getTextureReferenceClass() {
-		return RotaryCraft.class;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
-	{
+	public boolean onBlockDestroyed(ItemStack is, World world, Block par3, int par4, int par5, int par6, EntityLivingBase e) {
 		return true;
 	}
 
 	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack is)
-	{
+	public boolean canHarvestBlock(Block par1Block, ItemStack is) {
 		return true;
 	}
 
@@ -216,8 +183,7 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 	}
 
 	@Override
-	public float getDigSpeed(ItemStack is, Block b, int meta)
-	{
+	public float getDigSpeed(ItemStack is, Block b, int meta) {
 		float f = 0.75F;
 		if (b != null) {
 			if (b instanceof IShearable) {
@@ -234,11 +200,6 @@ public class ItemBedrockShears extends ItemShears implements IndexedItemSprites 
 			}
 		}
 		return f;
-	}
-
-	@Override
-	public String getItemStackDisplayName(ItemStack is) {
-		return ItemRegistry.getEntry(is).getBasicName();
 	}
 
 	static {

@@ -146,7 +146,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			streamOmega = (int)(vtot*2);
 			double F = ReikaEngLibrary.rhowater*vtot*vtot; //A=1
 			double fudge = 0.875;
-			streamTorque = ReikaMathLibrary.ceil2exp((int)(F*0.5*fudge));
+			streamTorque = 2*ReikaMathLibrary.ceil2exp((int)(F*0.5*fudge));
 			return true;
 		}
 		streamPower = false;

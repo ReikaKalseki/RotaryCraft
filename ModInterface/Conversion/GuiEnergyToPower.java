@@ -11,6 +11,8 @@ package Reika.RotaryCraft.ModInterface.Conversion;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
@@ -118,6 +120,11 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 
 		int ddy = engine.isRedstoneControlEnabled() ? 0 : 1;
 		api.drawItemStack(itemRender, fontRendererObj, engine.getRedstoneStateIcon(), 148, 71+ddy);
+		GL11.glPushMatrix();
+		double s = 0.75;
+		GL11.glScaled(s, s, s);
+		api.drawItemStack(itemRender, fontRendererObj, engine.hasRedstoneSignal() ? new ItemStack(Blocks.lit_redstone_lamp) : new ItemStack(Blocks.redstone_lamp), (int)(148/s-2/s)-6, (int)(71/s)-6);
+		GL11.glPopMatrix();
 	}
 
 	@Override

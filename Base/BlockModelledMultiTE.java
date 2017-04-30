@@ -101,7 +101,17 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+		AxisAlignedBB box = this.getAABB(world, x, y, z);
+		this.setBounds(box, x, y, z);
+	}
+
+	@Override
 	public final AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		return this.getAABB(world, x, y, z);
+	}
+
+	private AxisAlignedBB getAABB(IBlockAccess world, int x, int y, int z) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == null)
 			return ReikaAABBHelper.getBlockAABB(x, y, z);
@@ -118,8 +128,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
-	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
-	{
+	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		return this.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
