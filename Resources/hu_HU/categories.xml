@@ -1,0 +1,42 @@
+﻿<?xml version="1.0"?>
+<categories>
+	<misc>
+		Néhány hasznos információ a gépek működtetéséről és a szükséges eszközökről.
+	</misc>
+	<engine>
+		Talán a leglényegesebb gépek a motorok, amik az energiát szolgáltatják. Mindegyik sajátságos sebesség- és forgatónyomaték-értékekkel rendelkezik, de általában a sebesség nagyobb a forgatónyomatéknál. Minden motornak külön igényei vannak, és néhány motornak egyedi funkciója, amit nem árt ismerni.
+	</engine>
+	<trans>
+		Lényegesen kevesebb lehetőségünk lenne, ha az energiát mindjárt a termelés helyszínén kéne felhasználni. Szerencsére ez az energia könnyen szállítható, majdnem veszteségmentesen, akármilyen messzire is visszük. Egy fontos dolgot kell tudni: a szállítóeszközök egyirányúak - visszafelé nem szállítanak energiát. A bemenet(ek) zöld színű kockával, a kimenet(ek) pirossal vannak jelölve.
+	</trans>
+	<procmachine>
+		Ezek a gépek feldolgozók; új anyagokat hoznak létre, javítják a hozamot (a feldolgozás hatásfokát) vagy különböző modok anyagait alakítják át egy másik modéba.
+	</procmachine>
+	<utilmachine>
+		Ezek a gépek nem férnek bele egy másik kategóriába sem.
+	</utilmachine>
+	<prodmachine>
+		Ezek a gépek alapanyagokat hoznak létre, bányászatból vagy nyersanyagból.
+	</prodmachine>
+	<survmachine>
+		Ezeknek a gépeknek a környezet elemzése, a veszélyek és értékes anyagok felkutatása a feladatuk.
+	</survmachine>
+	<wepmachine>
+		Fegyver és védelem típusú szerkezetek, ellenségeid legyőzésére - legyenek játékosok vagy mobok - és támadásaik kivédésére tervezve.
+	</wepmachine>
+	<farmmachine>
+		Ezek a gépek helyettesítik vagy modernizálják a közönséges farmokat.
+	</farmmachine>
+	<cosmachine>
+		A dekorációs gépeknek nincs (vagy alig van) gyakorlati haszna, csak látvány- és hangelemekkel díszítik a világod.
+	</cosmachine>
+	<accmachine>
+		Egymagukban nem kifejezetten hasznos gépek, amik más gépek fejlesztésére valóak.
+	</accmachine>
+	<tool>
+		Ezeket a szerszámokat felhúzott tekercsrugók működtetik, amik minden használattal merülnek. Újratöltéshez tedd őket egy barkácsasztalba egy felhúzott rugóval, és visszakapod a lemerültet.
+	</tool>
+	<resource>
+		Nyersanyagok, különböző célokra.
+	</resource>
+</categories>

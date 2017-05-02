@@ -1,0 +1,144 @@
+﻿<?xml version="1.0"?>
+<engines>
+	<dc>
+		<desc>
+			Az egyenáramú (DC) motor a legegyszerűbben elkészíthető és üzemeltethető motor, egyedül egy (bármilyen erősségű) vöröskő-jel szükséges a működéséhez. Ennek az egyszerűségnek ára van - ezek a leggyengébb motorok, %d Nm forgatónyomatékkal és %d rad/s sebességgel, azaz %.3fkW teljesítménnyel.
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Vöröskő-jel
+			Szükséges üzemanyag: Nincs
+			Veszélyek: Nincs
+		</note>
+	</dc>
+	<wind>
+		<desc>
+			A szélturbinát - meglepő módon - a szél hajtja meg. A levegő kis sűrűsége miatt a forgatónyomaték alacsony (csupán %d Nm), de akár %d rad/s-os forgásra is képes, ezáltal %.3fkW teljesítményre is képes, adott esetben. Megjegyzendő, hogy ennek a generátornak a hatásfoka magasan fekvő nyitott helyeken a legnagyobb. Nem tanácsos a lapátok útjába tárgyakat és blokkokat helyezni, mert ezek megakasztják.
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Szél
+			Szükséges üzemanyag: Nincs
+			Veszélyek: A forgó lapátok sérülést okozhatnak!
+			Egyéb infó: Legalább 16 blokkot szabadon kell hagyni előtte, teljesítménymaximumát 80m magasan vagy annál magasabban éri el.
+		</note>
+	</wind>
+	<steam>
+		<desc>
+			Ez a gőzgép mindaddig folyamatos működésre képes, amíg alulról hőt és hátulról vizet kap. Valamennyivel erősebb az eddigi motoroknál, %d Nm nyomaték mellett %d rad/s sebességgel üzemel (%.3fkW).
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Víz és hő
+			Szükséges üzemanyag: Víz
+			Veszélyek: 150°C-on felül túlmelegszik!
+		</note>
+	</steam>
+	<gas>
+		<desc>
+			Ez a dízelmotor nevéhez híven... etanolt fogyaszt. Az etanolkristályokat elégetve %d Nm nyomatékot szolgáltat %d rad/s mellett, azaz %.3fkW-ot.
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Etanol
+			Szükséges üzemanyag: Etanol
+			Veszélyek: Nincs
+		</note>
+	</gas>
+	<ac>
+		<desc>
+			Ez a váltóáramú (AC) villanymotor, a DC motorhoz hasonlóan vöröskő-jellel üzemel. Azonban ennek, az előbbivel ellentétben, egy váltakozó jelre van szüksége, amit pl. egy órajel szolgáltat. Minél gyorsabb az órajel, annál stabilabban fut a motor, egy 2 jelismétlős órajelen állandó %d Nm-on és %d rad/s-on (%.3fkW). Ennek a motornak továbbá szükséges egy felmágnesezett tengely, ami használat alatt lassan elveszti mágnesességét.
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Váltakozó vöröskő-jel (órajel) és egy felmágnesezett tengely.
+			Szükséges üzemanyag: Nincs
+			Veszélyek: Nincs
+		</note>
+	</ac>
+	<sport>
+		<desc>
+			A sportmotor, csakúgy mint a dízel, etanol üzemanyagú, de ezen felül szüksége van vízre a hűtéshez, és névleges teljesítményét csak adalékanyagok hozzáadása mellett éri el - vöröskő-por, puskapor vagy őrlángpor, hatékonyság szerint növekvő sorrendben. Így %d Nm nyomatékot és %d rad/s sebességet érhetünk el vele, a teljes %.3fkW-ot.
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Etanol és adalékok
+			Szükséges üzemanyag: Etanol, adaléknak: vöröskő-por, puskapor vagy őrlángpor
+			Veszélyek: 240°C-on felül túlmelegszik!
+		</note>
+	</sport>
+	<hydro>
+		<desc>
+			A vízkerék a zuhanó víz energiáját továbbítja a tengelybe. Ez a kerék csak óramutató járásával ellentétes irányba képes forogni, erre ügyeljünk a víz elhelyezésénél. Ezenfelül a lapátkerekek közé kerülő blokkok megakaszthatják. Végezetül, a teljesítmény a víz zuhanási magasságától nagyban függ. Egy 3 blokkról lecsorgó víz minimális energiát szolgáltat, de egy 64m+ magaszól zubogó víztömeg %d Nm nyomatékot és %d rad/s-ot hoz létre, a legmagasabb forgatónyomaték-értéket, összesen %.3fkW-ért. Ezeket a kerekek egymás mellé téve magasabb forgatónyomatékok érhetők el. A helyes működésükhöz kenőolaj szükséges.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Max. forgatónyomaték: %d Nm
+					Max. szögsebesség: %d rad/s
+					Max. teljesítmény: %.3fkW
+					Energiaforrás: Lefolyó víz
+					Szükséges üzemanyag: Kenőolaj
+					Veszélyek: A forgó lapátok sérülést okozhatnak!
+					Egyéb infó: A nagyobb teljesítményhez minél magasabb vízesés szükséges
+				</s1>
+				<s2>
+					Legfeljebb 4 lapátkerék tehető egymás mellé, különben a forgatónyomaték eltöri a hossztengelyt
+
+					Egy alapkő tengelyblokkal ez a határ 16-ra vihető fel.
+				</s2>
+			</sub>
+		</note>
+	</hydro>
+	<micro>
+		<desc>
+			A mikroturbina meglehetősen egyedi szerkezet. Állandó üzemanyag-adagolás mellett csekély nyomatékot szolgáltat (%d Nm), de iszonyatos sebesség mellett: %d rad/s, így teljesítménye éppen meghaladja a 2 MegaWattot (%.3fMW).
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Hajtőmű-üzemanyag
+			Szükséges üzemanyag: Hajtőmű-üzemanyag
+			Veszélyek: Nincs
+		</note>
+	</micro>
+	<jet>
+		<desc>
+			A legerősebb motor, a sugárhajtómű, annyi energiát termel, mint egy kereskedelmi sugárhajtású repülőgép...és olyan hangos is. Ezek a hajtóművek, teljesen feltankolva %d Nm-t és %d rad/s-ot (%.3fMW) hoznak létre. Figyelem: hacsak nem szeretnél emberturmixxá válni, állj JÓ MESSZE a gép elejétől, amikor működésben van! Sem neked, sem a hajtóműnek nem tenne jót.
+		</desc>
+		<note>
+			Forgatónyomaték: %d Nm
+			Szögsebesség: %d rad/s
+			Teljesítmény: %.3fkW
+			Energiaforrás: Hajtőmű-üzemanyag
+			Szükséges üzemanyag: Hajtőmű-üzemanyag
+			Veszélyek: Erős szívóerő; sérülés esetén NAGYOT koppan, aztán elhallgat
+		</note>
+	</jet>
+	<solar>
+		<desc>
+			A napkollektor egyedülálló tulajdonsága, hogy mérete, ezáltal teljesítménye is, változtatható. Csak építsünk egy tornyot az oszlopblokkokból, és vegyük körbe a talpazatblokkot tükrökkel. Több tükör és magasabb torony több energiát képes termelni. Ez az energia a torony aljából vezethető el. A toronynak szüksége van vízre a működéshez. A tükröknek összeköttetésben kell lenniük az talpazatblokkal (esetleg további tükrökön keresztül).
+		</desc>
+		<note>
+			Forgatónyomaték: Változtatható
+			Szögsebesség: %d rad/s
+			Teljesítmény: Változtatható
+			Energiaforrás: Napsugárzás
+			Szükséges üzemanyag: Víz
+			Veszélyek: A közeli gyúlékony anyagok lángra kaphatnak!
+		</note>
+	</solar>
+</engines>
