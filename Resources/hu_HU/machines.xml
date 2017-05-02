@@ -1,0 +1,1142 @@
+﻿<?xml version="1.0"?>
+<machines>
+	<bedrockbreaker>
+		<desc>
+			The bedrock breaker will, when sufficiently powered, gradually grind away at the bedrock blocks in front of it and move on to the next block. When each block is consumed, it will expel some bedrock dust, which can be used to make the highest tier of tools or shafts and gears - bedrock. This machine's operational speed goes up as the input speed does. This machine will NOT break the bedrock at layer 0.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</bedrockbreaker>
+	<fermenter>
+		<desc>
+			The fermenter is how you produce the ethanol for the engines that require it. To make yeast, place sugar in the top slot, and dirt on the bottom. To make sludge, put yeast on top and plant matter on the bottom. Put that in a furnace, and you will get crystals of ethanol. This machine's operational speed rises as the input speed does. This machine is temperature-sensitive, and very low or high temperatures will slow it down or even kill the yeast. To automate this machine, use redstone to choose the target production item (displayed at the top-right of the GUI). The middle GUI slot is in fact a water gauge, not an item slot.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Bemenet: Hátul
+		</note>
+	</fermenter>
+	<grinder>
+		<desc>
+			The grinder does exactly what its name suggests - it grinds things. Stone to cobblestone, cobble to gravel, gravel to sand, that sort of thing. It also plays a critical role in the lubrication of gearboxes - it grinds the canola seeds into an oil usable as lubricant. This machine's operational speed goes up as the input speed does.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</grinder>
+	<floodlight>
+		<desc>
+			The floodlight creates a beam of light that illuminates everything in its path until blocked by an opaque, solid block. Perfect for lighting up large spaces where point-source light sources like torches will simply not cut it.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Bemenet: Hátul
+		</note>
+	</floodlight>
+	<heatray>
+		<desc>
+			One of the most powerful and expensive of the machines, the heat ray creates a beam of fiery death and destruction for as long as its range allows. While it is hard to supply enough power to turn the thing on, let alone unlock some of its more powerful capabilities, it, fully powered, is capable of burning down a biome kilometers away if you let it. Extra power to this machine, in addition to increasing range, also increases the range and strength of its ability to melt rock, light TNT...
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 8+(Power-%d)W/%d m
+			Bemenet: Hátul
+		</note>
+	</heatray>
+	<borer>
+		<desc>
+			The boring machine is rather interesting. It will dig tunnels in the direction it is facing for as long as you like. With the GUI, you can control the tunnel shape, and control the item drops. Harder materials require more power and torque to dig - %dW per hardness points of the blocks in front of it, and up to %d Nm of torque per block to cut through the harder materials. The borer will ensure that the tunnel roof does not collapse by replacing sand and gravel. Rumor has it that certain underground mazes found in a mythical forest are easily conquered with this machine, though the hard stone makes for a high torque requirement.
+		</desc>
+		<note>
+			Szükséges teljesítmény: Változó
+			Required Torque: Varies
+			Bemenet: Hátul
+		</note>
+	</borer>
+	<piledriver>
+		<desc>
+			The pile driver repeatedly impacts the ground to break it apart, digging a deep, narrow shaft. This shaft will go through any liquids in its path, and will go through everything but bedrock. Multiple impacts are required to break some harder materials, and the vibration will dislodge things like paintings, uproot saplings, and disorient players. Beware: Being in the path of the mining pile will end exactly as you may imagine. This machine's power requirements go up the deeper it digs - %dW per meter depth.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW per méter
+			Required Torque: %dNm
+			Bemenet: Hátul vagy elöl
+		</note>
+	</piledriver>
+	<aerosolizer>
+		<desc>
+			The potion aerosolizer has nine internal tanks which can store up to 64 bottles of potion each. These effects are dispersed through the entire room the machine is in, and applied to all entities within. Filling more than one slot with the same potion type will result in upgraded effects.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Power Input: Any horizontal side or bottom
+		</note>
+	</aerosolizer>
+	<lightbridge>
+		<desc>
+			This machine will, when its enormous power requirement is satisfied, emit a beam of solid, tangible light which can be walked upon and will support any mass placed on it. Nothing can destroy this beam, but it will be blocked by any non-air block. Note that it requires bright light above it - or a view of the sky - in order to be able to make the beam.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW for full range, or %dW per meter
+			Bemenet: Hátul
+		</note>
+	</lightbridge>
+	<extractor>
+		<desc>
+			The extractor is used to get more material out of ore. First, it grinds ore to dust, then mixes it with water to form a slurry, then presses that slurry through a filter to obtain a liquid solution, then burns the result to obtain ore flakes. These flakes can be smelted in a furnace to obtain a unit of the ore's material. Each stage in the extractor has at least a 50%% chance of doubling the output. The machine's requirements are complex and vary from stage to stage, but a supply of water and %d Nm of torque at %d rad/s will run all four stages.
+		</desc>
+		<note>
+			Stage 1 Power: %dW
+			Stage 2 Power: %dW
+			Stage 3 Power: %dW
+			Stage 4 Power: %dW
+			Stage 1 Torque: %dNm
+			Stage 4 Torque: %dNm
+			Stage 2 Speed: %drad/s
+			Stage 3 Speed: %drad/s
+			Bemenet: Alul
+			Notes: Stages 2 and 3 require a water supply; can be upgraded with a bedrock drill
+		</note>
+	</extractor>
+	<pulsejet>
+		<desc>
+			The pulse jet is a powerful furnace. While it will not smelt the ordinary recipes, it will melt obsidian into glass that is immune to TNT, melt armor and tools back into ingots, and make steel more efficiently than a standard furnace. It will get VERY hot, and will ignite nearby flammable materials - keeping it cooled with water is a necessity. While there is no minimum power requirement, the jet requires high shaft speeds. The pulse jet consumes jet fuel to operate, and a rather large amount of it. This machine receives power from below.
+		</desc>
+		<note>
+			Szükséges sebesség: %drad/s
+			Bemenet: Alul
+			Max Temperature: %dC
+		</note>
+	</pulsejet>
+	<pump>
+		<desc>
+			The pump will, when provided with power, will suck up liquids from the surrounding area and pump them into pipes, for transport to a machine that can use it. Water is often used as coolant, while lava is more often pumped to a reservoir for convenient access or as fuel to some engines.
+		</desc>
+		<note>
+			Required Power: %d W
+			Szükséges forgatónyomaték: %d Nm
+			Power Input: Front or Back
+		</note>
+	</pump>
+	<reservoir>
+		<desc>
+			The reservoir is simply a tank for storing any liquid, with a maximum capacity of %d cubic meters (buckets). It can be right-clicked with a bucket to add or remove liquid, and if it is full of water, glass bottles can be filled from it. Additionally, they can be linked horizontally to form large vats, and covered with glass panes.
+		</desc>
+		<note>
+			Capacity: %d m^3 per block
+		</note>
+	</reservoir>
+	<fan>
+		<desc>
+			The fan emits a stream of air that will push entities around. With greater input power, heavier entities can be moved, and all entities will accelerate faster. A minimum of %dW of power is required, and power levels greater than %dW of power will have no increased effect due to airflow limitations. The fan, at higher speeds, can also be used to uproot crops to harvest them, and to put out - or spread - fires.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 8+(Power-MINPOWER)/%d m
+			Bemenet: Hátul
+			Harvesting Speed: %d rad/s
+			Fire Extinguish Speed: %d rad/s
+			Can be upgraded with a diffuser to increase AOE, but this reduces efficiency 50%%
+		</note>
+	</fan>
+	<compactor>
+		<desc>
+			The compactor is capable of compressing coal until it becomes anthracite, then prismane, then lonsdaleite, then diamond. Each stage will require four of the input items per unit output. All steps require enormous pressures of %dkPa and temperatures of greater than %dC to take place. The compactor will gradually heat or cool depending on its surroundings, and pressure is built up by applying high torques.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Required Pressure: %dkPa
+			Required Temperature: %dC
+			Max Pressure: %dkPa
+			Max Temperature: %dC
+			Bemenet: Hátul
+		</note>
+	</compactor>
+	<autobreeder>
+		<desc>
+			The auto-breeder will lure in animals, and when they get close, feed them until they feel like breeding. With this machine, you can quickly amass large herds. Each animal has its own desired food item; without that item, the machine will fail to attract or feed the animal. Wolves, for example, particularly like raw pork. The food item will be consumed when the animal enters breeding mode.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 8+(Power-%d)/%d m
+			Bemenet: Alul
+		</note>
+	</autobreeder>
+	<baitbox>
+		<desc>
+			The bait box will attract or repel mobs of all kinds, provided it contains the appropriate items to do so. For example, Endermen are attracted by grass blocks and the opportunity to take them, but are repelled by the faces on soul sand staring back at them. These items are not consumed.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 8+(Power-%d)/%d m
+			Power Input: Any side
+		</note>
+	</baitbox>
+	<firework>
+		<desc>
+			The firework machine will, when given the appropriate ingredients with which to make fireworks, craft random fireworks out of the possible recipes and launch them automatically. When given pre-made firework stars, it will use those preferentially. With excess power input, the machine is capable of conserving ingredients and thus getting far more than one firework out of the same amount of ingredients.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Power Input: Any side
+		</note>
+	</firework>
+	<fractionator>
+		<desc>
+			The fractionator distills various items and refines them into jet fuel for use in some of the engines and machines. Jet fuel requires tar, netherrack dust, coal, blaze powder, ethanol, and magma cream. Additionally, ghast tears are used as a solvent, but are not consumed like the other items. Fuel lines connect only to the top of this machine.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Bemenet: Alul
+		</note>
+	</fractionator>
+	<gpr>
+		<desc>
+			The Ground-Penetrating Radar is capable of reading the densities and other properties of the blocks below it, and from that determining what blocks lie below. This allows it to draw a cross-sectional map of caves, underground structures, and other materials. Larger power inputs will give it a wider field of view, topping out at 82 blocks wide.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Field-of-View = 1+2*log_2(power-%d) m
+			Power Input: Any side
+		</note>
+	</gpr>	
+	<heater>
+		<desc>
+			Tired of blowing up your compactors and other machines by overheating them? The heater will heat itself to a temperature you specify, and when placed below a machine, will warm it to a temperature near its own. The heater will consume any fuel that the standard furnace can, with stronger fuels providing more heat, up to 800C from one lava bucket.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Max Attainable Temperature: %dC
+			Bemenet: Alul
+		</note>
+	</heater>
+	<obsidian>
+		<desc>
+			The obsidian factory will mix piped-in water and lava to produce obsidian. Be careful; if the machine is left full of only lava too long, it will start to overheat and will eventually melt.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Maximum Temperature: %dC
+			Liquid Capacity: %d mB
+			Bemenet: Alul
+		</note>
+	</obsidian>
+	<playerdetector>
+		<desc>
+			The player detector does exactly what its name implies - when a player comes within its configurable range, it will emit a redstone signal. The maximum range is determined by the power input, and the reaction time of the detector - the delay between a player entering a range and the signal output - is dependent on the speed input.
+		</desc>
+		<note>
+			Range = (Power)/%d m
+			Bemenet: Alul
+			Reaction Time: %d-(Speed/%d)
+		</note>
+	</playerdetector>
+	<spawnercontroller>
+		<desc>
+			The spawner controller hacks into the functioning of a monster spawner, allowing you to either shut it down completely, or to adjust the spawn rate as you see fit. The minimum allowable spawn rate is determined by the speed input.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Min Delay: %d-40*log_2(Speed)
+			Power Input: Spawner Block
+		</note>
+	</spawnercontroller>
+	<sprinkler>
+		<desc>
+			The sprinkler will, when supplied with water, spray it out on the blocks below, watering crops and speeding up their growth, hydrating farmland, and extinguishing fires. Higher water pressures - created by larger power inputs to the pumps - result in increased range.
+		</desc>
+		<note>
+			Range: Water Pressure/80
+		</note>
+	</sprinkler>
+	<vacuum>
+		<desc>
+			The item vacuum draws items and XP orbs towards it, and will absorb them into its internal storage when they get close. To extract the stored XP, right-click it with a screwdriver while sneaking. The item vacuum can also suck items from inventories horizontally adjacent to it (except other vacuums).
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 8+(Power*4)/%d m
+			Power Input: Any side
+		</note>
+	</vacuum>
+	<woodcutter>
+		<desc>
+			The woodcutter will cut away at the trunk of a tree, causing the rest of the tree to collapse, possibly replanting the tree if it dropped saplings. If enchanted with infinity, it will always replant the tree.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</woodcutter>
+	<ecu>
+		<desc>
+			The engine controller can throttle down the fuel-powered engines. When throttled down, they output their usual torque, but at a fraction of the speed. The benefit of this is that they consume fuel more slowly; slower speeds have greater efficiencies than faster ones, though turbine engines do not see as large a benefit. Modes are changed by right-clicking the ECU with a screwdriver. The ECU can also accept a redstone input, which will shut the engine down entirely.
+		</desc>
+		<note>
+			Available Modes:
+			%s
+		</note>
+	</ecu>
+	<mobradar>
+		<desc>
+			The mob radar can detect mobs in a large radius around it, and is unobstructed by blocks in the way. It will display their positions on the NSEW plane, signified with the appropriate icon. If you have a motion tracker in your inventory, the radar will also render a HUD of sorts to alert you to mob positions near you.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 8+(Power-%d)/%d m
+			Bemenet: Alul
+		</note>
+	</mobradar>
+	<winder>
+		<desc>
+			The coil winder is used to wind up coil items, to store mechanical energy for later use. It can also use previously-wound coils as an energy source, thus allowing you to transport power in item form.
+		</desc>
+		<note>
+			Maximum energy acheivable is proportional to torque input
+		</note>
+	</winder>
+	<tntcannon>
+		<desc>
+			The TNT cannon fires primed TNT either with a given velocity (specified by speed, launch angle, and compass heading), or to a specific target coordinate. It requires a continuous supply of TNT to continue operation. It requires higher torques to fire at steeper angles, more speed to fire faster projectiles, and more power to reach farther targets.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Power Input: Any horizontal side or bottom
+		</note>
+	</tntcannon>
+	<sonicweapon>
+		<desc>
+			The sonic weapon is a ranged defense weapon designed to protect against hostile mobs and players. At higher and higher volumes (made possible by higher input torques), it can cause more and more debilitating effects on those in its effect radius, from confusion to blindness to drowning to death. This machine follows the inverse-square law, and thus the sound intensity and the severity of its effects decrease accordingly. 
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 8+(Power-%d)/%d m
+			Blindness at: %d W/m^2
+			Confusion at: %d W/m^2
+			Drowning at: %d W/m^2
+			Lethality at: %d W/m^2
+			Power Input: Any side
+		</note>
+	</sonicweapon>
+	<blastfurnace>
+		<desc>
+			The blast furnace is the main way to make steel. Simply supply carbon (in the form of coal or coke) at the left, gunpowder at the bottom-left, sand in the top-left, and fill any or all of the middle nine slots with iron ingots. Heat the machine to %dC to start the alloying process. The machine will operate more efficiently with coke and with more slots full of iron. The coal is not fuel - an external heat source is required. This machine is also used to make bedrock ingots. To make that, put 4 bedrock dust in the left, one steel ingot in the top-left of the grid, and heat the machine to %dC.
+		</desc>
+		<note>
+			Steel Requirements: Coal/coke in left slot, gunpowder in bottom-left, sand in top-left, iron in middle slots
+
+			Bonuses: Chance increases as the number of filled slots rises, max 50 percent
+			Max bonus size: Increases as the number of filled slots rises, max 100 percent
+
+			XP per steel ingot: %.2f
+		</note>
+	</blastfurnace>
+	<forcefield>
+		<desc>
+			The force field emits a solid sphere of energy that repels all hostile mobs and projectiles. Note that it is only solid in one direction - threats may leave but cannot re-enter. However, due to the large magnetic field, arrows will be diverted even if launched from inside the sphere. This machine needs a clear view above it equal to the selected radius.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 2+(Power-%d)/%d m
+			Power Input: Any side
+		</note>
+	</forcefield>
+	<musicbox>
+		<desc>
+			The music box is essentially an integrated noteblock circuit. Simply program it with music - either using one of the demo tracks or by writing your own, and give it power to run the music. A redstone pulse will cycle the music once; for looping music, use shaft power.
+		</desc>
+		<note>
+			Activation: Redstone for one cycle, shaft power for looped music
+			Loop Power: %d
+			Data Entry Mode: Sequential
+			Power Input: Any side
+		</note>
+	</musicbox>
+	<mobharvester>
+		<desc>
+			The mob harvester is designed to kill mobs as if a player was, so that normally player-only drops (such as Blaze Rods) can be automatically farmed. The machine will deal damage to mobs directly above it, with the amount depending on the power input.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Damage Dealt: log_2((2+power/%d)^6)
+			Power Input: Any horizontal side or bottom
+		</note>
+	</mobharvester>
+	<projector>
+		<desc>
+			The projector outputs an image from a slide against a wall. Note that the wall must be 7 blocks wide and 5 blocks tall, and must be opaque and unobstructed.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Bemenet: Hátul
+		</note>
+	</projector>
+	<railgun>
+		<desc>
+			The railgun is a very powerful defence weapon. It uses strong magnetic fields to accelerate heavy metallic ammunition at the target, dealing very large amounts of damage. Note that more massive projectiles deal much more damage, and can destroy large areas of terrain. The railgun will automatically target the nearest visible mob; for maximum efficiency, mount it where it has a clear view of the surrounding area. You may also invert the railgun to target below itself rather than above.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Required Torque: 512*SQRT(mass) Nm
+			Bemenet: Alul or top, orientation dependent
+		</note>
+	</railgun>
+	<weathercontroller>
+		<desc>
+			The silver iodide cannon is used to control the weather. It has a built-in light sensor to determine the current weather and if set to do so, will fire the appropriate chemicals into the air to alter it. Note that it has a cooldown time, and must have a clear view of the sky.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Bemenet: Alul
+			Sun: Sawdust
+			Rain: Silver Iodide
+			Thunder: Redstone+Silver Iodide
+			Superstorm: Glowstone Dust+Redstone+Silver Iodide
+		</note>
+	</weathercontroller>
+	<refresher>
+		<desc>
+			The item refresher keeps nearby items from despawning. Note that items that have been maintained for a long time will immediately despawn if the machine is destroyed or loses power.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 4+(Power-%d)/%d m
+			Power Input: Any side
+		</note>
+	</refresher>
+	<cavescanner>
+		<desc>
+			The cave scanner functions much like a laser 3D scanner. It sends pulses into the ground and can detect the interface between air and other blocks, which it will render in the world. This allows you to map caves from the surface. Its field of view is 16 blocks by default, and can be moved around by right-clicking the block. Right-click will push it in the direction you are looking, and shift-right-clicking will push it in the opposite direction you are looking. Caves are color coded based on depth.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Move the selected region by right-clicking the block
+			Power Input: Any side
+		</note>
+	</cavescanner>
+	<scalechest>
+		<desc>
+			The scaleable chest allows you to store your things in a small space. Its inventory size scales with the amount of power it receives, up to a maximum of %d stacks. If the power input drops or is lost while there are items in the now-removed slots, they will remain hidden and inaccessible until sufficient power is restored.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Inventory Size: 9+(Power-%d)/%d slots
+			Max Size: %d
+			Bemenet: Hátul
+		</note>
+	</scalechest>
+	<spiller>
+		<desc>
+			The liquid spiller is designed to fill a depression with liquid piped into it. Each bucket worth pumped in equates to one placed liquid block. It will fill the lowest layers first.
+		</desc>
+		<note>
+			Requires piped liquid to operate
+		</note>
+	</spiller>
+	<smokedetector>
+		<desc>
+			The smoke detector will sound an alarm when it detects a nearby fire block, and will also beep occasionally when the coil powering it is running low.
+		</desc>
+		<note>
+			Requires a charged windspring as a power source
+		</note>
+	</smokedetector>
+	<igniter>
+		<desc>
+			The firestarter allows you to ignite flammable materials in a large radius, and is therefore very effective at clearing areas in forests or tall grass. Due to its ability to ignite creatures, it can also serve as a powerful, if rather dangerous, form of defence.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = Temperature/50 m
+			Acceptable fuels: Coal, Blaze Powder, Wood, Lava, Thermite
+			Power Input: Any side
+		</note>
+	</igniter>
+	<freezegun>
+		<desc>
+			The freeze gun is a nonlethal defence weapon. It automatically targets threats, and will freeze them in a block of ice, completely immobilizing them without causing them other harm. Ice is more effective ammunition than snowballs. Like the Railgun, this machine can be oriented upside-down and is most effective with a clear view of the surroundings. Note that frozen mobs can still attack if approached.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Alul or top, orientation dependent
+		</note>
+	</freezegun>
+	<magnetizer>
+		<desc>
+			The magnetizer uses a rapidly rotating shaft to create a magnetic field inside a shaft core. This is one of the critical components of an AC Electric Engine. It requires an AC redstone current and high speed.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Bemenet: Hátul
+		</note>
+	</magnetizer>
+	<containment>
+		<desc>
+			The containment field is complementary to the Force Field - while that keeps things out, this keeps them in. Note that hostile mobs which fire projectiles, like Skeletons and the Wither, can still hit targets outside the field without leaving it themselves. This machine needs a clear view above it equal to the selected radius.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Range = 2+(Power-%d)/%d m
+			Power Input: Any side
+			Requires %dW to restrain a Wither and %dW to restrain an EnderDragon
+		</note>
+	</containment>
+	<screen>
+		<desc>
+			The CCTV monitor is how CCTV cameras are viewed. Simply add 3 dyes as the color code - matching one of the existing CCTV cameras in the world - and shift-right-click it to use the camera.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Alul
+		</note>
+	</screen>
+	<cctv>
+		<desc>
+			The CCTV camera allows you to see areas that you would otherwise not have safe access to visit yourself. Simply provide it a charged wind spring and three dyes as a color code, and you can view the world through its lens with the aid of a CCTV Monitor. To exit camera mode, press "\". The camera can be reoriented with a screwdriver (shift-clicking for inclination).
+		</desc>
+		<note>
+			Requires a charged windspring as a power source
+		</note>
+	</cctv>
+	<purifier>
+		<desc>
+			The steel purifier is used to transform basic low-grade steel into pure HSLA steel for use in machines. Like the Blast Furnace, it requires gunpowder and sand and temperatures over %dC.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Required Temperature: %dC
+			Power Input: Any Side
+		</note>
+	</purifier>
+	<lasergun>
+		<desc>
+			The laser gun is another powerful defence or offence weapon. Like the RailGun, it targets the nearest mob or non-whitelisted player, and its beam sweeps the area, starting fires, melting rock, and generally causing havoc.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Bemenet: Alul or top, orientation dependent
+		</note>
+	</lasergun>
+	<itemcannon>
+		<desc>
+			The item cannon can fire items across the map without harming them, which allows for near-instant long-distance item transport. Note that you must enter the coordinates of another item cannon to receive the items.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</itemcannon>
+	<friction>
+		<desc>
+			The friction heater is a tool to warm up a standard furnace without fuel. Higher torques and speeds mean higher temperatures, but beware: spend too long at high temperatures and you can melt the furnace entirely. Also of note is that high temperatures can speed up the furnace operation. A hot furnace is also the only way to smelt tungsten flakes into tungsten ingots. Note that while temperature is ultimately a function of input power, matching the torque and speed will improve efficiency.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</friction>
+	<landmine>
+		<desc>
+			The land mine is a trap that can be laid up to one block underground. It requires a wind spring, and as its charge depletes, the risk of spontaneous detonation increases. Additional effects can be added by placing TNT, blaze powder, spider eyes, or glass in the right slots, and more gunpowder in the left slots increases the explosive force.
+		</desc>
+		<note>
+			Requires a charged windspring as a power source
+		</note>
+	</landmine>
+	<bucketfiller>
+		<desc>
+			The bucket filler takes in liquid on the sides and empty buckets in the top, and automatically fills them. It can also be used in the reverse; full buckets can supply liquid.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Power Input: Any side
+		</note>
+	</bucketfiller>
+	<blockcannon>
+		<desc>
+			The block cannon can fire blocks as projectiles, allowing you to make a large mess of your target. To launch liquids, put in filled buckets.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Required Torque: Goes up with block mass
+			Power Input: Any side or bottom
+		</note>
+	</blockcannon>
+	<spycam>
+		<desc>
+			The aerial camera allows for you to see a large area as it would appear from high above, and therefore know the positions of exposed mobs and blocks. Like the CCTV camera, it uses a windspring and a 3-color "channel code".
+		</desc>
+		<note>
+			Requires a charged windspring as a power source
+		</note>
+	</spycam>
+	<mirror>
+		<desc>
+			Mirrors are crucial for the solar power plant to function. More mirrors means more power. Note that they require a clear view of the sky, and work at reduced efficiency if the sun is not at full brightness. Additionally, mirrors can break if heavy objects like players or slimes land on them.
+		</desc>
+		<note>
+			Requires a clear view of the sky
+		</note>
+	</mirror>
+	<selfdestruct>
+		<desc>
+			The self-destruct machine can detect when its power supply is damaged, and unleash all sorts of destruction under the assumption that the base it resides in has been damaged or destroyed.
+		</desc>
+		<note>
+			Detonates on power loss
+			Power Input: Any side
+		</note>
+	</selfdestruct>
+	<coolingfin>
+		<desc>
+			The cooling fin draws heat away from machines to help keep them cool without the need for advanced water piping systems.
+		</desc>
+		<note>
+			Will deal contact damage if connected to a hot machine
+		</note>
+	</coolingfin>
+	<worktable>
+		<desc>
+			The worktable is the crafting grid on which all machines must be crafted, with the exception of the Blast Furnace and the worktable itself. Simply use it as an ordinary crafting table. To actually craft the products, give it a redstone signal or click the item in the right hand side. The workbench is also used to recharge spring-powered tools. Simply put a new spring and the tool in the left slot, and take the products from the right. Unlike a crafting table, the workbench stores its contents.
+		</desc>
+		<note>
+			Required to craft any machines
+		</note>
+	</worktable>
+	<compressor>
+		<desc>
+			The air compressor converts shaft power into pressurized air, which can be carried out via conductive piping to BuildCraft machines. If given excessive amounts of power, it can and will explode. Violently.
+		</desc>
+		<note>
+			Maximum pressure before detonation: %d kPa
+			Orientation and Output: Like BuildCraft engines
+			Bemenet: Hátul
+		</note>
+	</compressor>
+	<pneuengine>
+		<desc>
+			The pneumatic engine uses a turbine to convert pressurized air from PneumaticCraft pipes into shaft power. Use its GUI to choose the speed output. Higher power outputs will require more air pressure and airflow.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Air Pipe Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</pneuengine>
+	<liquidconverter>
+		<desc>
+			The pressure balancer is used to safely connect pressurized hoses, pipes and fuel lines with standard liquid conduits.
+		</desc>
+		<note>
+			Supports: Water, Lava, Lubricant, Jet Fuel
+		</note>
+	</liquidconverter>
+	<display>
+		<desc>
+			The display screen is used to display text on a holographic screen, for things like server welcome messages. It requires a charged windspring to function. To add text, write it in a book and then right-click the machine with the book, which will not be consumed.
+		</desc>
+		<note>
+			The machine can display format codes.
+		</note>
+	</display>
+	<lamp>
+		<desc>
+			The bright lamp will light a large area around itself, so long as it contains a charged windspring.
+		</desc>
+		<note>
+			Maximum Range: %d m
+		</note>
+	</lamp>
+	<terraformer>
+		<desc>
+			The terraformer is used to convert biomes into each other. Note that it can only convert between similar biomes - so radical changes may require multiple steps - and each stage is likely to consume a great deal of liquid and items. Give this machine a diamond and it can even mimic the world-generation of the target biome.
+		</desc>
+		<note>
+			Select tiles to convert with the Tile Selection tool
+			Only tiles that are the same biome as the one the machine is in can be converted
+			Power Input: Any horizontal side
+			Requires a redstone input to activate
+		</note>
+	</terraformer>
+	<fuelenhancer>
+		<desc>
+			The fuel enhancer can take standard petroleum fuel, like that used by Combustion Engines, and then purify and refine it further, ultimately producing jet fuel. Note that the purification process causes an fourfold decrease in fuel volume, and that the machine still needs magma cream, blaze powder, netherrack dust, and tar.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Bemenet: Alul
+		</note>
+	</fuelenhancer>
+	<emp>
+		<desc>
+			The EMP, when fired, will permanently disable all nearby vulnerable machines. Things like shafts are immune due to lacking any electronic or redstone parts, nor any intelligence, but anything even remotely more complex, such as a spawner, an engine, or a battery box will be destroyed. Rumor has it that this machine's blast is so powerful that it can even upset the balance of the invisible magic "nodes" said to exist in the world.
+		</desc>
+		<note>
+			Purely mechanical blocks like shafts are immune
+			Activation Energy: %dJ
+			Bemenet: Alul
+		</note>
+	</emp>
+	<linebuilder>
+		<desc>
+			The block ram will push out a line of blocks, akin to a more powerful piston. Simply supply it with building blocks and it will build until it hits an obstacle such as bedrock, a chest, spawner, or other machine, or its length reaches 512 meters. 
+		</desc>
+		<note>
+			Bemenet: Hátul
+		</note>
+	</linebuilder>
+	<arrowgun>
+		<desc>
+			The arrow gun is the evolution of the dispenser. Given power, it will detect when a mob is in front of it, and will fire upon it. Faster input speeds equate to greater rates of fire, while higher torques cause the arrow to fly faster, farther and deal more damage.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Bemenet: Hátul
+			Launch Velocity: 20*log_2(torque) m/s
+			Rate of Fire: 0.8-log_2(speed)/20 seconds per shot, up to 5 shots per second
+			Range: 10+2*log_2(torque) m
+		</note>
+	</arrowgun>
+	<boiler>
+		<desc>
+			The friction boiler uses shaft power to heat water pumped into it. When boiled, the water can be drawn out the top of the boiler as steam. This machine has a warm-up period before which it will not make steam. Note that this machine can overheat and violently fail.
+		</desc>
+		<note>
+			Bemenet: Alul
+		</note>
+	</boiler>
+	<steamturbine>
+		<desc>
+			The steam turbine takes in steam from any pipe or tank behind it and generates shaft power. Use the GUI to select the power usage (and steam consumption).
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Steam Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</steamturbine>
+	<beammirror>
+		<desc>
+			The beam mirror reflects the sun's rays into a horizontal beam, thus allowing you to use natural light to illuminate long tunnels without consuming power. This also doubles as an anti-undead system, as the reflected light is still capable of lighting zombies, skeletons, and similar on fire.
+		</desc>
+		<note>
+			Only works in the day
+
+			Range drops as the sun sets
+		</note>
+	</beammirror>
+	<fertilizer>
+		<desc>
+			The fertilizer, when given apatite or bonemeal, can accelerate the growth of nearby crops, saplings, and other plants. To dissolve the fertilizer, this machine requires liquid water.
+		</desc>
+		<note>
+			Bemenet: Alul
+			Range: 2*log_2(torque)
+			Szükséges teljesítmény: %dW
+		</note>
+	</fertilizer>
+	<lavamaker>
+		<desc>
+			The rock melter uses frictional heating to melt rock into lava, which can be drawn out with pipes. Netherrack provides the most lava per block, while cobblestone provides the least.
+		</desc>
+		<note>
+			Bemenet: Alul
+		</note>
+	</lavamaker>
+	<generator>
+		<desc>
+			The electric generator takes in shaft power and produces IC2 electrical power at a rate of %.0f W/EU. The total power output as well as EU packet size scales with the amount of power going in.
+		</desc>
+		<note>
+			Bemenet: Hátul
+		</note>
+	</generator>
+	<electricmotor>
+		<desc>
+			The electric motor uses IC2 electrical power to produce shaft power. Use its GUI to choose the speed output. Higher power outputs will require more electrical power and a higher supply voltage.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Wire Connection: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</electricmotor>
+	<hose>
+		<desc>
+			These actually carry the canola oil lubricant from the grinder to the gearboxes. The transmission is done automatically, and they will connect to any grinder or gearbox automatically as well.
+		</desc>
+		<note>
+		</note>
+	</hose>
+	<pipe>
+		<desc>
+			Pipes carry liquids from pumps to machines or reservoirs. A pipe can hold an almost unlimited amount internally, but can only store one liquid at a time, and must be emptied before changing contents. Due to corrosion concerns, pipes cannot carry jet fuel or fluorine-based fluids.
+		</desc>
+		<note>
+		</note>
+	</pipe>
+	<fuelline>
+		<desc>
+			Fuel lines carry ethanol or jet fuel to the engines and furnaces that require it. Once connected to a source, they will automatically start to fill themselves from it, and if connected to a target, will automatically empty themselves into it. They have a very high capacity, so caution is recommended when breaking them, to avoid destroying large quantities of stored fuel.
+		</desc>
+		<note>
+		</note>
+	</fuelline>
+	<valve>
+		<desc>
+			The valve pipe, like other pipe types, extracts liquid from reservoirs if placed below it. However, the valve pipe remains inert until given a redstone signal.
+		</desc>
+		<note>
+		</note>
+	</valve>
+	<bypass>
+		<desc>
+			The bypass pipes do not connect to each other or to machines, allowing for more compact piping.
+		</desc>
+		<note>
+		</note>
+	</bypass>
+	<separation>
+		<desc>
+			The separator pipe can be used to route liquids according to a redstone signal. It takes in liquid on the sides, and will output the liquid up or down, depending on whether it is receiving power. It will transmit liquids upwards when it has power.
+		</desc>
+		<note>
+		</note>
+	</separation>
+	<bedpipe>
+		<desc>
+			The bedrock pipe is identical to the steel pipe except that it is able to withstand far higher pressures and temperatures.
+		</desc>
+		<note>
+
+		</note>
+	</bedpipe>
+	<aggregator>
+		<desc>
+			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed. It must be cooled to below ambient temperature to function. More torque means more water per cycle while more speed means faster cycles.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Bemenet: Alul
+		</note>
+	</aggregator>
+	<fuelengine>
+		<desc>
+			The fuel-powered engine runs off of BuildCraft fuel to produce shaft power. It performs similarly to that mod's combustion engines in terms of power output. It requires both lubricant and water cooling, and it will decelerate as it overheats.
+		</desc>
+		<note>
+			Torque Produced: %d Nm
+			Rotational Speed: %d rad/s
+			Power Produced: %dW
+		</note>
+	</fuelengine>
+	<airgun>
+		<desc>
+			The air pressure gun is basically a machine-mounted and upgraded Knockback Gun. It uses the input power to build air pressure, and when a mob approaches, it will send that mob flying backwards at a high velocity.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</airgun>
+	<sonicborer>
+		<desc>
+			The sonic borer uses shock waves to dig tunnels. This allows it to be aimed in any direction and work more quickly than the standard borer. The only disadvantage is the sonic borer drops the blocks at their original locations, rather than transporting them to the machine for easy collection. If you supply too much power, this machine will suffer a violent failure.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</sonicborer>
+	<sorting>
+		<desc>
+			The sorting machine sorts dropped items into one of its three output sides (red, green, or blue). For large stacks, it transfers one item per tick (and thus a full stack takes 3 seconds to completely sort).
+		</desc>
+		<note>
+			Required power: %dW
+		</note>
+	</sorting>
+	<fillingstation>
+		<desc>
+			The filling station is used to fill the tanks of fuel-powered items like the jetpack.
+		</desc>
+		<note>
+			Required power: %dW
+			Bemenet: Hátul
+		</note>
+	</fillingstation>
+	<vandegraff>
+		<desc>
+			The van de graaff uses a belt to build a static charge on the upper metal sphere. If a conductive object - like a mob - comes close enough, that charge can be released into the object. The larger the charge, the longer a gap it can jump. Note that some mobs may not react as predicted to the discharge. Excessive charges may attract even larger discharges from above.
+		</desc>
+		<note>
+			Water dissipates static charge
+		</note>
+	</vandegraff>
+	<defoliator>
+		<desc>
+			The defoliator is used for quickly clearing large areas of plant life. Note that animal life in the vicinity is also likely to die.
+		</desc>
+		<note>
+			Required power: %dW
+			Bemenet: Alul
+		</note>
+	</defoliator>
+	<bigfurnace>
+		<desc>
+			The lava smeltery can smelt up to 18 items at a time. However, to do this, its tanks must be full of lava, and it must be at least 400 degrees. It also requires shaft power.
+		</desc>
+		<note>
+			Required power: %dW
+			Bemenet: Alul
+		</note>
+	</bigfurnace>
+	<distiller>
+		<desc>
+			The distiller is used to convert one fluid type to another. Simply pump the fluid upwards through the machine.
+		</desc>
+		<note>
+			Required power and torque vary per fluid conversion
+			Bemenet: Alul
+			Valid Conversions:
+			%s
+		</note>
+	</distiller>
+	<suction>
+		<desc>
+			The suction pipe draws fluid from other mods' tanks and machines. It is not designed to connect to other pipe systems, or to RotaryCraft machines.
+		</desc>
+		<note>
+		</note>
+	</suction>
+	<dynamo>
+		<desc>
+			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Due to the limitations imposed by the internal magnetic fields, it can take a maximum of %d Nm of torque (%d Nm if upgraded) at a maximum of %d rad/s. Any excess, while not dangerous, will be wasted.
+		</desc>
+		<note>
+			Orientation and Output: Like ThermalExpansion Dynamos
+			Bemenet: Hátul
+		</note>
+	</dynamo>
+	<magnetic>
+		<desc>
+			The magnetostatic engine functions much like the pneumatic engine. It accepts RF provided to it, and its output speed can be selected to choose the total power output. Like all other conversion engines, it requires coolant.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Conduit Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</magnetic>
+	<crystallizer>
+		<desc>
+			The fluid crystallizer freezes fluids. Note that it must therefore be colder than the fluid's freezing point.
+		</desc>
+		<note>
+			Bemenet: Hátul
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+		</note>
+	</crystallizer>
+	<particle>
+		<desc>
+			The particle display can emit a stream of any particle type you choose from its GUI. It requires a charged windspring to function.
+		</desc>
+		<note>
+		</note>
+	</particle>
+	<lawnsprinkler>
+		<desc>
+			The ground sprinkler is a ground-mounted variety of the overheat sprinkler, and can put out fire, hydrate farmland, and increase the growth rate of crops. Due to the higher water volume it consumes, it is more effective than its ceiling variety. Note that high water pressures can be dangerous.
+		</desc>
+		<note>
+		</note>
+	</lawnsprinkler>
+	<grindstone>
+		<desc>
+			The grindstone is used to sharpen and repair tools without spending additional material. Because this reduces the amount of material in the tool, it cannot fully repair a tool, and the tool will gradually degrade until it is no longer able to be repaired.
+		</desc>
+		<note>
+			Bemenet: Hátul
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Requires water
+		</note>
+	</grindstone>
+	<blower>
+		<desc>
+			The pneumatic item pump is used to rapidly transfer items between inventories. If an item pump has an inventory behind it, it will check in front of it for a valid receiving inventory. If it finds another pump, it follows that pump's frontal direction and repeats the process. This system allows you to transport items across any distance nearly instantly. The pump can transfer one item per tick per kW of input power; therefore, to transfer entire stacks, supply 65kW of power. More power will transfer multiple stacks, as there is no upper limit on the transfer rate.
+		</desc>
+		<note>
+			Power Input: Any side
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+		</note>
+	</blower>
+	<refrigerator>
+		<desc>
+			The refrigeration unit is used to dramatically cool air to the point that some components freeze or condense out of it. This is how liquid nitrogen and dry ice are produced. Note that ice is required to aid in cooling the air.
+		</desc>
+		<note>
+			Bemenet: Hátul
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+		</note>
+	</refrigerator>
+	<composter>
+		<desc>
+			The composter allows discarded food, plant matter, and other organics to be broken down into something that, while unappealing to you, is highly valued by plants and is often very conducive to their growth. This process requires yeast to facilitiate the process.
+		</desc>
+		<note>
+			Required Temperature: Between %dC and %dC
+		</note>
+	</composter>
+	<gastank>
+		<desc>
+			The fluid compression chamber can store up to one million buckets of any one fluid. Higher torques allow for higher achievable pressures; if your torque is not high enough, you will not be able to pump in further fluid. Both gases and liquids can be stored, but liquids take many, many times more torque to compress.
+		</desc>
+		<note>
+			Bemenet: Alul
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Storage Capacity: f*10^(0.5*log_2(torque))/40 mB, f = 1 for liquids and 8 for gases
+		</note>
+	</gastank>
+	<crafter>
+		<desc>
+			The autocrafter allows you to automate crafting of anything from the vanilla crafting table. It has three modes: In autonomous mode, it continuously crafts as long as it has ingredients to do so; in request mode, it will craft one cycle of the requested items and then sit idle. It can read any inventory above it or it can draw from an Applied Energistics network for its ingredient supply. This machine can store 18 patterns, and thus can craft 18 recipes in parallel. Its third mode, sustain, ensures a certain amount of a given item remains in the ME system.
+		</desc>
+		<note>
+			Power Input: Any Side
+			Szükséges teljesítmény: %dW
+			Sustain mode use the AE crafting CPU
+		</note>
+	</crafter>
+	<antiair>
+		<desc>
+			A cheaper and more specialized version of the railgun, the antiair gun will shoot scrap at flying mobs as a form of base defence. It only deals one heart of damage per impact, but can fire over 3 rounds per second, and the ammunition is much cheaper than that of the railgun.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Alul or top, orientation dependent
+		</note>
+	</antiair>
+	<pipepump>
+		<desc>
+			The pipe pump helps pump fluids through pipes, reducing the amount that gets stuck in pipes and increasing overall flow rate. Faster input speeds mean faster liquid pumping. Note that pumping too much liquid into a pipe will cause it to burst.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Power Input: Any side
+		</note>
+	</pipepump>
+	<centrifuge>
+		<desc>
+			The centrifuge will use large centripetal forces to separate items into constituents of different density, or to squeeze fluids out of some items. If you are into beekeeping, it can also extract propolis and other products from combs.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Bemenet: Alul
+		</note>
+	</centrifuge>
+	<drying>
+		<desc>
+			The drying bed is where some liquids can evaporate or coagulate to leave other items behind.
+		</desc>
+		<note>
+
+		</note>
+	</drying>
+	<wetter>
+		<desc>
+			The liquefaction machine will mix a fluid into an item, yielding a different item.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges sebesség: %drad/s
+			Bemenet: Alul
+		</note>
+	</wetter>
+	<chunkloader>
+		<desc>
+			The chunk loader uses extremely high velocities - generated with extreme input speeds - to induce relativistic effects and distort space-time around it, keeping chunks loaded.
+		</desc>
+		<note>
+			Szükséges sebesség: %drad/s
+			Bemenet: Alul
+			Radius In Chunks: %d+((Power-%d)/%d)
+		</note>
+	</chunkloader>
+	<drops>
+		<desc>
+			The drop processor can convert blocks into their drops, to save the need to place and break them. It can also process IC2 scrap boxes into their randomized outputs.
+		</desc>
+		<note>
+			Szükséges teljesítmény: %dW
+			Szükséges forgatónyomaték: %d Nm
+			Bemenet: Hátul
+		</note>
+	</drops>
+</machines>

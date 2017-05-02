@@ -1,0 +1,52 @@
+﻿<?xml version="1.0"?>
+<info>
+	<terms>
+		W/kW/MW - Watt/Kilowatt/Megawatt - teljesítményegység (egységnyi idő alatt mennyi munka). 1W = 1 Joule per másodperc.
+
+		Nm - Newton-méter - forgatónyomaték-egység (erő szorozva erőkar).
+
+		rad/s - Radiáns per másodperc. Szögsebesség-egység (forgás sebessége). 1 rad/s = 9.55 rpm.
+
+		Radián - Szög mértékegysége, 1 rad = 180°/pi = 57.3°; egy teljes fordulat 6.28 rad.
+	</terms>
+	<physics>
+		A forgatónyomaték a forgatás 'ereje'; nagyobb forgatónyomaték nagyobb terhelést bír el. Ezért egy gép, aminek több erő kell a meghajtásához, pl. a Tömörítő, nagyobb forgatónyomaték-igényű mint pl. a Favágó.
+
+		A szögsebesség a forgás sebessége. Például egy gép, aminek gyorsan kell kevernie a hozzávalókat, pl. a Frakcionáló egység, nagyobb szögsebességet igényel, mint pl. az Erjesztő, ami lassabban dolgozik.
+	</physics>
+	<material>
+		Különböző anyagok különböző erősségűek, ami meghatározza, hogy a tengelyek és lendkerekek mennyit bírnak. A lendkerekek teherbírását a sűrűségük és a szakítószilárdságuk (Rm) határozza meg, míg a tengelyekét a szakító- és nyírószilárdságuk (T; megadja, hogy mennyire bírják a tengelyek az oldalirányú behatást).
+
+		Fa: %.0f kg/m^3; Rm: %.1f %sPa; T: %.1f %sPa
+		Kő: %.0f kg/m^3; Rm: %.1f %sPa; T: %.1f %sPa
+		Vas: %.0f kg/m^3; Rm: %.1f %sPa; T: %.1f %sPa
+		Acél: %.0f kg/m^3; Rm: %.1f %sPa; T: %.1f %sPa
+		Arany: %.0f kg/m^3; Rm: %.1f %sPa; T: %.1f %sPa
+		Gyémánt: %.0f kg/m^3; Rm: %.1f %sPa; T: %.1f %sPa
+	</material>
+	<shafts>
+		Ezek a tengelyek és váltók teherbírási adatai. Ennél nagyobb terhelés hatására az elemek károsodnak. Váltók esetében mint a bemeneti, mind a kimeneti értékek számítanak.
+		
+		Fa: %dNm, %d rad/s
+		Kő: %dNm, %d rad/s
+		Acél: %dNm, %d rad/s
+		Gyémánt: %dNm, %d rad/s
+		Alapkő: Végtelen
+	</shafts>
+	<flywheels>
+		Ezek a lendkerekek maximális sebessége. Ezek meghaladása a lendkerekek megsemmsüléséhez vezet.
+		Fa: %d rad/s
+		Kő: %d rad/s
+		Vas: %d rad/s
+		Arany: %d rad/s
+	</flywheels>
+	<transfer>
+		A forgási energia másképpen viselkedik, mint az elektromos, pneumatikus és egyéb hagyományos energiák. Valójában nem is "energia", hanem teljesítmény, azaz nem gyűlik fel fogyasztó nélküli tengelyekben, gépekben; a létrejöttével egyidőben kell elfogyasztani. Továbbá, a fogyasztó terhelése nem befolyásolja a tengely által felvett energiát - egy fogyasztó nélküli tengely minden energiát felvesz, csak éppen nem adja le sehova, kárba vész, ellentétben egy vezetékkel, ahol a fogyasztó eltűnése átirányítja az energiát a többi gép felé.
+	</transfer>
+	<tiers>
+		Nem minden gép egyforma; néhányat nehezebb üzemeltetni, mint másokat. Egy gép helyzetét a fejlődési fában jól mutatja az energiaigénye (ha van). Ez alól vannak kivételek, és természetesen különböző játékstílusok különböző utakhoz vezetnek, de azért érdemes ismerni ezt a hierarchiát. Itt megjegyzendő, hogy a nulla minimum érték azt jelenti, hogy nincs egy konkrét energiaminimum, és az energia növelése sokkal összetettebb hatással bír.
+	</tiers>
+	<timing>
+		Azok a gépek, amik egyféle feladatot látnak el, általában gyorsabban dolgoznak, ha nagyobb szögsebességet kapnak. A gépre a kurzort rávive megmutatja a sebesség képletét. Az "x" a bemeneti szögsebességet jelenti, a végeredmény a feldolgozási idő tikkekben (1 t=0.05 mp).
+	</timing>
+</info>

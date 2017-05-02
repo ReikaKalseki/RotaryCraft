@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<misc>
+	<lube>
+		A legtöbb váltónak kenőolajra van szüksége a működéshez. Olaj nélkül fokozatosan tönkremennek és egyre kevesebb nyomatékot tudnak átadni, azaz kevesebb energiát. A folyamatos olajellátás érdekében csatlakoztass egy kenőolaj-vezetéket a váltóhoz, a másik végét egy Őrlőhöz, amibe néhány repcemagot téve olaj termelődik, ami végigfolyik a vezetéken (vagy szükség esetén vödörrel is szállítható). A legtöbb váltó elfogyasztja az olajat, nagyobb sebességnél többet, szóval figyeljük az olajszintet a GUI-ban. Ezenkívül néhány másik gép is igényel kenőolajat.
+	</lube>
+	<canola>
+		Találj néhány repcemagot a magas fűben, és ültesd el. Amikor kinyitják a kis sárga virágaikat, azt jelenti megértek és le lehet aratni őket. Csakúgy mint a búzának, szükségük van vízre, fényre stb. Ha kiszárad a föld, kihal a repcenövény. A magok egyszerű tárolására össze lehet tömöríteni őket.
+	</canola>
+	<meter>
+		The angular transducer is an indispensable tool for those with large or complex shaft systems. Right click any engine, gearbox, or machine with it, and you will be informed of the power and speed going in or out. Most machines will also have additional info.
+	</meter>
+	<screw>
+		A csavarhúzóval forgathatóak a gépek arra az esetre, ha rosszul tettük le, vagy nem tudtuk volna jól letenni. Shift-kattintással a másodlagos funkció érhető el, mint pl. a tengelycsomópontnál a nyomatékegyesítés és -szétosztás módok közti váltás. A csavarhúzó lépcsők és dugattyúk forgatására is alkalmas.
+	</screw>
+	<modinterface>
+		Ezek az átalakítási arányszámok a más modok energiái és anyagai közti átváltáshoz.
+
+                RF/t -> Watt: 1 RF/t = %.3f %sW
+
+		Ércmosó kimenet duplázási esélyek:
+		Normál ércek: %d százalék műveletenként
+		Alvilági ércek: %d százalék műveletenként
+		Ritka ércek: %d százalék műveletenként
+	</modinterface>
+	<enchanting>
+		Néhány gépre lehet varázslatot tenni. Például a Fúróra Gyengéd érintést, Szerencsét vagy Hatékonyságot, így ugyanazt a hatást érhetjük el, mint az eszközök esetén. A gépek megbűvöléséhez kattintsunk rájuk egy varázskönyvvel.
+
+		Ezekre a gépekre hat a varázslat: %s
+	</enchanting>
+	<computercraft>
+		Ha telepítve van a ComputerCraft vagy az OpenComputers, ezekkel ellenőrizhetjük és vezérelhetjük a gépeket. A gépeket perifériaként kezelve az alábbi metódusokat érhetjük el. Nem minden gép támogatja az összes metódust, pl. a Folyadéktárolónaknak nincsen felszerelésre, energiára és hatótávolságra vonatkozó metódusai, hiszen ezeknek nincs értelme.
+	</computercraft>
+</misc>
