@@ -23,13 +23,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Exception.WTFException;
+import Reika.DragonAPI.Interfaces.ISBRH;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.BlockRegistry;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
-public class PipeBodyRenderer implements ISimpleBlockRenderingHandler {
+public class PipeBodyRenderer implements ISBRH {
 
 	public final int renderID;
 	public int renderPass;

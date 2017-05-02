@@ -24,6 +24,7 @@ import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.RotaryCraft.API.Event.ShaftFailureEvent;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -484,6 +485,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		int dx = x+read.offsetX;
 		int dy = y+read.offsetY;
 		int dz = z+read.offsetZ;
+
+		if (isCentered && ReikaBlockHelper.isPortalBlock(world, x+write.offsetX, y+write.offsetY, z+write.offsetZ)) {
+			this.convertToPortal(world, x, y, z, x+write.offsetX, y+write.offsetY, z+write.offsetZ);
+		}
+
 		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
 		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
 		if (this.isProvider(te)) {
@@ -520,6 +526,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					this.readFromSplitter(world, x, y, z, devicein);
 					omegain = omega;
 					torquein = torque;
+
+					if (!type.isInfiniteStrength())
+						this.testFailure();
+
 					return;
 				}
 				else if (devicein.isWritingTo(this)) {
@@ -555,6 +565,15 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		}
 		if (power >= 1000000000 && !failed)
 			RotaryAchievements.GIGAWATT.triggerAchievement(this.getPlacer());
+	}
+
+	private void convertToPortal(World world, int x, int y, int z, int dx, int dy, int dz) {
+		world.setBlock(x, y, z, MachineRegistry.PORTALSHAFT.getBlock(), MachineRegistry.PORTALSHAFT.getBlockMetadata(), 3);
+		TileEntityPortalShaft ps = new TileEntityPortalShaft();
+		ps.setBlockMetadata(this.getBlockMetadata());
+		ps.setPortalType(world, dx, dy, dz);
+		ps.material = this.getShaftType();
+		world.setTileEntity(x, y, z, ps);
 	}
 
 	@Override

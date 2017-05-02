@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Instantiable.Data.DynamicAverage;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -36,6 +37,8 @@ public class RenderReservoir extends RotaryTERenderer
 {
 
 	private ModelReservoir ReservoirModel = new ModelReservoir();
+
+	private static DynamicAverage average = new DynamicAverage();
 
 	public void renderTileEntityReservoirAt(TileEntityReservoir tile, double par2, double par4, double par6, float par8)
 	{
@@ -152,9 +155,8 @@ public class RenderReservoir extends RotaryTERenderer
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityReservoir tr = (TileEntityReservoir)tile;
-		int amt = tr.getLevel();
 		Fluid f = tr.getFluid();
-		if (f != null && amt > 0) {
+		if (f != null) {
 			if (!f.equals(FluidRegistry.LAVA)) {
 				GL11.glEnable(GL11.GL_BLEND);
 			}
@@ -169,23 +171,142 @@ public class RenderReservoir extends RotaryTERenderer
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
 			float dv = ico.getMaxV();
-			double h = 0.0625+14D/16D*amt/tr.CAPACITY;
+			double h = this.getFillAmount(tr);
 			Tessellator v5 = Tessellator.instance;
 			if (f.getLuminosity() > 0 && tile.hasWorldObj())
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
 			v5.setColorOpaque_I(tr.getFluidRenderColor());
-			v5.addVertexWithUV(0, h, 1, u, dv);
-			v5.addVertexWithUV(1, h, 1, du, dv);
-			v5.addVertexWithUV(1, h, 0, du, v);
-			v5.addVertexWithUV(0, h, 0, u, v);
+
+			TileEntityReservoir tr1 = null;
+			TileEntityReservoir tr2 = null;
+			TileEntityReservoir tr3 = null;
+			TileEntityReservoir tr4 = null;
+			TileEntityReservoir tr6 = null;
+			TileEntityReservoir tr7 = null;
+			TileEntityReservoir tr8 = null;
+			TileEntityReservoir tr9 = null;
+
+			if (tr.hasNearbyReservoir(1)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord-1, tr.yCoord, tr.zCoord+1);
+				if (teb instanceof TileEntityReservoir) {
+					tr1 = (TileEntityReservoir)teb;
+					if (tr1.getFluid() != f)
+						tr1 = null;
+				}
+			}
+			if (tr.hasNearbyReservoir(2)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord, tr.yCoord, tr.zCoord+1);
+				if (teb instanceof TileEntityReservoir) {
+					tr2 = (TileEntityReservoir)teb;
+					if (tr2.getFluid() != f)
+						tr2 = null;
+				}
+			}
+			if (tr.hasNearbyReservoir(3)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord+1, tr.yCoord, tr.zCoord+1);
+				if (teb instanceof TileEntityReservoir) {
+					tr3 = (TileEntityReservoir)teb;
+					if (tr3.getFluid() != f)
+						tr3 = null;
+				}
+			}
+			if (tr.hasNearbyReservoir(4)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord-1, tr.yCoord, tr.zCoord);
+				if (teb instanceof TileEntityReservoir) {
+					tr4 = (TileEntityReservoir)teb;
+					if (tr4.getFluid() != f)
+						tr4 = null;
+				}
+			}
+			if (tr.hasNearbyReservoir(6)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord+1, tr.yCoord, tr.zCoord);
+				if (teb instanceof TileEntityReservoir) {
+					tr6 = (TileEntityReservoir)teb;
+					if (tr6.getFluid() != f)
+						tr6 = null;
+				}
+			}
+			if (tr.hasNearbyReservoir(7)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord-1, tr.yCoord, tr.zCoord-1);
+				if (teb instanceof TileEntityReservoir) {
+					tr7 = (TileEntityReservoir)teb;
+					if (tr7.getFluid() != f)
+						tr7 = null;
+				}
+			}
+			if (tr.hasNearbyReservoir(8)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord, tr.yCoord, tr.zCoord-1);
+				if (teb instanceof TileEntityReservoir) {
+					tr8 = (TileEntityReservoir)teb;
+					if (tr8.getFluid() != f)
+						tr8 = null;
+				}
+			}
+			if (tr.hasNearbyReservoir(9)) {
+				TileEntity teb = tr.worldObj.getTileEntity(tr.xCoord+1, tr.yCoord, tr.zCoord-1);
+				if (teb instanceof TileEntityReservoir) {
+					tr9 = (TileEntityReservoir)teb;
+					if (tr9.getFluid() != f)
+						tr9 = null;
+				}
+			}
+
+			average.clear();
+			average.add(h);
+			if (tr1 != null)
+				average.add(this.getFillAmount(tr1));
+			if (tr2 != null)
+				average.add(this.getFillAmount(tr2));
+			if (tr4 != null)
+				average.add(this.getFillAmount(tr4));
+			double hmp = average.getAverage();
+
+			average.clear();
+			average.add(h);
+			if (tr3 != null)
+				average.add(this.getFillAmount(tr3));
+			if (tr2 != null)
+				average.add(this.getFillAmount(tr2));
+			if (tr6 != null)
+				average.add(this.getFillAmount(tr6));
+			double hpp = average.getAverage();
+
+			average.clear();
+			average.add(h);
+			if (tr8 != null)
+				average.add(this.getFillAmount(tr8));
+			if (tr9 != null)
+				average.add(this.getFillAmount(tr9));
+			if (tr6 != null)
+				average.add(this.getFillAmount(tr6));
+			double hpm = average.getAverage();
+
+			average.clear();
+			average.add(h);
+			if (tr7 != null)
+				average.add(this.getFillAmount(tr7));
+			if (tr8 != null)
+				average.add(this.getFillAmount(tr8));
+			if (tr4 != null)
+				average.add(this.getFillAmount(tr4));
+			double hmm = average.getAverage();
+
+			v5.addVertexWithUV(0, hmp, 1, u, dv);
+			v5.addVertexWithUV(1, hpp, 1, du, dv);
+			v5.addVertexWithUV(1, hpm, 0, du, v);
+			v5.addVertexWithUV(0, hmm, 0, u, v);
 			v5.draw();
 			if (tile.hasWorldObj())
 				ReikaRenderHelper.enableLighting();
 		}
 		GL11.glTranslated(-par2, -par4, -par6);
 		GL11.glDisable(GL11.GL_BLEND);
+	}
+
+	private double getFillAmount(TileEntityReservoir tr) {
+		return 0.0625+14D/16D*tr.getLevel()/tr.CAPACITY;
 	}
 
 	@Override

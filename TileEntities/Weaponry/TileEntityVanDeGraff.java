@@ -24,6 +24,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
+import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -37,10 +39,56 @@ import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements RangedEffect {
+public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements RangedEffect, AdjacentUpdateWatcher {
+
+	private final WeightedRandom<ForgeDirection> sideMap = new WeightedRandom();
 
 	//In coloumbs
 	private int charge;
+
+	private void updateSidedMappings(World world, int x, int y, int z) {
+		sideMap.clear();
+		for (int i = 1; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			int dx = x+dir.offsetX;
+			int dy = y+dir.offsetY;
+			int dz = z+dir.offsetZ;
+			Block b = world.getBlock(dx, dy, dz);
+			int metadata = world.getBlockMetadata(dx, dy, dz);
+			if (b.isAir(world, dx, dy, dz)) {
+				sideMap.addEntry(dir, 0);
+			}
+			else {
+				Material mat = b.getMaterial();
+				MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+				if (m == MachineRegistry.VANDEGRAFF) {
+					sideMap.addEntry(dir, 0);
+				}
+				else {
+					TileEntity te = this.getAdjacentTileEntity(dir);
+					if (te instanceof Shockable) {
+						sideMap.addEntry(dir, 1000);
+					}
+					else if (mat == Material.iron || mat == Material.anvil) {
+						sideMap.addEntry(dir, 50);
+					}
+					else if (mat == Material.water) {
+						sideMap.addEntry(dir, 20);
+					}
+					else if (b == Blocks.tnt) {
+						sideMap.addEntry(dir, 100);
+					}
+				}
+			}
+		}
+		//ReikaJavaLibrary.pConsole(sideMap, Side.SERVER);
+		sideMap.addEntry(ForgeDirection.UNKNOWN, 1);
+	}
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		this.updateSidedMappings(world, x, y, z);
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -52,45 +100,13 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 		int r = this.getRange();
 
 		if (r > 0) {
-			for (int i = 1; i < 6; i++) {
-				ForgeDirection dir = dirs[i];
-				int dx = x+dir.offsetX;
-				int dy = y+dir.offsetY;
-				int dz = z+dir.offsetZ;
-				Block b = world.getBlock(dx, dy, dz);
-				int metadata = world.getBlockMetadata(dx, dy, dz);
-				if (b != Blocks.air) {
-					Material mat = b.getMaterial();
-					MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-					if (m != MachineRegistry.VANDEGRAFF) {
-						if (b.hasTileEntity(metadata)) {
-							TileEntity te = world.getTileEntity(dx, dy, dz);
-							if (te instanceof Shockable) {
-								this.dischargeToBlock(dx, dy, dz, (Shockable)te);
-								return;
-							}
-						}
-						if (mat == Material.iron || mat == Material.anvil) {
-							this.dischargeToBlock(dx, dy, dz, null);
-							return;
-						}
-						else if (mat == Material.water) {
-							this.dischargeToBlock(dx, dy, dz, null);
-							return;
-						}
-						else if (b == Blocks.tnt) {
-							this.dischargeToBlock(dx, dy, dz, null);
-							world.setBlockToAir(dx, dy, dz);
-							EntityTNTPrimed var6 = new EntityTNTPrimed(world, dx+0.5D, dy+0.5D, dz+0.5D, null);
-							if (!world.isRemote)
-								world.spawnEntityInWorld(var6);
-							world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-							world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
-							return;
-						}
-					}
-				}
+			ForgeDirection dir = sideMap.getRandomEntry();
+			//ReikaJavaLibrary.pConsole(dir+": "+sideMap, Side.SERVER);
+			if (dir != null && dir != ForgeDirection.UNKNOWN) {
+				this.shock(world, x, y, z, dir);
+				return;
 			}
+
 			for (int i = 2; i < 4; i++) {
 				TileEntity te = this.getTileEntity(x, y+i, z);
 				if (te instanceof Shockable && ((Shockable)te).canDischargeLongRange()) {
@@ -118,6 +134,25 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 
 		if (world.isRaining() && world.canLightningStrikeAt(x, y+1, z)) {
 			charge *= 0.5;
+		}
+	}
+
+	private void shock(World world, int x, int y, int z, ForgeDirection dir) {
+		int dx = x+dir.offsetX;
+		int dy = y+dir.offsetY;
+		int dz = z+dir.offsetZ;
+		TileEntity te = this.getAdjacentTileEntity(dir);
+		Block b = world.getBlock(dx, dy, dz);
+		if (b.isAir(world, dx, dy, dz))
+			return;
+		this.dischargeToBlock(dx, dy, dz, te instanceof Shockable ? (Shockable)te : null);
+		if (b == Blocks.tnt) {
+			world.setBlockToAir(dx, dy, dz);
+			EntityTNTPrimed e = new EntityTNTPrimed(world, dx+0.5D, dy+0.5D, dz+0.5D, null);
+			if (!world.isRemote)
+				world.spawnEntityInWorld(e);
+			world.playSoundAtEntity(e, "random.fuse", 1.0F, 1.0F);
+			world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
 		}
 	}
 
@@ -219,6 +254,11 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 	{
 		super.readSyncTag(NBT);
 		charge = NBT.getInteger("c");
+	}
+
+	@Override
+	public void onAdjacentUpdate(World world, int x, int y, int z, Block b) {
+		this.updateSidedMappings(world, x, y, z);
 	}
 
 }

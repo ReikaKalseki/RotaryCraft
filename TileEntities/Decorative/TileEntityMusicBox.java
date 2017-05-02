@@ -33,7 +33,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMusicHelper.MusicKey;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.NoteEvent;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -48,8 +47,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private final ArrayList<Note>[] musicQueue;
 
 	private boolean isOneTimePlaying = false;
-
-	private boolean lastPower = false;
 
 	public static final int LOOPPOWER = 1024;
 
@@ -116,16 +113,10 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return;
 
 		if (power < LOOPPOWER) {
-			if (ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
-				isOneTimePlaying = true;
-				this.startPlaying();
-			}
-			if (!ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower) && !isOneTimePlaying) {
-				lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
+			if (!isOneTimePlaying) {
 				this.startPlaying();
 				return;
 			}
-			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
 		}
 		else {
 			isOneTimePlaying = false;
@@ -154,6 +145,12 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		if (this.isAtEnd() && this.hasNoDelays()) {
 			this.resetPlayback();
 		}
+	}
+
+	@Override
+	protected void onPositiveRedstoneEdge() {
+		isOneTimePlaying = true;
+		this.startPlaying();
 	}
 
 	private boolean hasNoDelays() {
@@ -236,7 +233,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("onetime", isOneTimePlaying);
-		NBT.setBoolean("lastpwr", lastPower);
 	}
 
 	@Override
@@ -245,7 +241,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		super.readSyncTag(NBT);
 
 		isOneTimePlaying = NBT.getBoolean("onetime");
-		lastPower = NBT.getBoolean("lastpwr");
 	}
 
 	public void save() {

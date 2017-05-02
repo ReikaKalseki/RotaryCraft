@@ -297,6 +297,21 @@ public class MachineAspectMapper {
 		this.addAspect(MachineRegistry.DRYING, Aspect.AIR, 2);
 		this.addAspect(MachineRegistry.DRYING, Aspect.WATER, 2);
 		this.addAspect(MachineRegistry.DRYING, Aspect.MINE, 1);
+
+		this.addAspect(MachineRegistry.DROPS, Aspect.MINE, 4);
+		this.addAspect(MachineRegistry.DROPS, Aspect.CRAFT, 2);
+
+		this.addAspect(MachineRegistry.ITEMFILTER, Aspect.MIND, 4);
+		this.addAspect(MachineRegistry.ITEMFILTER, Aspect.EXCHANGE, 2);
+
+		this.addAspect(MachineRegistry.HYDRATOR, Aspect.WATER, 4);
+		this.addAspect(MachineRegistry.HYDRATOR, Aspect.CROP, 4);
+
+		this.addAspect(MachineRegistry.FILLER, Aspect.MINE, 4);
+		this.addAspect(MachineRegistry.FILLER, Aspect.EXCHANGE, 4);
+
+		this.addAspect(MachineRegistry.SPILLWAY, Aspect.WATER, 4);
+		this.addAspect(MachineRegistry.SPILLWAY, Aspect.EXCHANGE, 2);
 	}
 
 	private void addAspect(MachineRegistry m, Aspect a, int amt) {

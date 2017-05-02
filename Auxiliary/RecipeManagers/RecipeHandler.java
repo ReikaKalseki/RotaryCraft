@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,12 +19,17 @@ import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import com.google.common.collect.HashBiMap;
@@ -217,5 +223,51 @@ public abstract class RecipeHandler {
 
 	}
 
+	public final void loadCustomRecipeFiles() {
+		CustomRecipeList crl = new CustomRecipeList(RotaryCraft.instance, machine.name().toLowerCase(Locale.ENGLISH));
+		crl.addFieldLookup("rotarycraft_stack", ItemStacks.class);
+		crl.load();
+		for (LuaBlock lb : crl.getEntries()) {
+			Exception e = null;
+			boolean flag = false;
+			try {
+				flag = this.addCustomRecipe(lb, crl);
+			}
+			catch (Exception ex) {
+				e = ex;
+				flag = false;
+			}
+			if (flag) {
+				RotaryCraft.logger.log("Loaded custom recipe '"+lb.getString("type")+"' for "+machine.name()+"");
+			}
+			else {
+				RotaryCraft.logger.logError("Could not load custom recipe '"+lb.getString("type")+"' for "+machine.name()+"");
+				if (e != null)
+					e.printStackTrace();
+			}
+		}
+	}
+
+	protected abstract boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception;
+
+	protected final void verifyOutputItem(ItemStack is) {
+		if (is.getItem() instanceof ItemBlockPlacer || is.getItem() == ItemRegistry.ETHANOL.getItemInstance())
+			throw new IllegalArgumentException("This item is not permitted as an output (it is a gating item).");
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.tungstenflakes) || ReikaItemHelper.matchStacks(is, ItemStacks.tungsteningot))
+			throw new IllegalArgumentException("This item is not permitted as an output (it is a gating item).");
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.silicondust) || ReikaItemHelper.matchStacks(is, ItemStacks.silicon))
+			throw new IllegalArgumentException("This item is not permitted as an output (it is a gating item).");
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.redgoldingot) || ReikaItemHelper.matchStacks(is, ItemStacks.silumin))
+			throw new IllegalArgumentException("This item is not permitted as an output (it is a gating item).");
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.bedrockdust) || ReikaItemHelper.matchStacks(is, ItemStacks.bedingot))
+			throw new IllegalArgumentException("This item is not permitted as an output (it is a gating item).");
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.springingot) || ReikaItemHelper.matchStacks(is, ItemStacks.steelingot))
+			throw new IllegalArgumentException("This item is not permitted as an output (it is a gating item).");
+	}
+
+	protected final void verifyOutputFluid(Fluid f) {
+		if (f.getName().equalsIgnoreCase("rc jet fuel") || f.getName().equalsIgnoreCase("rc ethanol") || f.getName().equalsIgnoreCase("rc lubricant"))
+			throw new IllegalArgumentException("This fluid is not permitted as an output (it is a gating item).");
+	}
 
 }

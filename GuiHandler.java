@@ -32,50 +32,51 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerCraftingPattern;
 import Reika.RotaryCraft.Containers.ContainerHandCraft;
 import Reika.RotaryCraft.Containers.ContainerWorldEdit;
-import Reika.RotaryCraft.Containers.Machine.ContainerAerosolizer;
-import Reika.RotaryCraft.Containers.Machine.ContainerAutoCrafter;
-import Reika.RotaryCraft.Containers.Machine.ContainerBigFurnace;
-import Reika.RotaryCraft.Containers.Machine.ContainerBlastFurnace;
 import Reika.RotaryCraft.Containers.Machine.ContainerBlower;
-import Reika.RotaryCraft.Containers.Machine.ContainerCVT;
-import Reika.RotaryCraft.Containers.Machine.ContainerCannon;
-import Reika.RotaryCraft.Containers.Machine.ContainerCentrifuge;
-import Reika.RotaryCraft.Containers.Machine.ContainerCompactor;
-import Reika.RotaryCraft.Containers.Machine.ContainerComposter;
-import Reika.RotaryCraft.Containers.Machine.ContainerCrystallizer;
-import Reika.RotaryCraft.Containers.Machine.ContainerDefoliator;
-import Reika.RotaryCraft.Containers.Machine.ContainerDropProcessor;
-import Reika.RotaryCraft.Containers.Machine.ContainerDryingBed;
-import Reika.RotaryCraft.Containers.Machine.ContainerEthanol;
-import Reika.RotaryCraft.Containers.Machine.ContainerExtractor;
-import Reika.RotaryCraft.Containers.Machine.ContainerFermenter;
-import Reika.RotaryCraft.Containers.Machine.ContainerFillingStation;
-import Reika.RotaryCraft.Containers.Machine.ContainerFractionator;
-import Reika.RotaryCraft.Containers.Machine.ContainerFridge;
 import Reika.RotaryCraft.Containers.Machine.ContainerGearbox;
-import Reika.RotaryCraft.Containers.Machine.ContainerGrinder;
-import Reika.RotaryCraft.Containers.Machine.ContainerHeater;
-import Reika.RotaryCraft.Containers.Machine.ContainerItemCannon;
-import Reika.RotaryCraft.Containers.Machine.ContainerItemFilter;
 import Reika.RotaryCraft.Containers.Machine.ContainerJet;
-import Reika.RotaryCraft.Containers.Machine.ContainerLandmine;
-import Reika.RotaryCraft.Containers.Machine.ContainerObsidian;
-import Reika.RotaryCraft.Containers.Machine.ContainerPerformance;
-import Reika.RotaryCraft.Containers.Machine.ContainerPowerBus;
-import Reika.RotaryCraft.Containers.Machine.ContainerProjector;
-import Reika.RotaryCraft.Containers.Machine.ContainerPulseFurnace;
-import Reika.RotaryCraft.Containers.Machine.ContainerPurifier;
 import Reika.RotaryCraft.Containers.Machine.ContainerRemoteControl;
 import Reika.RotaryCraft.Containers.Machine.ContainerReservoir;
-import Reika.RotaryCraft.Containers.Machine.ContainerRockMelter;
-import Reika.RotaryCraft.Containers.Machine.ContainerScaleChest;
 import Reika.RotaryCraft.Containers.Machine.ContainerScreen;
 import Reika.RotaryCraft.Containers.Machine.ContainerSorter;
 import Reika.RotaryCraft.Containers.Machine.ContainerSteam;
-import Reika.RotaryCraft.Containers.Machine.ContainerTerraformer;
-import Reika.RotaryCraft.Containers.Machine.ContainerVacuum;
 import Reika.RotaryCraft.Containers.Machine.ContainerWetter;
 import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerAerosolizer;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerAutoCrafter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerBigFurnace;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerBlastFurnace;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCVT;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCannon;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCentrifuge;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCompactor;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerComposter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCrystallizer;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerDefoliator;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerDropProcessor;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerDryingBed;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerEthanol;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerExtractor;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFermenter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFillingStation;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFractionator;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFridge;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerGrinder;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerHeater;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerItemCannon;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerItemFilter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerLandmine;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerMultiCannon;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerObsidian;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerPerformance;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerPowerBus;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerProjector;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerPulseFurnace;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerPurifier;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerRockMelter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerScaleChest;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerTerraformer;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerVacuum;
 import Reika.RotaryCraft.GUIs.GuiCraftingPattern;
 import Reika.RotaryCraft.GUIs.GuiHandCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
@@ -126,6 +127,7 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiHeater;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiItemFilter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiLandmine;
+import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiMultiCannon;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiObsidian;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiParticle;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPerformance;
@@ -141,15 +143,14 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWetter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
-import Reika.RotaryCraft.ModInterface.ContainerEnergyToPower;
 import Reika.RotaryCraft.ModInterface.ContainerFuelEngine;
-import Reika.RotaryCraft.ModInterface.GuiEnergyToPower;
 import Reika.RotaryCraft.ModInterface.GuiFuelEngine;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
+import Reika.RotaryCraft.ModInterface.Conversion.ContainerEnergyToPower;
+import Reika.RotaryCraft.ModInterface.Conversion.GuiEnergyToPower;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
@@ -202,7 +203,9 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
+import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -381,6 +384,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityItemFilter) {
 			return new ContainerItemFilter(player, (TileEntityItemFilter) te);
+		}
+		if (te instanceof TileEntityMultiCannon) {
+			return new ContainerMultiCannon(player, (TileEntityMultiCannon) te);
 		}
 
 		if (te instanceof OneSlotMachine)
@@ -619,6 +625,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityItemFilter) {
 			return new GuiItemFilter(player, (TileEntityItemFilter) te);
+		}
+		if (te instanceof TileEntityMultiCannon) {
+			return new GuiMultiCannon(player, (TileEntityMultiCannon) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

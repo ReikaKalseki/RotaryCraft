@@ -15,13 +15,18 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.APIPacketHandler.PacketIDs;
 import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.ChunkManager;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
+import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -34,10 +39,12 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 
-public class TileEntityPortalShaft extends TileEntity1DTransmitter {
+public class TileEntityPortalShaft extends TileEntity1DTransmitter implements ChunkLoadingTile {
 
 	private PortalType type;
 	public MaterialRegistry material;
+
+	private WorldLocation otherShaft;
 
 	public static enum PortalType {
 		NETHER(),
@@ -93,6 +100,27 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			this.transferPower(world, x, y, z, meta);
 			this.emitPower(world, x, y, z);
 		}
+
+		if (!world.isRemote && otherShaft != null) {
+			if (otherShaft.getTileEntity() instanceof TileEntityPortalShaft) {
+
+			}
+			else {
+				power = 0;
+
+				world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlock(), MachineRegistry.SHAFT.getBlockMetadata(), 3);
+				TileEntityShaft ts = new TileEntityShaft(this.getShaftType());
+				ts.setBlockMetadata(this.getBlockMetadata());
+				world.setTileEntity(x, y, z, ts);
+			}
+		}
+	}
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		super.onFirstTick(world, x, y, z);
+
+		ChunkManager.instance.loadChunks(this);
 	}
 
 	private int getTargetDimensionBy(World world, int x, int y, int z) {
@@ -114,9 +142,9 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 		}
 	}
 
-	private int[] getScaledCoordinates(int x, int y, int z, World source, World target) {
+	private Coordinate getScaledCoordinates(int x, int y, int z, World source, World target) {
 		if (source == null || target == null)
-			return new int[]{0, 0, 0};
+			return null;
 		int tg = target.provider.dimensionId;
 		int src = source.provider.dimensionId;
 		if (src != -1 && tg == -1) { //to nether
@@ -128,11 +156,13 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			z *= 8;
 		}
 		//ReikaJavaLibrary.pConsole(src+">"+tg+" @ "+x+","+y+","+z, Side.SERVER);
-		return new int[]{x, y, z};
+		return new Coordinate(x, y, z);
 	}
 
 	private void emitPower(World world, int x, int y, int z) {
 		Location c = this.getOutputLocation(world, x, y, z);
+		if (c == null)
+			return;
 		int dx = c.posX;
 		int dy = c.posY;
 		int dz = c.posZ;
@@ -162,6 +192,8 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 				ps.setBlockMetadata(te.getBlockMetadata());
 				ps.setPortalType(age, ax, ay, az);
 				ps.material = material;
+				ps.otherShaft = new WorldLocation(this);
+				otherShaft = new WorldLocation(age, dx, dy, dz);
 				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.TILEDELETE.ordinal(), ps, new PacketTarget.RadiusTarget(this, 32));
 			}
 		}
@@ -184,18 +216,21 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 		//ReikaJavaLibrary.pConsole(writex+":"+writey+":"+writez, Side.SERVER);
 		//ReikaJavaLibrary.pConsole(dim, Side.SERVER);
 		World age = DimensionManager.getWorld(dim);
-		int[] coords = this.getScaledCoordinates(x+write.offsetX, y+write.offsetY, z+write.offsetZ, world, age);
-		int ax = coords[0];
-		int ay = coords[1];
-		int az = coords[2];
-		if (age != null && age.checkChunksExist(ax, ay, az, ax, ay, az)) {
+		//ReikaJavaLibrary.pConsole(age);
+		Coordinate loc = this.getScaledCoordinates(x+write.offsetX, y+write.offsetY, z+write.offsetZ, world, age);
+		if (loc == null)
+			return null;
+		int ax = loc.xCoord;
+		int ay = loc.yCoord;
+		int az = loc.zCoord;
+		if (age != null/* && age.checkChunksExist(ax, ay, az, ax, ay, az)*/) {
 			int tg = this.getTargetDimensionBy(age, ax, ay, az);
 			//ReikaJavaLibrary.pConsole(write+": "+tg+": "+ax+","+ay+","+az, Side.SERVER);
 			//ReikaJavaLibrary.pConsole(tg, dim == 7);
 			if (tg == world.provider.dimensionId) {
 				//ReikaJavaLibrary.pConsole(writex+", "+writey+", "+writez+" >> "+Blocks.blocksList[id], Side.SERVER);
-				int[] c2 = this.getScaledCoordinates(x+write.offsetX*2, y+write.offsetY*2, z+write.offsetZ*2, world, age);
-				return new Location(age, c2[0], c2[1], c2[2], ax, ay, az);
+				Coordinate c2 = this.getScaledCoordinates(x, y, z, world, age);
+				return new Location(age, c2.xCoord+write.offsetX*1, c2.yCoord+write.offsetY*1, c2.zCoord+write.offsetZ*1, ax, ay, az);
 			}
 		}
 		return null;
@@ -383,6 +418,16 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter {
 			posZA = za;
 		}
 
+	}
+
+	@Override
+	public void breakBlock() {
+		ChunkManager.instance.unloadChunks(this);
+	}
+
+	@Override
+	public Collection<ChunkCoordIntPair> getChunksToLoad() {
+		return ChunkManager.getChunkSquare(xCoord, zCoord, 1);
 	}
 
 }

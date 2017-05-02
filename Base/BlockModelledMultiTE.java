@@ -22,6 +22,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -100,7 +101,17 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+		AxisAlignedBB box = this.getAABB(world, x, y, z);
+		this.setBounds(box, x, y, z);
+	}
+
+	@Override
 	public final AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		return this.getAABB(world, x, y, z);
+	}
+
+	private AxisAlignedBB getAABB(IBlockAccess world, int x, int y, int z) {
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 		if (m == null)
 			return ReikaAABBHelper.getBlockAABB(x, y, z);
@@ -117,8 +128,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
-	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
-	{
+	public final AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		return this.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
@@ -151,6 +161,16 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	public int getMixedBrightnessForBlock(IBlockAccess iba, int x, int y, int z)
 	{
 		return iba.getLightBrightnessForSkyBlocks(x, y+1, z, this.getLightValue(iba, x, y+1, z));
+	}
+
+	@Override
+	public final boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
+		if (m.isSolidBottom()) {
+			return te.isFlipped ? dir == ForgeDirection.UP : dir == ForgeDirection.DOWN;
+		}
+		return false;
 	}
 
 }

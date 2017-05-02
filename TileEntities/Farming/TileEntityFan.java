@@ -27,6 +27,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.Registry.CropType.CropMethods;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -364,64 +365,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	public AxisAlignedBB getBlowZone(int meta, int range) {
-		int minx = 0;
-		int miny = 0;
-		int minz = 0;
-		int maxx = 0;
-		int maxy = 0;
-		int maxz = 0;
-
-		switch (meta) {
-			case 0:
-				minx = xCoord-range;
-				maxx = xCoord;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minz = zCoord;
-				maxz = zCoord+1;
-				break;
-			case 1:
-				minx = xCoord+1;
-				maxx = xCoord+range+1;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minz = zCoord;
-				maxz = zCoord+1;
-				break;
-			case 2:
-				maxz = zCoord+range+1;
-				minz = zCoord+1;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
-			case 3:
-				maxz = zCoord;
-				minz = zCoord-range;
-				miny = yCoord;
-				maxy = yCoord+1;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
-			case 4:
-				minz = zCoord;
-				maxz = zCoord+1;
-				miny = yCoord+1;
-				maxy = yCoord+range+1;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
-			case 5:
-				minz = zCoord;
-				maxz = zCoord+1;
-				maxy = yCoord;
-				miny = yCoord-range;
-				minx = xCoord;
-				maxx = xCoord+1;
-				break;
-		}
-		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz).expand(0.0, 0.0, 0.0);
+		return ReikaAABBHelper.getBeamBox(xCoord, yCoord, zCoord, facing, range);//.expand(0.0, 0.0, 0.0);
 	}
 
 	public AxisAlignedBB getWideBlowZone(int meta, int range) {

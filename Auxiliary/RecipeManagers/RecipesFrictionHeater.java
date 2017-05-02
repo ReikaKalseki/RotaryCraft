@@ -14,6 +14,8 @@ import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.FrictionHeaterManager;
@@ -121,6 +123,15 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipes.removeValue((FrictionRecipe)recipe) && outputs.removeValue((FrictionRecipe)recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		this.addCustomRecipe(in, out, lb.getInt("temperature"), lb.getInt("duration"));
+		return true;
 	}
 
 }

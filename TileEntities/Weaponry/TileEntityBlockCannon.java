@@ -9,12 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -24,6 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -75,42 +73,31 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		}
 	}
 
-	private double getBlockMass(ItemStack is) {
-		return ReikaPhysicsHelper.getBlockDensity(Block.getBlockFromItem(is.getItem()));
+	private double getBlockMass(BlockKey bk) {
+		return ReikaPhysicsHelper.getBlockDensity(bk.blockID);
 	}
 
-	private int getReqTorque(ItemStack is) {
-		double m = this.getBlockMass(is);
+	private int getReqTorque(BlockKey bk) {
+		double m = this.getBlockMass(bk);
 		int base = ReikaMathLibrary.ceil2exp((int)(velocity*m))/4;
 		return base;
 	}
 
-	private int getNextToFire() {
+	private BlockToFire getNextToFire() {
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
 				if (ReikaItemHelper.isBlock(inv[i])) {
 					ItemStack is = inv[i].copy();
-					if (torque >= this.getReqTorque(is)) {
-						return i;
+					BlockKey bk = ReikaItemHelper.getWorldBlockFromItem(is);
+					if (torque >= this.getReqTorque(bk)) {
+						return new BlockToFire(inv[i], bk, i);
 					}
 				}
 				else if (ItemRegistry.SPAWNER.matchItem(inv[i])) {
-					ItemStack is = new ItemStack(Blocks.mob_spawner);
-					is.stackTagCompound = inv[i].stackTagCompound;
-					if (torque >= this.getReqTorque(is)) {
-						return i;
-					}
-				}
-				else if (inv[i].getItem() == Items.water_bucket) {
-					ItemStack is = new ItemStack(Blocks.flowing_water);
-					if (torque >= this.getReqTorque(is)) {
-						return i;
-					}
-				}
-				else if (inv[i].getItem() == Items.lava_bucket) {
-					ItemStack is = new ItemStack(Blocks.flowing_lava);
-					if (torque >= this.getReqTorque(is)) {
-						return i;
+					ItemStack is = inv[i].copy();
+					BlockKey bk = new BlockKey(Blocks.mob_spawner, 0);
+					if (torque >= this.getReqTorque(bk)) {
+						return new BlockToFire(is, bk, i);
 					}
 				}
 				else {
@@ -118,16 +105,16 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 					if (fs != null) {
 						Fluid f = fs.getFluid();
 						if (f.canBePlacedInWorld()) {
-							ItemStack is = new ItemStack(f.getBlock());
-							if (torque >= this.getReqTorque(is)) {
-								return i;
+							BlockKey bk = new BlockKey(f.getBlock(), 0);
+							if (torque >= this.getReqTorque(bk)) {
+								return new BlockToFire(inv[i], bk, i);
 							}
 						}
 					}
 				}
 			}
 		}
-		return -1;
+		return null;
 	}
 
 	private void dropItem(ItemStack is) {
@@ -143,11 +130,11 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
 	}
 
-	private void fireBlock(ItemStack is, World world, int x, int y, int z) {
-		EntityFallingBlock e = new EntityFallingBlock(world, x+0.5, y+1+0.5, z+0.5, Block.getBlockFromItem(is.getItem()), is.getItemDamage());
-		if (ReikaItemHelper.matchStackWithBlock(is, Blocks.mob_spawner)) {
+	private void fireBlock(BlockToFire b, World world, int x, int y, int z) {
+		EntityFallingBlock e = new EntityFallingBlock(world, x+0.5, y+1+0.5, z+0.5, b.toFire.blockID, b.toFire.metadata);
+		if (b.toFire.blockID == Blocks.mob_spawner) {
 			TileEntityMobSpawner spw = new TileEntityMobSpawner();
-			ReikaSpawnerHelper.setSpawnerFromItemNBT(is, spw);
+			ReikaSpawnerHelper.setSpawnerFromItemNBT(b.referenceItem, spw);
 			NBTTagCompound nbt = new NBTTagCompound();
 			spw.writeToNBT(nbt);
 			e.field_145810_d = nbt;
@@ -174,30 +161,23 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
 	@Override
 	protected boolean fire(World world, int x, int y, int z, int slot) {
-		slot = this.getNextToFire();
-		if (slot < 0)
+		BlockToFire b = this.getNextToFire();
+		if (b == null)
 			return false;
-		ItemStack next = ReikaItemHelper.getSizedItemStack(inv[slot], 1);
-		if (next == null)
+		if (inv[b.inventorySlot] == null)
 			return false;
 		//ReikaJavaLibrary.pConsole(this.getReqTorque(next));
-		ReikaInventoryHelper.decrStack(slot, inv);
-		this.dropContainers(world, x, y, z, next);
-		this.fireBlock(next, world, x, y, z);
+		ReikaInventoryHelper.decrStack(b.inventorySlot, inv);
+		this.dropContainers(world, x, y, z, b.referenceItem);
+		this.fireBlock(b, world, x, y, z);
 		return true;
 	}
 
 	private void dropContainers(World world, int x, int y, int z, ItemStack next) {
-		if (next.getItem() == Items.water_bucket) {
-			this.dropItem(new ItemStack(Items.bucket));
-		}
-		else if (next.getItem() == Items.lava_bucket) {
-			this.dropItem(new ItemStack(Items.bucket));
-		}
-		else if (FluidContainerRegistry.isFilledContainer(next)) {
-			Item cont = next.getItem().getContainerItem();
+		if (FluidContainerRegistry.isFilledContainer(next)) {
+			ItemStack cont = FluidContainerRegistry.drainFluidContainer(next);
 			if (cont != null)
-				this.dropItem(new ItemStack(cont));
+				this.dropItem(cont);
 		}
 	}
 
@@ -220,6 +200,20 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		if (power < MINPOWER)
 			return 0;
 		return 1000;
+	}
+
+	private static class BlockToFire {
+
+		private final ItemStack referenceItem;
+		private final BlockKey toFire;
+		private final int inventorySlot;
+
+		private BlockToFire(ItemStack is, BlockKey bk, int s) {
+			referenceItem = is;
+			toFire = bk;
+			inventorySlot = s;
+		}
+
 	}
 
 }

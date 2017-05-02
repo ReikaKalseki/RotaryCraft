@@ -64,7 +64,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
-import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -211,8 +211,10 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			int dz = z+write.offsetZ*i;
 			TileEntity te = this.getTileEntity(dx, y, dz);
 			if (te instanceof TemperatureTE) {
-				int dT = T-((TemperatureTE)te).getTemperature();
-				((TemperatureTE)te).addTemperature(dT);
+				if (((TemperatureTE)te).allowExternalHeating()) {
+					int dT = T-((TemperatureTE)te).getTemperature();
+					((TemperatureTE)te).addTemperature(dT);
+				}
 			}
 			else if (te instanceof ThermalMachine) {
 				((ThermalMachine)te).setTemperature(T);
@@ -380,7 +382,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.explode", 2, 0.75F);
 		SoundRegistry.INGESTION.playSoundAtBlock(this, 0.5F, 1);
 
-		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).addCoord(x+write.offsetX*8, y, z+write.offsetZ*8).expand(3, 3, 3);
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).addCoord(write.offsetX*8, y, write.offsetZ*8).expand(3, 3, 3);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		HashSet<Integer> idSet = new HashSet();
 		for (EntityLivingBase e : li) {

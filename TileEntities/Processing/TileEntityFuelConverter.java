@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.init.Items;
@@ -27,6 +29,8 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPoweredLiquidIO;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
@@ -85,11 +89,47 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 			}
 		}
 
-		public static void addRecipe(String name, String in, String out, int sp, int r, double f, ItemMatch... items) {
-			Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, ItemMatch[].class}, new Object[]{in, out, sp, r, f, items});
+		public static void addRecipe(String name, String in, String out, int speed, int fluidRatio, double itemConsumeChance, ItemMatch... items) {
+			Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, ItemMatch[].class}, new Object[]{in, out, speed, fluidRatio, itemConsumeChance, items});
 			conversionMap.put(in, c);
 			conversionOutputMap.put(out, c);
 			list = values();
+		}
+
+		public static Collection<Conversions> getByInput(ItemStack is) {
+			Collection<Conversions> li = new ArrayList();
+			for (Conversions c : conversionMap.values()) {
+				if (c.isValidItem(is))
+					li.add(c);
+			}
+			return li;
+		}
+
+		public static Collection<Conversions> getByInput(Fluid f) {
+			Collection<Conversions> li = new ArrayList();
+			for (Conversions c : conversionMap.values()) {
+				if (c.input == f)
+					li.add(c);
+			}
+			return li;
+		}
+
+		public static Collection<Conversions> getByOutput(Fluid f) {
+			Collection<Conversions> li = new ArrayList();
+			for (Conversions c : conversionMap.values()) {
+				if (c.output == f)
+					li.add(c);
+			}
+			return li;
+		}
+
+		@SideOnly(Side.CLIENT)
+		public Collection<ItemStack> getIngredientsForDisplay() {
+			Collection<ItemStack> c = new ArrayList();
+			for (ItemMatch m : ingredients) {
+				c.add(m.getCycledItem());
+			}
+			return c;
 		}
 	}
 

@@ -17,8 +17,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -28,8 +30,12 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
+import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
+import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -52,6 +58,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 
 	public static enum HelmetUpgrades {
 		NIGHTVISION(),
+		VISOR(),
 		APIARIST(ModList.FORESTRY);
 
 		public static final HelmetUpgrades[] list = values();
@@ -88,6 +95,8 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 			switch(this) {
 				case NIGHTVISION:
 					return new ItemStack[]{ItemRegistry.NVG.getStackOf()};
+				case VISOR:
+					return new ItemStack[]{new ItemStack(Blocks.stained_glass, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.diamond), new ItemStack(Blocks.stained_glass, 1, OreDictionary.WILDCARD_VALUE)};
 				case APIARIST:
 					return ReikaArrayHelper.getArrayOf(ForestryHandler.CraftingMaterials.WOVENSILK.getItem(), 8);
 			}
@@ -137,6 +146,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 			ep.addPotionEffect(new PotionEffect(Potion.nightVision.id, 3, 0));
 			ReikaEntityHelper.setNoPotionParticles(ep);
 		}
+		ep.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(Double.MAX_VALUE);
 	}
 
 	public HashMap<Enchantment, Integer> getDefaultEnchantments() {
@@ -225,15 +235,36 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 	public static boolean isWearingFullSuitOf(EntityLivingBase e) {
 		for (int i = 1; i < 5; i++) {
 			ItemStack is = e.getEquipmentInSlot(i);
-			if (is == null)
-				return false;
-			ItemRegistry ir = ItemRegistry.getEntry(is);
-			if (ir == null)
-				return false;
-			if (!ir.isBedrockTypeArmor())
+			if (!checkItem(is))
 				return false;
 		}
 		return true;
+	}
+
+	private static boolean checkItem(ItemStack is) {
+		if (is == null)
+			return false;
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			if (checkFloatstoneBoots(is))
+				return true;
+		}
+		ItemRegistry ir = ItemRegistry.getEntry(is);
+		if (ir == null)
+			return false;
+		if (!ir.isBedrockTypeArmor())
+			return false;
+		return true;
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private static boolean checkFloatstoneBoots(ItemStack is) {
+		if (ChromaItems.FLOATBOOTS.matchWith(is)) {
+			ItemStack in = ItemFloatstoneBoots.getSpecialItem(is);
+			if (in != null) {
+				return checkItem(in);
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -243,7 +274,9 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 
 	@Override
 	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
-		return ((ItemArmor)armor.getItem()).armorType == 0 ? HelmetUpgrades.APIARIST.existsOn(armor) : entity.getEquipmentInSlot(4) != null && HelmetUpgrades.APIARIST.existsOn(entity.getEquipmentInSlot(4));
+		ItemStack head = entity.getEquipmentInSlot(4);
+		ItemRegistry ir = head != null ? ItemRegistry.getEntry(head) : null;
+		return ir != null && ir.isBedrockArmor() && HelmetUpgrades.APIARIST.existsOn(head);
 	}
 
 	@Override
@@ -253,8 +286,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 	}
 
 	@Override
-	public final void setDamage(ItemStack stack, int damage)
-	{
+	public final void setDamage(ItemStack stack, int damage) {
 
 	}
 

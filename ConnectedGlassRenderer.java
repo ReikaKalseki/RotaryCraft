@@ -21,14 +21,14 @@ import net.minecraftforge.fluids.Fluid;
 
 import org.lwjgl.opengl.GL11;
 
+import Reika.DragonAPI.Interfaces.ISBRH;
 import Reika.DragonAPI.Interfaces.Block.ConnectedTextureGlass;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 
-public class ConnectedGlassRenderer implements ISimpleBlockRenderingHandler {
+public class ConnectedGlassRenderer implements ISBRH {
 
 	public final int renderID;
 	private static final ForgeDirection[] dirs = ForgeDirection.values();

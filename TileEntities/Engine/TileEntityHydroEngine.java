@@ -146,7 +146,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			streamOmega = (int)(vtot*2);
 			double F = ReikaEngLibrary.rhowater*vtot*vtot; //A=1
 			double fudge = 0.875;
-			streamTorque = ReikaMathLibrary.ceil2exp((int)(F*0.5*fudge));
+			streamTorque = 2*ReikaMathLibrary.ceil2exp((int)(F*0.5*fudge));
 			return true;
 		}
 		streamPower = false;
@@ -391,10 +391,10 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			ForgeDirection dir = this.getWriteDirection();
 			ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
 			for (int i = -1; i <= y; i++) {
-				ReikaWorldHelper.dropAndDestroyBlockAt(world, x+left.offsetX, y+i, z+left.offsetZ, null, false);
+				ReikaWorldHelper.dropAndDestroyBlockAt(world, x+left.offsetX, y+i, z+left.offsetZ, null, false, true);
 			}
-			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y+1, z, null, false);
-			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y-1, z, null, false);
+			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y+1, z, null, false, true);
+			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y-1, z, null, false, true);
 		}
 	}
 

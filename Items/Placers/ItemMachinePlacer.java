@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
+import Reika.DragonAPI.Interfaces.TileEntity.PlaceNotification;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -105,6 +106,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		if (te instanceof PressureTE) {
 			((PressureTE)te).addPressure(101);
 		}
+		if (te instanceof PlaceNotification)
+			((PlaceNotification)te).onPlaced();
 		if (te instanceof EnchantableMachine) {
 			EnchantableMachine e = (EnchantableMachine)te;
 			e.applyEnchants(is);

@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,15 +24,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import appeng.api.implementations.ICraftingPatternItem;
 import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityBlower extends TileEntityPowerReceiver {
@@ -42,6 +49,28 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 	public boolean useOreDict = true;
 	public boolean checkMeta = false;
 	public boolean checkNBT = false;
+
+	private static Method getPatterns;
+	private static Field dualityField;
+
+	static {
+		if (ModList.APPENG.isLoaded()) {
+			try {
+				Class c = Class.forName("appeng.helpers.DualityInterface");
+				getPatterns = c.getDeclaredMethod("getPatterns");
+				getPatterns.setAccessible(true);
+
+				c = InterfaceCache.MEINTERFACE.getClassType();
+				dualityField = c.getDeclaredField("duality");
+				dualityField.setAccessible(true);
+			}
+			catch (Exception e) {
+				RotaryCraft.logger.logError("Could not add Item Pump AE pattern interfacing!");
+				e.printStackTrace();
+				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.APPENG, e);
+			}
+		}
+	}
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -104,8 +133,11 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 			//this.printTEs(source, target);
 
 			if (target instanceof IInventory) {
-				if (InterfaceCache.DSU.instanceOf(source)) {
+				if (InterfaceCache.DSU.instanceOf(target)) {
 					this.transferItems(null, (IInventory)source, (IInventory)target, dir);
+				}
+				else if (this.tryPatternInsertion((IInventory)source, target)) {
+
 				}
 				else {
 					HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
@@ -128,6 +160,31 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 				}
 			}
 		}
+	}
+
+	private boolean tryPatternInsertion(IInventory source, TileEntity target) {
+		if (InterfaceCache.MEINTERFACE.instanceOf(target)) {
+			for (int i = 0; i < source.getSizeInventory(); i++) {
+				ItemStack is = source.getStackInSlot(i);
+				if (is != null && is.getItem() instanceof ICraftingPatternItem) {
+					try {
+						IInventory patterns = this.getPatterns(target);
+						if (ReikaInventoryHelper.addToIInv(is, patterns))
+							return true;
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+						return false;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	@ModDependent(ModList.APPENG)
+	public static IInventory getPatterns(TileEntity target) throws Exception {
+		return (IInventory)getPatterns.invoke(dualityField.get(target));
 	}
 
 	private void printTEs(TileEntity source, TileEntity target) {

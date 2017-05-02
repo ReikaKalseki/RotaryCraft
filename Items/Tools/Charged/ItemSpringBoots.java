@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,12 +22,20 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
+import Reika.ChromatiCraft.Registry.ChromaItems;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import forestry.api.apiculture.IArmorApiarist;
 
-public class ItemSpringBoots extends ItemChargedArmor {
+@Strippable(value={"forestry.api.apiculture.IArmorApiarist"})
+public class ItemSpringBoots extends ItemChargedArmor implements IArmorApiarist {
 
 	public final int JUMP_LEVEL = 3;
 	public final int SPEED_LEVEL = 2;
@@ -68,7 +77,7 @@ public class ItemSpringBoots extends ItemChargedArmor {
 			if (pot == null || pot.getAmplifier() < SPEED_LEVEL) {
 				ep.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 1, SPEED_LEVEL));
 			}
-			ep.stepHeight = Math.max(ep.stepHeight, 1.45F); //1.25F
+			ep.stepHeight = ep.isSneaking() ? 0.5F : Math.max(ep.stepHeight, 1.45F); //1.25F
 			if (itemRand.nextInt(320) == 0) {
 				if (is.getItem() != ItemRegistry.BEDJUMP.getItemInstance()) {
 					ep.setCurrentItemOrArmor(1, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1));
@@ -101,5 +110,38 @@ public class ItemSpringBoots extends ItemChargedArmor {
 		ItemRegistry ir = ItemRegistry.getEntry(is);
 		if (ir.isAvailableInCreativeInventory())
 			li.add(is);
+	}
+
+	public static boolean isSpringBoots(ItemStack is) {
+		return is.getItem() instanceof ItemSpringBoots || (ModList.CHROMATICRAFT.isLoaded() && checkFloatstoneBoots(is));
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private static boolean checkFloatstoneBoots(ItemStack is) {
+		if (ChromaItems.FLOATBOOTS.matchWith(is)) {
+			ItemStack in = ItemFloatstoneBoots.getSpecialItem(is);
+			if (in != null) {
+				return in.getItem() instanceof ItemSpringBoots;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
+		ItemStack head = entity.getEquipmentInSlot(4);
+		ItemRegistry ir = head != null ? ItemRegistry.getEntry(head) : null;
+		return ir != null && ir.isBedrockArmor() && HelmetUpgrades.APIARIST.existsOn(head);
+	}
+
+	@Override
+	@Deprecated
+	public boolean protectPlayer(EntityPlayer player, ItemStack armor, String cause, boolean doProtect) {
+		return this.protectEntity(player, armor, cause, doProtect);
+	}
+
+	@Override
+	public final void setDamage(ItemStack stack, int damage) {
+
 	}
 }

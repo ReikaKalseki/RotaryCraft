@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Processing;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -29,11 +30,16 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 	private int tick = 0;
 	private EntityItem item;
 
+	private int extractionCooldown = 0;
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getPowerBelow();
 		this.updateItem();
+
+		if (extractionCooldown > 0)
+			extractionCooldown--;
 
 		if (power >= MINPOWER && omega >= MINSPEED) {
 			ItemStack is = inv[0];
@@ -50,6 +56,7 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 						}
 						else {
 							tick += 1+4*ReikaMathLibrary.logbase2(omega/MINSPEED);
+							extractionCooldown = 10;
 						}
 					}
 					else {
@@ -93,7 +100,7 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack is, int side) {
-		return tick == 0;
+		return tick == 0 && extractionCooldown == 0;
 	}
 
 	@Override
@@ -168,6 +175,22 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT)
+	{
+		super.writeToNBT(NBT);
+
+		NBT.setInteger("extract", extractionCooldown);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT)
+	{
+		super.readFromNBT(NBT);
+
+		extractionCooldown = NBT.getInteger("extract");
 	}
 
 }

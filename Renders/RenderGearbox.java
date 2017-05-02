@@ -290,6 +290,8 @@ public class RenderGearbox extends RotaryTERenderer
 	}
 
 	private void renderLiquid(TileEntity tile, double par2, double par4, double par6) {
+		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		GL11.glTranslated(par2, par4, par6);
 		TileEntityGearbox tr = (TileEntityGearbox)tile;
 		if (tr.getLubricant() > 0) {
@@ -310,6 +312,7 @@ public class RenderGearbox extends RotaryTERenderer
 			double h = 0.0625+(4D/16D*tr.getLubricant()/tr.getMaxLubricant())*0.9;
 			if (tr.isFlipped) {
 				h = 1-h;
+				GL11.glDisable(GL11.GL_CULL_FACE);
 			}
 			Tessellator v5 = Tessellator.instance;
 			v5.startDrawingQuads();
@@ -319,10 +322,23 @@ public class RenderGearbox extends RotaryTERenderer
 			v5.addVertexWithUV(0.9375, h, 0.9375, du, dv);
 			v5.addVertexWithUV(0.9375, h, 0.0625, du, v);
 			v5.addVertexWithUV(0.0625, h, 0.0625, u, v);
+
+			if (tr.isFlipped) {
+				ico = Blocks.glass.getIcon(0, 0);
+				u = ico.getMinU();
+				v = ico.getMinV();
+				du = ico.getMaxU();
+				dv = ico.getMaxV();
+				double o = 0.005;
+				v5.addVertexWithUV(0.0625, h-o, 0.9375, u, dv);
+				v5.addVertexWithUV(0.9375, h-o, 0.9375, du, dv);
+				v5.addVertexWithUV(0.9375, h-o, 0.0625, du, v);
+				v5.addVertexWithUV(0.0625, h-o, 0.0625, u, v);
+			}
 			v5.draw();
 		}
-		GL11.glTranslated(-par2, -par4, -par6);
-		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopAttrib();
+		GL11.glPopMatrix();
 	}
 
 	@Override

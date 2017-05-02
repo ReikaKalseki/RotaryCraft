@@ -9,9 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,9 +27,12 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 public class PowerSourceList implements PowerTracker {
 
 	private HashSet<PowerWrapper> engines = new HashSet();
+	private HashSet<ShaftMerger> mergers = new HashSet();
+
 	private ShaftMerger caller;
-	private ArrayList<ShaftMerger> mergers = new ArrayList();
+
 	private boolean isLooping = false;
+	private boolean errored = false;
 
 	public long getMaxGennablePower() {
 		long pwr = 0;
@@ -79,6 +82,10 @@ public class PowerSourceList implements PowerTracker {
 			}
 		}
 
+		if (pwr.errored) {
+			fail(pwr, caller, world, x, y, z);
+		}
+
 		try {
 			if (tile instanceof TileEntityIOMachine) {
 				TileEntityIOMachine te = (TileEntityIOMachine)tile;
@@ -115,8 +122,25 @@ public class PowerSourceList implements PowerTracker {
 		}
 		catch (StackOverflowError e) {
 			//e.printStackTrace();
-			RotaryCraft.logger.logError("PowerSourceList SOE!");
+			RotaryCraft.logger.logError("PowerSourceList SOE @ "+pwr+", called from "+caller+"!");
+			pwr.errored = true;
+			//fail(pwr, caller, world, x, y, z);
 			return pwr;
+		}
+	}
+
+	private static void fail(PowerSourceList pwr, ShaftMerger caller, World world, int x, int y, int z) {
+		if (caller != null) {
+			caller.fail();
+		}
+		else {
+			try {
+				world.setBlock(x, y, z, Blocks.air);
+				world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3, false);
+			}
+			catch (Throwable t) {
+				t.printStackTrace();
+			}
 		}
 	}
 
@@ -124,6 +148,7 @@ public class PowerSourceList implements PowerTracker {
 		for (PowerWrapper te : pwr.engines) {
 			this.addSource(te.generator);
 		}
+		errored = errored || pwr.errored;
 	}
 
 	@Override

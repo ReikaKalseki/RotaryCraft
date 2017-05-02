@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.IntHashMap;
 import Reika.DragonAPI.DragonOptions;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -47,6 +48,8 @@ public class OldTextureLoader {
 	}
 
 	public boolean loadOldTextures() {
+		if (ReikaObfuscationHelper.isDeObfEnvironment())
+			return false;
 		if (!DragonOptions.APRIL.getState())
 			return false;
 		Calendar c = Calendar.getInstance();

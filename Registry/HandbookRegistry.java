@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
@@ -60,6 +62,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	TRANSFER("Basics of Power Transfer"),
 	TIERS("Machine Tiers"),
 	TIMING("Duration Time"),
+	MUFFLING("Sounds and Muffling"),
+	INTERDIM("Interdimensional Power Transport"),
 	ALERTS("Config Alerts"),
 	PACKMODS("Modpack Changes"),
 	//---------------------MISC--------------------//
@@ -153,6 +157,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	HARVESTER(MachineRegistry.MOBHARVESTER),
 	FERTILIZER(MachineRegistry.FERTILIZER),
 	LAWNSPRINKLER(MachineRegistry.LAWNSPRINKLER),
+	HYDRATOR(MachineRegistry.HYDRATOR),
 
 	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
 	HOSE(MachineRegistry.HOSE.getName(), MachineRegistry.HOSE),
@@ -174,6 +179,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	SORTING(MachineRegistry.SORTING),
 	FILLING(MachineRegistry.FILLINGSTATION),
 	PIPEPUMP(MachineRegistry.PIPEPUMP),
+	ITEMFILTER(MachineRegistry.ITEMFILTER),
 
 	WEPMACHINEDESC("Defence/Offence Machines", "Defence/Offense"),
 	ARROWGUN(MachineRegistry.ARROWGUN),
@@ -192,6 +198,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	EMP(MachineRegistry.EMP),
 	AIRGUN(MachineRegistry.AIRGUN),
 	VDG(MachineRegistry.VANDEGRAFF),
+	GATLING(MachineRegistry.GATLING),
 
 	SURVMACHINEDESC("Surveying Machines", "Surveying"),
 	GPR(MachineRegistry.GPR),
@@ -232,6 +239,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	GASTANK(MachineRegistry.GASTANK),
 	CRAFTER(MachineRegistry.CRAFTER),
 	CHUNKLOADER(MachineRegistry.CHUNKLOADER),
+	FILLER(MachineRegistry.FILLER),
+	SPILLWAY(MachineRegistry.SPILLWAY),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),
@@ -639,7 +648,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	public static List<HandbookRegistry> getEntriesForScreen(int screen) {
 		//ReikaJavaLibrary.pConsole(screen);
-		List<HandbookRegistry> li = new ArrayList<HandbookRegistry>();
+		List<HandbookRegistry> li = new ArrayList();
 		for (int i = 0; i < tabList.length; i++) {
 			if (tabList[i].getScreen() == screen/* && !tabList[i].isDummiedOut()*/) {
 				li.add(tabList[i]);
@@ -684,6 +693,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	}
 
 	public String getTitle() {
+		if (this == TOC)
+			return "Info";
 		if (isParent)
 			return title;
 		if (this.getParent() == ENGINEDESC) {
@@ -996,6 +1007,10 @@ public enum HandbookRegistry implements HandbookEntry {
 			return new ItemStack(Items.enchanted_book);
 		if (this == TIMING)
 			return new ItemStack(Items.clock);
+		if (this == MUFFLING)
+			return ReikaItemHelper.whiteWool;
+		if (this == INTERDIM)
+			return new ItemStack(Blocks.portal);
 		if (this == COMPUTERCRAFT)
 			return ItemStacks.pcb;
 		if (this == TRANSFER)

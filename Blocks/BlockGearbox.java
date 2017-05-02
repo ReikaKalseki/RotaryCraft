@@ -26,7 +26,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
@@ -164,12 +163,12 @@ public class BlockGearbox extends BlockModelledMachine {
 		if (RotaryCraft.instance.isLocked())
 			return false;
 		TileEntityGearbox tile = (TileEntityGearbox)world.getTileEntity(x, y, z);
-		if (ep.isSneaking()) {
-			if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().getItem() == Items.bucket) {
-				tile.clearLubricant();
-			}
+		//if (ep.isSneaking()) {
+		if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().getItem() == Items.bucket) {
+			tile.clearLubricant();
 			return true;
 		}
+		//}
 
 		if (ep.getCurrentEquippedItem() != null && (ep.getCurrentEquippedItem().getItem() instanceof ItemScrewdriver || ep.getCurrentEquippedItem().getItem() instanceof ItemMeter || ep.getCurrentEquippedItem().getItem() instanceof ItemDebug)) {
 			return false;
@@ -220,11 +219,5 @@ public class BlockGearbox extends BlockModelledMachine {
 		is.stackTagCompound = gbx.getTagsToWriteToStack();
 		ret.add(is);
 		return ret;
-	}
-
-	@Override
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
-		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
-		return te.isFlipped ? dir == ForgeDirection.UP : dir == ForgeDirection.DOWN;
 	}
 }

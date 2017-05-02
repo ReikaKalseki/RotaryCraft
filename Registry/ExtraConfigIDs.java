@@ -70,4 +70,29 @@ public enum ExtraConfigIDs implements IDRegistry {
 	public boolean isDummiedOut() {
 		return type == null;
 	}
+
+	@Override
+	public boolean enforceMatch() {
+		return true;
+	}
+
+	@Override
+	public Class getPropertyType() {
+		return int.class;
+	}
+
+	@Override
+	public String getLabel() {
+		return this.getName();
+	}
+
+	@Override
+	public boolean isEnforcingDefaults() {
+		return false;
+	}
+
+	@Override
+	public boolean shouldLoad() {
+		return true;
+	}
 }

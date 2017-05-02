@@ -14,11 +14,13 @@ import java.util.List;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
@@ -27,6 +29,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.Item.SpriteRenderCallback;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
@@ -67,7 +70,7 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 				li.add("Crafts "+item.stackSize+" "+item.getDisplayName());//+" with:");
 			}
 			else {
-				li.add("No Output.");
+				li.add("Items, No Output.");
 			}
 		}
 		li.add("Recipe Mode: "+this.getMode(is).displayName);
@@ -94,6 +97,14 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		return items;
 	}
 
+	public static int getStackInputLimit(ItemStack is) {
+		if (is.stackTagCompound != null) {
+			int amt = is.stackTagCompound.getInteger("stacklimit");
+			return amt > 0 ? amt : 64;
+		}
+		return 64;
+	}
+
 	private static void resetNBT(ItemStack is) {
 		if (is.stackTagCompound != null) {
 			is.stackTagCompound.removeTag("output");
@@ -106,8 +117,7 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		ItemStack out = getMode(is).getRecipe(ic, world);
-		if (out == null)
-			return;
+		boolean valid = out != null;
 		NBTTagCompound recipe = new NBTTagCompound();
 		for (int i = 0; i < 9; i++) {
 			ItemStack in = ic.getStackInSlot(i);
@@ -118,10 +128,12 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 			}
 		}
 		is.stackTagCompound.setTag("recipe", recipe);
-		NBTTagCompound outt = new NBTTagCompound();
-		if (out != null)
+		is.stackTagCompound.setBoolean("valid", valid);
+		if (valid) {
+			NBTTagCompound outt = new NBTTagCompound();
 			out.writeToNBT(outt);
-		is.stackTagCompound.setTag("output", outt);
+			is.stackTagCompound.setTag("output", outt);
+		}
 		//ReikaJavaLibrary.pConsole(Arrays.toString(items)+" -> "+out);
 	}
 
@@ -152,6 +164,13 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("mode", md.ordinal());
+	}
+
+	public static void changeStackLimit(ItemStack is, int change) {
+		if (is.stackTagCompound == null)
+			is.stackTagCompound = new NBTTagCompound();
+		int limit = getStackInputLimit(is);
+		is.stackTagCompound.setInteger("stacklimit", MathHelper.clamp_int(limit+change, 1, 64));
 	}
 
 	public static enum RecipeMode {
@@ -200,6 +219,15 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 			}
 			return null;
 		}
+	}
+
+	public static boolean checkPatternForMatch(IInventory te, RecipeMode type, int invslot, int patternslot, ItemStack is, ItemStack p) {
+		ItemStack in = te.getStackInSlot(invslot);
+		return getMode(p) == type && checkItemAndSize(patternslot, is, p, in != null ? in.stackSize : 0);
+	}
+
+	private static boolean checkItemAndSize(int slot, ItemStack is, ItemStack p, int current) {
+		return ReikaItemHelper.matchStacks(is, getItems(p)[slot]) && current+is.stackSize <= Math.min(is.getMaxStackSize(), getStackInputLimit(p));
 	}
 
 }

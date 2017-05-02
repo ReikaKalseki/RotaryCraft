@@ -34,7 +34,7 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 	}
 
 	private ForgeDirection getDirectionDir() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) ? ForgeDirection.UP : ForgeDirection.DOWN;
+		return this.hasRedstoneSignal() ? ForgeDirection.UP : ForgeDirection.DOWN;
 	}
 
 	@Override

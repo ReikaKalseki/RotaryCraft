@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerExtractor;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerExtractor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 
@@ -36,9 +36,9 @@ public class GuiExtractor extends GuiMachine
 	{
 		super.drawGuiContainerForegroundLayer(a, b);
 
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
 		if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
-			int j = (width - xSize) / 2;
-			int k = (height - ySize) / 2;
 			int dx = j+19;
 			int dy = k+33;
 			if (api.isMouseInBox(dx, dx+4, dy, dy+18)) {
@@ -59,6 +59,18 @@ public class GuiExtractor extends GuiMachine
 			int i1 = Math.min(32, ext.getCookProgressScaled(32, 0));
 			this.drawTexturedModalRect(29, 34, 176, 48, 10, i1);
 			GL11.glPopMatrix();
+		}
+
+		String var4 = ConfigRegistry.EXTRACTORMAINTAIN.getState() ? "/Reika/RotaryCraft/Textures/GUI/extractorgui2.png" : "/Reika/RotaryCraft/Textures/GUI/extractorgui.png";
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
+		int u = ext.isBedrock() ? 190 : 182;
+		int v = 142;
+		int dx = 10;
+		int dy = 33;
+		this.drawTexturedModalRect(dx, dy, u, v, 7, 18);
+		if (api.isMouseInBox(j+dx, j+dx+7, k+dy, k+dy+18)) {
+			String s = ext.isBedrock() ? "Bedrock Drill" : "Steel Drill";
+			api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-fontRendererObj.getStringWidth(s), api.getMouseRealY()-12);
 		}
 	}
 

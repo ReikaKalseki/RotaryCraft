@@ -42,6 +42,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected TileEntityPowerReceiver recv;
 	protected EntityPlayer ep;
 	protected static final ReikaGuiAPI api = ReikaGuiAPI.instance;
+	protected long lastClick = -1;
 
 	public GuiMachine(Container par1Container, RotaryCraftTileEntity te) {
 		super(par1Container);
@@ -88,6 +89,13 @@ public abstract class GuiMachine extends GuiContainer {
 			else
 				ep.openGui(RotaryCraft.instance, GuiRegistry.HANDBOOKPAGE.ordinal(), tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 		}
+	}
+
+	protected final boolean isClickTooSoon() {
+		boolean flag = System.currentTimeMillis()-lastClick < 250;
+		if (!flag)
+			lastClick = System.currentTimeMillis();
+		return flag;
 	}
 
 	@Override

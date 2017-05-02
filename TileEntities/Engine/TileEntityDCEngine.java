@@ -27,7 +27,7 @@ public class TileEntityDCEngine extends TileEntityEngine {
 
 	@Override
 	protected boolean getRequirements(World world, int x, int y, int z, int meta) {
-		return world.isBlockIndirectlyGettingPowered(x, y, z);
+		return this.hasRedstoneSignal();
 	}
 
 	@Override

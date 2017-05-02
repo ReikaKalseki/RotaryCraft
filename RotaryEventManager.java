@@ -20,12 +20,14 @@ import net.minecraft.block.BlockWorkbench;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -42,7 +44,9 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
+import Reika.DragonAPI.Instantiable.Event.EnderLookAggroEvent;
 import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
+import Reika.DragonAPI.Instantiable.Event.FarmlandTrampleEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
@@ -76,6 +80,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -94,6 +99,54 @@ public class RotaryEventManager {
 	private RotaryEventManager() {
 
 	}
+
+	@SubscribeEvent
+	public void enderVisor(EnderLookAggroEvent evt) {
+		ItemStack is = evt.entityPlayer.inventory.armorInventory[3];
+		if (is != null && (is.getItem() == ItemRegistry.BEDREVEAL.getItemInstance() || is.getItem() == ItemRegistry.BEDHELM.getItemInstance())) {
+			if (ItemBedrockArmor.HelmetUpgrades.VISOR.existsOn(is)) {
+				evt.setResult(Result.DENY);
+			}
+		}
+	}
+
+	@SubscribeEvent(priority=EventPriority.HIGHEST)
+	public void chaosProtection(LivingDropsEvent evt) {
+		if (evt.entity instanceof EntitySlime) {
+			int rounds = evt.entity.getEntityData().getInteger(TileEntityMultiCannon.SLIME_NBT);
+			if (rounds > 0) {
+				int drop = (int)(rounds/TileEntityMultiCannon.AMMO_PER_SHOT);
+				while (drop > 0) {
+					int amt = Math.min(64, drop);
+					ReikaItemHelper.dropItem(evt.entity, ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, amt));
+					drop -= amt;
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent(priority=EventPriority.HIGHEST, receiveCanceled = true)
+	public void chaosProtection(LivingHurtEvent evt) {
+		if (evt.entity instanceof EntityPlayer) {
+			if (ItemBedrockArmor.isWearingFullSuitOf(evt.entityLiving)) {
+				String n = evt.source.damageType.toLowerCase(Locale.ENGLISH);
+				if (evt.source.damageType.startsWith("chaos") || evt.source.damageType.startsWith("damage.de.") || evt.source.damageType.startsWith("de.")) {
+					float f = 1-0.08F*Math.min(8, evt.ammount);
+					evt.ammount = Math.min(12, evt.ammount*f);
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void noSpringTrample(FarmlandTrampleEvent evt) {
+		if (evt.entity instanceof EntityLivingBase) {
+			ItemStack is = ((EntityLivingBase)evt.entity).getEquipmentInSlot(1);
+			if (is != null && ItemSpringBoots.isSpringBoots(is))
+				evt.setResult(Result.DENY);
+		}
+	}
+
 	/*
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -252,8 +305,7 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent
-	public void bonemealEvent(BonemealEvent event)
-	{
+	public void bonemealEvent(BonemealEvent event) {
 		if (!event.world.isRemote)  {
 			if (event.block == BlockRegistry.CANOLA.getBlockInstance()) {
 				World world = event.world;
@@ -270,7 +322,7 @@ public class RotaryEventManager {
 		int id = evt.slotID;
 		if (evt.inventory instanceof InventoryPlayer && evt.slotID == 36) { //foot armor
 			ItemStack is = evt.getItem();
-			if (is == null || !(is.getItem() instanceof ItemSpringBoots)) {
+			if (is == null || !ItemSpringBoots.isSpringBoots(is)) {
 				((InventoryPlayer)evt.inventory).player.stepHeight = 0.5F;
 			}
 		}
@@ -281,7 +333,7 @@ public class RotaryEventManager {
 		int id = evt.slotID;
 		if (evt.slotID == 36) { //foot armor
 			ItemStack is = evt.getItem();
-			if (is != null && is.getItem() instanceof ItemSpringBoots) {
+			if (is != null && ItemSpringBoots.isSpringBoots(is)) {
 				evt.player.stepHeight = 0.5F;
 			}
 		}
@@ -294,7 +346,7 @@ public class RotaryEventManager {
 		ItemStack is = e.getEquipmentInSlot(1);
 
 		if (is != null) {
-			if (is.getItem() instanceof ItemSpringBoots) {
+			if (ItemSpringBoots.isSpringBoots(is)) {
 				if (is.getItem() == ItemRegistry.BEDJUMP.getItemInstance() || is.getItemDamage() > 0) {
 					//ReikaJavaLibrary.pConsole(event.distance);
 					event.distance *= 0.6F;
@@ -313,7 +365,7 @@ public class RotaryEventManager {
 			if (e instanceof EntityPlayer) {
 				if (ItemBedrockArmor.isWearingFullSuitOf(e)) {
 					evt.ammount = Math.min(evt.ammount, 5);
-					if (evt.ammount <= 1) {
+					if (evt.ammount <= 1 && evt.source != DamageSource.drown && evt.source != DamageSource.starve) {
 						evt.ammount = 0;
 						return;
 					}

@@ -248,7 +248,7 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 
 		this.addRotaryCraft();
 
-		this.addFluids();
+		//this.addFluids();
 
 		this.addModOres();
 		this.addModWood();
@@ -517,16 +517,36 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 			return AIR_COLOR;
 		if (b == null)
 			return UNKNOWN_COLOR;
-		BlockKey mimic = mimics.get(b, meta);
+		BlockKey mimic = this.getMimic(b, meta);
 		if (mimic != null)
 			return this.getColorForBlock(mimic.blockID, mimic.metadata);
 		Integer c = map.get(b, meta);
+		if (c == null) {
+			c = BlockColorInterface.getColor(b, meta);
+			if (c != null) {
+				map.put(b, meta, c);
+			}
+		}
+		if (c == null) {
+			Fluid f = FluidRegistry.lookupFluidForBlock(b);
+			if (f != null) {
+				c = f.getColor();
+				map.put(b, meta, c);
+			}
+		}
 		return c != null ? c : UNKNOWN_COLOR;
 	}/*
 
 	public void addModBlockColor(int blockID, int metadata, int color) {
 		this.addOrSetColorMapping(blockID, metadata, color, false);
 	}*/
+
+	private BlockKey getMimic(Block b, int meta) {
+		BlockKey bk = mimics.get(b, meta);
+		if (bk == null)
+			bk = BlockColorInterface.getMimic(b, meta);
+		return bk;
+	}
 
 	public void loadFromConfig() {
 		String sg = this.getFullSavePath();

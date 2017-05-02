@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -29,6 +30,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.ChromatiCraft.API.RitualAPI;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
 import Reika.DragonAPI.Interfaces.Item.MultiLayerItemSprite;
@@ -50,8 +52,10 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.apiculture.IArmorApiarist;
 
-public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayerItemSprite {
+@Strippable(value={"forestry.api.apiculture.IArmorApiarist"})
+public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayerItemSprite, IArmorApiarist {
 
 	public ItemJetPack(ArmorMaterial mat, int tex, int render) {
 		super(mat, render, 1, tex);
@@ -135,6 +139,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 				ReikaWorldHelper.ignite(world, dx, dy, dz);
 			}
 		}
+
+		player.getEntityData().setBoolean("jetpack", flying);
 	}
 
 	private boolean useJetpack(EntityPlayer ep, ItemStack is) {
@@ -153,10 +159,12 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 			thrust *= hoverMode ? 2 : 4;
 		if (jetbonus)
 			thrust *= 1.25F;
+		if (ep.ridingEntity != null)
+			thrust *= 1.25F;
 
 		boolean canFly = !hoverMode || (!ep.onGround && ep.motionY < 0);
 		if (isFlying && canFly) {
-			if (!ep.worldObj.isRemote && !ep.capabilities.isCreativeMode) {
+			if (!ep.worldObj.isRemote && !ep.capabilities.isCreativeMode && !ep.capabilities.isFlying) {
 				if (ep.worldObj.getTotalWorldTime()%2 == 0)
 					this.use(is, (hoverMode ? 2 : 1)*this.getFuelUsageMultiplier());
 			}
@@ -173,6 +181,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 					if (jetbonus && !horiz) {
 						deltav *= 1.5;
 					}
+					if (ep.ridingEntity != null)
+						deltav *= 1.5;
 					ep.motionY = Math.min(ep.motionY+deltav, maxSpeed);
 				}
 
@@ -236,6 +246,14 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 				ep.motionZ += vz;
 			}
 		}
+
+		if (isFlying && ep.ridingEntity != null) {
+			ep.ridingEntity.motionX = ep.motionX;
+			ep.ridingEntity.motionY = ep.motionY;
+			ep.ridingEntity.motionZ = ep.motionZ;
+			ep.ridingEntity.fallDistance = ep.fallDistance;
+		}
+
 		return isFlying;
 	}
 
@@ -452,5 +470,22 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	@Override
 	public boolean getIsRepairable(ItemStack tool, ItemStack item) {
 		return tool.getItem() == this && this.isSteel() && ReikaItemHelper.matchStacks(item, ItemStacks.steelingot);
+	}
+
+	@Override
+	public boolean protectEntity(EntityLivingBase entity, ItemStack armor, String cause, boolean doProtect) {
+		ItemStack head = entity.getEquipmentInSlot(4);
+		return head != null && head.getItem() instanceof IArmorApiarist && ((IArmorApiarist)head.getItem()).protectEntity(entity, head, cause, doProtect);
+	}
+
+	@Override
+	@Deprecated
+	public boolean protectPlayer(EntityPlayer player, ItemStack armor, String cause, boolean doProtect) {
+		return this.protectEntity(player, armor, cause, doProtect);
+	}
+
+	@Override
+	public final void setDamage(ItemStack stack, int damage) {
+
 	}
 }

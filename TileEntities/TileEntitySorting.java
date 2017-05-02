@@ -66,7 +66,8 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 			AxisAlignedBB box = this.getBox();
 			List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, box);
 			for (EntityItem ei : items) {
-				li.add(new EntityItemCallback(ei));
+				if (!ei.isDead)
+					li.add(new EntityItemCallback(ei));
 			}
 		}
 		return li;
@@ -98,9 +99,7 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 				if (is.stackSize <= 1) {
 					ei.destroy();
 				}
-				else {
-					is.stackSize--;
-				}
+				is.stackSize--;
 				ForgeDirection dir = this.getSideForItem(is);
 				this.dumpItem(world, x, y, z, is, dir);
 			}

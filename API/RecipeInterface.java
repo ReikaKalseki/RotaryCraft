@@ -26,6 +26,7 @@ public class RecipeInterface {
 	public static DryingBedManager dryingbed;
 	public static FrictionHeaterManager friction;
 	public static BlastFurnaceManager blastfurn;
+	public static MagnetizerManager magnetizer;
 
 	public static interface CompactorManager extends RecipeManager {
 
@@ -97,7 +98,20 @@ public class RecipeInterface {
 
 	}
 
-	public static interface RecipeManager {
+	public static interface MagnetizerManager extends RecipeManager {
+
+		/** Null is acceptable for an action, in which case it will use the native NBT "magnet" behavior. */
+		public void addAPIRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, MagnetizationAction a);
+
+		public static interface MagnetizationAction {
+
+			public void step(int omega, ItemStack is);
+
+		}
+
+	}
+
+	private static interface RecipeManager {
 
 	}
 

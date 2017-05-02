@@ -20,9 +20,10 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MagnetizationCore;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer.MagnetizerRecipe;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction, ConditionalOperation, MagnetizationCore {
@@ -66,53 +67,48 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		tickcount++;
 		if (tickcount < this.getOperationTime())
 			return;
-		if (!this.hasCore()) {
-			if (this.hasUpgrade()) {
-				this.magnetize();
-			}
-			tickcount = 0;
-			return;
-		}
 		tickcount = 0;
-		this.magnetize();
+		if (inv[0] != null) {
+			MagnetizerRecipe r = RecipesMagnetizer.getRecipes().getRecipe(inv[0]);
+			if (r != null && this.canRunRecipe(r))
+				this.magnetize(r);
+		}
 	}
 
-	private boolean hasUpgrade() {
-		return inv[0] != null && inv[0].getItem() == ItemRegistry.UPGRADE.getItemInstance() && inv[0].getItemDamage() == 2;
+	private boolean hasRecipe() {
+		return inv[0] != null && RecipesMagnetizer.getRecipes().getRecipe(inv[0]) != null;
 	}
 
-	private boolean hasCore() {
-		if (inv[0] == null) {
-			return false;
-		}
-		if (inv[0].stackSize > 1) {
-			return false;
-		}
-		if (!ReikaItemHelper.matchStacks(inv[0], ItemStacks.shaftcore)) {
-			return false;
-		}
-		return true;
+	private boolean canRunRecipe(MagnetizerRecipe r) {
+		return omega >= r.minSpeed;
 	}
 
-	private void magnetize() {
+	private void magnetize(MagnetizerRecipe r) {
+		if (rand.nextInt(r.timeFactor) > 0)
+			return;
 		ItemStack is = inv[0];
-		if (is.stackTagCompound == null) {
-			is.stackTagCompound = new NBTTagCompound();
-			is.stackTagCompound.setInteger("magnet", 1);
-		}
-		else if (is.stackTagCompound.hasKey("magnet")){
-			int m = is.stackTagCompound.getInteger("magnet");
-			if (m < this.getMaxCharge())
-				m++;
-			is.stackTagCompound.setInteger("magnet", m);
+		if (r.action != null) {
+			r.action.step(omega, inv[0]);
 		}
 		else {
-			is.stackTagCompound.setInteger("magnet", 1);
+			if (is.stackTagCompound == null) {
+				is.stackTagCompound = new NBTTagCompound();
+				is.stackTagCompound.setInteger("magnet", 1);
+			}
+			else if (is.stackTagCompound.hasKey("magnet")){
+				int m = is.stackTagCompound.getInteger("magnet");
+				if (m < this.getMaxCharge(r))
+					m++;
+				is.stackTagCompound.setInteger("magnet", m);
+			}
+			else {
+				is.stackTagCompound.setInteger("magnet", 1);
+			}
 		}
 	}
 
-	private int getMaxCharge() {
-		return omega/2;
+	private int getMaxCharge(MagnetizerRecipe r) {
+		return omega/r.speedPeruT;
 	}
 
 	@Override
@@ -132,7 +128,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.hasCore())
+		if (!this.hasRecipe())
 			return 15;
 		return 0;
 	}
@@ -144,7 +140,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 
 	@Override
 	public boolean areConditionsMet() {
-		return this.hasCore();
+		return this.hasRecipe();
 	}
 
 	@Override

@@ -36,6 +36,7 @@ import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Event.RailgunImpactEvent;
 import Reika.RotaryCraft.API.Interfaces.TargetEntity;
@@ -256,12 +257,12 @@ public class EntityRailGunShot extends EntityTurretShot {
 								}
 							}
 							if (power == 14) {
-								if (id != null && id != MachineRegistry.RAILGUN.getBlock() && !(id instanceof BlockLiquid || id instanceof BlockFluidBase)) {
+								if (id != null && id != MachineRegistry.RAILGUN.getBlock() && !ReikaBlockHelper.isLiquid(id) && !ReikaBlockHelper.isUnbreakable(world, x0+i, y0+j, z0+k, id, world.getBlockMetadata(x0+i, y0+j, z0+k), null)) {
 									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, id, -1, x0+i, y0+j, z0+k, 3);
 								}
 							}
 							if (power == 15) {
-								if (id != null && id != MachineRegistry.RAILGUN.getBlock() && !(id instanceof BlockLiquid || id instanceof BlockFluidBase)) {
+								if (id != null && id != MachineRegistry.RAILGUN.getBlock() && !ReikaBlockHelper.isLiquid(id) && !ReikaBlockHelper.isUnbreakable(world, x0+i, y0+j, z0+k, id, world.getBlockMetadata(x0+i, y0+j, z0+k), null)) {
 									ReikaWorldHelper.recursiveBreakWithinSphere(world, x0+i, y0+j, z0+k, id, -1, x0+i, y0+j, z0+k, 6);
 								}
 							}

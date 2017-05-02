@@ -13,7 +13,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -63,5 +65,15 @@ public abstract class BlockModelledMachine extends BlockBasicMachine {
 			return null;
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
 		return AxisAlignedBB.getBoundingBox(x+m.getMinX(te), y+m.getMinY(te), z+m.getMinZ(te), x+m.getMaxX(te), y+m.getMaxY(te), z+m.getMaxZ(te));
+	}
+
+	@Override
+	public final boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		RotaryCraftTileEntity te = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
+		if (m.isSolidBottom()) {
+			return te.isFlipped ? dir == ForgeDirection.UP : dir == ForgeDirection.DOWN;
+		}
+		return false;
 	}
 }

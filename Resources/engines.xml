@@ -62,7 +62,7 @@
 			Speed: %d rad/s
 			Power: %.3fkW
 			Power Source: Redstone Clock and Magnetized Shaft Core
-			Requires Consumables: No
+			Requires Consumables: Shaft Core Magnetization
 			Risks: None
 		</note>
 	</ac>

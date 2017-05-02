@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -25,6 +26,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.EngineType.EngineClass;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -198,10 +200,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		return true;
 	}
 
-	private boolean canIntakeFuel(Fluid f) {
-		return tank.isEmpty() ? f != null : tank.getActualFluid().equals(f);
-	}
-
 	@Override
 	public boolean hasModelTransparency() {
 		return false;
@@ -294,6 +292,14 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
 		//if (fluid.equals(FluidRegistry.LAVA)) Why was THIS here???
 		//	return true;
+		TileEntity te = this.getAdjacentTileEntity(ForgeDirection.UP);
+		if (te instanceof TileEntityEngine) {
+			TileEntityEngine eng = (TileEntityEngine)te;
+			return eng.getEngineType() != EngineType.STEAM && eng.getEngineType().burnsFuel() && fluid.equals(eng.getEngineType().getFuelType());
+		}
+		else if (te instanceof TileEntityFuelEngine) {
+			return fluid.equals(FluidRegistry.getFluid("fuel"));
+		}
 		if (fluid.equals(FluidRegistry.getFluid("rc jet fuel")))
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))

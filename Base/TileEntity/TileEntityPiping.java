@@ -150,7 +150,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 		if (this.getPressure() > this.getMaxPressure()) {
 			if (world.isRemote) {
-				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.EXPLODE.ordinal(), this, new PacketTarget.ServerTarget());
+				ReikaPacketHelper.sendUpdatePacket(DragonAPIInit.packetChannel, PacketIDs.EXPLODE.ordinal(), this, PacketTarget.server);
 			}
 			else {
 				this.overpressure(world, x, y, z);
@@ -549,10 +549,6 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	public void breakBlock() {
 		this.deleteFromAdjacentConnections(worldObj, xCoord, yCoord, zCoord);
-	}
-
-	public final void setTemperature(int temp) {
-
 	}
 
 	@Override

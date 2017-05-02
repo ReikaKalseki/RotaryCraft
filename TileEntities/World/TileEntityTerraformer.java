@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -120,7 +119,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			return;
 		}
 
-		if (!world.isBlockIndirectlyGettingPowered(x, y, z))
+		if (!this.hasRedstoneSignal())
 			return;
 
 		//ReikaJavaLibrary.pConsole(String.format("Tick %2d: ", tickcount)+this.getOperationTime(), Side.SERVER);
@@ -187,7 +186,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 	}
 
 	private void addCoordinate(int x, int z, boolean sort) {
-		if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if (this.hasRedstoneSignal())
 			return;
 		BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
 		if (coords.add(x, z)) {
@@ -337,7 +336,7 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 		target = tg;
 	}
 
-	public List<BiomeGenBase> getValidTargetBiomes(BiomeGenBase start) {
+	public Collection<BiomeGenBase> getValidTargetBiomes(BiomeGenBase start) {
 		return transforms.getChildren(start);
 	}
 

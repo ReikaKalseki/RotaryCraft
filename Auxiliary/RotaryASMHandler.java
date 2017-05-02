@@ -70,8 +70,8 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 		private final HashSet<String> set = new HashSet();
 
 		{
-			set.add("Reika/RotaryCraft/ModInterface/TileEntityDynamo");
-			set.add("Reika/RotaryCraft/ModInterface/TileEntityMagnetic");
+			set.add("Reika/RotaryCraft/ModInterface/Conversion/TileEntityDynamo");
+			set.add("Reika/RotaryCraft/ModInterface/Conversion/TileEntityMagnetic");
 		}
 
 		@Override

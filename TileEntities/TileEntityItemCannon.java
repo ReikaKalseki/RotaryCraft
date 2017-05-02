@@ -14,17 +14,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.LocationTarget;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation {
+public class TileEntityItemCannon extends InventoriedPowerReceiver implements DiscreteFunction, ConditionalOperation, LocationTarget {
 
-	public int[] target = new int[3];
+	private WorldLocation target;
+
+	public static final int STACKPOWER = 524288;
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -63,32 +67,34 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 		ItemStack is = this.getFirstStack();
 		if (is == null)
 			return;
-		if (this.getTargetTE() == null) {
+		if (world.isRemote)
+			return;
+		TileEntityItemCannon te = this.getTargetTE();
+		if (te == null) {
 			//ReikaChatHelper.write("Item Cannon At "+xCoord+", "+yCoord+", "+zCoord+" has an invalid target!");
 			//ReikaChatHelper.writeBlockAtCoords(world, target[0], target[1], target[2])
 			//ReikaJavaLibrary.pConsole(this);
 			return;
 		}
-		if (!ReikaInventoryHelper.hasSpaceFor(is, this.getTargetTE(), true))
+		if (!ReikaInventoryHelper.hasSpaceFor(is, te, true))
 			return;
 		tickcount = 0;
 		//ReikaJavaLibrary.pConsole(target[0]+"   "+target[1]+"   "+target[2]);
-		this.fire(world, x, y, z);
+		this.fire(world, x, y, z, te);
 	}
 
-	private void fire(World world, int x, int y, int z) {
-		if (world.isRemote)
-			return;
+	private void fire(World world, int x, int y, int z, TileEntityItemCannon te) {
 		double v = 4;
 		ItemStack is = this.getFirstStack();
 		if (is == null)
 			return;
+		int num = power >= STACKPOWER ? is.stackSize : 1;
 		int slot = ReikaInventoryHelper.locateInInventory(is, inv, false);
-		ReikaInventoryHelper.decrStack(slot, inv);
+		ReikaInventoryHelper.decrStack(slot, this, num);
 		EntityItem ei = new EntityItem(world, x+0.5, y+1.125, z+0.5, is);
-		double dx = target[0]-x;
-		double dy = target[1]-y;
-		double dz = target[2]-z;
+		double dx = target.xCoord-x;
+		double dy = target.yCoord-y;
+		double dz = target.zCoord-z;
 		double dd = ReikaMathLibrary.py3d(dx, dy, dz);
 		ei.motionX = dx/dd*v;
 		ei.motionY = dy/dd*v;
@@ -98,16 +104,16 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 		if (!world.isRemote)
 			world.spawnEntityInWorld(ei);
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 1, 1);
-		TileEntityItemCannon ii = this.getTargetTE();
-		if (!world.isRemote)
-			ReikaInventoryHelper.addToIInv(is, this.getTargetTE());
+		int left = ReikaInventoryHelper.addToInventoryWithLeftover(ReikaItemHelper.getSizedItemStack(is, num), te.inv);
+		if (left > 0)
+			inv[slot] = ReikaItemHelper.getSizedItemStack(is, left);
+		else
+			inv[slot] = null;
 	}
 
 	private TileEntityItemCannon getTargetTE() {
-		TileEntity te = worldObj.getTileEntity(target[0], target[1], target[2]);
-		if (!(te instanceof TileEntityItemCannon))
-			return null;
-		return (TileEntityItemCannon)te;
+		TileEntity te = target.getTileEntity();
+		return te instanceof TileEntityItemCannon ? (TileEntityItemCannon)te : null;
 	}
 
 	private ItemStack getFirstStack() {
@@ -125,24 +131,18 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 		return false;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
-		target = NBT.getIntArray("targetxyz");
+		if (NBT.hasKey("target"))
+			target = WorldLocation.readFromNBT("target", NBT);
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
-		NBT.setIntArray("targetxyz", target);
+		if (target != null)
+			target.writeToNBT("target", NBT);
 	}
 
 	@Override
@@ -165,5 +165,19 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 	@Override
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "No Items";
+	}
+
+	public void selectNewTarget(int dim, int x, int y, int z) {
+		this.setTarget(new WorldLocation(dim, x, y, z));
+	}
+
+	@Override
+	public void setTarget(WorldLocation loc) {
+		target = loc;
+		this.syncAllData(true);
+	}
+
+	public WorldLocation getTarget() {
+		return target;
 	}
 }

@@ -22,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -72,7 +74,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
 		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE); //create a tar
 
-		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 4), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 3), RecipeLevel.PERIPHERAL);
 		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), RecipeLevel.CORE);
 
 		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), RecipeLevel.PROTECTED);//, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));
@@ -105,12 +107,39 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.trapdoor, this.getSizedSawdust(24), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.fence_gate, this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
 
+		this.addFlowerDyes();
+
 		this.addRecipe(Items.coal, ItemStacks.coaldust, RecipeLevel.CORE);
 
 		this.addRecipe(ItemStacks.canolaSeeds, ItemStacks.canolaHusks, RecipeLevel.CORE);
 
 		this.addOreDictRecipe("plankWood", this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
 		this.addOreDictRecipe("logWood", this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
+	}
+
+	private void addFlowerDyes() {
+		Object[][] recipes = {
+				{Blocks.yellow_flower, 0, ReikaItemHelper.yellowDye},
+				{Blocks.red_flower, 0, ReikaItemHelper.redDye},
+				{Blocks.red_flower, 1, ReikaItemHelper.lblueDye},
+				{Blocks.red_flower, 2, ReikaItemHelper.magentaDye},
+				{Blocks.red_flower, 3, ReikaItemHelper.lgrayDye},
+				{Blocks.red_flower, 4, ReikaItemHelper.redDye},
+				{Blocks.red_flower, 5, ReikaItemHelper.orangeDye},
+				{Blocks.red_flower, 6, ReikaItemHelper.lgrayDye},
+				{Blocks.red_flower, 7, ReikaItemHelper.pinkDye},
+				{Blocks.red_flower, 8, ReikaItemHelper.lgrayDye},
+				{Blocks.double_plant, 1, ReikaItemHelper.magentaDye},
+				{Blocks.double_plant, 4, ReikaItemHelper.redDye},
+				{Blocks.double_plant, 5, ReikaItemHelper.pinkDye},
+		};
+
+		for (int i = 0; i < recipes.length; i++) {
+			Object[] r = recipes[i];
+			ItemStack is = new ItemStack((Block)r[0], 1, (Integer)r[1]);
+			ItemStack out = (ItemStack)r[2];
+			this.addRecipe(is, ReikaItemHelper.getSizedItemStack(out, 6));
+		}
 	}
 
 	private static class GrinderRecipe implements MachineRecipe {
@@ -295,6 +324,16 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			}
 		}
 
+		ItemStack dust = ReikaItemHelper.lookupItem("exnihilo:dust");
+		if (dust != null) {
+			this.addRecipe(Blocks.sand, dust, RecipeLevel.MODINTERACT);
+		}
+
+		ItemStack endDust = ReikaItemHelper.lookupItem("exnihilo:exnihilo.gravel_ender");
+		if (endDust != null) {
+			this.addRecipe(Blocks.end_stone, endDust, RecipeLevel.MODINTERACT);
+		}
+
 		this.addOreDictRecipe("cropCinderpearl", new ItemStack(Items.blaze_powder, 3, 0), RecipeLevel.MODINTERACT);
 		this.addOreDictRecipe("cropShimmerleaf", ReikaItemHelper.getSizedItemStack(ExtractorModOres.getSmeltedIngot(ModOreList.CINNABAR), 3), RecipeLevel.MODINTERACT);
 	}
@@ -361,5 +400,14 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipes.removeValue((GrinderRecipe)recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		this.addCustomRecipe(in, out);
+		return true;
 	}
 }

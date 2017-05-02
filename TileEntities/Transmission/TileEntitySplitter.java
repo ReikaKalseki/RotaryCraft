@@ -61,11 +61,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 
+		this.getIOSides(world, x, y, z, meta);
 		if (failed) {
 			omega = torque = 0;
 		}
 		else {
-			this.getIOSides(world, x, y, z, meta);
 			this.transferPower(world, x, y, z, meta, true, true);
 		}
 		power = (long)omega*(long)torque;
@@ -699,11 +699,11 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 			caller = this;
 		if (!this.isSplitting()) { //merge
 			if (read != null) {
-				PowerSourceList in = pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
+				PowerSourceList in = PowerSourceList.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller);
 				pwr.addAll(in);
 			}
 			if (read2 != null) {
-				PowerSourceList in = pwr.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
+				PowerSourceList in = PowerSourceList.getAllFrom(worldObj, read2, xCoord+read2.offsetX, yCoord+read2.offsetY, zCoord+read2.offsetZ, this, caller);
 				pwr.addAll(in);
 			}
 			return pwr;

@@ -38,10 +38,12 @@ import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Interfaces.TileEntity.ToggleTile;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.Interfaces.IntegratedGearboxable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
@@ -49,12 +51,13 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
-import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.Items.Tools.ItemIntegratedGearbox;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public abstract class EnergyToPowerBase extends TileEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine,
-IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
+IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedGearboxable {
 
 	private static final int MINBASE = -1;
 
@@ -82,6 +85,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 	private boolean enabled = true;
 
 	private boolean efficient = false;
+
+	private int integratedGear = 0;
 
 	private static final double[][] efficiencyTable = new double[2][TIERS];
 
@@ -129,7 +134,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 	}
 
 	public final int getGenTorque() {
-		return getGenTorque(tier);
+		return TileEntityEngine.getIntegratedGearTorque(getGenTorque(tier), integratedGear);
 	}
 
 	public final int getMaxSpeedBase() {
@@ -258,9 +263,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		if (!enabled)
 			return false;
 		if (this.isRedstoneControlEnabled()) {
-			boolean red = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			RedstoneState rs = this.getRedstoneState();
-			return red ? rs == RedstoneState.HI : rs == RedstoneState.LOW;
+			return this.hasRedstoneSignal() ? rs == RedstoneState.HI : rs == RedstoneState.LOW;
 		}
 		else
 			return true;
@@ -289,15 +293,13 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 	}
 
 	public final int getMaxSpeed() {
-		if (!this.isEmitting())
-			return 0;
 		if (baseomega < 0)
 			return 0;
-		return ReikaMathLibrary.intpow2(2, baseomega);
+		return TileEntityEngine.getIntegratedGearSpeed(ReikaMathLibrary.intpow2(2, baseomega), integratedGear);
 	}
 
 	protected final void updateSpeed() {
-		int maxspeed = this.getMaxSpeed();
+		int maxspeed = this.isEmitting() ? this.getMaxSpeed() : 0;
 		float mult = 1;
 		boolean accel = omega <= maxspeed && this.hasEnoughEnergy();
 		if (accel) {
@@ -402,8 +404,12 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 	}
 
 	public final void incrementOmega() {
-		if (baseomega < this.getMaxSpeedBase())
+		if (baseomega < this.getMaxSpeedBase()) {
 			baseomega++;
+			while (baseomega < this.getMaxSpeedBase() && this.getMaxSpeed() == 0) {
+				baseomega++;
+			}
+		}
 	}
 
 	public final void decrementOmega() {
@@ -460,6 +466,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		NBT.setBoolean("t_enable", enabled);
 
 		NBT.setBoolean("efficient", efficient);
+
+		NBT.setInteger("gear", integratedGear);
 	}
 
 	@Override
@@ -487,6 +495,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 			enabled = NBT.getBoolean("t_enable");
 
 		efficient = NBT.getBoolean("efficient");
+
+		integratedGear = NBT.getInteger("gear");
 	}
 
 	@Override
@@ -653,8 +663,13 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 		return false;
 	}
 
-	public final void setTemperature(int temp) {
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
+	}
 
+	public final void setTemperature(int temp) {
+		temperature = temp;
 	}
 
 	@Override
@@ -692,6 +707,25 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine {
 	public final void setEnabled(boolean enable) {
 		enabled = enable;
 		this.syncAllData(false);
+	}
+
+	public final void breakBlock() {
+		if (integratedGear != 0) {
+			ItemStack is = ItemIntegratedGearbox.getIntegratedGearItem(integratedGear, null);
+			ReikaItemHelper.dropItem(worldObj, xCoord+rand.nextDouble(), yCoord+rand.nextDouble(), zCoord+rand.nextDouble(), is);
+		}
+	}
+
+	public final boolean applyIntegratedGear(ItemStack is) {
+		if (is == null || !ItemRegistry.GEARUPGRADE.matchItem(is))
+			return false;
+		if (integratedGear != 0)
+			return false;
+		if (omega > 0 || power > 0)
+			return false;
+		integratedGear = ItemIntegratedGearbox.getRatioFromIntegratedGearItem(is, true);
+		this.syncAllData(true);
+		return integratedGear != 0;
 	}
 
 }

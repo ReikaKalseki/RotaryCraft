@@ -145,20 +145,19 @@ public abstract class IORenderer {
 			}
 			if (te.isOmniSided) {
 				if (te.getMachine().getMaxY(te) == 1)
-					renderIn(par2, par4+1, par6, te.iotick);
+					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY()+1, par6+te.getPointingOffsetZ(), te.iotick);
 				if (te.getMachine().getMinY(te) == 0)
-					renderIn(par2, par4-1, par6, te.iotick);
+					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY()-1, par6+te.getPointingOffsetZ(), te.iotick);
 				if (te.getMachine().getMaxX(te) == 1)
-					renderIn(par2+1, par4, par6, te.iotick);
+					renderIn(par2+te.getPointingOffsetX()+1, par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ(), te.iotick);
 				if (te.getMachine().getMinX(te) == 0)
-					renderIn(par2-1, par4, par6, te.iotick);
+					renderIn(par2+te.getPointingOffsetX()-1, par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ(), te.iotick);
 				if (te.getMachine().getMaxZ(te) == 1)
-					renderIn(par2, par4, par6+1, te.iotick);
+					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ()+1, te.iotick);
 				if (te.getMachine().getMinZ(te) == 0)
-					renderIn(par2, par4, par6-1, te.iotick);
+					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ()-1, te.iotick);
 				return;
 			}
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d %d %d", te.writex, te.writey, te.writez));
 			if (te.getWriteDirection() != null) {
 				double xdiff = te.getWriteDirection().offsetX;
 				double ydiff = te.getWriteDirection().offsetY;
@@ -171,7 +170,6 @@ public abstract class IORenderer {
 				double zdiff = te.getWriteDirection2().offsetZ;
 				renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
 			}
-			//ReikaChatHelper.writeInt(te.ready);
 			if (te.getReadDirection() != null) {
 				double xdiff = te.getReadDirection().offsetX+te.getPointingOffsetX();
 				double ydiff = te.getReadDirection().offsetY+te.getPointingOffsetY();

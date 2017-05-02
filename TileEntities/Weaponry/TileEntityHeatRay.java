@@ -282,54 +282,54 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		int maxz = 0;
 
 		switch (meta) {
-		case 0:
-			minx = xCoord-step;
-			maxx = xCoord-1;
-			miny = yCoord;
-			maxy = yCoord;
-			minz = zCoord;
-			maxz = zCoord;
-			break;
-		case 1:
-			minx = xCoord+1;
-			maxx = xCoord+step;
-			miny = yCoord;
-			maxy = yCoord+1;
-			minz = zCoord;
-			maxz = zCoord+1;
-			break;
-		case 2:
-			maxz = zCoord+step;
-			minz = zCoord+1;
-			miny = yCoord;
-			maxy = yCoord+1;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
-		case 3:
-			maxz = zCoord-1;
-			minz = zCoord-step;
-			miny = yCoord;
-			maxy = yCoord+1;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
-		case 4:
-			miny = yCoord;
-			maxz = zCoord+1;
-			miny = yCoord+1;
-			maxy = yCoord+step;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
-		case 5:
-			minz = zCoord;
-			maxz = zCoord+1;
-			miny = yCoord-1;
-			maxy = yCoord-step-1;
-			minx = xCoord;
-			maxx = xCoord+1;
-			break;
+			case 0:
+				minx = xCoord-step;
+				maxx = xCoord-1;
+				miny = yCoord;
+				maxy = yCoord;
+				minz = zCoord;
+				maxz = zCoord;
+				break;
+			case 1:
+				minx = xCoord+1;
+				maxx = xCoord+step;
+				miny = yCoord;
+				maxy = yCoord+1;
+				minz = zCoord;
+				maxz = zCoord+1;
+				break;
+			case 2:
+				maxz = zCoord+step;
+				minz = zCoord+1;
+				miny = yCoord;
+				maxy = yCoord+1;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
+			case 3:
+				maxz = zCoord-1;
+				minz = zCoord-step;
+				miny = yCoord;
+				maxy = yCoord+1;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
+			case 4:
+				miny = yCoord;
+				maxz = zCoord+1;
+				miny = yCoord+1;
+				maxy = yCoord+step;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
+			case 5:
+				minz = zCoord;
+				maxz = zCoord+1;
+				miny = yCoord-1;
+				maxy = yCoord-step-1;
+				minx = xCoord;
+				maxx = xCoord+1;
+				break;
 		}
 		/*ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, minx, miny, minz, 20);
     	ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, minx, maxy, minz, 20);
@@ -447,7 +447,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			if (id == Blocks.tnt) {
 				world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
 				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*facing.offsetX+0.5D, y+step*facing.offsetY+0.5D, z+step*facing.offsetZ+0.5D, null);
-				world.spawnEntityInWorld(var6);
+				if (!world.isRemote)
+					world.spawnEntityInWorld(var6);
 				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
 				world.spawnParticle("lava", x+step*facing.offsetX+rand.nextFloat(), y+step*facing.offsetY+rand.nextFloat(), z+step*facing.offsetZ+rand.nextFloat(), 0, 0, 0);
 			}

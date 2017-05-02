@@ -11,7 +11,7 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerComposter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 
 public class GuiComposter extends GuiNonPoweredMachine

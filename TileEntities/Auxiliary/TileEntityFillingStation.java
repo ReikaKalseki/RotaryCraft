@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -108,7 +107,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 		}
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[FUEL_SLOT]);
 		tank.addLiquid(fs.amount, fs.getFluid());
-		inv[FUEL_SLOT] = new ItemStack(Items.bucket);
+		inv[FUEL_SLOT] = FluidContainerRegistry.drainFluidContainer(inv[FUEL_SLOT]);
 	}
 
 	private void fill() {
@@ -151,6 +150,8 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 		if (tank.isEmpty())
 			return false;
 		ItemStack is = inv[0];
+		if (is == null)
+			return false;
 		Fillable i = (Fillable)is.getItem();
 		int current = i.getCurrentFillLevel(is);
 		int max = i.getCapacity(is);
@@ -189,7 +190,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE || m.isStandardPipe();
+		return m == MachineRegistry.FUELLINE || m.isStandardPipe() || m == MachineRegistry.HOSE;
 	}
 
 	@Override

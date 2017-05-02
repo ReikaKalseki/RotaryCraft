@@ -32,15 +32,8 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
-import Reika.RotaryCraft.TileEntities.World.TileEntityIgniter;
 
 public class TileEntityHeater extends InventoriedPowerReceiver implements TemperatureTE, DiscreteFunction {
 
@@ -178,188 +171,6 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 			ReikaWorldHelper.temperatureEnvironment(world, x, y-1, z, temperature);
 		MachineRegistry id = MachineRegistry.getMachine(world, x, y, z);
 		TileEntity te = world.getTileEntity(x, y, z);
-		if (id == MachineRegistry.PULSEJET) {
-			TileEntityPulseFurnace tile = (TileEntityPulseFurnace)te;
-			if (tile == null)
-				return;
-			int tempdiff = temperature-tile.temperature;
-			if (tempdiff <= 0)
-				return;
-			if (tempdiff > 100) {
-				tile.temperature += tempdiff/16;
-				//this.temperature -= tempdiff/16;
-			}
-			else if (tempdiff > 16) {
-				tile.temperature += tempdiff/8;
-				//this.temperature -= tempdiff/8;
-			}
-			else if (tempdiff > 8) {
-				tile.temperature += tempdiff/4;
-				//this.temperature -= tempdiff/4;
-			}
-			else {
-				tile.temperature += tempdiff;
-				//this.temperature -= tempdiff;
-			}
-			if (tile.temperature > tile.MAXTEMP)
-				tile.updateTemperature(world, x, y, z, world.getBlockMetadata(x, y, z));
-		}
-		if (id == MachineRegistry.IGNITER) {
-			TileEntityIgniter tile = (TileEntityIgniter)te;
-			if (tile == null)
-				return;
-			int tempdiff = temperature-tile.temperature;
-			if (tempdiff <= 0)
-				return;
-			if (tempdiff > 100) {
-				tile.temperature += tempdiff/16;
-				//this.temperature -= tempdiff/16;
-			}
-			else if (tempdiff > 16) {
-				tile.temperature += tempdiff/8;
-				//this.temperature -= tempdiff/8;
-			}
-			else if (tempdiff > 8) {
-				tile.temperature += tempdiff/4;
-				//this.temperature -= tempdiff/4;
-			}
-			else {
-				tile.temperature += tempdiff;
-				//this.temperature -= tempdiff;
-			}
-			if (tile.temperature > tile.MAXTEMP)
-				tile.temperature = tile.MAXTEMP;
-		}
-		if (id == MachineRegistry.COMPACTOR) {
-			TileEntityCompactor tile = (TileEntityCompactor)te;
-			if (tile == null)
-				return;
-			int tempdiff = temperature-tile.temperature;
-			if (tempdiff <= 0)
-				return;
-			if (tempdiff > 100) {
-				tile.temperature += tempdiff/16;
-				//this.temperature -= tempdiff/16;
-			}
-			else if (tempdiff > 16) {
-				tile.temperature += tempdiff/8;
-				//this.temperature -= tempdiff/8;
-			}
-			else if (tempdiff > 8) {
-				tile.temperature += tempdiff/4;
-				//this.temperature -= tempdiff/4;
-			}
-			else {
-				tile.temperature += tempdiff;
-				//this.temperature -= tempdiff;
-			}
-			if (tile.temperature > tile.MAXTEMP)
-				tile.overheat(world, x, y, z);
-		}
-		if (id == MachineRegistry.OBSIDIAN) {
-			TileEntityObsidianMaker tile = (TileEntityObsidianMaker)te;
-			if (tile == null)
-				return;
-			int tempdiff = temperature-tile.temperature;
-			if (tempdiff <= 0)
-				return;
-			if (tempdiff > 100) {
-				tile.temperature += tempdiff/16;
-				//this.temperature -= tempdiff/16;
-			}
-			else if (tempdiff > 16) {
-				tile.temperature += tempdiff/8;
-				//this.temperature -= tempdiff/8;
-			}
-			else if (tempdiff > 8) {
-				tile.temperature += tempdiff/4;
-				//this.temperature -= tempdiff/4;
-			}
-			else {
-				tile.temperature += tempdiff;
-				//this.temperature -= tempdiff;
-			}
-			if (tile.temperature > tile.MAXTEMP)
-				tile.overheat(world, x, y, z);
-		}
-		if (id == MachineRegistry.FERMENTER) {
-			TileEntityFermenter tile = (TileEntityFermenter)te;
-			if (tile == null)
-				return;
-			int tempdiff = temperature-tile.temperature;
-			if (tempdiff <= 0)
-				return;
-			if (tempdiff > 100) {
-				tile.temperature += tempdiff/16;
-				//this.temperature -= tempdiff/16;
-			}
-			else if (tempdiff > 16) {
-				tile.temperature += tempdiff/8;
-				//this.temperature -= tempdiff/8;
-			}
-			else if (tempdiff > 8) {
-				tile.temperature += tempdiff/4;
-				//this.temperature -= tempdiff/4;
-			}
-			else {
-				tile.temperature += tempdiff;
-				//this.temperature -= tempdiff;
-			}
-			if (rand.nextInt(5) == 0)
-				tile.testYeastKill();
-		}
-		if (id == MachineRegistry.BLASTFURNACE) {
-			TileEntityBlastFurnace tile = (TileEntityBlastFurnace)te;
-			if (tile == null)
-				return;
-			int tempdiff = temperature-tile.getTemperature();
-			if (tempdiff <= 0)
-				return;
-			if (tempdiff > 100) {
-				tile.addTemperature(tempdiff/16);
-				//this.temperature -= tempdiff/16;
-			}
-			else if (tempdiff > 16) {
-				tile.addTemperature(tempdiff/8);
-				//this.temperature -= tempdiff/8;
-			}
-			else if (tempdiff > 8) {
-				tile.addTemperature(tempdiff/4);
-				//this.temperature -= tempdiff/4;
-			}
-			else {
-				tile.addTemperature(tempdiff);
-				//this.temperature -= tempdiff;
-			}
-		}
-		if (id == MachineRegistry.ENGINE) {
-			TileEntityEngine tile = (TileEntityEngine)te;
-			if (tile == null)
-				return;
-			if (!tile.getEngineType().isCooled())
-				return;
-			int tempdiff = temperature-tile.temperature;
-			if (tempdiff <= 0)
-				return;
-			if (tempdiff > 100) {
-				tile.temperature += tempdiff/16;
-				//this.temperature -= tempdiff/16;
-			}
-			else if (tempdiff > 16) {
-				tile.temperature += tempdiff/8;
-				//this.temperature -= tempdiff/8;
-			}
-			else if (tempdiff > 8) {
-				tile.temperature += tempdiff/4;
-				//this.temperature -= tempdiff/4;
-			}
-			else {
-				tile.temperature += tempdiff;
-				//this.temperature -= tempdiff;
-			}
-			if (tile.temperature > tile.MAXTEMP)
-				tile.overheat(world, x, y, z);
-		}
 		if (te instanceof ThermalMachine) {
 			ThermalMachine th = (ThermalMachine)te;
 			int tempdiff = temperature-th.getTemperature();
@@ -455,7 +266,12 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	}
 
 	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
 	}
 
 	@Override

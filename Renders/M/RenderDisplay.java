@@ -52,18 +52,18 @@ public class RenderDisplay extends RotaryTERenderer {
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		int var11 = 1;	 //used to rotate the model about metadata
 		switch(var9) {
-		case 0:
-			var11 = 0;
-			break;
-		case 1:
-			var11 = 180;
-			break;
-		case 2:
-			var11 = 90;
-			break;
-		case 3:
-			var11 = 270;
-			break;
+			case 0:
+				var11 = 0;
+				break;
+			case 1:
+				var11 = 180;
+				break;
+			case 2:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
 		}
 		GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);
 		var14.renderAll(tile, null, -tile.phi, 0);
@@ -82,29 +82,36 @@ public class RenderDisplay extends RotaryTERenderer {
 			this.renderTileEntityDisplayAt((TileEntityDisplay)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			if (((TileEntityDisplay)tile).canDisplay() && ((TileEntityDisplay)tile).hasSpace()) {
+				GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+				GL11.glPushMatrix();
+				GL11.glDisable(GL11.GL_LIGHTING);
+				GL11.glEnable(GL11.GL_BLEND);
+				ReikaRenderHelper.disableEntityLighting();
+				GL11.glDisable(GL11.GL_ALPHA_TEST);
+				GL11.glDepthMask(false);
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				((TileEntityDisplay)tile).loadColorData();
 				int dir = 0;
 				int dx = 0;
 				int dz = 0;
 				switch(tile.getBlockMetadata()) {
-				case 0:
-					dir = 270;
-					dx = 1;
-					break;
-				case 1:
-					dir = 90;
-					dz = 1;
-					break;
-				case 2:
-					dir = 180;
-					dz = 1;
-					dx = 1;
-					break;
-				case 3:
-					dir = 0;
-					break;
+					case 0:
+						dir = 270;
+						dx = 1;
+						break;
+					case 1:
+						dir = 90;
+						dz = 1;
+						break;
+					case 2:
+						dir = 180;
+						dz = 1;
+						dx = 1;
+						break;
+					case 3:
+						dir = 0;
+						break;
 				}
-				GL11.glPushMatrix();
 				GL11.glTranslated(par2, par4, par6);
 				GL11.glTranslated(dx, 0, dz);
 				GL11.glRotatef(dir, 0, 1, 0);
@@ -112,7 +119,9 @@ public class RenderDisplay extends RotaryTERenderer {
 				this.renderText((TileEntityDisplay)tile, par2, par4, par6);
 				GL11.glRotatef(-dir, 0, 1, 0);
 				GL11.glTranslated(-dx, 0, -dz);
+
 				GL11.glPopMatrix();
+				GL11.glPopAttrib();
 			}
 		}
 	}
@@ -121,7 +130,6 @@ public class RenderDisplay extends RotaryTERenderer {
 		if (tile == null)
 			return;
 		GL11.glTranslated(0, 0, 0.495);
-		ReikaRenderHelper.prepareGeoDraw(true);
 		Tessellator v5 = Tessellator.instance;
 		int r = tile.getRed();
 		int g = tile.getGreen();
@@ -131,10 +139,10 @@ public class RenderDisplay extends RotaryTERenderer {
 		int bb = tile.getBorderBlue();
 		v5.startDrawingQuads();
 		v5.setColorRGBA(r, g, b, 96);
-		v5.addVertex(-2, 4, 0);
-		v5.addVertex(3, 4, 0);
-		v5.addVertex(3, 1, 0);
 		v5.addVertex(-2, 1, 0);
+		v5.addVertex(3, 1, 0);
+		v5.addVertex(3, 4, 0);
+		v5.addVertex(-2, 4, 0);
 		v5.draw();
 
 		double dd = 0.03125;
@@ -146,10 +154,10 @@ public class RenderDisplay extends RotaryTERenderer {
 
 		v5.startDrawingQuads();
 		v5.setColorRGBA(br, bg, bb, 255);
-		v5.addVertex(-2, 4, 0);
-		v5.addVertex(3, 4, 0);
-		v5.addVertex(3, 4-dy, 0);
 		v5.addVertex(-2, 4-dy, 0);
+		v5.addVertex(3, 4-dy, 0);
+		v5.addVertex(3, 4, 0);
+		v5.addVertex(-2, 4, 0);
 		v5.draw();
 
 		v5.startDrawingQuads();
@@ -162,10 +170,10 @@ public class RenderDisplay extends RotaryTERenderer {
 
 		v5.startDrawingQuads();
 		v5.setColorRGBA(br, bg, bb, 255);
-		v5.addVertex(3, 4, 0);
-		v5.addVertex(3, 1, 0);
-		v5.addVertex(3-dx, 1, 0);
 		v5.addVertex(3-dx, 4, 0);
+		v5.addVertex(3-dx, 1, 0);
+		v5.addVertex(3, 1, 0);
+		v5.addVertex(3, 4, 0);
 		v5.draw();
 
 		v5.startDrawingQuads();
@@ -175,7 +183,6 @@ public class RenderDisplay extends RotaryTERenderer {
 		v5.addVertex(-2+dx, 1, 0);
 		v5.addVertex(-2+dx, 4, 0);
 		v5.draw();
-
 
 		v5.startDrawing(GL11.GL_LINES);
 		v5.setColorRGBA(br, bg, bb, 32);
@@ -193,7 +200,6 @@ public class RenderDisplay extends RotaryTERenderer {
 
 		GL11.glTranslated(0, 0, -0.0005);
 
-		ReikaRenderHelper.exitGeoDraw();
 		GL11.glTranslated(0, 0, -0.495);
 	}
 
@@ -202,10 +208,8 @@ public class RenderDisplay extends RotaryTERenderer {
 			return;
 		if (!tile.hasList())
 			return;
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		FontRenderer f = this.getFontRenderer();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDepthMask(false);
-		GL11.glPushMatrix();
 		GL11.glScaled(1, -1, 1);
 		double sc = 0.02;
 		GL11.glScaled(sc, sc, sc);
@@ -235,9 +239,6 @@ public class RenderDisplay extends RotaryTERenderer {
 			GL11.glTranslated(0, 0, 0.2875);
 
 		}
-		GL11.glPopMatrix();
-		GL11.glDepthMask(true);
-		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override

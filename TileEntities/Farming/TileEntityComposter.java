@@ -45,7 +45,7 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 
 	private static enum CompostMatter {
 
-		CRAP(1, Items.egg, Items.cookie, Items.wheat),
+		CRAP(1, Items.egg, Items.cookie, Items.wheat, ItemStacks.canolaSeeds, ItemStacks.canolaHusks),
 		SUGARCANE(2, Items.reeds),
 		PLANT(1, Blocks.sapling, Blocks.waterlily, Blocks.red_flower, Blocks.yellow_flower, Blocks.brown_mushroom, Blocks.red_mushroom),
 		LEAF(2, Blocks.leaves, Blocks.leaves2, Blocks.grass, Blocks.vine, Blocks.tallgrass, Blocks.double_plant),
@@ -59,23 +59,24 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 
 		public static final CompostMatter[] list = values();
 
-		private CompostMatter(int value, Block... items) {
+		private CompostMatter(int value, Object... items) {
 			this.value = value;
 			for (int i = 0; i < items.length; i++) {
-				this.items.add(new ItemStack(items[i], 1, OreDictionary.WILDCARD_VALUE));
+				ItemStack is = null;
+				if (items[i] instanceof ItemStack)
+					is = (ItemStack)items[i];
+				else if (items[i] instanceof Block)
+					is = new ItemStack((Block)items[i], 1, OreDictionary.WILDCARD_VALUE);
+				else if (items[i] instanceof Item)
+					is = new ItemStack((Item)items[i], 1, OreDictionary.WILDCARD_VALUE);
+				else if (items[i] instanceof String) {
+					ArrayList<ItemStack> li = OreDictionary.getOres((String)items[i]);
+					this.items.addAll(li);
+					continue;
+				}
+				if (is != null)
+					this.items.add(is);
 			}
-		}
-
-		private CompostMatter(int value, Item... items) {
-			this.value = value;
-			for (int i = 0; i < items.length; i++)
-				this.items.add(new ItemStack(items[i], 1, OreDictionary.WILDCARD_VALUE));
-		}
-
-		private CompostMatter(int value, ItemStack... items) {
-			this.value = value;
-			for (int i = 0; i < items.length; i++)
-				this.items.add(items[i]);
 		}
 
 		public static CompostMatter getMatterType(ItemStack is) {
@@ -268,6 +269,11 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 
 	@Override
 	public boolean canBeCooledWithFins() {
+		return true;
+	}
+
+	@Override
+	public boolean allowExternalHeating() {
 		return true;
 	}
 

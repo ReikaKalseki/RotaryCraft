@@ -26,7 +26,6 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
@@ -50,7 +49,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 
 	public boolean craftable = false;
 	private ItemStack toCraft;
-	private boolean lastPower;
 	//private boolean hasProgram;
 
 	@Override
@@ -66,27 +64,29 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 					this.makeBedjump();
 					this.makeHelmetUpgrades();
 				}
-
-				if (!world.isRemote && ReikaRedstoneHelper.isPositiveEdge(world, x, y, z, lastPower)) {
-					if (!this.craft()) {
-						if (this.canUncraft())
-							this.uncraft();
-					}
-					this.uncraftJetplate();
-				}
 			}
-			lastPower = world.isBlockIndirectlyGettingPowered(x, y, z);
+		}
+	}
+
+	@Override
+	protected void onPositiveRedstoneEdge() {
+		if (!worldObj.isRemote) {
+			if (!this.craft()) {
+				if (this.canUncraft())
+					this.uncraft();
+			}
+			this.uncraftJetplate();
 		}
 	}
 
 	private void makeHelmetUpgrades() {
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDHELM.getItemInstance(), inv);
 		if (armorslot == -1)
-			ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDREVEAL.getItemInstance(), inv);
+			armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDREVEAL.getItemInstance(), inv);
 		if (armorslot != -1) {
 			for (int i = 0; i < HelmetUpgrades.list.length; i++) {
 				HelmetUpgrades g = HelmetUpgrades.list[i];
-				if (g.isAvailable) {
+				if (g.isAvailable && !g.existsOn(inv[armorslot])) {
 					ItemStack[] rec = g.getUpgradeItems();
 					boolean flag = false;
 					int itemslot = -1;
@@ -196,8 +196,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			cm.setInventorySlotContents(i, this.getStackInSlot(i));
 		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
 		if (wr != null) {
-			this.handleCrafting(wr, ep);
-			return true;
+			return this.handleCrafting(wr, ep);
 		}
 		return false;
 	}
@@ -210,7 +209,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		return true;
 	}
 
-	public void handleCrafting(WorktableRecipe wr, EntityPlayer ep) {
+	public boolean handleCrafting(WorktableRecipe wr, EntityPlayer ep) {
 		if (wr.isRecycling()) {
 			ArrayList<ItemStack> li = wr.getRecycling().getSplitOutput();
 			int i = 9;
@@ -222,6 +221,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		}
 		else {
 			ItemStack is = wr.getOutput();
+			if (inv[13] != null && inv[13].stackSize+is.stackSize > is.getMaxStackSize())
+				return false;
 			is.onCrafting(worldObj, ep, is.stackSize);
 			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
 			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, is));
@@ -234,6 +235,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			}
 		}
 		SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
+		return true;
 	}
 
 	private void makeBedjump() {
@@ -447,11 +449,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		if (i >= 9)
 			return false;
 		//return hasProgram ? inv[i+18] != null && ReikaItemHelper.matchStacks(inv[i+18], itemstack) : true;
-		return ItemRegistry.CRAFTPATTERN.matchItem(inv[18]) ? this.patternMatches(i, itemstack, inv[18]) : true;
-	}
-
-	private boolean patternMatches(int slot, ItemStack is, ItemStack p) {
-		return ItemCraftPattern.getMode(p) == RecipeMode.WORKTABLE && ReikaItemHelper.matchStacks(is, ItemCraftPattern.getItems(p)[slot]);
+		return ItemRegistry.CRAFTPATTERN.matchItem(inv[18]) ? ItemCraftPattern.checkPatternForMatch(this, RecipeMode.WORKTABLE, i, i, itemstack, inv[18]) : true;
 	}
 
 	@Override
@@ -476,8 +474,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
 		super.writeSyncTag(NBT);
-
-		NBT.setBoolean("lastpwr", lastPower);
 		//NBT.setBoolean("prog", hasProgram);
 	}
 
@@ -485,8 +481,6 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
-
-		lastPower = NBT.getBoolean("lastpwr");
 		//hasProgram = NBT.getBoolean("prog");
 	}
 

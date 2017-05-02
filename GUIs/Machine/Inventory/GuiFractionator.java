@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerFractionator;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 
 public class GuiFractionator extends GuiMachine

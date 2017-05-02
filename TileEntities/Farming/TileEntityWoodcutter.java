@@ -35,6 +35,7 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray.BlockTypePriorit
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Interfaces.Registry.TreeType;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -82,7 +83,6 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 	private boolean cuttingTree;
 
-	private Comparator<Coordinate> inwardsComparator;
 	private Comparator<Coordinate> leafPriority;
 
 	private static final int MAX_JAM = 20;
@@ -109,7 +109,6 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
 		leafPriority = new LeafPrioritizer(world);
-		inwardsComparator = new InwardsComparator();
 	}
 
 	@Override
@@ -135,56 +134,15 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 		if (tree.isEmpty() && this.hasWood()) {
 			tree.reset();
-			ModWoodList wood = ModWoodList.getModWood(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
-			ReikaTreeHelper vanilla = ReikaTreeHelper.getTree(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			TreeType type = ReikaTreeHelper.getTree(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			if (type == null)
+				type = ModWoodList.getModWood(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
 
-			for (int i = -1; i <= 1; i++) {
-				for (int j = -1; j <= 1; j++) {
-					tree.checkAndAddDyeTree(world, editx+i, edity, editz+j);
-					if (tree.isEmpty() || !tree.isValidTree())
-						tree.clear();
-				}
-			}
-			if (tree.isEmpty()) {
+			if (type != null) {
+				tree.setTree(type);
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
-						tree.checkAndAddRainbowTree(world, editx+i, edity, editz+j);
-						if (tree.isEmpty() || !tree.isValidTree())
-							tree.clear();
-					}
-				}
-			}
-
-			if (tree.isEmpty()) {
-
-				if (wood == ModWoodList.SEQUOIA) {
-					for (int i = -32; i < 255; i += 16)
-						tree.addSequoia(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood == ModWoodList.DARKWOOD) {
-					tree.addDarkForest(world, editx, edity, editz, editx-8, editx+8, editz-8, editz+8, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood == ModWoodList.IRONWOOD) {
-					for (int i = -2; i < 128; i += 16)
-						tree.addIronwood(world, editx, edity+i, editz, RotaryCraft.logger.shouldDebug());
-				}
-				else if (wood != null) {
-					for (int i = -1; i <= 1; i++) {
-						for (int j = -1; j <= 1; j++) {
-							//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-							tree.setTree(wood);
-							tree.addModTree(world, editx+i, edity, editz+j);
-						}
-						//ReikaJavaLibrary.pConsole(tree, Side.SERVER);
-					}
-				}
-				else if (vanilla != null) {
-					for (int i = -1; i <= 1; i++) {
-						for (int j = -1; j <= 1; j++) {
-							//tree.addGenerousTree(world, editx+i, edity, editz+j, 16);
-							tree.setTree(vanilla);
-							tree.addTree(world, editx+i, edity, editz+j);
-						}
+						tree.addTree(world, editx+i, edity, editz+j);
 					}
 				}
 			}
@@ -195,9 +153,9 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 			this.checkAndMatchInventory();
 
-			tree.sortBlocksByHeight();
+			tree.sortBlocksByHeight(false);
 			tree.reverseBlockOrder();
-			tree.sort(inwardsComparator);
+			tree.sortBlocksByDistance(new Coordinate(this));
 			tree.sort(leafPriority);
 			treeCopy = (TreeReader)tree.copy();
 		}
@@ -227,16 +185,57 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 		for (int i = 0; i < this.getNumberConsecutiveOperations(); i++) {
 			Coordinate c = tree.getNextAndMoveOn();
-			Block drop = c.getBlock(world);
-			int dropmeta = c.getBlockMetadata(world);
+			this.cutCoord(world, x, y, z, c);
+			if (tree.isEmpty())
+				break;
+		}
+	}
 
-			if (drop != Blocks.air) {
-				Material mat = ReikaWorldHelper.getMaterial(world, c.xCoord, c.yCoord, c.zCoord);
-				if (ConfigRegistry.INSTACUT.getState()) {
-					//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
+	private void cutCoord(World world, int x, int y, int z, Coordinate c) {
+		Block drop = c.getBlock(world);
+		int dropmeta = c.getBlockMetadata(world);
+
+		if (drop != Blocks.air) {
+			Material mat = ReikaWorldHelper.getMaterial(world, c.xCoord, c.yCoord, c.zCoord);
+			if (ConfigRegistry.INSTACUT.getState()) {
+				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
+				this.cutBlock(world, x, y, z, c, mat);
+
+				if (c.yCoord == edity && drop == tree.getTreeType().getLogID()) {
+					Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
+					Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
+					if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
+						ItemStack plant = this.getPlantedSapling();
+						if (plant != null) {
+							if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
+								ReikaInventoryHelper.decrStack(0, inv);
+							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
+						}
+					}
+					else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
+						ItemStack plant = this.getPlantedSapling();
+						if (plant != null) {
+							if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
+								ReikaInventoryHelper.decrStack(0, inv);
+							world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
+							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
+						}
+					}
+				}
+			}
+			else {
+				boolean fall = BlockSand.func_149831_e(world, c.xCoord, c.yCoord-1, c.zCoord);
+				if (fall) {
+					EntityFallingBlock e = new EntityFallingBlock(world, c.xCoord+0.5, c.yCoord+0.65, c.zCoord+0.5, drop, dropmeta);
+					e.field_145812_b = -5000;
+					if (!world.isRemote) {
+						world.spawnEntityInWorld(e);
+					}
+					c.setBlock(world, Blocks.air);
+				}
+				else {
 					this.cutBlock(world, x, y, z, c, mat);
-
-					if (c.yCoord == edity && mat == Material.wood) {
+					if (c.yCoord == edity) {
 						Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 						Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
@@ -258,44 +257,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 						}
 					}
 				}
-				else {
-					boolean fall = BlockSand.func_149831_e(world, c.xCoord, c.yCoord-1, c.zCoord);
-					if (fall) {
-						EntityFallingBlock e = new EntityFallingBlock(world, c.xCoord+0.5, c.yCoord+0.65, c.zCoord+0.5, drop, dropmeta);
-						e.field_145812_b = -5000;
-						if (!world.isRemote) {
-							world.spawnEntityInWorld(e);
-						}
-						c.setBlock(world, Blocks.air);
-					}
-					else {
-						this.cutBlock(world, x, y, z, c, mat);
-						if (c.yCoord == edity) {
-							Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
-							Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
-							if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
-								ItemStack plant = this.getPlantedSapling();
-								if (plant != null) {
-									if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
-										ReikaInventoryHelper.decrStack(0, inv);
-									ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
-								}
-							}
-							else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
-								ItemStack plant = this.getPlantedSapling();
-								if (plant != null) {
-									if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
-										ReikaInventoryHelper.decrStack(0, inv);
-									world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
-									ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
-								}
-							}
-						}
-					}
-				}
 			}
-			if (tree.isEmpty())
-				break;
 		}
 	}
 
@@ -430,6 +392,8 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 			return null;
 		if (treeCopy.isDyeTree())
 			return new ItemStack(TreeGetter.getSaplingID(), 1, treeCopy.getDyeTreeMeta());
+		else if (treeCopy.isRainbowTree())
+			return new ItemStack(TreeGetter.getRainbowSaplingID());
 		else if (treeCopy.getTreeType() != null)
 			return treeCopy.getSapling();
 		else
@@ -701,7 +665,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 	@Override
 	public DamageSource getDamageType() {
-		return DamageSource.generic;
+		return RotaryCraft.grind;
 	}
 
 	private static class LeafPrioritizer extends BlockTypePrioritizer {
@@ -736,15 +700,6 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 			if (ModWoodList.isModLeaf(bk.blockID, bk.metadata))
 				return true;
 			return false;
-		}
-
-	}
-
-	private class InwardsComparator implements Comparator<Coordinate> {
-
-		@Override
-		public int compare(Coordinate o1, Coordinate o2) {
-			return (int)Math.signum(o2.getDistanceTo(editx, edity, editz)-o1.getDistanceTo(editx, edity, editz));
 		}
 
 	}

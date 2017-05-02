@@ -279,7 +279,12 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 	}
 
 	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
 	}
 
 	@Override

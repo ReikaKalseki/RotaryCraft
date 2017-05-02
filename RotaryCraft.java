@@ -9,20 +9,22 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
@@ -30,12 +32,12 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import thaumcraft.api.aspects.Aspect;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.CreativeTabSorter;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
@@ -60,13 +62,13 @@ import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ItemStackRepository;
 import Reika.DragonAPI.ModInteract.MinetweakerHooks;
 import Reika.DragonAPI.ModInteract.ReikaEEHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MTInteractionManager;
-import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.RouterHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
@@ -87,6 +89,7 @@ import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
+import Reika.RotaryCraft.Auxiliary.RotaryASMHandler;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
 import Reika.RotaryCraft.Auxiliary.RotaryIntegrationManager;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
@@ -95,11 +98,11 @@ import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
 import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
-import Reika.RotaryCraft.Items.ItemFuelTank;
+import Reika.RotaryCraft.Items.Tools.ItemFuelTank;
 import Reika.RotaryCraft.ModInterface.AgriCanola;
 import Reika.RotaryCraft.ModInterface.CanolaBee;
-import Reika.RotaryCraft.ModInterface.MachineAspectMapper;
 import Reika.RotaryCraft.ModInterface.OreForcer;
+import Reika.RotaryCraft.ModInterface.RotaryAspectManager;
 import Reika.RotaryCraft.ModInterface.Minetweaker.FrictionTweaker;
 import Reika.RotaryCraft.ModInterface.Minetweaker.GrinderTweaker;
 import Reika.RotaryCraft.ModInterface.Minetweaker.PulseJetTweaker;
@@ -113,6 +116,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+import appeng.api.config.PowerUnits;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -133,7 +137,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.recipes.RecipeManagers;
 
 
-@Mod( modid = "RotaryCraft", name="RotaryCraft", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
+@Mod( modid = "RotaryCraft", name="RotaryCraft", version = "v@MAJOR_VERSION@@MINOR_VERSION@", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
 
 public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
@@ -170,6 +174,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
 	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");
 	public static final CustomStringDamageSource shock = (CustomStringDamageSource)new CustomStringDamageSource("was electrified").setDamageBypassesArmor();
+	public static final CustomStringDamageSource grind = new CustomStringDamageSource("was ground to a pulp");
 
 	static final Random rand = new Random();
 
@@ -179,10 +184,12 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final Item[] items = new Item[ItemRegistry.itemList.length];
 
 	public static Achievement[] achievements;
-	public static Entity fallblock;
 
 	public static FreezePotion freeze;
 	public static PotionDeafness deafness;
+
+	public static IIcon hydratorOverlay;
+	public static IIcon woodLattice;
 
 	public static String currentVersion = "v@MAJOR_VERSION@@MINOR_VERSION@";
 
@@ -309,6 +316,7 @@ public class RotaryCraft extends DragonAPIMod {
 		FMLInterModComms.sendMessage("zzzzzcustomconfigs", "blacklist-mod-as-output", this.getModContainer().getModId());
 
 		ConfigMatcher.instance.addConfigList(this, ConfigRegistry.optionList);
+		ConfigMatcher.instance.addConfigList(this, ExtraConfigIDs.idList);
 
 		this.basicSetup(evt);
 		this.finishTiming();
@@ -367,6 +375,8 @@ public class RotaryCraft extends DragonAPIMod {
 			FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", is);
 		}
 		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", BlockRegistry.BLASTGLASS.getStackOf());
+
+		FMLInterModComms.sendMessage("Randomod", "blacklist", this.getModContainer().getModId());
 
 		DonatorController.instance.registerMod(this, DonatorController.reikaURL);
 
@@ -469,12 +479,25 @@ public class RotaryCraft extends DragonAPIMod {
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthracite, 24);
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.cokeblock, 12*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthrablock, 24*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
+		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.sawdust, 0.25F);
 
 		if (ModList.AGRICRAFT.isLoaded()) {
 			AgriCanola.register();
 		}
 
+		if (ModList.APPENG.isLoaded()) {
+			this.fixAEPowerRatio();
+		}
+
 		this.finishTiming();
+	}
+
+	@ModDependent(ModList.APPENG)
+	private void fixAEPowerRatio() {
+		double f = 1/11526D;
+		if (ReikaMathLibrary.isValueInsideBoundsIncl(f-0.005, f+0.005, PowerUnits.WA.conversionRatio)) {
+			PowerUnits.WA.conversionRatio = 1/1040D;
+		}
 	}
 
 	@Override
@@ -552,6 +575,7 @@ public class RotaryCraft extends DragonAPIMod {
 				//mat.registerPatternBuilder(ItemStacks.bedingot);
 				mat.registerWeapons(ItemStacks.bedingot, 10, 0.5F, 5F, 4F, 15F, 0);
 
+
 				id = ExtraConfigIDs.HSLAID.getValue();
 				mat = TinkerMaterialHelper.instance.createMaterial(id, this, "HSLA");
 				mat.durability = 600;
@@ -569,7 +593,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 				mat.register(true).registerTexture("tinkertools/hsla/hsla", false);
 				mat.registerRepairMaterial(ItemStacks.steelingot);
-				//mat.registerPatternBuilder(ItemStacks.bedingot);
+				//mat.registerPatternBuilder(ItemStacks.steelingot);
 				mat.registerWeapons(ItemStacks.steelblock, 8, 0.75F, 2F, 2.5F, 8F, 0.015F);
 				mat.registerSmelteryCasting(ItemStacks.steelingot, hslaFluid, 750, ItemStacks.steelblock);
 			}
@@ -589,64 +613,7 @@ public class RotaryCraft extends DragonAPIMod {
 			}
 
 			if (ModList.THAUMCRAFT.isLoaded()) {
-				RotaryCraft.logger.log("Adding ThaumCraft aspects.");
-				ReikaThaumHelper.addAspects(ItemStacks.canolaSeeds, Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
-				ReikaThaumHelper.addAspects(ItemStacks.denseCanolaSeeds, Aspect.EXCHANGE, 16, Aspect.CROP, 8, Aspect.MECHANISM, 8);
-				ReikaThaumHelper.addAspects(ItemStacks.canolaHusks, Aspect.EXCHANGE, 2, Aspect.CROP, 1, Aspect.MECHANISM, 1);
-
-				ReikaThaumHelper.addAspects(ItemRegistry.YEAST.getStackOf(), Aspect.EXCHANGE, 4);
-
-				ReikaThaumHelper.clearAspects(ItemRegistry.HANDBOOK.getStackOf());
-
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), Aspect.TOOL, 96);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), Aspect.TOOL, 96);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.TOOL, 80);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDSWORD.getStackOf(), Aspect.TOOL, 80);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHEARS.getStackOf(), Aspect.TOOL, 80);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDSHOVEL.getStackOf(), Aspect.TOOL, 72);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDSICKLE.getStackOf(), Aspect.TOOL, 96);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDHOE.getStackOf(), Aspect.TOOL, 80);
-				if (ModList.MULTIPART.isLoaded())
-					ReikaThaumHelper.addAspects(ItemRegistry.BEDSAW.getStackOf(), Aspect.TOOL, 80);
-				if (ModList.FORESTRY.isLoaded())
-					ReikaThaumHelper.addAspects(ItemRegistry.BEDGRAFTER.getStackOf(), Aspect.TOOL, 72);
-
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELAXE.getStackOf(), Aspect.TOOL, 18);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELPICK.getStackOf(), Aspect.TOOL, 18);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELHOE.getStackOf(), Aspect.TOOL, 16);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELSWORD.getStackOf(), Aspect.TOOL, 14);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELSHEARS.getStackOf(), Aspect.TOOL, 14);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELSHOVEL.getStackOf(), Aspect.TOOL, 12);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELSICKLE.getStackOf(), Aspect.TOOL, 18);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELHOE.getStackOf(), Aspect.TOOL, 14);
-
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDLEGS.getStackOf(), Aspect.ARMOR, 140);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDHELM.getStackOf(), Aspect.ARMOR, 100);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDBOOTS.getStackOf(), Aspect.ARMOR, 80);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDCHEST.getStackOf(), Aspect.ARMOR, 160);
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDREVEAL.getStackOf(), Aspect.ARMOR, 140, Aspect.SENSES, 20, Aspect.AURA, 20, Aspect.MAGIC, 20);
-
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDPACK.getStackOf(), Aspect.ARMOR, 160, Aspect.FLIGHT, 40);
-				ReikaThaumHelper.addAspects(ItemRegistry.STEELPACK.getStackOf(), Aspect.ARMOR, 40, Aspect.FLIGHT, 40);
-				ReikaThaumHelper.addAspects(ItemRegistry.JETPACK.getStackOf(), Aspect.TOOL, 40, Aspect.FLIGHT, 40);
-
-				ReikaThaumHelper.addAspects(ItemRegistry.BEDJUMP.getStackOf(), Aspect.ARMOR, 120, Aspect.TRAVEL, 20);
-				ReikaThaumHelper.addAspects(ItemRegistry.JUMP.getStackOf(), Aspect.TOOL, 20, Aspect.TRAVEL, 20);
-
-				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(0), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.MOTION, 2, Aspect.MECHANISM, 2);
-				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(1), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.FIRE, 3, Aspect.ENERGY, 12);
-				ReikaThaumHelper.addAspects(ItemRegistry.BUCKET.getStackOfMetadata(2), Aspect.VOID, 1, Aspect.METAL, 13, Aspect.ENERGY, 7, Aspect.PLANT, 3);
-
-				ReikaThaumHelper.addAspects(ItemRegistry.SHELL.getStackOf(), Aspect.FIRE, 8, Aspect.WEAPON, 8);
-
-				ReikaThaumHelper.addAspects(ItemStacks.steelingot, Aspect.METAL, 10, Aspect.MECHANISM, 6);
-				ReikaThaumHelper.addAspects(ItemStacks.netherrackdust, Aspect.FIRE, 4);
-				ReikaThaumHelper.addAspects(ItemStacks.sludge, Aspect.ENERGY, 1);
-				ReikaThaumHelper.addAspects(ItemStacks.sawdust, Aspect.TREE, 1);
-				ReikaThaumHelper.addAspects(ItemStacks.anthracite, Aspect.FIRE, 4, Aspect.ENERGY, 4);
-				ReikaThaumHelper.addAspects(ItemStacks.coke, Aspect.FIRE, 2, Aspect.MECHANISM, 2);
-
-				MachineAspectMapper.instance.register();
+				RotaryAspectManager.addThaumAspects();
 			}
 
 			RotaryRecipes.addPostLoadRecipes();
@@ -694,6 +661,10 @@ public class RotaryCraft extends DragonAPIMod {
 			RotaryRegistration.setupLiquidIcons(event);
 		if (OldTextureLoader.instance.loadOldTextures())
 			OldTextureLoader.instance.reloadOldTextures(event.map);
+		if (event.map.getTextureType() == 0) {
+			hydratorOverlay = event.map.registerIcon("rotarycraft:wateroverlay");
+			woodLattice = event.map.registerIcon("rotarycraft:woodlattice");
+		}
 	}
 
 	@Override
@@ -724,5 +695,15 @@ public class RotaryCraft extends DragonAPIMod {
 	@Override
 	public String getUpdateCheckURL() {
 		return CommandableUpdateChecker.reikaURL;
+	}
+
+	@Override
+	public File getConfigFolder() {
+		return config.getConfigFolder();
+	}
+
+	@Override
+	protected Class<? extends IClassTransformer> getASMClass() {
+		return RotaryASMHandler.ASMExecutor.class;
 	}
 }

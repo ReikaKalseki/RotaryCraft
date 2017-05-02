@@ -568,4 +568,9 @@ MultiOperational, ConditionalOperation {
 	public boolean canBeFrictionHeated() {
 		return true;
 	}
+
+	@Override
+	public boolean allowExternalHeating() {
+		return true;
+	}
 }

@@ -17,9 +17,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import Reika.DragonAPI.Interfaces.ISBRH;
 
-public class CubicalMachineRenderer implements ISimpleBlockRenderingHandler {
+public class CubicalMachineRenderer implements ISBRH {
 
 	public final int renderID;
 	private static final ForgeDirection[] dirs = ForgeDirection.values();

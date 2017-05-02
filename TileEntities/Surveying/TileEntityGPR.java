@@ -16,7 +16,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockVector;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
+import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.BlockColorMapper;
@@ -49,10 +51,19 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		return true;
 	}
 
+	public BlockVector getLookDirection() {
+		return new BlockVector(xCoord+offsetX, yCoord+offsetY, zCoord+offsetZ, ReikaDirectionHelper.getRightBy90(this.getGuiDirection()));
+	}
+
 	public void shift(ForgeDirection dir, int amt) {
-		offsetX += dir.offsetX*amt;
-		offsetY += dir.offsetY*amt;
-		offsetZ += dir.offsetZ*amt;
+		if (amt == 0) {
+			offsetX = offsetY = offsetZ = 0;
+		}
+		else {
+			offsetX += dir.offsetX*amt;
+			offsetY += dir.offsetY*amt;
+			offsetZ += dir.offsetZ*amt;
+		}
 	}
 
 	public void shiftInt(int amt) {

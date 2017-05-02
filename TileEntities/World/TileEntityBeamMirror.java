@@ -74,18 +74,18 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 
 	private void getDirection(int meta) {
 		switch(meta) {
-		case 0:
-			facingDir = ForgeDirection.EAST;
-			break;
-		case 1:
-			facingDir = ForgeDirection.WEST;
-			break;
-		case 2:
-			facingDir = ForgeDirection.SOUTH;
-			break;
-		case 3:
-			facingDir = ForgeDirection.NORTH;
-			break;
+			case 0:
+				facingDir = ForgeDirection.EAST;
+				break;
+			case 1:
+				facingDir = ForgeDirection.WEST;
+				break;
+			case 2:
+				facingDir = ForgeDirection.SOUTH;
+				break;
+			case 3:
+				facingDir = ForgeDirection.NORTH;
+				break;
 		}
 	}
 
@@ -103,16 +103,16 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 		int r = this.getRange();
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1);
 		switch(facingDir) {
-		case EAST:
-			return AxisAlignedBB.getBoundingBox(x, y, z, x+1+r, y+1, z+1);
-		case NORTH:
-			return AxisAlignedBB.getBoundingBox(x, y, z-r, x+1, y+1, z+1);
-		case SOUTH:
-			return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1+r);
-		case WEST:
-			return AxisAlignedBB.getBoundingBox(x-r, y, z, x+1, y+1, z+1);
-		default:
-			return box;
+			case EAST:
+				return AxisAlignedBB.getBoundingBox(x, y, z, x+1+r, y+1, z+1);
+			case NORTH:
+				return AxisAlignedBB.getBoundingBox(x, y, z-r, x+1, y+1, z+1);
+			case SOUTH:
+				return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1+r);
+			case WEST:
+				return AxisAlignedBB.getBoundingBox(x-r, y, z, x+1, y+1, z+1);
+			default:
+				return box;
 		}
 	}
 
@@ -161,7 +161,7 @@ public class TileEntityBeamMirror extends RotaryCraftTileEntity implements Range
 		int time = (int)(worldObj.getWorldTime()%24000);
 		if (time > 13500 && time < 22500)
 			return 0;
-		double r = ReikaMathLibrary.doubpow(2, 7*ReikaWorldHelper.getSunIntensity(worldObj));
+		double r = ReikaMathLibrary.doubpow(2, 7*ReikaWorldHelper.getSunIntensity(worldObj, true, 0));
 		//ReikaJavaLibrary.pConsole(r);
 		int ir = (int)r;
 		if (ir > this.getMaxRange())

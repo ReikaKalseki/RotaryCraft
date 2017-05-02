@@ -171,7 +171,7 @@
 	</autobreeder>
 	<baitbox>
 		<desc>
-			The bait box will attract or repel mobs of all kinds, provided it contains the appropriate items to do so. For example, Endermen are attracted by grass blocks and the opportunity to take them, but are repelled by the faces on soul sand staring back at them. These items are not consumed.
+			The bait box will attract or repel mobs of all kinds, provided it contains the appropriate items to do so. For example, Endermen are attracted by grass blocks and the opportunity to take them, but are repelled by the faces on soul sand staring back at them. These items are not consumed. It can also incubate eggs if gently heated.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -442,6 +442,9 @@
 			The liquid spiller is designed to fill a depression with liquid piped into it. Each bucket worth pumped in equates to one placed liquid block. It will fill the lowest layers first.
 		</desc>
 		<note>
+			Required Power: %dW
+			Power Input: Any side
+			
 			Requires piped liquid to operate
 		</note>
 	</spiller>
@@ -459,7 +462,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Range = Temperature/50 m
+			Range = 16+SQRT(2*Temperature)
 			Acceptable fuels: Coal, Blaze Powder, Wood, Lava, Thermite
 			Power Input: Any side
 		</note>
@@ -479,9 +482,16 @@
 			The magnetizer uses a rapidly rotating shaft to create a magnetic field inside a shaft core. This is one of the critical components of an AC Electric Engine. It requires an AC redstone current and high speed.
 		</desc>
 		<note>
-			Required Power: %dW
-			Required Speed: %d rad/s
-			Power Input: Back
+			<sub>
+				<s1>
+					Required Power: %dW
+					Required Speed: %d rad/s
+					Power Input: Back
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
 		</note>
 	</magnetizer>
 	<containment>
@@ -535,12 +545,12 @@
 	</lasergun>
 	<itemcannon>
 		<desc>
-			The item cannon can fire items across the map without harming them, which allows for near-instant long-distance item transport. Note that you must enter the coordinates of another item cannon to receive the items.
+			The item cannon can fire items across the map without harming them, which allows for near-instant long-distance item transport. Note that you must enter the coordinates of another item cannon to receive the items. Give it %dW, and it can move entire stacks.
 		</desc>
 		<note>
 			Required Power: %dW
 			Required Torque: %d Nm
-			Power Input: Back
+			Power Input: Bottom
 		</note>
 	</itemcannon>
 	<friction>
@@ -860,7 +870,7 @@
 	</bedpipe>
 	<aggregator>
 		<desc>
-			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed. It must be cooled to below ambient temperature to function. More torque means more water per cycle while more speed means faster cycles.
+			The dew point aggregator centrifuges water vapor out of the air, collecting it and if possible, sending it into nearby piping or liquid containers. This machine even works in the Nether, though it will be slowed. It must be cooled to below ambient temperature to function.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -948,6 +958,7 @@
 		<note>
 			Required power and torque vary per fluid conversion
 			Power Input: Bottom
+			
 			Valid Conversions:
 			%s
 		</note>
@@ -1139,4 +1150,59 @@
 			Power Input: Back
 		</note>
 	</drops>
+	<filler>
+		<desc>
+			The block filler will fill a contiguous area below it with any block fed into it, much like the liquid spiller. Denser materials need slightly more power to move.
+		</desc>
+		<note>
+			Required Power: %dW
+			Power Input: Any side
+			
+			Can pull items from a Botania Black Hole Talisman
+		</note>
+	</filler>
+	<hydrator>
+		<desc>
+			This machine spreads water pumped into it into the soil around it, hydrating farmland - without the need for water source blocks - and accelerating crop growth. It can also slow or reverse humus decay, and can accelerate the conversion of bog earth to peat.
+		</desc>
+		<note>
+			
+		</note>
+	</hydrator>
+	<gatling>
+		<desc>
+			A gatling gun fires small projectile rounds - in this case ball bearings - at targets, rapidly destroying them. Due to its design, it will continue firing - and consuming ammunition - as long as it has a target; that, combined with its less-than-perfect aim, means that running this near friendly targets or fragile materials is ill-advised.
+		</desc>
+		<note>
+			Required Power: %dW
+			Required Speed: %d rad/s
+			Power Input: Bottom or top, orientation dependent
+			
+			Substantially less effective against slimes
+		</note>
+	</gatling>
+	<spillway>
+		<desc>
+			The spillway draws liquid from bodies of water connected to it; if connected to a flowing stream, it will provide an infinite supply of fresh water. Connected to a stagnant pool or pond, and it will rapidly drain it, allowing for easily drying large areas.
+		</desc>
+		<note>
+			
+		</note>
+	</spillway>
+	<itemfilter>
+		<desc>
+			The item filter can, once given a template item, compare all other items that pass through it based on which parameters have been chosen to be used and their settings. Only items matching those parameters can be inserted and then extracted to be sent to the target destination.
+		</desc>
+		<note>
+			Can be connected directly to an ME system, which it will try to extract from
+		</note>
+	</itemfilter>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
 </machines>

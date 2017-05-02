@@ -29,10 +29,11 @@ import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
-import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
-import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
@@ -40,6 +41,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
+import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemRefresher;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
@@ -475,6 +477,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.GENERATOR, ReikaEUHelper.getWattsPerEU());
 		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXTORQUE_UPGRADE, TileEntityDynamo.MAXOMEGA);
+		addData(MachineRegistry.ITEMCANNON, TileEntityItemCannon.STACKPOWER);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());
@@ -546,7 +549,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.SORTING, PowerReceivers.SORTING.getMinPower());
 		addNotes(MachineRegistry.DEFOLIATOR, PowerReceivers.DEFOLIATOR.getMinPower());
 		addNotes(MachineRegistry.BIGFURNACE, PowerReceivers.BIGFURNACE.getMinPower());
-		addNotes(MachineRegistry.DISTILLER, PowerReceivers.DISTILLER.getMinPower(), PowerReceivers.DISTILLER.getMinTorque(), TileEntityDistillery.getValidConversions());
+		addNotes(MachineRegistry.DISTILLER, TileEntityDistillery.getValidConversions());
 		addNotes(MachineRegistry.CRYSTALLIZER, PowerReceivers.CRYSTALLIZER.getMinPower(), PowerReceivers.CRYSTALLIZER.getMinSpeed());
 		addNotes(MachineRegistry.GRINDSTONE, PowerReceivers.GRINDSTONE.getMinPower(), PowerReceivers.GRINDSTONE.getMinTorque());
 		addNotes(MachineRegistry.BLOWER, PowerReceivers.BLOWER.getMinPower(), PowerReceivers.BLOWER.getMinSpeed());
@@ -560,6 +563,9 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.WETTER, PowerReceivers.WETTER.getMinPower(), PowerReceivers.WETTER.getMinSpeed());
 		addNotes(MachineRegistry.CHUNKLOADER, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.BASE_RADIUS, PowerReceivers.CHUNKLOADER.getMinSpeed(), TileEntityChunkLoader.FALLOFF);
 		addNotes(MachineRegistry.DROPS, PowerReceivers.DROPS.getMinPower(), PowerReceivers.DROPS.getMinTorque());
+		addNotes(MachineRegistry.SPILLER, PowerReceivers.SPILLER.getMinPower());
+		addNotes(MachineRegistry.FILLER, PowerReceivers.FILLER.getMinPower());
+		addNotes(MachineRegistry.GATLING, PowerReceivers.GATLING.getMinPower(), PowerReceivers.GATLING.getMinSpeed());
 
 		addNotes(MachineRegistry.MAGNETIC, EnergyToPowerBase.MAXTEMP);
 		addNotes(MachineRegistry.PNEUENGINE, EnergyToPowerBase.MAXTEMP);
@@ -572,6 +578,8 @@ public final class RotaryDescriptions {
 		addSubNotes(MachineRegistry.PNEUENGINE, 1, EnergyToPowerBase.getTiersAsString());
 		addSubNotes(MachineRegistry.ELECTRICMOTOR, 1, EnergyToPowerBase.getTiersAsString());
 		addSubNotes(MachineRegistry.STEAMTURBINE, 1, EnergyToPowerBase.getTiersAsString());
+
+		addSubNotes(MachineRegistry.MAGNETIZER, 1, RecipesMagnetizer.getRecipes().getRecipesAsString());
 
 		addSubNotes(MachineRegistry.ADVANCEDGEARS, 1, TileEntityAdvancedGear.getMaxStorageCapacity(false), TileEntityAdvancedGear.getMaxStorageCapacityFormatted(false), TileEntityAdvancedGear.getMaxStorageCapacity(true), TileEntityAdvancedGear.getMaxStorageCapacityFormatted(true));
 		addSubNotes(MachineRegistry.ADVANCEDGEARS, 2, TileEntityAdvancedGear.getRequiredInputTorque(), TileEntityAdvancedGear.getRequiredInputPower());

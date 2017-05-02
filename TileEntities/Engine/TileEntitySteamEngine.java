@@ -169,4 +169,9 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 		return true;
 	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return true;
+	}
+
 }

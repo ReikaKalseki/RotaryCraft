@@ -31,7 +31,6 @@ import Reika.RotaryCraft.API.Interfaces.ControllableSpawner;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySpawnerController extends TileEntityPowerReceiver implements GuiController, DiscreteFunction, ConditionalOperation {
@@ -69,7 +68,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			control = null;
 			return;
 		}
-		this.getOffsetPower4Sided(0, -1, 0); //The spawner itself is the power input
+		this.getOffsetPower4Sided(0, -1, 0, true); //The spawner itself is the power input
 		if (power >= MINPOWER)
 			this.applyToSpawner(world, x, y, z);
 	}
@@ -115,7 +114,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	}
 
 	private int getSpawnLimit() {
-		return Math.max(24, ConfigRegistry.SPAWNERLIMIT.getValue());
+		return 99;//Math.max(24, ConfigRegistry.SPAWNERLIMIT.getValue());
 	}
 
 	public boolean isValidLocation(World world, int x, int y, int z) {
@@ -221,9 +220,6 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	}
 
-	private static int spawnCount = 4;
-	private static int spawnRange = 4;
-
 	public static final String CONTROLLED_SPAWN_TAG = "ControllerSpawned";
 
 	private static void flagNoDespawn(Entity e) {
@@ -241,6 +237,8 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		int y = tile.yCoord;
 		int z = tile.zCoord;
 		MobSpawnerBaseLogic lgc = tile.func_145881_a();
+		lgc.maxNearbyEntities = Integer.MAX_VALUE;
+		lgc.activatingRangeFromPlayer = Integer.MAX_VALUE;
 
 		if (world.isRemote) {
 			double var1 = x+world.rand.nextFloat();
@@ -252,16 +250,16 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			lgc.field_98287_c = (lgc.field_98287_c+1000D / (lgc.spawnDelay+200))%360;
 		}
 		else {
-			for (int i = 0; i < spawnCount; i++) {
+			for (int i = 0; i < lgc.spawnCount; i++) {
 				Entity toSpawn = EntityList.createEntityByName(lgc.getEntityNameToSpawn(), world);
 
 				// This is the max-6 code
 				//int var4 = world.getEntitiesWithinAABB(var13.getClass(), AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(spawnRange*2, 4, spawnRange*2)).size();
 
 				if (toSpawn != null) {
-					double ex = x+(world.rand.nextDouble()-world.rand.nextDouble())*spawnRange;
+					double ex = x+(world.rand.nextDouble()-world.rand.nextDouble())*lgc.spawnRange;
 					double ey = y+world.rand.nextInt(3)-1;
-					double ez = z+(world.rand.nextDouble()-world.rand.nextDouble())*spawnRange;
+					double ez = z+(world.rand.nextDouble()-world.rand.nextDouble())*lgc.spawnRange;
 					EntityLiving livingSpawn = toSpawn instanceof EntityLiving ? (EntityLiving)toSpawn : null;
 					toSpawn.setLocationAndAngles(ex, ey, ez, world.rand.nextFloat()*360, 0);
 

@@ -12,21 +12,23 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Effect;
-import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Fertility;
-import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Flowering;
-import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Life;
-import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Speeds;
-import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Territory;
-import Reika.DragonAPI.ModInteract.Bees.AlleleRegistry.Tolerance;
+import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Effect;
+import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Fertility;
+import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Flowering;
+import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Life;
+import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Speeds;
+import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Territory;
+import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Tolerance;
 import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
 import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
+import Reika.DragonAPI.ModInteract.ItemHandlers.AgriCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -40,6 +42,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
+import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerProvider;
 
@@ -55,13 +58,13 @@ public class CanolaBee extends BeeSpecies {
 
 	public CanolaBee() { //cultivated + meadows
 		super("Slippery", "bee.canola", "Mechanica Lubrica", "Reika", new BeeBranch("branch.rotary", "Mechanica", "Mechanica", "These bees seem to be made to aid mechanical devices."));
-		this.addSpecialty(ItemStacks.slipperyComb, 20);
+		this.addSpecialty(ItemStacks.slipperyComb, 15);
 		this.addSpecialty(ItemStacks.canolaSeeds, 25);
-		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 50);
-		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 12);
-		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 5);
+		this.addProduct(ForestryHandler.Combs.HONEY.getItem(), 40);
+		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 10);
+		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 2.5F);
 		if (ConfigRegistry.enableBeeYeast()) {
-			this.addSpecialty(ItemRegistry.YEAST.getStackOf(), 20);
+			this.addSpecialty(ItemRegistry.YEAST.getStackOf(), 10);
 		}
 	}
 
@@ -77,7 +80,7 @@ public class CanolaBee extends BeeSpecies {
 		}
 	}
 
-	private final class FlowerProviderCanola extends BasicFlowerProvider {
+	private final class FlowerProviderCanola extends BasicFlowerProvider implements IFlowerAcceptableRule {
 
 		private FlowerProviderCanola() {
 			super(BlockRegistry.CANOLA.getBlockInstance(), "canola");
@@ -131,6 +134,16 @@ public class CanolaBee extends BeeSpecies {
 			return new ItemStack[]{BlockRegistry.CANOLA.getStackOf()};
 		}
 		 */
+		@Override
+		public boolean isAcceptableFlower(String flowerType, World world, int x, int y, int z) {
+			if (super.isAcceptedFlower(world, x, y, z))
+				return true;
+			if (!ModList.AGRICRAFT.isLoaded())
+				return false;
+			Block b = world.getBlock(x, y, z);
+			int meta = world.getBlockMetadata(x, y, z);
+			return AgriCraftHandler.getInstance().isCrop(b, meta) && AgriCraftHandler.getInstance().getCropObject(world, x, y, z) == AgriCanola.instance;
+		}
 	}
 
 	@Override

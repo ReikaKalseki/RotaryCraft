@@ -24,6 +24,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -54,6 +56,12 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		BlastInput in3 = new BlastInput(Blocks.sand, 0.2F, 1);
 		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(hsla, RecipeLevel.CORE);
+
+		in1 = new BlastInput(new ItemStack(Items.coal, 1, 1), 100, 1);
+		in2 = new BlastInput(Items.gunpowder, 3.2F, 1);
+		in3 = new BlastInput(Blocks.sand, 0.2F, 1);
+		BlastRecipe hsla1b = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		this.addRecipe(hsla1b, RecipeLevel.CORE);
 
 		in1 = new BlastInput(ItemStacks.coke, 100, 1);
 		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
@@ -678,5 +686,33 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipeList.remove(recipe) | craftingList.remove(recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		Collection<ItemStack> main = crl.parseItemCollection(lb.getChild("main_item").getDataValues(), true);
+		if (main.isEmpty())
+			throw new IllegalArgumentException("You need at least one main item!");
+		int req = lb.getInt("required_main_item");
+		boolean match = lb.getBoolean("match_number_exactly");
+		boolean bonus = lb.getBoolean("has_bonus");
+		float xp = (float)lb.getDouble("xp");
+		int temp = lb.getInt("temperature");
+		if (temp > TileEntityBlastFurnace.MAXTEMP)
+			throw new IllegalArgumentException("Recipe temperature exceeds max temperature ("+TileEntityBlastFurnace.MAXTEMP+")!");
+		boolean alloy = lb.getBoolean("alloying");
+		LuaBlock first = lb.getChild("primary_input");
+		LuaBlock second = lb.hasChild("secondary_input") ? lb.getChild("secondary_input") : null;
+		LuaBlock third = lb.hasChild("tertiary_input") ? lb.getChild("tertiary_input") : null;
+		if (first == null || (second == null && third != null)) {
+			throw new IllegalArgumentException("Secondary inputs must be specified sequentially: Primary-secondary-tertiary!");
+		}
+		BlastInput primary = new BlastInput(crl.parseItemCollection(first.getChild("items").getDataValues(), true), (float)first.getDouble("consumption_chance"), first.getInt("number_to_use"));
+		BlastInput secondary = second != null ? new BlastInput(crl.parseItemCollection(second.getChild("items").getDataValues(), true), (float)second.getDouble("consumption_chance"), second.getInt("number_to_use")) : null;
+		BlastInput tertiary = third != null ? new BlastInput(crl.parseItemCollection(third.getChild("items").getDataValues(), true), (float)third.getDouble("consumption_chance"), third.getInt("number_to_use")) : null;
+		this.addRecipe(new BlastRecipe(primary, secondary, tertiary, main, out, bonus, xp, temp), RecipeLevel.CUSTOM);
+		return true;
 	}
 }

@@ -55,9 +55,16 @@ public abstract class EntityTurretShot extends EntityFireball implements IEntity
 	protected abstract void applyAttackEffectsToEntity(World world, Entity el);
 
 	public final void writeSpawnData(ByteBuf buf) {
-		buf.writeInt(gun.xCoord);
-		buf.writeInt(gun.yCoord);
-		buf.writeInt(gun.zCoord);
+		if (gun != null) {
+			buf.writeInt(gun.xCoord);
+			buf.writeInt(gun.yCoord);
+			buf.writeInt(gun.zCoord);
+		}
+		else {
+			buf.writeInt(0);
+			buf.writeInt(-1);
+			buf.writeInt(0);
+		}
 	}
 
 	public void readSpawnData(ByteBuf buf) {

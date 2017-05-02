@@ -28,14 +28,18 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceExponentiator;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CentrifugeManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -119,19 +123,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private void addRecipe(ItemStack in, FluidOut fs, RecipeLevel rl, Object... items)
 	{
-		ChancedOutputList li = new ChancedOutputList();
-		for (int i = 0; i < items.length; i += 2) {
-			Object is1 = items[i];
-			if (is1 instanceof Item)
-				is1 = new ItemStack((Item)is1);
-			else if (is1 instanceof Block)
-				is1 = new ItemStack((Block)is1);
-			Object chance = items[i+1];
-			if (chance instanceof Integer)
-				chance = new Float((Integer)chance);
-			li.addItem((ItemStack)is1, (Float)chance);
-		}
-		this.addRecipe(in, li, fs, rl);
+		this.addRecipe(in, ChancedOutputList.parseFromArray(true, items), fs, rl);
 	}
 
 	public void addAPIRecipe(ItemStack item, FluidStack fs, float fc, Object... items)
@@ -229,12 +221,66 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			}
 
 			ItemStack drop = new ItemStack(ForestryHandler.ItemEntry.HONEY.getItem());
-			ChancedOutputList out = new ChancedOutputList();
+			ChancedOutputList out = new ChancedOutputList(true);
 			out.addItem(new ItemStack(ForestryHandler.ItemEntry.PROPOLIS.getItem()), 25);
 			this.addRecipe(drop, out, new FluidOut(new FluidStack(FluidRegistry.getFluid("for.honey"), 150), 100), RecipeLevel.MODINTERACT);
 
 			drop = new ItemStack(ForestryHandler.ItemEntry.HONEYDEW.getItem());
 			this.addRecipe(drop, new FluidStack(FluidRegistry.getFluid("for.honey"), 150), 100, RecipeLevel.MODINTERACT);
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 0); //enchanting
+			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
+				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT, ItemStacks.lapisoreflakes, 2);
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 1); //intellect
+			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
+				FluidStack fs = ReikaXPFluidHelper.getFluid(15);
+				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 2); //redstone
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("redstone");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 3); //coal
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("coal");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 4); //lux
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("glowstone");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 5); //endearing
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("ender");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 50), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+
+			/* progression problem
+			drop = ReikaItemHelper.lookupItem("MagicBees", "drop", 1); //intellect
+			if (drop != null) {
+				Fluid f = FluidRegistry.getFluid("chroma");
+				if (f != null) {
+					this.addRecipe(drop, new FluidStack(f, 20), 100, RecipeLevel.MODINTERACT);
+				}
+			}
+			 */
 		}
 
 		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {
@@ -249,6 +295,10 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				FluidStack fs = ReikaXPFluidHelper.getFluid(30);
 				this.addRecipe(berry, fs, 100, RecipeLevel.MODINTERACT);
 			}
+
+			ItemStack chaff = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
+			ItemStack blueslime = ReikaItemHelper.lookupItem("TConstruct:strangeFood");
+			this.addRecipe(ModWoodList.SLIME.getSaplingID(), null, RecipeLevel.MODINTERACT, new ItemStack(Items.slime_ball), 70, blueslime, 20, chaff, 100);
 		}
 
 		if (ModList.MAGICCROPS.isLoaded()) {
@@ -260,6 +310,10 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
 			}
 		}
+
+		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
+		this.addRecipe(new ItemStack(Blocks.clay), new FluidStack(FluidRegistry.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.dirt), 100, ItemStacks.silicondust, 75, ItemStacks.ironoreflakes, 0.5F, ItemStacks.goldoreflakes, 0.2F, is, 2.5F);
+
 	}
 
 	@Override
@@ -302,5 +356,34 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			return fluid.amount+" mB of "+fluid.getFluid().getName()+" ("+chance+"%)";
 		}
 
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
+		FluidOut fo = null;
+		ChancedOutputList co = new ChancedOutputList(false);
+		if (lb.hasChild("output_fluid")) {
+			LuaBlock fluid = lb.getChild("output_fluid");
+			String s = fluid.getString("type");
+			Fluid f = FluidRegistry.getFluid(s);
+			if (f == null)
+				throw new IllegalArgumentException("Fluid '"+s+"' does not exist!");
+			this.verifyOutputFluid(f);
+			FluidStack fs = new FluidStack(f, fluid.getInt("amount"));
+			fo = new FluidOut(fs, (float)fluid.getDouble("chance"));
+		}
+		if (lb.hasChild("output_items")) {
+			LuaBlock items = lb.getChild("output_items");
+			for (LuaBlock entry : items.getChildren()) {
+				ItemStack is = crl.parseItemString(entry.getString("item"), entry.getChild("nbt"), true);
+				this.verifyOutputItem(is);
+				if (is != null) {
+					co.addItem(is, (float)entry.getDouble("chance"));
+				}
+			}
+		}
+		this.addRecipe(in, co, fo, RecipeLevel.CUSTOM);
+		return true;
 	}
 }

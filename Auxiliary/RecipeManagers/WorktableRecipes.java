@@ -28,6 +28,8 @@ import Reika.ChromatiCraft.Magic.ElementTagCompound;
 import Reika.ChromatiCraft.Magic.ItemElementCalculator;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.RecyclingRecipe;
@@ -312,5 +314,14 @@ public class WorktableRecipes extends RecipeHandler {
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipes.remove(recipe) && display.remove(((WorktableRecipe)recipe).recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		IRecipe ir = crl.parseCraftingRecipe(lb, out);
+		this.addRecipe(ir, RecipeLevel.CUSTOM);
+		return true;
 	}
 }

@@ -117,7 +117,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 	}
 
 	public boolean isAcceleratedOn(Block b) {
-		return field_150914_c.contains(b);
+		return field_150914_c.contains(b) || b.getMaterial() == Material.grass || b.getMaterial() == Material.ground || b.getMaterial() == Material.sand;
 	}
 
 	public String getTextureFile() {
@@ -187,10 +187,10 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		addDrop(b, meta, new ItemStack(i), chance);
 	}
 
-	private static void addDrop(Block b, int meta, ItemStack is, float chance) {
+	public static void addDrop(Block b, int meta, ItemStack is, float chance) {
 		ChancedOutputList co = extraDrops.get(b, meta);
 		if (co == null) {
-			co = new ChancedOutputList();
+			co = new ChancedOutputList(false);
 			extraDrops.put(b, meta, co);
 		}
 		co.addItem(is, chance);

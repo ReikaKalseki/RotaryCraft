@@ -220,7 +220,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 			return;
 		for (int j = 0; j <= GROWN; j++) {
 			for (int i = 0; i < 6; i++) {
-				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:canola"+String.valueOf(j));
+				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:canola/"+j);
 			}
 		}
 	}
@@ -350,7 +350,7 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 		if (id == Blocks.farmland) {
 			return world.getBlockMetadata(x, y, z) > 0;
 		}
-		return id.isFertile(world, x, y, z) && world.getBlock(x, y, z).canSustainPlant(world, x, y, z, ForgeDirection.UP, (IPlantable)BlockRegistry.CANOLA.getBlockInstance());
+		return id.isFertile(world, x, y, z) && id.canSustainPlant(world, x, y, z, ForgeDirection.UP, (IPlantable)BlockRegistry.CANOLA.getBlockInstance());
 		//return farmBlocks.contains(id);
 	}
 

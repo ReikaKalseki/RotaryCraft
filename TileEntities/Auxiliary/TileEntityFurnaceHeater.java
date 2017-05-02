@@ -80,6 +80,21 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (m != null && m.canBeFrictionHeated())
 			return true;
 		TileEntity te = this.getTileEntity(fx, fy, fz);
+		/*
+		if (ModList.THAUMICTINKER.isLoaded()) {
+			TileEntity relay = TransvectorHandler.getRelayedTile(te);
+			while (relay != te && relay != null) {
+				te = relay;
+				relay = TransvectorHandler.getRelayedTile(te);
+			}
+			te = relay;
+			if (te != null) {
+				fx = te.xCoord;
+				fy = te.yCoord;
+				fz = te.zCoord;
+			}
+		}
+		 */
 		return te instanceof ThermalMachine;
 	}
 
@@ -125,6 +140,21 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		}
 		else {
 			TileEntity te = this.getTileEntity(fx, fy, fz);
+			/*
+			if (ModList.THAUMICTINKER.isLoaded()) {
+				TileEntity relay = TransvectorHandler.getRelayedTile(te);
+				while (relay != te && relay != null) {
+					te = relay;
+					relay = TransvectorHandler.getRelayedTile(te);
+				}
+				te = relay;
+				if (te != null) {
+					fx = te.xCoord;
+					fy = te.yCoord;
+					fz = te.zCoord;
+				}
+			}
+			 */
 			if (te instanceof ThermalMachine) {
 				this.heatMachine(world, x, y, z, (ThermalMachine)te);
 			}
@@ -138,9 +168,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	private void heatMachine(World world, int x, int y, int z, ThermalMachine te) {
 		if (te.canBeFrictionHeated()) {
 			int tdiff = Math.min(te.getMaxTemperature(), temperature)-te.getTemperature();
-			if (tdiff > 0)
+			if (tdiff > 0 || (tdiff == 0 && temperature == te.getMaxTemperature())) {
 				te.addTemperature(Math.max(1, (int)(tdiff*te.getMultiplier())));
-			te.resetAmbientTemperatureTimer();
+				te.resetAmbientTemperatureTimer();
+			}
 
 			if (te.getTemperature() > te.getMaxTemperature()) {
 				te.onOverheat(world, fx, fy, fz);
@@ -362,7 +393,12 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	public void setTemperature(int temp) {
+		temperature = temp;
+	}
 
+	@Override
+	public boolean allowExternalHeating() {
+		return false;
 	}
 
 	public static boolean isHijacked(TileEntityFurnace furn) {

@@ -453,13 +453,7 @@ public class PacketHandlerCore implements PacketHandler {
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					TileEntityItemCannon icannon = (TileEntityItemCannon)te;
 					if (control == PacketRegistry.ITEMCANNON.getMinValue()) {
-						icannon.target[0] = data[0];
-					}
-					if (control == PacketRegistry.ITEMCANNON.getMinValue()+1) {
-						icannon.target[1] = data[0];
-					}
-					if (control == PacketRegistry.ITEMCANNON.getMinValue()+2) {
-						icannon.target[2] = data[0];
+						icannon.selectNewTarget(data[0], data[1], data[2], data[3]);
 					}
 					break;
 				}
@@ -591,7 +585,11 @@ public class PacketHandlerCore implements PacketHandler {
 					((TileEntityJetEngine)te).setBurnerActive(data[0] > 0);
 					break;
 				case CRAFTPATTERNMODE:
-					ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
+					if (control == PacketRegistry.CRAFTPATTERNMODE.getMinValue())
+						ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
+					else if (control == PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1) {
+						ItemCraftPattern.changeStackLimit(ep.getCurrentEquippedItem(), data[0]);
+					}
 					break;
 				case FILTERSETTING:
 					x = NBT.getInteger("posX");

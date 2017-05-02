@@ -45,6 +45,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TransmissionReceiver;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
@@ -74,16 +75,15 @@ import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
-import Reika.RotaryCraft.ModInterface.TileEntityAirCompressor;
-import Reika.RotaryCraft.ModInterface.TileEntityBoiler;
-import Reika.RotaryCraft.ModInterface.TileEntityDynamo;
-import Reika.RotaryCraft.ModInterface.TileEntityElectricMotor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
-import Reika.RotaryCraft.ModInterface.TileEntityGenerator;
-import Reika.RotaryCraft.ModInterface.TileEntityMagnetic;
-import Reika.RotaryCraft.ModInterface.TileEntityPneumaticEngine;
-import Reika.RotaryCraft.ModInterface.TileEntitySteam;
-import Reika.RotaryCraft.TileEntities.TileEntityAerosolizer;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityBoiler;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityElectricMotor;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityGenerator;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityMagnetic;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntityPneumaticEngine;
+import Reika.RotaryCraft.ModInterface.Conversion.TileEntitySteam;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityChunkLoader;
@@ -114,6 +114,7 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntityBaitBox;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFan;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityFertilizer;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntityGroundHydrator;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityLawnSprinkler;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
@@ -153,6 +154,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
+import Reika.RotaryCraft.TileEntities.Production.TileEntitySpillway;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
@@ -187,12 +189,15 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLaserGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMachineGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySelfDestruct;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
+import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityBeamMirror;
+import Reika.RotaryCraft.TileEntities.World.TileEntityBlockFiller;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFlooder;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
@@ -339,7 +344,11 @@ public enum MachineRegistry implements TileEnum {
 	DRYING(				"machine.drying",			BlockMIMachine.class,		TileEntityDryingBed.class,			26, "RenderDryingBed"),
 	WETTER(				"machine.wetter",			BlockMIMachine.class,		TileEntityWetter.class,				27, "RenderWetter"),
 	DROPS(				"machine.drops",			BlockIMachine.class,		TileEntityDropProcessor.class,		8),
-	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9);
+	ITEMFILTER(			"machine.itemfilter",		BlockIMachine.class,		TileEntityItemFilter.class,			9),
+	HYDRATOR(			"machine.hydrator",			BlockMMachine.class,		TileEntityGroundHydrator.class,		21, "RenderHydrator"),
+	FILLER(				"machine.filler", 			BlockMachine.class,			TileEntityBlockFiller.class,		9),
+	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon"),
+	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway");
 
 	private final String name;
 	private final Class te;
@@ -430,6 +439,8 @@ public enum MachineRegistry implements TileEnum {
 
 	public String getRenderPackage() {
 		if (this.hasPrerequisite() || BlockModEngine.class.isAssignableFrom(blockClass)) {
+			if (EnergyToPowerBase.class.isAssignableFrom(te) || RCToModConverter.class.isAssignableFrom(te))
+				return "Reika.RotaryCraft.ModInterface.Conversion";
 			return "Reika.RotaryCraft.ModInterface";
 		}
 
@@ -700,6 +711,7 @@ public enum MachineRegistry implements TileEnum {
 			case FAN:
 			case PROJECTOR:
 			case SCALECHEST:
+			case SPILLWAY:
 				return true;
 			default:
 				return false;
@@ -840,6 +852,7 @@ public enum MachineRegistry implements TileEnum {
 			case BUSCONTROLLER:
 			case REFRIGERATOR:
 			case DROPS:
+			case SPILLWAY:
 				return true;
 			default:
 				return false;
@@ -1131,6 +1144,7 @@ public enum MachineRegistry implements TileEnum {
 			case BLASTFURNACE:
 			case DRYING:
 			case COMPOSTER:
+			case HYDRATOR:
 				return true;
 			default:
 				return false;
@@ -1207,6 +1221,18 @@ public enum MachineRegistry implements TileEnum {
 			}
 		}
 		//this.addOreRecipe(obj);
+	}
+
+	public void addNBTCrafting(NBTTagCompound NBT, Object... obj) {
+		if (this.isCraftable()) {
+			ItemStack is = this.getCraftedProduct();
+			is.stackTagCompound = (NBTTagCompound)NBT.copy();
+			WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+			if (ConfigRegistry.TABLEMACHINES.getState()) {
+				GameRegistry.addRecipe(is, obj);
+			}
+		}
+		//this.addSizedOreRecipe(num, obj);
 	}
 
 	public void addSizedNBTCrafting(NBTTagCompound NBT, int num, Object... obj) {
@@ -1546,11 +1572,49 @@ public enum MachineRegistry implements TileEnum {
 			MachineRegistry m = machineList.get(i);
 			Block id = m.getBlock();
 			int meta = m.meta;
+			if (machineMappings.containsKey(id, meta))
+				throw new RegistrationException(RotaryCraft.instance, "ID/Meta conflict @ "+id+"/"+meta+": "+m+" & "+machineMappings.get(id, meta));
 			machineMappings.put(id, meta, m);
 		}
 	}
 
 	public boolean canDoMultiPerTick() {
 		return this == EXTRACTOR || MultiOperational.class.isAssignableFrom(this.getTEClass());
+	}
+
+	public boolean isSolidBottom() {
+		switch(this) {
+			case COMPOSTER:
+			case SHAFT:
+			case CLUTCH:
+			case GEARBOX:
+			case FLYWHEEL:
+			case ADVANCEDGEARS:
+			case RESERVOIR:
+			case ENGINE:
+			case AIRGUN:
+			case MAGNETIC:
+			case GENERATOR:
+			case ELECTRICMOTOR:
+			case STEAMTURBINE:
+			case BLOCKCANNON:
+			case TNTCANNON:
+			case ITEMCANNON:
+			case FRICTION:
+			case DYNAMOMETER:
+			case HEATRAY:
+			case GRINDER:
+			case MAGNETIZER:
+			case GRINDSTONE:
+			case REFRIGERATOR:
+			case CRYSTALLIZER:
+			case DISPLAY:
+			case SONICBORER:
+			case WINDER:
+			case PROJECTOR:
+				return true;
+			default:
+				return false;
+		}
 	}
 }

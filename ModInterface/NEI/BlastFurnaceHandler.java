@@ -256,6 +256,11 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 			f.drawString("Bonus output: "+(br.hasBonus ? "Yes" : "No"), 21, 72+dy, 0);
 		}
+		else if (r instanceof BlastFurnCrafting) {
+			BlastCrafting br = ((BlastFurnCrafting)r).recipe;
+			String sg = String.format("Time Factor: %dx", br.speed);
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(f, sg, 83, 64+dy, 0);
+		}
 	}
 
 }

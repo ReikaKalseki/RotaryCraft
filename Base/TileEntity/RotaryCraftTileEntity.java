@@ -180,7 +180,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	@Override
-	public String getTEName() {
+	public final String getTEName() {
 		MachineRegistry m = this.getMachine();
 		if (m.isMultiNamed())
 			return m.getMultiName(this);

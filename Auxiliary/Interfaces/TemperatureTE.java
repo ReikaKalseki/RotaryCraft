@@ -25,4 +25,6 @@ public interface TemperatureTE extends ThermalTile, TemperatureTile {
 
 	public abstract boolean canBeCooledWithFins();
 
+	public abstract boolean allowExternalHeating();
+
 }

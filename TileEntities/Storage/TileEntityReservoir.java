@@ -21,7 +21,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -34,10 +33,15 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
+import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Interfaces.TileEntity.OpenTopTank;
+import Reika.DragonAPI.Interfaces.TileEntity.PlaceNotification;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -51,7 +55,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine/*, BreakAction*/ {
+public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, NBTMachine, BreakAction,
+AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 
 	public static final int CAPACITY = 64000;
 
@@ -68,6 +73,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public boolean isCreative;
 
 	private final HybridTank tank = new HybridTank("reservoir", CAPACITY);
+
+	private boolean[] adjacent = new boolean[10];
 
 	//private CompoundReservoir network;
 
@@ -96,6 +103,59 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		}
 	}
 	 */
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		this.updateSides(world, x, y, z);
+	}
+
+	private void updateSides(World world, int x, int y, int z) {
+		adjacent[8] = MachineRegistry.getMachine(world, x, y, z-1) == MachineRegistry.RESERVOIR;
+		adjacent[4] = MachineRegistry.getMachine(world, x-1, y, z) == MachineRegistry.RESERVOIR;
+		adjacent[6] = MachineRegistry.getMachine(world, x+1, y, z) == MachineRegistry.RESERVOIR;
+		adjacent[2] = MachineRegistry.getMachine(world, x, y, z+1) == MachineRegistry.RESERVOIR;
+
+		adjacent[1] = MachineRegistry.getMachine(world, x-1, y, z+1) == MachineRegistry.RESERVOIR;
+		adjacent[3] = MachineRegistry.getMachine(world, x+1, y, z+1) == MachineRegistry.RESERVOIR;
+		adjacent[7] = MachineRegistry.getMachine(world, x-1, y, z-1) == MachineRegistry.RESERVOIR;
+		adjacent[9] = MachineRegistry.getMachine(world, x+1, y, z-1) == MachineRegistry.RESERVOIR;
+
+		this.syncAllData(false);
+	}
+
+	@Override
+	public void onAdjacentUpdate(World world, int x, int y, int z, Block b) {
+		this.updateSides(world, x, y, z);
+	}
+
+	@Override
+	public void onPlaced() {
+		this.updateNeighbors();
+	}
+
+	@Override
+	public void breakBlock() {
+		this.updateNeighbors();
+	}
+
+	private void updateNeighbors() {
+		for (int i = -1; i <= 1; i++) {
+			for (int k = -1; k <= 1; k++) {
+				if (i != 0 || k != 0) {
+					int dx = xCoord+i;
+					int dz = zCoord+k;
+					if (MachineRegistry.getMachine(worldObj, dx, yCoord, dz) == this.getMachine()) {
+						((TileEntityReservoir)worldObj.getTileEntity(dx, yCoord, dz)).updateSides(worldObj, dx, yCoord, dz);
+					}
+				}
+			}
+		}
+	}
+
+	public boolean hasNearbyReservoir(int loc) {
+		return adjacent[loc];
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		for (TankHandler th : tankHandlers) {
@@ -136,7 +196,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 		tempTimer.update();
 		if (!world.isRemote && !this.isEmpty() && tempTimer.checkCap()) {
-			if (!this.isSurrounded()) {
+			if (!this.isSurrounded(false)) {
 				Fluid f = tank.getActualFluid();
 				int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 				int temp = f.getTemperature(world, x, y, z)-273;
@@ -147,6 +207,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 						for (int k = -r; k <= r; k++) {
 							double dd = ReikaMathLibrary.py3d(i, j, k)+1;
 							int hiT = (int)(Tamb+dT/dd/2D);
+							//ReikaJavaLibrary.pConsole(e+":"+tracer.isClearLineOfSight(world)+" of "+e.height, e instanceof EntityChicken);
 							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, hiT);
 							if (temp > 2500)
 								ReikaSoundHelper.playSoundAtBlock(world, x+i, y+j, z+k, "random.fizz", 0.2F, 1F);
@@ -176,15 +237,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 	}
 
-	private boolean isSurrounded() {
-		for (int i = 2; i < 6; i++) {
-			TileEntity te = this.getAdjacentTileEntity(dirs[i]);
-			if (te instanceof TileEntityReservoir)
-				continue;
-			else
-				return false;
-		}
-		return true;
+	private boolean isSurrounded(boolean reservoirOnly) {
+		return (adjacent[2] && adjacent[4] && adjacent[6] && adjacent[8]) || (!reservoirOnly && ReikaWorldHelper.isBlockSurroundedBySolid(worldObj, xCoord, yCoord, zCoord, false));
 	}
 	/*
 	public CompoundReservoir getCompound() {
@@ -196,23 +250,43 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	}
 	 */
 	private void transferBetween(World world, int x, int y, int z) {
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			int dx = x+dir.offsetX;
-			int dy = y+dir.offsetY;
-			int dz = z+dir.offsetZ;
-			if (tank.getLevel() < CAPACITY) {
-				if (this.matchMachine(world, dx, dy, dz)) {
-					TileEntityReservoir tile = (TileEntityReservoir)world.getTileEntity(dx, dy, dz);
-					if (this.canMixWith(tile)) {
-						int diff = tile.getLevel()-this.getLevel();
-						if (diff > 1) {
-							tile.tank.removeLiquid(diff/2);
-							tank.addLiquid(diff/2, tile.getFluid());
+		if (tank.getLevel() < CAPACITY) {
+			for (int i = 2; i < 6; i++) {
+				ForgeDirection dir = dirs[i];
+				if (this.adjacentOnSide(dir)) {
+					int dx = x+dir.offsetX;
+					int dy = y+dir.offsetY;
+					int dz = z+dir.offsetZ;
+					if (this.matchMachine(world, dx, dy, dz)) {
+						TileEntityReservoir tile = (TileEntityReservoir)world.getTileEntity(dx, dy, dz);
+						if (this.canMixWith(tile)) {
+							int diff = tile.getLevel()-this.getLevel();
+							if (diff > 1) {
+								tile.tank.removeLiquid(diff/2);
+								tank.addLiquid(diff/2, tile.getFluid());
+							}
 						}
 					}
 				}
 			}
+		}
+	}
+
+	public boolean adjacentOnSide(ForgeDirection dir) {
+		switch(dir) {
+			case EAST:
+				return adjacent[6];
+			case NORTH:
+				return adjacent[8];
+			case SOUTH:
+				return adjacent[2];
+			case WEST:
+				return adjacent[4];
+			case DOWN:
+			case UNKNOWN:
+			case UP:
+			default:
+				return false;
 		}
 	}
 
@@ -234,6 +308,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 		NBT.setBoolean("cover", isCovered);
 		NBT.setBoolean("creative", isCreative);
+
+		NBT.setInteger("sides", ReikaArrayHelper.booleanToBitflags(adjacent));
 	}
 
 	@Override
@@ -245,6 +321,8 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 
 		isCovered = NBT.getBoolean("cover");
 		isCreative = NBT.getBoolean("creative");
+
+		adjacent = ReikaArrayHelper.booleanFromBitflags(NBT.getInteger("sides"), 10);
 	}
 
 	@Override
@@ -390,8 +468,10 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 		int dx = xCoord+dir.offsetX;
 		int dy = yCoord+dir.offsetY;
 		int dz = zCoord+dir.offsetZ;
-		if (this.matchMachine(worldObj, dx, dy, dz)) {
+		if (this.adjacentOnSide(dir)) {
 			TileEntityReservoir te = (TileEntityReservoir)worldObj.getTileEntity(dx, dy, dz);
+			if (te == null)
+				return false;
 			return te.isEmpty() || this.isEmpty() || te.getFluid().equals(this.getFluid());
 		}
 		return false;
@@ -459,6 +539,7 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 	public void setDataFromItemStackTag(NBTTagCompound NBT) {
 		if (NBT == null) {
 			tank.empty();
+			isCovered = false;
 			return;
 		}
 		Fluid f = ReikaNBTHelper.getFluidFromNBT(NBT);
@@ -612,5 +693,15 @@ public class TileEntityReservoir extends RotaryCraftTileEntity implements PipeCo
 			e.extinguish();
 		}
 
+	}
+
+	@Override
+	public int addLiquid(Fluid f, int amt, boolean doAdd) {
+		if (!tank.isEmpty() && tank.getActualFluid() != f)
+			return 0;
+		amt = Math.min(amt, tank.getRemainingSpace());
+		if (doAdd)
+			tank.addLiquid(amt, f);
+		return amt;
 	}
 }

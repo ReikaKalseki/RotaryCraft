@@ -14,6 +14,7 @@ import java.util.HashSet;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -98,12 +99,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return true;
 		else {
 			ItemStack in = inv[slot];
-			if (!ReikaItemHelper.matchStacks(is, in))
-				return false;
-			int sum = in.stackSize+is.stackSize;
-			if (sum > in.getMaxStackSize() || sum > this.getInventoryStackLimit())
-				return false;
-			return ItemStack.areItemStackTagsEqual(is, in);
+			return ReikaItemHelper.areStacksCombinable(is, is, this.getInventoryStackLimit());
 		}
 	}
 
@@ -188,15 +184,15 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		xp += rec.xp*num;
 
 		for (int i = 0; i < rec.primary.numberToUse; i++) {
-			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.primary.chanceToUse*made)))
+			if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.primary.chanceToUse, made)))
 				ReikaInventoryHelper.decrStack(0, inv);
 		}
 		for (int i = 0; i < rec.secondary.numberToUse; i++) {
-			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.secondary.chanceToUse*made)))
+			if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.secondary.chanceToUse, made)))
 				ReikaInventoryHelper.decrStack(11, inv);
 		}
 		for (int i = 0; i < rec.tertiary.numberToUse; i++) {
-			if (ReikaRandomHelper.doWithChance(Math.min(1, rec.tertiary.chanceToUse*made)))
+			if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.tertiary.chanceToUse, made)))
 				ReikaInventoryHelper.decrStack(14, inv);
 		}
 
@@ -209,6 +205,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			a.triggerAchievement(this.getPlacer());
 
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	private float getConsumptionFactor(float base, int made) {
+		return MathHelper.clamp_float(base*made*DifficultyEffects.BLASTCONSUME.getChance(), base, 1);
 	}
 
 	private int getProducedFor(BlastRecipe rec) {
@@ -300,6 +300,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			Tamb /= 2;
 		}
 		ForgeDirection iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
+		if (iceside == null)
+			iceside = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.packed_ice);
 		if (iceside != null) {
 			if (Tamb > 0)
 				Tamb /= 4;
@@ -307,10 +309,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 		int Tadd = 0;
 		if (RotaryAux.isNextToFire(world, x, y, z)) {
-			Tadd += Tamb >= 300 ? 100 : 200;
+			Tadd += Tamb >= 100 ? 100 : 200;
 		}
 		if (RotaryAux.isNextToLava(world, x, y, z)) {
-			Tadd += Tamb >= 300 ? 400 : 600;
+			Tadd += Tamb >= 100 ? 400 : 600;
 		}
 		Tamb += Tadd;
 
@@ -326,6 +328,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			temperature = MAXTEMP;
 		if (temperature > 100) {
 			ForgeDirection side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow);
+			if (side == null)
+				side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.snow_layer);
 			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.air, 0);
 			side = ReikaWorldHelper.checkForAdjBlock(world, x, y, z, Blocks.ice);
@@ -370,7 +374,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	private boolean getSlotForItem(int slot, ItemStack is) {
 		ItemStack patt = inv[PATTERN_SLOT];
 		if (ItemRegistry.CRAFTPATTERN.matchItem(patt)) {
-			return slot >= 1 && slot <= 9 && this.patternMatches(slot-1, is, patt);
+			return slot >= 1 && slot <= 9 && ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot-1, is, patt);
 		}
 		HashSet<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
 		if (!slots.isEmpty()) {
@@ -390,10 +394,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			default:
 				return false;
 		}
-	}
-
-	private boolean patternMatches(int slot, ItemStack is, ItemStack p) {
-		return ItemCraftPattern.getMode(p) == RecipeMode.BLASTFURN && ReikaItemHelper.matchStacks(is, ItemCraftPattern.getItems(p)[slot]);
 	}
 
 	@Override
@@ -485,6 +485,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	@Override
 	public boolean canBeFrictionHeated() {
+		return true;
+	}
+
+	@Override
+	public boolean allowExternalHeating() {
 		return true;
 	}
 }

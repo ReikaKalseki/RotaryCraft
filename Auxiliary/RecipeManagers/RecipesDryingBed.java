@@ -20,6 +20,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -165,5 +167,18 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
 		return recipeList.removeValue((DryingRecipe)recipe);
+	}
+
+	@Override
+	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		this.verifyOutputItem(out);
+		String fluid = lb.getString("input_fluid");
+		Fluid f = FluidRegistry.getFluid(fluid);
+		if (f == null)
+			throw new IllegalArgumentException("Fluid '"+fluid+"' does not exist!");
+		int amt = lb.getInt("input_amount");
+		this.addRecipe(f, amt, out, RecipeLevel.CUSTOM);
+		return true;
 	}
 }

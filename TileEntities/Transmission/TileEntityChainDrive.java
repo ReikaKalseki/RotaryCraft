@@ -19,6 +19,7 @@ public class TileEntityChainDrive extends TileEntityBeltHub {
 
 	@Override
 	public int getTorque(int input) {
+		input = super.getTorque(input);
 		if (input > 16384) {
 			ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.break");
 			this.reset();
@@ -29,6 +30,7 @@ public class TileEntityChainDrive extends TileEntityBeltHub {
 
 	@Override
 	public int getOmega(int input) {
+		input = super.getOmega(input);
 		if (input > 65536) {
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 			this.resetOther();

@@ -25,6 +25,7 @@ public enum DifficultyEffects {
 	COMPACTOR(2, 2, 1),
 	SMALLERCRAFT(2, 2, 1),
 	BONUSSTEEL(2D, 1D, 0.5D),
+	BLASTCONSUME(1F, 0.25F, 0F),
 	JETFAILURE(4500, 1800, 900),
 	CONSUMEFRAC(0.03125F, 0.25F, 0.75F),
 	PRODUCEFRAC(new int[]{1600,3200}, new int[]{1000,2200}, new int[]{400,800}),

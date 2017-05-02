@@ -111,6 +111,12 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 
 		NBT.setInteger("write1", write != null ? write.ordinal() : -1);
 		NBT.setInteger("write2", write2 != null ? write2.ordinal() : -1);
+
+		NBT.setBoolean("omni", isOmniSided);
+
+		NBT.setInteger("pox", pointoffsetx);
+		NBT.setInteger("poy", pointoffsety);
+		NBT.setInteger("poz", pointoffsetz);
 	}
 
 	@Override
@@ -140,6 +146,12 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		int w2 = NBT.getInteger("write2");
 		write = w1 != -1 ? dirs[w1] : null;
 		write2 = w2 != -1 ? dirs[w2] : null;
+
+		isOmniSided = NBT.getBoolean("omni");
+
+		pointoffsetx = NBT.getInteger("pox");
+		pointoffsety = NBT.getInteger("poy");
+		pointoffsetz = NBT.getInteger("poz");
 	}
 
 	public final ForgeDirection getReadDirection() {
@@ -348,7 +360,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return wx && wy && wz;
 	}
 
-	private boolean matchTile(PowerSourceTracker te, ForgeDirection dir) {
+	protected final boolean matchTile(PowerSourceTracker te, ForgeDirection dir) {
 		if (dir == null)
 			return false;
 		int dim = te.getWorld().provider.dimensionId;
@@ -364,7 +376,7 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		return !out.isInvalid() && out.worldObj.provider.dimensionId == dim && out.xCoord == tx && out.yCoord == ty && out.zCoord == tz;
 	}
 
-	public final boolean isWritingTo(PowerSourceTracker te) {
+	public boolean isWritingTo(PowerSourceTracker te) {
 		return this.matchTile(te, write);
 	}
 

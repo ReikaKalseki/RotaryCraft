@@ -19,7 +19,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.GuiMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerFermenter;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFermenter;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
 
@@ -40,7 +40,7 @@ public class GuiFermenter extends GuiMachine
 		super.drawGuiContainerForegroundLayer(a, b);
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
-		boolean red = ferm.worldObj.isBlockIndirectlyGettingPowered(ferm.xCoord, ferm.yCoord, ferm.zCoord);
+		boolean red = ferm.hasRedstoneSignal();
 		int sx = 154;
 		int sy = 6;
 		if (red) {

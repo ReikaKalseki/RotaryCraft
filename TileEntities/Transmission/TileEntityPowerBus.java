@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.TileEntities.Transmission;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -21,6 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
@@ -35,7 +35,7 @@ import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv, BreakAction {
 
-	private HashMap<ForgeDirection, Boolean> modes = new HashMap();
+	private final boolean[] modes = new boolean[4];
 
 	private ForgeDirection inputSide;
 
@@ -44,13 +44,6 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	private int hubX = Integer.MIN_VALUE;
 	private int hubY = Integer.MIN_VALUE;
 	private int hubZ = Integer.MIN_VALUE;
-
-	public TileEntityPowerBus() {
-		for (int i = 2; i < 6; i++) {
-			ForgeDirection dir = dirs[i];
-			modes.put(dir, false);
-		}
-	}
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -136,11 +129,11 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	public boolean isSideSpeedMode(ForgeDirection dir) {
-		return modes.get(dir);
+		return modes[dir.ordinal()-2];
 	}
 
 	public void setMode(ForgeDirection dir, boolean speed) {
-		modes.put(dir, speed);
+		modes[dir.ordinal()-2] = speed;
 	}
 
 	@Override
@@ -257,9 +250,7 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 
 		inputSide = dirs[NBT.getInteger("in")];
 
-		for (int i = 2; i < 6; i++) {
-			modes.put(dirs[i], NBT.getBoolean("spd"+i));
-		}
+		ReikaArrayHelper.booleanFromByteBitflags(NBT.getByte("mode"), 4);
 
 		hubX = NBT.getInteger("hx");
 		hubY = NBT.getInteger("hy");
@@ -272,9 +263,7 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 
 		NBT.setInteger("in", this.getInputSide().ordinal());
 
-		for (int i = 2; i < 6; i++) {
-			NBT.setBoolean("spd"+i, modes.get(dirs[i]));
-		}
+		NBT.setByte("mode", ReikaArrayHelper.booleanToByteBitflags(modes));
 
 		NBT.setInteger("hx", hubX);
 		NBT.setInteger("hy", hubY);
@@ -332,6 +321,18 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 		hubX = Integer.MIN_VALUE;
 		hubY = Integer.MIN_VALUE;
 		hubZ = Integer.MIN_VALUE;
+	}
+
+	@Override
+	public boolean isWritingTo(PowerSourceTracker te) {
+		for (int i = 2; i < 6; i++) {
+			if (this.canOutputToSide(dirs[i])) {
+				//TileEntity tile = this.getAdjacentTileEntity(dirs[i]);
+				if (this.matchTile(te, dirs[i]))
+					return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

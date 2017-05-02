@@ -29,7 +29,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public enum RotaryAchievements {
 
-	RCUSEBOOK(		-1, 1,	ItemRegistry.HANDBOOK,											null,			false),
+	RCUSEBOOK(		1, 1,	ItemRegistry.HANDBOOK,											null,			false),
 	MAKESTEEL(		0, 0,	ItemStacks.steelingot, 											null,			false),
 	WORKTABLE(		-2, 1,	MachineRegistry.WORKTABLE,										MAKESTEEL,		false),
 	MAKEYEAST(		2, -2,	ItemRegistry.YEAST,				 								MAKESTEEL,		false),

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.inventory.Container;
@@ -21,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -30,6 +32,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -80,7 +83,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	@Override
-	protected void onInventoryChanged() {
+	protected void onInventoryChanged(int slot) {
 		isFull = false;
 	}
 
@@ -132,45 +135,45 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		experience = 0;
 	}
 
-	@SuppressWarnings("unused")
 	private void suck(World world, int x, int y, int z) {
 		AxisAlignedBB box = this.getBox(world, x, y, z);
 
 		///Do not merge these, they have slightly different code!
-		List<EntityItem> inbox = world.getEntitiesWithinAABB(EntityItem.class, box);
-		for (EntityItem ent : inbox) {
-			//Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.posX, ent.posY, ent.posZ, x+0.5, y+0.5, z+0.5);
-			//if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
-			if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
-				double dx = (x+0.5 - ent.posX);
-				double dy = (y+0.5 - ent.posY);
-				double dz = (z+0.5 - ent.posZ);
-				double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
-				ent.motionX += dx/ddt/ddt/1;
-				ent.motionY += dy/ddt/ddt/2;
-				ent.motionZ += dz/ddt/ddt/1;
-				if (ent.posY < y)
-					ent.motionY += 0.125;
-				if (!world.isRemote)
-					ent.velocityChanged = true;
+		List<Entity> inbox = world.selectEntitiesWithinAABB(Entity.class, box, ReikaEntityHelper.itemOrXPSelector);
+		double v = Math.max(1, power/1048576D);
+		for (Entity ent : inbox) {
+			if (ent.ticksExisted > 5) {
+				//Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.posX, ent.posY, ent.posZ, x+0.5, y+0.5, z+0.5);
+				//if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
+				if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
+					double dx = (x+0.5 - ent.posX);
+					double dy = (y+0.5 - ent.posY);
+					double dz = (z+0.5 - ent.posZ);
+					double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
+					if (ent.ticksExisted > 50 && ddt > 1.5 && ent.ticksExisted%400 < 80) { //For routing around objects
+						double t = this.getTicksExisted()/25D;
+						double r = 2.875;//+1*ReikaMathLibrary.cosInterpolation(0, 1, Math.sin(t/2));
+						dx += r*Math.cos(t);
+						dz += r*Math.sin(t);
+					}
+					double vx = v*dx/ddt/ddt;
+					double vy = v*dy/ddt/ddt/2;
+					double vz = v*dz/ddt/ddt;
+					double vmax = 0.125;
+					vx = MathHelper.clamp_double(vx, -vmax, vmax);
+					vy = MathHelper.clamp_double(vy, -vmax, vmax);
+					vz = MathHelper.clamp_double(vz, -vmax, vmax);
+					ent.motionX += vx;
+					ent.motionY += vy;
+					ent.motionZ += vz;
+					if (ent.posY < y)
+						ent.motionY += 0.125;
+					if (!world.isRemote)
+						ent.velocityChanged = true;
+				}
 			}
 		}
-		List<EntityXPOrb> inbox2 = world.getEntitiesWithinAABB(EntityXPOrb.class, box);
-		for (EntityXPOrb ent : inbox2) {
-			if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
-				double dx = (x+0.5 - ent.posX);
-				double dy = (y+0.5 - ent.posY);
-				double dz = (z+0.5 - ent.posZ);
-				double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
-				ent.motionX += dx/ddt/ddt/2;
-				ent.motionY += dy/ddt/ddt/2;
-				ent.motionZ += dz/ddt/ddt/2;
-				if (ent.posY < y)
-					ent.motionY += 0.1;
-				if (!world.isRemote)
-					ent.velocityChanged = true;
-			}
-		}
+
 	}
 
 	private void absorb(World world, int x, int y, int z) {

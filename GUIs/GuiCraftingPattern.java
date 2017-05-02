@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,8 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Instantiable.IO.PacketTarget.ServerTarget;
+import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
+import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -53,15 +55,30 @@ public class GuiCraftingPattern extends GuiContainer {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		buttonList.add(new GuiButton(0, j+6, k+6, 20, 20, ""));
+
+		String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
+		buttonList.add(new ImagedGuiButton(1, j+4, k+42, 24, 8, 18, 110, file, RotaryCraft.class));
+		buttonList.add(new ImagedGuiButton(2, j+4, k+61, 24, 8, 42, 110, file, RotaryCraft.class));
 	}
 
 	@Override
 	public void actionPerformed(GuiButton b) {
-		if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem())) {
-			RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
-			ItemCraftPattern.setMode(this.getItem(), next);
-			((ContainerCraftingPattern)player.openContainer).clearRecipe();
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), new ServerTarget(), next.ordinal());
+		if (b.id == 0) {
+			if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem())) {
+				RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
+				ItemCraftPattern.setMode(this.getItem(), next);
+				((ContainerCraftingPattern)player.openContainer).clearRecipe();
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), PacketTarget.server, next.ordinal());
+			}
+		}
+		else if (b.id == 1 || b.id == 2) {
+			int amt = GuiScreen.isShiftKeyDown() ? 64 : GuiScreen.isCtrlKeyDown() ? 16 : 1;
+			if (b.id == 2)
+				amt = -amt;
+			if (amt > 1 && ItemCraftPattern.getStackInputLimit(this.getItem()) == 1)
+				amt--;
+			ItemCraftPattern.changeStackLimit(this.getItem(), amt);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1, PacketTarget.server, amt);
 		}
 		this.initGui();
 	}
@@ -69,11 +86,16 @@ public class GuiCraftingPattern extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem()))
+		String inv = StatCollector.translateToLocal("container.inventory");
+		fontRendererObj.drawString(inv, xSize-fontRendererObj.getStringWidth(inv)-8, ySize - 96 + 2, 4210752);
+		if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem())) {
 			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, ItemCraftPattern.getMode(this.getItem()).displayName, xSize/2, 6, 4210752);
-		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if (ItemRegistry.CRAFTPATTERN.matchItem(this.getItem()))
+			int lim = ItemCraftPattern.getStackInputLimit(this.getItem());
+			ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, lim == 64 ? "\u221E" : String.valueOf(lim), 16, 40+12, 4210752);
+			//ReikaGuiAPI.instance.drawCenteredStringNoShadow(fontRendererObj, "Limit", 16, 60, 4210752);
+			fontRendererObj.drawString("Input Limit", 6, 72, 4210752);
 			ReikaGuiAPI.instance.drawItemStack(itemRender, ItemCraftPattern.getMode(this.getItem()).getIcon(), 8, 8);
+		}
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public abstract class ItemChargedArmor extends ItemRotaryArmor {
 	}
 
 	protected final void warnCharge(ItemStack is) {
-		if (ConfigRegistry.CLEARCHAT.getState())
+		if (ConfigRegistry.CLEARCHAT.getState() && is.getItemDamage() <= 32)
 			ReikaChatHelper.clearChat();
 		if (is.getItemDamage() == 2) {
 			ReikaChatHelper.write("Armor charge is very low (2 kJ)!");

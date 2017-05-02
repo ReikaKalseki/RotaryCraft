@@ -117,7 +117,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 			return 0;
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return 0;
-		float sun = ReikaWorldHelper.getSunIntensity(worldObj);
+		float sun = ReikaWorldHelper.getSunIntensity(worldObj, true, 0);
 		if (InterfaceCache.ISOLARLEVEL.instanceOf(worldObj.provider)) {
 			ISolarLevel isl = (ISolarLevel)worldObj.provider;
 			sun *= isl.getSolarEnergyMultiplier();

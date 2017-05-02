@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import ic2.api.recipe.ISemiFluidFuelManager.BurnProperty;
+import ic2.api.recipe.Recipes;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,12 +19,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
+import minechem.api.RecipeAPI;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -32,6 +37,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
@@ -41,6 +47,7 @@ import Reika.DragonAPI.Instantiable.Formula.MathExpression;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.MoleculeHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
@@ -70,10 +77,12 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesDryingBed;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesWetter;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
-import Reika.RotaryCraft.Items.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.ModInterface.BedrockRevealingInfusion;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -82,11 +91,14 @@ import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+import blusunrize.immersiveengineering.api.energy.DieselHandler;
+import blusunrize.immersiveengineering.api.energy.DieselHandler.SqueezerRecipe;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import forestry.api.fuels.GeneratorFuel;
 
 public class RotaryRecipes {
 
@@ -102,9 +114,23 @@ public class RotaryRecipes {
 
 		if (ModList.THERMALEXPANSION.isLoaded())
 			addThermalExpansion();
+		Fluid ethanol = FluidRegistry.getFluid("rc ethanol");
 		if (ModList.BCENERGY.isLoaded()) {
-			FuelManager.INSTANCE.addFuel(FluidRegistry.getFluid("rc ethanol"), ReikaBuildCraftHelper.getFuelRFPerTick()*3/2, 3000); //ethanol generates about 50% more power, but burns fast
+			FuelManager.INSTANCE.addFuel(ethanol, ReikaBuildCraftHelper.getFuelRFPerTick()*3/2, 1500); //ethanol generates about 50% more power, but burns fast
 			CoolantManager.INSTANCE.addCoolant(FluidRegistry.getFluid("rc liquid nitrogen"), 0.01F);
+		}
+		if (ModList.FORESTRY.isLoaded()) {
+			int power = forestry.api.fuels.FuelManager.generatorFuel.get(FluidRegistry.getFluid("bioethanol")).eu*36/32; //36/32 (1.125x) forestry ethanol
+			forestry.api.fuels.FuelManager.generatorFuel.put(ethanol, new GeneratorFuel(new FluidStack(ethanol, 1), power, 3)); //25% less burn time
+		}
+		if (ModList.IC2.isLoaded()) {
+			double power = Recipes.semiFluidGenerator.getBurnProperties().get("bioethanol").power*18/16; //1.125x again
+			BurnProperty fuel = Recipes.semiFluidGenerator.getBurnProperties().get("fuel");
+			power = Math.max(power, fuel.power*3/2); //50% more than fuel
+			Recipes.semiFluidGenerator.addFluid(ethanol.getName(), Math.max(8, fuel.amount*4), power);
+		}
+		if (ModList.IMMERSIVEENG.isLoaded()) {
+			DieselHandler.squeezerList.add(new SqueezerRecipe(ItemRegistry.CANOLA.getStackOf(), 15, new FluidStack(FluidRegistry.getFluid("plantoil"), 20), null)); //4x less but 6x faster
 		}
 	}
 
@@ -150,7 +176,7 @@ public class RotaryRecipes {
 		//ItemStack conductanceCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilElectrum", 1);
 
 		ThermalRecipeHelper.addCoolant(RotaryCraft.nitrogenFluid, 40000);
-		ThermalRecipeHelper.addCompressionFuel(RotaryCraft.ethanolFluid, 125000); //1/4 of forestry
+		ThermalRecipeHelper.addCompressionFuel(RotaryCraft.ethanolFluid, 250000); //1/2 of forestry
 	}
 
 	public static void addPostLoadRecipes() {
@@ -165,6 +191,7 @@ public class RotaryRecipes {
 
 		for (RecipeHandler h : recipeHandlers) {
 			h.addPostLoadRecipes();
+			h.loadCustomRecipeFiles();
 		}
 
 		//RecipesExtractor.recipes().addModRecipes();
@@ -225,6 +252,8 @@ public class RotaryRecipes {
 			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.shaftCast, ItemStacks.shaftitem, bk, temp, f, base*3/DifficultyEffects.PARTCRAFT.getInt(), 80);
 			SmelteryRecipeHandler.addReversibleCasting(ItemStacks.propCast, ItemStacks.prop, bk, temp, f, base*3, 80);
 
+			SmelteryRecipeHandler.addMelting(ItemStacks.ironscrap, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
+
 			//Bedrock parts
 			int id = ExtraConfigIDs.BEDROCKID.getValue();
 			int id2 = ExtraConfigIDs.HSLAID.getValue();
@@ -273,49 +302,7 @@ public class RotaryRecipes {
 		}
 
 		if (ModList.THAUMCRAFT.isLoaded()) {
-			ReikaThaumHelper.addBookCategory(new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png"), "rotarycraft");
-
-			MathExpression cost = new MathExpression() {
-				@Override
-				public double evaluate(double arg) throws ArithmeticException {
-					return arg/5D;
-				}
-
-				@Override
-				public double getBaseValue() {
-					return 0;
-				}
-
-				@Override
-				public String toString() {
-					return "/5";
-				}
-			};
-
-			ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
-			ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
-			ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
-			AspectList al = new AspectList();
-			al.add(Aspect.MIND, 10);
-			al.add(Aspect.SENSES, 25);
-			al.add(Aspect.AURA, 10);
-			al.add(Aspect.ARMOR, 25);
-			al.add(Aspect.MAGIC, 25);
-			ItemStack[] recipe = {
-					meter,
-					new ItemStack(Items.gold_ingot),
-					ThaumItemHelper.ItemEntry.SALIS.getItem(),
-					ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
-					meter,
-					new ItemStack(Items.gold_ingot),
-					ThaumItemHelper.ItemEntry.SALIS.getItem(),
-					ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
-
-			};
-			String desc = "Combining the protection of bedrock with the power of a Thaumometer";
-			InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
-			String page = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? RotaryDescriptions.getParentPage()+"thaum.xml" : "";
-			ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page);
+			addThaumcraft();
 		}
 
 		if (ModList.BOTANIA.isLoaded()) {
@@ -379,6 +366,70 @@ public class RotaryRecipes {
 			gear.stackTagCompound.setBoolean("living", true);
 			MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', livingrockslab, 'G', ItemStacks.livingrock16x});
 		}
+
+		if (ModList.MINECHEM.isLoaded()) {
+			RecipeAPI.addDecompositionRecipe(ItemRegistry.ETHANOL.getStackOf(), "8 ethanol");
+			RecipeAPI.addDecompositionRecipe(ItemStacks.steelingot.copy(), "8 Fe", "1 S", "0.25 P", "1 C", "0.5 Si");
+			RecipeAPI.addDecompositionRecipe(ItemStacks.aluminumpowder.copy(), "1 Al");
+			MoleculeHelper.addMoleculeWithDecomposition("octane", "8 C", "18 H");
+			MoleculeHelper.addMoleculeWithDecomposition("hexane", "6 C", "14 H");
+			MoleculeHelper.addMoleculeWithDecomposition("decane", "10 C", "22 H");
+			MoleculeHelper.addMoleculeWithDecomposition("methylhexane", "7 C", "16 H");
+			MoleculeHelper.addMoleculeWithDecomposition("cyclohexane", "6 C", "12 H");
+			MoleculeHelper.addMoleculeWithDecomposition("methylcyclohexane", "7 C", "14 H");
+			MoleculeHelper.addMoleculeWithDecomposition("benzene", "6 C", "6 H");
+			MoleculeHelper.addMoleculeWithDecomposition("napthalene", "10 C", "8 H");
+			RecipeAPI.addDecompositionFluidRecipe(new FluidStack(FluidRegistry.getFluid("rc jet fuel"), 100), "4 octane", "2.2 hexane", "2.1 decane", "3.7 methylhexane", "1.2 cyclohexane", "2.3 methylcyclohexane", "0.5 benzene", "1.3 toluene", "0.5 napthalene");
+		}
+	}
+
+	@ModDependent(ModList.THAUMCRAFT)
+	private static void addThaumcraft() {
+		ReikaThaumHelper.addBookCategory(new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png"), "rotarycraft");
+
+		MathExpression cost = new MathExpression() {
+			@Override
+			public double evaluate(double arg) throws ArithmeticException {
+				return arg/5D;
+			}
+
+			@Override
+			public double getBaseValue() {
+				return 0;
+			}
+
+			@Override
+			public String toString() {
+				return "/5";
+			}
+		};
+
+		//ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
+		//ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
+		ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
+		AspectList al = new AspectList();
+		al.add(Aspect.MIND, 10);
+		al.add(Aspect.SENSES, 25);
+		al.add(Aspect.AURA, 10);
+		al.add(Aspect.ARMOR, 25);
+		al.add(Aspect.MAGIC, 25);
+		ItemStack[] recipe = {
+				meter,
+				new ItemStack(Items.gold_ingot),
+				ThaumItemHelper.ItemEntry.SALIS.getItem(),
+				ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+				meter,
+				new ItemStack(Items.gold_ingot),
+				ThaumItemHelper.ItemEntry.SALIS.getItem(),
+				ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
+
+		};
+		String desc = "Combining the protection of bedrock with the power of a Thaumometer";
+		//InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
+		InfusionRecipe ir = new BedrockRevealingInfusion(7, al, recipe);
+		ThaumcraftApi.getCraftingRecipes().add(ir);
+		String page = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? RotaryDescriptions.getParentPage()+"thaum.xml" : "";
+		ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page).setParents("GOGGLES");
 	}
 
 	public static ItemStack getConverterGatingItem() {
@@ -445,6 +496,9 @@ public class RotaryRecipes {
 		MachineRegistry.GRINDER.addCrafting("B B", "SGS", "PPP", 'B', ItemStacks.steelingot, 'G', ItemStacks.steelgear, 'P', ItemStacks.basepanel, 'S', ItemStacks.saw);
 
 		MachineRegistry.RESERVOIR.addCrafting("B B", "B B", "BBB", 'B', ItemStacks.basepanel);
+		nbt = new NBTTagCompound();
+		nbt.setBoolean("cover", true);
+		MachineRegistry.RESERVOIR.addNBTCrafting(nbt, "BPB", "B B", "BBB", 'B', ItemStacks.basepanel, 'P', Blocks.glass_pane);
 
 		MachineRegistry.FIREWORK.addCrafting("BEB", "BDB", "BRB", 'B', ItemStacks.basepanel, 'R', Items.redstone, 'E', Items.ender_eye, 'D', Blocks.dispenser);
 
@@ -515,6 +569,8 @@ public class RotaryRecipes {
 		MachineRegistry.SCALECHEST.addCrafting("sss", "scs", "sss", 'c', Blocks.chest, 's', ItemStacks.steelingot);
 
 		MachineRegistry.SPILLER.addCrafting("sps", "s s", 'p', ItemStacks.pipe, 's', ItemStacks.steelingot);
+
+		MachineRegistry.FILLER.addCrafting("sss", "sps", "s s", 'p', Blocks.chest, 's', ItemStacks.steelingot);
 
 		MachineRegistry.SMOKEDETECTOR.addCrafting(" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab, 'R', Items.redstone, 'N', Blocks.noteblock);
 
@@ -651,6 +707,12 @@ public class RotaryRecipes {
 		MachineRegistry.DROPS.addCrafting("PSP", "PDP", "PSP", 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'P', ItemStacks.basepanel);
 
 		MachineRegistry.ITEMFILTER.addCrafting("sSs", "CCC", "PRP", 's', ItemStacks.steelingot, 'S', ItemStacks.screen, 'C', ItemStacks.pcb, 'R', Items.redstone, 'P', ItemStacks.basepanel);
+
+		MachineRegistry.HYDRATOR.addOreRecipe("sls", "p p", "PpP", 's', ItemStacks.steelingot, 'p', "plankWood", 'l', Blocks.ladder, 'P', ItemStacks.basepanel);
+
+		MachineRegistry.GATLING.addCrafting("PPG", " GA", "  B", 'B', ItemStacks.railbase, 'A', ItemStacks.railaim, 'G', ItemStacks.steelgear, 'P', ItemStacks.cylinder);
+
+		MachineRegistry.SPILLWAY.addCrafting("S  ", "PSP", "PpP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe);
 	}
 
 	private static void addCraftItems() {
@@ -938,6 +1000,8 @@ public class RotaryRecipes {
 
 		ItemRegistry.PUMP.addRecipe(" sP", "sIs", "sRs", 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 's', ItemStacks.steelingot, 'P', ItemStacks.pipe, 'I', ItemStacks.impeller);
 
+		ItemRegistry.HELDPISTON.addRecipe(" sP", "sRs", "gs ", 'g', Items.glowstone_dust, 's', ItemStacks.steelingot, 'P', Blocks.piston, 'R', Blocks.redstone_block);
+
 		ItemRegistry.JUMP.addRecipe("GbG", "SgS", "B B", 'B', ItemStacks.basepanel, 'G', ItemStacks.steelgear, 'b', ItemRegistry.STEELBOOTS.getStackOf(), 'g', ItemStacks.gearunit, 'S', ItemRegistry.SPRING.getStackOf());
 
 		ItemRegistry.FUEL.addRecipe("SBS", "BGB", "SPS", 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', Blocks.glass);
@@ -958,6 +1022,13 @@ public class RotaryRecipes {
 
 		if (!ModList.REACTORCRAFT.isLoaded())
 			ItemRegistry.UPGRADE.addMetaBlastRecipe(2000, 32, Upgrades.EFFICIENCY.ordinal(), "IGI", "FTF", "BPB", 'G', ItemStacks.generator, 'I', ItemStacks.redgoldingot, 'B', ItemStacks.waterplate, 'P', ItemStacks.power, 'F', ItemStacks.bedingot, 'T', ItemStacks.tungsteningot);
+
+		ItemRegistry.GEARUPGRADE.addMetaBlastRecipe(1200, 2, 0, "sSS", "SsS", "SSG", 'S', ItemStacks.steelingot, 'G', Blocks.glass_pane, 's', ItemStacks.bedrockshaft);
+
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(1), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock2x));
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(2), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock4x));
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(3), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock8x));
+		ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(4), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), ItemStacks.bedrock16x));
 	}
 
 	private static void addMisc() {
@@ -977,18 +1048,18 @@ public class RotaryRecipes {
 
 		//GameRegistry.addRecipe(new ScrapCombinationRecipe());
 
-		GameRegistry.addRecipe(ReikaItemHelper.oakWood, new Object[]{
-				"WW", "WW", 'W', ItemStacks.sawdust});
-		GameRegistry.addRecipe(ReikaItemHelper.spruceWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.BLACK.getStackOf()});
-		GameRegistry.addRecipe(ReikaItemHelper.birchWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.WHITE.getStackOf()});
-		GameRegistry.addRecipe(ReikaItemHelper.jungleWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.RED.getStackOf()});
-		GameRegistry.addRecipe(ReikaItemHelper.acaciaWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.ORANGE.getStackOf()});
-		GameRegistry.addRecipe(ReikaItemHelper.darkOakWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.BROWN.getStackOf()});
+		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.oakWood, new Object[]{
+				"WW", "WW", 'W', ItemStacks.sawdust}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.spruceWood, new Object[]{
+				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.BLACK.getOreDictName()}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.birchWood, new Object[]{
+				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.WHITE.getOreDictName()}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.jungleWood, new Object[]{
+				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.RED.getOreDictName()}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.acaciaWood, new Object[]{
+				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.ORANGE.getOreDictName()}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.darkOakWood, new Object[]{
+				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.BROWN.getOreDictName()}));
 
 		GameRegistry.addRecipe(new ItemStack(Items.paper, 8, 0), new Object[]{
 			" W ", "SSS", "RRR", 'R', Blocks.stone, 'S', ItemStacks.sawdust, 'W', Items.water_bucket});
@@ -1023,6 +1094,7 @@ public class RotaryRecipes {
 			//anything else is not an even split
 			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(4), 2), mat.getGearUnitItem(16));
 			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(2), 2), mat.getGearUnitItem(4));
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearItem(), 2), mat.getGearUnitItem(2));
 		}
 
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);
@@ -1173,20 +1245,20 @@ public class RotaryRecipes {
 			MachineRegistry.ENGINE.addMetaOreRecipe(EngineType.AC.ordinal(), "SSS", "SGs", "PRP", 'S', "ingotElectrum", 'R', Items.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'G', ItemStacks.goldcoil);
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.SPORT.ordinal(), "CrC", "SGs", "PIP", 'C', ItemStacks.aluminumcylinder, 'S', ItemStacks.igniter, 'I', ItemStacks.impeller, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem, 'r', ItemStacks.radiator, 'G', ItemStacks.gearunit);
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.HYDRO.ordinal(), "PPP", "PGP", "PPP", 'P', ItemStacks.waterplate, 'G', ItemStacks.diamondshaftcore);
-		MachineRegistry.ENGINE.addMetaCrafting(EngineType.MICRO.ordinal(), "CSS", "cTs", "PPP", 'S', ItemStacks.steelingot, 'C', ItemStacks.compressor, 'c', ItemStacks.highcombustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
-		MachineRegistry.ENGINE.addMetaCrafting(EngineType.JET.ordinal(), "DCS", "ScS", "PTs", 'S', ItemStacks.steelingot, 'D', ItemStacks.diffuser, 'C', ItemStacks.compoundcompress, 'c', ItemStacks.highcombustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.MICRO.ordinal(), "CSS", "cTs", "PPP", 'S', ItemStacks.silumin, 'C', ItemStacks.compressor, 'c', ItemStacks.highcombustor, 'T', ItemStacks.turbine, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
+		MachineRegistry.ENGINE.addMetaCrafting(EngineType.JET.ordinal(), "DCS", "ScS", "PTs", 'S', ItemStacks.silumin, 'D', ItemStacks.diffuser, 'C', ItemStacks.compoundcompress, 'c', ItemStacks.highcombustor, 'T', ItemStacks.compoundturb, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
 
 		if (ConfigRegistry.ROTATEHOSE.getState()) {
 			MachineRegistry.HOSE.addSizedOreRecipe(DifficultyEffects.PIPECRAFT.getInt(), "WWW", "GGG", "WWW", 'G', Blocks.glass, 'W', "plankWood");
 			MachineRegistry.PIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "SSS", "GGG", "SSS", 'S', ItemStacks.steelingot, 'G', Blocks.glass);
 			MachineRegistry.FUELLINE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "OOO", "GGG", "OOO", 'O', Blocks.obsidian, 'G', Blocks.glass);
-			MachineRegistry.BEDPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "BBB", "GGG", "BBB", 'B', ItemStacks.bedingot, 'G', Blocks.glass);
+			MachineRegistry.BEDPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "BBB", "GGG", "BBB", 'B', ItemStacks.bedingot, 'G', BlockRegistry.BLASTGLASS.getBlockInstance());
 		}
 		else {
 			MachineRegistry.HOSE.addSizedOreRecipe(DifficultyEffects.PIPECRAFT.getInt(), "WGW", "WGW", "WGW", 'G', Blocks.glass, 'W', "plankWood");
 			MachineRegistry.PIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "SGS", "SGS", "SGS", 'S', ItemStacks.steelingot, 'G', Blocks.glass);
 			MachineRegistry.FUELLINE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "OGO", "OGO", "OGO", 'O', Blocks.obsidian, 'G', Blocks.glass);
-			MachineRegistry.BEDPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "BGB", "BGB", "BGB", 'B', ItemStacks.bedingot, 'G', Blocks.glass);
+			MachineRegistry.BEDPIPE.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "BGB", "BGB", "BGB", 'B', ItemStacks.bedingot, 'G', BlockRegistry.BLASTGLASS.getBlockInstance());
 		}
 
 		addGearboxes();
@@ -1318,6 +1390,7 @@ public class RotaryRecipes {
 	private static final Collection<RecipeHandler> recipeHandlers = new OneWayList();
 
 	public static void loadMachineRecipeHandlers() {
+		loadRecipeHandler(WorktableRecipes.getInstance());
 		loadRecipeHandler(RecipesBlastFurnace.getRecipes());
 		loadRecipeHandler(RecipesCentrifuge.getRecipes());
 		loadRecipeHandler(RecipesCompactor.getRecipes());
@@ -1328,6 +1401,7 @@ public class RotaryRecipes {
 		loadRecipeHandler(RecipesLavaMaker.getRecipes());
 		loadRecipeHandler(RecipesPulseFurnace.getRecipes());
 		loadRecipeHandler(RecipesWetter.getRecipes());
+		loadRecipeHandler(RecipesMagnetizer.getRecipes());
 	}
 
 	private static void loadRecipeHandler(RecipeHandler handler) {
