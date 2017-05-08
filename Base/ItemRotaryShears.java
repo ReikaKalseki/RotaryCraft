@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Interfaces.Block.ShearablePlant;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -72,7 +73,18 @@ public abstract class ItemRotaryShears extends ItemShears implements IndexedItem
 		}
 		Block b = world.getBlock(x, y, z);
 		if (b instanceof ShearablePlant) {
-			((ShearablePlant)b).shearAll(world, x, y, z, ep);
+			if (ep.isSneaking()) {
+				((ShearablePlant)b).shearAll(world, x, y, z, ep);
+				if (this.isDamageable()) {
+					is.damageItem(3, ep);
+				}
+			}
+			else {
+				((ShearablePlant)b).shearSide(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[side].getOpposite(), ep);
+				if (this.isDamageable()) {
+					is.damageItem(1, ep);
+				}
+			}
 			ReikaSoundHelper.playBreakSound(world, x, y, z, b);
 			return true;
 		}

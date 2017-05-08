@@ -30,6 +30,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -170,6 +171,8 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 		if (m.isSolidBottom()) {
 			return te.isFlipped ? dir == ForgeDirection.UP : dir == ForgeDirection.DOWN;
 		}
+		if (m == MachineRegistry.COMPACTOR)
+			return dir != ((TileEntityCompactor)te).getReadDirection().getOpposite();
 		return false;
 	}
 

@@ -1021,7 +1021,7 @@ public class RotaryRecipes {
 		ItemRegistry.UPGRADE.addMetaRecipe(6, "SEI", "ERE", "SEI", 'R', ItemStacks.compoundturb, 'S', ItemStacks.highcombustor, 'I', ItemStacks.igniter, 'E', ItemStacks.bedrockdust);
 
 		if (!ModList.REACTORCRAFT.isLoaded())
-			ItemRegistry.UPGRADE.addMetaBlastRecipe(2000, 32, Upgrades.EFFICIENCY.ordinal(), "IGI", "FTF", "BPB", 'G', ItemStacks.generator, 'I', ItemStacks.redgoldingot, 'B', ItemStacks.waterplate, 'P', ItemStacks.power, 'F', ItemStacks.bedingot, 'T', ItemStacks.tungsteningot);
+			ItemRegistry.UPGRADE.addMetaBlastRecipe(1980, 32, Upgrades.EFFICIENCY.ordinal(), "IGI", "FTF", "BPB", 'G', ItemStacks.generator, 'I', ItemStacks.redgoldingot, 'B', ItemStacks.waterplate, 'P', ItemStacks.power, 'F', ItemStacks.bedingot, 'T', ItemStacks.tungsteningot);
 
 		ItemRegistry.GEARUPGRADE.addMetaBlastRecipe(1200, 2, 0, "sSS", "SsS", "SSG", 'S', ItemStacks.steelingot, 'G', Blocks.glass_pane, 's', ItemStacks.bedrockshaft);
 

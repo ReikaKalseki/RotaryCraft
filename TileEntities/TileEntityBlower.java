@@ -109,52 +109,54 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 
 		if (source instanceof IInventory) {
 			TileEntity target = this.getAdjacentTileEntity(dir);
-			WorldLocation tg = new WorldLocation(target);
+			if (target != null) {
+				WorldLocation tg = new WorldLocation(target);
 
-			ArrayList<TileEntity> li = new ArrayList();
-			while (target instanceof TileEntityBlower) {
-				TileEntityBlower te = (TileEntityBlower)target;
-				target = te.getAdjacentTileEntity(te.getFacingDir());
-				tg = tg.move(te.getFacingDir(), 1);
+				ArrayList<TileEntity> li = new ArrayList();
+				while (target instanceof TileEntityBlower) {
+					TileEntityBlower te = (TileEntityBlower)target;
+					target = te.getAdjacentTileEntity(te.getFacingDir());
+					tg = tg.move(te.getFacingDir(), 1);
 
-				if (li.contains(target))
-					return;
-				else
-					li.add(target);
+					if (li.contains(target))
+						return;
+					else
+						li.add(target);
 
-				if (this.equals(target)) { //to prevent stackoverflow from loops, because some idiot is going to try
-					return;
+					if (this.equals(target)) { //to prevent stackoverflow from loops, because some idiot is going to try
+						return;
+					}
+					if (source.equals(target)) { //to prevent dupe glitch, and because this would be stupid to do
+						return;
+					}
 				}
-				if (source.equals(target)) { //to prevent dupe glitch, and because this would be stupid to do
-					return;
-				}
-			}
 
-			//this.printTEs(source, target);
+				//this.printTEs(source, target);
 
-			if (target instanceof IInventory) {
-				if (InterfaceCache.DSU.instanceOf(target)) {
-					this.transferItems(null, (IInventory)source, (IInventory)target, dir);
-				}
-				else if (this.tryPatternInsertion((IInventory)source, target)) {
+				if (target instanceof IInventory) {
+					if (InterfaceCache.DSU.instanceOf(target)) {
+						this.transferItems(null, (IInventory)source, (IInventory)target, dir);
+					}
+					else if (this.tryPatternInsertion((IInventory)source, target)) {
 
-				}
-				else {
-					HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
-					if (map != null && !map.isEmpty())
-						this.transferItems(map, (IInventory)source, (IInventory)target, dir);
-				}
-				//ReikaJavaLibrary.pConsole(map, Side.SERVER);
-			}
-			else if (target == null && ConfigRegistry.BLOWERSPILL.getState()) {
-				if (tg.isEmpty()) {
-					if (InterfaceCache.DSU.instanceOf(source)) {
-						this.dumpItems(null, (IInventory)source, tg);
 					}
 					else {
 						HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
-						if (map != null && !map.isEmpty()) {
-							this.dumpItems(map, (IInventory)source, tg);
+						if (map != null && !map.isEmpty())
+							this.transferItems(map, (IInventory)source, (IInventory)target, dir);
+					}
+					//ReikaJavaLibrary.pConsole(map, Side.SERVER);
+				}
+				else if (target == null && ConfigRegistry.BLOWERSPILL.getState()) {
+					if (tg.isEmpty()) {
+						if (InterfaceCache.DSU.instanceOf(source)) {
+							this.dumpItems(null, (IInventory)source, tg);
+						}
+						else {
+							HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
+							if (map != null && !map.isEmpty()) {
+								this.dumpItems(map, (IInventory)source, tg);
+							}
 						}
 					}
 				}

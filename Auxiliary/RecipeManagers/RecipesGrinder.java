@@ -66,6 +66,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.stonebrick, new ItemStack(Blocks.cobblestone), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.furnace, new ItemStack(Blocks.cobblestone, 8, 0), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.brick_block, new ItemStack(Items.clay_ball, 4, 0), RecipeLevel.PERIPHERAL);
+		this.addRecipe(Blocks.clay, new ItemStack(Items.clay_ball, 4, 0), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.brick_stairs, new ItemStack(Items.clay_ball, 6, 0), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Items.brick, new ItemStack(Items.clay_ball), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.stone_stairs, new ItemStack(Blocks.gravel, 2, 0), RecipeLevel.PERIPHERAL);

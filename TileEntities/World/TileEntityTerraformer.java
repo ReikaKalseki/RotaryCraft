@@ -91,8 +91,8 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
-		this.getCoordsFromIAP(world, x, y, z);
 		positionComparator = new PositionComparator(this);
+		this.getCoordsFromIAP(world, x, y, z);
 	}
 
 	@Override

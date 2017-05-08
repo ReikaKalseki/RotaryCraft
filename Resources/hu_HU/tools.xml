@@ -1,0 +1,80 @@
+﻿<?xml version="1.0"?>
+<tools>
+	<spring>
+		The wind spring is used to store mechanical energy. Once wound up with the coil winder, it can be used in another winder to provide a small amount of power, or it can be used to run various tools. Note that when charging coils, they run the risk of breaking, a risk which gets larger and larger as they are wound tighter and tighter.
+	</spring>
+	<strongspring>
+		To eliminate the chance of breakage, the spring's tensile strength can be upgraded by thickening the steel and reinforcing it with diamond and bedrock. Due to how stiff these new coils are, however, they require 16 times as much torque to achieve the same charge. These coils also supply far more power when unwound in a coil winder.
+	</strongspring>
+	<ultra>
+		The ultrasound sends high-frequency noise through blocks to determine their density. From this, it is able to detect nearby pockets of low density, such as air, or variations in density, like ore veins. It can also detect the silverfish inside infested blocks.
+	</ultra>
+	<motion>
+		The motion tracker emits a sonar and radar pulse to detect any creatures and evaluate their distance and speed. From this, it can inform you of nearby mobs (including if they are targeting you), even through walls.,
+	</motion>
+	<vac>
+		The vacuum is essentially a handheld version of the Item Vacuum machine. Right-clicking with it will draw items and XP towards you, assuming you have the inventory space for it. Shift-right-clicking on a storage block can be used to empty it all at once.
+	</vac>
+	<stun>
+		The knockback gun deals no direct damage, but can be used to send mobs flying back and keep them away. Using shift-right-click, its powerful sound blast can also be used to punch out connected areas of loose material, like gravel, leaves, and ores.
+	</stun>
+	<gravel>
+		The gravel gun launches pieces of flint at high speed at a target. At higher charge levels, the pieces can deal enough damage to kill most mobs in one hit. Due to its low mass and enormous velocity, the flint is not affected by gravity over its trajectory. This tool uses gravel as ammunition, and can only fire at a living entity, not things like blocks, machines, or dropped items.
+	</gravel>
+	<fireball>
+		The fireball launcher fires ghast-style fireballs at a target. It can be charged like a bow, up to maximum power at dark blue. Higher charge levels mean a more powerful explosion, up to twice that of a TNT blast. This tool requires fire charges as ammunition.
+	</fireball>
+	<handcraft>
+		The handheld crafting unit is exactly as the name implies; it can be used as a portable crafting table without having to place it down.
+	</handcraft>
+	<nvg>
+		Night-vision goggles allow you to see clearly, even in full blackness. However, they require a helmet armor slot and provide no defensive protection. To alleviate this, they can be crafted with a bedrock helmet to make a night-vision helmet.
+	</nvg>
+	<buckets>
+		Buckets of lubricant or jet fuel can be made by placing empty buckets in the appropriate slots of the grinder or fractionator. They can then be carried to a machine that needs them, to save on piping for long distances. Ethanol can also be bucketed in and out of engines and tanks.
+	</buckets>
+	<bedtools>
+		Bedrock tools are made from bedrock ingots. They have infinite durability, and are faster than the diamond tools while being just as effective at harvesting blocks. Also, because of their hardness, bedrock tools are extremely sharp. A bedrock pickaxe can cleanly harvest any block, as if it was permanently enchanted with Silk Touch, and a bedrock sword is very effective against armor and can harvest mobs much more cleanly. The sharpness of bedrock shears makes them able to harvest even the most delicate of plants. A bedrock hoe can be used to till a 5x5 area, or, while sneaking, to use seeds to replant grass.
+	</bedtools>
+	<bedarmor>
+		Armor can also be made of bedrock ingots. Like bedrock tools, it has infinite durability.
+	</bedarmor>
+	<targeter>
+		The TNT cannon targeting aid allows you to easily choose the target of the TNT cannon. Simply look at your target, placing your crosshairs directly on it, and the TNT cannon, if it is set to target mode, will target the block you are looking at. This tool may not work for extremely far targets, but they are outside the TNT cannon's range anyways.
+	</targeter>
+	<iogoggles>
+		IO Goggles are a utility device to see the input and ouput sides of machines at all times, useful when debugging complex setups.
+	</iogoggles>
+	<ckey>
+		The cannon key is used to configure cannon-type machines like RailGuns. If the owner right-clicks a machine with it, they can edit the player targeting whitelist. If anyone else right-clicks the machine with it, they are added to the whitelist.
+	</ckey>
+	<minecart>
+		The ethanol-engine-powered minecart is a faster and heavier equivalent to the vanilla furnace minecart, and thus is well-suited for pushing long cart trains. It, like its engine, runs off of ethanol crystals.
+	</minecart>
+	<tileselect>
+		The tile selector is used to add tiles to the memories of some machines, like the terraformer. If you right-click the machine with the tool, it binds the tool to it, and then right-clicking anywhere else adds that block to the machine's storage. To add machine's blocks, shift-right-click them.
+	</tileselect>
+	<jetpack>
+		A jetpack allows you to fly, making construction and navigation (or even combat) much easier. It consumes rather a lot of fuel, so keep an eye on the fuel gauge. Using jet fuel provides a thrust boost, as does adding a gas turbine engine. Also, adding three ingots across the top in a worktable will add a wing, aiding its ability to glide.
+	
+		The bedrock chestplate can be combined with the jetpack to get both the ability to fly and the protection of the chestplate. Because of the added mass, it is slightly less powerful and responds slightly more sluggishly.
+	</jetpack>
+	<steeltools>
+		HSLA can be made into tools. This makes tools that last 600 uses, but are otherwise equivalent to iron tools.
+	</steeltools>
+	<steelarmor>
+		Armor can also be made of HSLA steel. It provides slightly better protection than iron and lasts rather longer.
+	</steelarmor>
+	<itempump>
+		The spring-powered pump allows you to pick up large quantities of liquid from the world into the tool's internal tank. This liquid can then be deposited into a tank by right-clicking on it.
+	</itempump>
+	<jumpboots>
+		Spring Boots give the wearer greater agility and mobility by increasing their effective jump height and sprinting speed. They also double as shock absorbers, dampening fall damage.
+	</jumpboots>
+	<tanks>
+		Backup fuel tanks allow you to carry some extra fuel for things like jetpacks in case of emergency. They can be filled in the filling station. Right-click to empty them into their target item.
+	</tanks>
+	<disk>
+		The music disc allows you to copy music between music boxes. Right-click a programmed music box with an empty disk to create a written copy; right-clicking a music box with a written disk will overwrite the music box with the disk contents.
+	</disk>
+</tools>
