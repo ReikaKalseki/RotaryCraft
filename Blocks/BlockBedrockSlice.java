@@ -17,10 +17,17 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockBounds;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
@@ -56,22 +63,28 @@ public class BlockBedrockSlice extends BlockBasic
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
 	{
+		/*
 		int var5 = world.getBlockMetadata(x, y, z);
 		if (var5 != 0)
 			return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + (15-var5)/16F, z + maxZ);
 		else
 			return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
+		 */
+		return ((TileEntityBedrockSlice)world.getTileEntity(x, y, z)).getBounds().asAABB(x, y, z);
 	}
 
 	/**
 	 * Updates the blocks bounds based on its current state. Args: world, x, y, z
 	 */
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int x, int y, int z)
+	public void setBlockBoundsBasedOnState(IBlockAccess iba, int x, int y, int z)
 	{
-		int var5 = par1IBlockAccess.getBlockMetadata(x, y, z);
+		/*
+		int var5 = iba.getBlockMetadata(x, y, z);
 		float var6 = 1F-(1 * (var5)) / 16.0F; //Get thinner each damageval++
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, var6, 1.0F);
+		 */
+		((TileEntityBedrockSlice)iba.getTileEntity(x, y, z)).getBounds().copyToBlock(this);
 	}
 
 	@Override
@@ -104,15 +117,13 @@ public class BlockBedrockSlice extends BlockBasic
 		return 0;
 	}
 
-
 	/**
 	 * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
 	 * coordinates.  Args: blockAccess, x, y, z, side
 	 */
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int x, int y, int z, int par5)
-	{
-		return par5 == 1 ? true : super.shouldSideBeRendered(par1IBlockAccess, x, y, z, par5);
+	public boolean shouldSideBeRendered(IBlockAccess iba, int x, int y, int z, int par5) {
+		return super.shouldSideBeRendered(iba, x, y, z, par5);//par5 == 1 ? true : super.shouldSideBeRendered(iba, x, y, z, par5);
 	}
 
 	@Override
@@ -131,7 +142,7 @@ public class BlockBedrockSlice extends BlockBasic
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
 		return 0;
 	}
-	/*
+
 	@Override
 	public boolean hasTileEntity(int meta) {
 		return true;
@@ -145,22 +156,29 @@ public class BlockBedrockSlice extends BlockBasic
 	public static class TileEntityBedrockSlice extends TileEntity {
 
 		public float dustYield = 1;
+		private ForgeDirection machineDirection = ForgeDirection.EAST;
 
 		@Override
 		public boolean canUpdate() {
 			return false;
 		}
 
+		private BlockBounds getBounds() {
+			return BlockBounds.block().cut(machineDirection, this.getBlockMetadata()/16D);
+		}
+
 		@Override
 		public void readFromNBT(NBTTagCompound NBT) {
 			super.readFromNBT(NBT);
 			dustYield = NBT.getFloat("yield");
+			machineDirection = ForgeDirection.VALID_DIRECTIONS[NBT.getInteger("dir")];
 		}
 
 		@Override
 		public void writeToNBT(NBTTagCompound NBT) {
 			super.writeToNBT(NBT);
 			NBT.setFloat("yield", dustYield);
+			NBT.setInteger("dir", machineDirection.ordinal());
 		}
 
 		@Override
@@ -168,5 +186,24 @@ public class BlockBedrockSlice extends BlockBasic
 			return oldBlock != newBlock;
 		}
 
-	}*/
+		public void setDirection(ForgeDirection dir) {
+			machineDirection = dir;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+
+		@Override
+		public Packet getDescriptionPacket() {
+			NBTTagCompound NBT = new NBTTagCompound();
+			this.writeToNBT(NBT);
+			S35PacketUpdateTileEntity pack = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, NBT);
+			return pack;
+		}
+
+		@Override
+		public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity p)  {
+			this.readFromNBT(p.field_148860_e);
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+
+	}
 }

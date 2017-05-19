@@ -410,9 +410,15 @@ public class ModelBedrockBreakerV extends RotaryModelBase
 		Shape3cca.render(te, f5);
 		Shape3dd.render(te, f5);
 
+		float f = (Float)li.get(1);
 		for (int i = 1; i < step; i++) {
 			int a = i-1;
+			GL11.glPushMatrix();
 			GL11.glTranslated(a, 0, 0);
+			if (i == step-1) {
+				GL11.glTranslated(-f/2, 0, 0);
+				GL11.glScaled(1+f, 1, 1);
+			}
 			Shape7.render(te, f5);
 			Shape7a.render(te, f5);
 			Shape7b.render(te, f5);
@@ -421,7 +427,7 @@ public class ModelBedrockBreakerV extends RotaryModelBase
 			Shape7e.render(te, f5);
 			Shape7f.render(te, f5);
 			Shape7g.render(te, f5);
-			GL11.glTranslated(-a, 0, 0);
+			GL11.glPopMatrix();
 		}
 
 		GL11.glTranslated(0, 1, 0);

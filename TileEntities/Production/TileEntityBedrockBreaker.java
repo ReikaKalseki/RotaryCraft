@@ -21,12 +21,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -37,6 +39,7 @@ import Reika.RotaryCraft.API.Interfaces.SurrogateBedrock;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
+import Reika.RotaryCraft.Blocks.BlockBedrockSlice.TileEntityBedrockSlice;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -54,6 +57,10 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	private double dropx;
 	private double dropy;
 	private double dropz;
+
+	public ForgeDirection getFacing() {
+		return facing != null ? facing : ForgeDirection.UNKNOWN;
+	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -74,7 +81,23 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 			int hz = z+step*facing.offsetZ;
 			Block b = world.getBlock(hx, hy, hz);
 			if (b != Blocks.air) {
-				ReikaParticleHelper.CRITICAL.spawnAroundBlock(world, hx, hy, hz, 4);
+				float f = step+this.getGrindFraction()-0.5F;
+				for (int i = 0; i < 4; i++) {
+					double px = x+0.5+facing.offsetX*f;
+					double py = y+0.5+facing.offsetY*f;
+					double pz = z+0.5+facing.offsetZ*f;
+					if (facing.offsetX == 0) {
+						px = ReikaRandomHelper.getRandomPlusMinus(px, 0.5);
+					}
+					if (facing.offsetY == 0) {
+						py = ReikaRandomHelper.getRandomPlusMinus(py, 0.5);
+					}
+					if (facing.offsetZ == 0) {
+						pz = ReikaRandomHelper.getRandomPlusMinus(pz, 0.5);
+					}
+					ReikaParticleHelper.CRITICAL.spawnAt(world, px, py, pz);
+				}
+				//ReikaParticleHelper.CRITICAL.spawnAroundBlock(world, hx, hy, hz, 4);
 				ReikaSoundHelper.playStepSound(world, hx, hy, hz, b, 0.5F+rand.nextFloat(), 0.5F*rand.nextFloat());
 				//ReikaSoundHelper.playSoundAtBlock(world, hx, hy, hz, "dig.stone", );
 			}
@@ -83,13 +106,15 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 
 	public void process(World world, int x, int y, int z, int metadata) {
 		if (this.hasInventorySpace()) {
-			int hx = x+step*facing.offsetX;
-			int hy = y+step*facing.offsetY;
-			int hz = z+step*facing.offsetZ;
-			if (this.canBreakAt(world, hx, hy, hz)) {
-				this.grind(world, x, y, z, hx, hy, hz, metadata);
+			Coordinate c = this.getHeadLocation();
+			if (this.canBreakAt(world, c.xCoord, c.yCoord, c.zCoord)) {
+				this.grind(world, x, y, z, c.xCoord, c.yCoord, c.zCoord, metadata);
 			}
 		}
+	}
+
+	public Coordinate getHeadLocation() {
+		return new Coordinate(this).offset(this.getFacing(), step);
 	}
 
 	private boolean canBreakAt(World world, int x, int y, int z) {
@@ -205,17 +230,20 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 		return false;
 	}
 
-	public void grind(World world, int mx, int my, int mz, int x, int y, int z, int meta) {
+	private void grind(World world, int mx, int my, int mz, int x, int y, int z, int meta) {
 		if (this.processBlock(world, x, y, z)) {
 			if (this.isBedrock(world, x, y, z)) {
 				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 				world.setBlock(x, y, z, BlockRegistry.BEDROCKSLICE.getBlockInstance(), 0, 3);
+				((TileEntityBedrockSlice)world.getTileEntity(x, y, z)).setDirection(this.getFacing().getOpposite());
 			}
 			else {
 				int rockmetadata = world.getBlockMetadata(x, y, z);
 				if (rockmetadata < 15) {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
 					world.setBlockMetadataWithNotify(x, y, z, rockmetadata+1, 3);
+					step--;
+					this.incrementStep(world, mx, my, mz);
 				}
 				else {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "mob.blaze.hit", 0.5F, rand.nextFloat() * 0.4F + 0.8F);
@@ -229,7 +257,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 					}
 					RotaryAchievements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
 					MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, x, y, z));
-					if (!world.isRemote)
+					if (world.isRemote)
 						this.incrementStep(world, mx, my, mz);
 				}
 			}
@@ -308,9 +336,9 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	private int getNumberDust(World world, int x, int y, int z) {
-		//float f = Math.min(1, ((TileEntityBedrockSlice)world.getTileEntity(x, y, z)).dustYield);
-		//return Math.max(1, (int)(f*DifficultyEffects.BEDROCKDUST.getInt()));
-		return DifficultyEffects.BEDROCKDUST.getInt();
+		float f = Math.min(1, ((TileEntityBedrockSlice)world.getTileEntity(x, y, z)).dustYield);
+		return Math.max(1, (int)(f*DifficultyEffects.BEDROCKDUST.getInt()));
+		//return DifficultyEffects.BEDROCKDUST.getInt();
 	}
 
 	public int getContents() {
@@ -400,5 +428,13 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
+	}
+
+	public float getGrindFraction() {
+		TileEntity te = this.getHeadLocation().getTileEntity(worldObj);
+		if (te instanceof TileEntityBedrockSlice) {
+			return te.getBlockMetadata()/16F;
+		}
+		return 0;
 	}
 }

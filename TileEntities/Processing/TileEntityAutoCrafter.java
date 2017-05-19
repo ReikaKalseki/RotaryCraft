@@ -9,8 +9,15 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCompressed;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -24,6 +31,7 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.Maps.CountMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -430,7 +438,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 						//ReikaJavaLibrary.pConsole("need "+req+" / have "+has+" '"+is+" ("+is.getDisplayName()+")'; making '"+out+" ("+out.getDisplayName()+")'");
 						if (missing > 0 && d < 40) {
 							//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
-							if (!this.tryCraftIntermediates(missing, is, d+1)) {
+							if (this.canCraftIntermediates(out, counts) && !this.tryCraftIntermediates(missing, is, d+1)) {
 								//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
 								return false;
 							}
@@ -444,7 +452,32 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		return false;
 	}
 
-	private int getAvailableIngredients(ItemStack is) {
+	private boolean canCraftIntermediates(ItemStack out, ItemHashMap<Integer> req) {
+		Block b = Block.getBlockFromItem(out.getItem());
+		if (b instanceof BlockCompressed)
+			return false;
+		if (this.isLoopable(out, req))
+			return false;
+		if (out.getItem().getClass().getName().equals("ItemReactorCondensator")) //to be safe, since these tend to glitch
+			return false;
+		return true;
+	}
+
+	private boolean isLoopable(ItemStack out, ItemHashMap<Integer> req) { //recipe contains output, or recipes for inputs contain output
+		Collection<ItemStack> c = req.keySet();
+		if (ReikaItemHelper.collectionContainsItemStack(c, out))
+			return true;
+		for (ItemStack is : c) {
+			List<IRecipe> li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), is);
+			for (IRecipe ir : li) {
+				if (ReikaItemHelper.collectionContainsItemStack(ReikaRecipeHelper.getAllItemsInRecipe(ir), out))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private int getAvailableIngredients(ItemStack is) { //never needs to return more than 9 (one per slot)
 		int count = 0;
 		//ItemHashMap<Long> map = ModList.APPENG.isLoaded() && network != null ? network.getMESystemContents() : null;
 		//ReikaJavaLibrary.pConsole(map);
@@ -452,7 +485,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
 		count += ingredients.getItemCount(is);
 		if (ModList.APPENG.isLoaded() && network != null) {
-			count += network.removeItem(ReikaItemHelper.getSizedItemStack(is, Integer.MAX_VALUE), true, false);
+			count += network.removeItem(ReikaItemHelper.getSizedItemStack(is, is.getMaxStackSize()), true, false);
 		}
 		//}
 

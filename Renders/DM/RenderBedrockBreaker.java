@@ -59,24 +59,24 @@ public class RenderBedrockBreaker extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = -270;
-				break;
-			case 3:
-				var11 = -90;
-				break;
-			case 4:
-				var11 = 270;
-				break;
-			case 5:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = -270;
+					break;
+				case 3:
+					var11 = -90;
+					break;
+				case 4:
+					var11 = 270;
+					break;
+				case 5:
+					var11 = 90;
+					break;
 			}
 
 			if (tile.getBlockMetadata() <= 3)
@@ -96,7 +96,8 @@ public class RenderBedrockBreaker extends RotaryTERenderer
 
 		float var13;
 
-		ArrayList li = ReikaJavaLibrary.makeListFrom(tile.getStep());
+		float f = tile.isInWorld() ? tile.getGrindFraction() : 0;
+		ArrayList li = ReikaJavaLibrary.makeListFrom(tile.getStep(), f);
 		if (tile.isInWorld() && tile.getBlockMetadata() > 3) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/bedrockvtex.png");
 			var15.renderAll(tile, li, tile.phi, 0);

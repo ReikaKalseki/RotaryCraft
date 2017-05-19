@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Blocks.BlockBedrockSlice.TileEntityBedrockSlice;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
@@ -58,6 +59,7 @@ public class RotaryRegistration {
 			ReikaJavaLibrary.initClass(EngineType.engineList[i].engineClass);
 		}
 		GameRegistry.registerTileEntity(TileEntityDecoTank.class, "RCDecoTank");
+		GameRegistry.registerTileEntity(TileEntityBedrockSlice.class, "RCBedrockSlice");
 	}
 
 	public static void addEntities() {
