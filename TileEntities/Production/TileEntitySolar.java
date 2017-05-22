@@ -169,7 +169,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		}
 		power = (long)omega*(long)torque;
 		if (tank.getActualFluid() == FluidRegistry.getFluid("rc sodium")) {
-			amt *= power/((long)GENOMEGA_SODIUM*MAXTORQUE_SODIUM);
+			amt = (int)Math.max(1, amt*power/((double)GENOMEGA_SODIUM*MAXTORQUE_SODIUM));
 		}
 		if (power > 0 && tank.getLevel() > 0 && amt > 0) {
 			if (!water) {
@@ -205,7 +205,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			rnd = 100;
 		int ret = ReikaMathLibrary.roundUpToX(rnd, base);
 		if (tank.getActualFluid() == FluidRegistry.getFluid("rc sodium"))
-			ret *= 0.00390625;
+			ret *= 1/64D;//0.00390625; //1/256
 		return ret;
 	}
 

@@ -40,10 +40,6 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 public class TileEntityFlywheel extends TileEntityTransmissionMachine implements SimpleProvider, PowerGenerator, ShaftMerger {
 
 	public static final int MINTORQUERATIO = 4;
-	public static final int WOODFLYTORQUEMAX = 16;		// rho 0.8	-> 1	-> 1
-	public static final int STONEFLYTORQUEMAX = 128;	// rho 3	-> 4	-> 8
-	public static final int IRONFLYTORQUEMAX = 512;		// rho 8	-> 8	-> 32
-	public static final int GOLDFLYTORQUEMAX = 4096;	// rho 19.3	-> 32	-> 256
 
 	private int decayTime;
 
@@ -56,47 +52,19 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	private int oppTorque = 0;
 	private int updateticks = 0;
 
-	public static int[] getLimitLoads() {
-		double r = 0.75;
-		int[] loads = new int[4];
-		for (int i = 0; i < 4; i++) {
-			double rho = getDensity(i);
-			double s = 100*getStrength(i);
-			double frac = 2*s/(rho*r*r);
-			double base = Math.sqrt(frac);
-			loads[i] = (int)base;
-		}
-		return loads;
-	}
-
 	public int getOppTorque(TileEntityFlywheel reading) {
-		if (reading.getTypeOrdinal() < this.getTypeOrdinal())
+		if (reading.getTypeOrdinal().ordinal() < this.getTypeOrdinal().ordinal())
 			return this.getMinTorque()*MINTORQUERATIO;
 		return omega < omegain-omegain/20 ? torque+oppTorque : oppTorque;
 	}
 
-	public static int getMinTorque(int i) {
-		switch(i) {
-			case 0:
-				return WOODFLYTORQUEMAX/MINTORQUERATIO;
-			case 1:
-				return STONEFLYTORQUEMAX/MINTORQUERATIO;
-			case 2:
-				return IRONFLYTORQUEMAX/MINTORQUERATIO;
-			case 3:
-				return GOLDFLYTORQUEMAX/MINTORQUERATIO;
-			default:
-				return 0;
-		}
-	}
-
 	public int getMinTorque() {
-		return this.getMinTorque(this.getTypeOrdinal());
+		return this.getTypeOrdinal().getMinTorque();
 	}
 
 	public void testFailure() {
 		double factor = 0.25*Math.sqrt(omega);
-		switch(this.getTypeOrdinal()) {
+		switch(this.getTypeOrdinal().ordinal()) {
 			case 1:
 				factor /= 2.5;
 			case 3:
@@ -118,43 +86,15 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	private double getDensity() {
-		return this.getDensity(this.getTypeOrdinal());
+		return this.getTypeOrdinal().density;
 	}
 
-	private int getTypeOrdinal() {
-		return this.getBlockMetadata()/4;
-	}
-
-	public static double getDensity(int dmg) {
-		switch (dmg) {
-			case 0:
-				return ReikaEngLibrary.rhowood;
-			case 1:
-				return ReikaEngLibrary.rhorock;
-			case 2:
-				return ReikaEngLibrary.rhoiron;
-			case 3:
-				return ReikaEngLibrary.rhogold;
-		}
-		return 0;
+	private Flywheels getTypeOrdinal() {
+		return Flywheels.list[this.getBlockMetadata()/4];
 	}
 
 	private double getStrength() {
-		return this.getStrength(this.getTypeOrdinal());
-	}
-
-	public static double getStrength(int i) {
-		switch (i) {
-			case 0:
-				return ReikaEngLibrary.Twood;
-			case 1:
-				return 0.9*ReikaEngLibrary.Tstone;
-			case 2:
-				return 5*ReikaEngLibrary.Tiron;
-			case 3:
-				return ReikaEngLibrary.Tgold;
-		}
-		return 0;
+		return this.getTypeOrdinal().tensileStrength;
 	}
 
 	public int frictionLosses(int speed) {
@@ -198,28 +138,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	public void getType(int meta) {
-		switch (meta) {
-			case 0:
-				maxtorque = WOODFLYTORQUEMAX;
-				decayTime = 2;
-				break;
-			case 1:
-				maxtorque = STONEFLYTORQUEMAX;
-				decayTime = 5;
-				break;
-			case 2:
-				maxtorque = IRONFLYTORQUEMAX;
-				decayTime = 15;
-				break;
-			case 3:
-				maxtorque = GOLDFLYTORQUEMAX;
-				decayTime = 40;
-				break;
-			default:
-				maxtorque = 0;
-				decayTime = 1;
-				break;
-		}
+		maxtorque = this.getTypeOrdinal().maxTorque;
+		decayTime = this.getTypeOrdinal().decayTime;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -452,7 +372,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	@Override
 	public int getRedstoneOverride() {
-		return 15*omega/this.getLimitLoads()[this.getTypeOrdinal()];
+		return 15*omega/this.getTypeOrdinal().maxSpeed;
 	}
 
 	@Override
@@ -515,6 +435,42 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	@Override
 	public final int getItemMetadata() {
-		return this.getTypeOrdinal();
+		return this.getTypeOrdinal().ordinal();
+	}
+
+	public static enum Flywheels {
+		WOOD(16, 2, ReikaEngLibrary.rhowood, ReikaEngLibrary.Twood),		// rho 0.8	-> 1	-> 1
+		STONE(128, 5, ReikaEngLibrary.rhorock, 0.9*ReikaEngLibrary.Tstone),		// rho 3	-> 4	-> 8
+		IRON(512, 15, ReikaEngLibrary.rhoiron, 5*ReikaEngLibrary.Tiron),		// rho 8	-> 8	-> 32
+		GOLD(4096, 40, ReikaEngLibrary.rhogold, ReikaEngLibrary.Tgold);	// rho 19.3	-> 32	-> 256
+		//BEDROCK(Integer.MAX_VALUE, 200, 1.25*ReikaEngLibrary.rhoiron, Double.POSITIVE_INFINITY); want to have, but metadatas prevent
+
+		public final int maxTorque;
+		public final int maxSpeed;
+		public final int decayTime;
+		public final double density;
+		public final double tensileStrength;
+
+		public static final Flywheels[] list = values();
+
+		private Flywheels(int t, int dec, double rho, double str) {
+			maxTorque = t;
+			tensileStrength = str;
+			maxSpeed = this.getLimitLoad();
+			decayTime = dec;
+			density = rho;
+		}
+
+		private int getLimitLoad() {
+			double r = 0.75;
+			double s = 100*tensileStrength;
+			double frac = 2*s/(density*r*r);
+			double base = Math.sqrt(frac);
+			return (int)base;
+		}
+
+		public int getMinTorque() {
+			return maxTorque/MINTORQUERATIO;
+		}
 	}
 }

@@ -30,6 +30,7 @@ import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel.Flywheels;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -103,11 +104,10 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
 		int i = is.getItemDamage();
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			int[] loads = TileEntityFlywheel.getLimitLoads();
-			int torque = TileEntityFlywheel.getMinTorque(i);
-			li.add(String.format("Max Speed: %d rad/s", loads[i]));
-			li.add(String.format("Required Torque: %d Nm", torque));
-			li.add(String.format("Max Torque: %d Nm", torque*TileEntityFlywheel.MINTORQUERATIO));
+			Flywheels f = Flywheels.list[i];
+			li.add(String.format("Max Speed: %d rad/s", f.maxSpeed));
+			li.add(String.format("Required Torque: %d Nm", f.maxTorque/TileEntityFlywheel.MINTORQUERATIO));
+			li.add(String.format("Max Torque: %d Nm", f.maxTorque));
 		}
 		else {
 			StringBuilder sb = new StringBuilder();
