@@ -123,11 +123,16 @@ public class RotaryRecipes {
 			int power = forestry.api.fuels.FuelManager.generatorFuel.get(FluidRegistry.getFluid("bioethanol")).eu*36/32; //36/32 (1.125x) forestry ethanol
 			forestry.api.fuels.FuelManager.generatorFuel.put(ethanol, new GeneratorFuel(new FluidStack(ethanol, 1), power, 3)); //25% less burn time
 		}
-		if (ModList.IC2.isLoaded()) {
-			double power = Recipes.semiFluidGenerator.getBurnProperties().get("bioethanol").power*18/16; //1.125x again
-			BurnProperty fuel = Recipes.semiFluidGenerator.getBurnProperties().get("fuel");
-			power = Math.max(power, fuel.power*3/2); //50% more than fuel
-			Recipes.semiFluidGenerator.addFluid(ethanol.getName(), Math.max(8, fuel.amount*4), power);
+		if (ModList.IC2.isLoaded() && !Recipes.semiFluidGenerator.getBurnProperties().isEmpty()) {
+			BurnProperty eth = Recipes.semiFluidGenerator.getBurnProperties().get("bioethanol");
+			if (eth == null)
+				eth = Recipes.semiFluidGenerator.getBurnProperties().get("fuel");
+			if (eth != null) {
+				double power = eth.power*18/16; //1.125x again
+				BurnProperty fuel = Recipes.semiFluidGenerator.getBurnProperties().get("fuel");
+				power = Math.max(power, fuel.power*3/2); //50% more than fuel
+				Recipes.semiFluidGenerator.addFluid(ethanol.getName(), Math.max(8, fuel.amount*4), power);
+			}
 		}
 		if (ModList.IMMERSIVEENG.isLoaded()) {
 			DieselHandler.squeezerList.add(new SqueezerRecipe(ItemRegistry.CANOLA.getStackOf(), 15, new FluidStack(FluidRegistry.getFluid("plantoil"), 20), null)); //4x less but 6x faster
