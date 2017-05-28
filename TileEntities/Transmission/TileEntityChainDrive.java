@@ -24,8 +24,7 @@ public class TileEntityChainDrive extends TileEntityBeltHub {
 
 	@Override
 	public int getTorque(int input) {
-		int max = this.getMaxTorque();
-		if (input > max) {
+		if (input > this.getMaxTorque()) {
 			ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.break");
 			this.reset();
 			this.resetOther();
