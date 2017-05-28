@@ -18,20 +18,29 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityChainDrive extends TileEntityBeltHub {
 
 	@Override
+	public static int getMaxTorque() {
+		return 16384;
+	}
+
+	@Override
 	public int getTorque(int input) {
-		input = super.getTorque(input);
-		if (input > 16384) {
+		int max = this.getMaxTorque();
+		if (input > max) {
 			ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.break");
 			this.reset();
 			this.resetOther();
 		}
-		return input;
+		return this.isSplitting() ? input/2 : input;
+	}
+
+	@Override
+	public static int getMaxSmoothSpeed() {
+		return 65536;
 	}
 
 	@Override
 	public int getOmega(int input) {
-		input = super.getOmega(input);
-		if (input > 65536) {
+		if (input > this.getMaxSmoothSpeed()) {
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 			this.resetOther();
 			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 2, true);
