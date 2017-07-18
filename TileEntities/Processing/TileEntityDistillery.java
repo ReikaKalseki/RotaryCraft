@@ -99,12 +99,12 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 
 	@Override
 	public boolean canIntakeFromPipe(MachineRegistry p) {
-		return p == MachineRegistry.PIPE || p == MachineRegistry.HOSE || p == MachineRegistry.FUELLINE;
+		return p.isStandardPipe() || p == MachineRegistry.HOSE || p == MachineRegistry.FUELLINE;
 	}
 
 	@Override
 	public boolean canOutputToPipe(MachineRegistry p) {
-		return p == MachineRegistry.HOSE || p == MachineRegistry.PIPE || p == MachineRegistry.FUELLINE;
+		return p == MachineRegistry.HOSE || p.isStandardPipe() || p == MachineRegistry.FUELLINE;
 	}
 
 	@Override

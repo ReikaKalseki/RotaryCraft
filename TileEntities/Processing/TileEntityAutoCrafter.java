@@ -37,6 +37,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
+import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -438,7 +439,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 						//ReikaJavaLibrary.pConsole("need "+req+" / have "+has+" '"+is+" ("+is.getDisplayName()+")'; making '"+out+" ("+out.getDisplayName()+")'");
 						if (missing > 0 && d < 40) {
 							//ReikaJavaLibrary.pConsole(options+":"+has+"/"+req);
-							if (this.canCraftIntermediates(out, counts) && !this.tryCraftIntermediates(missing, is, d+1)) {
+							if (!this.canCraftIntermediates(out, counts))
+								return false;
+							if (!this.tryCraftIntermediates(missing, is, d+1)) {
 								//ReikaJavaLibrary.pConsole("missing "+missing+": "+options.get(is)+", needed "+req+", had "+has);
 								return false;
 							}
@@ -454,6 +457,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private boolean canCraftIntermediates(ItemStack out, ItemHashMap<Integer> req) {
 		Block b = Block.getBlockFromItem(out.getItem());
+		if (b == BlockRegistry.DECO.getBlockInstance())
+			return false;
 		if (b instanceof BlockCompressed)
 			return false;
 		if (this.isLoopable(out, req))

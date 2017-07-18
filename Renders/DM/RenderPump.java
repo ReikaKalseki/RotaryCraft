@@ -76,7 +76,7 @@ public class RenderPump extends RotaryTERenderer
 		Object[] pars = new Object[3];
 		pars[0] = tile.getLevel() > 0 && MinecraftForgeClient.getRenderPass() == 1;
 		pars[1] = (tile.shouldRenderInPass(0) && MinecraftForgeClient.getRenderPass() == 0) || !tile.isInWorld();
-		pars[2] = tile.damage > 400;
+		pars[2] = tile.isBroken();
 		var14.renderAll(tile, ReikaJavaLibrary.makeListFromArray(pars), -tile.phi, 0);
 
 		if (tile.isInWorld())

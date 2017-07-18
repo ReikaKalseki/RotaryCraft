@@ -295,7 +295,7 @@ ConditionalOperation, DamagingContact {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.HOSE;
+		return m == MachineRegistry.HOSE || m == MachineRegistry.BEDPIPE;
 	}
 
 	@Override

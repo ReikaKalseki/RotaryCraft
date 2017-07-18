@@ -775,7 +775,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.CENTRIFUGE) {
 			TileEntityCentrifuge tr = (TileEntityCentrifuge)tile;
 			if (tr.omega > 0 && world.isRemote) {
-			
+
 			}
 		}
 	}
@@ -1056,6 +1056,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		}
 		if (te instanceof TileEntityBorer) {
 			currenttip.add(((TileEntityBorer)te).getCurrentRequiredPower());
+		}
+		if (te instanceof TileEntityPump) {
+			if (((TileEntityPump)te).isBroken())
+				currenttip.add("Pump impeller is broken");
 		}
 		if (te instanceof TileEntityAggregator) {
 			currenttip.add(String.format("Producing %d mB per tick", ((TileEntityAggregator)te).getProductionPerTick(acc.getWorld().getBiomeGenForCoords(te.xCoord, te.zCoord))));

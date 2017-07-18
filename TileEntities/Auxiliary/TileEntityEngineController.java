@@ -246,7 +246,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE;
+		return m == MachineRegistry.FUELLINE || m == MachineRegistry.BEDPIPE;
 	}
 
 	@Override

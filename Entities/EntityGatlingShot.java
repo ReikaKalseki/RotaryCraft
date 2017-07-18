@@ -222,11 +222,11 @@ public class EntityGatlingShot extends EntityTurretShot {
 			int in = ent.getEntityData().getInteger(TileEntityMultiCannon.SLIME_NBT);
 			ent.getEntityData().setInteger(TileEntityMultiCannon.SLIME_NBT, in+1);
 			ReikaEntityHelper.knockbackEntityFromPos(gun.xCoord+0.5, gun.yCoord+0.5, gun.zCoord+0.5, ent, 1);
-			ent.attackEntityFrom(DamageSource.generic, this.getAttackDamage()/8F);
+			ent.attackEntityFrom(this.getDamageSource(), this.getAttackDamage()/8F);
 			ent.hurtResistantTime = 0;
 		}
 		else {
-			ent.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
+			ent.attackEntityFrom(this.getDamageSource(), this.getAttackDamage());
 			ReikaEntityHelper.knockbackEntityFromPos(gun.xCoord+0.5, gun.yCoord+0.5, gun.zCoord+0.5, ent, 0.0625);
 			ent.hurtResistantTime = 0;
 		}

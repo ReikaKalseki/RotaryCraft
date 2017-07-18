@@ -447,7 +447,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 		@Override
 		public boolean isValidItem(ItemStack is) {
-			return ReikaItemHelper.isBlock(is) && !ReikaBlockHelper.alwaysDropsSelf(Block.getBlockFromItem(is.getItem())) && Block.getBlockFromItem(is.getItem()).getItemDropped(is.getItemDamage(), rand, 0) != null;
+			return ReikaItemHelper.isBlock(is);
 		}
 
 		@Override

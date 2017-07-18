@@ -100,6 +100,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+
 		this.getPowerBelow();
 		power = (long)omega * (long)torque;
 		if (inv[ingredients.size()+1] != null && tank.getLevel() >= 1000) {
@@ -230,7 +231,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.FUELLINE;
+		return m == MachineRegistry.FUELLINE || m == MachineRegistry.BEDPIPE;
 	}
 
 	public int getFuelLevel() {

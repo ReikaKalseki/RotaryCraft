@@ -17,11 +17,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Interfaces.TargetEntity;
+import Reika.RotaryCraft.Auxiliary.TurretDamage;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -94,7 +94,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 					((TargetEntity)e).onLaserBeam(this);
 				}
 				if (e instanceof EntityLivingBase) {
-					e.attackEntityFrom(DamageSource.lava, 4);
+					e.attackEntityFrom(new TurretDamage(this).setFireDamage(), 4);
 					e.setFire(7);
 				}
 			}

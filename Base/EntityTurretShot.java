@@ -13,8 +13,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import Reika.RotaryCraft.Auxiliary.TurretDamage;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -72,6 +74,12 @@ public abstract class EntityTurretShot extends EntityFireball implements IEntity
 		int y = buf.readInt();
 		int z = buf.readInt();
 		gun = (TileEntityAimedCannon)worldObj.getTileEntity(x, y, z);
+	}
+
+	protected final DamageSource getDamageSource() {
+		if (gun == null || !gun.isInWorld())
+			return DamageSource.generic;
+		return new TurretDamage(gun);
 	}
 
 }

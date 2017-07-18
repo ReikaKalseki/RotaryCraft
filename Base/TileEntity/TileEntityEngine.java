@@ -659,10 +659,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		if (type == null)
 			return false;
 		if (type.isJetFueled())
-			if (p == MachineRegistry.FUELLINE && side == ForgeDirection.DOWN)
+			if ((p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE) && side == ForgeDirection.DOWN)
 				return true;
 		if (type.isEthanolFueled())
-			if (p == MachineRegistry.FUELLINE && side == ForgeDirection.DOWN)
+			if ((p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE) && side == ForgeDirection.DOWN)
 				return true;
 		if (type.isWaterPiped() && p.isStandardPipe()) {
 			switch(side) {
@@ -678,7 +678,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 					return false;
 			}
 		}
-		if (type.requiresLubricant() && p == MachineRegistry.HOSE) {
+		if (type.requiresLubricant() && (p == MachineRegistry.HOSE || p == MachineRegistry.BEDPIPE)) {
 			//ReikaJavaLibrary.pConsole(this.getBlockMetadata()+":"+side.name());
 			switch(side) {
 				case EAST:

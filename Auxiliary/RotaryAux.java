@@ -68,7 +68,7 @@ public class RotaryAux {
 			RotaryCraft.logger.log("Disabling "+name+" for shaft power. Destructive compatibility.");
 		}
 		catch (ClassNotFoundException e) {
-			//RotaryCraft.logger.logError("Could not add EMP blacklist for "+name+": Class not found!");
+
 		}
 	}
 

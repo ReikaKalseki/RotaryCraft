@@ -475,7 +475,8 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.SCALECHEST, TileEntityScaleableChest.MAXSIZE);
 		addData(MachineRegistry.PURIFIER, TileEntityPurifier.SMELTTEMP);
 		addData(MachineRegistry.GENERATOR, ReikaEUHelper.getWattsPerEU());
-		addData(MachineRegistry.BELT, TileEntityBeltHub.getMaxTorque(), TileEntityBeltHub.getMaxSmoothSpeed());
+		addData(MachineRegistry.BELT, ((TileEntityBeltHub)MachineRegistry.BELT.createTEInstanceForRender(0)).getMaxTorque(), ((TileEntityBeltHub)MachineRegistry.BELT.createTEInstanceForRender(0)).getMaxSmoothSpeed());
+		addData(MachineRegistry.CHAIN, ((TileEntityBeltHub)MachineRegistry.CHAIN.createTEInstanceForRender(0)).getMaxTorque(), ((TileEntityBeltHub)MachineRegistry.CHAIN.createTEInstanceForRender(0)).getMaxSmoothSpeed());
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXTORQUE_UPGRADE, TileEntityDynamo.MAXOMEGA);
 		addData(MachineRegistry.ITEMCANNON, TileEntityItemCannon.STACKPOWER);
 

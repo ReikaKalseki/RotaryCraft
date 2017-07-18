@@ -242,6 +242,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				TileEntity te = world.getTileEntity(dx, dy, dz);
 
 				if (te instanceof WorldRift) {
+					if (world.isRemote)
+						continue;
 					WorldLocation loc = ((WorldRift)te).getLinkTarget();
 					if (loc != null) {
 						te = ((WorldRift)te).getTileEntityFrom(dir);
@@ -320,6 +322,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				TileEntity te = world.getTileEntity(dx, dy, dz);
 
 				if (te instanceof WorldRift) {
+					if (world.isRemote)
+						continue;
 					WorldLocation loc = ((WorldRift)te).getLinkTarget();
 					if (loc != null) {
 						te = ((WorldRift)te).getTileEntityFrom(dir);
@@ -343,6 +347,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 							this.setFluid(f);
 							this.addFluid(todrain);
 							tp.removeLiquid(todrain);
+							//ReikaJavaLibrary.pConsole("Transferring "+todrain+", have "+this.getFluidLevel(), Side.SERVER, this.getAdjacentTileEntity(ForgeDirection.UP) == null);
 							this.onIntake(te);
 						}
 					}
@@ -361,6 +366,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 									this.setFluid(fs.getFluid());
 									pc.drain(dir.getOpposite(), todrain, true);
 									this.onIntake(te);
+									//ReikaJavaLibrary.pConsole("Transferring "+todrain+", have "+this.getFluidLevel(), Side.SERVER);
 								}
 							}
 						}

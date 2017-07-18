@@ -1060,12 +1060,12 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return this.getGearType().consumesLubricant() ? m == MachineRegistry.HOSE : false;
+		return this.getGearType().consumesLubricant() ? m == MachineRegistry.HOSE || m == MachineRegistry.BEDPIPE : false;
 	}
 
 	@Override
 	public boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.getGearType().consumesLubricant() ? p == MachineRegistry.HOSE : false;
+		return this.getGearType().consumesLubricant() ? p == MachineRegistry.HOSE || p == MachineRegistry.BEDPIPE : false;
 	}
 
 	@Override

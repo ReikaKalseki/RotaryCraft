@@ -58,6 +58,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	private int size;
 	private int topLocation = -1;
 
+	private int temperature;
+
 	public static final int GENOMEGA = 512;
 	public static final int GENOMEGA_SODIUM = 4096;
 
@@ -117,14 +119,18 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		else {
 			write = null;
 		}
-		if (world.getBlock(x, y+1, z) != Blocks.air && !(world.getTileEntity(x, y+1, z) instanceof SodiumSolarUpgrades))
+		if (world.getBlock(x, y+1, z) != Blocks.air && !(world.getTileEntity(x, y+1, z) instanceof SodiumSolarUpgrades)) {
+			if (MachineRegistry.getMachine(world, x, y+1, z) == this.getMachine())
+				temperature = ((TileEntitySolar)world.getTileEntity(x, y+1, z)).temperature;
 			return;
+		}
 
 		TileEntity top = world.getTileEntity(x, topLocation+1, z);
 		if (top instanceof SodiumSolarReceiver) {
 			SodiumSolarReceiver ss = (SodiumSolarReceiver)top;
 			if (ss.isActive()) {
 				ss.tick(size, overallBrightness);
+				temperature = ss.getTemperature();
 			}
 		}
 
@@ -163,7 +169,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		boolean water = tank.getActualFluid() == FluidRegistry.WATER;
 		omega = water ? GENOMEGA : GENOMEGA_SODIUM;
 		torque = this.getGenTorque(world, x, y, z);
-		if (size <= 0 || torque == 0 || tank.getLevel() < amt) {
+		if (size <= 0 || torque == 0 || tank.getLevel() < amt || (!water && temperature < 800)) {
 			omega = 0;
 			torque = 0;
 		}
@@ -197,15 +203,16 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	public int getConsumedWater() {
-		int base = 10+16*ReikaMathLibrary.logbase2(power);
+		boolean sodium = tank.getActualFluid() == FluidRegistry.getFluid("rc sodium");
+		int base = 10+(sodium ? 64 : 16)*ReikaMathLibrary.logbase2(power);
 		int rnd = 10;
 		if (base >= 1000)
 			rnd = 1000;
 		else if (base >= 100)
 			rnd = 100;
 		int ret = ReikaMathLibrary.roundUpToX(rnd, base);
-		if (tank.getActualFluid() == FluidRegistry.getFluid("rc sodium"))
-			ret *= 1/64D;//0.00390625; //1/256
+		if (sodium)
+			ret *= 1/128D;//0.00390625; //1/256
 		return ret;
 	}
 
@@ -292,6 +299,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
+
+		NBT.setInteger("temp", temperature);
 	}
 
 	@Override
@@ -300,6 +309,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
+
+		temperature = NBT.getInteger("temp");
 	}
 
 	@Override

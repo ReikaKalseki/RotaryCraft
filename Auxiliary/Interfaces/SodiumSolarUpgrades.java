@@ -18,6 +18,8 @@ public interface SodiumSolarUpgrades {
 
 		public void tick(int mirrorCount, float totalBrightness);
 
+		public int getTemperature();
+
 	}
 
 	public static interface SodiumSolarOutput extends SodiumSolarUpgrades {

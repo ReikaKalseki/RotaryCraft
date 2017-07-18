@@ -456,9 +456,9 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		private Flywheels(int t, int dec, double rho, double str) {
 			maxTorque = t;
 			tensileStrength = str;
-			maxSpeed = this.getLimitLoad();
 			decayTime = dec;
 			density = rho;
+			maxSpeed = this.getLimitLoad();
 		}
 
 		private int getLimitLoad() {

@@ -515,7 +515,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m) {
-		return m == MachineRegistry.HOSE;
+		return m == MachineRegistry.HOSE || m == MachineRegistry.BEDPIPE;
 	}
 
 	@Override

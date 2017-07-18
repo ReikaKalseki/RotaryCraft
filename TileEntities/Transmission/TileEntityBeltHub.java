@@ -212,7 +212,11 @@ Connectable, BreakAction {
 		return true;
 	}
 
-	public static int getMaxTorque() {
+	public int getMaxTorque() {
+		return 8192;
+	}
+
+	public int getMaxSmoothSpeed() {
 		return 8192;
 	}
 
@@ -220,10 +224,6 @@ Connectable, BreakAction {
 		int max = this.isWet() ? this.getMaxTorque()/4 : this.getMaxTorque();
 		int torque = Math.min(input, max);
 		return this.isSplitting() ? torque/2 : torque;
-	}
-
-	public static int getMaxSmoothSpeed() {
-		return 8192;
 	}
 
 	public int getOmega(int input) {

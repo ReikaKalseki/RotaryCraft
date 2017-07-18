@@ -49,7 +49,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 
 	private int soundtick = 200;
 
-	public int damage = 0;
+	private int damage = 0;
 
 	public final static int CAPACITY = 24*1000;
 
@@ -107,8 +107,12 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		}
 		if (inbox.size() > 0 && !ReikaEntityHelper.allAreDead(inbox, false))
 			damage++;
-		if (damage > 400)
+		if (damage >= 400)
 			this.breakPump(world, x, y, z);
+	}
+
+	public boolean isBroken() {
+		return damage >= 400;
 	}
 
 	private void breakPump(World world, int x, int y, int z) {
@@ -183,12 +187,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
@@ -196,12 +196,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		NBT.setInteger("dmg", damage);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);

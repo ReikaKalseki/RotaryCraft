@@ -484,26 +484,6 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 
 	protected void writeToPowerReceiver(ForgeDirection dir, int om, int tq) {
 		this.writeToReceiver(dir, om, tq);
-		/*
-		if (te instanceof ShaftPowerReceiver) {
-			if (this.isBlacklistedReceiver(te)) {
-				if (om > 0 && tq > 0)
-					this.affectBlacklistedReceiver(te);
-			}
-			else {
-				ShaftPowerReceiver sp = (ShaftPowerReceiver)te;
-				if (sp.isReceiving() && sp.canReadFromBlock(xCoord, yCoord, zCoord)) {
-					sp.setOmega(om);
-					sp.setTorque(tq);
-					sp.setPower((long)om*(long)tq);
-				}
-				else {
-					sp.setOmega(0);
-					sp.setTorque(0);
-					sp.setPower(0);
-				}
-			}
-		}*/
 	}
 
 	private void writePowerToReciever(ShaftPowerReceiver sp) {

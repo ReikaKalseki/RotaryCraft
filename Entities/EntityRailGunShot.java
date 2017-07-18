@@ -334,8 +334,9 @@ public class EntityRailGunShot extends EntityTurretShot {
 					RotaryAchievements.RAILDRAGON.triggerAchievement(gun.getPlacer());
 				}
 			}
-			else
-				el.attackEntityFrom(DamageSource.generic, this.getAttackDamage());
+			else {
+				el.attackEntityFrom(this.getDamageSource(), this.getAttackDamage());
+			}
 			if (el instanceof EntityPlayer) {
 				if (el.isDead || el.getHealth() <= 0)
 					RotaryAchievements.RAILKILLED.triggerAchievement((EntityPlayer) el);
