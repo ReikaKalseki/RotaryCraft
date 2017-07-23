@@ -38,6 +38,8 @@ public enum BlastGate {
 	VOIDMETAL("ingotVoid"),
 	THAUMIUM("ingotThaumium"),
 	OSMIUM("ingotOsmium"),
+	SIGNALUM("ingotSignalum"),
+	ENDERIUM("ingotEnderium"),
 	;
 
 	private Object item;

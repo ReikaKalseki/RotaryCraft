@@ -35,7 +35,7 @@ import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv, BreakAction {
 
-	private final boolean[] modes = new boolean[4];
+	private boolean[] modes = new boolean[4];
 
 	private ForgeDirection inputSide;
 
@@ -250,7 +250,7 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 
 		inputSide = dirs[NBT.getInteger("in")];
 
-		ReikaArrayHelper.booleanFromByteBitflags(NBT.getByte("mode"), 4);
+		modes = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByte("mode"), 4);
 
 		hubX = NBT.getInteger("hx");
 		hubY = NBT.getInteger("hy");
