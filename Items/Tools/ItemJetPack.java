@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -86,6 +87,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			is.stackTagCompound.setBoolean(this.getNBT(), set);
+			if (this == WING)
+				is.stackTagCompound.setBoolean("wingon", true);
 		}
 	}
 
@@ -111,8 +114,21 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	}*/
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack is)
-	{
+	protected final ItemStack onSneakClicked(ItemStack is, EntityPlayer ep) {
+		if (!PackUpgrades.WING.existsOn(is))
+			return is;
+		if (is.stackTagCompound == null)
+			is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setBoolean("wingon", !is.stackTagCompound.getBoolean("wingon"));
+		return is;
+	}
+
+	private static final boolean wingEnabled(ItemStack is) {
+		return PackUpgrades.WING.existsOn(is) && (is.stackTagCompound == null || is.stackTagCompound.getBoolean("wingon"));
+	}
+
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack is) {
 		boolean flying = this.useJetpack(player, is);
 		boolean fuel = this.getCurrentFillLevel(is) > 0;
 
@@ -151,7 +167,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		horiz = horiz || KeyWatcher.instance.isKeyDown(ep, Key.LEFT) || KeyWatcher.instance.isKeyDown(ep, Key.RIGHT);
 		float maxSpeed = jetbonus ? 3 : 1.25F;
 		double hspeed = ReikaMathLibrary.py3d(ep.motionX, 0, ep.motionZ);
-		boolean winged = PackUpgrades.WING.existsOn(is);
+		boolean winged = this.wingEnabled(is);
 		boolean propel = PackUpgrades.JET.existsOn(is) && this.isJetFueled(is);
 		boolean floatmode = !hoverMode;
 		float thrust = winged ? 0.15F : hoverMode ? 0.05F : 0.1F;
@@ -295,6 +311,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 			PackUpgrades pack = PackUpgrades.list[i];
 			if (pack.existsOn(is)) {
 				li.add(pack.label);
+				if (pack == PackUpgrades.WING && !this.wingEnabled(is))
+					li.add(EnumChatFormatting.RED+"[Wing Disabled]");
 			}
 		}
 		int ch = is.stackTagCompound != null ? is.stackTagCompound.getInteger("fuel") : 0;

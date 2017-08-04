@@ -36,7 +36,8 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 		int dx = x+dir.offsetX;
 		int dy = y+dir.offsetY;
 		int dz = z+dir.offsetZ;
-		if (MachineRegistry.getMachine(world, dx, dy, dz) == MachineRegistry.PIPE) {
+		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
+		if (m != null && m.isStandardPipe()) {
 			TileEntityPipe tile = (TileEntityPipe)world.getTileEntity(dx, dy, dz);
 			if (tile != null && tile.contains(FluidRegistry.WATER) && tile.getFluidLevel() > 0) {
 				if (liquid < this.getCapacity()) {

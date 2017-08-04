@@ -259,6 +259,9 @@ public class RotaryRecipes {
 
 			SmelteryRecipeHandler.addMelting(ItemStacks.ironscrap, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
 
+			SmelteryRecipeHandler.addMelting(ItemStacks.ironoreflakes, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
+			SmelteryRecipeHandler.addMelting(ItemStacks.goldoreflakes, new ItemStack(Blocks.gold_block), 600, base, "gold.molten");
+
 			//Bedrock parts
 			int id = ExtraConfigIDs.BEDROCKID.getValue();
 			int id2 = ExtraConfigIDs.HSLAID.getValue();

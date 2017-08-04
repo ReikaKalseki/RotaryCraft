@@ -28,6 +28,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
@@ -171,6 +172,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 		int az = c.posZA;
 		World age = c.world;
 		MachineRegistry m = MachineRegistry.getMachine(age, dx, dy, dz);
+		ReikaJavaLibrary.pConsole(m);
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+age.getBlock(dx, dy, dz), Side.SERVER);
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
 		//ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, Side.SERVER);
@@ -230,7 +232,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 			if (tg == world.provider.dimensionId) {
 				//ReikaJavaLibrary.pConsole(writex+", "+writey+", "+writez+" >> "+Blocks.blocksList[id], Side.SERVER);
 				Coordinate c2 = this.getScaledCoordinates(x, y, z, world, age);
-				return new Location(age, c2.xCoord+write.offsetX*1, c2.yCoord+write.offsetY*1, c2.zCoord+write.offsetZ*1, ax, ay, az);
+				return new Location(age, loc.xCoord+write.offsetX, loc.yCoord+write.offsetY, loc.zCoord+write.offsetZ, ax, ay, az);
 			}
 		}
 		return null;
