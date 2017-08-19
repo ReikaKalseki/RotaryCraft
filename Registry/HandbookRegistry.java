@@ -199,6 +199,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	AIRGUN(MachineRegistry.AIRGUN),
 	VDG(MachineRegistry.VANDEGRAFF),
 	GATLING(MachineRegistry.GATLING),
+	FLAMETURRET(MachineRegistry.FLAMETURRET),
 
 	SURVMACHINEDESC("Surveying Machines", "Surveying"),
 	GPR(MachineRegistry.GPR),

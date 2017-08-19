@@ -1197,6 +1197,70 @@
 			Can be connected directly to an ME system, which it will try to extract from
 		</note>
 	</itemfilter>
+	<flameturret>
+		<desc>
+			So long as you do not care about any structures or plant life around the target - or anything within sight of it - the flamethrower turret will prove a very effective way of clearing large clusters of mobs. Given fuel, it will ignite the liquid and spray the flame over a large area, including the target and anything nearby.
+		</desc>
+		<note>
+			Can run on ethanol or jet fuel; the latter burns hotter and more damagingly
+		</note>
+	</flameturret>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
 	<name>
 		<desc>
 			

@@ -27,7 +27,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelReservoir;
@@ -161,12 +160,7 @@ public class RenderReservoir extends RotaryTERenderer
 				GL11.glEnable(GL11.GL_BLEND);
 			}
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			IIcon ico = f.getIcon();
-			if (ico == null) {
-				RotaryCraft.logger.logError("Fluid "+f.getID()+" ("+f.getLocalizedName()+") exists (block ID "+f.getBlock()+") but has no icon! Registering bedrock texture as a placeholder!");
-				f.setIcons(Blocks.bedrock.getIcon(0, 0));
-				ico = Blocks.bedrock.getIcon(0, 0);
-			}
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

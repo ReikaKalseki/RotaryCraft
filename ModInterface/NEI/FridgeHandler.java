@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -106,7 +107,7 @@ public class FridgeHandler extends TemplateRecipeHandler {
 	private void drawFluids(int recipe) {
 		Fluid f = FluidRegistry.getFluid("rc liquid nitrogen");
 		if (f != null) {
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

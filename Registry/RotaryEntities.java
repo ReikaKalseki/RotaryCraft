@@ -15,6 +15,7 @@ import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityDischarge;
 import Reika.RotaryCraft.Entities.EntityExplosiveShell;
 import Reika.RotaryCraft.Entities.EntityFlakShot;
+import Reika.RotaryCraft.Entities.EntityFlameTurretShot;
 import Reika.RotaryCraft.Entities.EntityFreezeGunShot;
 import Reika.RotaryCraft.Entities.EntityGasMinecart;
 import Reika.RotaryCraft.Entities.EntityGatlingShot;
@@ -35,7 +36,8 @@ public enum RotaryEntities implements EntityEnum {
 	CUSTOMTNT(EntityCustomTNT.class, "CustomTNT"),
 	//FLAMETHROWER(EntityFlameThrowerFire.class, "Flamethrower Fire"),
 	FLAKSHOT(EntityFlakShot.class, "Flak Shot"),
-	GATLING(EntityGatlingShot.class, "Gatling Round");
+	GATLING(EntityGatlingShot.class, "Gatling Round"),
+	FLAMESHOT(EntityFlameTurretShot.class, "Burning Liquid");
 
 	public final String entityName;
 	private final Class entityClass;

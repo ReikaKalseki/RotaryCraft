@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -472,6 +473,17 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 	public boolean isJetFueled(ItemStack is) {
 		Fluid f = this.getCurrentFluid(is);
 		return f != null && f.equals(FluidRegistry.getFluid("rc jet fuel"));
+	}
+
+	public EnumSet<PackUpgrades> getUpgrades(ItemStack is) {
+		EnumSet<PackUpgrades> set = EnumSet.noneOf(PackUpgrades.class);
+		for (int i = 0; i < PackUpgrades.list.length; i++) {
+			PackUpgrades p = PackUpgrades.list[i];
+			if (p.existsOn(is)) {
+				set.add(p);
+			}
+		}
+		return set;
 	}
 
 	@Override

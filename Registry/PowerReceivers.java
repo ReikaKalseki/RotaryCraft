@@ -106,7 +106,8 @@ public enum PowerReceivers {
 	ITEMFILTER(1024),
 	SPILLER(1024),
 	FILLER(1024),
-	GATLING(1, 1024, 65536);
+	GATLING(1, 1024, 65536),
+	FLAMETURRET(1, 512, 32768);
 
 	private final int minT;
 	private final int minS;

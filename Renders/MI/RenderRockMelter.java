@@ -59,18 +59,18 @@ public class RenderRockMelter extends RotaryTERenderer
 
 		if (tile.isInWorld()) {
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			if (tile.getBlockMetadata() <= 3)
@@ -115,7 +115,7 @@ public class RenderRockMelter extends RotaryTERenderer
 		if (!tr.isEmpty() && tr.isInWorld()) {
 			Fluid f = tr.getContainedFluid();
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

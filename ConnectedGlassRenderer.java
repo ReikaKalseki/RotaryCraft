@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.ISBRH;
 import Reika.DragonAPI.Interfaces.Block.ConnectedTextureGlass;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
@@ -307,7 +308,7 @@ public class ConnectedGlassRenderer implements ISBRH {
 						v5.setColorOpaque_I(0xffffff);
 					else
 						v5.setColorOpaque_I(f.getColor());
-					IIcon ico = f.getIcon();
+					IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();
 					float v = ico.getMinV();

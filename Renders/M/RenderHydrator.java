@@ -181,7 +181,7 @@ public class RenderHydrator extends RotaryTERenderer
 		Fluid f = tr.getFluid();
 		if (f != null) {
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
 
 import minechem.api.RecipeAPI;
@@ -45,6 +46,7 @@ import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Formula.MathExpression;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MoleculeHelper;
@@ -260,7 +262,21 @@ public class RotaryRecipes {
 			SmelteryRecipeHandler.addMelting(ItemStacks.ironscrap, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
 
 			SmelteryRecipeHandler.addMelting(ItemStacks.ironoreflakes, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
-			SmelteryRecipeHandler.addMelting(ItemStacks.goldoreflakes, new ItemStack(Blocks.gold_block), 600, base, "gold.molten");
+			SmelteryRecipeHandler.addMelting(ItemStacks.goldoreflakes, new ItemStack(Blocks.gold_block), 500, base, "gold.molten");
+			ModOreList[] ores = {ModOreList.COPPER, ModOreList.TIN, ModOreList.ALUMINUM, ModOreList.SILVER, ModOreList.NICKEL, ModOreList.LEAD, ModOreList.PLATINUM};
+			for (ModOreList ore : ores) {
+				if (ore.existsInGame()) {
+					f = ore.name().toLowerCase(Locale.ENGLISH)+".molten";
+					if (FluidRegistry.isFluidRegistered(f)) {
+						temp = ore == ModOreList.ALUMINUM || ore == ModOreList.TIN || ore == ModOreList.LEAD ? 300 : 600;
+						ItemStack block = ore.getFirstOreBlock();
+						ArrayList<ItemStack> compact = OreDictionary.getOres("block"+ReikaStringParser.capFirstChar(ore.name()));
+						if (!compact.isEmpty())
+							block = compact.get(0);
+						SmelteryRecipeHandler.addMelting(ExtractorModOres.getFlakeProduct(ore), block, temp, base, f);
+					}
+				}
+			}
 
 			//Bedrock parts
 			int id = ExtraConfigIDs.BEDROCKID.getValue();
@@ -719,6 +735,8 @@ public class RotaryRecipes {
 		MachineRegistry.HYDRATOR.addOreRecipe("sls", "p p", "PpP", 's', ItemStacks.steelingot, 'p', "plankWood", 'l', Blocks.ladder, 'P', ItemStacks.basepanel);
 
 		MachineRegistry.GATLING.addCrafting("PPG", " GA", "  B", 'B', ItemStacks.railbase, 'A', ItemStacks.railaim, 'G', ItemStacks.steelgear, 'P', ItemStacks.cylinder);
+
+		MachineRegistry.FLAMETURRET.addCrafting("FIP", "GFS", " FB", 'B', ItemStacks.railbase, 'F', ItemStacks.fuelline, 'I', ItemStacks.igniter, 'P', ItemStacks.pipe, 'g', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
 
 		MachineRegistry.SPILLWAY.addCrafting("S  ", "PSP", "PpP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe);
 	}

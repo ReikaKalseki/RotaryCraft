@@ -167,7 +167,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 		if (cvt.hasLubricant()) {
 			Fluid f = FluidRegistry.getFluid("rc lubricant");
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			GL11.glColor4f(1, 1, 1, 1);
 			this.drawTexturedModelRectFromIcon(186, 89, ico, 16, 48);

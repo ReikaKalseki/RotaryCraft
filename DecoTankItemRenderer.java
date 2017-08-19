@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
 
@@ -45,7 +46,7 @@ public class DecoTankItemRenderer implements IItemRenderer {
 		if (item.stackTagCompound != null) {
 			Fluid f = ReikaNBTHelper.getFluidFromNBT(item.stackTagCompound);
 			if (f != null) {
-				IIcon ico = f.getStillIcon();
+				IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 				if (f.getLuminosity() == 15 || TankFlags.LIGHTED.apply(item))
 					GL11.glDisable(GL11.GL_LIGHTING);
 				float u = ico.getMinU();

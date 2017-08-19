@@ -208,6 +208,7 @@ public class ModelFreezeGun extends RotaryModelBase
 	{
 		Shape5.render(te, f5);
 
+		GL11.glPushMatrix();
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 0, 1, 0);
 		GL11.glTranslated(0, -1, 0);
@@ -223,6 +224,8 @@ public class ModelFreezeGun extends RotaryModelBase
 		Shape7e.render(te, f5);
 		Shape7f.render(te, f5);
 		Shape7g.render(te, f5);
+
+		GL11.glPushMatrix();
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(theta, 1, 0, 0);
 		GL11.glTranslated(0, -1, 0);
@@ -237,12 +240,8 @@ public class ModelFreezeGun extends RotaryModelBase
 		Shape2c.render(te, f5);
 		Shape2d.render(te, f5);
 		Shape2e.render(te, f5);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-theta, 1, 0, 0);
-		GL11.glTranslated(0, -1, 0);
-		GL11.glTranslated(0, 1, 0);
-		GL11.glRotatef(-phi, 0, 1, 0);
-		GL11.glTranslated(0, -1, 0);
+		GL11.glPopMatrix();
+		GL11.glPopMatrix();
 	}
 
 	@Override

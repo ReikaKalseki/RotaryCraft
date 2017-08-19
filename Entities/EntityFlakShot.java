@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAAGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityAAGun;
 
 public class EntityFlakShot extends EntityTurretShot {
 

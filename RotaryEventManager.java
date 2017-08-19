@@ -80,7 +80,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;

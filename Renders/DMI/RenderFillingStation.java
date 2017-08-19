@@ -134,7 +134,7 @@ public class RenderFillingStation extends RotaryTERenderer
 				GL11.glEnable(GL11.GL_BLEND);
 			}
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();
@@ -190,11 +190,13 @@ public class RenderFillingStation extends RotaryTERenderer
 				break;
 		}
 
+		GL11.glPushMatrix();
 		GL11.glTranslated(par2, par4, par6);
 
 		GL11.glRotatef(var11-90, 0.0F, 1.0F, 0.0F);
 
 		GL11.glTranslated(xoff, 0, zoff);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 
 		Tessellator v5 = Tessellator.instance;
 		v5.startDrawingQuads();
@@ -240,12 +242,8 @@ public class RenderFillingStation extends RotaryTERenderer
 		}
 
 		v5.draw();
-
-		GL11.glTranslated(-xoff, 0, -zoff);
-
-		GL11.glRotatef(-var11+90, 0.0F, 1.0F, 0.0F);
-
-		GL11.glTranslated(-par2, -par4, -par6);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glPopMatrix();
 	}
 
 	@Override

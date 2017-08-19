@@ -19,7 +19,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 public class GuiReservoir extends GuiNonPoweredMachine
 {
 
-	private TileEntityReservoir Reservoir;
+	private TileEntityReservoir reservoir;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
@@ -28,7 +28,7 @@ public class GuiReservoir extends GuiNonPoweredMachine
 	public GuiReservoir(EntityPlayer p5ep, TileEntityReservoir te)
 	{
 		super(new ContainerReservoir(p5ep, te), te);
-		Reservoir = te;
+		reservoir = te;
 		xSize = 176;
 		ySize = 96;
 		ep = p5ep;
@@ -45,15 +45,15 @@ public class GuiReservoir extends GuiNonPoweredMachine
 		if (api.isMouseInBox(j+83, j+92, k+25, k+70)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", Reservoir.getLevel(), Reservoir.CAPACITY), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", reservoir.getLevel(), reservoir.CAPACITY), mx-j, my-k);
 		}
 
-		if (!Reservoir.isEmpty()) {
-			int i2 = Reservoir.getLiquidScaled(44);
+		if (!reservoir.isEmpty()) {
+			int i2 = reservoir.getLiquidScaled(44);
 			int x = xSize/2-4;
 			int y = ySize/2-13-i2+35;
-			IIcon ico = Reservoir.getFluid().getStillIcon();
-			ReikaLiquidRenderer.bindFluidTexture(Reservoir.getFluid());
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(reservoir.getFluid());
+			ReikaLiquidRenderer.bindFluidTexture(reservoir.getFluid());
 			this.drawTexturedModelRectFromIcon(x, y, ico, 8, i2);
 		}
 	}

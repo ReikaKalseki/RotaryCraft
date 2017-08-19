@@ -69,7 +69,8 @@ public enum SoundRegistry implements SoundEnum {
 	RUMBLE("rumble2"),
 	COIL("#coil"),
 	GATLINGRELOAD("gatlingreload"),
-	GATLING("gatling");
+	GATLING("gatling"),
+	FLAMETURRET("flameturret");
 
 	public static final SoundRegistry[] soundList = SoundRegistry.values();
 

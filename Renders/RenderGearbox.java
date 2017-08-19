@@ -298,7 +298,7 @@ public class RenderGearbox extends RotaryTERenderer
 			Fluid f = FluidRegistry.getFluid("rc lubricant");
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			GL11.glEnable(GL11.GL_BLEND);
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			int c = 0xffffff;
 			if (tr.isLiving()) {
 				ico = this.getManaIcon();

@@ -29,6 +29,7 @@ import org.lwjgl.opengl.GL11;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.ModInteract.PositionedStackWithTooltip;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -181,7 +182,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		FluidStack fs = RecipesCentrifuge.getRecipes().getFluidResult(in);
 		if (fs != null) {
 			Fluid f = fs.getFluid();
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

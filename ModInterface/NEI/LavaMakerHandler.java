@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
@@ -174,7 +175,7 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 		FluidStack fs = RecipesLavaMaker.getRecipes().getMelting(in);
 		if (fs != null) {
 			Fluid f = fs.getFluid();
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

@@ -605,7 +605,7 @@ public final class HandbookAuxData {
 					api.drawCenteredStringNoShadow(font, String.format("%d", liq.amount), posX+116+16, posY+38+5, 0);
 					ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
 					GL11.glColor4f(1, 1, 1, 1);
-					IIcon ico = liq.getFluid().getIcon();
+					IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(liq.getFluid());
 					api.drawTexturedModelRectFromIcon(posX+116, posY+38, ico, 16, 16);
 					api.drawTexturedModelRectFromIcon(posX+116+16, posY+38, ico, 16, 16);
 					//api.drawItemStack(ri, fontRenderer, liq.asItemStack(), posX+116, posY+38);

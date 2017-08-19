@@ -14,6 +14,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -44,6 +47,7 @@ public class ItemUltrasound extends ItemChargedTool {
 			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
 			Block id = world.getBlock(xyz[0], xyz[1], xyz[2]);
 			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
+			Fluid f = FluidRegistry.lookupFluidForBlock(id);
 			if (ReikaBlockHelper.isOre(id, meta) && !ores) {
 				ores = true;
 				ReikaChatHelper.write("Ore Detected!");
@@ -54,13 +58,9 @@ public class ItemUltrasound extends ItemChargedTool {
 			}
 			if (id != Blocks.air && !ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]))
 				caveready = true;
-			if ((id == Blocks.water || id == Blocks.flowing_water) && !liq) {
+			if (f != null && !liq) {
 				liq = true;
-				ReikaChatHelper.write("Water Detected!");
-			}
-			if ((id == Blocks.lava || id == Blocks.flowing_lava) && !liq) {
-				liq = true;
-				ReikaChatHelper.write("Lava Detected!");
+				ReikaChatHelper.write(f.getLocalizedName(new FluidStack(f, 1000))+" Detected!");
 			}
 			if (caveready && ReikaWorldHelper.caveBlock(id) && !cave) {
 				cave = true;

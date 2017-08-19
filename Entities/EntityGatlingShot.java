@@ -38,7 +38,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
 
 public class EntityGatlingShot extends EntityTurretShot {
 

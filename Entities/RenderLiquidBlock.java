@@ -43,7 +43,7 @@ public class RenderLiquidBlock extends Render
 		IIcon ico;
 		Fluid f = e.getFluid();
 		if (f != null) {
-			ico = e.getFluid().getIcon();
+			ico = ReikaLiquidRenderer.getFluidIconSafe(e.getFluid());
 			ReikaLiquidRenderer.bindFluidTexture(f);
 		}
 		else {

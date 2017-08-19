@@ -21,7 +21,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Turret.ModelMultiCannon;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
 
 public class RenderMultiCannon extends RotaryTERenderer {
 

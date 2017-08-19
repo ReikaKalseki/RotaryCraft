@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
@@ -135,7 +136,7 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 		Fluid out = r.recipe.output;
 		Fluid in = r.recipe.input;
 
-		IIcon ico = in.getIcon();
+		IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(in);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();
@@ -153,7 +154,7 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 		}
 		v5.draw();
 
-		ico = out.getIcon();
+		ico = ReikaLiquidRenderer.getFluidIconSafe(out);
 		u = ico.getMinU();
 		v = ico.getMinV();
 		du = ico.getMaxU();

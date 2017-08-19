@@ -178,23 +178,24 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAAGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAirGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityBlockCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityFreezeGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLaserGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMachineGun;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySelfDestruct;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityVanDeGraff;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityAAGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityFlameTurret;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityFreezeGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityLaserGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
 import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityBeamMirror;
 import Reika.RotaryCraft.TileEntities.World.TileEntityBlockFiller;
@@ -210,6 +211,7 @@ import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityWeatherController;
 import cpw.mods.fml.common.registry.GameRegistry;
+
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
 public enum MachineRegistry implements TileEnum {
@@ -348,7 +350,8 @@ public enum MachineRegistry implements TileEnum {
 	HYDRATOR(			"machine.hydrator",			BlockMMachine.class,		TileEntityGroundHydrator.class,		21, "RenderHydrator"),
 	FILLER(				"machine.filler", 			BlockMachine.class,			TileEntityBlockFiller.class,		9),
 	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon"),
-	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway");
+	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway"),
+	FLAMETURRET(		"machine.flameturret",		BlockMMachine.class,		TileEntityFlameTurret.class,		22, "RenderFlameTurret");
 
 	private final String name;
 	private final Class te;

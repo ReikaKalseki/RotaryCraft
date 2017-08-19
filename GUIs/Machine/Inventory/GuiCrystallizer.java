@@ -52,7 +52,7 @@ public class GuiCrystallizer extends GuiMachine
 			int y = 78-i2+1;
 			GL11.glColor4f(1, 1, 1, 1);
 			Fluid f = te.getContainedFluid();
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			this.drawTexturedModelRectFromIcon(x, y, ico, 16, i2);
 

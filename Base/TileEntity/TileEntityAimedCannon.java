@@ -152,6 +152,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		double dz = z+0.5-t[2];
 		double[] tg = ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz);
 		tg[1] = Math.abs(tg[1])-90+0.25;
+		tg[1] += this.getThetaOffset();
 		//ReikaJavaLibrary.pConsole("PHI: "+phi+" THETA: "+theta+" for "+tg[2]+", "+tg[1]);
 		if (tg[2] - phi > 180)
 			tg[2] -= 360;
@@ -168,6 +169,10 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 			theta = MAXLOWANGLE;
 		if (theta > -MAXLOWANGLE && dir == -1)
 			theta = MAXLOWANGLE;
+	}
+
+	protected double getThetaOffset() {
+		return 0;
 	}
 
 	protected float getAimingSpeed() {

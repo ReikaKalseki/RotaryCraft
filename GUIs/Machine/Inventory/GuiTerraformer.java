@@ -101,7 +101,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 			if (liq != null) {
 				GL11.glColor4f(1, 1, 1, 1);
 				ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
-				IIcon ico = liq.getFluid().getIcon();
+				IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(liq.getFluid());
 				this.drawTexturedModelRectFromIcon(48, 17+i*39, ico, 16, 16);
 				api.drawCenteredStringNoShadow(fontRendererObj, String.format("%d", liq.amount), 56, 21+i*39, 0);
 			}

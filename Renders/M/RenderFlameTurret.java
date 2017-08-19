@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Renders.MI;
+package Reika.RotaryCraft.Renders.M;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -19,17 +19,14 @@ import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
-import Reika.RotaryCraft.Models.Turret.ModelFreezeGun;
-import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityFreezeGun;
+import Reika.RotaryCraft.Models.Turret.ModelFlameTurret;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityFlameTurret;
 
-public class RenderFreezeGun extends RotaryTERenderer {
+public class RenderFlameTurret extends RotaryTERenderer {
 
-	private ModelFreezeGun freezegunModel = new ModelFreezeGun();
+	private ModelFlameTurret FlameTurretModel = new ModelFlameTurret();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
-	public void renderTileEntityFreezeGunAt(TileEntityFreezeGun tile, double par2, double par4, double par6, float par8)
+	public void renderTileEntityFlameTurretAt(TileEntityFlameTurret tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
 
@@ -38,10 +35,9 @@ public class RenderFreezeGun extends RotaryTERenderer {
 		else
 			var9 = tile.getBlockMetadata();
 
-		ModelFreezeGun var14;
-		var14 = freezegunModel;
-
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/freezeguntex.png");
+		ModelFlameTurret var14;
+		var14 = FlameTurretModel;
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flameturrettex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -75,46 +71,16 @@ public class RenderFreezeGun extends RotaryTERenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
 	{
-		if (this.doRenderModel((RotaryCraftTileEntity)tile))
-			this.renderTileEntityFreezeGunAt((TileEntityFreezeGun)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-			IORenderer.renderIO(tile, par2, par4, par6);
-			//this.renderIce((TileEntityFreezeGun)tile, par2, par4, par6);
-		}
-	}
-
-	/*
-
-	private void renderIce(TileEntityFreezeGun tile, double par2, double par4, double par6) {
 		if (tile == null)
 			return;
-		if (!tile.isInWorld())
-			return;
-		if (tile.frozen == null)
-			return;
-		//ReikaJavaLibrary.pConsole(tile.frozen.size());
-		ReikaRenderHelper.prepareGeoDraw(true);
-		Tessellator v5 = new Tessellator();
-		int[] rgb = {255,255,255};
-		for (int i = 0; i < tile.frozen.size(); i++) {
-			EntityLivingBase e = tile.frozen.get(i);
-			ReikaJavaLibrary.pConsole(e.getCommandSenderName());
-			double dx = e.posX-tile.xCoord;
-			double dy = e.posY-tile.yCoord;
-			double dz = e.posZ-tile.zCoord;
-			v5.startDrawing(GL11.GL_LINE_LOOP);
-			v5.setColorRGBA(rgb[0], rgb[1], rgb[2], 255);
-			v5.addVertex(par2+dx, par4+dy, par6+dz);
-			v5.addVertex(dx, dy+10, dz);
-			v5.addVertex(dx+10, dy+10, dz);
-			v5.addVertex(dx+10, dy, dz);
-			v5.draw();
-		}
-		ReikaRenderHelper.exitGeoDraw();
-	}*/
+		if (this.doRenderModel((RotaryCraftTileEntity)tile))
+			this.renderTileEntityFlameTurretAt((TileEntityFlameTurret)tile, par2, par4, par6, par8);
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+			IORenderer.renderIO(tile, par2, par4, par6);
+	}
 
 	@Override
 	public String getImageFileName(RenderFetcher te) {
-		return "freezeguntex.png";
+		return "flameturrettex.png";
 	}
 }

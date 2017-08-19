@@ -115,7 +115,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	@Override
 	public String getTexture(ItemStack is) {
 		int index = ItemRegistry.getEntry(is).getTextureSheet();
-		String s = index > 0 ? String.valueOf(index) : "";
+		String s = index > 0 ? String.valueOf(index+1) : "";
 		return "/Reika/RotaryCraft/Textures/Items/items"+s+".png";
 	}
 

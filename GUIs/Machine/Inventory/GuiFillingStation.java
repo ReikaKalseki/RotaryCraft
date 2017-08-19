@@ -19,7 +19,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFillingStation;
 public class GuiFillingStation extends GuiPowerOnlyMachine
 {
 
-	private TileEntityFillingStation FillingStation;
+	private TileEntityFillingStation fillingStation;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
 	int x;
@@ -28,7 +28,7 @@ public class GuiFillingStation extends GuiPowerOnlyMachine
 	public GuiFillingStation(EntityPlayer p5ep, TileEntityFillingStation te)
 	{
 		super(new ContainerFillingStation(p5ep, te), te);
-		FillingStation = te;
+		fillingStation = te;
 		xSize = 176;
 		ySize = 187;
 		ep = p5ep;
@@ -45,15 +45,15 @@ public class GuiFillingStation extends GuiPowerOnlyMachine
 		if (api.isMouseInBox(j+81, j+94, k+20, k+87)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRendererObj, String.format("%d/%d mB", FillingStation.getLevel(), FillingStation.CAPACITY), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d mB", fillingStation.getLevel(), fillingStation.CAPACITY), mx-j, my-k);
 		}
 
-		if (!FillingStation.isEmpty()) {
-			int i2 = FillingStation.getLiquidScaled(66);
+		if (!fillingStation.isEmpty()) {
+			int i2 = fillingStation.getLiquidScaled(66);
 			int x = 82;
 			int y = 87-i2;
-			IIcon ico = FillingStation.getFluid().getStillIcon();
-			ReikaLiquidRenderer.bindFluidTexture(FillingStation.getFluid());
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(fillingStation.getFluid());
+			ReikaLiquidRenderer.bindFluidTexture(fillingStation.getFluid());
 			this.drawTexturedModelRectFromIcon(x, y, ico, 12, i2);
 		}
 	}

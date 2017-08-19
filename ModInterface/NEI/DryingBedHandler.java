@@ -15,7 +15,6 @@ import java.util.Collection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
@@ -25,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesDryingBed;
@@ -153,12 +153,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 		FluidStack fs = r.getEntry();
 		if (fs != null) {
 			Fluid f = fs.getFluid();
-			IIcon ico = f.getIcon();
-			if (ico == null) {
-				RotaryCraft.logger.logError("Fluid "+f.getID()+" ("+f.getLocalizedName()+") exists (block ID "+f.getBlock()+") but has no icon! Registering bedrock texture as a placeholder!");
-				ico = Blocks.bedrock.getIcon(0, 0);
-				f.setIcons(ico);
-			}
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

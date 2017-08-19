@@ -69,7 +69,7 @@ public class GuiCentrifuge extends GuiMachine
 			int y = 77-i2+1;
 			GL11.glColor4f(1, 1, 1, 1);
 			Fluid f = cent.getFluid();
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			this.drawTexturedModelRectFromIcon(x, y, ico, 16, i2);
 		}

@@ -110,7 +110,7 @@ public class RenderPump extends RotaryTERenderer
 		if (tr.getLevel() > 0 && tr.isInWorld()) {
 			Fluid f = tr.getLiquid();
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

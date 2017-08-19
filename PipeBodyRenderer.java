@@ -223,10 +223,7 @@ public class PipeBodyRenderer implements ISBRH {
 		double in2 = 0.5-size+0.01;
 		double dd2 = in-in2;
 
-		IIcon ico = f.getIcon();
-		if (ico == null) {
-			ico = RenderBlocks.getInstance().getIconSafe(ico);
-		}
+		IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float u2 = ico.getMaxU();

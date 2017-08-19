@@ -89,7 +89,7 @@ public class RenderBigFurnace extends RotaryTERenderer
 		if (!tr.isEmpty() && tr.isInWorld()) {
 			Fluid f = FluidRegistry.LAVA;
 			ReikaLiquidRenderer.bindFluidTexture(f);
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			float u = ico.getMinU();
 			float v = ico.getMinV();
 			float du = ico.getMaxU();

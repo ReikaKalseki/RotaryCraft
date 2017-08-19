@@ -20,7 +20,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Turret.ModelRailGun;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityRailGun;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
 
 public class RenderRailGun extends RotaryTERenderer {
 

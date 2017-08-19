@@ -66,7 +66,7 @@ public class GuiRockMelter extends GuiPowerOnlyMachine {
 			int k = (height - ySize) / 2;
 			GL11.glColor4f(1, 1, 1, 1);
 			Fluid f = tile.getContainedFluid();
-			IIcon ico = f.getIcon();
+			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			int x = j+134;
 			int y = k+73-frac+1;

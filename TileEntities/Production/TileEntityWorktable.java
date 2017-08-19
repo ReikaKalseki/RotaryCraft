@@ -426,6 +426,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			if (ReikaInventoryHelper.hasNEmptyStacks(inv, 18)) {
 				ItemStack jet = ItemRegistry.JETPACK.getStackOf();
 				((ItemJetPack)jet.getItem()).addFluid(jet, pack.getCurrentFluid(combine), pack.getFuel(combine));
+				for (PackUpgrades p : pack.getUpgrades(combine))
+					p.enable(jet, true);
 				inv[4] = null;
 				ItemStack plate = bed ? ItemRegistry.BEDCHEST.getEnchantedStack() : ItemRegistry.STEELCHEST.getStackOf();
 				inv[9] = plate;

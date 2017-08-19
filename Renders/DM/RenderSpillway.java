@@ -216,7 +216,7 @@ public class RenderSpillway extends RotaryTERenderer
 		Fluid f = FluidRegistry.WATER;
 
 		ReikaLiquidRenderer.bindFluidTexture(f);
-		IIcon ico = f.getIcon();
+		IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 		float u = ico.getMinU();
 		float v = ico.getMinV();
 		float du = ico.getMaxU();

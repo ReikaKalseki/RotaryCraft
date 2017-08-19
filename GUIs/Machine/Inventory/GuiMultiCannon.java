@@ -18,7 +18,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerMultiCannon;
-import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityMultiCannon;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
 
 
 public class GuiMultiCannon extends GuiMachine {
