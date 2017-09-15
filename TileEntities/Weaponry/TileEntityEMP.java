@@ -58,7 +58,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	public static final long BLAST_ENERGY = (long)(4.184e9);
 
-	private List<TileEntity> blocks = new ArrayList<TileEntity>();
+	private ArrayList<Coordinate> blocks = new ArrayList();
 	private BlockArray check  = new BlockArray();
 
 	private static ClassNameCache blacklist = new ClassNameCache();
@@ -192,7 +192,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			for (int y = 0; y < world.provider.getHeight(); y++) {
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te != null) {
-					blocks.add(te);
+					blocks.add(new Coordinate(te));
 				}
 			}
 			check.remove(b.xCoord, b.yCoord, b.zCoord);
@@ -206,11 +206,11 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	private void fire(World world, int x, int y, int z) {
 		fired = true;
 		for (int i = 0; i < blocks.size(); i++) {
-			TileEntity te = blocks.get(i);
-			if (InterfaceCache.NODE.instanceOf(te))
-				this.chargeNode((INode)te);
-			else if (ModList.CHROMATICRAFT.isLoaded() && te instanceof TileEntityCrystalPylon)
+			TileEntity te = blocks.get(i).getTileEntity(world);
+			if (ModList.CHROMATICRAFT.isLoaded() && te instanceof TileEntityCrystalPylon)
 				((TileEntityCrystalPylon)te).onEMP(this);
+			else if (InterfaceCache.NODE.instanceOf(te))
+				this.chargeNode((INode)te);
 			else
 				this.shutdownTE(te);
 		}

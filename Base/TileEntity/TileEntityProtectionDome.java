@@ -9,14 +9,13 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import java.awt.Color;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -30,18 +29,16 @@ public abstract class TileEntityProtectionDome extends TileEntityPowerReceiver i
 
 	public abstract int getRangeBoost();
 
-	private int[] RGB = new int[3];
+	private int rgb;
 
 	public int setRange;
 
 	protected void setColor(int r, int g, int b) {
-		RGB[0] = Math.max(0, Math.min(255, r));
-		RGB[1] = Math.max(0, Math.min(255, g));
-		RGB[2] = Math.max(0, Math.min(255, b));
+		rgb = ReikaColorAPI.RGBtoHex(Math.min(255, r), Math.min(255, g), Math.min(255, b));
 	}
 
-	public final Color getDomeColor() {
-		return new Color(RGB[0], RGB[1], RGB[2]);
+	public final int getDomeColor() {
+		return rgb;
 	}
 
 	protected final boolean isClear(World world, int x, int y, int z) {
@@ -58,7 +55,7 @@ public abstract class TileEntityProtectionDome extends TileEntityPowerReceiver i
 			return 0;
 		if (power < MINPOWER)
 			return 0;
-		int range = 2+(int)(power-MINPOWER)/this.getFallOff()+this.getRangeBoost();
+		int range = 2+(int)((power-MINPOWER)/this.getFallOff())+this.getRangeBoost();
 		int max = Math.max(64, ConfigRegistry.FORCERANGE.getValue());
 		if (range > max)
 			return max;

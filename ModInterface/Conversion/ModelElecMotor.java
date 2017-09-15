@@ -20,8 +20,11 @@ import java.util.ArrayList;
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelElecMotor extends RotaryModelBase
@@ -82,6 +85,15 @@ public class ModelElecMotor extends RotaryModelBase
 	LODModelPart Shape1kf;
 	LODModelPart Shape1kg;
 	LODModelPart Shape1kh;
+
+	LODModelPart Shape5;
+	LODModelPart Shape5a;
+	LODModelPart Shape5b;
+	LODModelPart Shape5c;
+	LODModelPart Shape5d;
+	LODModelPart Shape5e;
+	LODModelPart Shape5f;
+	LODModelPart Shape5g;
 
 	public ModelElecMotor()
 	{
@@ -418,6 +430,55 @@ public class ModelElecMotor extends RotaryModelBase
 		Shape1kh.setTextureSize(128, 128);
 		Shape1kh.mirror = true;
 		this.setRotation(Shape1kh, 0F, 0F, 0.5890486F);
+
+		Shape5 = new LODModelPart(this, 58, 70);
+		Shape5.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5.setRotationPoint(0F, 15F, -6F);
+		Shape5.setTextureSize(128, 128);
+		Shape5.mirror = true;
+		this.setRotation(Shape5, 0F, 0F, -0.2617994F);
+		Shape5a = new LODModelPart(this, 58, 70);
+		Shape5a.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5a.setRotationPoint(0F, 15F, -6F);
+		Shape5a.setTextureSize(128, 128);
+		Shape5a.mirror = true;
+		this.setRotation(Shape5a, 0F, 0F, 0.2617994F);
+		Shape5b = new LODModelPart(this, 58, 70);
+		Shape5b.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5b.setRotationPoint(0F, 15F, -6F);
+		Shape5b.setTextureSize(128, 128);
+		Shape5b.mirror = true;
+		this.setRotation(Shape5b, 0F, 0F, -0.7853982F);
+		Shape5c = new LODModelPart(this, 58, 70);
+		Shape5c.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5c.setRotationPoint(0F, 15F, -6F);
+		Shape5c.setTextureSize(128, 128);
+		Shape5c.mirror = true;
+		this.setRotation(Shape5c, 0F, 0F, 0.7853982F);
+		Shape5d = new LODModelPart(this, 58, 70);
+		Shape5d.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5d.setRotationPoint(0F, 15F, -6F);
+		Shape5d.setTextureSize(128, 128);
+		Shape5d.mirror = true;
+		this.setRotation(Shape5d, 0F, 0F, 1.308997F);
+		Shape5e = new LODModelPart(this, 58, 70);
+		Shape5e.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5e.setRotationPoint(0F, 15F, -6F);
+		Shape5e.setTextureSize(128, 128);
+		Shape5e.mirror = true;
+		this.setRotation(Shape5e, 0F, 0F, -1.308997F);
+		Shape5f = new LODModelPart(this, 58, 70);
+		Shape5f.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5f.setRotationPoint(0F, 15F, -6F);
+		Shape5f.setTextureSize(128, 128);
+		Shape5f.mirror = true;
+		this.setRotation(Shape5f, 0F, 0F, 1.832596F);
+		Shape5g = new LODModelPart(this, 58, 70);
+		Shape5g.addBox(-0.5F, -8F, 0F, 1, 3, 12);
+		Shape5g.setRotationPoint(0F, 15F, -6F);
+		Shape5g.setTextureSize(128, 128);
+		Shape5g.mirror = true;
+		this.setRotation(Shape5g, 0F, 0F, -1.832596F);
 	}
 
 	@Override
@@ -467,6 +528,33 @@ public class ModelElecMotor extends RotaryModelBase
 		Shape1kf.render(te, f5);
 		Shape1kg.render(te, f5);
 		Shape1kh.render(te, f5);
+
+		//color code
+		if (li.size() > 1) {
+			int color = (Integer)li.get(1);
+			float r = ReikaColorAPI.getRed(color)/255F;
+			float g = ReikaColorAPI.getGreen(color)/255F;
+			float b = ReikaColorAPI.getBlue(color)/255F;
+			GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+			if (li.size() > 2 && (Boolean)li.get(2)) {
+				GL11.glDisable(GL11.GL_LIGHTING);
+				ReikaRenderHelper.disableLighting();
+				ReikaRenderHelper.disableEntityLighting();
+				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+				GL11.glDisable(GL11.GL_NORMALIZE);
+				GL11.glNormal3f(1, 1, 1);
+			}
+			GL11.glColor3f(r, g, b);
+			Shape5.render(te, f5);
+			Shape5a.render(te, f5);
+			Shape5b.render(te, f5);
+			Shape5c.render(te, f5);
+			Shape5d.render(te, f5);
+			Shape5e.render(te, f5);
+			Shape5f.render(te, f5);
+			Shape5g.render(te, f5);
+			GL11.glPopAttrib();
+		}
 
 		double t = 0.25;
 		double dz = 0.75;

@@ -37,7 +37,7 @@ public enum EngineType {
 	GAS(	512, 	128, 	EngineClass.PISTON,		TileEntityGasEngine.class),
 	AC(		256, 	512, 	EngineClass.ELECTRIC,	TileEntityACEngine.class),
 	SPORT(	1024, 	256, 	EngineClass.PISTON,		TileEntityPerformanceEngine.class),
-	HYDRO(	32, 	16384, 	EngineClass.KINETIC,	TileEntityHydroEngine.class), //double speed, add new lava engine as 524kW?
+	HYDRO(	32, 	16384, 	EngineClass.KINETIC,	TileEntityHydroEngine.class), //double speed, add new lava engine as 524kW? no
 	MICRO(	131072, 16, 	EngineClass.TURBINE,	TileEntityMicroturbine.class),
 	JET(	65536, 	1024, 	EngineClass.TURBINE,	TileEntityJetEngine.class);
 

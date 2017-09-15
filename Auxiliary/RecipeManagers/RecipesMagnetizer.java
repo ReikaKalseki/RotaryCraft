@@ -40,22 +40,22 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 		super(MachineRegistry.MAGNETIZER);
 		RecipeInterface.magnetizer = this;
 
-		this.addRecipe(ItemStacks.shaftcore, 0, 2, 1, RecipeLevel.CORE);
-		this.addRecipe(ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.MAGNETOSTATIC2.ordinal()), 32768, 1, 4, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.shaftcore, 0, 2, 1, false, RecipeLevel.CORE);
+		this.addRecipe(ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.MAGNETOSTATIC2.ordinal()), 32768, 1, 4, true, RecipeLevel.CORE);
 	}
 
-	private void addRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, RecipeLevel rl) {
-		this.addRecipe(in, minSpeed, reqSpeedPerMicroTesla, timeFactor, null, rl);
+	private void addRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, boolean allowStacks, RecipeLevel rl) {
+		this.addRecipe(in, minSpeed, reqSpeedPerMicroTesla, timeFactor, allowStacks, null, rl);
 	}
 
-	private void addRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, MagnetizationAction a, RecipeLevel rl) {
-		MagnetizerRecipe rec = new MagnetizerRecipe(in, timeFactor, minSpeed, reqSpeedPerMicroTesla, a);
+	private void addRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, boolean allowStacks, MagnetizationAction a, RecipeLevel rl) {
+		MagnetizerRecipe rec = new MagnetizerRecipe(in, timeFactor, minSpeed, reqSpeedPerMicroTesla, allowStacks, a);
 		recipes.put(in, rec);
 		this.onAddRecipe(rec, rl);
 	}
 
-	public void addAPIRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, MagnetizationAction a) {
-		this.addRecipe(in, minSpeed, reqSpeedPerMicroTesla, timeFactor, a, RecipeLevel.API);
+	public void addAPIRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, boolean allowStacks, MagnetizationAction a) {
+		this.addRecipe(in, minSpeed, reqSpeedPerMicroTesla, timeFactor, allowStacks, a, RecipeLevel.API);
 	}
 
 	@Override
@@ -84,14 +84,18 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 		public final int minSpeed;
 		public final int speedPeruT;
 
+		public final boolean allowStacking;
+
 		public final MagnetizationAction action;
 
-		private MagnetizerRecipe(ItemStack is, int time, int omega, int sput, MagnetizationAction a) {
+		private MagnetizerRecipe(ItemStack is, int time, int omega, int sput, boolean stack, MagnetizationAction a) {
 			item = is;
 			timeFactor = time;
 			minSpeed = omega;
 			speedPeruT = sput;
+
 			action = a;
+			allowStacking = stack;
 		}
 
 		public ItemStack getItem() {
@@ -130,7 +134,8 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 		int speed = lb.getInt("min_speed");
 		int spuT = lb.getInt("speed_per_microtesla");
 		int time = lb.getInt("time_factor");
-		this.addRecipe(in, speed, spuT, time, RecipeLevel.CUSTOM);
+		boolean stack = lb.getBoolean("allow_stacks");
+		this.addRecipe(in, speed, spuT, time, stack, RecipeLevel.CUSTOM);
 		return true;
 	}
 

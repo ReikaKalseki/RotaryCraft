@@ -116,6 +116,16 @@ public class CustomExtractLoader {
 		public String[] getOreDictNames() {
 			return ReikaJavaLibrary.collectionToArray(oreNames);
 		}
+
+		@Override
+		public String getProductOreDictName() {
+			return productName;
+		}
+
+		@Override
+		public String name() {
+			return displayName;
+		}
 	}
 
 	public final String getSaveFileName() {

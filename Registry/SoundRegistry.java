@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.Registry.SoundEnum;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -159,6 +160,13 @@ public enum SoundRegistry implements SoundEnum {
 
 	public void playSoundAtBlock(WorldLocation loc) {
 		this.playSoundAtBlock(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);
+	}
+
+	public void playSoundNoAttenuation(World world, double x, double y, double z, float vol, float pitch, int broadcast) {
+		if (world.isRemote)
+			return;
+		//ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, te.worldObj, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, false);
+		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, this, world, x, y, z, vol, pitch, false, broadcast);
 	}
 
 	public String getName() {

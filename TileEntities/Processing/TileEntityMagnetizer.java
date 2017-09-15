@@ -80,7 +80,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 	}
 
 	private boolean canRunRecipe(MagnetizerRecipe r) {
-		return omega >= r.minSpeed;
+		return omega >= r.minSpeed && (r.allowStacking || inv[0].stackSize == 1);
 	}
 
 	private void magnetize(MagnetizerRecipe r) {

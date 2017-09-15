@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Base;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,6 +33,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityACEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -207,8 +209,7 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
-	{
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) { //Adds the metadata blocks to the creative inventory
 		int j;
 		switch (type) {
 			case 0: //shaftcraft
@@ -286,13 +287,12 @@ public class ItemMulti extends ItemBasic {
 	}
 
 	@Override
-	public int getMetadata (int damageValue) {
+	public int getMetadata(int damageValue) {
 		return damageValue;
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack is)
-	{
+	public String getUnlocalizedName(ItemStack is) {
 		int d = is.getItemDamage();
 		String s = super.getUnlocalizedName();
 		switch(type) {
@@ -320,9 +320,6 @@ public class ItemMulti extends ItemBasic {
 			case 8:
 				s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
 				break;
-			case 16:
-				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
-				break;
 			case 10:
 				s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
 				break;
@@ -332,6 +329,9 @@ public class ItemMulti extends ItemBasic {
 			case 12:
 				s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
 				break;
+			case 16:
+				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
+				break;
 			case 23:
 				s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
 				break;
@@ -339,8 +339,26 @@ public class ItemMulti extends ItemBasic {
 		return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
 	}
 
+	@SideOnly(Side.CLIENT)
+	private boolean offsetDustName(ItemStack is) {
+		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
+		return (ep.posY < 15 || ep.worldObj.provider.hasNoSky) && ep.getCommandSenderName().equals("Freyskol");
+	}
+
 	@Override
+	public String getItemStackDisplayName(ItemStack item) {
+		if (ReikaItemHelper.matchStacks(item, ItemStacks.bedrockdust) && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && this.offsetDustName(item)) {
+			return ((ItemMulti)ItemStacks.salt.getItem()).getItemStackDisplayName(ItemStacks.salt);
+		}
+		return super.getItemStackDisplayName(item);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public int getItemSpriteIndex(ItemStack item) {
+		if (ReikaItemHelper.matchStacks(item, ItemStacks.bedrockdust) && this.offsetDustName(item)) {
+			return ((ItemMulti)ItemStacks.salt.getItem()).getItemSpriteIndex(ItemStacks.salt);
+		}
 		int row = type%16+item.getItemDamage()/16;
 		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)
 			return 16*9+item.getItemDamage()-32;

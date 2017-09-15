@@ -108,7 +108,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		//ReikaJavaLibrary.pConsole(Block.getIdFromBlock(world.getBlock(x, y-1, z))+":"+world.getBlockMetadata(x, y, z)+" > "+world.getBlock(x, y-1, z));
 		Block b = world.getBlock(x, y-1, z);
 		if (InterfaceCache.STREAM.instanceOf(b)) {
-			return this.handleStream(world, x, y, z, meta, b, pos);
+			return this.handleStream(world, x, y, z, x, y-1, z, meta, b, pos);
 		}
 		else {
 			streamPower = false;
@@ -133,19 +133,19 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		}
 	}
 
-	private boolean handleStream(World world, int x, int y, int z, int meta, Block b, int[] pos) {
+	private boolean handleStream(World world, int x, int y, int z, int wx, int wy, int wz, int meta, Block b, int[] pos) {
 		FixedFlowBlock ff = (FixedFlowBlock)b;
-		double vel = this.getUsefulVelocity(ff.dx(), ff.dz(), meta);
+		double vel = this.getUsefulVelocity(world, wx, wy, wz, ff.dx(), ff.dz(), meta);
 		if (vel > 0) {
 			streamPower = true;
 			Block b2 = world.getBlock(pos[0], y, pos[1]);
-			boolean fall = (FluidRegistry.lookupFluidForBlock(b2) == FluidRegistry.WATER && world.getBlock(pos[0], y-1, pos[1]) instanceof FixedFlowBlock) || (b2 instanceof FixedFlowBlock && this.getUsefulVelocity(((FixedFlowBlock)b2).dx(), ((FixedFlowBlock)b2).dz(), meta) > 0);
+			boolean fall = (FluidRegistry.lookupFluidForBlock(b2) == FluidRegistry.WATER && world.getBlock(pos[0], y-1, pos[1]) instanceof FixedFlowBlock) || (b2 instanceof FixedFlowBlock && this.getUsefulVelocity(world, pos[0], y, pos[1], ((FixedFlowBlock)b2).dx(), ((FixedFlowBlock)b2).dz(), meta) > 0);
 			double grav = this.getGravity(world);
 			double vh_sq = fall ? 2*grav*1 : 0;
 			double vtot = Math.sqrt(vh_sq+vel*vel);
 			streamOmega = (int)(vtot*2);
 			double F = ReikaEngLibrary.rhowater*vtot*vtot; //A=1
-			double fudge = 0.875;
+			double fudge = 0.0625;//0.875;
 			streamTorque = 2*ReikaMathLibrary.ceil2exp((int)(F*0.5*fudge));
 			return true;
 		}
@@ -153,9 +153,10 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		return false;
 	}
 
-	private double getUsefulVelocity(int dx, int dz, int meta) {
-		double vx = Math.abs(2D*dx);
-		double vz = Math.abs(2D*dz);
+	private double getUsefulVelocity(World world, int wx, int wy, int wz, int dx, int dz, int meta) {
+		double scale = this.getStreamSpeedScale(world, wx, wy, wz);
+		double vx = Math.abs(dx/2)*scale;
+		double vz = Math.abs(dz/2)*scale; // div by 2 since speeds are from 0-2
 		switch(meta) {
 			case 0:
 				return vz;
@@ -168,6 +169,28 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			default:
 				return 0;
 		}
+	}
+
+	private double getStreamSpeedScale(World world, int x, int y, int z) {
+		int mindist = 12;
+		for (int i = 0; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (dir != ForgeDirection.UP) {
+				for (int d = 1; d < mindist; d++) {
+					int dx = x+dir.offsetX*d;
+					int dy = y+dir.offsetY*d;
+					int dz = z+dir.offsetZ*d;
+					Block b = world.getBlock(dx, dy, dz);
+					if (FluidRegistry.lookupFluidForBlock(b) != FluidRegistry.WATER || !(b instanceof FixedFlowBlock)) {
+						mindist = d-1;
+						break;
+					}
+				}
+			}
+		}
+		double base = 16.25;
+		double frac = 2*(Math.pow((mindist-0.9375)/12D, 0.1)-0.492);
+		return base*frac;
 	}
 
 	private void distributeLubricant(World world, int x, int y, int z) {

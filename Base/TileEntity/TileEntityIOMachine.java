@@ -128,9 +128,9 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 		power = NBT.getLong("power");
 		iotick = NBT.getInteger("io");
 
-		if (torque < 0)
+		if (torque < 0 || torque == Double.POSITIVE_INFINITY || torque == Double.NaN)
 			torque = 0;
-		if (omega < 0)
+		if (omega < 0 || omega == Double.POSITIVE_INFINITY || omega == Double.NaN)
 			omega = 0;
 
 		int r1 = NBT.getInteger("read1");

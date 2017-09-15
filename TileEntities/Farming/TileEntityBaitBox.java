@@ -15,6 +15,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntitySlime;
@@ -157,7 +158,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 			this.dropHeldItem(world, x, y, z, ent);
 		}
 
-		if (ent instanceof EntitySlime || ent instanceof EntityMagmaCube || ent instanceof EntityGhast || ent instanceof EntitySquid) {
+		if (ent instanceof EntityBlaze || ent instanceof EntitySlime || ent instanceof EntityMagmaCube || ent instanceof EntityGhast || ent instanceof EntitySquid) {
 			if (attract) {
 				if (!(ent instanceof EntitySlime) || !ent.onGround) {
 					ent.motionX = 0.02*(x-ent.posX);

@@ -29,7 +29,6 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	ENGINEVOLUME("Engine Volume", 1F),
 	GPRORES("GPR Renders Ores", true),
 	INSTACUT("Instant Woodcutter", true),
-	RENDERFORCEFIELD("Show Force Fields", true),
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),
 	LOCKMACHINES("Owner-Only Machine Use", false),
 	MACHINEVOLUME("Machine Volume Multiplier", 1.0F),
@@ -333,7 +332,6 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 		switch(this) {
 			case ENGINEVOLUME:
 			case MACHINEVOLUME:
-			case RENDERFORCEFIELD:
 			case PROJECTORLINES:
 			case DYNAMICHANDBOOK:
 			case COLORBLIND:

@@ -331,8 +331,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	private ItemStack getDrops(World world, int x, int y, int z) {
-		ItemStack dust = ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, this.getNumberDust(world, x, y, z));
-		return dust;
+		return ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, this.getNumberDust(world, x, y, z));
 	}
 
 	private int getNumberDust(World world, int x, int y, int z) {

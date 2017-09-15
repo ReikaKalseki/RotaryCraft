@@ -92,7 +92,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 		//	RotaryAchievements.MAKEJET.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, MachineRegistry.WORKTABLE.getCraftedProduct()))
 			RotaryAchievements.WORKTABLE.triggerAchievement(player);
-		if (ReikaItemHelper.matchStacks(item, new ItemStack(ItemRegistry.SHAFT.getItemInstance(), 1, MaterialRegistry.STEEL.ordinal())))
+		if (ItemRegistry.SHAFT.matchItem(item) && item.getItemDamage() >= MaterialRegistry.STEEL.ordinal())
 			RotaryAchievements.STEELSHAFT.triggerAchievement(player);
 		if (ReikaItemHelper.matchStacks(item, ItemStacks.pcb))
 			RotaryAchievements.PCB.triggerAchievement(player);

@@ -9,8 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import java.awt.Color;
-
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -19,12 +18,14 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Models.ModelDomeEmitter;
-import Reika.RotaryCraft.Registry.ConfigRegistry;
 
 public class RenderProtectionDome extends RotaryTERenderer
 {
@@ -70,8 +71,7 @@ public class RenderProtectionDome extends RotaryTERenderer
 			this.renderTileEntityProtectionDomeAt((TileEntityProtectionDome)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			if (ConfigRegistry.RENDERFORCEFIELD.getState())
-				this.renderField(((TileEntityProtectionDome)tile), par2+0.5, par4+0.5, par6+0.5);
+			this.renderField(((TileEntityProtectionDome)tile), par2+0.5, par4+0.5, par6+0.5);
 		}
 	}
 
@@ -80,21 +80,64 @@ public class RenderProtectionDome extends RotaryTERenderer
 			return;
 		if (te.getRange() <= 0)
 			return;
-		Color c = te.getDomeColor();
+		int color = te.getDomeColor();
+		int r = te.getRange();
+
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
+		ReikaRenderHelper.disableEntityLighting();
+		BlendMode.ADDITIVEDARK.apply();
+		GL11.glDepthMask(false);
+
+		ReikaTextureHelper.bindTexture(RotaryCraft.class, "Textures/forcefield.png");
+		Tessellator var5 = Tessellator.instance;
+		var5.startDrawingQuads();
+		var5.setColorRGBA_I(color, color >> 24 & 255);
+		double dk = 0.5*r/16;
+		double di = 10;
+		for (double k = -r; k <= r; k += dk) {
+			double r2 = Math.sqrt(r*r-k*k);
+			double r3 = Math.sqrt(r*r-(k+dk)*(k+dk));
+			for (int i = 0; i < 360; i += di) {
+				double a = Math.toRadians(i);
+				double a2 = Math.toRadians(i+di);
+				double ti = i+(System.currentTimeMillis()/50D%360);
+				double tk = k+(System.currentTimeMillis()/220D%360);
+				double u = ti/360D;
+				double du = (ti+di)/360D;
+				double v = tk/r;
+				double dv = (tk+dk)/r;
+				double s1 = Math.sin(a);
+				double s2 = Math.sin(a2);
+				double c1 = Math.cos(a);
+				double c2 = Math.cos(a2);
+				var5.addVertexWithUV(x+r2*c1, y+k, z+r2*s1, u, v);
+				var5.addVertexWithUV(x+r2*c2, y+k, z+r2*s2, du, v);
+				var5.addVertexWithUV(x+r3*c2, y+k+dk, z+r3*s2, du, dv);
+				var5.addVertexWithUV(x+r3*c1, y+k+dk, z+r3*s1, u, dv);
+			}
+		}
+		var5.draw();
+		GL11.glPopAttrib();
+
+		/*
 		ReikaRenderHelper.prepareGeoDraw(false);
-		int color = c.getRGB();
-		for (double k = -te.getRange(); k <= te.getRange(); k += 0.5*te.getRange()/8)
-			ReikaRenderHelper.renderCircle(Math.sqrt(te.getRange()*te.getRange()-k*k), x, y+k, z, color, 15);
+		for (double k = -r; k <= r; k += 0.5*r/8)
+			ReikaRenderHelper.renderCircle(Math.sqrt(r*r-k*k), x, y+k, z, color, 15);
 		for (int k = 0; k < 360; k += 15)
-			ReikaRenderHelper.renderVCircle(te.getRange(), x, y, z, color, k, 15);
+			ReikaRenderHelper.renderVCircle(r, x, y, z, color, k, 15);
 
 		double ang = 7;
-		ReikaRenderHelper.renderLine(x, y, z, x, y+te.getRange(), z, color);
+		ReikaRenderHelper.renderLine(x, y, z, x, y+r, z, color);
 		for (int k = 0; k < 360; k += 15) {
 			ReikaRenderHelper.renderVCircle(0.125, x, y+0.5, z, color, (System.nanoTime()/7500000)%360+k, 15);
-			ReikaRenderHelper.renderLine(x, y, z, x+te.getRange()*Math.sin(Math.toRadians(ang)*Math.cos(Math.toRadians(k))), y+te.getRange()-Math.sin(Math.toRadians(ang)), z+te.getRange()*Math.sin(Math.toRadians(ang)*Math.sin(Math.toRadians(k))), color);
+			ReikaRenderHelper.renderLine(x, y, z, x+r*Math.sin(Math.toRadians(ang)*Math.cos(Math.toRadians(k))), y+r-Math.sin(Math.toRadians(ang)), z+r*Math.sin(Math.toRadians(ang)*Math.sin(Math.toRadians(k))), color);
 		}
 		ReikaRenderHelper.exitGeoDraw();
+		 */
 	}
 
 	@Override

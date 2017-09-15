@@ -246,8 +246,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 		if (power >= MINPOWER) {
 			tick++;
-			mode.tick(this);
-			this.injectItems();
+			if (!world.isRemote) {
+				mode.tick(this);
+				this.injectItems();
+			}
 		}
 	}
 

@@ -101,7 +101,7 @@ public class RecipeInterface {
 	public static interface MagnetizerManager extends RecipeManager {
 
 		/** Null is acceptable for an action, in which case it will use the native NBT "magnet" behavior. */
-		public void addAPIRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, MagnetizationAction a);
+		public void addAPIRecipe(ItemStack in, int minSpeed, int reqSpeedPerMicroTesla, int timeFactor, boolean allowStacks, MagnetizationAction a);
 
 		public static interface MagnetizationAction {
 

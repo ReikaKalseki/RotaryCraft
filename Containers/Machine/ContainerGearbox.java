@@ -55,10 +55,18 @@ public class ContainerGearbox extends ContainerIOMachine
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		//case 1: gearbox.setLubricant(par2); break;
-		case 2: gearbox.setDamage(par2); break;
-		case 3: gearbox.omega = par2; break;
-		case 4: gearbox.torque = par2; break;
+			case 1:
+				gearbox.setLubricant(par2);
+				break;
+			case 2:
+				gearbox.setDamage(par2);
+				break;
+			case 3:
+				gearbox.omega = Math.max(0, par2);
+				break;
+			case 4:
+				gearbox.torque = par2;
+				break;
 		}
 	}
 }
