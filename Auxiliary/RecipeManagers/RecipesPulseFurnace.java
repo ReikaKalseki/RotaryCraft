@@ -56,7 +56,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		RecipeInterface.pulsefurn = this;
 
 		this.addSmelting(Blocks.obsidian, BlockRegistry.BLASTGLASS.getCraftedProduct(1), RecipeLevel.CORE);
-		this.addSmelting(Items.iron_ingot, ItemStacks.steelingot, RecipeLevel.CORE);
+		this.addSmelting(Items.iron_ingot, ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2), RecipeLevel.CORE);
 
 		this.addRecycling();
 
@@ -64,8 +64,6 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 
 		//addSmelting(RotaryCraft.shaftcraft, 10, new ItemStack(Items.iron_ingot, 1, 0));	//scrap
 		//addSmelting(RotaryCraft.shaftcraft, 9, new ItemStack(RotaryCraft.shaftcraft, 1, 1));	//Iron scrap
-		this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
-		this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
 	}
 
 	private static class PulseJetRecipe implements MachineRecipe {
@@ -165,6 +163,9 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		this.addSmelting(ItemRegistry.STEELHOE.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
 		this.addSmelting(ItemRegistry.STEELSHEARS.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
 		this.addSmelting(ItemRegistry.STEELSICKLE.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
+
+		this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
+		this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
 	}
 
 	private ItemStack getSizedSteel(int size) {

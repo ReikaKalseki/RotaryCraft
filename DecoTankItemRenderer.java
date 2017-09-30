@@ -10,10 +10,13 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.fluids.Fluid;
 
@@ -59,8 +62,16 @@ public class DecoTankItemRenderer implements IItemRenderer {
 				v5.addTranslation(dx, dy, dz);
 				if (TankFlags.NOCOLOR.apply(item))
 					v5.setColorOpaque_I(0xffffff);
-				else
-					v5.setColorOpaque_I(f.getColor());
+				else {
+					int c = f.getColor();
+					if (c == 0xffffff && f.canBePlacedInWorld()) {
+						EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
+						if (ep != null) {
+							c = f.getBlock().colorMultiplier(ep.worldObj, MathHelper.floor_double(ep.posX), MathHelper.floor_double(ep.posY), MathHelper.floor_double(ep.posZ));
+						}
+					}
+					v5.setColorOpaque_I(c);
+				}
 				v5.setBrightness(240);
 				v5.addVertexWithUV(0, 1, 1, u, dv);
 				v5.addVertexWithUV(1, 1, 1, du, dv);

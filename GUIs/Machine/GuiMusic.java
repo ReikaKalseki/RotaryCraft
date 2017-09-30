@@ -166,7 +166,7 @@ public class GuiMusic extends GuiNonPoweredMachine implements MusicGui {
 			else {
 				//ReikaJavaLibrary.pConsole(button.id);
 				flag = false;
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), music, button.id, activeChannel, activeType.ordinal(), activeVoice.ordinal());
+				music.sendNote(button.id, activeChannel, activeType, activeVoice);
 			}
 		}
 		if (flag) {

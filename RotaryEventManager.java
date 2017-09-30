@@ -30,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -239,8 +240,8 @@ public class RotaryEventManager {
 
 	@SubscribeEvent
 	public void burnLubricantHose(BlockConsumedByFireEvent evt) {
-		if (MachineRegistry.getMachine(evt.world, evt.x, evt.y, evt.z) == MachineRegistry.HOSE) {
-			((TileEntityHose)evt.world.getTileEntity(evt.x, evt.y, evt.z)).burn();
+		if (MachineRegistry.getMachine(evt.world, evt.xCoord, evt.yCoord, evt.zCoord) == MachineRegistry.HOSE) {
+			((TileEntityHose)evt.world.getTileEntity(evt.xCoord, evt.yCoord, evt.zCoord)).burn();
 		}
 	}
 
@@ -359,6 +360,20 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public void bedrockSaveB(LivingAttackEvent evt) {
+		EntityLivingBase e = evt.entityLiving;
+		if (evt.ammount < 1000) {
+			if (e instanceof EntityPlayer) {
+				if (ItemBedrockArmor.isWearingFullSuitOf(e)) {
+					if (evt.source == DamageSource.cactus) {
+						evt.setCanceled(true);
+					}
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void bedrockSave(LivingHurtEvent evt) {
 		EntityLivingBase e = evt.entityLiving;
 		if (evt.ammount < 1000) {
@@ -367,7 +382,7 @@ public class RotaryEventManager {
 					evt.ammount = Math.min(evt.ammount, 5);
 					if (evt.ammount <= 1 && evt.source != DamageSource.drown && evt.source != DamageSource.starve) {
 						evt.ammount = 0;
-						return;
+						evt.setCanceled(true);
 					}
 					else {
 						Entity attacker = evt.source.getSourceOfDamage();
@@ -438,7 +453,7 @@ public class RotaryEventManager {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void buildWorktables(PlayerPlaceBlockEvent evt) {
 		if (evt.block == Blocks.crafting_table || evt.block instanceof BlockWorkbench || TinkerToolHandler.getInstance().isWorkbench(evt.block)) {
-			this.checkAndBuildWorktable(evt.world, evt.x, evt.y, evt.z);
+			this.checkAndBuildWorktable(evt.world, evt.xCoord, evt.yCoord, evt.zCoord);
 		}
 	}
 

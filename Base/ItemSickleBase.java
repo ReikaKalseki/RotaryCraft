@@ -28,6 +28,7 @@ import net.minecraftforge.common.IShearable;
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.ChromatiCraft.Registry.ChromaBlocks;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -103,6 +104,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep) {
 		World world = ep.worldObj;
 		Block id = world.getBlock(x, y, z);
+		if (id instanceof BlockTieredResource)
+			return false;
 		int meta = world.getBlockMetadata(x, y, z);
 		boolean ignoreMeta = ep.isSneaking();
 		ModCrop mod = ModCropList.getModCrop(id, meta);

@@ -306,8 +306,13 @@ public class ConnectedGlassRenderer implements ISBRH {
 					}
 					if (TankFlags.NOCOLOR.apply(world, x, y, z))
 						v5.setColorOpaque_I(0xffffff);
-					else
-						v5.setColorOpaque_I(f.getColor());
+					else {
+						int c = f.getColor();
+						if (c == 0xffffff && f.canBePlacedInWorld()) {
+							c = f.getBlock().colorMultiplier(world, x, y, z);
+						}
+						v5.setColorOpaque_I(c);
+					}
 					IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 					float u = ico.getMinU();
 					float du = ico.getMaxU();

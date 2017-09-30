@@ -69,6 +69,12 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(hsla2, RecipeLevel.CORE);
 
+		in1 = new BlastInput(ItemStacks.coke, 100, 1);
+		in2 = new BlastInput(Items.gunpowder, 1.8F*9, 1);
+		in3 = new BlastInput(Blocks.sand, 0.1F*9, 1);
+		BlastRecipe hslablock = new BlastRecipe(in1, in2, in3, Blocks.iron_block, ItemStacks.steelblock, false, TileEntityBlastFurnace.SMELT_XP*9, TileEntityBlastFurnace.SMELTTEMP);
+		this.addRecipe(hslablock, RecipeLevel.CORE);
+
 		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
 		in2 = new BlastInput((ItemStack)null, 0, 1);
 		in3 = new BlastInput((ItemStack)null, 0, 1);

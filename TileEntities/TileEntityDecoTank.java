@@ -58,16 +58,14 @@ public class TileEntityDecoTank extends TileEntityBase {
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		ReikaNBTHelper.writeFluidToNBT(NBT, f);
 		NBT.setInteger("flags", ReikaArrayHelper.booleanToBitflags(flags));
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		f = ReikaNBTHelper.getFluidFromNBT(NBT);
 		flags = ReikaArrayHelper.booleanFromBitflags(NBT.getInteger("flags"), TankFlags.list.length);
@@ -78,8 +76,7 @@ public class TileEntityDecoTank extends TileEntityBase {
 	}
 
 	@Override
-	public boolean canUpdate()
-	{
+	public boolean canUpdate() {
 		return false;
 	}
 

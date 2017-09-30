@@ -31,6 +31,7 @@ public enum RotaryAchievements {
 
 	RCUSEBOOK(		1, 1,	ItemRegistry.HANDBOOK,											null,			false),
 	MAKESTEEL(		0, 0,	ItemStacks.steelingot, 											null,			false),
+	FAILSTEEL(		1, 2,	ItemStacks.steelblock, 											MAKESTEEL,		false),
 	WORKTABLE(		-2, 1,	MachineRegistry.WORKTABLE,										MAKESTEEL,		false),
 	MAKEYEAST(		2, -2,	ItemRegistry.YEAST,				 								MAKESTEEL,		false),
 	EXTRACTOR(		2, 0,	ItemStacks.goldoreflakes, 										MAKESTEEL,		false),
@@ -72,6 +73,7 @@ public enum RotaryAchievements {
 	DOUBLEKILL(		-2, -6, Items.arrow,													GRAVELGUN,		true),
 	INSANITY(		2, 2,	MachineRegistry.EXTRACTOR,										EXTRACTOR,		true),
 	INSTANTBED(		-6, 4,	MachineRegistry.BEDROCKBREAKER,									BEDROCKBREAKER,	true),
+	PULSEFIRE(		5, -5,	MachineRegistry.PULSEJET, 										JETFUEL,		false),
 	;
 	public static final RotaryAchievements[] list = values();
 

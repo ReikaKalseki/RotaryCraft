@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2017
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
 import java.util.Locale;
@@ -8,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -15,8 +25,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
-
-
+@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
 public abstract class TileEntityFluidCannon extends TileEntityAimedCannon implements IFluidHandler, PipeConnector, IPipeConnection {
 
 	protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase(Locale.ENGLISH)), this.getCapacity());

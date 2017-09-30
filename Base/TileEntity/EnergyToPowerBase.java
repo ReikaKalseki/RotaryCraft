@@ -303,7 +303,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 		float mult = 1;
 		boolean accel = omega <= maxspeed && this.hasEnoughEnergy();
 		if (accel) {
-			mult = 1.5F;
+			if (omega < maxspeed)
+				mult = 1.5F;
 			omega += 4*ReikaMathLibrary.logbase(maxspeed+1, 2);
 			if (omega > maxspeed)
 				omega = maxspeed;

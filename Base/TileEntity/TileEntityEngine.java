@@ -342,8 +342,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	}
 
 	@Override
-	public final void updateEntity(World world, int x, int y, int z, int meta)
-	{
+	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
 
@@ -368,12 +367,16 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 			TileEntityEngineController te = this.getECU();
 			if (te != null) {
 				if (te.canProducePower()) {
+					int fueltime = type.getFuelUnitDuration();
 					if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
 						//omega = (int)(omega*te.getSpeedMultiplier());
 						int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
 						//this.updateSpeed(max, omega < max);
 					}
-					timer.setCap("fuel", type.getFuelUnitDuration());
+					else {
+						fueltime = Math.max(type.getFuelUnitDuration()/4, 1);
+					}
+					timer.setCap("fuel", fueltime);
 					int fuelcap = timer.getCapOf("fuel");
 					fuelcap = fuelcap*te.getFuelMultiplier(type.type);
 					timer.setCap("fuel", fuelcap);

@@ -1075,17 +1075,17 @@ public class RotaryRecipes {
 		//GameRegistry.addRecipe(new ScrapCombinationRecipe());
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.oakWood, new Object[]{
-				"WW", "WW", 'W', ItemStacks.sawdust}));
+				"WW", "WW", 'W', "dustWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.spruceWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.BLACK.getOreDictName()}));
+				"WWD", "WW ", 'W', "dustWood", 'D', ReikaDyeHelper.BLACK.getOreDictName()}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.birchWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.WHITE.getOreDictName()}));
+				"WWD", "WW ", 'W', "dustWood", 'D', ReikaDyeHelper.WHITE.getOreDictName()}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.jungleWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.RED.getOreDictName()}));
+				"WWD", "WW ", 'W', "dustWood", 'D', ReikaDyeHelper.RED.getOreDictName()}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.acaciaWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.ORANGE.getOreDictName()}));
+				"WWD", "WW ", 'W', "dustWood", 'D', ReikaDyeHelper.ORANGE.getOreDictName()}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(ReikaItemHelper.darkOakWood, new Object[]{
-				"WWD", "WW ", 'W', ItemStacks.sawdust, 'D', ReikaDyeHelper.BROWN.getOreDictName()}));
+				"WWD", "WW ", 'W', "dustWood", 'D', ReikaDyeHelper.BROWN.getOreDictName()}));
 
 		GameRegistry.addRecipe(new ItemStack(Items.paper, 8, 0), new Object[]{
 			" W ", "SSS", "RRR", 'R', Blocks.stone, 'S', ItemStacks.sawdust, 'W', Items.water_bucket});

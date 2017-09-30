@@ -207,7 +207,7 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 						for (int k = -r; k <= r; k++) {
 							double dd = ReikaMathLibrary.py3d(i, j, k)+1;
 							int hiT = (int)(Tamb+dT/dd/2D);
-							//ReikaJavaLibrary.pConsole(e+":"+tracer.isClearLineOfSight(world)+" of "+e.height, e instanceof EntityChicken);
+							//ReikaJavaLibrary.pConsole(dT+" above "+Tamb+" @ "+temp+", h = "+hiT, Side.SERVER);
 							ReikaWorldHelper.temperatureEnvironment(world, x+i, y+j, z+k, hiT);
 							if (temp > 2500)
 								ReikaSoundHelper.playSoundAtBlock(world, x+i, y+j, z+k, "random.fizz", 0.2F, 1F);

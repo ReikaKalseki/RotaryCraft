@@ -73,6 +73,15 @@ public class ItemBlockDecoTank extends ItemBlock implements Fillable {
 	public void getSubItems(Item id, CreativeTabs tab, List li) {
 		li.add(new ItemStack(id, 1, 0));
 		li.add(new ItemStack(id, 1, 1));
+		/*
+		for (Fluid f : FluidRegistry.getRegisteredFluids().values()) {
+			ItemStack is = new ItemStack(id, 1, 0);
+			is.stackTagCompound = new NBTTagCompound();
+			ReikaNBTHelper.writeFluidToNBT(is.stackTagCompound, f);
+			is.stackTagCompound.setInteger("level", FILL);
+			li.add(is);
+		}
+		 */
 	}
 
 	@Override

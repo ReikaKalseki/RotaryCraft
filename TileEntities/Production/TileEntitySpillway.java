@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -73,7 +74,13 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 			this.handleStream(world, x, y, z, dx, dy+1, dz);
 		}
 		else if (f == FluidRegistry.WATER) {
-			this.formAndDrainPool(world, x, y, z, dx, dy, dz, b);
+			if (ReikaWorldHelper.isLiquidAColumn(world, dx, dy+1, dz)) {
+				liquidPool = null;
+				tank.addLiquid(50, FluidRegistry.WATER);
+				this.setActive();
+			}
+			else
+				this.formAndDrainPool(world, x, y, z, dx, dy, dz, b);
 		}
 		else {
 			liquidPool = null;

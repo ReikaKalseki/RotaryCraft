@@ -29,6 +29,7 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
@@ -107,6 +108,9 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 		}
 
 		this.getPower(false);
+
+		if ((world.getWorldTime()&31) == 0)
+			ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
 	}
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {

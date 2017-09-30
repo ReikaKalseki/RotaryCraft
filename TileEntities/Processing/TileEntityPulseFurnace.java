@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +24,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
+import Reika.DragonAPI.Instantiable.TemperatureEffect.TemperatureCallback;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -37,9 +39,10 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
+public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation, TemperatureCallback {
 
 	public int pulseFurnaceCookTime;
 
@@ -77,14 +80,12 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		return 3;
 	}
 
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
+	public static boolean func_52005_b(ItemStack par0ItemStack) {
 		return true;
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		pulseFurnaceCookTime = NBT.getShort("CookTime");
@@ -191,7 +192,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
 			world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
 		}
-		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature);
+		ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temperature, this);
 		if (temperature > MAXTEMP) {
 			this.overheat(world, x, y, z);
 		}
@@ -530,5 +531,11 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	@Override
 	public int getMaxTemperature() {
 		return MAXTEMP;
+	}
+
+	@Override
+	public void onApplyTemperature(World world, int x, int y, int z, int temperature) {
+		if (world.getBlock(x, y, z) == Blocks.fire)
+			RotaryAchievements.PULSEFIRE.triggerAchievement(this.getPlacer());
 	}
 }

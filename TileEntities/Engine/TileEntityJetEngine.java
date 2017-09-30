@@ -72,6 +72,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import Reika.VoidMonster.Entity.EntityVoidMonster;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -291,6 +292,13 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		}
 		if (e instanceof EntityTurretShot)
 			return 0;
+		if (ModList.VOIDMONSTER.isLoaded() && e instanceof EntityVoidMonster) {
+			if (e.getDistanceSq(xCoord+0.5, yCoord+0.5, zCoord+0.5) < 16) {
+				isJetFailing = true;
+				temperature += 2;
+			}
+			return 0;
+		}
 		return 1;
 	}
 

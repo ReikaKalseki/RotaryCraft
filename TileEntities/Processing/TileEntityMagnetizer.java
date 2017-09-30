@@ -14,9 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MagnetizationCore;
@@ -123,7 +121,8 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) && inv[0] == null;
+		MagnetizerRecipe rec = RecipesMagnetizer.getRecipes().getRecipe(is);
+		return rec != null && ((inv[0] == null && is.stackSize == 1) || rec.allowStacking);
 	}
 
 	@Override

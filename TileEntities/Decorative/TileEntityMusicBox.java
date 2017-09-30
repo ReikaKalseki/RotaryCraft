@@ -14,8 +14,11 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +27,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.Instantiable.MusicScore;
+import Reika.DragonAPI.Instantiable.IO.MIDIInterface;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
@@ -40,6 +45,8 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiController, BreakAction, TriggerableAction {
 
@@ -109,8 +116,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		this.getSummativeSidedPower();
 		//ReikaJavaLibrary.pConsole(Arrays.toString(musicQueue), Side.SERVER);
 
-		if (world.isRemote)
+		if (world.isRemote) {
 			return;
+		}
 
 		if (power < LOOPPOWER) {
 			if (!isOneTimePlaying) {
@@ -228,19 +236,69 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("onetime", isOneTimePlaying);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		isOneTimePlaying = NBT.getBoolean("onetime");
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void loadLocalMIDI(String file) {
+		File f = new File(file);
+		if (!f.exists() || f.isDirectory()) {
+			RotaryCraft.logger.logError("Could not load local MIDI: file is not a MIDI file!");
+			return;
+		}
+		if (f.length() > 60000) {
+			RotaryCraft.logger.logError("Could not load local MIDI: file is too large ("+f.length()+" bytes) and cannot be safely used!");
+			return;
+		}
+		try {
+			MusicScore mus = new MIDIInterface(f).fillToScore(true).scaleSpeed(11);
+			this.dispatchTrack(mus);
+		}
+		catch (Exception e) {
+			RotaryCraft.logger.logError(e.toString());
+			e.printStackTrace();
+		}
+	}
+
+	private void dispatchTrack(MusicScore mus) {
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, this);
+		for (int i = 0; i < mus.countTracks(); i++) {
+			Map<Integer, Collection<MusicScore.Note>> track = mus.getTrack(i);
+			int lastNoteTime = -1;
+			int lastNoteLength = -1;
+			for (int time : track.keySet()) {
+				Collection<MusicScore.Note> c = track.get(time);
+				for (MusicScore.Note n : c) {
+					if (n != null && n.key != null) {
+						if (lastNoteTime >= 0) {
+							int t1 = lastNoteTime+lastNoteLength;
+							int dt = time-t1;
+							while (dt >= NoteLength.SIXTEENTH.tickLength) {
+								NoteLength l = NoteLength.getLargestNotMoreThan(dt);
+								t1 += l.tickLength;
+								dt = time-t1;
+								this.sendNote(0, i, l, Instrument.REST);
+							}
+						}
+						Note n2 = Note.getFromMusicScore(n);
+						this.sendNote(n2.pitch, i, n2.length, n2.voice);//ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.FIXEDMUSICNOTE.getMinValue(), this, i, n.key.ordinal(), n.length, n.voice == -1 ? 1 : 0, time);
+						lastNoteTime = time;
+						lastNoteLength = n2.length.tickLength;
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	public void save() {
@@ -504,9 +562,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			StringBuilder sb = new StringBuilder();
 			sb.append(voice);
 			sb.append(" plays ");
-			sb.append(length);
-			sb.append(" ");
 			sb.append(pitch);
+			sb.append(" for ");
+			sb.append(length);
 			return sb.toString();
 		}
 
@@ -550,6 +608,22 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return MusicKey.getByIndex(MusicKey.F2.ordinal()+pitch);
 		}
 
+		public static int getPitch(MusicKey k) {
+			return k.ordinal()-MusicKey.F2.ordinal();
+		}
+
+		public static Note getFromMusicScore(MusicScore.Note n) {
+			Instrument i = Instrument.getFromVoiceAndPitch(n);
+			MusicKey key = n.key;
+			key = key.getInterval(-12);
+			if (i == Instrument.BASS)
+				key = key.getOctave().getOctave().getOctave();
+			int pitch = getPitch(key);
+			while (pitch > 48)
+				pitch -= 12;
+			return new Note(NoteLength.getByTickLength(n.length/8), pitch, i);
+		}
+
 	}
 
 	public static enum NoteLength {
@@ -561,6 +635,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 		public final int tickLength;
 
+		private static final HashMap<Integer, NoteLength> lengthMap = new HashMap();
+
 		private NoteLength(int length) {
 			tickLength = length;
 		}
@@ -569,32 +645,76 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		public String toString() {
 			return ReikaStringParser.capFirstChar(this.name());
 		}
+
+		static {
+			for (NoteLength n : values()) {
+				lengthMap.put(n.tickLength, n);
+			}
+		}
+
+		public static NoteLength getByTickLength(int ticks) {
+			NoteLength len = lengthMap.get(ticks);
+			if (len == null) {
+				len = WHOLE;
+				for (NoteLength n : values()) {
+					if (Math.abs(n.tickLength-ticks) < Math.abs(len.tickLength-ticks)) {
+						len = n;
+					}
+				}
+			}
+			return len;
+		}
+
+		public static NoteLength getLargestNotMoreThan(int dt) {
+			for (NoteLength n : values()) {
+				if (n.tickLength <= dt)
+					return n;
+			}
+			return null;
+		}
 	}
 
 	public static enum Instrument {
-		REST(0, -1),
-		GUITAR(1, 18),
-		BASS(2, 32),
-		PLING(3, 98),
-		BASSDRUM(4, 116),
-		SNARE(5, 48),
-		CLAVE(6, 0);
+		REST(-1),
+		GUITAR(18),
+		BASS(32),
+		PLING(98),
+		BASSDRUM(116),
+		SNARE(48),
+		CLAVE(-1);
 
-		public final int index;
 		public final int MIDIvalue;
 
-		private Instrument(int index, int mid) {
-			this.index = index;
+		private static final HashMap<Integer, Instrument> MIDIMap = new HashMap();
+
+		private Instrument(int mid) {
 			MIDIvalue = mid;
 		}
 
-		public boolean isPitched() {
-			return index < 4;
+		public static Instrument getFromVoiceAndPitch(MusicScore.Note n) {
+			if (n.percussion) {
+				return CLAVE;
+			}
+			else {
+				Instrument i = MIDIMap.get(n.voice);
+				if (i != null)
+					return i;
+				if (n.key.ordinal() < MusicKey.F4.ordinal())
+					return BASS;
+				if (n.voice >= 81 && n.voice <= 96) //synth leads and pads
+					return PLING;
+				return GUITAR;
+			}
 		}
 
-		@Override
-		public String toString() {
-			return this.name();
+		public boolean isPitched() {
+			return this.ordinal() < 4;
+		}
+
+		static {
+			for (Instrument n : values()) {
+				MIDIMap.put(n.MIDIvalue, n);
+			}
 		}
 	}
 
@@ -607,6 +727,11 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	public boolean trigger() {
 		this.startPlaying();
 		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void sendNote(int pitch, int channel, NoteLength len, Instrument voice) {
+		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), this, pitch, channel, len.ordinal(), voice.ordinal());
 	}
 
 }

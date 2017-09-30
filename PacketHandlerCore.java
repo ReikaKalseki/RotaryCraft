@@ -404,7 +404,7 @@ public class PacketHandlerCore implements PacketHandler {
 					if (control == PacketRegistry.MUSIC.getMinValue()) {
 						Note n = new Note(NoteLength.values()[data[2]], data[0], Instrument.values()[data[3]]);
 						for (int i = 0; i < 3; i++)
-							n.play(world, x, y, z);
+							;//n.play(world, x, y, z);
 						music.addNote(data[1], n);
 					}
 					if (control == PacketRegistry.MUSIC.getMinValue()+1) {

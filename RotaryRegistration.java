@@ -99,7 +99,7 @@ public class RotaryRegistration {
 		OreDictionary.registerOre("dustSalt", ItemStacks.salt);
 		OreDictionary.registerOre("foodSalt", ItemStacks.salt);
 
-		OreDictionary.registerOre("dustWood", ItemStacks.sawdust);
+		OreDictionary.registerOre(ModList.GREGTECH.isLoaded() ? "dustSmallWood" : "dustWood", ItemStacks.sawdust);
 		OreDictionary.registerOre("pulpWood", ItemStacks.sawdust);
 
 		OreDictionary.registerOre("silicon", ItemStacks.silicon);

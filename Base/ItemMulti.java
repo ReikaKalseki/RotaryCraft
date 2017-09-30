@@ -12,7 +12,6 @@ package Reika.RotaryCraft.Base;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +32,6 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityACEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -339,6 +337,7 @@ public class ItemMulti extends ItemBasic {
 		return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
 	}
 
+	/*
 	@SideOnly(Side.CLIENT)
 	private boolean offsetDustName(ItemStack is) {
 		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
@@ -352,13 +351,13 @@ public class ItemMulti extends ItemBasic {
 		}
 		return super.getItemStackDisplayName(item);
 	}
-
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getItemSpriteIndex(ItemStack item) {
-		if (ReikaItemHelper.matchStacks(item, ItemStacks.bedrockdust) && this.offsetDustName(item)) {
-			return ((ItemMulti)ItemStacks.salt.getItem()).getItemSpriteIndex(ItemStacks.salt);
-		}
+		//if (ReikaItemHelper.matchStacks(item, ItemStacks.bedrockdust) && this.offsetDustName(item)) {
+		//	return ((ItemMulti)ItemStacks.salt.getItem()).getItemSpriteIndex(ItemStacks.salt);
+		//}
 		int row = type%16+item.getItemDamage()/16;
 		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)
 			return 16*9+item.getItemDamage()-32;

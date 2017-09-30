@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Production;
 import java.util.HashSet;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
@@ -175,11 +176,27 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			}
 		}
 
-		if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 10))
-			if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 12))
-				if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 13))
-					if (!this.checkSpreadFit(out, num))
+		if (ReikaItemHelper.matchStacks(out, ItemStacks.steelblock)) {
+			if (!ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2*num), inv, 10))
+				if (!ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2*num), inv, 12))
+					if (!ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2*num), inv, 13))
 						return;
+			if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.coal, 3*num, 1), inv, 10))
+				if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.coal, 3*num, 1), inv, 12))
+					if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.coal, 3*num, 1), inv, 13))
+						return;
+			if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 1), inv, 10))
+				if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 1), inv, 12))
+					if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 1), inv, 13))
+						return;
+		}
+		else {
+			if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 10))
+				if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 12))
+					if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 13))
+						if (!this.checkSpreadFit(out, num))
+							return;
+		}
 
 		xp += rec.xp*num;
 
@@ -227,6 +244,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return RotaryAchievements.RECYCLE;
 		if (ReikaItemHelper.matchStacks(rec.outputItem(), ItemStacks.steelingot))
 			return RotaryAchievements.MAKESTEEL;
+		if (ReikaItemHelper.matchStacks(rec.outputItem(), ItemStacks.steelblock))
+			return RotaryAchievements.FAILSTEEL;
 		return null;
 	}
 

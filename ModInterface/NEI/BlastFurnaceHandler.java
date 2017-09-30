@@ -12,10 +12,12 @@ package Reika.RotaryCraft.ModInterface.NEI;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
@@ -24,6 +26,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
@@ -53,14 +56,27 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 
 		@Override
 		public PositionedStack getResult() {
+			if (ReikaItemHelper.matchStacks(recipe.outputItem(), ItemStacks.steelblock)) {
+				return null;
+			}
 			int in = this.getInput();
 			int num = recipe.getNumberProduced(in);
 			return new PositionedStack(ReikaItemHelper.getSizedItemStack(recipe.outputItem(), num), 143, 24);
 		}
 
 		@Override
-		public ArrayList<PositionedStack> getIngredients()
-		{
+		public List<PositionedStack> getOtherStacks() {
+			ArrayList li = new ArrayList();
+			if (ReikaItemHelper.matchStacks(recipe.outputItem(), ItemStacks.steelblock)) {
+				li.add(new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2), 143, 24));
+				li.add(new PositionedStack(new ItemStack(Items.coal, 3, 1), 143, 24-18));
+				li.add(new PositionedStack(new ItemStack(Items.iron_ingot, 5, 1), 143, 24+18));
+			}
+			return li;
+		}
+
+		@Override
+		public ArrayList<PositionedStack> getIngredients() {
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			int dx = 57;
 			int dy = 6;

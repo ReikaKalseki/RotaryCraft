@@ -53,7 +53,7 @@ public class ItemDisk extends ItemRotaryTool implements MusicDataItem {
 					//ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Side.SERVER);
 					Note n = Note.readFromNBT(nbt);
 					if (!n.isRest())
-						mus.addNote(pos[i], i, n.getMusicKey(), n.voice.MIDIvalue, 128, n.getTickLength());
+						mus.addNote(pos[i], i, n.getMusicKey(), n.voice.MIDIvalue, 128, n.getTickLength(), !n.voice.isPitched());
 					pos[i] += n.getTickLength();
 				}
 			}
