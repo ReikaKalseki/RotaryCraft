@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,7 +24,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
+import Reika.DragonAPI.Instantiable.BasicModEntry;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceExponentiator;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
@@ -37,14 +41,17 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.ForestryRecipeHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CentrifugeManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.Loader;
 
 public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManager {
 
@@ -308,6 +315,30 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
 				FluidStack fs = ReikaXPFluidHelper.getFluid(5);
 				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
+			}
+		}
+
+		if (Loader.isModLoaded("Automagy")) {
+			ItemStack phial = ReikaItemHelper.lookupItem("Automagy:phialExtra");
+			if (phial != null && ReikaXPFluidHelper.fluidsExist()) {
+				try {
+					Class c = phial.getItem().getClass();
+					Method m = c.getMethod("getXPValue");
+					int val = (int)m.invoke(phial.getItem());
+					FluidStack fs = ReikaXPFluidHelper.getFluid(val);
+					ChancedOutputList co = new ChancedOutputList(false);
+					co.addItem(ThaumItemHelper.ItemEntry.PHIAL.getItem(), 100);
+					co.addItem(ThaumItemHelper.getCrystallizedEssentia(Aspect.WATER), 10);
+					co.addItem(ThaumItemHelper.getCrystallizedEssentia(Aspect.ORDER), 10);
+					co.addItem(ThaumItemHelper.getCrystallizedEssentia(Aspect.MAGIC), 5);
+					co.addItem(ThaumItemHelper.getCrystallizedEssentia(Aspect.MIND), 4);
+					co.addItem(ThaumItemHelper.getCrystallizedEssentia(Aspect.CRAFT), 2);
+					this.addRecipe(phial, co, new FluidOut(fs, 100), RecipeLevel.MODINTERACT);
+				}
+				catch (Exception e) {
+					RotaryCraft.logger.logError("Could not determine XP value of enchanting phial!");
+					ReflectiveFailureTracker.instance.logModReflectiveFailure(new BasicModEntry("Automagy"), e);
+				}
 			}
 		}
 

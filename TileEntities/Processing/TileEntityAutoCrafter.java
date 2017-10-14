@@ -26,6 +26,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.Maps.CountMap;
@@ -34,6 +35,8 @@ import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
+import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.ChangeCallback;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
@@ -53,7 +56,9 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 @Strippable(value={"appeng.api.networking.IActionHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
-public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/ {
+public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/, ChangeCallback {
+
+	private static final String LOGGER_ID = "autocrafter_workflag";
 
 	public static final int SIZE = 18;
 
@@ -79,6 +84,12 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private static final int OUTPUT_OFFSET = SIZE;
 	private static final int CONTAINER_OFFSET = SIZE*2;
+
+	private boolean hasWork = true;
+
+	static {
+		ModularLogger.instance.addLogger(RotaryCraft.instance, LOGGER_ID);
+	}
 
 	public TileEntityAutoCrafter() {
 		if (ModList.APPENG.isLoaded()) {
@@ -249,7 +260,11 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (power >= MINPOWER) {
 			tick++;
 			if (!world.isRemote) {
-				mode.tick(this);
+				if (hasWork) {
+					//ReikaJavaLibrary.pConsole("Executing tick");
+					mode.tick(this);
+					hasWork = false;
+				}
 				this.injectItems();
 			}
 		}
@@ -311,7 +326,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 			if (aeGridNode == null) {
 				aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 			}
-			((IGridNode)aeGridNode).updateState();
+			if (aeGridNode != null)
+				((IGridNode)aeGridNode).updateState();
 
 			if (oldNode != aeGridNode || network == null) {
 				if (aeGridNode == null)
@@ -320,9 +336,33 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 					network = new MESystemReader((IGridNode)aeGridNode, this);
 				else
 					network = new MESystemReader((IGridNode)aeGridNode, network);
+
+				this.buildCallbacks();
 			}
 			//network.setRequester(this);
 		}
+	}
+
+	private void buildCallbacks() {
+		network.clearCallbacks();
+		for (int i = 0; i < SIZE; i++) {
+			ItemStack pattern = inv[i];
+			if (pattern != null) {
+				ItemStack[] in = this.getIngredients(pattern);
+				for (int k = 0; k < in.length; k++) {
+					if (in[k] != null)
+						network.addCallback(in[k], this);
+				}
+				ItemStack out = this.getSlotRecipeOutput(i);
+				network.addCallback(out, this);
+			}
+		}
+	}
+
+	@Override
+	protected void onInventoryChanged(int slot) {
+		if (network != null)
+			this.buildCallbacks();
 	}
 
 	public void triggerCraftingCycle(int slot) {
@@ -460,6 +500,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 						}
 					}
 				}
+				//ReikaJavaLibrary.pConsole("Performing crafting of "+out);
 				this.craft(slot, size, out, counts);
 				return true;
 			}
@@ -502,7 +543,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		//ReikaJavaLibrary.pConsole(is+":"+ingredients.getItemCount(is)+" > "+ingredients);
 		count += ingredients.getItemCount(is);
 		if (ModList.APPENG.isLoaded() && network != null) {
-			count += network.removeItem(ReikaItemHelper.getSizedItemStack(is, is.getMaxStackSize()), true, false);
+			count += network.getItemCount(is, false);//network.removeItem(ReikaItemHelper.getSizedItemStack(is, is.getMaxStackSize()), true, false);
 		}
 		//}
 
@@ -723,5 +764,12 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	@ModDependent(ModList.APPENG)
 	public IGridNode getActionableNode() {
 		return (IGridNode)aeGridNode;
+	}
+
+	@Override
+	public void onItemChange(IAEItemStack iae) {
+		hasWork = true;
+		//ModularLogger.instance.log(LOGGER_ID, "Activating "+this+" due to change in "+iae.getItemStack());
+		//ReikaJavaLibrary.pConsole("Activating "+this+" due to change in "+(iae != null ? iae.getItemStack() : "Network"));
 	}
 }

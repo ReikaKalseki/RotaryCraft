@@ -185,9 +185,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 				if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.coal, 3*num, 1), inv, 12))
 					if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.coal, 3*num, 1), inv, 13))
 						return;
-			if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 1), inv, 10))
-				if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 1), inv, 12))
-					if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 1), inv, 13))
+			if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 0), inv, 10))
+				if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 0), inv, 12))
+					if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.iron_ingot, 5*num, 0), inv, 13))
 						return;
 		}
 		else {

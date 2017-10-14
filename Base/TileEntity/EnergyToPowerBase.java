@@ -418,6 +418,16 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 			baseomega--;
 	}
 
+	public final boolean setOmega(int base) {
+		if (base >= MINBASE && base <= this.getMaxSpeedBase()) {
+			baseomega = base;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public final int getEnergyScaled(int h) {
 		return (int)(this.getPercentStorage()*h);
 	}

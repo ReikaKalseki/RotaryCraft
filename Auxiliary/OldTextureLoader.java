@@ -9,7 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 
@@ -18,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.IntHashMap;
 import Reika.DragonAPI.DragonOptions;
+import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
@@ -29,6 +32,9 @@ public class OldTextureLoader {
 
 	private final EnumMap<MachineRegistry, IconSide> machineIcons = new EnumMap(MachineRegistry.class);
 	private final IntHashMap textureIndices = new IntHashMap();
+	private boolean cachedLoadState = false;
+	private long cachedLoadTime = -1;
+	private final ArrayList<String> magnetoNames = new ArrayList();
 
 	private OldTextureLoader() {
 		machineIcons.put(MachineRegistry.SHAFT, new IconSide(8).addSideTexture(2, 9).addSideTexture(3, 9));
@@ -45,6 +51,16 @@ public class OldTextureLoader {
 		machineIcons.put(MachineRegistry.FLYWHEEL, new IconSide(23).addSideTexture(2, 24));
 		machineIcons.put(MachineRegistry.ENGINE, new IconSide(1).addSideTexture(2, 14).addSideTexture(3, 15));
 		machineIcons.put(MachineRegistry.DYNAMOMETER, new IconSide(34).addSideTexture(2, 35).addSideTexture(3, 35));
+
+		magnetoNames.add("Malgetonatic");
+		magnetoNames.add("Manafetic");
+		magnetoNames.add("Magdatectic");
+		magnetoNames.add("Maclenotic");
+		magnetoNames.add("Magnitic");
+		magnetoNames.add("Maknosatic");
+		magnetoNames.add("Magostatic");
+		magnetoNames.add("Macoagulatic");
+		Collections.shuffle(magnetoNames);
 	}
 
 	public boolean loadOldTextures() {
@@ -52,8 +68,17 @@ public class OldTextureLoader {
 			return false;
 		if (!DragonOptions.APRIL.getState())
 			return false;
-		Calendar c = Calendar.getInstance();
-		return c.get(Calendar.MONTH) == Calendar.APRIL && c.get(Calendar.DAY_OF_MONTH) <= 2;
+		long time = System.currentTimeMillis();
+		if (time-cachedLoadTime > 60000) {
+			Calendar c = Calendar.getInstance();
+			boolean flag = c.get(Calendar.MONTH) == Calendar.APRIL && c.get(Calendar.DAY_OF_MONTH) <= 2;
+			if (flag != cachedLoadState) {
+				ReikaRenderHelper.rerenderAllChunks();
+			}
+			cachedLoadTime = time;
+			cachedLoadState = flag;
+		}
+		return cachedLoadState;
 	}
 
 	public IIcon getOldTexture(Block b, int meta, int side) {
@@ -98,6 +123,10 @@ public class OldTextureLoader {
 		int row = idx / 16;
 		int col = idx % 16;
 		return "rotarycraft:old/tile"+col+"_"+row;
+	}
+
+	public String getMagnetostaticName() {
+		return magnetoNames.get((int)((System.currentTimeMillis()/4000)%magnetoNames.size()))+" Engine";
 	}
 
 	private static class IconSide {

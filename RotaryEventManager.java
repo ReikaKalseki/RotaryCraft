@@ -188,7 +188,7 @@ public class RotaryEventManager {
 	}
 	 */
 	@SubscribeEvent
-	public void applyEMPEffects(SetBlockEvent evt) {
+	public void applyEMPEffects(SetBlockEvent.Post evt) {
 		TileEntityEMP.resetCoordinate(evt.world, evt.xCoord, evt.yCoord, evt.zCoord);
 	}
 

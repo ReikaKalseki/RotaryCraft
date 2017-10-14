@@ -178,7 +178,8 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			if (aeGridNode == null) {
 				aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 			}
-			((IGridNode)aeGridNode).updateState();
+			if (aeGridNode != null)
+				((IGridNode)aeGridNode).updateState();
 
 			if (oldNode != aeGridNode || network == null) {
 				if (aeGridNode == null)

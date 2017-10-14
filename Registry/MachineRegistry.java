@@ -39,6 +39,7 @@ import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -210,7 +211,9 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
 import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityWeatherController;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 
 /** ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST */
@@ -537,6 +540,9 @@ public enum MachineRegistry implements TileEnum {
 	}
 
 	public String getName() {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && DragonAPICore.hasGameLoaded() && OldTextureLoader.instance.loadOldTextures() && this == MAGNETIC) {
+			return OldTextureLoader.instance.getMagnetostaticName();
+		}
 		//return LanguageRegistry.instance().getStringLocalization("rcmachine."+this.name().toLowerCase());
 		return StatCollector.translateToLocal(name);
 		//return name;

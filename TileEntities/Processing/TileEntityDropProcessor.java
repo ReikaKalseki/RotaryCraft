@@ -99,7 +99,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	}
 
 	private boolean doOperation(World world, int x, int y, int z, boolean multiple) {
-		if (inv[1] == null) {
+		if (inv[1] == null || this.canContinueProcessingWithOutput()) {
 			if (overflow.isEmpty()) {
 				if (inv[0] != null && this.isProcessable(inv[0])) {
 					dropProcessTime++;
@@ -115,14 +115,47 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 				}
 			}
 			else {
+				if (inv[1] == null) {
+					inv[1] = overflow.remove(0);
+				}
+				else {
+
+				}
 				dropProcessTime = 0;
-				inv[1] = overflow.remove(0);
 				return false;
 			}
 		}
 		else {
-			dropProcessTime = 0;
+			dropProcessTime = Math.max(0, Math.min(dropProcessTime, this.getOperationTime()-1));//0;
 			return false;
+		}
+	}
+
+	private boolean canContinueProcessingWithOutput() {
+		DropProcessing h = getHandler(inv[0]);
+		if (h.allowsStacking()) {
+			Collection<ItemStack> c = this.runHandler(h, inv[0]);
+			if (c.size() != 1) {
+				return false;
+			}
+			ItemStack is = c.iterator().next();
+			if (ReikaItemHelper.matchStacks(is, inv[1]) && is.stackSize+inv[1].stackSize <= Math.min(this.getInventoryStackLimit(), is.getMaxStackSize())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Collection<ItemStack> runHandler(DropProcessing dp, ItemStack in) {
+		try {
+			int fortune = this.getEnchantment(Enchantment.fortune);
+			EntityPlayer ep = this.getPlacer();
+			return dp.generateItems(worldObj, xCoord, yCoord, zCoord, fortune, ep, rand, in);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			this.writeError(e);
+			return new ArrayList();
 		}
 	}
 
@@ -172,20 +205,12 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	}
 
 	private void processItem(World world, int x, int y, int z) {
-		int fortune = this.getEnchantment(Enchantment.fortune);
-		EntityPlayer ep = this.getPlacer();
 		DropProcessing dp = this.getHandler(inv[0]);
-		try {
-			Collection<ItemStack> c = dp.generateItems(world, x, y, z, fortune, ep, rand, inv[0]);
-			ArrayList<ItemStack> li = ReikaItemHelper.collateItemList(c);
-			if (!li.isEmpty()) {
-				inv[1] = li.remove(0);
-				overflow.addAll(li);
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			this.writeError(e);
+		Collection<ItemStack> c = this.runHandler(dp, inv[0]);
+		ArrayList<ItemStack> li = ReikaItemHelper.collateItemList(c);
+		if (!li.isEmpty()) {
+			inv[1] = li.remove(0);
+			overflow.addAll(li);
 		}
 		ReikaInventoryHelper.decrStack(0, inv);
 	}
@@ -367,7 +392,8 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		new ScrapBoxProcessing().register();
 		new ThaumBagProcessing().register();
 		new CratedItemProcessing().register();
-		new MystFolderProcessing().register();
+		MystFolderProcessing.instance.register();
+		new MystNotebookProcessing().register();
 	}
 
 	public static abstract class DropProcessing {
@@ -384,6 +410,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 
 		protected abstract boolean isLoadable();
+		protected abstract boolean allowsStacking();
 		public abstract boolean isValidItem(ItemStack is);
 		protected abstract Collection<ItemStack> generateItems(World world, int x, int y, int z, int fortune, EntityPlayer ep, Random rand, ItemStack src) throws Exception;
 
@@ -404,6 +431,11 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		@Override
 		protected boolean isLoadable() {
 			return true;
+		}
+
+		@Override
+		protected boolean allowsStacking() {
+			return false;
 		}
 
 		@Override
@@ -443,6 +475,11 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 			Block b = Block.getBlockFromItem(src.getItem());
 			ArrayList<ItemStack> li = b.getDrops(world, x, y, z, src.getItemDamage(), fortune);
 			return li;
+		}
+
+		@Override
+		protected boolean allowsStacking() {
+			return false;
 		}
 
 		@Override
@@ -504,6 +541,11 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 
 		@Override
+		protected boolean allowsStacking() {
+			return false;
+		}
+
+		@Override
 		protected Collection<ItemStack> generateItems(World world, int x, int y, int z, int fortune, EntityPlayer ep, Random rand, ItemStack src) throws Exception {
 			return ReikaJavaLibrary.makeListFrom(Recipes.scrapboxDrops.getDrop(src, false));
 		}
@@ -562,6 +604,11 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 				e.printStackTrace();
 				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.THAUMCRAFT, e);
 			}
+		}
+
+		@Override
+		protected boolean allowsStacking() {
+			return false;
 		}
 
 		@Override
@@ -676,6 +723,11 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 
 		@Override
+		protected boolean allowsStacking() {
+			return true;
+		}
+
+		@Override
 		public boolean isValidItem(ItemStack is) {
 			return is.getItem().getClass() == cratedItemClass;
 		}
@@ -725,11 +777,70 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 	}
 
+	private static class MystNotebookProcessing extends MystFolderProcessing {
+
+		private Method generate;
+
+		@Override
+		protected void create() {
+			try {
+				Class c = Class.forName("com.xcompwiz.mystcraft.item.ItemBoosterPack");
+				generate = c.getDeclaredMethod("generateBooster", ItemStack.class, Random.class, int.class, int.class, int.class, int.class);
+			}
+			catch (Exception e) {
+				RotaryCraft.logger.logError("Could not initialize Mystcraft notebook processing:");
+				e.printStackTrace();
+				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.MYSTCRAFT, e);
+			}
+		}
+
+		@Override
+		protected boolean allowsStacking() {
+			return false;
+		}
+
+		@Override
+		public boolean isValidItem(ItemStack is) {
+			return is.getItem() == MystCraftHandler.getInstance().sealedBookID;
+		}
+
+		@Override
+		protected Collection<ItemStack> generateItems(World world, int x, int y, int z, int fortune, EntityPlayer ep, Random rand, ItemStack src) throws Exception {
+			ItemStack is = (ItemStack)generate.invoke(null, null, rand, 7, 4, 4, 1); //from internal myst code
+			if (MystFolderProcessing.instance.isValidItem(is)) {
+				return MystFolderProcessing.instance.generateItems(world, x, y, z, fortune, ep, rand, is);
+			}
+			else {
+				return ReikaJavaLibrary.makeListFrom(is);
+			}
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public ArrayList<ItemStack> getAllInputsForDisplay() {
+			return ReikaJavaLibrary.makeListFrom(new ItemStack(MystCraftHandler.getInstance().sealedBookID));
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Collection<ItemStack> getPotentialOutputsForDisplay() {
+			return super.getPotentialOutputsForDisplay();//ReikaJavaLibrary.makeListFrom(new ItemStack(MystCraftHandler.getInstance().folderID));
+		}
+
+	}
+
 	private static class MystFolderProcessing extends DropProcessing {
+
+		private static final MystFolderProcessing instance = new MystFolderProcessing();
 
 		@Override
 		public boolean isValidItem(ItemStack is) {
 			return is.getItem() == MystCraftHandler.getInstance().folderID;
+		}
+
+		@Override
+		protected boolean allowsStacking() {
+			return false;
 		}
 
 		@Override
@@ -738,7 +849,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 
 		@Override
-		protected boolean isLoadable() {
+		protected final boolean isLoadable() {
 			return ModList.MYSTCRAFT.isLoaded();
 		}
 
@@ -750,7 +861,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public List<ItemStack> getOutputsOfInputForDisplay(ItemStack src) {
+		public final List<ItemStack> getOutputsOfInputForDisplay(ItemStack src) {
 			try {
 				return (List<ItemStack>)this.generateItems(null, 0, 0, 0, 0, Minecraft.getMinecraft().thePlayer, rand, src);
 			}

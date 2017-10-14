@@ -163,6 +163,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		this.addSmelting(ItemRegistry.STEELHOE.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
 		this.addSmelting(ItemRegistry.STEELSHEARS.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
 		this.addSmelting(ItemRegistry.STEELSICKLE.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
+		this.addSmelting(ItemRegistry.STEELSWORD.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
 
 		this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
 		this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
@@ -356,6 +357,9 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
 					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+				}
+				else {
+					RotaryCraft.logger.logError("Could not find thaumium tool #"+i);
 				}
 			}
 		}

@@ -242,9 +242,11 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		int armorslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.BEDBOOTS.getItemInstance(), inv);
 		int jumpslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JUMP.getItemInstance(), inv);
 		if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
+			NBTTagCompound tag = (NBTTagCompound)inv[armorslot].stackTagCompound.copy();
 			inv[jumpslot] = null;
 			inv[armorslot] = null;
 			ItemStack is = ItemRegistry.BEDJUMP.getEnchantedStack();
+			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag);
 			inv[9] = is;
 		}
 	}

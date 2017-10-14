@@ -28,6 +28,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -299,6 +301,19 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 		addFeedItem(EntityCow.class, ItemStacks.canolaHusks);
 		addFeedItem(EntityChicken.class, ItemStacks.canolaHusks);
 		addFeedItem(EntityPig.class, ItemStacks.canolaHusks);
+
+		if (ModList.TWILIGHT.isLoaded()) {
+			try {
+				addFeedItem(Class.forName("twilightforest.entity.passive.EntityTFBighorn"), Items.wheat);
+				addFeedItem(Class.forName("twilightforest.entity.passive.EntityTFBighorn"), ItemStacks.canolaHusks);
+				addFeedItem(Class.forName("twilightforest.entity.passive.EntityTFDeer"), Items.wheat);
+				addFeedItem(Class.forName("twilightforest.entity.passive.EntityTFDeer"), ItemStacks.canolaHusks);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.TWILIGHT, e);
+			}
+		}
 
 		addFeedItem(EntityVillager.class, Items.emerald);
 	}

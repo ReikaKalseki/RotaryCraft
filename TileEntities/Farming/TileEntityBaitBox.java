@@ -175,6 +175,10 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 					ent.motionZ = -0.02*(z-ent.posZ);
 				}
 			}
+			if (ent instanceof EntityBlaze) {
+				ent.motionX *= 4;
+				ent.motionZ *= 4;
+			}
 			float var1 = (float)ReikaMathLibrary.py3d(ent.motionX, 0, ent.motionZ);
 			ent.renderYawOffset += (-((float)Math.atan2(ent.motionX, ent.motionZ)) * 180.0F / (float)Math.PI - ent.renderYawOffset) * 0.1F;
 			ent.rotationYaw = ent.renderYawOffset;
