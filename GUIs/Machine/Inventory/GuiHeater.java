@@ -86,12 +86,12 @@ public class GuiHeater extends GuiMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			temperature = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
 			return;
 		}
 		temperature = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (temperature >= 0)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
 		heater.setTemperature = temperature;
 
 	}

@@ -71,9 +71,10 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 					break;
 			}
 			if (display != null) {
-				int max = Math.min(nbtListPos+display.size(), nbtListPos+5);
-				for (int i = nbtListPos; i < max && i < display.size(); i++) {
-					int i2 = i-nbtListPos;
+				int d = page == SettingType.NBT ? 1 : 0;
+				int max = Math.min(nbtListPos+display.size(), nbtListPos+5-d);
+				for (int i = nbtListPos; i < max && i < display.size()+d; i++) {
+					int i2 = i-nbtListPos+d;
 					MatchDisplay m = display.get(i);
 					int u = m.getSetting() == MatchType.MATCH ? 0 : 9;
 					int v = m.getSetting() == MatchType.MISMATCH ? 54 : 63;
@@ -83,9 +84,18 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		}
 		buttonList.add(new GuiButton(-1, j+30, k+100, 20, 20, "<"));
 		buttonList.add(new GuiButton(-2, j+50, k+100, 20, 20, ">"));
-		if (page == SettingType.NBT && display != null && display.size() > LINES) {
-			buttonList.add(new GuiButton(-3, j+70, k+100, 20, 20, "+"));
-			buttonList.add(new GuiButton(-4, j+90, k+100, 20, 20, "-"));
+		if (page == SettingType.NBT) {
+			if (!display.isEmpty()) {
+				for (int i = 0; i < 3; i++) {
+					int u = i == 0 ? 0 : 9;
+					int v = i == 1 ? 54 : 63;
+					buttonList.add(new ImagedGuiButton(-5-i, j+30+i*10, k+18+0, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
+				}
+			}
+			if (display != null && display.size() > LINES) {
+				buttonList.add(new GuiButton(-3, j+70, k+100, 20, 20, "+"));
+				buttonList.add(new GuiButton(-4, j+90, k+100, 20, 20, "-"));
+			}
 		}
 	}
 
@@ -102,25 +112,37 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 			page = page.next();
 		}
 		else if (b.id == -3) {
-			if (display != null && nbtListPos < display.size()-LINES)
+			int d = page == SettingType.NBT ? 1 : 0;
+			if (display != null && nbtListPos < display.size()-LINES+d)
 				nbtListPos++;
 		}
 		else if (b.id == -4) {
 			if (nbtListPos > 0)
 				nbtListPos--;
 		}
+		else if (b.id == -5 || b.id == -6 || b.id == -7) {
+			for (MatchDisplay m : display) {
+				while (m.getSetting().ordinal() != (-b.id)-5)
+					m.increment();
+			}
+			this.sendData();
+		}
 		else if (b.id >= 0 && b.id != 24000) {
 			MatchDisplay m = display.get(b.id);
 			m.increment();
-			//ReikaJavaLibrary.pConsole(filter.getData());
-			NBTTagCompound nbt = filter.getData().writeToNBT();
-			//ReikaJavaLibrary.pConsole(nbt);
-			nbt.setInteger("posX", tile.xCoord);
-			nbt.setInteger("posY", tile.yCoord);
-			nbt.setInteger("posZ", tile.zCoord);
-			ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.getMinValue(), nbt, PacketTarget.server);
+			this.sendData();
 		}
 		this.initGui();
+	}
+
+	private void sendData() {
+		//ReikaJavaLibrary.pConsole(filter.getData());
+		NBTTagCompound nbt = filter.getData().writeToNBT();
+		//ReikaJavaLibrary.pConsole(nbt);
+		nbt.setInteger("posX", tile.xCoord);
+		nbt.setInteger("posY", tile.yCoord);
+		nbt.setInteger("posZ", tile.zCoord);
+		ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.getMinValue(), nbt, PacketTarget.server);
 	}
 
 	@Override
@@ -165,15 +187,22 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 					fontRendererObj.drawString("[No Values]", 42, 19, 0x000000);
 				}
 
-				int max = Math.min(nbtListPos+display.size(), nbtListPos+LINES);
-				for (int i = nbtListPos; i < max && i < display.size(); i++) {
-					int i2 = i-nbtListPos;
+				int d = page == SettingType.NBT ? 1 : 0;
+				int max = Math.min(nbtListPos+display.size(), nbtListPos+LINES-d);
+				for (int i = nbtListPos; i < max && i < display.size()+d; i++) {
+					int i2 = i-nbtListPos+d;
 					MatchDisplay m = display.get(i);
 					int tx = 42;
 					int ty = 19+i2*16;
 					String s = m.displayName+" ("+m.value+"): ";
 					fontRendererObj.drawString(s, tx, ty, 0x000000);
 					fontRendererObj.drawString(m.getSetting().name, tx+fontRendererObj.getStringWidth(s), ty, m.getSetting().color);
+				}
+
+				if (page == SettingType.NBT) {
+					int tx = 42;
+					int ty = 19+0*16;
+					fontRendererObj.drawString("Toggle All", tx+22, ty, 0x000000);
 				}
 			}
 		}

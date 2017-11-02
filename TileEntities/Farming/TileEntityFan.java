@@ -130,8 +130,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	public int getRange() {
 		if (power < MINPOWER)
 			return 0;
-		long power2 = Math.min(power - MINPOWER, MAXPOWER);
-		int range = 8+(int)(power2-MINPOWER)/(wideAreaBlow ? FALLOFF_WIDE : FALLOFF);
+		int power2 = (int)Math.min(power - MINPOWER, MAXPOWER);
+		int range = 8+power2/(wideAreaBlow ? FALLOFF_WIDE : FALLOFF);
 		if (range > this.getMaxRange())
 			range = this.getMaxRange();
 		return range;

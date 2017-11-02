@@ -43,8 +43,9 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 				if (liquid < this.getCapacity()) {
 					oldLevel = tile.getFluidLevel();
 					int toremove = tile.getFluidLevel()/4+1;
-					tile.removeLiquid(toremove);
-					liquid = ReikaMathLibrary.extrema(liquid+oldLevel/4+1, 0, "max");
+					int toadd = Math.min(toremove, this.getCapacity()-liquid);
+					tile.removeLiquid(toadd);
+					liquid = ReikaMathLibrary.extrema(liquid+toadd, 0, "max");
 				}
 				pressure = tile.getPressure();
 			}
@@ -94,8 +95,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setInteger("press", pressure);
@@ -103,8 +103,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		pressure = NBT.getInteger("press");

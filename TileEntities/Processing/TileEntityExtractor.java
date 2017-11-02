@@ -85,9 +85,11 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	public void testIdle() {
+		/*
 		for (int i = 0; i < 4; i++)
 			if (power < machine.getMinPower(i))
 				return;
+		 */
 		boolean works = false;
 		for (int i = 0; i < 4; i++) {
 			if (this.canProcess(i))

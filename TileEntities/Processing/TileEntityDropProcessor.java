@@ -99,34 +99,40 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	}
 
 	private boolean doOperation(World world, int x, int y, int z, boolean multiple) {
-		if (inv[1] == null || this.canContinueProcessingWithOutput()) {
-			if (overflow.isEmpty()) {
-				if (inv[0] != null && this.isProcessable(inv[0])) {
-					dropProcessTime++;
-					if (multiple || dropProcessTime >= this.getOperationTime()) {
-						dropProcessTime = 0;
-						this.processItem(world, x, y, z);
+		if (inv[0] != null) {
+			if (inv[1] == null || this.canContinueProcessingWithOutput()) {
+				if (overflow.isEmpty()) {
+					if (this.isProcessable(inv[0])) {
+						dropProcessTime++;
+						if (multiple || dropProcessTime >= this.getOperationTime()) {
+							dropProcessTime = 0;
+							this.processItem(world, x, y, z);
+						}
+						return true;
 					}
-					return true;
+					else {
+						dropProcessTime = 0;
+						return false;
+					}
 				}
 				else {
+					if (inv[1] == null) {
+						inv[1] = overflow.remove(0);
+					}
+					else {
+
+					}
 					dropProcessTime = 0;
 					return false;
 				}
 			}
 			else {
-				if (inv[1] == null) {
-					inv[1] = overflow.remove(0);
-				}
-				else {
-
-				}
-				dropProcessTime = 0;
+				dropProcessTime = Math.max(0, Math.min(dropProcessTime, this.getOperationTime()-1));//0;
 				return false;
 			}
 		}
 		else {
-			dropProcessTime = Math.max(0, Math.min(dropProcessTime, this.getOperationTime()-1));//0;
+			dropProcessTime = 0;
 			return false;
 		}
 	}
@@ -160,6 +166,8 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	}
 
 	public static DropProcessing getHandler(ItemStack is) {
+		if (is == null)
+			return INVALID;
 		DropProcessing d = itemMap.get(is);
 		if (d != null) {
 			return d;
@@ -209,7 +217,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		Collection<ItemStack> c = this.runHandler(dp, inv[0]);
 		ArrayList<ItemStack> li = ReikaItemHelper.collateItemList(c);
 		if (!li.isEmpty()) {
-			inv[1] = li.remove(0);
+			ReikaInventoryHelper.addOrSetStack(li.remove(0), inv, 1);
 			overflow.addAll(li);
 		}
 		ReikaInventoryHelper.decrStack(0, inv);
@@ -394,6 +402,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		new CratedItemProcessing().register();
 		MystFolderProcessing.instance.register();
 		new MystNotebookProcessing().register();
+		new GregCrateProcessing().register();
 	}
 
 	public static abstract class DropProcessing {
@@ -874,6 +883,70 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		@SideOnly(Side.CLIENT)
 		public Collection<ItemStack> getPotentialOutputsForDisplay() {
 			return new ArrayList(ReikaMystcraftHelper.getAllAgePages());
+		}
+
+	}
+
+	private static class GregCrateProcessing extends DropProcessing {
+
+		private final ItemHashMap<ItemStack> inputs = new ItemHashMap();
+
+		private ItemStack crate;
+
+		@Override
+		protected void create() {
+			crate = ReikaItemHelper.lookupItem("gregtech:gt.metaitem.01:32403");
+
+			this.addCrate("gregtech:gt.metaitem.03:67", "gregtech:gt.metaitem.01:2067");
+			this.addCrate("gregtech:gt.metaitem.03:1031", "gregtech:gt.metaitem.01:11031");
+			this.addCrate("gregtech:gt.metaitem.03:1300", "gregtech:gt.metaitem.01:11300");
+			this.addCrate("gregtech:gt.metaitem.03:1335", "gregtech:gt.metaitem.01:11335");
+			this.addCrate("gregtech:gt.metaitem.03:1305", "gregtech:gt.metaitem.01:11305");
+			this.addCrate("gregtech:gt.metaitem.03:30", "gregtech:gt.metaitem.01:2030");
+		}
+
+		private void addCrate(String in, String out) {
+			ItemStack isout = ReikaItemHelper.lookupItem(out);
+			isout.stackSize = 16;
+			inputs.put(ReikaItemHelper.lookupItem(in), isout);
+		}
+
+		@Override
+		public boolean isValidItem(ItemStack is) {
+			return inputs.containsKey(is);
+		}
+
+		@Override
+		protected boolean allowsStacking() {
+			return true;
+		}
+
+		@Override
+		protected Collection<ItemStack> generateItems(World world, int x, int y, int z, int fortune, EntityPlayer ep, Random rand, ItemStack src) throws Exception {
+			return ReikaJavaLibrary.makeListFrom(crate, inputs.get(src));
+		}
+
+		@Override
+		protected final boolean isLoadable() {
+			return ModList.GREGTECH.isLoaded();
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public ArrayList<ItemStack> getAllInputsForDisplay() {
+			return new ArrayList(inputs.keySet());
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public final List<ItemStack> getOutputsOfInputForDisplay(ItemStack src) {
+			return ReikaJavaLibrary.makeListFrom(crate, inputs.get(src));
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Collection<ItemStack> getPotentialOutputsForDisplay() {
+			return Collections.unmodifiableCollection(inputs.values());
 		}
 
 	}

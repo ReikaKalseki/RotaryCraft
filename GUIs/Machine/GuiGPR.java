@@ -48,7 +48,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		boolean keyC = Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH);
 
 		if (keyL && !pressL) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 1);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 1);
 			gpr.shift(gpr.getGuiDirection(), 1);
 			pressL = true;
 		}
@@ -57,7 +57,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		}
 
 		if (keyR && !pressR) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, -1);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, -1);
 			gpr.shift(gpr.getGuiDirection(), -1);
 			pressR = true;
 		}
@@ -66,7 +66,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		}
 
 		if (keyC && !pressC) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 0);
 			gpr.shift(gpr.getGuiDirection(), 0);
 			pressC = true;
 		}

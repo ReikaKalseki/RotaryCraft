@@ -84,13 +84,15 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 			AxisAlignedBB above = AxisAlignedBB.getBoundingBox(x+0.25, y+1, z+0.25, x+0.75, y+1.5, z+0.75);
 			List<Entity> in = world.getEntitiesWithinAABB(Entity.class, above);
 			for (Entity e : in) {
-				double m = ReikaEntityHelper.getEntityMass(e);
-				//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
-				if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
-					ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
-					e.attackEntityFrom(DamageSource.cactus, 1);
-					this.breakMirror(world, x, y, z);
-					break;
+				if (ReikaEntityHelper.isSolidEntity(e)) {
+					double m = ReikaEntityHelper.getEntityMass(e);
+					//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
+					if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
+						ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
+						e.attackEntityFrom(DamageSource.cactus, 1);
+						this.breakMirror(world, x, y, z);
+						break;
+					}
 				}
 			}
 		}

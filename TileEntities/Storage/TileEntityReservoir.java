@@ -511,6 +511,8 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 				e.attackEntityFrom(DamageSource.lava, 4);
 				e.setFire(12);
 			}
+			if (f.getTemperature(worldObj, xCoord, yCoord, zCoord) < 250)
+				e.attackEntityFrom(DamageSource.wither, 1);
 			if (e.isBurning() && ReikaFluidHelper.isFlammable(f)) {
 				this.delete();
 				worldObj.newExplosion(e, e.posX, e.posY, e.posZ, 4F, true, true);

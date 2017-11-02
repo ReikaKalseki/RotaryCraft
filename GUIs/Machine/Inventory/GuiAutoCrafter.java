@@ -87,9 +87,9 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id >= 0 && button.id < crafter.SIZE)
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue(), crafter, button.id, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue(), crafter, button.id, 0);
 		else if (button.id == -1) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue()+2, crafter, button.id, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue()+2, crafter, button.id, 0);
 		}
 		else if (button.id >= 40 && button.id < 40+crafter.SIZE) {
 			selectedSlot = button.id-40;
@@ -149,7 +149,7 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	}
 
 	private void dispatch(int slot, int thresh) {
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue()+1, crafter, selectedSlot, thresh);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue()+1, crafter, selectedSlot, thresh);
 	}
 
 	@Override

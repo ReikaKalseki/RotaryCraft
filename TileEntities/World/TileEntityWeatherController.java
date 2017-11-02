@@ -137,30 +137,30 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 		}
 	}
 
-	private boolean hasSawdust() {
-		boolean sawdust = ReikaInventoryHelper.checkForItemStack(ItemStacks.sawdust, inv, false);
-		if (sawdust)
-			return true;
+	private int hasSawdust() {
+		int sawdust = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust, inv, false);
+		if (sawdust >= 0)
+			return sawdust;
 		ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
 		for (int i = 0; i < inv.length; i++) {
 			ItemStack is = inv[i];
 			if (is != null) {
 				if (ReikaItemHelper.collectionContainsItemStack(li, is))
-					return true;
+					return i;
 			}
 		}
-		return false;
+		return -1;
 	}
 
-	public RainMode getRainMode() {
+	private RainMode getRainMode() {
 		RainMode rainmode;
 		ItemStack is = null;
 		ItemStack is2 = null;
-		boolean sawdust = this.hasSawdust();
+		int sawdust = this.hasSawdust();
 		boolean silverio = ReikaInventoryHelper.checkForItemStack(ItemStacks.silveriodide, inv, false);
 		boolean redstone = ReikaInventoryHelper.checkForItem(Items.redstone, inv);
 		boolean glowdust = ReikaInventoryHelper.checkForItem(Items.glowstone_dust, inv);
-		if (sawdust) {
+		if (sawdust >= 0) {
 			rainmode = RainMode.SUN;
 			is = ItemStacks.sawdust;
 		}
@@ -189,7 +189,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 			case NONE:
 				break;
 			case SUN:
-				slot = ReikaInventoryHelper.locateInInventory(ItemStacks.sawdust, inv, false);
+				slot = sawdust;
 				ReikaInventoryHelper.decrStack(slot, inv);
 				break;
 			case RAIN:

@@ -39,6 +39,8 @@ import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityGatlingShot extends EntityTurretShot {
 
@@ -64,15 +66,7 @@ public class EntityGatlingShot extends EntityTurretShot {
 		}
 
 		if (worldObj.isRemote && this.getEntityId()%10 == 0) { //tracer round
-			double l = 0.25;
-			for (double d = -l; d <= l; d += 0.0625) {
-				double px = posX+motionX*d;
-				double py = posY+motionY*d;
-				double pz = posZ+motionZ*d;
-				float s = 3*(float)(l-Math.abs(d)/2D);
-				EntityFX fx = new EntityFluidFX(worldObj, px, py, pz, FluidRegistry.LAVA).setLife(2)/*.setColor(0xffd0a0)*/.setScale(s);
-				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-			}
+			this.spawnTracerParticles();
 		}
 
 		ticksExisted++;
@@ -154,6 +148,19 @@ public class EntityGatlingShot extends EntityTurretShot {
 				}
 			}
 			this.setPosition(posX, posY, posZ);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnTracerParticles() {
+		double l = 0.25;
+		for (double d = -l; d <= l; d += 0.0625) {
+			double px = posX+motionX*d;
+			double py = posY+motionY*d;
+			double pz = posZ+motionZ*d;
+			float s = 3*(float)(l-Math.abs(d)/2D);
+			EntityFX fx = new EntityFluidFX(worldObj, px, py, pz, FluidRegistry.LAVA).setLife(2)/*.setColor(0xffd0a0)*/.setScale(s);
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 	}
 

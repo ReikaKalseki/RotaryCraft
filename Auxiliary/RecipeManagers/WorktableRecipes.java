@@ -268,7 +268,7 @@ public class WorktableRecipes extends RecipeHandler {
 
 		@Override
 		public String getUniqueID() {
-			return "WORKTABLE/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toString(recipe)+">"+fullID(output)+"?"+(output.getItem() instanceof ItemBlockPlacer);
+			return "WORKTABLE/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toDeterministicString(recipe)+">"+fullID(output)+"?"+(output.getItem() instanceof ItemBlockPlacer);
 		}
 
 		@Override

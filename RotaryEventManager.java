@@ -228,6 +228,7 @@ public class RotaryEventManager {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void preventControlledDespawns(LivingFarDespawnEvent evt) {
+		//ReikaJavaLibrary.pConsole(evt.entityLiving+" is trying to despawn");
 		if (TileEntitySpawnerController.isFlaggedNoDespawn(evt.entity))
 			evt.setResult(Result.DENY);
 	}

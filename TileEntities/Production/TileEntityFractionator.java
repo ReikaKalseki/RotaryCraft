@@ -109,11 +109,11 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 				tank.removeLiquid(1000);
 			}
 		}
+		this.testIdle();
 		if (power < MINPOWER || omega < MINSPEED) {
 			mixTime = 0;
 			return;
 		}
-		this.testIdle();
 		//int operationtime = ReikaMathLibrary.extrema(BASETIME-this.omega, MINTIME, "max");
 
 		int n = this.getNumberConsecutiveOperations();

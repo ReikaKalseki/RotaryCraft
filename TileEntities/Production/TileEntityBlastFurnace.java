@@ -157,7 +157,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			if (inv[i] != null)
 				ReikaInventoryHelper.decrStack(i, inv);
 		}
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	private void make(BlastRecipe rec) {
@@ -221,7 +220,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		if (a != null)
 			a.triggerAchievement(this.getPlacer());
 
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	private float getConsumptionFactor(float base, int made) {
@@ -355,7 +353,6 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			if (side != null)
 				ReikaWorldHelper.changeAdjBlock(world, x, y, z, side, Blocks.flowing_water, 0);
 		}
-		worldObj.markBlockForUpdate(x, y, z);
 	}
 
 	public int getSizeInventory() {
@@ -392,8 +389,8 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	private boolean getSlotForItem(int slot, ItemStack is) {
 		ItemStack patt = inv[PATTERN_SLOT];
-		if (ItemRegistry.CRAFTPATTERN.matchItem(patt)) {
-			return slot >= 1 && slot <= 9 && ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot-1, is, patt);
+		if (ItemRegistry.CRAFTPATTERN.matchItem(patt) && slot >= 1 && slot <= 9) {
+			return ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot-1, is, patt);
 		}
 		HashSet<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
 		if (!slots.isEmpty()) {

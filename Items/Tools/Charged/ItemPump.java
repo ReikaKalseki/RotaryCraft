@@ -193,6 +193,8 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 						if (world.getBlock(dx, dy, dz).isAir(world, dx, dy, dz) || (world.getBlock(dx, dy, dz) == b && !ReikaWorldHelper.isLiquidSourceBlock(world, dx, dy, dz))) {
 							world.setBlock(dx, dy, dz, b);
 							is.stackTagCompound.setInteger("lvl", amt-1000);
+							if (amt <= 1000)
+								ReikaNBTHelper.writeFluidToNBT(is.stackTagCompound, null);
 							is.setItemDamage(is.getItemDamage()-1);
 							for (int i = -1; i <= 1; i++) {
 								for (int k = -1; k <= 1; k++) {

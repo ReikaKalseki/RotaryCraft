@@ -18,6 +18,8 @@ import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
+import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Effect;
 import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Fertility;
 import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Flowering;
@@ -25,8 +27,6 @@ import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Life;
 import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Speeds;
 import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Territory;
 import Reika.DragonAPI.ModInteract.Bees.BeeAlleleRegistry.Tolerance;
-import Reika.DragonAPI.ModInteract.Bees.BasicFlowerProvider;
-import Reika.DragonAPI.ModInteract.Bees.BasicGene;
 import Reika.DragonAPI.ModInteract.Bees.BeeSpecies;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AgriCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
@@ -36,6 +36,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import forestry.api.apiculture.EnumBeeChromosome;
+import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
@@ -84,6 +85,7 @@ public class CanolaBee extends BeeSpecies {
 
 		private FlowerProviderCanola() {
 			super(BlockRegistry.CANOLA.getBlockInstance(), "canola");
+			FlowerManager.flowerRegistry.registerAcceptableFlowerRule(this, this.getFlowerType());
 		}
 		/*
 		@Override
@@ -136,8 +138,6 @@ public class CanolaBee extends BeeSpecies {
 		 */
 		@Override
 		public boolean isAcceptableFlower(String flowerType, World world, int x, int y, int z) {
-			if (super.isAcceptedFlower(world, x, y, z))
-				return true;
 			if (!ModList.AGRICRAFT.isLoaded())
 				return false;
 			Block b = world.getBlock(x, y, z);

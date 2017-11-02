@@ -347,7 +347,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		network.clearCallbacks();
 		for (int i = 0; i < SIZE; i++) {
 			ItemStack pattern = inv[i];
-			if (pattern != null) {
+			if (this.isItemValidForSlot(i, pattern)) {
 				ItemStack[] in = this.getIngredients(pattern);
 				for (int k = 0; k < in.length; k++) {
 					if (in[k] != null)
@@ -648,7 +648,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
-		return i < SIZE && ItemRegistry.CRAFTPATTERN.matchItem(is);
+		return i < SIZE && ItemRegistry.CRAFTPATTERN.matchItem(is) && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING && ItemCraftPattern.getRecipeOutput(is) != null;
 	}
 
 	@Override

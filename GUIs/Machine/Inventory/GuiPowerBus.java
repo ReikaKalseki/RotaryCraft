@@ -62,7 +62,7 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 		if (button.id < 24000) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[button.id+2];
 			tile.setMode(dir, !tile.isSideSpeedMode(dir));
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.getMinValue(), tile, button.id);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.getMinValue(), tile, button.id);
 		}
 		this.initGui();
 	}

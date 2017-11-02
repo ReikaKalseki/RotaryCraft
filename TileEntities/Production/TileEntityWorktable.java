@@ -407,8 +407,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
 		if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
-			ItemStack jet = inv[jetslot];
-			NBTTagCompound tag = jet.stackTagCompound != null ? (NBTTagCompound)jet.stackTagCompound.copy() : null;
+			ItemStack plate = inv[plateslot];
+			NBTTagCompound tag = plate.stackTagCompound != null ? (NBTTagCompound)plate.stackTagCompound.copy() : null;
 			inv[jetslot] = null;
 			inv[plateslot] = null;
 			ItemStack is = bed ? ItemRegistry.BEDPACK.getEnchantedStack() : ItemRegistry.STEELPACK.getStackOf();

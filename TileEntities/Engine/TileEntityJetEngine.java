@@ -126,6 +126,11 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	}
 
 	@Override
+	protected boolean canBeThrottled() {
+		return !this.isAfterburning();
+	}
+
+	@Override
 	protected boolean getRequirements(World world, int x, int y, int z, int meta) {
 		if (FOD >= 8) {
 			jetstarttimer.reset();
@@ -446,6 +451,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	}
 
 	private boolean canDamageEngine(Entity caught) {
+		if (caught.noClip)
+			return false;
 		if (caught instanceof EntityChicken)
 			return false;
 		if (caught instanceof EntityBat)

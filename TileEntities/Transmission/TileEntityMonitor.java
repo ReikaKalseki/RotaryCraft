@@ -35,7 +35,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 
 	@Override
 	protected void transferPower(World world, int x, int y, int z, int meta) {
-		if (world.isRemote && !RotaryAux.getPowerOnClient)
+		if (!RotaryAux.getPowerOnClient && world.isRemote)
 			return;
 		omegain = torquein = 0;
 		boolean isCentered = x == xCoord && y == yCoord && z == zCoord;

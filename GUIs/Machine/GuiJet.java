@@ -55,7 +55,7 @@ public class GuiJet extends GuiEngine
 
 		if (b.id == 0 && jet != null && jet.canAfterBurn()) {
 			burn = !burn;
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.getMinValue(), eng, burn ? 1 : 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.getMinValue(), eng, burn ? 1 : 0);
 			jet.setBurnerActive(burn);
 			this.initGui();
 		}

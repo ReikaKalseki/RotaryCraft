@@ -119,8 +119,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		this.onAddRecipe(br, rl);
 	}
 
-	public static final RecipesBlastFurnace getRecipes()
-	{
+	public static final RecipesBlastFurnace getRecipes() {
 		return BlastFurnaceBase;
 	}
 
@@ -232,7 +231,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		@Override
 		public String getUniqueID() {
-			return "CRAFT/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toString(recipe)+">"+output;
+			return "CRAFT/"+recipe.getClass().getName()+"^"+ReikaRecipeHelper.toDeterministicString(recipe)+">"+output;
 		}
 
 		@Override

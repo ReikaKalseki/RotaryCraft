@@ -102,17 +102,17 @@ public class GuiCVT extends GuiNonPoweredMachine
 		else
 			buttontimer = 8;
 		if (button.id == 0) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue(), cvt, 0);
 			redstone = !redstone;
 		}
 
 		if (redstone) {
 			if (button.id == 1) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, 0);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, 0);
 				cvt.incrementCVTState(true);
 			}
 			if (button.id == 2) {
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+2, cvt, 0);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+2, cvt, 0);
 				cvt.incrementCVTState(false);
 			}
 		}
@@ -122,7 +122,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 					ratio = cvt.getMaxRatio();
 				ratio = -ratio;
 				reduction = ratio < 0;
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ratio);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ratio);
 			}
 		}
 
@@ -142,14 +142,14 @@ public class GuiCVT extends GuiNonPoweredMachine
 			if (!(input.getText().matches("^[0-9 ]+$"))) {
 				ratio = 1;
 				input.deleteFromCursor(-1);
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ratio);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ratio);
 				return;
 			}
 			ratio = ReikaJavaLibrary.safeIntParse(input.getText());
 			if (reduction)
 				ratio = -ratio;
 			if (ratio != 0)
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ratio);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVT.getMinValue()+1, cvt, ratio);
 		}
 	}
 

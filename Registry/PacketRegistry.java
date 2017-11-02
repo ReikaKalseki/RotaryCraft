@@ -52,7 +52,8 @@ public enum PacketRegistry {
 	POWERSYNC(73),
 	AFTERBURN(74),
 	CRAFTPATTERNMODE(75, 76),
-	FILTERSETTING(77);
+	FILTERSETTING(77),
+	SPRINKLER(78);
 
 	private int min;
 	private int max;
@@ -99,6 +100,8 @@ public enum PacketRegistry {
 		if (this == ENGINEBACKFIRE)
 			return 0;
 		if (this == ITEMCANNON)
+			return 4;
+		if (this == SPRINKLER)
 			return 4;
 		return 1;
 	}

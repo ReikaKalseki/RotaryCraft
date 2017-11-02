@@ -59,7 +59,7 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 		if (b.id < 16) {
 			int side = multi.getNextSideForState(b.id);
 			multi.setSideOfState(b.id, side);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.REDGEAR.getMinValue(), multi, b.id, side);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.REDGEAR.getMinValue(), multi, b.id, side);
 		}
 		this.initGui();
 	}

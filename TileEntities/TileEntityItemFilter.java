@@ -34,7 +34,6 @@ import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
@@ -477,16 +476,18 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					}
 					break;
 				case NBT:
-					NBTBase b = matchNBT;
+					NBTTagCompound b = matchNBT;
 					//ReikaJavaLibrary.pConsole(m.displayName+" > "+m.tags+" == "+matchNBT);
 					if (m.tags != null) {
 						for (String s : m.tags) {
-							b = ((NBTTagCompound)b).getTag(s);
+							b = b.getCompoundTag(s);
 						}
 					}
-					NBTTagCompound tag = ((NBTTagCompound)b).getCompoundTag(m.displayName);
+					NBTTagCompound tag = b.getCompoundTag(m.displayName);
+					//ReikaJavaLibrary.pConsole(tag.func_150296_c()+" ("+m+") of "+b+" {"+b.func_150296_c()+"}");
 					MatchType match = MatchType.list[tag.getInteger("type")];
 					tag.setInteger("type", match.getNext().ordinal());
+					//ReikaJavaLibrary.pConsole(match.getNext()+" for "+tag);
 					break;
 				case ORE:
 					int i = Integer.parseInt(m.displayName);
@@ -550,7 +551,8 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 			for (Object o : tag.func_150296_c()) {
 				String s = (String)o;
 				NBTBase b = tag.getTag(s);
-				NBTTagCompound match = matchRef.getCompoundTag(s);
+				NBTTagCompound match = !tags.isEmpty() && tags.getLast().equals("tag") ? matchRef.getCompoundTag("tag").getCompoundTag(s) : matchRef.getCompoundTag(s);
+				//ReikaJavaLibrary.pConsole(match+" from "+s+" in "+matchRef+" with "+tags);
 				MatchType m = MatchType.list[match.getInteger("type")];
 				if (b instanceof NBTTagList) {
 					MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", "", m);
@@ -570,8 +572,12 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					li.add(new MatchDisplay(this, SettingType.NBT, s, b, tags, "", m));
 				}
 			}
-			if (!tags.isEmpty())
+			if (!tags.isEmpty()) {
+				if (tags.getLast().equals("tag"))
+					tags.removeLast();
 				tags.removeLast();
+			}
+			//ReikaJavaLibrary.pConsole(matchRef+" > "+li);
 			return li;
 		}
 
@@ -587,6 +593,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					md.tags = new LinkedList(tags);
 					li.add(md);
 					tags.add(s);
+					tags.add("tag");
 					li.addAll(this.getNBTDisplay((NBTTagList)b, match, tags));
 				}
 				else if (b instanceof NBTTagCompound) {
@@ -594,14 +601,18 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 					md.tags = new LinkedList(tags);
 					li.add(md);
 					tags.add(s);
+					tags.add("tag");
 					li.addAll(this.getNBTDisplay((NBTTagCompound)b, match, tags));
 				}
 				else {
 					li.add(new MatchDisplay(this, SettingType.NBT, s, b, tags, "", m));
 				}
 			}
-			if (!tags.isEmpty())
+			if (!tags.isEmpty()) {
+				if (tags.getLast().equals("tag"))
+					tags.removeLast();
 				tags.removeLast();
+			}
 			return li;
 		}
 
@@ -698,13 +709,13 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 						return m.check(true);
 					}
 					if (val == null || b2 == null) {
-						ReikaJavaLibrary.pConsole(val+" @ "+s);
+						//ReikaJavaLibrary.pConsole(val+" @ "+s);
 						return m.check(false);
 					}
 					if (val instanceof NBTTagCompound || val instanceof NBTTagList)
 						;//return m.check(true);
 					if (!m.check(val.equals(b2))) {
-						ReikaJavaLibrary.pConsole(val+" @ "+s);
+						//ReikaJavaLibrary.pConsole(val+" @ "+s);
 						return false;
 					}
 				}
@@ -887,6 +898,11 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 		public void increment() {
 			setting = setting.getNext();
 			source.incrementSetting(this);
+		}
+
+		@Override
+		public String toString() {
+			return displayName+": "+setting.toString()+" & "+type.toString()+" % "+tags;
 		}
 
 	}

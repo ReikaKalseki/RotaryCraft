@@ -76,7 +76,7 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 
 		@Override
 		public Collection<ItemStack> getAllUsedItems() {
-			return ReikaJavaLibrary.makeListFrom(input);
+			return ReikaJavaLibrary.makeListFrom(ReikaFluidHelper.getFluidStackAsItem(input));
 		}
 
 	}

@@ -271,7 +271,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	private void dispatchTrack(MusicScore mus) {
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, this);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, this);
 		for (int i = 0; i < mus.countTracks(); i++) {
 			Map<Integer, Collection<MusicScore.Note>> track = mus.getTrack(i);
 			int lastNoteTime = -1;
@@ -731,7 +731,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	@SideOnly(Side.CLIENT)
 	public void sendNote(int pitch, int channel, NoteLength len, Instrument voice) {
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), this, pitch, channel, len.ordinal(), voice.ordinal());
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), this, pitch, channel, len.ordinal(), voice.ordinal());
 	}
 
 }

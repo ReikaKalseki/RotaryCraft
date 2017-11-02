@@ -75,8 +75,13 @@ public class RecyclingRecipe implements IRecipe, CustomToStringRecipe {
 	}
 
 	@Override
-	public String toString() {
+	public String toDisplayString() {
 		return scrapValue+" X scrap = "+ReikaRecipeHelper.toString(input);
+	}
+
+	@Override
+	public String toDeterministicString() {
+		return scrapValue+" X scrap = "+ReikaRecipeHelper.toDeterministicString(input);
 	}
 
 }

@@ -284,7 +284,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	}
 
 	private void updateSpeed(int maxspeed, boolean revup) {
-		if (this.hasECU()) {
+		if (this.hasECU() && this.canBeThrottled()) {
 			TileEntityEngineController te = this.getECU();
 			if (te != null) {
 				maxspeed *= te.getSpeedMultiplier();
@@ -367,27 +367,29 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 			TileEntityEngineController te = this.getECU();
 			if (te != null) {
 				if (te.canProducePower()) {
-					int fueltime = type.getFuelUnitDuration();
-					if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
-						//omega = (int)(omega*te.getSpeedMultiplier());
-						int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
-						//this.updateSpeed(max, omega < max);
+					if (this.canBeThrottled()) {
+						int fueltime = type.getFuelUnitDuration();
+						if (omega >= type.getSpeed()*te.getSpeedMultiplier()) {
+							//omega = (int)(omega*te.getSpeedMultiplier());
+							int max = (int)(type.getSpeed()*te.getSpeedMultiplier());
+							//this.updateSpeed(max, omega < max);
+						}
+						else {
+							fueltime = Math.max(type.getFuelUnitDuration()/4, 1);
+						}
+						timer.setCap("fuel", fueltime);
+						int fuelcap = timer.getCapOf("fuel");
+						fuelcap = fuelcap*te.getFuelMultiplier(type.type);
+						timer.setCap("fuel", fuelcap);
+						pitch = te.getSoundStretch();
+						soundfactor = 1F/te.getSoundStretch();
+						int soundcap = timer.getCapOf("sound");
+						soundcap = (int)(soundcap*soundfactor);
+						timer.setCap("sound", soundcap);
+						int tempcap = timer.getCapOf("temperature");
+						tempcap *= soundfactor;
+						timer.setCap("temperature", tempcap);
 					}
-					else {
-						fueltime = Math.max(type.getFuelUnitDuration()/4, 1);
-					}
-					timer.setCap("fuel", fueltime);
-					int fuelcap = timer.getCapOf("fuel");
-					fuelcap = fuelcap*te.getFuelMultiplier(type.type);
-					timer.setCap("fuel", fuelcap);
-					pitch = te.getSoundStretch();
-					soundfactor = 1F/te.getSoundStretch();
-					int soundcap = timer.getCapOf("sound");
-					soundcap = (int)(soundcap*soundfactor);
-					timer.setCap("sound", soundcap);
-					int tempcap = timer.getCapOf("temperature");
-					tempcap *= soundfactor;
-					timer.setCap("temperature", tempcap);
 				}
 				else {
 					//this.updateSpeed(0, false);
@@ -425,6 +427,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	protected boolean canConsumeFuel() {
 		return this.getFuelLevel() > 0;
+	}
+
+	protected boolean canBeThrottled() {
+		return true;
 	}
 
 	public final void getIOSides(World world, int x, int y, int z, int metadata) {

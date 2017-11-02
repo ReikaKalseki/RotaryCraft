@@ -106,7 +106,7 @@ public class RenderFan extends RotaryTERenderer
 			AxisAlignedBB wide = te.getWideBlowZone(te.getBlockMetadata(), te.getRange());
 
 			ReikaAABBHelper.renderAABB(te.wideAreaBlow ? wide : box, par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 32, 192, 255, true);
-			ReikaAABBHelper.renderAABB(te.wideAreaHarvest ? wide : box, par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 255, 255, 255, true);
+			ReikaAABBHelper.renderAABB(te.wideAreaHarvest ? wide.offset(0, 1, 0) : box, par2, par4, par6, te.xCoord, te.yCoord, te.zCoord, te.iotick, 255, 255, 255, true);
 		}
 	}
 

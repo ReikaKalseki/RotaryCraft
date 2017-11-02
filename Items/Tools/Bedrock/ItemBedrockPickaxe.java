@@ -130,8 +130,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep)
-	{
+	public boolean onBlockStartBreak(ItemStack is, int x, int y, int z, EntityPlayer ep) {
 		if (ep.capabilities.isCreativeMode)
 			return false;
 		World world = ep.worldObj;
@@ -171,7 +170,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 				ItemStack item = ItemRegistry.SPAWNER.getStackOf();
 				ReikaSpawnerHelper.addMobNBTToItem(item, spw);
 				if (ReikaSpawnerHelper.hasCustomLogic(spw))
-					ReikaSpawnerHelper.setSpawnerItemNBT(is, spw.func_145881_a(), true);
+					ReikaSpawnerHelper.setSpawnerItemNBT(item, spw.func_145881_a(), true);
 				ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);
 				//world.setBlockToAir(x, y, z);
 				//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 1.25F);

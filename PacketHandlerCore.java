@@ -30,6 +30,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.DataPacket;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
@@ -57,6 +58,7 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityProjector;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
+import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
@@ -198,6 +200,7 @@ public class PacketHandlerCore implements PacketHandler {
 					NBT = ((DataPacket)packet).asNBT();
 					break;
 				case STRINGINT:
+				case STRINGINTLOC:
 					stringdata = packet.readString();
 					control = inputStream.readInt();
 					pack = PacketRegistry.getEnum(control);
@@ -578,8 +581,7 @@ public class PacketHandlerCore implements PacketHandler {
 					TileEntityIOMachine io = (TileEntityIOMachine)te;
 					io.torque = data[0];
 					io.omega = data[1];
-					long pwr = (long)data[3] << 32 | data[2] & 0xFFFFFFFFL;
-					io.power = pwr;
+					io.power = ReikaJavaLibrary.buildLong(data[2], data[3]);
 					break;
 				case AFTERBURN:
 					((TileEntityJetEngine)te).setBurnerActive(data[0] > 0);
@@ -599,6 +601,9 @@ public class PacketHandlerCore implements PacketHandler {
 					MatchData dat = MatchData.createFromNBT(NBT);
 					((TileEntityItemFilter)te).setData(dat);
 					break;
+				case SPRINKLER:
+					((TileEntitySprinkler)te).doParticle(world, data[0], data[1], data[2], data[3] > 0);
+					break;
 			}
 		}
 		catch (NullPointerException e) {
@@ -614,13 +619,12 @@ public class PacketHandlerCore implements PacketHandler {
 
 
 	public static void sendPowerSyncPacket(TileEntityIOMachine iotile, EntityPlayerMP ep) {
-		int p1 = (int)iotile.power;
-		int p2 = (int)(iotile.power >> 32);
+		int[] data = ReikaJavaLibrary.splitLong(iotile.power);
 		if (ep != null) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, ep, iotile.torque, iotile.omega, p1, p2);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, ep, iotile.torque, iotile.omega, data[0], data[1]);
 		}
 		else {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, iotile.torque, iotile.omega, p1, p2);
+			ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, 64, iotile.torque, iotile.omega, data[0], data[1]);
 		}
 	}
 }

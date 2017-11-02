@@ -80,7 +80,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 		}
 		else if (b.id < targets.size()) {
 			BiomeGenBase biome = targets.get(b.id);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.getMinValue(), terra, biome.biomeID);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.getMinValue(), terra, biome.biomeID);
 		}
 
 		this.initGui();

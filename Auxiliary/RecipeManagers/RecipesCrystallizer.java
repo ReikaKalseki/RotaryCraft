@@ -76,7 +76,7 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 
 		@Override
 		public Collection<ItemStack> getAllUsedItems() {
-			return ReikaJavaLibrary.makeListFrom(input);
+			return ReikaJavaLibrary.makeListFrom(ReikaFluidHelper.getFluidStackAsItem(input));
 		}
 
 	}

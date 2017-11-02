@@ -320,7 +320,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 		this.getDirectionFromIO();
 		this.initGui();
 		bevel.direction = posn;
-		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.BEVEL.getMinValue(), bevel, posn);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.getMinValue(), bevel, posn);
 	}
 
 	@Override

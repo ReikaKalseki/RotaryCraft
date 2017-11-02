@@ -145,7 +145,7 @@ public class TileEntityDefoliator extends InventoriedPowerLiquidReceiver impleme
 				}
 
 				if (world.checkChunksExist(x, y, z, x, y, z))
-					ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.getMinValue(), this, x, y, z);
+					ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.getMinValue(), world, x, y, z, 64);
 				tank.removeLiquid(1);
 			}
 		}
