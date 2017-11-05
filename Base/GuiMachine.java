@@ -125,7 +125,7 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	public boolean labelInventory() {
-		return this.getGuiTexture() != "targetgui";
+		return !this.getGuiTexture().equals("targetgui");
 	}
 
 	@Override

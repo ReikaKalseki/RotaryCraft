@@ -252,11 +252,4 @@ public class ModelChunkLoader extends RotaryModelBase
 		GL11.glPopMatrix();
 	}
 
-	private void setRotation(LODModelPart model, float x, float y, float z)
-	{
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
-	}
-
 }

@@ -12,16 +12,18 @@ package Reika.RotaryCraft.Base;
 import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
+import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.DragonAPI.Interfaces.TileModel;
 
 public abstract class RotaryModelBase extends ModelBase implements TileModel {
 
 	protected final float f5 = 0.0625F;
 	protected int pass;
+
+	private final LODModelPart boxList = new LODModelPart(this, 0, 0);
 
 	public abstract void renderAll(TileEntity te, ArrayList conditions, float phi, float theta);
 
@@ -42,10 +44,14 @@ public abstract class RotaryModelBase extends ModelBase implements TileModel {
 		this.renderAll(te, conditions, phi, 0);
 	}
 
-	protected final void setRotation(ModelRenderer model, float x, float y, float z)
-	{
+	protected final void setRotation(LODModelPart model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
+		boxList.addBox(model);
+	}
+
+	protected final void renderList(TileEntity te) {
+		boxList.render(te, f5);
 	}
 }

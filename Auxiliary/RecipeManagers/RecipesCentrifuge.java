@@ -24,6 +24,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
@@ -219,9 +222,21 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	public void addPostLoadRecipes() {
 
 		if (ModList.FORESTRY.isLoaded()) {
-			Collection<ItemStack> centrifuge = ForestryRecipeHelper.getInstance().getCentrifugeRecipes();
-			for (ItemStack in : centrifuge) {
-				ChancedOutputList out = ForestryRecipeHelper.getInstance().getRecipeOutput(in);
+			for (ItemStack in : ForestryRecipeHelper.getInstance().getSqueezerRecipes()) {
+				ImmutablePair<ChancedOutputList, FluidStack> out = ForestryRecipeHelper.getInstance().getSqueezerOutput(in);
+				ChancedOutputList co = out.left.copy();
+				co.manipulateChances(new ChanceExponentiator(2.5));
+				co.manipulateChances(new ChanceRounder());
+				FluidStack fs = out.right;
+				if (fs != null) {
+					fs = fs.copy();
+					fs.amount *= 1.25;
+				}
+				this.addRecipe(in, co, fs != null ? new FluidOut(fs, 100) : null, RecipeLevel.MODINTERACT);
+			}
+
+			for (ItemStack in : ForestryRecipeHelper.getInstance().getCentrifugeRecipes()) {
+				ChancedOutputList out = ForestryRecipeHelper.getInstance().getCentrifugeOutput(in);
 				out.manipulateChances(new ChanceExponentiator(3));
 				out.manipulateChances(new ChanceRounder());
 				this.addRecipe(in, out, null, RecipeLevel.MODINTERACT);

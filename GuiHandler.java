@@ -143,8 +143,11 @@ import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWetter;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
+import Reika.RotaryCraft.ModInterface.ContainerBundledBus;
 import Reika.RotaryCraft.ModInterface.ContainerFuelEngine;
+import Reika.RotaryCraft.ModInterface.GuiBundledBus;
 import Reika.RotaryCraft.ModInterface.GuiFuelEngine;
+import Reika.RotaryCraft.ModInterface.TileEntityBundledBus;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.Conversion.ContainerEnergyToPower;
 import Reika.RotaryCraft.ModInterface.Conversion.GuiEnergyToPower;
@@ -388,6 +391,9 @@ public class GuiHandler implements IGuiHandler {
 		if (te instanceof TileEntityMultiCannon) {
 			return new ContainerMultiCannon(player, (TileEntityMultiCannon) te);
 		}
+		if (te instanceof TileEntityBundledBus) {
+			return new ContainerBundledBus(player, (TileEntityBundledBus) te);
+		}
 
 		if (te instanceof OneSlotMachine)
 			return new OneSlotContainer(player, te);
@@ -628,6 +634,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityMultiCannon) {
 			return new GuiMultiCannon(player, (TileEntityMultiCannon) te);
+		}
+		if (te instanceof TileEntityBundledBus) {
+			return new GuiBundledBus(player, (TileEntityBundledBus) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

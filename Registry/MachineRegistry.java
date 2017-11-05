@@ -39,6 +39,7 @@ import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.ModDependency;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
@@ -76,6 +77,7 @@ import Reika.RotaryCraft.Blocks.BlockPiping;
 import Reika.RotaryCraft.Blocks.BlockShaft;
 import Reika.RotaryCraft.Blocks.BlockSolar;
 import Reika.RotaryCraft.Blocks.BlockTrans;
+import Reika.RotaryCraft.ModInterface.TileEntityBundledBus;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityBoiler;
@@ -354,7 +356,8 @@ public enum MachineRegistry implements TileEnum {
 	FILLER(				"machine.filler", 			BlockMachine.class,			TileEntityBlockFiller.class,		9),
 	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon"),
 	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway"),
-	FLAMETURRET(		"machine.flameturret",		BlockMMachine.class,		TileEntityFlameTurret.class,		22, "RenderFlameTurret");
+	FLAMETURRET(		"machine.flameturret",		BlockMMachine.class,		TileEntityFlameTurret.class,		22, "RenderFlameTurret"),
+	BUNDLEDBUS(			"machine.bundledbus",		BlockDMachine.class,		TileEntityBundledBus.class,			5, ModList.APPENG, ModList.PROJRED);
 
 	private final String name;
 	private final Class te;
@@ -363,7 +366,7 @@ public enum MachineRegistry implements TileEnum {
 	private final int meta;
 	private boolean hasRender = false;
 	private String renderClass;
-	private ModList requirement;
+	private ModDependency requirement;
 	private PowerTypes powertype;
 	private PowerReceivers receiver;
 	private TileEntity renderInstance;
@@ -384,9 +387,9 @@ public enum MachineRegistry implements TileEnum {
 		receiver = PowerReceivers.initialize(this);
 	}
 
-	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, ModList a) {
+	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, ModList... a) {
 		this(n, b, tile, m);
-		requirement = a;
+		requirement = a.length > 0 ? new ModDependency(a) : null;
 
 		receiver = PowerReceivers.initialize(this);
 	}
@@ -406,9 +409,9 @@ public enum MachineRegistry implements TileEnum {
 		receiver = PowerReceivers.initialize(this);
 	}
 
-	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, ModList a) {
+	private MachineRegistry(String n, Class<? extends Block> b, Class<? extends RotaryCraftTileEntity> tile, int m, String r, ModList... a) {
 		this(n, b, tile, m, r);
-		requirement = a;
+		requirement = a.length > 0 ? new ModDependency(a) : null;
 
 		receiver = PowerReceivers.initialize(this);
 	}
@@ -884,6 +887,7 @@ public enum MachineRegistry implements TileEnum {
 			case PIPEPUMP:
 			case CHAIN:
 			case CLUTCH:
+			case BUNDLEDBUS:
 				return true;
 			default:
 				return false;
@@ -1110,7 +1114,7 @@ public enum MachineRegistry implements TileEnum {
 		return requirement != null || powertype != null;
 	}
 
-	public ModList getModDependency() {
+	public ModDependency getModDependency() {
 		return requirement;
 	}
 

@@ -35,6 +35,7 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 		return new String[]{
 				ASMExecutor.class.getName(),
 				InterfaceVerifier.class.getName(),
+				//ModelRedirector.class.getName(),
 		};
 	}
 
@@ -56,6 +57,26 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 	@Override
 	public String getAccessTransformerClass() {
 		return null;
+	}
+
+	public static class ModelRedirector implements IClassTransformer {
+
+		@Override
+		public byte[] transform(String name, String transformedName, byte[] data) {
+			if (data == null)
+				return null;
+			ClassNode cn = new ClassNode();
+			ClassReader classReader = new ClassReader(data);
+			classReader.accept(cn, 0);
+			if (cn.name.startsWith("Reika/RotaryCraft/Models") && !cn.name.startsWith("Reika/RotaryCraft/Models/Animated")) {
+
+			}
+
+			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS/* | ClassWriter.COMPUTE_FRAMES*/);
+			cn.accept(writer);
+			return writer.toByteArray();
+		}
+
 	}
 
 	public static class InterfaceVerifier implements IClassTransformer {

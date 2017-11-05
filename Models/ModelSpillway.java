@@ -119,18 +119,18 @@ public class ModelSpillway extends RotaryModelBase
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		Shape1.render(f5);
-		Shape2a.render(f5);
-		Shape2.render(f5);
-		Shape3.render(f5);
-		Shape4.render(f5);
-		Shape5.render(f5);
-		Shape6.render(f5);
-		Shape4b.render(f5);
-		Shape2b.render(f5);
-		Shape2c.render(f5);
-		Shape2d.render(f5);
-		Shape2e.render(f5);
+		Shape1.render(te, f5);
+		Shape2a.render(te, f5);
+		Shape2.render(te, f5);
+		Shape3.render(te, f5);
+		Shape4.render(te, f5);
+		Shape5.render(te, f5);
+		Shape6.render(te, f5);
+		Shape4b.render(te, f5);
+		Shape2b.render(te, f5);
+		Shape2c.render(te, f5);
+		Shape2d.render(te, f5);
+		Shape2e.render(te, f5);
 	}
 
 }

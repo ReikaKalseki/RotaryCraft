@@ -53,18 +53,18 @@ public abstract class EnchantmentRenderer {
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		float var11 = 0;
 		switch(tile.getBlockMetadata()) {
-		case 0:
-			var11 = 180;
-			break;
-		case 1:
-			var11 = 0;
-			break;
-		case 2:
-			var11 = 270;
-			break;
-		case 3:
-			var11 = 90;
-			break;
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 0;
+				break;
+			case 2:
+				var11 = 270;
+				break;
+			case 3:
+				var11 = 90;
+				break;
 		}
 		float f11 = 0.76F;
 		GL11.glColor4f(0.5F * f11, 0.25F * f11, 0.8F * f11, 1.0F);
@@ -82,7 +82,7 @@ public abstract class EnchantmentRenderer {
 
 		double f = 0.01*0;
 		GL11.glTranslated(par2*f, par4*f, -par6*f);
-		model.renderAll(tile, li, 0, 0);
+		model.renderAll(tile, li, 0);
 
 		GL11.glTranslated(0, p, 0);
 		GL11.glScaled(1D/d, 1D/d, 1D/d);

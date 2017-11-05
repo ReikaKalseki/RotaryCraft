@@ -200,9 +200,11 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 				}
 
 				if (page == SettingType.NBT) {
-					int tx = 42;
-					int ty = 19+0*16;
-					fontRendererObj.drawString("Toggle All", tx+22, ty, 0x000000);
+					if (!display.isEmpty()) {
+						int tx = 42;
+						int ty = 19+0*16;
+						fontRendererObj.drawString("Toggle All", tx+22, ty, 0x000000);
+					}
 				}
 			}
 		}
