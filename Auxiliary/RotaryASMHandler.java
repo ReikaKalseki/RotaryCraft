@@ -18,7 +18,11 @@ import net.minecraftforge.classloading.FMLForgePlugin;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import Reika.DragonAPI.Libraries.Java.ReikaASMHelper;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
@@ -69,7 +73,13 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 			ClassReader classReader = new ClassReader(data);
 			classReader.accept(cn, 0);
 			if (cn.name.startsWith("Reika/RotaryCraft/Models") && !cn.name.startsWith("Reika/RotaryCraft/Models/Animated")) {
+				MethodNode m = ReikaASMHelper.getMethodByName(cn, "renderAll", "(Lnet/minecraft/tileentity/TileEntity;Ljava/util/ArrayList;FF)V");
+				for (int i = 0; i < m.instructions.size(); i++) {
+					AbstractInsnNode ain = m.instructions.get(i);
+					if (ain.getOpcode() == Opcodes.INVOKESTATIC && ((MethodInsnNode)ain).name.startsWith("gl")) { //animation code
 
+					}
+				}
 			}
 
 			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS/* | ClassWriter.COMPUTE_FRAMES*/);

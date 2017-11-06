@@ -72,7 +72,7 @@ public class RenderMonitor extends RotaryTERenderer
 
 		float var13;
 
-		var14.renderAll(tile, null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi);
 		if (tile.isInWorld()) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 			ReikaRenderHelper.disableEntityLighting();

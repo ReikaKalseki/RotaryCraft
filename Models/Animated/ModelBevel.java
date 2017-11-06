@@ -52,6 +52,7 @@ public class ModelBevel extends RotaryModelBase
 		textureWidth = 128;
 		textureHeight = 32;
 
+		this.setCompilable(true);
 		Shape1 = new LODModelPart(this, 0, 0);
 		Shape1.addBox(0F, 0F, 0F, 16, 1, 16);
 		Shape1.setRotationPoint(-8F, 23F, -8F);
@@ -65,6 +66,8 @@ public class ModelBevel extends RotaryModelBase
 		Shape3.mirror = true;
 		this.setRotation(Shape3, 0F, 0F, 0F);
 		Shape3.mirror = false;
+		this.setCompilable(false);
+
 		Shape12 = new LODModelPart(this, 0, 27);
 		Shape12.addBox(0F, 0F, 0F, 6, 2, 2);
 		Shape12.setRotationPoint(-8.5F, 15F, -1F);
@@ -139,6 +142,8 @@ public class ModelBevel extends RotaryModelBase
 		Shape23.setTextureSize(128, 32);
 		Shape23.mirror = true;
 		this.setRotation(Shape23, 0F, 0F, 0.7853982F);
+
+		this.setCompilable(true);
 		Shape2 = new LODModelPart(this, 66, 0);
 		Shape2.addBox(0F, 0F, 0F, 15, 15, 1);
 		Shape2.setRotationPoint(-7F, 8F, -8F);
@@ -163,17 +168,20 @@ public class ModelBevel extends RotaryModelBase
 		Shape6.setTextureSize(128, 32);
 		Shape6.mirror = true;
 		this.setRotation(Shape6, 0F, 0F, 0F);
+		this.setCompilable(false);
 	}
 
 	@Override
-	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
-	{
-		Shape1.render(te, f5);
-		Shape2.render(te, f5);
-		Shape3.render(te, f5);
-		Shape4.render(te, f5);
-		Shape5.render(te, f5);
-		Shape6.render(te, f5);
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta) {
+		//Shape1.render(te, f5);
+		//Shape2.render(te, f5);
+		//Shape3.render(te, f5);
+		//Shape4.render(te, f5);
+		//Shape5.render(te, f5);
+		//Shape6.render(te, f5);
+
+		this.renderList(te);
+
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 0, 0, 1);
 		GL11.glTranslated(0, -1, 0);

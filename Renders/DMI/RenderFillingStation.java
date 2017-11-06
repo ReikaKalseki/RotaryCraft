@@ -87,7 +87,7 @@ public class RenderFillingStation extends RotaryTERenderer
 			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
 		}
 
-		var14.renderAll(tile, null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

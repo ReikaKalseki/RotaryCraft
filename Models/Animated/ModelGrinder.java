@@ -520,10 +520,7 @@ public class ModelGrinder extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
-	{
-		double xoff = -0.25;
-		double yoff = 1.125;
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta) {
 		Shape1.render(te, f5);
 		Shape3.render(te, f5);
 		Shape3A.render(te, f5);
@@ -535,6 +532,10 @@ public class ModelGrinder extends RotaryModelBase
 		Shape5a.render(te, f5);
 		Shape6.render(te, f5);
 		Shape6a.render(te, f5);
+
+		double xoff = -0.25;
+		double yoff = 1.125;
+
 		GL11.glTranslated(xoff, yoff, 0);
 		GL11.glRotatef(-phi, 0, 0, 1);
 		GL11.glTranslated(-xoff, -yoff, 0);

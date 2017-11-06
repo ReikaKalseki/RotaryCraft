@@ -78,7 +78,7 @@ public class RenderGrinder extends RotaryTERenderer
 		// if (tile.getBlockMetadata() < 4)
 
 
-		var14.renderAll(tile, null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi);
 		// else
 		//var15.renderAll(tile, );
 		//GL11.glEnable(GL11.GL_LIGHTING);

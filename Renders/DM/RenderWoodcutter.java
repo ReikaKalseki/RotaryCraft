@@ -75,7 +75,7 @@ public class RenderWoodcutter extends RotaryTERenderer
 				GL11.glColor4f(ReikaColorAPI.getRed(c)/255F, ReikaColorAPI.getGreen(c)/255F, ReikaColorAPI.getBlue(c)/255F, 1);
 		}
 
-		var14.renderAll(tile, null, tile.phi, 0);
+		var14.renderAll(tile, null, tile.phi);
 
 		this.closeGL(tile);
 	}

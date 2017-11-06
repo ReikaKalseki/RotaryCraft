@@ -65,18 +65,18 @@ public class RenderLamp extends RotaryTERenderer
 		if (tile.isInWorld() && !tile.beammode) {
 			meta = tile.getBlockMetadata();
 			switch(meta) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			if (tile.getBlockMetadata() <= 3)
@@ -95,9 +95,9 @@ public class RenderLamp extends RotaryTERenderer
             var12 = 1.0F - var12 * var12 * var12;*/
 		// if (tile.getBlockMetadata() < 4)
 		if (tile.isInWorld() && tile.getBlockMetadata() > 3)
-			var15.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.beammode), 0, 0);
+			var15.renderAll(tile, ReikaJavaLibrary.makeListFrom(tile.beammode));
 		else
-			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(false), 0, 0);
+			var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(false));
 		// else
 		//var15.renderAll(tile, );
 		if (tile.isInWorld())

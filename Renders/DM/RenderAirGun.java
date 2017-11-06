@@ -49,18 +49,18 @@ public class RenderAirGun extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 180;
-				break;
-			case 1:
-				var11 = 0;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 180;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			if (tile.getBlockMetadata() <= 3)
@@ -73,7 +73,7 @@ public class RenderAirGun extends RotaryTERenderer
 			}
 		}
 
-		var14.renderAll(tile, null, -tile.phi, 0);
+		var14.renderAll(tile, null, -tile.phi);
 
 		this.closeGL(tile);
 	}

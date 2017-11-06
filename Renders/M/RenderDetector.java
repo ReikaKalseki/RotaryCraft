@@ -62,7 +62,7 @@ public class RenderDetector extends RotaryTERenderer
             var12 = 1.0F - var12 * var12 * var12;*/
 		// if (tile.getBlockMetadata() < 4)
 
-		var14.renderAll(tile, null, 0, 0);
+		var14.renderAll(tile, null);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

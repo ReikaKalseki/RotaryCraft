@@ -67,12 +67,12 @@ public class ModelObsidian extends RotaryModelBase
 		Shape3a.setTextureSize(128, 128);
 		Shape3a.mirror = true;
 		this.setRotation(Shape3a, 0F, 0F, 0F);
-		Shape4 = new LODModelPart(this, 64, 0);
-		Shape4.addBox(0F, 0F, 0F, 14, 1, 14);
-		Shape4.setRotationPoint(-7F, 14F, -7F);
-		Shape4.setTextureSize(128, 128);
-		Shape4.mirror = true;
-		this.setRotation(Shape4, 0F, 0F, 0F);
+		//Shape4 = new LODModelPart(this, 64, 0);
+		//Shape4.addBox(0F, 0F, 0F, 14, 1, 14);
+		//Shape4.setRotationPoint(-7F, 14F, -7F);
+		//Shape4.setTextureSize(128, 128);
+		//Shape4.mirror = true;
+		//this.setRotation(Shape4, 0F, 0F, 0F);
 		Shape5 = new LODModelPart(this, 0, 44);
 		Shape5.addBox(0F, 0F, 0F, 14, 1, 14);
 		Shape5.setRotationPoint(-7F, 12F, -7F);

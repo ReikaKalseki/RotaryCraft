@@ -93,7 +93,7 @@ public class RenderHydrator extends RotaryTERenderer
 			var14.renderSide(tile, ForgeDirection.DOWN);
 		}
 		else {
-			var14.renderAll(tile, null, 0, 0);
+			var14.renderAll(tile, null);
 		}
 
 		if (tile.isInWorld())

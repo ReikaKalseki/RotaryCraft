@@ -131,6 +131,8 @@ public class ModelPipePump extends RotaryModelBase
 		Shape4b.setTextureSize(128, 128);
 		Shape4b.mirror = true;
 		this.setRotation(Shape4b, 0F, 0F, 0F);
+
+		this.setCompilable(false);
 	}
 
 	@Override

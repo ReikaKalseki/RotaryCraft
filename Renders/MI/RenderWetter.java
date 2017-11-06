@@ -57,7 +57,7 @@ public class RenderWetter extends RotaryTERenderer {
 		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		var14.renderAll(tile, null, tile.phi, 0);
+		var14.renderAll(tile, null, tile.phi);
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

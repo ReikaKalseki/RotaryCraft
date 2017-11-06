@@ -63,7 +63,7 @@ public class RenderCaveFinder extends RotaryTERenderer {
 
 		float var13;
 
-		var14.renderAll(tile, null, 0, 0);
+		var14.renderAll(tile, null);
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

@@ -74,7 +74,7 @@ public class RenderClutch extends RotaryTERenderer
 		}
 		float var13;
 		if (tile.getBlockMetadata() < 4)
-			var14.renderAll(tile, null, -tile.phi, 0);
+			var14.renderAll(tile, null, -tile.phi);
 		else {
 			var15.renderAll(tile, null, tile.getBlockMetadata() == 5 ? tile.phi : -tile.phi, 0);
 		}

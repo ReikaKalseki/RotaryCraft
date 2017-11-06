@@ -95,12 +95,12 @@ public class ModelAerosolizer extends RotaryModelBase
 		Shape9.setTextureSize(128, 128);
 		Shape9.mirror = true;
 		this.setRotation(Shape9, 0F, 0F, 0F);
-		Shape10 = new LODModelPart(this, 0, 46);
-		Shape10.addBox(0F, 0F, 0F, 14, 1, 14);
-		Shape10.setRotationPoint(-7F, 10.5F, -7F);
-		Shape10.setTextureSize(128, 128);
-		Shape10.mirror = true;
-		this.setRotation(Shape10, 0F, 0F, 0F);
+		//Shape10 = new LODModelPart(this, 0, 46);
+		//Shape10.addBox(0F, 0F, 0F, 14, 1, 14);
+		//Shape10.setRotationPoint(-7F, 10.5F, -7F);
+		//Shape10.setTextureSize(128, 128);
+		//Shape10.mirror = true;
+		//this.setRotation(Shape10, 0F, 0F, 0F);
 		Shape11 = new LODModelPart(this, 0, 31);
 		Shape11.addBox(0F, 0F, 0F, 14, 1, 14);
 		Shape11.setRotationPoint(-7F, 11.5F, -7F);
@@ -112,7 +112,7 @@ public class ModelAerosolizer extends RotaryModelBase
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		boolean on = (Boolean)li.get(0);
+		//boolean on = (Boolean)li.get(0);
 		Shape1.render(te, f5);
 		Shape2.render(te, f5);
 		Shape3.render(te, f5);
@@ -122,8 +122,8 @@ public class ModelAerosolizer extends RotaryModelBase
 		Shape7.render(te, f5);
 		Shape8.render(te, f5);
 		Shape9.render(te, f5);
-		if (on)
-			Shape10.render(te, f5);
+		//if (on)
+		//	Shape10.render(te, f5);
 		Shape11.render(te, f5);
 	}
 
