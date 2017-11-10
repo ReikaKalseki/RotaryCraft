@@ -34,6 +34,7 @@ import Reika.DragonAPI.Instantiable.BasicModEntry;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceExponentiator;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
@@ -120,12 +121,11 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	}
 
-	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl)
-	{
+	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl) {
 		out.lock();
-		for (ItemStack isout : out.keySet())
-			if (!ReikaItemHelper.collectionContainsItemStack(outputs, isout))
-				outputs.add(isout);
+		for (ItemWithChance isout : out.keySet())
+			if (!ReikaItemHelper.collectionContainsItemStack(outputs, isout.getItem()))
+				outputs.add(isout.getItem());
 		CentrifugeRecipe rec = new CentrifugeRecipe(in, out, fs);
 		recipeList.put(in, rec);
 		this.onAddRecipe(rec, rl);
@@ -162,12 +162,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private Collection<ItemStack> getRecipeOutputs(ItemStack item) {
 		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
-		return cr != null ? cr.out.keySet() : null;
-	}
-
-	public float getItemChance(ItemStack in, ItemStack out) {
-		ChancedOutputList c = this.getRecipeResult(in);
-		return c.getItemChance(out);
+		return cr != null ? cr.out.itemSet() : null;
 	}
 
 	private FluidOut getFluidOut(ItemStack item) {
@@ -224,9 +219,14 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		if (ModList.FORESTRY.isLoaded()) {
 			for (ItemStack in : ForestryRecipeHelper.getInstance().getSqueezerRecipes()) {
 				ImmutablePair<ChancedOutputList, FluidStack> out = ForestryRecipeHelper.getInstance().getSqueezerOutput(in);
-				ChancedOutputList co = out.left.copy();
-				co.manipulateChances(new ChanceExponentiator(2.5));
-				co.manipulateChances(new ChanceRounder());
+				ChancedOutputList co = out.left != null ? out.left.copy() : null;
+				if (co != null) {
+					co.manipulateChances(new ChanceExponentiator(2.5));
+					co.manipulateChances(new ChanceRounder());
+				}
+				else {
+					co = new ChancedOutputList(false);
+				}
 				FluidStack fs = out.right;
 				if (fs != null) {
 					fs = fs.copy();

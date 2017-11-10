@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import gregapi.data.TD.ItemGenerator;
+import gregapi.oredict.OreDictMaterial;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,9 +24,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -389,6 +394,32 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 					ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
 					this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, n), RecipeLevel.CORE);
 					RotaryCraft.logger.log("Adding "+(n)+"x grinder recipe for "+ore+" ore "+is);
+				}
+			}
+		}
+
+		if (ModList.GREGTECH.isLoaded()) {
+			this.loadGTOres();
+		}
+	}
+
+	@ModDependent(ModList.GREGTECH)
+	private void loadGTOres() {
+		for (OreDictMaterial mat : OreDictMaterial.MATERIAL_MAP.values()) {
+			if (mat.contains(ItemGenerator.ORES)) {
+				String oreName = "ore"+mat.mNameInternal;
+				OreType ore = ReikaOreHelper.getEntryFromOreName(oreName);
+				if (ore == null)
+					ore = ModOreList.getByOreName(oreName);
+				if (ore != null) {
+					int n = ore_rate*mat.mOreMultiplier;
+					ItemStack flake = ore instanceof ReikaOreHelper ? ItemRegistry.EXTRACTS.getCraftedMetadataProduct(n, 24+ore.ordinal()) : ExtractorModOres.getFlakeProduct((ModOreList)ore);
+					flake.stackSize = n;
+					ItemStack is = null;
+					if (is != null) {
+						this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, n), RecipeLevel.CORE);
+						RotaryCraft.logger.log("Adding "+(n)+"x grinder recipe for GT ore "+ore+" "+mat);
+					}
 				}
 			}
 		}

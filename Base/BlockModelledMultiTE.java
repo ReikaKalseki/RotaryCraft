@@ -30,6 +30,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Renders.MachineISBRH;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import cpw.mods.fml.relauncher.Side;
@@ -43,7 +44,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 
 	@Override
 	public final int getRenderType() {
-		return RotaryCraft.instance.isLocked() || OldTextureLoader.instance.loadOldTextures() ? 0 : -1;
+		return RotaryCraft.instance.isLocked() || OldTextureLoader.instance.loadOldTextures() ? 0 : MachineISBRH.renderID;
 	}
 
 	@Override
@@ -62,8 +63,7 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	}
 
 	@Override
-	public int getLightOpacity(IBlockAccess world, int x, int y, int z)
-	{
+	public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
 		return 0; //out of 255
 	}
 

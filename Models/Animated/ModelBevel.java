@@ -173,14 +173,17 @@ public class ModelBevel extends RotaryModelBase
 
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta) {
-		//Shape1.render(te, f5);
-		//Shape2.render(te, f5);
-		//Shape3.render(te, f5);
-		//Shape4.render(te, f5);
-		//Shape5.render(te, f5);
-		//Shape6.render(te, f5);
-
-		this.renderList(te);
+		if (LODModelPart.allowCompiling) {
+			this.renderList(te);
+		}
+		else {
+			Shape1.render(te, f5);
+			Shape2.render(te, f5);
+			Shape3.render(te, f5);
+			Shape4.render(te, f5);
+			Shape5.render(te, f5);
+			Shape6.render(te, f5);
+		}
 
 		GL11.glTranslated(0, 1, 0);
 		GL11.glRotatef(phi, 0, 0, 1);

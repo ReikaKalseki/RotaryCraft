@@ -222,7 +222,9 @@ public class ClientProxy extends CommonProxy
 				MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), machineItems);
 			}
 		}
-		//MinecraftForgeClient.registerItemRenderer(RotaryCraft.hydraulicitems.itemID, machineItems);
+
+		//MachineISBRH.renderID = RenderingRegistry.getNextAvailableRenderId();
+		//RenderingRegistry.registerBlockHandler(MachineISBRH.renderID, new MachineISBRH());
 	}
 
 

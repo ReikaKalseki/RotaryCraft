@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
 import Reika.DragonAPI.Instantiable.ModInteract.PositionedStackWithTooltip;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
@@ -59,16 +60,16 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		{
 			List<PositionedStack> pos = new ArrayList();
 			ChancedOutputList c = RecipesCentrifuge.getRecipes().getRecipeResult(input);
-			Collection<ItemStack> li = c.keySet();
+			Collection<ItemWithChance> li = c.keySet();
 
 			int dx = 80;
 			int dy = 10;
 			int i = 0;
-			for (ItemStack is : li) {
+			for (ItemWithChance is : li) {
 				int x = dx+i%3*18;
 				int y = dy+i/3*18;
-				String tip = String.format("%.2f%s chance", c.getItemChance(is), "%");
-				pos.add(new PositionedStackWithTooltip(is, x, y, tip));
+				String tip = String.format("%.2f%s chance", is.getChance(), "%");
+				pos.add(new PositionedStackWithTooltip(is.getItem(), x, y, tip));
 				i++;
 			}
 			return pos;

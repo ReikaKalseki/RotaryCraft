@@ -521,10 +521,10 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		@SideOnly(Side.CLIENT)
 		private void doParticles(World world) {
 			for (ColumnAction ca : effectMap.allValues(false)) {
-				if (ca.doDripParticles && rand.nextInt(12) == 0) {
+				if (ca.doDripParticles && rand.nextInt(8) == 0) {
 					ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord, ca.zCoord+rand.nextDouble());
 				}
-				if (ca.doDripParticlesUp && rand.nextInt(12) == 0) {
+				if (ca.doDripParticlesUp && rand.nextInt(8) == 0) {
 					ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord+0.9375, ca.zCoord+rand.nextDouble());
 				}
 				if (ca.doSplashParticles) {

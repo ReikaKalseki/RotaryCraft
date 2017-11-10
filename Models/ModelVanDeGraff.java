@@ -98,7 +98,6 @@ public class ModelVanDeGraff extends RotaryModelBase
 	@Override
 	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
 	{
-		/*
 		Shape1.render(te, f5);
 		Shape2.render(te, f5);
 		Shape3.render(te, f5);
@@ -108,8 +107,6 @@ public class ModelVanDeGraff extends RotaryModelBase
 		Shape5.render(te, f5);
 		Shape6.render(te, f5);
 		Shape6a.render(te, f5);
-		 */
-		this.renderList(te);
 	}
 
 	@Override

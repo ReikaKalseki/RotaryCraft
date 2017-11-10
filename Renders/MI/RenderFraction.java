@@ -17,12 +17,14 @@ import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
+import Reika.RotaryCraft.Base.RotaryModelBase;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelFraction;
+import Reika.RotaryCraft.Renders.MachineISBRH.StaticModelRenderer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 
-public class RenderFraction extends RotaryTERenderer
+public class RenderFraction extends RotaryTERenderer implements StaticModelRenderer
 {
 	private ModelFraction FractionModel = new ModelFraction();
 
@@ -66,5 +68,10 @@ public class RenderFraction extends RotaryTERenderer
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		return "fractex.png";
+	}
+
+	@Override
+	public RotaryModelBase getModel() {
+		return FractionModel;
 	}
 }

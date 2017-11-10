@@ -9,10 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
+import ic2.api.reactor.IReactor;
+import ic2.api.reactor.IReactorChamber;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -30,22 +34,40 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 
 	public FinSettings setting = FinSettings.FULL;
 
+	private static final Interpolation reactorTemperatureEfficiency = new Interpolation(false);
+
 	public static enum FinSettings {
 		FULL(20),
 		HALF(40),
 		QUARTER(80);
 
 		public final int tickRate;
+		public final float rawMultiplier;
 
 		private static final FinSettings[] list = values();
 
 		private FinSettings(int n) {
 			tickRate = n;
+			rawMultiplier = 20F/tickRate;
 		}
 
 		public FinSettings next() {
 			return this.ordinal() == list.length-1 ? list[0] : list[this.ordinal()+1];
 		}
+	}
+
+	static {
+		reactorTemperatureEfficiency.addPoint(-273, 4);
+		reactorTemperatureEfficiency.addPoint(-100, 3);
+		reactorTemperatureEfficiency.addPoint(-25, 2.5);
+		reactorTemperatureEfficiency.addPoint(0, 2);
+		reactorTemperatureEfficiency.addPoint(15, 1.5);
+		reactorTemperatureEfficiency.addPoint(25, 1.25);
+		reactorTemperatureEfficiency.addPoint(50, 1);
+		reactorTemperatureEfficiency.addPoint(80, 0.75);
+		reactorTemperatureEfficiency.addPoint(100, 0.5);
+		reactorTemperatureEfficiency.addPoint(250, 0.25);
+		reactorTemperatureEfficiency.addPoint(500, 0.125);
 	}
 
 	@Override
@@ -61,7 +83,8 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 			temperature++;
 		}
 		else {
-			temperature--;
+			//temperature -= Math.max(1, (temperature-Tamb)/16);
+			temperature = Math.max(Tamb, temperature-2);
 		}
 	}
 
@@ -90,11 +113,14 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 		if (ticks > 0)
 			ticks -= 8;
 		this.getTargetSide(world, x, y, z, meta);
+		TileEntity te = world.getTileEntity(targetx, targety, targetz);
+		if (!world.isRemote && ModList.IC2.isLoaded() && (te instanceof IReactor || te instanceof IReactorChamber)) {
+			this.coolIC2Reactor(world, x, y, z, te);
+		}
 		if (tickcount < setting.tickRate)
 			return;
 		tickcount = 0;
 		this.updateTemperature(world, x, y, z, meta);
-		TileEntity te = world.getTileEntity(targetx, targety, targetz);
 		if (te instanceof TemperatureTE) {
 			TemperatureTE tr = (TemperatureTE)te;
 			if (tr.canBeCooledWithFins()) {
@@ -104,6 +130,24 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 					tr.addTemperature(-1);
 				}
 			}
+		}
+	}
+
+	private void coolIC2Reactor(World world, int x, int y, int z, Object te) {
+		if (this.getTicksExisted()%20 != 0)
+			return;
+		if (te instanceof IReactorChamber) {
+			te = ((IReactorChamber)te).getReactor();
+		}
+		IReactor r = (IReactor)te;
+		int h = r.getHeat();
+		if (h > 0) {
+			int rem = Math.max(1, (int)Math.min(20*setting.rawMultiplier*reactorTemperatureEfficiency.getValue(temperature), h));
+			//ReikaJavaLibrary.pConsole(temperature+" > "+reactorTemperatureEfficiency.getValue(temperature));
+			r.addHeat(-rem); //20 == 4x 1 reactor heat vent
+			int net = 500*h/r.getMaxHeat();
+			//ReikaJavaLibrary.pConsole(h+" of "+r.getMaxHeat()+" > "+net);
+			temperature += Math.max(1, Math.min(net-temperature, rem));
 		}
 	}
 
@@ -168,19 +212,19 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setInteger("tick", ticks);
 		NBT.setInteger("setting", setting.ordinal());
+		NBT.setInteger("temp", temperature);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		ticks = NBT.getInteger("tick");
 		setting = FinSettings.list[NBT.getInteger("setting")];
+		temperature = NBT.getInteger("temp");
 	}
 
 	@Override

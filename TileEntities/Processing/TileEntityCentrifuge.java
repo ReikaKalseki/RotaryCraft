@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.TemporaryInventory;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -84,19 +85,19 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 
 			if (multiple || progressTime >= this.getOperationTime()) {
 				ChancedOutputList out = RecipesCentrifuge.getRecipes().getRecipeResult(in);
-				Collection<ItemStack> items = out.keySet();
+				Collection<ItemWithChance> items = out.keySet();
 				if (this.canMakeAllOf(items)) {
 					FluidStack fs = RecipesCentrifuge.getRecipes().getFluidResult(in);
 					if (fs == null || tank.canTakeIn(fs)) {
-						for (ItemStack is : items) {
+						for (ItemWithChance is : items) {
 							//ReikaInventoryHelper.addOrSetStack(out.get(i).copy(), inv, i+1);
-							double ch = out.getNormalizedItemChance(is);
+							double ch = is.getNormalizedChance();
 							while (ch >= 1) {
-								ReikaInventoryHelper.addToIInv(is, this, true, 1, this.getSizeInventory());
+								ReikaInventoryHelper.addToIInv(is.getItem(), this, true, 1, this.getSizeInventory());
 								ch -= 1.0D;
 							}
 							if (ReikaRandomHelper.doWithChance(ch)) {
-								ReikaInventoryHelper.addToIInv(is, this, true, 1, this.getSizeInventory());
+								ReikaInventoryHelper.addToIInv(is.getItem(), this, true, 1, this.getSizeInventory());
 							}
 						}
 						if (fs != null)
@@ -112,7 +113,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 		}
 	}
 
-	private boolean canMakeAllOf(Collection<ItemStack> out) {
+	private boolean canMakeAllOf(Collection<ItemWithChance> out) {
 		if (out.size() > 9)
 			return ReikaInventoryHelper.isEmptyFrom(this, 1, 9);
 		IInventory temp = new TemporaryInventory(9);
@@ -121,8 +122,8 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 			if (in != null)
 				temp.setInventorySlotContents(i, in.copy());
 		}
-		for (ItemStack is : out) {
-			if (!ReikaInventoryHelper.addToIInv(is.copy(), temp))
+		for (ItemWithChance is : out) {
+			if (!ReikaInventoryHelper.addToIInv(is.getItem(), temp))
 				return false;
 		}
 		return true;

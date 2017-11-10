@@ -26,8 +26,8 @@ public class ContainerBundledBus extends CoreContainer {
 		tile = te;
 
 		for (int i = 0; i < tile.NSLOTS; i++) {
-			int dx = 50+(i%4)*22;
-			int dy = 19+(i/4)*22;
+			int dx = 50+(i%4)*20;
+			int dy = 19+(i/4)*20;
 			this.addSlotToContainer(new GhostSlot(i, dx, dy));
 		}
 

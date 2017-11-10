@@ -18,13 +18,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.DragonAPI.Interfaces.TileModel;
+import Reika.RotaryCraft.RotaryCraft;
 
 public abstract class RotaryModelBase extends ModelBase implements TileModel {
+
+	public static boolean allowRendering = true;
 
 	protected final float f5 = 0.0625F;
 	protected int pass;
 
-	private boolean canBeCompiled = this.calcDefaultCompilability();
+	private boolean canBeCompiled = LODModelPart.allowCompiling && this.calcDefaultCompilability();
 
 	private final ArrayList<LODModelPart> renderGroups = new ArrayList();
 
@@ -40,7 +43,7 @@ public abstract class RotaryModelBase extends ModelBase implements TileModel {
 	}
 
 	public void setCompilable(boolean flag) {
-		canBeCompiled = flag;
+		canBeCompiled = LODModelPart.allowCompiling && flag;
 	}
 
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f6) {}
@@ -53,6 +56,8 @@ public abstract class RotaryModelBase extends ModelBase implements TileModel {
 	}
 
 	public final void renderAll(TileEntity te, ArrayList conditions, float phi) {
+		if (!allowRendering)
+			return;
 		if (canBeCompiled && phi == 0 && !GuiScreen.isCtrlKeyDown() && (conditions == null || conditions.isEmpty())) {
 			this.renderList(te);
 		}
@@ -77,6 +82,9 @@ public abstract class RotaryModelBase extends ModelBase implements TileModel {
 	}
 
 	protected final void renderList(TileEntity te) {
+		if (!LODModelPart.allowCompiling) {
+			RotaryCraft.logger.logError("Attempt to call compiled model for tile "+te+" without compiling enabled!");
+		}
 		for (LODModelPart part : renderGroups)
 			part.render(te, f5);
 	}
