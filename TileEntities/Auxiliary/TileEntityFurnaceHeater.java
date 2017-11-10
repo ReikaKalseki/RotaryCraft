@@ -20,10 +20,12 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.TransvectorHandler;
 import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -80,7 +82,6 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (m != null && m.canBeFrictionHeated())
 			return true;
 		TileEntity te = this.getTileEntity(fx, fy, fz);
-		/*
 		if (ModList.THAUMICTINKER.isLoaded()) {
 			TileEntity relay = TransvectorHandler.getRelayedTile(te);
 			while (relay != te && relay != null) {
@@ -94,7 +95,6 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 				fz = te.zCoord;
 			}
 		}
-		 */
 		return te instanceof ThermalMachine;
 	}
 
