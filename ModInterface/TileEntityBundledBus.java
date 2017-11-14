@@ -226,7 +226,8 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 
 	public void setMapping(int slot, ItemStack is) {
 		filter[slot] = is;
-		this.buildCallbacks();
+		if (ModList.APPENG.isLoaded())
+			this.buildCallbacks();
 		this.syncAllData(true);
 	}
 

@@ -344,24 +344,26 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	}
 
 	private void buildCallbacks() {
-		network.clearCallbacks();
-		for (int i = 0; i < SIZE; i++) {
-			ItemStack pattern = inv[i];
-			if (this.isItemValidForSlot(i, pattern)) {
-				ItemStack[] in = this.getIngredients(pattern);
-				for (int k = 0; k < in.length; k++) {
-					if (in[k] != null)
-						network.addCallback(in[k], this);
+		if (network != null) {
+			network.clearCallbacks();
+			for (int i = 0; i < SIZE; i++) {
+				ItemStack pattern = inv[i];
+				if (this.isItemValidForSlot(i, pattern)) {
+					ItemStack[] in = this.getIngredients(pattern);
+					for (int k = 0; k < in.length; k++) {
+						if (in[k] != null)
+							network.addCallback(in[k], this);
+					}
+					ItemStack out = this.getSlotRecipeOutput(i);
+					network.addCallback(out, this);
 				}
-				ItemStack out = this.getSlotRecipeOutput(i);
-				network.addCallback(out, this);
 			}
 		}
 	}
 
 	@Override
 	protected void onInventoryChanged(int slot) {
-		if (network != null)
+		if (ModList.APPENG.isLoaded())
 			this.buildCallbacks();
 	}
 

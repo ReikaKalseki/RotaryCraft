@@ -44,6 +44,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.GregOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
@@ -928,7 +929,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 		@Override
 		protected final boolean isLoadable() {
-			return ModList.GREGTECH.isLoaded();
+			return ModList.GREGTECH.isLoaded() && !GregOreHandler.getInstance().isGreg6();
 		}
 
 		@Override
