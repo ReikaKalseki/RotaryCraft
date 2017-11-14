@@ -263,7 +263,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 				if (hasWork) {
 					//ReikaJavaLibrary.pConsole("Executing tick");
 					mode.tick(this);
-					hasWork = false;
+					if (ModList.APPENG.isLoaded())
+						hasWork = false;
 				}
 				this.injectItems();
 			}
