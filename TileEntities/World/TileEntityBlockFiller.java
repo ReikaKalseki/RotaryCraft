@@ -241,4 +241,9 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 		return mat == Material.rock ? 2048 : 1024;
 	}
 
+	@Override
+	protected boolean allowFluidOverwrite() {
+		return true;
+	}
+
 }

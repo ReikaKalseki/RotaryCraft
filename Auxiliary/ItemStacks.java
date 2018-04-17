@@ -21,7 +21,6 @@ import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -258,12 +257,20 @@ public final class ItemStacks {
 		return ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal());
 	}
 
-	public static ItemStack getFlake(ReikaOreHelper ore) {
-		return ItemRegistry.EXTRACTS.getStackOfMetadata(ore.ordinal());
+	public static ItemStack getDust(ReikaOreHelper ore) {
+		return ItemRegistry.EXTRACTS.getStackOfMetadata(+ore.ordinal());
 	}
 
-	public static ItemStack getFlake(ModOreList ore) {
-		return ExtractorModOres.getFlakeProduct(ore);
+	public static ItemStack getSlurry(ReikaOreHelper ore) {
+		return ItemRegistry.EXTRACTS.getStackOfMetadata(ReikaOreHelper.oreList.length+ore.ordinal());
+	}
+
+	public static ItemStack getSolution(ReikaOreHelper ore) {
+		return ItemRegistry.EXTRACTS.getStackOfMetadata(ReikaOreHelper.oreList.length*2+ore.ordinal());
+	}
+
+	public static ItemStack getFlake(ReikaOreHelper ore) {
+		return ItemRegistry.EXTRACTS.getStackOfMetadata(ReikaOreHelper.oreList.length*3+ore.ordinal());
 	}
 
 	/** In nuggets. *//*

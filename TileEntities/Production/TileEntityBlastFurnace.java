@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,6 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -63,6 +65,9 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 	private final StepTimer tempTimer = new StepTimer(20);
 
+	public boolean[] lockedSlots = new boolean[inv.length];
+	public boolean leaveLastItem;
+
 	@Override
 	protected int getActiveTexture() {
 		return this.getRecipe() != null || this.getCrafting() != null ? 1 : 0;
@@ -88,6 +93,14 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		out = ReikaItemHelper.getSizedItemStack(out, num);
 		if (!this.checkCanMakeItem(out))
 			return null;
+
+		if (leaveLastItem) {
+			for (int i = 1; i <= 9; i++) {
+				if (inv[i] != null && inv[i].stackSize == 1)
+					return null;
+			}
+		}
+
 		return rec;
 	}
 
@@ -365,21 +378,25 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setInteger("melt", smeltTime);
 		NBT.setInteger("temp", temperature);
 		NBT.setFloat("exp", xp);
+
+		NBT.setInteger("locks", ReikaArrayHelper.booleanToBitflags(lockedSlots));
+		NBT.setBoolean("last", leaveLastItem);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		smeltTime = NBT.getInteger("melt");
 		temperature = NBT.getInteger("temp");
 		xp = NBT.getFloat("exp");
+
+		lockedSlots = ReikaArrayHelper.booleanFromBitflags(NBT.getInteger("locks"), inv.length);
+		leaveLastItem = NBT.getBoolean("last");
 	}
 
 	@Override
@@ -392,24 +409,24 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		if (ItemRegistry.CRAFTPATTERN.matchItem(patt) && slot >= 1 && slot <= 9) {
 			return ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot-1, is, patt);
 		}
+		//ReikaJavaLibrary.pConsole(slot+": "+lockedSlots[slot]);
+		if (lockedSlots[slot])
+			return false;
 		HashSet<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
 		if (!slots.isEmpty()) {
 			return slots.contains(slot);
 		}
 
-		int type = RecipesBlastFurnace.getRecipes().getInputTypeForItem(is);
-		switch (type) {
-			case 0:
-				return slot >= 1 && slot <= 9;
-			case 1:
-				return slot == SLOT_1;
-			case 2:
-				return slot == SLOT_2;
-			case 3:
-				return slot == SLOT_3;
-			default:
-				return false;
-		}
+		Set<Integer> types = RecipesBlastFurnace.getRecipes().getInputTypesForItem(is);
+		if (slot >= 1 && slot <= 9)
+			return types.contains(0);
+		if (slot == SLOT_1)
+			return types.contains(1);
+		if (slot == SLOT_2)
+			return types.contains(2);
+		if (slot == SLOT_3)
+			return types.contains(3);
+		return false;
 	}
 
 	@Override

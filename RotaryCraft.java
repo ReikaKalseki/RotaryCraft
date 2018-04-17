@@ -451,6 +451,12 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.silumin, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.UPGRADE.getItemInstance(), true);
 
+		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.aluminumcylinder, false);
+		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedrockdrill, false);
+		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.highcombustor, false);
+		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.compoundturb, false);
+		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.compoundcompress, false);
+
 		if (MTInteractionManager.isMTLoaded()) {
 			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.BLASTFURNACE.getCraftedProduct());
 			MTInteractionManager.instance.blacklistRecipeRemovalFor(MachineRegistry.WORKTABLE.getCraftedProduct());

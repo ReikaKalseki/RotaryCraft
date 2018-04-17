@@ -135,9 +135,9 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 			}
 
 			if (true) {
-				ItemStack bonus = ExtractorBonus.getBonusItemForIngredient(this.getSolution());
+				ExtractorBonus bonus = ExtractorBonus.getBonusForIngredient(this.getSolution());
 				if (bonus != null) {
-					stacks.add(new PositionedStack(bonus, 147, 44));
+					stacks.add(new PositionedStack(bonus.getBonusItem(), 147, 44));
 				}
 			}
 			return stacks;
@@ -149,19 +149,19 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 
 		private Object getItem(int x, int y) {
 			switch(x+y*4) {
-			case 0:
-				return oreBlock.get(this.getTick());
-			case 1:
-			case 4:
-				return this.getDust();
-			case 2:
-			case 5:
-				return this.getSlurry();
-			case 3:
-			case 6:
-				return this.getSolution();
-			default:
-				return new ItemStack(Blocks.fire);
+				case 0:
+					return oreBlock.get(this.getTick());
+				case 1:
+				case 4:
+					return this.getDust();
+				case 2:
+				case 5:
+					return this.getSlurry();
+				case 3:
+				case 6:
+					return this.getSolution();
+				default:
+					return new ItemStack(Blocks.fire);
 			}
 		}
 
@@ -292,7 +292,7 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 		ItemStack is = ((ExtractorRecipe)arecipes.get(recipe)).getSolution();
 		ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(is);
 		if (bon != null) {
-			ItemStack bonus = ExtractorBonus.getBonusItemForIngredient(is);
+			ExtractorBonus bonus = ExtractorBonus.getBonusForIngredient(is);
 			if (bonus != null) {
 				String s = String.format("%.2f%s", bon.getBonusPercent(), "%");
 				ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, s, 157, 34, 0);

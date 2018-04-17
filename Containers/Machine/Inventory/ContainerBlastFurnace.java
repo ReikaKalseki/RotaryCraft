@@ -55,11 +55,22 @@ public class ContainerBlastFurnace extends CoreContainer
 	}
 
 	@Override
-	public ItemStack slotClick(int ID, int par2, int par3, EntityPlayer ep) {
-		ItemStack is = super.slotClick(ID, par2, par3, ep);
-		if (ID < blast.getSizeInventory() && (ID == 10 || ID == 13 || ID == 12)) {
-			if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, is)) {
-				RotaryAchievements.MAKESTEEL.triggerAchievement(ep);
+	public ItemStack slotClick(int ID, int mouse, int action, EntityPlayer ep) {
+		if (ID >= 0 && ID < blast.getSizeInventory()) {
+			if (inventorySlots.get(ID).getClass() == Slot.class) {
+				if (mouse == 2) {
+					blast.lockedSlots[ID] = !blast.lockedSlots[ID];
+					blast.syncAllData(false);
+					return null; //prevent creative item dupe
+				}
+			}
+		}
+		ItemStack is = super.slotClick(ID, mouse, action, ep);
+		if (ID >= 0 && ID < blast.getSizeInventory()) {
+			if (ID == 10 || ID == 13 || ID == 12) {
+				if (ReikaItemHelper.matchStacks(ItemStacks.steelingot, is)) {
+					RotaryAchievements.MAKESTEEL.triggerAchievement(ep);
+				}
 			}
 		}
 		return is;

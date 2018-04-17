@@ -73,8 +73,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		if (f == null)
 			return;
 		if (blocks.isEmpty()) {
-			blocks.setLiquid(idbelow.getMaterial());
-			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, y-2, z-16, x+16, y-1, z+16);
+			blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-16, y-2, z-16, x+16, y-1, z+16, f);
 			blocks.reverseBlockOrder();
 		}
 		if (damage > 400)

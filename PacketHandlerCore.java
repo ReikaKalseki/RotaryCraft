@@ -60,6 +60,7 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
@@ -603,6 +604,9 @@ public class PacketHandlerCore implements PacketHandler {
 					break;
 				case SPRINKLER:
 					((TileEntitySprinkler)te).doParticle(world, data[0], data[1], data[2], data[3] > 0);
+					break;
+				case BLASTLEAVEONE:
+					((TileEntityBlastFurnace)te).leaveLastItem = data[0] > 0;
 					break;
 			}
 		}

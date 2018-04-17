@@ -56,6 +56,8 @@ public abstract class TileEntityAreaFiller extends TileEntityPowerReceiver imple
 					int r = ConfigRegistry.SPILLERRANGE.getValue();
 					if (r > 0) {
 						blocks.recursiveAddWithBounds(world, x, y-1, z, Blocks.air, x-r, 0, z-r, x+r, y-1, z+r);
+						if (this.allowFluidOverwrite())
+							blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-r, 0, z-r, x+r, y-1, z+r, null);
 						if (ReikaBlockHelper.isLiquid(bk.blockID))
 							blocks.recursiveAddWithBoundsNoFluidSource(world, x, y-1, z, bk.blockID, x-r, 0, z-r, x+r, y-1, z+r);
 					}
@@ -84,6 +86,8 @@ public abstract class TileEntityAreaFiller extends TileEntityPowerReceiver imple
 			//blocks.clear();
 		}
 	}
+
+	protected abstract boolean allowFluidOverwrite();
 
 	protected abstract long getRequiredPower();
 

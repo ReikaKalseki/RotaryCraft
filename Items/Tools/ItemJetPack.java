@@ -144,7 +144,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 			}
 		}
 
-		if (flying && world.difficultySetting != EnumDifficulty.PEACEFUL && itemRand.nextInt(4) == 0) {
+		if (flying && fuel && world.difficultySetting != EnumDifficulty.PEACEFUL && itemRand.nextInt(4) == 0) {
 			int x = MathHelper.floor_double(player.posX);
 			int y = MathHelper.floor_double(player.posY);
 			int z = MathHelper.floor_double(player.posZ);

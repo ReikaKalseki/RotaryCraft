@@ -44,14 +44,14 @@ public class RecipesExtractor
 		for (int i = 0; i < 24; i++)
 			this.addRecipe(ItemRegistry.EXTRACTS.getStackOfMetadata(i), ItemRegistry.EXTRACTS.getStackOfMetadata(i+8));
 
-		this.addRecipe(Blocks.coal_ore, 0, ItemStacks.getFlake(ReikaOreHelper.COAL));
-		this.addRecipe(Blocks.iron_ore, 0, ItemStacks.getFlake(ReikaOreHelper.IRON));
-		this.addRecipe(Blocks.gold_ore, 0, ItemStacks.getFlake(ReikaOreHelper.GOLD));
-		this.addRecipe(Blocks.redstone_ore, 0, ItemStacks.getFlake(ReikaOreHelper.REDSTONE));
-		this.addRecipe(Blocks.lapis_ore, 0, ItemStacks.getFlake(ReikaOreHelper.LAPIS));
-		this.addRecipe(Blocks.diamond_ore, 0, ItemStacks.getFlake(ReikaOreHelper.DIAMOND));
-		this.addRecipe(Blocks.emerald_ore, 0, ItemStacks.getFlake(ReikaOreHelper.EMERALD));
-		this.addRecipe(Blocks.quartz_ore, 0, ItemStacks.getFlake(ReikaOreHelper.QUARTZ));
+		this.addRecipe(Blocks.coal_ore, 0, ItemStacks.getDust(ReikaOreHelper.COAL));
+		this.addRecipe(Blocks.iron_ore, 0, ItemStacks.getDust(ReikaOreHelper.IRON));
+		this.addRecipe(Blocks.gold_ore, 0, ItemStacks.getDust(ReikaOreHelper.GOLD));
+		this.addRecipe(Blocks.redstone_ore, 0, ItemStacks.getDust(ReikaOreHelper.REDSTONE));
+		this.addRecipe(Blocks.lapis_ore, 0, ItemStacks.getDust(ReikaOreHelper.LAPIS));
+		this.addRecipe(Blocks.diamond_ore, 0, ItemStacks.getDust(ReikaOreHelper.DIAMOND));
+		this.addRecipe(Blocks.emerald_ore, 0, ItemStacks.getDust(ReikaOreHelper.EMERALD));
+		this.addRecipe(Blocks.quartz_ore, 0, ItemStacks.getDust(ReikaOreHelper.QUARTZ));
 
 		this.addModRecipes();
 	}

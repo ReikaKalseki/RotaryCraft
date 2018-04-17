@@ -25,6 +25,8 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class OldTextureLoader {
 
@@ -72,7 +74,7 @@ public class OldTextureLoader {
 		if (time-cachedLoadTime > 60000) {
 			Calendar c = Calendar.getInstance();
 			boolean flag = c.get(Calendar.MONTH) == Calendar.APRIL && c.get(Calendar.DAY_OF_MONTH) <= 2;
-			if (flag != cachedLoadState) {
+			if (flag != cachedLoadState && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 				ReikaRenderHelper.rerenderAllChunks();
 			}
 			cachedLoadTime = time;

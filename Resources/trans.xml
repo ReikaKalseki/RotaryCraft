@@ -29,7 +29,7 @@
 		Flywheels store rotational kinetic energy. They take some time to spin up to the input speed, but when they do, they keep spinning for some time, providing a more steady power output to a machine than a shaft hooked up to a varying input. Heavier materials make better, more efficient - and more powerful - flywheels, but take more torque to start moving. Spinning one of these too rapidly will result in a violent and destructive failure. Flywheel deceleration is based on the torque requirement of what they are running. Unconnected, they spin forever.
 	</flywheel>
 	<worm>
-		The worm gear is a fast way to increase shaft torque without using a large number of intermediate gears, creating an equivalent 16:1 ratio. However, worm gears are inefficient and will lose some of their power, leading to a much slower output speed. This loss rate goes up as the input speed does.
+		The worm gear is a fast way to increase shaft torque without using a large number of intermediate gears, creating an equivalent %d:1 ratio with comparatively low material or space requirements. However, worm gears are inefficient and will lose some of their power, leading to a much slower output speed. This loss rate goes up as the input speed does.
 	</worm>
 	<cvt>
 		A CVT (continuously variable transmission) Unit is essentially a dynamic gearbox. Rather than using toothed wheels, it uses a series of belts to change the gear ratio. This gives them the advantage of being efficient and highly flexible, allowing you to select the desired gear ratio on demand. Note that higher ratios require more belts, with each power of 2 doubling the maximum ratio (capped at 32:1). This machine also requires lubricant, but will not consume it.

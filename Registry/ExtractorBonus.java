@@ -21,10 +21,14 @@ import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
+import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 
 public enum ExtractorBonus {
 
@@ -114,15 +118,35 @@ public enum ExtractorBonus {
 		RotaryCraft.logger.log("Adding extractor bonus "+this.toString());
 	}
 
+	public static void addCustomOreDelegate(CustomExtractEntry cus) {
+		OreType base = cus.nativeOre;
+		if (base == null)
+			return;
+
+		ItemStack out = null;
+		if (base instanceof ReikaOreHelper)
+			out = ItemStacks.getSolution((ReikaOreHelper)base);
+		else if (base instanceof ModOreList)
+			out = ExtractorModOres.getSolutionProduct((ModOreList)base);
+		else
+			RotaryCraft.logger.logError("Could not map custom extract "+cus.displayName+" to "+base.name()+"; does not have a recognized ore type.");
+
+		registerAlias(ItemCustomModOre.getItem(cus.ordinal, ExtractorStage.SOLUTION), out);
+	}
+
+	private static void registerAlias(ItemStack is, ItemStack imi) {
+		ExtractorBonus b = getBonusForIngredient(imi);
+		if (b == null) {
+			throw new IllegalArgumentException("Registering an item "+is+" as an alias of unmapped item "+imi+"!");
+		}
+		mapBonus(is, b.getBonusItem(), b);
+	}
+
 	public static ExtractorBonus getBonusForIngredient(ItemStack is) {
 		return bonusmap.get(is);
 	}
 
-	public static ItemStack getBonusItemForIngredient(ItemStack is) {
-		return itemmap.get(is);
-	}
-
-	private ItemStack getBonus() {
+	public ItemStack getBonusItem() {
 		if (hasReq && !requirementMod.isLoaded())
 			return null;
 		if (isVariable) {
@@ -195,21 +219,24 @@ public enum ExtractorBonus {
 		return backwards.containsKey(ore);
 	}
 
+	private static void mapBonus(ItemStack src, ItemStack bon, ExtractorBonus b) {
+		OreType in = ExtractorModOres.getOreFromExtract(src);
+		OreType out = ExtractorModOres.getOreFromExtract(bon);
+		oremap.put(in, out);
+		backwards.addValue(out, in);
+		itemmap.put(src, bon);
+		bonusmap.put(src, b);
+	}
+
 	static {
 		for (int i = 0; i < bonusList.length; i++) {
 			ExtractorBonus b = bonusList[i];
 			ItemStack is = b.sourceItem;
-			ItemStack bon = b.getBonus();
+			ItemStack bon = b.getBonusItem();
 			if (bon != null) {
-				OreType in = ExtractorModOres.getOreFromExtract(is);
-				OreType out = ExtractorModOres.getOreFromExtract(bon);
-				oremap.put(in, out);
-				backwards.addValue(out, in);
-				itemmap.put(is, bon);
-				bonusmap.put(is, b);
+				mapBonus(is, bon, b);
 			}
 		}
-		backwards.lock();
 	}
 
 }

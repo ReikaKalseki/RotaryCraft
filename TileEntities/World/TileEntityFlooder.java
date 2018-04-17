@@ -149,4 +149,9 @@ public class TileEntityFlooder extends TileEntityAreaFiller implements IFluidHan
 			return base;
 		return MathHelper.clamp_int(base*tank.getActualFluid().getViscosity()/1000, base/4, base*4);
 	}
+
+	@Override
+	protected boolean allowFluidOverwrite() {
+		return false;
+	}
 }

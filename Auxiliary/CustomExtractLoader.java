@@ -30,6 +30,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Registry.ExtractorBonus;
 
 public class CustomExtractLoader {
 
@@ -152,6 +153,7 @@ public class CustomExtractLoader {
 						CustomExtractEntry entry = this.parseString(line);
 						if (entry != null) {
 							data.add(entry);
+							ExtractorBonus.addCustomOreDelegate(entry);
 							RotaryCraft.logger.log("Added extract entry "+entry);
 						}
 						else {

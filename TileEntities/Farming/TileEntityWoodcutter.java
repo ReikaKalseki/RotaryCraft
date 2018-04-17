@@ -317,7 +317,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		if (tree.getTreeType() == ModWoodList.SLIME) {
 			Block log = tree.getTreeType().getLogID();
 			if (b == log) {
-				return 0.2F;
+				return 0.6F;
 			}
 		}
 		return 1;

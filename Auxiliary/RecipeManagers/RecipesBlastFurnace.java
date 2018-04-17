@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -24,6 +25,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
@@ -46,6 +48,8 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 	private final ArrayList<BlastRecipe> recipeList = new ArrayList();
 	private final ArrayList<BlastCrafting> craftingList = new ArrayList();
+
+	private final ItemHashMap<HashSet<Integer>> itemInputTypes = new ItemHashMap();
 
 	private RecipesBlastFurnace() {
 		super(MachineRegistry.BLASTFURNACE);
@@ -116,6 +120,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 	private void addRecipe(BlastRecipe br, RecipeLevel rl) {
 		recipeList.add(br);
+		itemInputTypes.clear();
 		this.onAddRecipe(br, rl);
 	}
 
@@ -147,6 +152,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 	private void addCrafting(BlastCrafting cr, RecipeLevel rl) {
 		craftingList.add(cr);
+		itemInputTypes.clear();
 		this.onAddRecipe(cr, rl);
 	}
 
@@ -563,22 +569,27 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	}
 
 	public boolean isInput(ItemStack ingredient) {
-		return this.getInputTypeForItem(ingredient) >= 0;
+		return !this.getInputTypesForItem(ingredient).isEmpty();
 	}
 
-	public int getInputTypeForItem(ItemStack is) {
-		for (int i = 0; i < recipeList.size(); i++) {
-			BlastRecipe r = recipeList.get(i);
-			if (r.isValidMainItem(is))
-				return 0;
-			else if (r.primary.match(is))
-				return 1;
-			else if (r.secondary.match(is))
-				return 2;
-			else if (r.tertiary.match(is))
-				return 3;
+	public Set<Integer> getInputTypesForItem(ItemStack is) {
+		HashSet<Integer> set = itemInputTypes.get(is);
+		if (set == null) {
+			set = new HashSet();
+			for (int i = 0; i < recipeList.size(); i++) {
+				BlastRecipe r = recipeList.get(i);
+				if (r.isValidMainItem(is))
+					set.add(0);
+				else if (r.primary.match(is))
+					set.add(1);
+				else if (r.secondary.match(is))
+					set.add(2);
+				else if (r.tertiary.match(is))
+					set.add(3);
+			}
+			itemInputTypes.put(is, set);
 		}
-		return -1;
+		return Collections.unmodifiableSet(set);
 	}
 
 	public ArrayList<BlastRecipe> getAllRecipesUsing(ItemStack is) {
@@ -690,6 +701,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
+		itemInputTypes.clear();
 		return recipeList.remove(recipe) | craftingList.remove(recipe);
 	}
 

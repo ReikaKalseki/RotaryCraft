@@ -70,7 +70,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	/** Stored energy, in joules */
 	private long energy;
 
-	public static final int WORMRATIO = 16;
+	public static final int WORMRATIO = 64;
 
 	private CVTController controller;
 

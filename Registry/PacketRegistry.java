@@ -53,7 +53,8 @@ public enum PacketRegistry {
 	AFTERBURN(74),
 	CRAFTPATTERNMODE(75, 76),
 	FILTERSETTING(77),
-	SPRINKLER(78);
+	SPRINKLER(78),
+	BLASTLEAVEONE(79);
 
 	private int min;
 	private int max;
