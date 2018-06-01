@@ -667,11 +667,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
 		if (type == null)
 			return false;
-		if (type.isJetFueled())
-			if ((p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE) && side == ForgeDirection.DOWN)
-				return true;
-		if (type.isEthanolFueled())
-			if ((p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE) && side == ForgeDirection.DOWN)
+		if (type.isJetFueled() || type.isEthanolFueled())
+			if ((p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE) && side == (isFlipped ? ForgeDirection.UP : ForgeDirection.DOWN))
 				return true;
 		if (type.isWaterPiped() && p.isStandardPipe()) {
 			switch(side) {

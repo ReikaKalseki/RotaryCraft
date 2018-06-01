@@ -51,6 +51,7 @@ ConditionalOperation, DamagingContact {
 	public boolean idle = false;
 
 	public static final int MAXLUBE = 4000;
+	private static final int MIN_LUBE_PRODUCTION = DifficultyEffects.CANOLA.getAverageAmount();
 
 	private final HybridTank tank = new HybridTank("grinder", MAXLUBE);
 
@@ -121,22 +122,12 @@ ConditionalOperation, DamagingContact {
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
 	}
 
-	/**
-	 * Returns the number of slots in the inv.
-	 */
-	public int getSizeInventory()
-	{
+	public int getSizeInventory() {
 		return 3;
 	}
 
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
-	}
-
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		grinderCookTime = NBT.getShort("CookTime");
@@ -145,16 +136,14 @@ ConditionalOperation, DamagingContact {
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setShort("CookTime", (short)grinderCookTime);
 
 		tank.writeToNBT(NBT);
 	}
 
-	public int getCookProgressScaled(int par1)
-	{
+	public int getCookProgressScaled(int par1) {
 		//ReikaChatHelper.writeInt(this.tickcount);
 		return (grinderCookTime * par1)/2 / this.getOperationTime();
 	}
@@ -209,7 +198,7 @@ ConditionalOperation, DamagingContact {
 		boolean flag = false;
 		if (isGrindableSeed(inv[0])) {
 			flag = true;
-			if (tank.isFull()) {
+			if (tank.getRemainingSpace() < MIN_LUBE_PRODUCTION) {
 				return false;
 			}
 		}

@@ -193,7 +193,11 @@ public class RotaryRecipes {
 
 		Object[] bin = getBlastFurnaceIngredients();
 		addOreRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), bin);
-		RotaryCraft.logger.log("Blast Furnace gating materials set to "+Arrays.toString(bin));
+		RotaryCraft.logger.log("Blast Furnace materials set to "+Arrays.toString(bin));
+
+		bin = getWorktableIngredients();
+		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), bin);
+		RotaryCraft.logger.log("Worktable materials set to "+Arrays.toString(bin));
 
 		addProps();
 
@@ -501,7 +505,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.getNumberShaftTypes()-1, " S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem); //Shaft cross
 
-		addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);
+		//addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);
 
 		MachineRegistry.BEVELGEARS.addSizedCrafting(4, "ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
 
@@ -1382,37 +1386,19 @@ public class RotaryRecipes {
 	}
 
 	public static Object[] getBlastFurnaceIngredients() {
-		Object obj1 = ReikaItemHelper.stoneBricks;
-		Object obj2 = ReikaItemHelper.stoneBricks;
-		Object obj3 = ReikaItemHelper.stoneBricks;
-		Object obj4 = ReikaItemHelper.stoneBricks;
-
-		ArrayList<Object> c = RotaryCraft.config.getBlastFurnaceGatingMaterials();
-		switch(c.size()) {
-			case 1:
-				obj1 = obj2 = obj3 = obj4 = c.get(0);
-				break;
-			case 2:
-				obj1 = obj4 = c.get(0);
-				obj2 = obj3 = c.get(1);
-				break;
-			case 3:
-				obj1 = obj4 = c.get(0);
-				obj2 = c.get(1);
-				obj3 = c.get(2);
-				break;
-			case 4:
-				obj1 = c.get(0);
-				obj2 = c.get(1);
-				obj3 = c.get(2);
-				obj4 = c.get(3);
-				break;
-			default:
-				break;
-		}
+		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEBLAST.getState(), ReikaItemHelper.stoneBricks, ReikaItemHelper.stoneBricks, ReikaItemHelper.stoneBricks, ReikaItemHelper.stoneBricks);
 
 		Object[] args = {
-				"BaB", "brc", "BdB", 'B', ReikaItemHelper.stoneBricks, 'r', Items.redstone, 'a', obj1, 'b', obj2, 'c', obj3, 'd', obj4
+				"BaB", "brc", "BdB", 'B', ReikaItemHelper.stoneBricks, 'r', Items.redstone, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]
+		};
+		return args;
+	}
+
+	public static Object[] getWorktableIngredients() {
+		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEWORK.getState() && !ConfigRegistry.TABLEMACHINES.getState(), Blocks.air, Blocks.air, ReikaItemHelper.stoneSlab, ReikaItemHelper.stoneSlab);
+
+		Object[] args = {
+				"aCb", "SBS", "crd", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]
 		};
 		return args;
 	}

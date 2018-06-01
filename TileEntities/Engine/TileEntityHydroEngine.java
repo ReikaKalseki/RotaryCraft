@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -265,6 +266,15 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		double dy = (ReikaWorldHelper.findFluidSurface(world, pos[0], y, pos[1])-y)-0.5;
 		dy = Math.pow(dy, 1.5)/32;
 		fluidFallSpeed = 0.92*Math.sqrt(2*grav*dy)/Math.max(0.25, Math.pow(f.getViscosity()/1000, 0.375));
+	}
+
+	public int getWaterfallHeightForDisplay() {
+		int[] pos = this.getWaterColumnPos();
+		Fluid f = ReikaWorldHelper.getFluid(worldObj, pos[0], yCoord, pos[1]);
+		if (f == null || f.isGaseous() || f.getDensity() <= 0) {
+			return 0;
+		}
+		return MathHelper.ceiling_double_int(ReikaWorldHelper.findFluidSurface(worldObj, pos[0], yCoord, pos[1]))-yCoord;
 	}
 
 	private int getEffectiveSpeed(World world, int x, int y, int z) {

@@ -11,6 +11,10 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
+
+import org.lwjgl.opengl.GL11;
+
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFillingStation;
@@ -21,9 +25,6 @@ public class GuiFillingStation extends GuiPowerOnlyMachine
 
 	private TileEntityFillingStation fillingStation;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
-
-	int x;
-	int y;
 
 	public GuiFillingStation(EntityPlayer p5ep, TileEntityFillingStation te)
 	{
@@ -54,6 +55,11 @@ public class GuiFillingStation extends GuiPowerOnlyMachine
 			int y = 87-i2;
 			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(fillingStation.getFluid());
 			ReikaLiquidRenderer.bindFluidTexture(fillingStation.getFluid());
+			int clr = 0xffffffff;
+			if (fillingStation.getFluid().canBePlacedInWorld()) {
+				clr = fillingStation.getFluid().getBlock().colorMultiplier(fillingStation.worldObj, fillingStation.xCoord*2, fillingStation.yCoord*2, fillingStation.zCoord*2);
+			}
+			GL11.glColor4f(ReikaColorAPI.HextoColorMultiplier(clr, 0), ReikaColorAPI.HextoColorMultiplier(clr, 1), ReikaColorAPI.HextoColorMultiplier(clr, 2), 1);
 			this.drawTexturedModelRectFromIcon(x, y, ico, 12, i2);
 		}
 	}

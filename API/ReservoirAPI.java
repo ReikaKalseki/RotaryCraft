@@ -12,6 +12,7 @@ package Reika.RotaryCraft.API;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -32,7 +33,7 @@ public class ReservoirAPI {
 	public static interface TankHandler {
 
 		/** Returns the amount of liquid to drain. Do not drain the liquidstack directly, but you can modify it in other ways. */
-		public int onTick(TileEntity te, FluidStack stored);
+		public int onTick(TileEntity te, FluidStack stored, EntityPlayer owner);
 
 	}
 

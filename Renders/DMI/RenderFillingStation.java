@@ -145,6 +145,12 @@ public class RenderFillingStation extends RotaryTERenderer
 				ReikaRenderHelper.disableLighting();
 			v5.startDrawingQuads();
 			v5.setNormal(0, 1, 0);
+			int clr = 0xffffffff;
+			if (f.canBePlacedInWorld()) {
+				clr = f.getBlock().colorMultiplier(tr.worldObj, tr.xCoord*2, tr.yCoord*2, tr.zCoord*2);
+			}
+			v5.setColorOpaque_I(clr);
+
 			v5.addVertexWithUV(dx+0, h, -ddz+1, u, dv);
 			v5.addVertexWithUV(-ddx+1, h, -ddz+1, du, dv);
 			v5.addVertexWithUV(-ddx+1, h, dz+0, du, v);

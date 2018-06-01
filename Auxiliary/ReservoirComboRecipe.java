@@ -13,6 +13,8 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
@@ -20,6 +22,10 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 public class ReservoirComboRecipe implements IRecipe {
 
 	private final ItemStack basicItem = MachineRegistry.RESERVOIR.getCraftedProduct();
+
+	static {
+		RecipeSorter.register("rotarycraft:reservoir", ReservoirComboRecipe.class, Category.SHAPELESS, "after:minecraft:shaped after:minecraft:shapeless");
+	}
 
 	public ReservoirComboRecipe() {
 

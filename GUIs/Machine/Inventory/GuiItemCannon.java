@@ -57,15 +57,23 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		input = new GuiTextField(fontRendererObj, j+xSize/2+25, k+26, 46, 16);
 		input.setFocused(false);
 		input.setMaxStringLength(6);
+		if (target != null)
+			input.setText(String.valueOf(target.xCoord));
 		input2 = new GuiTextField(fontRendererObj, j+xSize/2+25, k+42, 46, 16);
 		input2.setFocused(false);
 		input2.setMaxStringLength(6);
+		if (target != null)
+			input2.setText(String.valueOf(target.yCoord));
 		input3 = new GuiTextField(fontRendererObj, j+xSize/2+25, k+58, 46, 16);
 		input3.setFocused(false);
 		input3.setMaxStringLength(6);
+		if (target != null)
+			input3.setText(String.valueOf(target.zCoord));
 		input4 = new GuiTextField(fontRendererObj, j+xSize/4-30-6, k+50, 26, 16);
 		input4.setFocused(false);
 		input4.setMaxStringLength(6);
+		if (target != null)
+			input4.setText(String.valueOf(target.dimensionID));
 	}
 
 	@Override

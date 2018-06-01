@@ -52,6 +52,7 @@ import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
@@ -251,6 +252,10 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked.getEngineType().isWaterPiped()) {
 					int amt = clicked.getWater();
 					String sg = String.format("Water: %d mB", amt);
+					ReikaChatHelper.writeString(sg);
+				}
+				if (clicked.getEngineType() == EngineType.HYDRO) {
+					String sg = String.format("Detected waterfall height: %d m", ((TileEntityHydroEngine)clicked).getWaterfallHeightForDisplay());
 					ReikaChatHelper.writeString(sg);
 				}
 				return true;

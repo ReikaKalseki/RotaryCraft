@@ -224,6 +224,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 				ItemStack is = map.get(slot);
 				if (this.isItemTransferrable(is)) {
 					int rem = this.addItemToInventory(is, target, source, slot, max, dir);
+					break; //only one slot at a time if not a DSU or similar
 				}
 			}
 		}

@@ -122,6 +122,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl) {
+		if (out.size() > 9)
+			throw new IllegalArgumentException("Too many output items for "+in.getDisplayName()+" centrifuge recipe; only 9 inventory slots!");
 		out.lock();
 		for (ItemWithChance isout : out.keySet())
 			if (!ReikaItemHelper.collectionContainsItemStack(outputs, isout.getItem()))

@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
@@ -21,6 +23,10 @@ import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
 public class DecoTankSettingsRecipe implements IRecipe {
 
 	private final ItemStack basicItem = BlockRegistry.DECOTANK.getStackOf();
+
+	static {
+		RecipeSorter.register("rotarycraft:decotank", DecoTankSettingsRecipe.class, Category.SHAPELESS, "after:minecraft:shaped after:minecraft:shapeless");
+	}
 
 	public DecoTankSettingsRecipe() {
 

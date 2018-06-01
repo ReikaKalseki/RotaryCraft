@@ -115,7 +115,9 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	BORERPOW("Borer Power Requirement Factor", 1F),
 	BEEYEAST("Use Forestry Bees To Produce Yeast", 0),
 	HARDCONVERTERS("Harder Converter Unit Recipes", false),
-	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false);
+	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false),
+	GATEBLAST("Enable Blast Furnace recipe gating", false),
+	GATEWORK("Enable Worktable recipe gating", false);
 
 	private String label;
 	private boolean defaultState;

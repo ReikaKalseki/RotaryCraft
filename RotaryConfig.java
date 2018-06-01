@@ -24,6 +24,7 @@ public class RotaryConfig extends ControlledConfig {
 
 	private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(RotaryAchievements.class);
 	private final DataElement<Integer>[] achievementIDs = new DataElement[entries.size()]; //
+
 	private DataElement<String[]> blastGate;
 
 	/** Non-config-file control data used by the machines */
@@ -56,10 +57,10 @@ public class RotaryConfig extends ControlledConfig {
 		return achievementIDs[idx].getData();
 	}
 
-	public ArrayList<Object> getBlastFurnaceGatingMaterials() {
+	public Object[] getBlastFurnaceGatingMaterials(boolean check, Object obj1, Object obj2, Object obj3, Object obj4) {
 		String[] arr = blastGate.getData();
-		if (arr == null || arr.length == 0)
-			return new ArrayList();
+		if (!check || arr == null || arr.length == 0)
+			return new Object[]{obj1, obj2, obj3, obj4};
 		ArrayList<Object> c = new ArrayList();
 		boolean invalid = false;
 		for (int i = 0; i < arr.length; i++) {
@@ -92,6 +93,30 @@ public class RotaryConfig extends ControlledConfig {
 				sb.append(g.name()+"; ");
 			RotaryCraft.logger.log(sb.toString());
 		}
-		return c;
+
+		switch(c.size()) {
+			case 1:
+				obj1 = obj2 = obj3 = obj4 = c.get(0);
+				break;
+			case 2:
+				obj1 = obj4 = c.get(0);
+				obj2 = obj3 = c.get(1);
+				break;
+			case 3:
+				obj1 = obj4 = c.get(0);
+				obj2 = c.get(1);
+				obj3 = c.get(2);
+				break;
+			case 4:
+				obj1 = c.get(0);
+				obj2 = c.get(1);
+				obj3 = c.get(2);
+				obj4 = c.get(3);
+				break;
+			default:
+				break;
+		}
+
+		return new Object[]{obj1, obj2, obj3, obj4};
 	}
 }

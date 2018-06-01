@@ -159,7 +159,7 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		for (TankHandler th : tankHandlers) {
-			int amt = th.onTick(this, tank.getFluid());
+			int amt = th.onTick(this, tank.getFluid(), this.getPlacer());
 			if (amt > 0)
 				tank.removeLiquid(amt);
 		}
@@ -489,7 +489,13 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 	@SideOnly(Side.CLIENT)
 	public int getFluidRenderColor() {
 		FluidStack fs = tank.getFluid();
-		return fs != null && fs.tag != null && fs.tag.hasKey("renderColor") ? fs.tag.getInteger("renderColor") : 0xffffff;
+		if (fs == null)
+			return 0xffffff;
+		int clr = fs.tag != null && fs.tag.hasKey("renderColor") ? fs.tag.getInteger("renderColor") : 0xffffff;
+		if (this.isInWorld() && fs.getFluid().canBePlacedInWorld()) {
+			clr = fs.getFluid().getBlock().colorMultiplier(worldObj, xCoord*2, yCoord*2, zCoord*2);
+		}
+		return clr;
 	}
 	/*
 	@Override

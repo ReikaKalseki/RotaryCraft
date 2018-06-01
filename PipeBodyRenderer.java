@@ -239,6 +239,12 @@ public class PipeBodyRenderer implements ISBRH {
 		int mix = tile.getPipeBlockType().getMixedBrightnessForBlock(Minecraft.getMinecraft().theWorld, x, y, z);
 		ReikaLiquidRenderer.bindFluidTexture(f);
 		v5.setColorOpaque(255, 255, 255);
+		int clr = 0xffffffff;
+		if (f.canBePlacedInWorld()) {
+			clr = f.getBlock().colorMultiplier(Minecraft.getMinecraft().theWorld, x*2, y*2, z*2);
+			v5.setColorOpaque_I(clr);
+		}
+
 		if (f.getLuminosity() > 0) {
 			v5.setBrightness(240);
 			//ReikaRenderHelper.disableLighting();

@@ -88,9 +88,6 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 		ItemStack is = this.getFirstStack();
 		if (is == null)
 			return;
-		int num = power >= STACKPOWER ? is.stackSize : 1;
-		int slot = ReikaInventoryHelper.locateInInventory(is, inv, false);
-		ReikaInventoryHelper.decrStack(slot, this, num);
 		EntityItem ei = new EntityItem(world, x+0.5, y+1.125, z+0.5, is);
 		double dx = target.xCoord-x;
 		double dy = target.yCoord-y;
@@ -104,11 +101,12 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 		if (!world.isRemote)
 			world.spawnEntityInWorld(ei);
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.explode", 1, 1);
+		int num = power >= STACKPOWER ? is.stackSize : 1;
+		int slot = ReikaInventoryHelper.locateInInventory(is, inv, false);
+		if (slot == -1)
+			return;
 		int left = ReikaInventoryHelper.addToInventoryWithLeftover(ReikaItemHelper.getSizedItemStack(is, num), te.inv);
-		if (left > 0)
-			inv[slot] = ReikaItemHelper.getSizedItemStack(is, left);
-		else
-			inv[slot] = null;
+		ReikaInventoryHelper.decrStack(slot, this, num-left);
 	}
 
 	private TileEntityItemCannon getTargetTE() {
@@ -119,8 +117,7 @@ public class TileEntityItemCannon extends InventoriedPowerReceiver implements Di
 	private ItemStack getFirstStack() {
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
-				ItemStack is = inv[i].copy();
-				return ReikaItemHelper.getSizedItemStack(is, 1);
+				return inv[i].copy();
 			}
 		}
 		return null;
