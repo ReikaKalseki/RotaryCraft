@@ -12,14 +12,14 @@ package Reika.RotaryCraft.TileEntities.Engine;
 import java.util.List;
 
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
+import net.minecraftforge.common.util.ForgeDirection;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -29,6 +29,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityWindEngine extends TileEntityEngine {
+
+	private WindClearanceCheck clearance;
 
 	private void dealBladeDamage(World world, int x, int y, int z, int meta) {
 		int c = 0; int d = 0;
@@ -69,6 +71,7 @@ public class TileEntityWindEngine extends TileEntityEngine {
 	}
 
 	private float getWindFactor(World world, int x, int y, int z, int meta) {
+		/*
 		if (world.provider.terrainType == WorldType.FLAT) {
 			if (y < 4)
 				return 0;
@@ -93,6 +96,18 @@ public class TileEntityWindEngine extends TileEntityEngine {
 				f = 1;
 			return f;
 		}
+		 */
+
+		if (clearance == null)
+			clearance = new WindClearanceCheck(this, 32, 3);
+		clearance.tick(world);
+
+		float f = 1F-clearance.getPenalty();
+		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
+			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+			f *= ig.getWindLevel();
+		}
+		return Math.min(1, f);
 	}
 
 	@Override
@@ -124,14 +139,14 @@ public class TileEntityWindEngine extends TileEntityEngine {
 					return false;
 				}
 			}
-		}
+		}/*
 		for (int i = 1; i < 16; i++) {
 			Block id = world.getBlock(x+c*i, y, z+d*i);
 			if (id != Blocks.air) {
 				if (id.getCollisionBoundingBoxFromPool(world, x+c*i, y, z+d*i) != null)
 					return false;
 			}
-		}
+		}*/
 		return true;
 	}
 
@@ -169,5 +184,111 @@ public class TileEntityWindEngine extends TileEntityEngine {
 	public AxisAlignedBB getRenderBoundingBox()
 	{
 		return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(1, 1, 1);
+	}
+
+	private static class WindClearanceCheck {
+
+		private final Coordinate engine;
+		private final ForgeDirection direction;
+
+		private final int stepRatio;
+		private final int searchDistance;
+
+		private int step = 1;
+
+		//private boolean[][] blockLocations;
+		//private boolean[][] lastBlockLocations;
+
+		private final double[] blockFraction;
+
+		private boolean dirty;
+
+		private float penalty;
+
+		private WindClearanceCheck(TileEntityWindEngine te, int search, int step) {
+			engine = new Coordinate(te);
+			direction = te.getWriteDirection().getOpposite();
+
+			searchDistance = search;
+			stepRatio = step;
+
+			/*
+			blockLocations = new boolean[search][];
+			lastBlockLocations = new boolean[search][];
+			int r = 1+((step-1)/stepRatio);
+			for (int i = 0; i < searchDistance; i++) {
+				blockLocations[i] = new boolean[r*2+1];
+				lastBlockLocations[i] = new boolean[r*2+1];
+			}*/
+
+			blockFraction = new double[searchDistance];
+
+			for (int i = 1; i <= searchDistance; i++) {
+				this.scanRow(te.worldObj, i);
+			}
+		}
+
+		private void tick(World world) {
+			this.scanRow(world, step);
+
+			step++;
+			if (step > searchDistance)
+				step = 1;
+		}
+
+		private void scanRow(World world, int step) {
+			int r = 1+((step-1)/stepRatio);
+			ForgeDirection dir = ReikaDirectionHelper.getRightBy90(direction);
+
+			//ReikaJavaLibrary.pConsole("Scanning row "+step+", center coord is "+engine.offset(direction, step));
+
+			int blocked = 0;
+			for (int i = -r; i <= r; i++) {
+				//lastBlockLocations[step-1][i+r] = blockLocations[step-1][i+r];
+
+				int dx = engine.xCoord+direction.offsetX*step+dir.offsetX*i;
+				int dy = engine.yCoord;
+				int dz = engine.zCoord+direction.offsetZ*step+dir.offsetZ*i;
+				//blockLocations[step-1][i+r] = !ReikaWorldHelper.softBlocks(world, dx, dy, dz);
+
+				if (!ReikaWorldHelper.softBlocks(world, dx, dy, dz)) {
+					blocked++;
+				}
+			}
+
+			double frac = blocked/(r*2D+1);
+			//ReikaJavaLibrary.pConsole("Row "+step+" is "+(frac*100)+" % blocked.");
+			if (blockFraction[step-1] != frac) {
+				blockFraction[step-1] = frac;
+				dirty = true;
+			}
+		}
+
+		private void calculatePenalty() {
+			penalty = 0;
+			double max = 0;
+			for (int i = 0; i < blockFraction.length; i++) {
+				//double rowValue = 1+1D/searchDistance-((i+1)/(double)searchDistance);
+				double pow = 1.2D-(i/(double)searchDistance);
+				double rowValue = Math.pow(pow, 12);
+				penalty += rowValue*blockFraction[i];
+				max += rowValue;
+
+				//penalty = (float)Math.max(penalty, blockFraction[i]);
+			}
+			penalty /= Math.sqrt(max);
+			penalty = (float)Math.sqrt(penalty);
+			//ReikaJavaLibrary.pConsole(penalty);
+			//ReikaJavaLibrary.pConsole(penalty+" of "+max);
+		}
+
+		public float getPenalty() {
+			if (dirty) {
+				this.calculatePenalty();
+				dirty = false;
+			}
+			return penalty;
+		}
+
 	}
 }

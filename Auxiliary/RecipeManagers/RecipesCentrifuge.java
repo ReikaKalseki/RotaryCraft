@@ -38,6 +38,7 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithC
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
@@ -65,8 +66,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private ArrayList<ItemStack> outputs = new ArrayList();
 
-	public static final RecipesCentrifuge getRecipes()
-	{
+	public static final RecipesCentrifuge getRecipes() {
 		return CentrifugeBase;
 	}
 
@@ -83,6 +83,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10, new ItemStack(Items.wheat_seeds), 2F, new ItemStack(Items.pumpkin_seeds), 0.125F, new ItemStack(Items.melon_seeds), 0.125F, new ItemStack(Blocks.sapling), 0.03125F, new ItemStack(Blocks.tallgrass, 1, 1), 0.0625F);
 		this.addRecipe(Items.blaze_powder, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
+		this.addRecipe(ItemStacks.sludge, null, RecipeLevel.CORE, 2, new Object[]{ItemStacks.cleansludge, 75, ItemStacks.cleansludge, 25, ItemStacks.compost, 15});
+
 		this.addRecipe(ItemStacks.slipperyComb, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 50), 60, RecipeLevel.PROTECTED, ItemStacks.slipperyPropolis, 80);
 		this.addRecipe(ItemStacks.slipperyPropolis, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 150), 100, RecipeLevel.PROTECTED);
 
@@ -93,23 +95,25 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	public static class CentrifugeRecipe implements MachineRecipe {
 
 		private final ItemStack in;
+		public final int maxStack;
 		private final ChancedOutputList out;
 		private final FluidOut fluid;
 
-		private CentrifugeRecipe(ItemStack is, ChancedOutputList li, FluidOut fs) {
+		private CentrifugeRecipe(ItemStack is, ChancedOutputList li, FluidOut fs, int cycles) {
 			in = is;
 			out = li;
 			fluid = fs;
+			maxStack = cycles;
 		}
 
 		@Override
 		public String getUniqueID() {
-			return fullID(in)+">"+out.toString()+"&"+(fluid != null ? fluid.toString() : "X");
+			return fullID(in)+">"+out.toString()+"&"+(fluid != null ? fluid.toString() : "X")+" {x"+maxStack+"}";
 		}
 
 		@Override
 		public String getAllInfo() {
-			return "Centrifuge "+fullID(in)+" to items["+out+"] and fluid "+fluid;
+			return "Centrifuge "+fullID(in)+" to items["+out+"] and fluid "+fluid+"; can stack up to "+maxStack+"x";
 		}
 
 		@Override
@@ -119,37 +123,76 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			return li;
 		}
 
+		public FluidStack getFluid() {
+			return fluid != null ? fluid.fluid.copy() : null;
+		}
+
+		public FluidStack rollFluid() {
+			return fluid != null ? ReikaRandomHelper.doWithChance(fluid.chance) ? fluid.fluid.copy() : null : null;
+		}
+
+		public Collection<ItemWithChance> getItems() {
+			return out.keySet();
+		}
+
+		public Collection<ItemStack> rollItems() {
+			ArrayList<ItemStack> li = new ArrayList();
+			for (ItemWithChance is : this.getItems()) {
+				double ch = is.getNormalizedChance();
+				while (ch >= 1) {
+					li.add(is.getItem());
+					ch -= 1.0D;
+				}
+				if (ReikaRandomHelper.doWithChance(ch)) {
+					li.add(is.getItem());
+				}
+			}
+			return li;
+		}
+
+		public ItemStack getInput() {
+			return in.copy();
+		}
+
+		public float getFluidChance() {
+			return fluid != null ? fluid.chance : 0;
+		}
+
 	}
 
 	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl) {
+		this.addRecipe(in, out, fs, rl, 1);
+	}
+
+	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl, int stack) {
 		if (out.size() > 9)
 			throw new IllegalArgumentException("Too many output items for "+in.getDisplayName()+" centrifuge recipe; only 9 inventory slots!");
 		out.lock();
 		for (ItemWithChance isout : out.keySet())
 			if (!ReikaItemHelper.collectionContainsItemStack(outputs, isout.getItem()))
 				outputs.add(isout.getItem());
-		CentrifugeRecipe rec = new CentrifugeRecipe(in, out, fs);
+		CentrifugeRecipe rec = new CentrifugeRecipe(in, out, fs, stack);
 		recipeList.put(in, rec);
 		this.onAddRecipe(rec, rl);
 	}
 
-	private void addRecipe(ItemStack in, FluidOut fs, RecipeLevel rl, Object... items)
-	{
+	private void addRecipe(ItemStack in, FluidOut fs, RecipeLevel rl, int stack, Object... items) {
+		this.addRecipe(in, ChancedOutputList.parseFromArray(true, items), fs, rl, stack);
+	}
+
+	private void addRecipe(ItemStack in, FluidOut fs, RecipeLevel rl, Object... items) {
 		this.addRecipe(in, ChancedOutputList.parseFromArray(true, items), fs, rl);
 	}
 
-	public void addAPIRecipe(ItemStack item, FluidStack fs, float fc, Object... items)
-	{
+	public void addAPIRecipe(ItemStack item, FluidStack fs, float fc, Object... items) {
 		this.addRecipe(item, fs != null ? new FluidOut(fs, fc) : null, RecipeLevel.API, items);
 	}
 
-	private void addRecipe(ItemStack item, FluidStack fs, float fc, RecipeLevel rl, Object... items)
-	{
+	private void addRecipe(ItemStack item, FluidStack fs, float fc, RecipeLevel rl, Object... items) {
 		this.addRecipe(item, new FluidOut(fs, fc), rl, items);
 	}
 
-	private void addRecipe(Block item, FluidOut fs, RecipeLevel rl, Object... items)
-	{
+	private void addRecipe(Block item, FluidOut fs, RecipeLevel rl, Object... items) {
 		this.addRecipe(new ItemStack(item), fs, rl, items);
 	}
 
@@ -157,30 +200,14 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		this.addRecipe(new ItemStack(item), fs, rl, items);
 	}
 
-	public ChancedOutputList getRecipeResult(ItemStack item) {
+	public CentrifugeRecipe getRecipeResult(ItemStack item) {
 		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
-		return cr != null ? cr.out : null;
+		return cr != null ? cr : null;
 	}
 
 	private Collection<ItemStack> getRecipeOutputs(ItemStack item) {
 		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
 		return cr != null ? cr.out.itemSet() : null;
-	}
-
-	private FluidOut getFluidOut(ItemStack item) {
-		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
-		return cr != null ? cr.fluid : null;
-	}
-
-	public FluidStack getFluidResult(ItemStack item)
-	{
-		FluidOut fo = this.getFluidOut(item);
-		return fo != null ? fo.fluid.copy() : null;
-	}
-
-	public float getFluidChance(ItemStack item) {
-		FluidOut fo = this.getFluidOut(item);
-		return fo != null ? fo.chance : 0;
 	}
 
 	public ArrayList<ItemStack> getSources(ItemStack result) {
@@ -196,8 +223,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	public ArrayList<ItemStack> getSources(Fluid result) {
 		ArrayList<ItemStack> li = new ArrayList();
 		for (ItemStack in : recipeList.keySet()) {
-			FluidStack fs = this.getFluidResult(in);
-			if (fs != null && fs.getFluid().equals(result))
+			FluidOut fo = recipeList.get(in).fluid;
+			if (fo != null && fo.fluid.getFluid().equals(result))
 				li.add(in.copy());
 		}
 		return li;

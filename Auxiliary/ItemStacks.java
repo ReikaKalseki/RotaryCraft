@@ -43,6 +43,7 @@ public final class ItemStacks {
 	public static final ItemStack compost 			= ItemRegistry.POWDERS.getStackOfMetadata(13);
 	public static final ItemStack silicondust 		= ItemRegistry.POWDERS.getStackOfMetadata(14);
 	//public static final ItemStack mulch 			= ItemRegistry.POWDERS.getStackOfMetadata(15);
+	public static final ItemStack cleansludge 		= ItemRegistry.POWDERS.getStackOfMetadata(16);
 
 	public static final ItemStack lubebucket 		= ItemRegistry.BUCKET.getStackOfMetadata(0);
 	public static final ItemStack fuelbucket 		= ItemRegistry.BUCKET.getStackOfMetadata(1);

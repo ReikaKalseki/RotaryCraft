@@ -32,7 +32,7 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityWindEngine;
 
 public enum EngineType {
 	DC(		256, 	4, 		EngineClass.ELECTRIC,	TileEntityDCEngine.class),
-	WIND(	1024, 	4, 		EngineClass.KINETIC,	TileEntityWindEngine.class),
+	WIND(	1024, 	8, 		EngineClass.KINETIC,	TileEntityWindEngine.class),
 	STEAM(	512, 	32, 	EngineClass.THERMAL,	TileEntitySteamEngine.class),
 	GAS(	512, 	128, 	EngineClass.PISTON,		TileEntityGasEngine.class),
 	AC(		256, 	512, 	EngineClass.ELECTRIC,	TileEntityACEngine.class),

@@ -26,7 +26,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
 import Reika.DragonAPI.Instantiable.ModInteract.PositionedStackWithTooltip;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -35,6 +34,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge.CentrifugeRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCentrifuge;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
@@ -42,12 +42,12 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class CentrifugeHandler extends TemplateRecipeHandler {
 
-	public class CentrifugeRecipe extends CachedRecipe {
+	public class CentrifugeNEIRecipe extends CachedRecipe {
 
-		private ItemStack input;
+		private CentrifugeRecipe recipe;
 
-		private CentrifugeRecipe(ItemStack in) {
-			input = in;
+		private CentrifugeNEIRecipe(CentrifugeRecipe in) {
+			recipe = in;
 		}
 
 		@Override
@@ -56,36 +56,35 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		}
 
 		@Override
-		public List<PositionedStack> getOtherStacks()
-		{
+		public List<PositionedStack> getOtherStacks() {
 			List<PositionedStack> pos = new ArrayList();
-			ChancedOutputList c = RecipesCentrifuge.getRecipes().getRecipeResult(input);
-			Collection<ItemWithChance> li = c.keySet();
+
+			int num = 1+(int)((System.currentTimeMillis()/1000)%recipe.maxStack);
 
 			int dx = 80;
 			int dy = 10;
 			int i = 0;
-			for (ItemWithChance is : li) {
+			for (ItemWithChance is : recipe.getItems()) {
 				int x = dx+i%3*18;
 				int y = dy+i/3*18;
 				String tip = String.format("%.2f%s chance", is.getChance(), "%");
-				pos.add(new PositionedStackWithTooltip(is.getItem(), x, y, tip));
+				pos.add(new PositionedStackWithTooltip(ReikaItemHelper.getSizedItemStack(is.getItem(), num), x, y, tip));
 				i++;
 			}
 			return pos;
 		}
 
 		@Override
-		public PositionedStack getIngredient()
-		{
-			return new PositionedStack(ReikaItemHelper.getSizedItemStack(input, 1), 21, 28);
+		public PositionedStack getIngredient() {
+			int num = 1+(int)((System.currentTimeMillis()/1000)%recipe.maxStack);
+			return new PositionedStack(ReikaItemHelper.getSizedItemStack(recipe.getInput(), num), 21, 28);
 		}
 	}
 
 	@Override
 	public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipe) {
 		if (stack != null) {
-			for (PositionedStack is : ((CentrifugeRecipe)arecipes.get(recipe)).getOtherStacks()) {
+			for (PositionedStack is : ((CentrifugeNEIRecipe)arecipes.get(recipe)).getOtherStacks()) {
 				if (is instanceof PositionedStackWithTooltip && gui.isMouseOver(is, recipe))
 					currenttip.add(((PositionedStackWithTooltip)is).tooltip);
 			}
@@ -131,7 +130,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		if (outputId != null && outputId.equals("rccentri")) {
 			Collection<ItemStack> li = RecipesCentrifuge.getRecipes().getAllCentrifugables();
 			for (ItemStack is : li)
-				arecipes.add(new CentrifugeRecipe(is));
+				arecipes.add(new CentrifugeNEIRecipe(RecipesCentrifuge.getRecipes().getRecipeResult(is)));
 		}
 		super.loadCraftingRecipes(outputId, results);
 	}
@@ -149,19 +148,19 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(result);
 		if (fs != null) {
 			ArrayList<ItemStack> li = RecipesCentrifuge.getRecipes().getSources(fs.getFluid());
-			for (int i = 0; i < li.size(); i++)
-				arecipes.add(new CentrifugeRecipe(li.get(i)));
+			for (ItemStack is : li)
+				arecipes.add(new CentrifugeNEIRecipe(RecipesCentrifuge.getRecipes().getRecipeResult(is)));
 		}
 
 		ArrayList<ItemStack> li = RecipesCentrifuge.getRecipes().getSources(result);
-		for (int i = 0; i < li.size(); i++)
-			arecipes.add(new CentrifugeRecipe(li.get(i)));
+		for (ItemStack is : li)
+			arecipes.add(new CentrifugeNEIRecipe(RecipesCentrifuge.getRecipes().getRecipeResult(is)));
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (RecipesCentrifuge.getRecipes().isCentrifugable(ingredient)) {
-			arecipes.add(new CentrifugeRecipe(ingredient));
+			arecipes.add(new CentrifugeNEIRecipe(RecipesCentrifuge.getRecipes().getRecipeResult(ingredient)));
 		}
 	}
 
@@ -178,9 +177,8 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	}
 
 	private void drawFluids(int recipe) {
-		CentrifugeRecipe r = (CentrifugeRecipe)arecipes.get(recipe);
-		ItemStack in = r.input;
-		FluidStack fs = RecipesCentrifuge.getRecipes().getFluidResult(in);
+		CentrifugeNEIRecipe r = (CentrifugeNEIRecipe)arecipes.get(recipe);
+		FluidStack fs = r.recipe.getFluid();
 		if (fs != null) {
 			Fluid f = fs.getFluid();
 			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
@@ -205,7 +203,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 			v5.addVertexWithUV(x+16, 65, 0, du, v);
 			v5.draw();
 			FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-			String s = f.getLocalizedName()+" ("+fs.amount+" mB) ("+RecipesCentrifuge.getRecipes().getFluidChance(in)+"%)";
+			String s = f.getLocalizedName()+" ("+fs.amount+" mB) ("+r.recipe.getFluidChance()+"%)";
 			int l = fr.getStringWidth(s);
 			fr.drawString(s, 166-l, 70, 0);
 		}

@@ -364,6 +364,9 @@ public class ItemMulti extends ItemBasic {
 		if (ItemRegistry.ENGINECRAFT.matchItem(item) && item.getItemDamage() >= 16) {
 			row += 9;
 		}
+		if (ItemRegistry.POWDERS.matchItem(item) && item.getItemDamage() >= 16) {
+			row += 3;
+		}
 		return 16*row+item.getItemDamage()%16;
 	}
 

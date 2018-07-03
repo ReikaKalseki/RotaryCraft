@@ -1348,7 +1348,7 @@ public class RotaryRecipes {
 
 	private static void addFurnace() {
 		ReikaRecipeHelper.addSmelting(ItemStacks.aluminumpowder, ItemStacks.aluminumingot, 0.4F);
-		ReikaRecipeHelper.addSmelting(ItemStacks.sludge, ItemRegistry.ETHANOL.getStackOf(), 0.5F);
+		ReikaRecipeHelper.addSmelting(ItemStacks.cleansludge, ItemRegistry.ETHANOL.getStackOf(), 0.5F);
 
 		ReikaRecipeHelper.addSmelting(ItemRegistry.EXTRACTS.getStackOfMetadata(24), new ItemStack(Items.coal, 1, 0), 0.1F);
 		ReikaRecipeHelper.addSmelting(ItemRegistry.EXTRACTS.getStackOfMetadata(25), new ItemStack(Items.iron_ingot, 1, 0), 0.7F);
