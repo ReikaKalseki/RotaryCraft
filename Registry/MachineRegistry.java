@@ -1139,6 +1139,8 @@ public enum MachineRegistry implements TileEnum {
 			return true;
 		if (this == PUMP)
 			return true;
+		if (this == EMP)
+			return true;
 		return false;
 	}
 

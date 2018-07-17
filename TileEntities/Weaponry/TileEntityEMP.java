@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +46,8 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
@@ -53,6 +58,11 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffect {
 
@@ -70,7 +80,50 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	private long energy;
 
-	static {
+	public static final int MAX_RANGE = 64;
+
+	@SideOnly(Side.CLIENT)
+	public EMPEffect effectRender;
+
+	private boolean fired = false;
+
+	@SideOnly(Side.CLIENT)
+	public static class EMPEffect {
+
+		public static final int EXPAND_LIFESPAN = 20;
+		public static final int FADE_LIFESPAN = 10;
+		private int age;
+
+		private EMPEffect() {
+			age = 0;
+		}
+
+		public boolean tick() {
+			age++;
+			return age > EXPAND_LIFESPAN+FADE_LIFESPAN;
+		}
+
+		public double getRadius(float ptick) {
+			if (age >= EXPAND_LIFESPAN)
+				return MAX_RANGE+2*(age-EXPAND_LIFESPAN+ptick);
+			return Math.min(MAX_RANGE, 0.25+(age+ptick)*MAX_RANGE/(double)EXPAND_LIFESPAN);
+		}
+
+		public float getBrightness() {
+			return age <= EXPAND_LIFESPAN ? 1 : 1-((age-EXPAND_LIFESPAN)/(float)FADE_LIFESPAN);
+		}
+
+		public int getColor1() {
+			return ReikaColorAPI.getColorWithBrightnessMultiplier(0xffBEFFFF, this.getBrightness());
+		}
+
+		public int getColor2() {
+			return ReikaColorAPI.getColorWithBrightnessMultiplier(0xff47F2E2, this.getBrightness());
+		}
+
+	}
+
+	static { //this list is horribly incomplete
 		addEntry(TileEntityChest.class);
 		addEntry(TileEntityEnderChest.class);
 		addEntry(TileEntityHopper.class);
@@ -103,6 +156,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		//addEntry("Reika.FurryKingdoms.TileEntities.TileEntityFlag", ModList.FURRYKINGDOMS);
 
 		addEntry("Reika.ExpandedRedstone.TileEntities.*", ModList.EXPANDEDREDSTONE);
+		addEntry("Reika.ElectriCraft.TileEntities.TileEntityWire", ModList.ELECTRICRAFT);
 	}
 
 	private static void addEntry(Class<? extends TileEntity> cl) {
@@ -117,11 +171,14 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		RotaryCraft.logger.log("Adding "+name+" to the EMP immunity list");
 	}
 
-	private boolean fired = false;
-
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-
+		if (world.isRemote) {
+			if (effectRender != null) {
+				if (effectRender.tick())
+					effectRender = null;
+			}
+		}
 	}
 
 	@Override
@@ -145,11 +202,12 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		tickcount++;
 
 		this.getPowerBelow();
-		if (power >= MINPOWER)
-			energy += power;
 
 		if (fired)
 			return;
+
+		if (power >= MINPOWER)
+			energy += power;
 
 		if (canLoad && check.isEmpty()) {
 			int r = this.getRange();
@@ -177,8 +235,17 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 		//power = (long)BLAST_ENERGY+800;
 
-		if (energy/20L >= BLAST_ENERGY && !loading && !world.isRemote)
+		if (energy/20L >= BLAST_ENERGY && !loading) {
+			//if (world.isRemote)
+			//	this.initEffect();
+			//else
 			this.fire(world, x, y, z);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void initEffect() {
+		effectRender = new EMPEffect();
 	}
 
 	private void createListing() {
@@ -191,7 +258,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			int z = b.zCoord;
 			for (int y = 0; y < world.provider.getHeight(); y++) {
 				TileEntity te = world.getTileEntity(x, y, z);
-				if (te != null) {
+				if (this.canAffect(te)) {
 					blocks.add(new Coordinate(te));
 				}
 			}
@@ -203,8 +270,30 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		}
 	}
 
+	private boolean canAffect(TileEntity te) {
+		if (te == null || te.isInvalid())
+			return false;
+		if (te instanceof IEnergyReceiver)
+			return true;
+		if (te instanceof IEnergyProvider)
+			return true;
+		if (te instanceof IEnergySource)
+			return true;
+		if (te instanceof IEnergySink)
+			return true;
+		if (InterfaceCache.NODE.instanceOf(te))
+			return true;
+		if (ModList.CHROMATICRAFT.isLoaded() && te instanceof TileEntityCrystalPylon)
+			return true;
+		if (te instanceof RotaryCraftTileEntity) {
+			return true;
+		}
+		return false;
+	}
+
 	private void fire(World world, int x, int y, int z) {
 		fired = true;
+		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.EMPEFFECT.getMinValue(), this, 128);
 		for (int i = 0; i < blocks.size(); i++) {
 			TileEntity te = blocks.get(i).getTileEntity(world);
 			if (ModList.CHROMATICRAFT.isLoaded() && te instanceof TileEntityCrystalPylon)
@@ -215,6 +304,10 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 				this.shutdownTE(te);
 		}
 		this.affectEntities(world, x, y, z);
+		//destroySelf(world, x, y, z);
+	}
+
+	private void destroySelf(World world, int x, int y, int z) {
 		world.setBlockToAir(x, y, z);
 		world.createExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true);
 		if (ReikaRandomHelper.doWithChance(50)) {
@@ -293,13 +386,17 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			return;
 		if (this.isBlacklisted(te))
 			return;
+		ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord, 1);
 		if (te instanceof RotaryCraftTileEntity) {
 			RotaryCraftTileEntity rc = (RotaryCraftTileEntity)te;
 			if (!rc.isShutdown())
 				rc.onEMP();
 		}
+		else {
+			shutdownLocations.add(new WorldLocation(te));
+		}/*
 		else if (ConfigRegistry.ATTACKBLOCKS.getState())
-			this.shutdownFallback(te);
+			this.shutdownFallback(te);*/
 	}
 
 	private boolean isBlacklisted(TileEntity te) {
@@ -347,6 +444,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	public static void resetCoordinate(World world, int x, int y, int z) {
 		shutdownLocations.remove(new WorldLocation(world, x, y, z));
+		ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), world.provider.dimensionId, x, y, z, 0);
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {
@@ -367,7 +465,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	@Override
 	public int getMaxRange() {
-		return 64;
+		return MAX_RANGE;
 	}
 
 	public boolean isLoading() {
@@ -401,6 +499,18 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	public void updateListing() {
 		canLoad = true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final double getMaxRenderDistanceSquared()
+	{
+		return 16384D;
+	}
+
+	@Override
+	public final AxisAlignedBB getRenderBoundingBox() {
+		return INFINITE_EXTENT_AABB;
 	}
 
 }

@@ -593,4 +593,8 @@ public abstract class TileEntityIOMachine extends RotaryCraftTileEntity implemen
 	public final void setIORenderAlpha(int io) {
 		iotick = io;
 	}*/
+
+	public void onRotate() {
+
+	}
 }

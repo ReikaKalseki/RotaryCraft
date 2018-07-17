@@ -54,7 +54,9 @@ public enum PacketRegistry {
 	CRAFTPATTERNMODE(75, 76),
 	FILTERSETTING(77),
 	SPRINKLER(78),
-	BLASTLEAVEONE(79);
+	BLASTLEAVEONE(79),
+	EMPEFFECT(80),
+	SPARKLOC(81);
 
 	private int min;
 	private int max;
@@ -104,6 +106,10 @@ public enum PacketRegistry {
 			return 4;
 		if (this == SPRINKLER)
 			return 4;
+		if (this == SPARKLOC)
+			return 5;
+		if (this == EMPEFFECT)
+			return 0;
 		return 1;
 	}
 

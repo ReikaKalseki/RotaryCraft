@@ -23,6 +23,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -33,7 +34,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 
-public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv, BreakAction {
+public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv, BreakAction, ComplexIO {
 
 	private boolean[] modes = new boolean[4];
 
@@ -75,6 +76,14 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 					ShaftPowerBus bus = hub.getBus();
 					this.configureBusData(bus);
 				}
+			}
+		}
+		for (int i = 2; i < 6; i++) {
+			ForgeDirection dir = dirs[i];
+			if (this.canHaveItemInSlot(dir) && this.getAdjacentTileEntity(dir) != null) {
+				int speed = this.getSpeedToSide(dir);
+				int torque = this.getTorqueToSide(dir);
+				this.writeToPowerReceiver(dir, speed, torque);
 			}
 		}
 	}

@@ -54,9 +54,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public static final int BEDROCKTEMP = 1450;//1400;//1000;//1150;
 	public static final int MAXTEMP = 2000;
 	public static final float SMELT_XP = 0.6F;
-	public static final int SLOT_1 = 0;
-	public static final int SLOT_2 = 11;
-	public static final int SLOT_3 = 14;
+
+	public static final int CENTER_ADDITIVE = 0;
+	public static final int LOWER_ADDITIVE = 11;
+	public static final int UPPER_ADDITIVE = 14;
 	public static final int PATTERN_SLOT = 15;
 
 	private float xp;
@@ -83,7 +84,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	private BlastRecipe getRecipe() {
 		ItemStack[] center = new ItemStack[9];
 		System.arraycopy(inv, 1, center, 0, 9);
-		BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[SLOT_1], inv[SLOT_2], inv[SLOT_3], center, temperature);
+		BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[CENTER_ADDITIVE], inv[LOWER_ADDITIVE], inv[UPPER_ADDITIVE], center, temperature);
 
 		if (rec == null)
 			return null;
@@ -418,14 +419,14 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		}
 
 		Set<Integer> types = RecipesBlastFurnace.getRecipes().getInputTypesForItem(is);
-		if (slot >= 1 && slot <= 9)
-			return types.contains(0);
-		if (slot == SLOT_1)
+		if (slot == CENTER_ADDITIVE)
 			return types.contains(1);
-		if (slot == SLOT_2)
+		if (slot == LOWER_ADDITIVE)
 			return types.contains(2);
-		if (slot == SLOT_3)
+		if (slot == UPPER_ADDITIVE)
 			return types.contains(3);
+		if (slot >= 1 && slot <= 9)
+			return types.contains(0); //check this last, since there are fewer variants that go in additives
 		return false;
 	}
 

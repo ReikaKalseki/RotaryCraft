@@ -731,7 +731,12 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public void repair(World world, int x, int y, int z, int tier) {
-		this.repair((int)Math.sqrt(tier));
+		//damage = 60;
+		int mod = Math.max(1, 64/ReikaMathLibrary.intpow2(2, tier));
+		if (!world.isRemote && this.getTicksExisted()%mod == 0) {
+			int amt = Math.max(1, Math.min(damage/8, (int)(Math.sqrt(tier)/20D)));
+			this.repair(amt);
+		}
 	}
 
 	@Override

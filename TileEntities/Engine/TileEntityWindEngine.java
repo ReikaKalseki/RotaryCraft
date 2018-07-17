@@ -186,6 +186,11 @@ public class TileEntityWindEngine extends TileEntityEngine {
 		return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(1, 1, 1);
 	}
 
+	@Override
+	public void onRotate() {
+		clearance = null;
+	}
+
 	private static class WindClearanceCheck {
 
 		private final Coordinate engine;

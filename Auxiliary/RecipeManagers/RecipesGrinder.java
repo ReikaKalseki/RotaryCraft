@@ -385,7 +385,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 				n *= 3;
 			for (ItemStack is : li) {
 				if (recipes.containsKey(is)) {
-					ModOreList mod = (ModOreList)ExtractorModOres.getOreFromExtract(recipes.get(is).output);
+					OreType mod = (OreType)ExtractorModOres.getOreFromExtract(recipes.get(is).output);
 					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for grinder registration as "+ore+" as it is already registered to "+mod);
 				}
 				else {

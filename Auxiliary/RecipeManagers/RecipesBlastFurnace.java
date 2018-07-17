@@ -217,7 +217,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			else if (recipe instanceof ShapedOreRecipe || recipe instanceof ShapedRecipes) {
 
 			}*/
-			if (slot == TileEntityBlastFurnace.SLOT_1 || slot > 9)
+			if (slot == TileEntityBlastFurnace.CENTER_ADDITIVE || slot > 9)
 				return false;
 			return ReikaRecipeHelper.getRecipeLocationIndices(recipe, is).contains(slot-1);
 		}
@@ -456,11 +456,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		@Override
 		public boolean isValidInputForSlot(int slot, ItemStack is) {
-			if (slot == TileEntityBlastFurnace.SLOT_1)
+			if (slot == TileEntityBlastFurnace.CENTER_ADDITIVE)
 				return primary.match(is);
-			if (slot == TileEntityBlastFurnace.SLOT_2)
+			if (slot == TileEntityBlastFurnace.LOWER_ADDITIVE)
 				return secondary.match(is);
-			if (slot == TileEntityBlastFurnace.SLOT_3)
+			if (slot == TileEntityBlastFurnace.UPPER_ADDITIVE)
 				return tertiary.match(is);
 			if (slot >= 1 && slot < 10)
 				return this.isValidMainItem(is);

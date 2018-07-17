@@ -173,6 +173,7 @@ powercrystals.minefactoryreloaded.api.IToolHammer, IWrench, ICarpentersHammer, c
 					clicked.setBlockMetadata(dmg-3);
 				else
 					clicked.setBlockMetadata(dmg+1);
+				clicked.onRotate();
 				return true;
 			}
 			if (m == MachineRegistry.FLYWHEEL) {

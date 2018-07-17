@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.RotaryCraft.API.IOMachine;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 
 /** This class has some functions to aid in ensuring you are not the source of a power exploit by remaining powered even if the supplying machine
  * is broken. Call this every tick you are powered, and if the return value is false, your power supply is gone. */
@@ -37,7 +38,13 @@ public class PowerTransferHelper {
 			}
 		}
 		if (toCheck instanceof PowerGenerator || toCheck instanceof IOMachine) {
-			if (toCheck instanceof IOMachine) {
+			if (toCheck instanceof ComplexIO) {
+				ComplexIO cio = (ComplexIO)toCheck;
+				int torque = cio.getTorqueToSide(dir.getOpposite());
+				int omega = cio.getSpeedToSide(dir.getOpposite());
+				return (torque*omega) != 0;
+			}
+			else if (toCheck instanceof IOMachine) {
 				int wx = ((IOMachine) toCheck).getWriteX();
 				int wy = ((IOMachine) toCheck).getWriteY();
 				int wz = ((IOMachine) toCheck).getWriteZ();
