@@ -36,6 +36,8 @@ import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv, BreakAction, ComplexIO {
 
+	private static final boolean ALLOW_VERTICAL_CHAINS = true;
+
 	private boolean[] modes = new boolean[4];
 
 	private ForgeDirection inputSide;
@@ -280,7 +282,7 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	public void findNetwork(World world, int x, int y, int z) {
-		for (int i = 2; i < 6; i++) {
+		for (int i = ALLOW_VERTICAL_CHAINS ? 0 : 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			int dx = x+dir.offsetX;
 			int dy = y+dir.offsetY;
