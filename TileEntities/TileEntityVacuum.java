@@ -336,6 +336,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		if (fs != null) {
 			if (fs.amount > maxDrain)
 				fs.amount = maxDrain;
+			if (ReikaXPFluidHelper.getXPForAmount(fs.amount) <= 0)
+				return null;
 			if (doDrain)
 				experience -= ReikaXPFluidHelper.getXPForAmount(fs.amount);
 		}

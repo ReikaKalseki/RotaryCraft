@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
+import Reika.DragonAPI.Instantiable.Interpolation;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -55,6 +58,21 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	private final HybridTank lava = new HybridTank("lavamix", CAPACITY);
 	private final HybridTank water = new HybridTank("watermix", CAPACITY);
 
+	private static final Interpolation obsidianWeight = new Interpolation(false).addPoint(0.5, 0).addPoint(1, 100);
+	private static final Interpolation stoneWeight = new Interpolation(false).addPoint(0.05, 0).addPoint(0.5, 100).addPoint(0.95, 0);
+	private static final Interpolation cobbleWeight = new Interpolation(false).addPoint(0, 100).addPoint(0.5, 0);
+
+	private ItemStack getProducedItem() {
+		if (water.getFraction() <= 0)
+			return null;
+		WeightedRandom<Block> w = new WeightedRandom();
+		float f = lava.getFraction()/water.getFraction();
+		w.addEntry(Blocks.obsidian, obsidianWeight.getValue(f));
+		w.addEntry(Blocks.stone, stoneWeight.getValue(f));
+		w.addEntry(Blocks.cobblestone, cobbleWeight.getValue(f));
+		return new ItemStack(w.getRandomEntry());
+	}
+
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return true;
@@ -74,9 +92,11 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 			return;
 		this.testIdle();
 
-		int n = this.getNumberConsecutiveOperations();
-		for (int i = 0; i < n; i++)
-			this.doOperation(n > 1);
+		if (!world.isRemote) {
+			int n = this.getNumberConsecutiveOperations();
+			for (int i = 0; i < n; i++)
+				this.doOperation(n > 1);
+		}
 	}
 
 	private void doOperation(boolean multiple) {
@@ -90,8 +110,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		boolean noliq = false;
 		if (water.isEmpty() || lava.isEmpty())
 			noliq = true;
-		boolean full = (this.getNonFullStack() == -1);
-		idle = (full || noliq);
+		boolean full = this.getNonFullStack(this.getProducedItem()) == -1;
+		idle = full || noliq;
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -132,35 +152,36 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	}
 
 	public void mix() {
-		int slot = this.getNonFullStack();
+		ItemStack is = this.getProducedItem();
+		if (is == null)
+			return;
+		int slot = this.getNonFullStack(is);
 		if (slot == -1)
 			return;
-		if (lava.getLevel() < 1000 || water.getLevel() < 1000)
+		//ReikaJavaLibrary.pConsole(is);
+		int lavaamt = !ReikaItemHelper.matchStackWithBlock(is, Blocks.obsidian) ? 5 : 1000;
+		if (lava.getLevel() < lavaamt || water.getLevel() < 1000)
 			return;
-		lava.removeLiquid(1000);
+		ReikaInventoryHelper.addOrSetStack(is, inv, slot);
+		if (!ReikaItemHelper.matchStackWithBlock(is, Blocks.cobblestone))
+			lava.removeLiquid(lavaamt);
 		water.removeLiquid(1000);
-		ReikaInventoryHelper.addOrSetStack(Blocks.obsidian, 1, 0, inv, slot);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*rand.nextFloat(), 0.7F+0.3F*rand.nextFloat());
-		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.25, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.5, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.5, yCoord+0.75, zCoord+0.75, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.25, yCoord+0.75, zCoord+0.25, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.25, yCoord+0.75, zCoord+0.5, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.25, yCoord+0.75, zCoord+0.75, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.75, yCoord+0.75, zCoord+0.25, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.75, yCoord+0.75, zCoord+0.5, 0, 0, 0);
-		worldObj.spawnParticle("smoke", xCoord+0.75, yCoord+0.75, zCoord+0.75, 0, 0, 0);
+		for (double x = xCoord+0.25; x <= xCoord+0.75; x += 0.25) {
+			for (double z = zCoord+0.25; z <= zCoord+0.75; z += 0.25) {
+				worldObj.spawnParticle("smoke", x, yCoord+0.75, z, 0, 0, 0);
+			}
+		}
 	}
 
-	public int getNonFullStack() {
-		int slot = -1;
-		for (int k = 0; k < inv.length && slot == -1; k++) {
+	public int getNonFullStack(ItemStack is) {
+		for (int k = 0; k < inv.length; k++) {
 			if (inv[k] == null)
-				slot = k;
-			else if (ReikaItemHelper.matchStackWithBlock(inv[k], Blocks.obsidian) && inv[k].stackSize < this.getInventoryStackLimit())
-				slot = k;
+				return k;
+			else if (ReikaItemHelper.matchStacks(inv[k], is) && inv[k].stackSize < this.getInventoryStackLimit())
+				return k;
 		}
-		return slot;
+		return -1;
 	}
 
 	public int getWaterScaled(int par1)
@@ -251,13 +272,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 
 	@Override
 	public int getRedstoneOverride() {
-		if (this.getNonFullStack() == -1)
-			return 15;
-		if (lava.isEmpty())
-			return 15;
-		if (water.isEmpty())
-			return 15;
-		return 0;
+		return idle ? 15 : 0;
 	}
 
 	@Override
