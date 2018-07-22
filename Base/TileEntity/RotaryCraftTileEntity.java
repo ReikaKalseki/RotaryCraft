@@ -241,7 +241,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	@ModDependent(ModList.OPENCOMPUTERS)
-	protected final Visibility getOCNetworkVisibility() {
+	public final Visibility getOCNetworkVisibility() {
 		if (this.getMachine().isTransmissionMachine())
 			return this.getMachine().isAdvancedTransmission() ? Visibility.Network : Visibility.Neighbors;
 		else if (this.getMachine().isPipe())

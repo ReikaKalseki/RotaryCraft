@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -109,40 +110,46 @@ public class WorktableRecipes extends RecipeHandler {
 
 		for (hashmap = new HashMap(); i < items.length; i += 2) {
 			Character character = (Character)items[i];
-			ItemStack itemstack1 = null;
+			ItemStack input = null;
 
-			if (items[i+1] instanceof Item) {
-				itemstack1 = new ItemStack((Item)items[i+1]);
+			if (items[i+1] == null || items[i+1] == Blocks.air) {
+				input = null;
+			}
+			else if (items[i+1] instanceof Item) {
+				input = new ItemStack((Item)items[i+1]);
 			}
 			else if (items[i+1] instanceof Block) {
-				itemstack1 = new ItemStack((Block)items[i+1], 1, 32767);
+				if (Item.getItemFromBlock((Block)items[i+1]) == null)
+					throw new IllegalArgumentException("Tried to create a recipe with a block with no item!");
+				input = new ItemStack((Block)items[i+1], 1, 32767);
 			}
 			else if (items[i+1] instanceof ItemStack) {
-				itemstack1 = (ItemStack)items[i+1];
+				input = (ItemStack)items[i+1];
 			}
 			else if (items[i+1] == null || ((items[i+1] instanceof ItemStack && ((ItemStack)items[i+1]).getItem() == null))) {
 				throw new IllegalArgumentException("Null item in recipe! Possible mod conflict?");
 			}
 
 			//ReikaJavaLibrary.pConsole(character+" -> "+itemstack1);
-			hashmap.put(character, itemstack1);
+			if (input != null)
+				hashmap.put(character, input);
 		}
 
-		ItemStack[] aitemstack = new ItemStack[j * k];
+		ItemStack[] array = new ItemStack[j * k];
 
 		for (int i1 = 0; i1 < j * k; ++i1) {
 			char c0 = s.charAt(i1);
 
 			if (hashmap.containsKey(c0)) {
 				//ReikaJavaLibrary.spamConsole(c0+":   "+(hashmap.get(Character.valueOf(c0))));
-				aitemstack[i1] = ((ItemStack)hashmap.get(Character.valueOf(c0))).copy();
+				array[i1] = ((ItemStack)hashmap.get(Character.valueOf(c0))).copy();
 			}
 			else {
-				aitemstack[i1] = null;
+				array[i1] = null;
 			}
 		}
 
-		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, aitemstack, output);
+		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, array, output);
 		this.addRecipe(shapedrecipes, rl);
 		return shapedrecipes;
 	}
