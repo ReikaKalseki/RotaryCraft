@@ -443,8 +443,8 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	public static void resetCoordinate(World world, int x, int y, int z) {
-		shutdownLocations.remove(new WorldLocation(world, x, y, z));
-		ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), world.provider.dimensionId, x, y, z, 0);
+		if (shutdownLocations.remove(new WorldLocation(world, x, y, z)))
+			ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), world.provider.dimensionId, x, y, z, 0);
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {

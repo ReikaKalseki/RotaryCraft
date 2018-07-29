@@ -480,7 +480,7 @@ public class RotaryCraft extends DragonAPIMod {
 		MinetweakerHooks.instance.registerClass(PulseJetTweaker.class);
 		MinetweakerHooks.instance.registerClass(FrictionTweaker.class);
 
-		FurnaceFuelRegistry.instance.registerItemSimple(ItemRegistry.ETHANOL.getStackOf(), 2);
+		FurnaceFuelRegistry.instance.registerItemSimple(ItemRegistry.ETHANOL.getStackOf(), 5);
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.coke, 12);
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthracite, 24);
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.cokeblock, 12*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
