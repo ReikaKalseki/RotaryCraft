@@ -727,9 +727,13 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			throw new IllegalArgumentException("Secondary inputs must be specified sequentially: Primary-secondary-tertiary!");
 		}
 		BlastInput primary = new BlastInput(crl.parseItemCollection(first.getChild("items").getDataValues(), true), (float)first.getDouble("consumption_chance"), first.getInt("number_to_use"));
-		BlastInput secondary = second != null ? new BlastInput(crl.parseItemCollection(second.getChild("items").getDataValues(), true), (float)second.getDouble("consumption_chance"), second.getInt("number_to_use")) : null;
-		BlastInput tertiary = third != null ? new BlastInput(crl.parseItemCollection(third.getChild("items").getDataValues(), true), (float)third.getDouble("consumption_chance"), third.getInt("number_to_use")) : null;
-		this.addRecipe(new BlastRecipe(primary, secondary, tertiary, main, out, bonus, xp, temp), RecipeLevel.CUSTOM);
+		BlastInput secondary = second != null ? new BlastInput(crl.parseItemCollection(second.getChild("items").getDataValues(), true), (float)second.getDouble("consumption_chance"), second.getInt("number_to_use")) : new BlastInput((ItemStack)null, 0, 1);
+		BlastInput tertiary = third != null ? new BlastInput(crl.parseItemCollection(third.getChild("items").getDataValues(), true), (float)third.getDouble("consumption_chance"), third.getInt("number_to_use")) : new BlastInput((ItemStack)null, 0, 1);
+		BlastRecipe br = new BlastRecipe(primary, secondary, tertiary, main, req, out, bonus, xp, temp);
+		br.matchNumberExactly = match;
+		if (alloy)
+			br.setAlloy();
+		this.addRecipe(br, RecipeLevel.CUSTOM);
 		return true;
 	}
 }

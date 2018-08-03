@@ -9,13 +9,19 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Instantiable.Rendering.RenderTransform;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -27,14 +33,34 @@ import Reika.RotaryCraft.Models.Animated.ModelBevel;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 
+import com.google.common.collect.HashBiMap;
+
 public class RenderBevel extends RotaryTERenderer
 {
 
-	private ModelBevel BevelModel = new ModelBevel();
+	private final ModelBevel BevelModel = new ModelBevel();
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
+	private static final HashBiMap<ImmutablePair<ForgeDirection, ForgeDirection>, Integer> directions = HashBiMap.create();
+	private static final HashMap<ImmutablePair<ForgeDirection, ForgeDirection>, RenderTransform> transforms = new HashMap();
+
+	private static final RenderTransform[] renders = new RenderTransform[TileEntityBevelGear.getDirectionMap().size()];
+
+	static {
+
+
+		for (Entry<ImmutablePair<ForgeDirection, ForgeDirection>, Integer> e : directions.entrySet()) {
+			renders[e.getValue()] = transforms.get(e.getKey());
+		}
+	}
+
+	private static void registerDirection(ForgeDirection d1, ForgeDirection d2, RenderTransform r) {
+		int idx = directions.size()/2;
+		directions.put(new ImmutablePair(d1, d2), idx);
+		directions.put(new ImmutablePair(d2, d1), idx);
+		transforms.put(new ImmutablePair(d1, d2), r);
+		transforms.put(new ImmutablePair(d2, d1), r);
+	}
+
 	public void renderTileEntityBevelAt(TileEntityBevelGear tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -55,122 +81,123 @@ public class RenderBevel extends RotaryTERenderer
 		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		int var11 = 0;	 //used to rotate the model about metadata
-		int var12 = 0;
-		int var13 = 0;
+		int ry = 0;	 //used to rotate the model about metadata
+		int rx = 0;
+		int rz = 0;
 		int dir = 1;
 		if (tile.isInWorld()) {
-
-			switch(tile.direction) {
-			case 0:
-				var11 = 90; var12 = 0; var13 = 0;
-				break;
-			case 1:
-				var11 = 180; var12 = 0; var13 = 0;
-				break;
-			case 2:
-				var11 = 270; var12 = 0; var13 = 0;
-				break;
-			case 3:
-				var11 = 0; var12 = 0; var13 = 0;
-				break;
-			case 4:
-				var11 = 0; var12 = 0; var13 = 0;
-				dir = -1;
-				break;
-			case 5:
-				var11 = 90; var12 = 0; var13 = 0;
-				dir = -1;
-				break;
-			case 6:
-				var11 = 180; var12 = 0; var13 = 0;
-				dir = -1;
-				break;
-			case 7:
-				var11 = 270; var12 = 0; var13 = 0;
-				dir = -1;
-				break;
-			case 8:
-				var11 = 0; var12 = 270; var13 = 0;
-				GL11.glTranslatef(0F, 1F, 1F);
-				dir = -1;
-				break;
-			case 9:
-				var11 = 90; var12 = 270; var13 = 0;
-				GL11.glTranslatef(1F, 1F, -0F);
-				dir = -1;
-				break;
-			case 10:
-				var11 = 180; var12 = 270; var13 = 0;
-				GL11.glTranslatef(0F, 1F, -1F);
-				dir = -1;
-				break;
-			case 11:
-				var11 = -90; var12 = 270; var13 = 0;
-				GL11.glTranslatef(-1F, 1F, -0F);
-				dir = -1;
-				break;
-			case 12:
-				var11 = 0; var12 = 90; var13 = 0;
-				GL11.glTranslatef(0F, 1F, -1F);
-				dir = -1;
-				break;
-			case 13:
-				var11 = 90; var12 = 90; var13 = 0;
-				GL11.glTranslatef(-1F, 1F, -0F);
-				break;
-			case 14:
-				var11 = 180; var12 = 90; var13 = 0;
-				GL11.glTranslatef(0F, 1F, 1F);
-				dir = -1;
-				break;
-			case 15:
-				var11 = -90; var12 = 90; var13 = 0;
-				GL11.glTranslatef(1F, 1F, -0F);
-				dir = -1;
-				break;
-			case 16:
-				var11 = 0; var12 = 90; var13 = 0;
-				GL11.glTranslatef(0F, 1F, -1F);
-				dir = -1;
-				break;
-			case 17:
-				var11 = 90; var12 = 90; var13 = 0;
-				GL11.glTranslatef(-1F, 1F, -0F);
-				dir = -1;
-				break;
-			case 18:
-				var11 = 180; var12 = 90; var13 = 0;
-				GL11.glTranslatef(0F, 1F, 1F);
-				dir = -1;
-				break;
-			case 19:
-				var11 = -90; var12 = 90; var13 = 0;
-				GL11.glTranslatef(1F, 1F, -0F);
-				dir = -1;
-				break;
-			case 20:
-				var11 = 0; var12 = 270; var13 = 0;
-				GL11.glTranslatef(0F, 1F, 1F);
-				break;
-			case 21:
-				var11 = 90; var12 = 270; var13 = 0;
-				GL11.glTranslatef(1F, 1F, -0F);
-				break;
-			case 22:
-				var11 = 180; var12 = 270; var13 = 0;
-				GL11.glTranslatef(0F, 1F, -1F);
-				break;
-			case 23:
-				var11 = -90; var12 = 270; var13 = 0;
-				GL11.glTranslatef(-1F, 1F, 0F);
-				break;
+			int ddir = tile.direction;
+			ddir = 10;
+			switch(ddir) {
+				case 13:
+					ry = 90; rx = 0; rz = 0;
+					break;
+				case 15:
+					ry = 180; rx = 0; rz = 0;
+					break;
+				case 12:
+					ry = 270; rx = 0; rz = 0;
+					break;
+				case 14:
+					ry = 0; rx = 0; rz = 0;
+					break;
+				case 9:
+					ry = 0; rx = 0; rz = 0;
+					dir = -1;
+					break;
+				case 11:
+					ry = 90; rx = 0; rz = 0;
+					dir = -1;
+					break;
+				case 8:
+					ry = 180; rx = 0; rz = 0;
+					dir = -1;
+					break;
+				case 10:
+					ry = 270; rx = 0; rz = 0;
+					dir = -1;
+					break;
+				case 6:
+					ry = 0; rx = 270; rz = 0;
+					GL11.glTranslatef(0F, 1F, 1F);
+					dir = -1;
+					break;
+				case 4:
+					ry = 90; rx = 270; rz = 0;
+					GL11.glTranslatef(1F, 1F, -0F);
+					dir = -1;
+					break;
+				case 7:
+					ry = 180; rx = 270; rz = 0;
+					GL11.glTranslatef(0F, 1F, -1F);
+					dir = -1;
+					break;
+				case 5:
+					ry = -90; rx = 270; rz = 0;
+					GL11.glTranslatef(-1F, 1F, -0F);
+					dir = -1;
+					break;
+				case 2:
+					ry = 0; rx = 90; rz = 0;
+					GL11.glTranslatef(0F, 1F, -1F);
+					dir = -1;
+					break;
+				case 0:
+					ry = 90; rx = 90; rz = 0;
+					GL11.glTranslatef(-1F, 1F, -0F);
+					break;
+				case 3:
+					ry = 180; rx = 90; rz = 0;
+					GL11.glTranslatef(0F, 1F, 1F);
+					dir = -1;
+					break;
+				case 1:
+					ry = -90; rx = 90; rz = 0;
+					GL11.glTranslatef(1F, 1F, -0F);
+					dir = -1;
+					break;
+				case 16:
+					ry = 0; rx = 90; rz = 0;
+					GL11.glTranslatef(0F, 1F, -1F);
+					dir = -1;
+					break;
+				case 17:
+					ry = 90; rx = 90; rz = 0;
+					GL11.glTranslatef(-1F, 1F, -0F);
+					dir = -1;
+					break;
+				case 18:
+					ry = 180; rx = 90; rz = 0;
+					GL11.glTranslatef(0F, 1F, 1F);
+					dir = -1;
+					break;
+				case 19:
+					ry = -90; rx = 90; rz = 0;
+					GL11.glTranslatef(1F, 1F, -0F);
+					dir = -1;
+					break;
+				case 20:
+					ry = 0; rx = 270; rz = 0;
+					GL11.glTranslatef(0F, 1F, 1F);
+					break;
+				case 21:
+					ry = 90; rx = 270; rz = 0;
+					GL11.glTranslatef(1F, 1F, -0F);
+					break;
+				case 22:
+					ry = 180; rx = 270; rz = 0;
+					GL11.glTranslatef(0F, 1F, -1F);
+					break;
+				case 23:
+					ry = -90; rx = 270; rz = 0;
+					GL11.glTranslatef(-1F, 1F, 0F);
+					break;
 			}
 
 
-			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(var12, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(var13, 0.0F, 0.0F, 1.0F);
+			GL11.glRotatef(ry, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(rx, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(rz, 0.0F, 0.0F, 1.0F);
 
 		}
 		else {
@@ -216,35 +243,35 @@ public class RenderBevel extends RotaryTERenderer
 			double dy = 0;
 			double dz = 0;
 			switch(i) {
-			case 0:
-				rx = 90;
-				l = 0.07;
-				break;
-			case 1:
-				rx = 90;
-				dy = 1;
-				break;
-			case 2:
-				rz = 180;
-				dy = 1;
-				dx = 1;
-				break;
-			case 3:
-				dz = 1;
-				l = 0.07;
-				break;
-			case 4:
-				ry = 90;
-				rz = 180;
-				dy = 1;
-				break;
-			case 5:
-				ry = -90;
-				rz = 180;
-				dy = 1;
-				dx = 1;
-				dz = 1;
-				break;
+				case 0:
+					rx = 90;
+					l = 0.07;
+					break;
+				case 1:
+					rx = 90;
+					dy = 1;
+					break;
+				case 2:
+					rz = 180;
+					dy = 1;
+					dx = 1;
+					break;
+				case 3:
+					dz = 1;
+					l = 0.07;
+					break;
+				case 4:
+					ry = 90;
+					rz = 180;
+					dy = 1;
+					break;
+				case 5:
+					ry = -90;
+					rz = 180;
+					dy = 1;
+					dx = 1;
+					dz = 1;
+					break;
 			}
 			GL11.glTranslated(dx, 0, 0);
 			GL11.glTranslated(0, dy, 0);

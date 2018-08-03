@@ -200,7 +200,13 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			if (m == MachineRegistry.SPLITTER) {
 				TileEntitySplitter devicein = (TileEntitySplitter)te;
 				if (devicein.isSplitting()) {
+					int om = omega;
+					int tq = torque;
 					this.readFromSplitter(world, x, y, z, devicein);
+					omegain = omega;
+					torquein = torque;
+					omega = om;
+					torque = tq;
 					return;
 				}
 				else if (devicein.isWritingTo(this)) {
@@ -383,6 +389,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		/*return new PowerSourceList().addSource(this);*/
 		PowerSourceList pwr = new PowerSourceList();
 		pwr.addAll(pwr.getAllFrom(worldObj, read, xCoord+read.offsetX, yCoord+read.offsetY, zCoord+read.offsetZ, this, caller));
+		if (pwr.isEmpty())
+			pwr.addSource(this);
 		return pwr;
 	}
 

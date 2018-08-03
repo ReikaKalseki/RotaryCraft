@@ -11,16 +11,13 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public abstract class EnchantmentRenderer {
@@ -35,6 +32,7 @@ public abstract class EnchantmentRenderer {
 		int y = tile.yCoord;
 		int z = tile.zCoord;
 		float f9 = (System.nanoTime()/100000000)%64/64F;
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		ReikaTextureHelper.bindEnchantmentTexture();
 		GL11.glEnable(GL11.GL_BLEND);
 		BlendMode.OVERLAYDARK.apply();
@@ -51,6 +49,12 @@ public abstract class EnchantmentRenderer {
 		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
 		GL11.glScalef(1.0F, -1.0F, -1.0F);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+
+		if (!tile.hasWorldObj()) {
+			GL11.glTranslated(-1, 0, 0);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+		}
+
 		float var11 = 0;
 		switch(tile.getBlockMetadata()) {
 			case 0:
@@ -76,6 +80,7 @@ public abstract class EnchantmentRenderer {
 
 		double d = 1.0125;
 		int p = 2;
+		GL11.glPushMatrix();
 		GL11.glTranslated(0, p, 0);
 		GL11.glScaled(d, d, d);
 		GL11.glTranslated(0, -p, 0);
@@ -84,166 +89,14 @@ public abstract class EnchantmentRenderer {
 		GL11.glTranslated(par2*f, par4*f, -par6*f);
 		model.renderAll(tile, li, 0);
 
-		GL11.glTranslated(0, p, 0);
-		GL11.glScaled(1D/d, 1D/d, 1D/d);
-		GL11.glTranslated(0, -p, 0);
+		GL11.glPopMatrix();
 
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
 		GL11.glLoadIdentity();
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
-		GL11.glDepthMask(true);
-
-		if (tile.hasWorldObj())
-			ReikaRenderHelper.enableLighting();
-
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-
 		GL11.glPopMatrix();
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-
-		BlendMode.ADDITIVE2.apply();
-		GL11.glDisable(GL11.GL_BLEND);
-	}
-
-	@Deprecated
-	public static void renderShine(double p2, double p4, double p6, double dx, double dy, double dz) {
-		boolean textured = true;
-		par2 = p2;
-		par4 = p4;
-		par6 = p6;
-		int[] color = {127, 0, 255, 255};
-		if (textured)
-			ReikaRenderHelper.disableLighting();
-		else
-			ReikaRenderHelper.prepareGeoDraw(true);
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)par2, (float)par4 + 2.0F, (float)par6 + 1.0F);
-		GL11.glScalef(1.0F, -1.0F, -1.0F);
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		GL11.glPopMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		if (color[3] > 255)
-			color[3] = 255;
-
-		Tessellator var5 = Tessellator.instance;
-		var5.startDrawing(GL11.GL_QUADS);
-		//var5.setBrightness(255);
-
-		if (textured) {
-			ReikaTextureHelper.bindTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/glint.png");
-			GL11.glEnable(GL11.GL_BLEND);
-			double off = ((System.nanoTime()/50000000)%25)/25D;
-			var5.addVertexWithUV(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand, 0+off, 0+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand, 0+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand, 1+off, 1+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand, 1+off, 0+off);
-
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand, 0+off, 0+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand, 0+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand, 1+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand, 1+off, 0+off);
-
-			var5.addVertexWithUV(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand, 0+off, 0+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand, 0+off, 1+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand, 1+off, 1+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand, 1+off, 0+off);
-
-			var5.addVertexWithUV(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand, 0+off, 0+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand, 0+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand, 1+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand, 1+off, 0+off);
-
-			var5.addVertexWithUV(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand, 0+off, 0+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand, 0+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand, 1+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand, 1+off, 0+off);
-
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand, 0+off, 0+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand, 0+off, 1+off);
-			var5.addVertexWithUV(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand, 1+off, 1+off);
-			var5.addVertexWithUV(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand, 1+off, 0+off);
-			GL11.glColor4d(1, 1, 1, 1);
-		}
-		else {
-			var5.setColorRGBA(color[0], color[1], color[2], (int)(color[3]*0.375));
-
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-		}
-		var5.draw();
-
-		if (!textured) {
-			var5.startDrawing(GL11.GL_LINE_LOOP);
-			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-			var5.draw();
-			var5.startDrawing(GL11.GL_LINE_LOOP);
-			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.draw();
-			var5.startDrawing(GL11.GL_LINE_LOOP);
-			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.draw();
-			var5.startDrawing(GL11.GL_LINE_LOOP);
-			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz-0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz-0.0625*expand);
-			var5.draw();
-			var5.startDrawing(GL11.GL_LINE_LOOP);
-			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-			var5.addVertex(dx+1+0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx+1+0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-			var5.draw();
-			var5.startDrawing(GL11.GL_LINE_LOOP);
-			var5.setColorRGBA(color[0], color[1], color[2], color[3]);
-			var5.addVertex(dx-0.0625*expand, dy-0.0625*expand, dz+1+0.0625*expand);
-			var5.addVertex(dx-0.0625*expand, dy+1+0.0625*expand, dz+1+0.0625*expand);
-			var5.draw();
-		}
-
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		ReikaRenderHelper.exitGeoDraw();
+		GL11.glPopAttrib();
 	}
 
 }

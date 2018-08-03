@@ -17,7 +17,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
@@ -63,7 +62,6 @@ import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.BannedItemReader;
 import Reika.DragonAPI.ModInteract.ItemStackRepository;
 import Reika.DragonAPI.ModInteract.MinetweakerHooks;
@@ -644,7 +642,7 @@ public class RotaryCraft extends DragonAPIMod {
 				GameRegistry.addRecipe(new ShapedOreRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), RotaryRecipes.getBlastFurnaceIngredients()));
 			}
 			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.WORKTABLE.getCraftedProduct())) {
-				GameRegistry.addRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);
+				GameRegistry.addRecipe(new ShapedOreRecipe(MachineRegistry.WORKTABLE.getCraftedProduct(), RotaryRecipes.getWorktableIngredients()));
 			}
 		}
 	}

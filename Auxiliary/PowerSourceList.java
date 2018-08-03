@@ -203,6 +203,10 @@ public class PowerSourceList implements PowerTracker {
 		return engines.size();
 	}
 
+	public boolean isEmpty() {
+		return engines.isEmpty();
+	}
+
 	public static PowerSourceList combine(PowerSourceList in1, PowerSourceList in2, ShaftMerger caller) {
 		PowerSourceList psl = new PowerSourceList();
 		psl.engines.addAll(in1.engines);

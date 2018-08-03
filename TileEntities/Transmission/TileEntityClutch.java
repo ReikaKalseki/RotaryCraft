@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Transmission;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -17,7 +19,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Power.ShaftMerger;
+import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
+import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -140,18 +145,27 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("redstone", needsRedstone);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		needsRedstone = NBT.getBoolean("redstone");
+	}
+
+	@Override
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
+		return this.isOutputEnabled() ? super.getPowerSources(io, caller) : new PowerSourceList();
+	}
+
+	@Override
+	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		if (this.isOutputEnabled())
+			super.getAllOutputs(c, dir);
 	}
 }

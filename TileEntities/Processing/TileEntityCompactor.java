@@ -204,21 +204,7 @@ MultiOperational, ConditionalOperation {
 	}
 
 	public void updatePressure(World world, int x, int y, int z, int meta) {
-		int Pamb = 101;
-		if (world.getBiomeGenForCoords(x, z) == BiomeGenBase.hell)
-			Pamb = 20000;
-		if (y < 30)
-			Pamb *= 1.25;
-		if (y > 128)
-			Pamb *= 0.8;
-		if (y > 192)
-			Pamb *= 0.8; //Makes a collective *0.64
-		int waterpressure = 10*ReikaWorldHelper.getDepth(world, x, y, z, "water"); //10kPa per meter
-		if (waterpressure != -10)
-			Pamb += waterpressure;
-		int lavapressure = 27*ReikaWorldHelper.getDepth(world, x, y, z, "lava"); //27kPa per meter
-		if (lavapressure != -27)
-			Pamb += lavapressure;
+		int Pamb = (int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, true);
 
 		if (pressure > Pamb && world.getBiomeGenForCoords(x, z) != BiomeGenBase.hell)
 			pressure -= ReikaMathLibrary.extrema((pressure-Pamb)/200, 1, "max");

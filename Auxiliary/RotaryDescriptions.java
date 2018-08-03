@@ -74,11 +74,14 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public final class RotaryDescriptions {
 
-	private static String PARENT = getParent();
+	private static String PARENT = getParent(true);
 	private static final String DESC_SUFFIX = ":desc";
 	private static final String NOTE_SUFFIX = ":note";
 	private static final String SUBNOTE_SUFFIX = ":sub";
@@ -94,21 +97,32 @@ public final class RotaryDescriptions {
 
 	private static ArrayList<HandbookRegistry> categories = new ArrayList<HandbookRegistry>();
 
-	private static final boolean mustLoad = !ReikaObfuscationHelper.isDeObfEnvironment();
-	private static final XMLInterface parents = new XMLInterface(RotaryCraft.class, PARENT+"categories.xml", mustLoad);
-	private static final XMLInterface machines = new XMLInterface(RotaryCraft.class, PARENT+"machines.xml", mustLoad);
-	private static final XMLInterface trans = new XMLInterface(RotaryCraft.class, PARENT+"trans.xml", mustLoad);
-	private static final XMLInterface engines = new XMLInterface(RotaryCraft.class, PARENT+"engines.xml", mustLoad);
-	private static final XMLInterface tools = new XMLInterface(RotaryCraft.class, PARENT+"tools.xml", mustLoad);
-	private static final XMLInterface resources = new XMLInterface(RotaryCraft.class, PARENT+"resource.xml", mustLoad);
-	private static final XMLInterface miscs = new XMLInterface(RotaryCraft.class, PARENT+"misc.xml", mustLoad);
-	private static final XMLInterface infos = new XMLInterface(RotaryCraft.class, PARENT+"info.xml", mustLoad);
+	private static final XMLInterface parents = loadData("categories");
+	private static final XMLInterface machines = loadData("machines");
+	private static final XMLInterface trans = loadData("trans");
+	private static final XMLInterface engines = loadData("engines");
+	private static final XMLInterface tools = loadData("tools");
+	private static final XMLInterface resources = loadData("resource");
+	private static final XMLInterface miscs = loadData("misc");
+	private static final XMLInterface infos = loadData("info");
+
+	private static XMLInterface loadData(String name) {
+		XMLInterface xml = new XMLInterface(RotaryCraft.class, PARENT+name+".xml", !ReikaObfuscationHelper.isDeObfEnvironment());
+		xml.setFallback(getParent(false)+name+".xml");
+		xml.init();
+		return xml;
+	}
 
 	public static void addCategory(HandbookRegistry h) {
 		categories.add(h);
 	}
 
-	private static String getParent() {
+	private static String getParent(boolean locale) {
+		return locale && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? getLocalizedParent() : "Resources/";
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static String getLocalizedParent() {
 		Language language = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
 		String lang = language.getLanguageCode();
 		if (hasLocalizedFor(language) && !"en_US".equals(lang))
@@ -166,7 +180,7 @@ public final class RotaryDescriptions {
 
 	/** Call this from the SERVER side! */
 	public static void reload() {
-		PARENT = getParent();
+		PARENT = getParent(true);
 
 		loadNumericalData();
 

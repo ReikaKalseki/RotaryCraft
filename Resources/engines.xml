@@ -58,12 +58,19 @@
 			The alternating current (AC) engine, like its DC cousin, requires a redstone signal to perform. However, this one needs an alternating signal, best supplied with a redstone clock. Faster cycle times correlate to more consistent power output, with 2-clocks providing a constant supply of %d Nm at %d rad/s (%.3fkW). This engine requires a magnetized shaft core, which it will gradually de-magnetize.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fkW
-			Power Source: Redstone Clock and Magnetized Shaft Core
-			Requires Consumables: Shaft Core Magnetization
-			Risks: None
+			<sub>
+				<s1>
+					Torque: %d Nm
+					Speed: %d rad/s
+					Power: %.3fkW
+					Power Source: Redstone Clock and Magnetized Shaft Core
+					Requires Consumables: Shaft Core Magnetization
+					Risks: None
+				</s1>
+				<s2>
+					Shaft cores can only be automatically extracted once fully demagnetized
+				</s2>
+			</sub>
 		</note>
 	</ac>
 	<sport>
@@ -81,7 +88,7 @@
 	</sport>
 	<hydro>
 		<desc>
-			The hydrokinetic engine converts the energy of falling water into shaft power. Note that this machine can only rotate counterclockwise, and therefore the waterfall must be positioned accordingly. Additionally, adjacent blocks can obstruct the paddles from rotating. Finally, this engine's power output is dependent on how far the water is falling. A 3-block fall will produce minimal power, but a 64+ block fall can produce %d Nm at %d rad/s, the highest torque of any engine, totalling %.3fkW. These engines can also be chained, adding their torques together. This engine must be lubricated to function.
+			The hydrokinetic engine converts the energy of falling liquids into shaft power. Note that this machine can only rotate counterclockwise, and therefore the waterfall must be positioned accordingly. Additionally, adjacent blocks can obstruct the paddles from rotating. Finally, this engine's power output is dependent on how far the water is falling. A 3-block fall will produce minimal power, but a 64+ block fall can produce %d Nm at %d rad/s, the highest torque of any engine, totalling %.3fkW. These engines can also be chained, adding their torques together. This engine must be lubricated to function.
 		</desc>
 		<note>
 			<sub>
@@ -89,7 +96,7 @@
 					Max Torque: %d Nm
 					Max Speed: %d rad/s
 					Max Power: %.3fkW
-					Power Source: Falling Water
+					Power Source: Falling Liquids
 					Requires Consumables: Lubricant
 					Risks: Spinning Paddles
 					Notes: Requires tall waterfalls to acheive full power
@@ -98,6 +105,8 @@
 					At most 4 engines can be chained before the torque overloads the core shaft
 
 					Can be upgraded with a bedrock shaft unit to increase that limit to 16 engines
+					
+					Liquid density and viscosity affect power production
 				</s2>
 			</sub>
 		</note>

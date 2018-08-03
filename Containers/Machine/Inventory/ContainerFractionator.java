@@ -56,7 +56,6 @@ public class ContainerFractionator extends ContainerIOMachine
 
 			//icrafting.sendProgressBarUpdate(this, 1, Fraction.getFuelLevel());
 			icrafting.sendProgressBarUpdate(this, 2, Fraction.mixTime);
-			icrafting.sendProgressBarUpdate(this, 3, Fraction.storeTime);
 		}
 
 		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Fraction, "tank");
@@ -66,9 +65,8 @@ public class ContainerFractionator extends ContainerIOMachine
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		//case 1: Fraction.setFuelLevel(par2); break;
-		case 2: Fraction.mixTime = par2; break;
-		case 3: Fraction.storeTime = par2; break;
+			//case 1: Fraction.setFuelLevel(par2); break;
+			case 2: Fraction.mixTime = par2; break;
 		}
 	}
 }

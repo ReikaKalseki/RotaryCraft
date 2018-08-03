@@ -113,6 +113,7 @@ import Reika.RotaryCraft.TileEntities.Production.TileEntityAggregator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBedrockBreaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityLavaMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
@@ -1063,6 +1064,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		}
 		if (te instanceof TileEntityAggregator) {
 			currenttip.add(String.format("Producing %d mB per tick", ((TileEntityAggregator)te).getProductionPerTick(acc.getWorld().getBiomeGenForCoords(te.xCoord, te.zCoord))));
+		}
+		if (te instanceof TileEntityFractionator) {
+			currenttip.add(String.format("Efficiency Factor: %.2f%s", ((TileEntityFractionator)te).getYieldRatio()*100D, "%"));
 		}
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();

@@ -263,7 +263,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			return;
 		}
 		double grav = this.getGravity(world);
-		double dy = (ReikaWorldHelper.findFluidSurface(world, pos[0], y, pos[1])-y)-0.5;
+		double dy = ReikaWorldHelper.findFluidSurface(world, pos[0], y, pos[1], fluidType)-y;
 		dy = Math.pow(dy, 1.5)/32;
 		fluidFallSpeed = 0.92*Math.sqrt(2*grav*dy)/Math.max(0.25, Math.pow(f.getViscosity()/1000, 0.375));
 	}

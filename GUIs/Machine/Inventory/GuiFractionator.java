@@ -62,7 +62,6 @@ public class GuiFractionator extends GuiMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i1 = fct.getStorageScaled(17);
 		int i2 = fct.getFuelScaled(50);
 		int i3 = Math.min(30, fct.getMixScaled(30));
 		this.drawTexturedModalRect(j+64, k+25, 177, 1, i3, 38);
