@@ -14,6 +14,7 @@ import java.util.Locale;
 import net.minecraft.util.StatCollector;
 
 public enum Variables {
+
 	PRESSURE(),
 	TEMPERATURE(),
 	SPEED(),
@@ -21,7 +22,8 @@ public enum Variables {
 	POWER(),
 	RANGE(),
 	DAMAGED(),
-	FUEL();
+	FUEL(),
+	OPERATIONTIME();
 
 	private String getText() {
 		return StatCollector.translateToLocal("label."+this.name().toLowerCase(Locale.ENGLISH));

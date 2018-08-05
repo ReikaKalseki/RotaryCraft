@@ -44,7 +44,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	SPAWNERLIMIT("Spawner Mob Limit", 128),
 	DETECTORRANGE("Player Detector Range", 128),
 	BREEDERRANGE("Breeder Range", 128),
-	BAITRANGE("Bait Box Range", 128),
+	BAITRANGE("Bait Box Range", 24),
 	LINEBUILDER("Block Ram Range", 512),
 	BAITMOBS("Max Bait Box Mob Count", 256),
 	CAVEFINDERRANGE("Cave Scanner FOV", 16),

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.TileEntities.Decorative;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.enchantment.Enchantment;
@@ -114,7 +115,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	}
 
 	private boolean consumeChance() {
-		if (this.hasEnchantment(Enchantment.silkTouch))
+		if (this.hasEnchantment(Enchantment.infinity))
 			return false;
 		int excess = (int)(power/MINPOWER);
 		int chance = rand.nextInt(1+excess/8);
@@ -178,10 +179,11 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		boolean[] hasColors = new boolean[16]; // To save CPU time, see below
 		boolean hasDye = false;
 		for (int i = 0; i < inv.length; i++) {
-			ReikaDyeHelper dye = ReikaDyeHelper.getColorFromItem(inv[i]);
-			if (dye != null) {
+			Collection<ReikaDyeHelper> dyes = ReikaDyeHelper.getColorsFromItem(inv[i]);
+			if (dyes != null) {
 				hasDye = true;
-				hasColors[dye.ordinal()] = true;
+				for (ReikaDyeHelper dye : dyes)
+					hasColors[dye.ordinal()] = true;
 			}
 		}
 		if (!hasDye)
@@ -251,18 +253,18 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		int slot = -1;
 		Item id = null;
 		switch (shape) {
-		case 0:
-			id = Items.fire_charge;
-			break;
-		case 1:
-			id = Items.gold_nugget;
-			break;
-		case 2:
-			id = Items.feather;
-			break;
-		case 3:
-			id = Items.skull;
-			break;
+			case 0:
+				id = Items.fire_charge;
+				break;
+			case 1:
+				id = Items.gold_nugget;
+				break;
+			case 2:
+				id = Items.feather;
+				break;
+			case 3:
+				id = Items.skull;
+				break;
 		}
 		if (id != null && this.consumeChance())
 			ReikaInventoryHelper.findAndDecrStack(id, -1, inv);
@@ -306,20 +308,20 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 			inputitems[3] = glowstone;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(shape));
 		switch(shape) {
-		case 1:
-			inputitems[4] = new ItemStack(Items.fire_charge, 1, 0);
-			break;
-		case 2:
-			inputitems[4] = new ItemStack(Items.gold_nugget, 1, 0);
-			break;
-		case 3:
-			inputitems[4] = new ItemStack(Items.feather, 1, 0);
-			break;
-		case 4:
-			inputitems[4] = new ItemStack(Items.skull, 1, 0);
-			break;
-		default:
-			inputitems[4] = null;
+			case 1:
+				inputitems[4] = new ItemStack(Items.fire_charge, 1, 0);
+				break;
+			case 2:
+				inputitems[4] = new ItemStack(Items.gold_nugget, 1, 0);
+				break;
+			case 3:
+				inputitems[4] = new ItemStack(Items.feather, 1, 0);
+				break;
+			case 4:
+				inputitems[4] = new ItemStack(Items.skull, 1, 0);
+				break;
+			default:
+				inputitems[4] = null;
 		}
 		/*
 		for (int k = 0; k < inputitems.length; k++) {
@@ -632,8 +634,8 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	@Override
 	public boolean applyEnchants(ItemStack is) {
 		boolean accepted = false;
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
-			enchantments.put(Enchantment.silkTouch, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch, is));
+		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
+			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
 			accepted = true;
 		}
 		return accepted;
@@ -641,7 +643,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 
 	public ArrayList<Enchantment> getValidEnchantments() {
 		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
-		li.add(Enchantment.silkTouch);
+		li.add(Enchantment.infinity);
 		return li;
 	}
 

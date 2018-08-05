@@ -101,7 +101,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	}
 
 	public int getMaxRange() {
-		return Math.max(64, ConfigRegistry.BAITRANGE.getValue());
+		return Math.max(24, ConfigRegistry.BAITRANGE.getValue());
 	}
 
 	private void silverfishStone(World world, int x, int y, int z) {

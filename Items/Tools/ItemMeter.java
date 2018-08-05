@@ -32,6 +32,7 @@ import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Variables;
+import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -612,6 +613,9 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (tile instanceof RangedEffect) {
 			ReikaChatHelper.writeString(Variables.RANGE+": "+((RangedEffect)(tile)).getRange()+" m. "+"Max Range: "+((RangedEffect)(tile)).getMaxRange()+" m.");
+		}
+		if (tile instanceof DiscreteFunction) {
+			ReikaChatHelper.writeString(Variables.OPERATIONTIME+": "+((DiscreteFunction)(tile)).getOperationTime()+" s.");
 		}
 		//ReikaChatHelper.writeString(String.format("Clicked coords at %d, %d, %d; ID %d.", x, y, z, m));
 		if (tile instanceof TileEntityPowerReceiver) {
