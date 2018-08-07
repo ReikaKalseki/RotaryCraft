@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <resource>
 	<steelingot>
 		钢锭在高炉或喷气燃炉内冶炼得来,它是各种机器的基础,因为只有钢才有足够的抗拉和切变强度来应付机器工作所遇到的负载.
@@ -78,4 +78,25 @@
 	<tungsten>
 		钨是铁矿在提取器内处理时的副产物,一般应用于高温,高强度或高压设备.它只能在达到%dC的原版熔炉内冶炼.
 	</tungsten>
+	<coke>
+		焦煤是炼钢时最有效的碳源.也因此它作为燃料有着更长的燃烧时间.
+	</coke>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
 </resource>
