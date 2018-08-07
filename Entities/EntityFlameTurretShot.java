@@ -30,16 +30,17 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.EntityTurretShot;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityFlameTurret;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityFlameTurret.FlameAttack;
 
 public class EntityFlameTurretShot extends EntityTurretShot {
 
-	private boolean jetfuel;
+	private FlameAttack parameters;
 
 	public EntityFlameTurretShot(World world) {
 		super(world);
 	}
 
-	public EntityFlameTurretShot(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityFlameTurret r, boolean jet) {
+	public EntityFlameTurretShot(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityFlameTurret r, FlameAttack f) {
 		super(world, x, y, z, 0, 0, 0, r);
 		motionX = vx;
 		motionY = vy;
@@ -47,7 +48,7 @@ public class EntityFlameTurretShot extends EntityTurretShot {
 		if (!world.isRemote)
 			velocityChanged = true;
 		gun = r;
-		jetfuel = jet;
+		parameters = f;
 	}
 
 	@Override
@@ -116,8 +117,8 @@ public class EntityFlameTurretShot extends EntityTurretShot {
 		Entity ent;
 		int r = 0;
 		if (world.getBlock(x0, y0, z0) == Blocks.air)
-			world.setBlock(x0, y0, z0, Blocks.fire);
-		ReikaWorldHelper.ignite(world, x0, y0, z0);
+			world.setBlock(x0, y0, z0, Blocks.fire, parameters.fireBlockLife, 3);
+		ReikaWorldHelper.ignite(world, x0, y0, z0, parameters.fireBlockLife);
 
 		double d = 1.5;
 		AxisAlignedBB splash = AxisAlignedBB.getBoundingBox(x, y, z, x, y, z).expand(d, d, d);
@@ -138,13 +139,13 @@ public class EntityFlameTurretShot extends EntityTurretShot {
 
 	@Override
 	public int getAttackDamage() {
-		return jetfuel ? 8 : 4;
+		return Math.round(5*parameters.damageMultiplier);
 	}
 
 	@Override
 	protected void applyAttackEffectsToEntity(World world, Entity ent) {
 		ent.attackEntityFrom(this.getDamageSource().setFireDamage(), this.getAttackDamage());
-		ent.setFire(4);
+		ent.setFire(parameters.burnTime);
 	}
 
 	@Override

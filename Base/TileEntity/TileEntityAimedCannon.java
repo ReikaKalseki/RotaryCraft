@@ -68,7 +68,7 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	}
 
 	protected final double getFiringPositionY(double dy) {
-		double a = 0.75;//dir == 1 ? 0.75 : 0.25;
+		double a = dir == 1 ? 0.75 : -0.25;
 		return yCoord+voffset*0+a+dy;
 	}
 

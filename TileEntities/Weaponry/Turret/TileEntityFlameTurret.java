@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry.Turret;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -18,7 +19,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
@@ -32,9 +32,20 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityFlameTurret extends TileEntityFluidCannon {
 
+	private static final HashMap<String, FlameAttack> damageMultipliers = new HashMap();
+
+	static {
+		damageMultipliers.put("oil", new FlameAttack(0.75F, 6, 0.4F, 0));
+		damageMultipliers.put("fuel", new FlameAttack(1F, 3));
+		damageMultipliers.put("rc ethanol", new FlameAttack(1.2F, 4, 1, 8));
+		damageMultipliers.put("bioethanol", new FlameAttack(1.35F, 4, 1, 8)); //forestry
+		damageMultipliers.put("rc jet fuel", new FlameAttack(1.8F, 6));
+		damageMultipliers.put("rocket fuel", new FlameAttack(2F, 10));
+	}
+
 	@Override
 	public int getRange() {
-		return 32;
+		return tank.isEmpty() ? 0 : (int)(32*damageMultipliers.get(tank.getActualFluid().getName()).rangeMultiplier);
 	}
 
 	@Override
@@ -86,7 +97,7 @@ public class TileEntityFlameTurret extends TileEntityFluidCannon {
 		double dz = v[2];
 		if (!world.isRemote) {
 			double y = this.getFiringPositionY(dy);
-			world.spawnEntityInWorld(new EntityFlameTurretShot(world, xCoord+0.5+dx, y, zCoord+0.5+dz, v[0], v[1], v[2], this, tank.getActualFluid().equals(FluidRegistry.getFluid("rc jet fuel"))));
+			world.spawnEntityInWorld(new EntityFlameTurretShot(world, xCoord+0.5+dx, y, zCoord+0.5+dz, v[0], v[1], v[2], this, damageMultipliers.get(tank.getActualFluid().getName())));
 		}
 		if (this.getTicksExisted()%34 == 0)
 			SoundRegistry.FLAMETURRET.playSoundAtBlock(this, 1, 1);
@@ -164,12 +175,42 @@ public class TileEntityFlameTurret extends TileEntityFluidCannon {
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return f.equals(FluidRegistry.getFluid("rc jet fuel")) || f.equals(FluidRegistry.getFluid("rc ethanol"));
+		return damageMultipliers.containsKey(f.getName());
 	}
 
 	@Override
 	public boolean canReceiveFrom(ForgeDirection from) {
 		return true;
+	}
+
+	public static class FlameAttack {
+
+		public final float damageMultiplier;
+		public final int burnTime;
+		public final float rangeMultiplier;
+		public final int fireBlockLife;
+
+		private static final int DEFAULT_FIRE_LIFE = 4; //lower is higher life
+
+		private FlameAttack(float f, int burn) {
+			this(f, burn, 1, DEFAULT_FIRE_LIFE);
+		}
+
+		private FlameAttack(float f, int burn, int life) {
+			this(f, burn, 1, life);
+		}
+
+		private FlameAttack(float f, int burn, float r) {
+			this(f, burn, r, DEFAULT_FIRE_LIFE);
+		}
+
+		private FlameAttack(float f, int burn, float r, int life) {
+			damageMultiplier = f;
+			burnTime = burn;
+			rangeMultiplier = r;
+			fireBlockLife = life;
+		}
+
 	}
 
 }

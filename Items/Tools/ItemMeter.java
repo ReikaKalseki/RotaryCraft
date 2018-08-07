@@ -615,7 +615,7 @@ public class ItemMeter extends ItemRotaryTool
 			ReikaChatHelper.writeString(Variables.RANGE+": "+((RangedEffect)(tile)).getRange()+" m. "+"Max Range: "+((RangedEffect)(tile)).getMaxRange()+" m.");
 		}
 		if (tile instanceof DiscreteFunction) {
-			ReikaChatHelper.writeString(Variables.OPERATIONTIME+": "+((DiscreteFunction)(tile)).getOperationTime()+" s.");
+			ReikaChatHelper.writeString(Variables.OPERATIONTIME+": "+((DiscreteFunction)(tile)).getOperationTime()/20F+" s.");
 		}
 		//ReikaChatHelper.writeString(String.format("Clicked coords at %d, %d, %d; ID %d.", x, y, z, m));
 		if (tile instanceof TileEntityPowerReceiver) {

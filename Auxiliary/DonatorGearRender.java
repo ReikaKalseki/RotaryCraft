@@ -15,6 +15,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer.PlayerRotationData;
+import Reika.DragonAPI.Instantiable.InertItem;
 import Reika.DragonAPI.Interfaces.PlayerRenderObj;
 
 public class DonatorGearRender implements PlayerRenderObj {
@@ -42,7 +43,7 @@ public class DonatorGearRender implements PlayerRenderObj {
 		GL11.glScaled(s, s, s);
 		//GL11.glRotated(45-ep.rotationPitch+90, 1, 0, 0);
 		//GL11.glRotated(RenderManager.instance.playerViewY-ep.rotationYawHead-45, 0, 1, 0);
-		Reika.RotaryCraft.ClientProxy.getSpritesheetRenderer(0).renderItem(ItemRenderType.ENTITY, ItemStacks.steelgear, null);
+		Reika.RotaryCraft.ClientProxy.getSpritesheetRenderer(0).renderItem(ItemRenderType.ENTITY, ItemStacks.steelgear, new InertItem(ep.worldObj, ItemStacks.steelgear));
 		GL11.glPopMatrix();
 	}
 

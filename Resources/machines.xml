@@ -197,6 +197,8 @@
 			Required Power: %dW
 			Required Speed: %d rad/s
 			Power Input: Bottom
+			
+			More pressure provides better yields
 		</note>
 	</fractionator>
 	<gpr>

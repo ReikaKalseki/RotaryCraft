@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -133,11 +134,11 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	@Override
 	public int getSinkTier() {
 		//ReikaJavaLibrary.pConsole(ReikaEUHelper.getIC2TierFromPower(this.getTierPower(this.getTier())));
-		return 5;//this.getScaledTier();
+		return IC2Handler.getInstance().isIC2Classic() ? this.getScaledTier() : 5;//this.getScaledTier();
 	}
 
 	private int getScaledTier() {
-		return ReikaEUHelper.getIC2TierFromPower(this.getTierPower());
+		return 1+ReikaEUHelper.getIC2TierFromPower(this.getTierPower());
 	}
 
 	@Override

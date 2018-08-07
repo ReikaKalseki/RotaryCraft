@@ -889,7 +889,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		return type.ordinal();
 	}
 
-	public final void breakBlock() {
+	public void breakBlock() {
 		if (integratedGear != 0) {
 			ItemStack is = ItemIntegratedGearbox.getIntegratedGearItem(integratedGear, null);
 			ReikaItemHelper.dropItem(worldObj, xCoord+rand.nextDouble(), yCoord+rand.nextDouble(), zCoord+rand.nextDouble(), is);

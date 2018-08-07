@@ -175,6 +175,9 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		
+		if (this.getTileEntityAge() == 0)
+			this.findRoute(world, x, y, z);
 
 		power = (long)omega*(long)torque;
 		this.getIOSides(world, x, y, z);
@@ -183,8 +186,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 		this.basicPowerReceiver();
 	}
 
-	@Override
-	protected void onFirstTick(World world, int x, int y, int z) {
+	private void findRoute(World world, int x, int y, int z) {
 		ForgeDirection write = null;
 		ForgeDirection read = null;
 		for (int i = 0; i < 6; i++) {

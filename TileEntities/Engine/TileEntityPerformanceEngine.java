@@ -70,10 +70,7 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	protected boolean getRequirements(World world, int x, int y, int z, int meta) {
 		if (fuel.isEmpty())
 			return false;
-		if (additives <= 0)
-			starvedengine = true;
-		else
-			starvedengine = false;
+		starvedengine = additives <= 0;
 		return true;
 	}
 
