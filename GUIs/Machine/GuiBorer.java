@@ -101,8 +101,13 @@ public class GuiBorer extends GuiMachine
 		}
 		if (button.id == 8)
 			this.sendPacket(PacketRegistry.BORER.getMinValue()+3);
-		if (button.id < 7) {
+		if (button.id < 7) { //toggle
 			this.sendPacket(PacketRegistry.BORER.getMinValue()+2);
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 7; j++) {
+					dig[j][i] = !dig[j][i];
+				}
+			}
 		}
 		if (button.id >= 10 && button.id < 50) {
 			int rows = (button.id-10)/7;

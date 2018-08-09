@@ -418,6 +418,7 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, BlockRegistry.BLASTGLASS.getBlockInstance(), false);
 		SensitiveItemRegistry.instance.registerItem(this, BlockRegistry.BLASTPANE.getBlockInstance(), true);
 
+		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.YEAST.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.ETHANOL.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.CANOLA.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.EXTRACTS.getItemInstance(), true);
@@ -428,6 +429,10 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.FLYWHEEL.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.GEARBOX.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MACHINE.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.SHAFTCRAFT.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.BORECRAFT.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.ENGINECRAFT.getItemInstance(), true);
+		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MISCCRAFT.getItemInstance(), true);
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (!ir.isDummiedOut()) {
@@ -436,6 +441,7 @@ public class RotaryCraft extends DragonAPIMod {
 			}
 		}
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.sludge, false);
+		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.cleansludge, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.springingot, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedingotblock, true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.steelblock, true);

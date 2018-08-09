@@ -726,7 +726,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	@Override
 	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
-		return new PowerSourceList().addSource(this);
+		PowerSourceList psl = new PowerSourceList();
+		if (power > 0)
+			psl.addSource(this);
+		return psl;
 	}
 
 	public final long getMaxPower() {

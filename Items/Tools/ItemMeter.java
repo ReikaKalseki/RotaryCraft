@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -86,8 +87,10 @@ public class ItemMeter extends ItemRotaryTool
 	{
 		if (super.onItemUse(is, ep, world, x, y, z, s, a, b, c))
 			return true;
+		if (world.isRemote)
+			return true;
 		if (ConfigRegistry.CLEARCHAT.getState())
-			ReikaChatHelper.clearChat();
+			ReikaChatHelper.clearChat((EntityPlayerMP)ep);
 		int ratioclicked = 1;
 		String geartype = null;
 		boolean reductionclicked = true;
@@ -109,7 +112,7 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (tile instanceof ThermalMachine) {
 			ThermalMachine th = (ThermalMachine)tile;
-			ReikaChatHelper.writeString(String.format("%s %s: %dC", th.getName(), Variables.TEMPERATURE, th.getTemperature()));
+			this.sendMessage(ep, String.format("%s %s: %dC", th.getName(), Variables.TEMPERATURE, th.getTemperature()));
 		}
 		boolean flag = false;
 		boolean flag1 = false;
@@ -117,7 +120,7 @@ public class ItemMeter extends ItemRotaryTool
 			ArrayList<String> li = ((Transducerable)tile).getMessages(world, x, y, z, s);
 			if (li != null) {
 				for (int i = 0; i < li.size(); i++)
-					ReikaChatHelper.writeString(li.get(i));
+					this.sendMessage(ep, li.get(i));
 			}
 			//flag = tile instanceof ShaftPowerEmitter;
 			//flag1 = tile instanceof ShaftPowerReceiver;
@@ -126,7 +129,7 @@ public class ItemMeter extends ItemRotaryTool
 			ArrayList<String> li = ((Transducerable)bk).getMessages(world, x, y, z, s);
 			if (li != null) {
 				for (int i = 0; i < li.size(); i++)
-					ReikaChatHelper.writeString(li.get(i));
+					this.sendMessage(ep, li.get(i));
 			}
 		}
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
@@ -134,7 +137,7 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityBlastFurnace clicked = (TileEntityBlastFurnace)tile;
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s: %dC.", Variables.TEMPERATURE, clicked.getTemperature()));
+			this.sendMessage(ep, String.format("%s: %dC.", Variables.TEMPERATURE, clicked.getTemperature()));
 			if (clicked.getTemperature() < clicked.SMELTTEMP)
 				RotaryAux.writeMessage("mintemp");
 			return true;
@@ -146,16 +149,16 @@ public class ItemMeter extends ItemRotaryTool
 		if (m == MachineRegistry.RESERVOIR) {
 			TileEntityReservoir clicked = (TileEntityReservoir)tile;
 			if (!clicked.isEmpty())
-				ReikaChatHelper.writeString(String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
+				this.sendMessage(ep, String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
 			else
 				RotaryAux.writeMessage("emptyres");
 		}
 		if (m == MachineRegistry.GASTANK) {
 			TileEntityFluidCompressor clicked = (TileEntityFluidCompressor)tile;
 			if (clicked.isEmpty())
-				ReikaChatHelper.writeString(String.format("%s is empty.", m.getName()));
+				this.sendMessage(ep, String.format("%s is empty.", m.getName()));
 			else
-				ReikaChatHelper.writeString(String.format("%s contains %.3fB of %s of a capacity of %.3fB.", m.getName(), clicked.getLevel()/1000D, clicked.getFluid().getLocalizedName(), clicked.getCapacity()/1000D));
+				this.sendMessage(ep, String.format("%s contains %.3fB of %s of a capacity of %.3fB.", m.getName(), clicked.getLevel()/1000D, clicked.getFluid().getLocalizedName(), clicked.getCapacity()/1000D));
 		}
 		if (m != null && m.isStandardPipe()) {
 			TileEntityPipe clicked = (TileEntityPipe)tile;
@@ -165,28 +168,28 @@ public class ItemMeter extends ItemRotaryTool
 				RotaryAux.writeMessage("emptypipe");
 				return true;
 			}
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getFluidLevel()/1000D, clicked.getFluidType().getLocalizedName().toLowerCase(Locale.ENGLISH), Variables.PRESSURE, clicked.getPressure()/1000D));
+			this.sendMessage(ep, String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getFluidLevel()/1000D, clicked.getFluidType().getLocalizedName().toLowerCase(Locale.ENGLISH), Variables.PRESSURE, clicked.getPressure()/1000D));
 			return true;
 		}
 		if (m == MachineRegistry.FUELLINE) {
 			TileEntityFuelLine clicked = (TileEntityFuelLine)tile;
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel.", m.getName(), clicked.getFluidLevel()/1000D));
+			this.sendMessage(ep, String.format("%s contains %.3f m^3 of fuel.", m.getName(), clicked.getFluidLevel()/1000D));
 			return true;
 		}
 		if (m == MachineRegistry.HOSE) {
 			TileEntityHose clicked = (TileEntityHose)tile;
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of lubricant.", m.getName(), clicked.getFluidLevel()/1000D));
+			this.sendMessage(ep, String.format("%s contains %.3f m^3 of lubricant.", m.getName(), clicked.getFluidLevel()/1000D));
 			return true;
 		}/*
 		if (m == MachineRegistry.HYDRAULICLINE) {
 			TileEntityHydraulicLine clicked = (TileEntityHydraulicLine)tile;
 			if (clicked == null)
 				return false;
-			ReikaChatHelper.writeString(String.format("%s carrying %dmB/s of hydraulic fluid at %s %d kPa.", m.getName(), clicked.getFlowRate(), Variables.PRESSURE, clicked.getPressure()));
+			sendMessage(String.format("%s carrying %dmB/s of hydraulic fluid at %s %d kPa.", m.getName(), clicked.getFlowRate(), Variables.PRESSURE, clicked.getPressure()));
 			return true;
 		}*/
 		if (!flag && tile instanceof ShaftPowerEmitter) {
@@ -194,9 +197,9 @@ public class ItemMeter extends ItemRotaryTool
 			power = sp.getPower();
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
-			ReikaChatHelper.writeString(String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
 			if (tile instanceof PowerSourceTracker) {
-				ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
+				this.sendMessage(ep, String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
 			}
 			return true;
 		}
@@ -205,9 +208,9 @@ public class ItemMeter extends ItemRotaryTool
 			power = sp.getPower();
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
-			ReikaChatHelper.writeString(String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
+			this.sendMessage(ep, String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
 			if (tile instanceof PowerSourceTracker) {
-				ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
+				this.sendMessage(ep, String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
 			}
 			return true;
 		}
@@ -223,11 +226,11 @@ public class ItemMeter extends ItemRotaryTool
 				clicked.iotick = 512;
 				world.markBlockForUpdate(x, y, z);
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
 				torque = omega = 0;
 				if (clicked.getEngineType().isAirBreathing() && clicked.isDrowned(world, x, y, z))
 					RotaryAux.writeMessage("drowning");
@@ -238,26 +241,26 @@ public class ItemMeter extends ItemRotaryTool
 						RotaryAux.writeMessage("fod");
 				}
 				if (clicked.hasTemperature()) {
-					ReikaChatHelper.writeString(String.format("%s: %dC", Variables.TEMPERATURE, clicked.temperature));
+					this.sendMessage(ep, String.format("%s: %dC", Variables.TEMPERATURE, clicked.temperature));
 				}
 				if (clicked.getEngineType().burnsFuel()) {
 					int time = clicked.getFuelDuration();
 					String sg = String.format("%s: %s", Variables.FUEL, ReikaFormatHelper.getSecondsAsClock(time));
-					ReikaChatHelper.writeString(sg);
+					this.sendMessage(ep, sg);
 				}
 				if (clicked.getEngineType().requiresLubricant()) {
 					int amt = clicked.getLube();
 					String sg = String.format("Lubricant: %d mB", amt);
-					ReikaChatHelper.writeString(sg);
+					this.sendMessage(ep, sg);
 				}
 				if (clicked.getEngineType().isWaterPiped()) {
 					int amt = clicked.getWater();
 					String sg = String.format("Water: %d mB", amt);
-					ReikaChatHelper.writeString(sg);
+					this.sendMessage(ep, sg);
 				}
 				if (clicked.getEngineType() == EngineType.HYDRO) {
 					String sg = String.format("Detected waterfall height: %d m", ((TileEntityHydroEngine)clicked).getWaterfallHeightForDisplay());
-					ReikaChatHelper.writeString(sg);
+					this.sendMessage(ep, sg);
 				}
 				return true;
 			}
@@ -267,13 +270,13 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("Detector Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("Detector Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("Detector Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+					this.sendMessage(ep, String.format("Detector Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("Detector Receiving %.3f W @ %d rad/s.", power, omega));
+					this.sendMessage(ep, String.format("Detector Receiving %.3f W @ %d rad/s.", power, omega));
 				torque = omega = 0;
-				ReikaChatHelper.writeString(String.format("Maximum Range: %dm. Reaction Time: %.2fs", clicked.getMaxRange(), clicked.getReactionTime()/20F));
+				this.sendMessage(ep, String.format("Maximum Range: %dm. Reaction Time: %.2fs", clicked.getMaxRange(), clicked.getReactionTime()/20F));
 				if (power < clicked.MINPOWER)
 					RotaryAux.writeMessage("minpower");
 				return true;
@@ -283,7 +286,7 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntityGPR clicked = (TileEntityGPR)tile;
 				if (ep.isSneaking() && clicked.power > clicked.MINPOWER) {
 					double ratio = 100*clicked.getSpongy(world, x, y-1, z);
-					ReikaChatHelper.writeString(String.format("The ground is %.3f%s caves here.", ratio, "%%"));
+					this.sendMessage(ep, String.format("The ground is %.3f%s caves here.", ratio, "%%"));
 				}
 				return true;
 			}
@@ -291,8 +294,8 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntitySolar clicked = (TileEntitySolar)tile;
 				TileEntitySolar top = (TileEntitySolar)world.getTileEntity(x, clicked.getTopOfTower(), z);
 				TileEntitySolar bottom = (TileEntitySolar)world.getTileEntity(x, clicked.getBottomOfTower(), z);
-				ReikaChatHelper.writeString(String.format("Solar plant contains %d mirrors and %d active tower pieces.", top.getArraySize(), bottom.getTowerHeight()));
-				ReikaChatHelper.writeString(String.format("Outputting %.3fkW at %d rad/s. Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
+				this.sendMessage(ep, String.format("Solar plant contains %d mirrors and %d active tower pieces.", top.getArraySize(), bottom.getTowerHeight()));
+				this.sendMessage(ep, String.format("Outputting %.3fkW at %d rad/s. Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
 				return true;
 			}
 			if (m == MachineRegistry.WINDER) {
@@ -306,11 +309,11 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("Winder %s %.3f MW @ %d rad/s.", text, power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("Winder %s %.3f MW @ %d rad/s.", text, power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("Winder %s %.3f kW @ %d rad/s.", text, power/1000.0D, omega));
+					this.sendMessage(ep, String.format("Winder %s %.3f kW @ %d rad/s.", text, power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("Winder %s %.3f W @ %d rad/s.", text, power, omega));
+					this.sendMessage(ep, String.format("Winder %s %.3f W @ %d rad/s.", text, power, omega));
 				torque = omega = 0;
 				return true;
 			}
@@ -320,12 +323,12 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
-				ReikaChatHelper.writeString(String.format("Water: %dmB. Lava: %dmB.", clicked.getWater(), clicked.getLava()));
+					this.sendMessage(ep, String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
+				this.sendMessage(ep, String.format("Water: %dmB. Lava: %dmB.", clicked.getWater(), clicked.getLava()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					RotaryAux.writeMessage("minpower");
@@ -337,13 +340,13 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
 				if (power >= clicked.MINPOWER)
-					ReikaChatHelper.writeString(String.format("%s %dm, dealing %ds of burn damage.", Variables.RANGE.toString(), clicked.getRange(), clicked.getBurnTime()));
+					this.sendMessage(ep, String.format("%s %dm, dealing %ds of burn damage.", Variables.RANGE.toString(), clicked.getRange(), clicked.getBurnTime()));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					RotaryAux.writeMessage("minpower");
@@ -355,18 +358,18 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
+					this.sendMessage(ep, String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
 				if (power >= clicked.MINPOWER) {
 					if (clicked.getLevel() > 0) {
 						String sg = String.format("Liquid Contents:\n%dmB of %s", clicked.getLevel(), clicked.getContainedFluid().getLocalizedName());
-						ReikaChatHelper.writeString(sg);
+						this.sendMessage(ep, sg);
 					}
 					else {
-						ReikaChatHelper.writeString(String.format("%s has no liquid.", m.getName()));
+						this.sendMessage(ep, String.format("%s has no liquid.", m.getName()));
 					}
 				}
 				torque = omega = 0;
@@ -380,11 +383,11 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("Pump Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("Pump Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("Pump Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+					this.sendMessage(ep, String.format("Pump Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("Pump Receiving %.3f W @ %d rad/s.", power, omega));
+					this.sendMessage(ep, String.format("Pump Receiving %.3f W @ %d rad/s.", power, omega));
 				torque = omega = 0;
 				if (power < clicked.MINPOWER)
 					RotaryAux.writeMessage("minpower");
@@ -395,15 +398,15 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked.getGearType().storesEnergy()) {
 					long energy = clicked.getEnergy();
 					if (energy/20D >= 1000000000000L)
-						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f TJ.", energy/20D/1000000000000.0D, omega));
+						this.sendMessage(ep, String.format("Stored Energy: %.3f TJ.", energy/20D/1000000000000.0D, omega));
 					else if (energy/20D >= 1000000000)
-						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f GJ.", energy/20D/1000000000.0D, omega));
+						this.sendMessage(ep, String.format("Stored Energy: %.3f GJ.", energy/20D/1000000000.0D, omega));
 					else if (energy/20D >= 1000000)
-						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f MJ.", energy/20D/1000000.0D, omega));
+						this.sendMessage(ep, String.format("Stored Energy: %.3f MJ.", energy/20D/1000000.0D, omega));
 					else if (energy/20D >= 1000)
-						ReikaChatHelper.writeString(String.format("Stored Energy: %.3f kJ.", energy/20D/1000.0D, omega));
+						this.sendMessage(ep, String.format("Stored Energy: %.3f kJ.", energy/20D/1000.0D, omega));
 					else
-						ReikaChatHelper.writeString(String.format("Stored Energy: %d J.", energy, omega));
+						this.sendMessage(ep, String.format("Stored Energy: %d J.", energy, omega));
 					torque = omega = 0;
 					return true;
 				}
@@ -413,20 +416,20 @@ public class ItemMeter extends ItemRotaryTool
 				power = torque*omega;
 
 				if (power >= 1000000000) {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
 				}
 				else if (power >= 1000000) {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
 				}
 				else if (power >= 1000) {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
 				}
 				else {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
 				}
 
 				if (clicked.getGearType() == TileEntityAdvancedGear.GearType.WORM && power > 0) {
-					ReikaChatHelper.writeString(String.format("Power Loss: %.2f%s", clicked.getCurrentLoss(), "%%"));
+					this.sendMessage(ep, String.format("Power Loss: %.2f%s", clicked.getCurrentLoss(), "%%"));
 				}
 			}
 			if (m == MachineRegistry.BEVELGEARS) {
@@ -435,16 +438,16 @@ public class ItemMeter extends ItemRotaryTool
 				omega = clicked.omega;
 				power = torque*omega;
 				if (power >= 1000000000) {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
 				}
 				else if (power >= 1000000) {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
 				}
 				else if (power >= 1000) {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
 				}
 				else {
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
 				}
 
 				int dx = clicked.getWriteDirection().offsetX;
@@ -459,11 +462,11 @@ public class ItemMeter extends ItemRotaryTool
 					sdy = "+"+sdy;
 				if (dz >= 0)
 					sdz = "+"+sdz;
-				ReikaChatHelper.writeString(String.format("Output side: x%s : y%s : z%s", sdx, sdy, sdz));
+				this.sendMessage(ep, String.format("Output side: x%s : y%s : z%s", sdx, sdy, sdz));
 			}
 			if (m == MachineRegistry.COMPRESSOR) {
 				TileEntityAirCompressor clicked = (TileEntityAirCompressor)tile;
-				ReikaChatHelper.writeString(String.format("%s generating %d mL/t.", clicked.getName(), clicked.getGenAir()));
+				this.sendMessage(ep, String.format("%s generating %d mL/t.", clicked.getName(), clicked.getGenAir()));
 			}
 			if (tile instanceof EnergyToPowerBase) {
 				EnergyToPowerBase te = (EnergyToPowerBase)tile;
@@ -471,15 +474,15 @@ public class ItemMeter extends ItemRotaryTool
 				String pe = ReikaEngLibrary.getSIPrefix(te.power);
 				int units = te.getConsumedUnitsPerTick();
 				String unit = te.getUnitDisplay();
-				ReikaChatHelper.writeString(String.format("%s Outputting %.3f%sW @ %d rad/s.", name, p3, pe, omega));
-				ReikaChatHelper.writeString(String.format("Consuming %d %s/t.", units, unit));
+				this.sendMessage(ep, String.format("%s Outputting %.3f%sW @ %d rad/s.", name, p3, pe, omega));
+				this.sendMessage(ep, String.format("Consuming %d %s/t.", units, unit));
 				return true;
 			}
 			if (m == MachineRegistry.BORER) {
 				TileEntityBorer clicked = (TileEntityBorer)tile;
-				ReikaChatHelper.writeString(String.format("%s head at %d, %d", clicked.getName(), clicked.getHeadX(), clicked.getHeadZ()));
+				this.sendMessage(ep, String.format("%s head at %d, %d", clicked.getName(), clicked.getHeadX(), clicked.getHeadZ()));
 				if (clicked.isJammed())
-					ReikaChatHelper.writeString(String.format("%s is jammed, supply more torque or power!", clicked.getName()));
+					this.sendMessage(ep, String.format("%s is jammed, supply more torque or power!", clicked.getName()));
 			}
 			if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
 				TileEntityBeltHub clicked = (TileEntityBeltHub)tile;
@@ -488,11 +491,11 @@ public class ItemMeter extends ItemRotaryTool
 					omega = ((TileEntityPowerReceiver)tile).omega;
 					power = torque*omega;
 					if (power >= 1000000)
-						ReikaChatHelper.writeString(name+String.format(" Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+						this.sendMessage(ep, name+String.format(" Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
 					if (power >= 1000 && power < 1000000)
-						ReikaChatHelper.writeString(name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+						this.sendMessage(ep, name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
 					if (power < 1000)
-						ReikaChatHelper.writeString(name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
+						this.sendMessage(ep, name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
 					return false;
 				}
 			}
@@ -504,23 +507,23 @@ public class ItemMeter extends ItemRotaryTool
 				clicked.iotick = 512;
 				world.markBlockForUpdate(x, y, z);
 				if (power >= 1000000)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
 				if (power >= 1000 && power < 1000000)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
 				if (power < 1000)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
 				torque = omega = 0;
 			}
 			if (m == MachineRegistry.DYNAMO) {
 				TileEntityDynamo clicked = (TileEntityDynamo)tile;
-				ReikaChatHelper.writeString(String.format("%s generating %d RF/t.", clicked.getName(), clicked.getGenRF()));
+				this.sendMessage(ep, String.format("%s generating %d RF/t.", clicked.getName(), clicked.getGenRF()));
 				if ((clicked.torque > (clicked.isUpgraded() ? clicked.MAXTORQUE_UPGRADE : clicked.MAXTORQUE) || clicked.omega > clicked.MAXOMEGA))
-					ReikaChatHelper.writeString("Conversion limits exceeded; Power is being wasted.");
+					this.sendMessage(ep, "Conversion limits exceeded; Power is being wasted.");
 			}
 			if (m == MachineRegistry.FLYWHEEL) {
 				ratioclicked = 16;
 				TileEntityFlywheel clicked = (TileEntityFlywheel)tile;
-				ReikaChatHelper.writeString(String.format("Flywheel rotating at %d rad/s.", clicked.omega));
+				this.sendMessage(ep, String.format("Flywheel rotating at %d rad/s.", clicked.omega));
 			}
 			if (m == MachineRegistry.SHAFT) {
 				ratioclicked = 1;
@@ -530,11 +533,11 @@ public class ItemMeter extends ItemRotaryTool
 				if (clicked.getBlockMetadata() >= 6) {
 					power = ReikaMathLibrary.extrema(clicked.readtorque[0]*clicked.readomega[0], clicked.readtorque[1]*clicked.readomega[1], "max");
 					if (power >= 1000000)
-						ReikaChatHelper.writeString(String.format("Shaft Transmitting %.3f MW and %.3f MW\nat %d rad/s and %d rad/s.", (double)clicked.readtorque[0]*clicked.readomega[0]/1000000D, (double)clicked.readtorque[1]*clicked.readomega[1]/1000000D, clicked.readomega[0], clicked.readomega[1]));
+						this.sendMessage(ep, String.format("Shaft Transmitting %.3f MW and %.3f MW\nat %d rad/s and %d rad/s.", (double)clicked.readtorque[0]*clicked.readomega[0]/1000000D, (double)clicked.readtorque[1]*clicked.readomega[1]/1000000D, clicked.readomega[0], clicked.readomega[1]));
 					if (power >= 1000 && power < 1000000)
-						ReikaChatHelper.writeString(String.format("Shaft Transmitting %.3f kW and %.3f kW\nat %d rad/s and %d rad/s.", (double)clicked.readtorque[0]*clicked.readomega[0]/1000D, (double)clicked.readtorque[1]*clicked.readomega[1]/1000D, clicked.readomega[0], clicked.readomega[1]));
+						this.sendMessage(ep, String.format("Shaft Transmitting %.3f kW and %.3f kW\nat %d rad/s and %d rad/s.", (double)clicked.readtorque[0]*clicked.readomega[0]/1000D, (double)clicked.readtorque[1]*clicked.readomega[1]/1000D, clicked.readomega[0], clicked.readomega[1]));
 					if (power < 1000)
-						ReikaChatHelper.writeString(String.format("Shaft Transmitting %d W and %d W\nat %d rad/s and %d rad/s.", clicked.readtorque[0]*clicked.readomega[0], clicked.readtorque[1]*clicked.readomega[1], clicked.readomega[0], clicked.readomega[1]));
+						this.sendMessage(ep, String.format("Shaft Transmitting %d W and %d W\nat %d rad/s and %d rad/s.", clicked.readtorque[0]*clicked.readomega[0], clicked.readtorque[1]*clicked.readomega[1], clicked.readomega[0], clicked.readomega[1]));
 					torque = omega = 0;
 					return true;
 				}
@@ -559,77 +562,77 @@ public class ItemMeter extends ItemRotaryTool
 				omega = te.omega;
 				torque = te.torque;
 				if (power < te.MINPOWER)
-					ReikaChatHelper.write(RotaryAux.getMessage("minpower")+" "+name+" requires "+te.MINPOWER+" W.");
+					this.sendMessage(ep, RotaryAux.getMessage("minpower")+" "+name+" requires "+te.MINPOWER+" W.");
 				if (!te.machine.isMinPowerOnly()) {
 					if (torque < te.MINTORQUE && !te.machine.hasNoDirectMinTorque())
-						ReikaChatHelper.writeString(RotaryAux.getMessage("mintorque")+" "+name+" requires "+te.MINTORQUE+" Nm.");
+						this.sendMessage(ep, RotaryAux.getMessage("mintorque")+" "+name+" requires "+te.MINTORQUE+" Nm.");
 					if (omega < te.MINSPEED && !te.machine.hasNoDirectMinSpeed())
-						ReikaChatHelper.writeString(RotaryAux.getMessage("minspeed")+" "+name+" requires "+te.MINSPEED+" rad/s.");
+						this.sendMessage(ep, RotaryAux.getMessage("minspeed")+" "+name+" requires "+te.MINSPEED+" rad/s.");
 				}
 			}
 
 			power = omega*torque;
 			if (power >= 1000000000) {
 				if (m == MachineRegistry.GEARBOX)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
 				if (m == MachineRegistry.SHAFT)
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
 			}
 			else if (power >= 1000000) {
 				if (m == MachineRegistry.GEARBOX)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
 				if (m == MachineRegistry.SHAFT)
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
 			}
 			else if (power >= 1000) {
 				if (m == MachineRegistry.GEARBOX)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
 				if (m == MachineRegistry.SHAFT)
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
 			}
 			else {
 				if (m == MachineRegistry.GEARBOX)
-					ReikaChatHelper.writeString(String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
+					this.sendMessage(ep, String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
 				if (m == MachineRegistry.SHAFT)
-					ReikaChatHelper.writeString(String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
+					this.sendMessage(ep, String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
 			}
 			if (m == MachineRegistry.GEARBOX) {
-				ReikaChatHelper.writeString(String.format("Gearbox %d percent damaged. Lubricant Levels at %d.", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, damage))), lube));
+				this.sendMessage(ep, String.format("Gearbox %d percent damaged. Lubricant Levels at %d.", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, damage))), lube));
 			}
 			if (m == MachineRegistry.FUELENHANCER) {
 				TileEntityFuelConverter clicked = (TileEntityFuelConverter)tile;
-				ReikaChatHelper.writeString(String.format("%s contains %.3f m^3 of fuel and %.3f m^3 of jet fuel.", clicked.getName(), clicked.getInputLevel()/1000D, clicked.getOutputLevel()/1000D));
+				this.sendMessage(ep, String.format("%s contains %.3f m^3 of fuel and %.3f m^3 of jet fuel.", clicked.getName(), clicked.getInputLevel()/1000D, clicked.getOutputLevel()/1000D));
 			}
 		}
 		if (tile instanceof PowerSourceTracker) {
-			ReikaChatHelper.writeString(String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
+			this.sendMessage(ep, String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
 		}
 
 		if (tile instanceof TemperatureTE) {
-			ReikaChatHelper.writeString(Variables.TEMPERATURE+": "+((TemperatureTE)(tile)).getTemperature()+" C.");
+			this.sendMessage(ep, Variables.TEMPERATURE+": "+((TemperatureTE)(tile)).getTemperature()+" C.");
 		}
 		if (tile instanceof PressureTE) {
-			ReikaChatHelper.writeString(Variables.PRESSURE+": "+((PressureTE)(tile)).getPressure()+" kPa.");
+			this.sendMessage(ep, Variables.PRESSURE+": "+((PressureTE)(tile)).getPressure()+" kPa.");
 		}
 		if (tile instanceof RangedEffect) {
-			ReikaChatHelper.writeString(Variables.RANGE+": "+((RangedEffect)(tile)).getRange()+" m. "+"Max Range: "+((RangedEffect)(tile)).getMaxRange()+" m.");
+			this.sendMessage(ep, Variables.RANGE+": "+((RangedEffect)(tile)).getRange()+" m. "+"Max Range: "+((RangedEffect)(tile)).getMaxRange()+" m.");
 		}
 		if (tile instanceof DiscreteFunction) {
-			ReikaChatHelper.writeString(Variables.OPERATIONTIME+": "+((DiscreteFunction)(tile)).getOperationTime()/20F+" s.");
+			this.sendMessage(ep, Variables.OPERATIONTIME+": "+((DiscreteFunction)(tile)).getOperationTime()/20F+" s.");
 		}
-		//ReikaChatHelper.writeString(String.format("Clicked coords at %d, %d, %d; ID %d.", x, y, z, m));
+		//sendMessage(String.format("Clicked coords at %d, %d, %d; ID %d.", x, y, z, m));
 		if (tile instanceof TileEntityPowerReceiver) {
 			((TileEntityPowerReceiver)tile).iotick = 512;
-			//ReikaChatHelper.writeString(String.format("%d", ((TileEntityPowerReceiver)tile).iotick));
+			//sendMessage(String.format("%d", ((TileEntityPowerReceiver)tile).iotick));
 			torque = ((TileEntityPowerReceiver)tile).torque;
 			omega = ((TileEntityPowerReceiver)tile).omega;
 			power = torque*omega;
 			if (power >= 1000000)
-				ReikaChatHelper.writeString(name+String.format(" Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
+				this.sendMessage(ep, name+String.format(" Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
 			if (power >= 1000 && power < 1000000)
-				ReikaChatHelper.writeString(name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
+				this.sendMessage(ep, name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
 			if (power < 1000)
-				ReikaChatHelper.writeString(name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
+				this.sendMessage(ep, name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
 		}
 		if (m == null && tile instanceof IFluidHandler) {
 			FluidTankInfo[] info = ((IFluidHandler)tile).getTankInfo(ForgeDirection.VALID_DIRECTIONS[s]);
@@ -651,9 +654,14 @@ public class ItemMeter extends ItemRotaryTool
 				sb.append("No Tank Data.");
 			}
 
-			ReikaChatHelper.writeString(sb.toString());
+			this.sendMessage(ep, sb.toString());
 		}
 
 		return true;
+	}
+
+	private void sendMessage(EntityPlayer ep, String s) {
+		//ReikaChatHelper.writeString(s);
+		ReikaChatHelper.sendChatToPlayer(ep, s);
 	}
 }

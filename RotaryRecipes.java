@@ -1395,11 +1395,17 @@ public class RotaryRecipes {
 	}
 
 	public static Object[] getWorktableIngredients() {
-		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEWORK.getState() && !ConfigRegistry.TABLEMACHINES.getState(), Blocks.air, Blocks.air, ReikaItemHelper.stoneSlab, ReikaItemHelper.stoneSlab);
+		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEWORK.getState() && !ConfigRegistry.TABLEMACHINES.getState(), null, null, ReikaItemHelper.stoneSlab, ReikaItemHelper.stoneSlab);
 
 		Object[] args = {
 				"aCb", "SBS", "crd", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]
 		};
+
+		if (c[0] == null)
+			args[0] = ((String)args[0]).replace("a", " ");
+		if (c[1] == null)
+			args[0] = ((String)args[0]).replace("b", " ");
+
 		return args;
 	}
 

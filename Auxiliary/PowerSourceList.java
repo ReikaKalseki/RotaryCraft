@@ -23,6 +23,7 @@ import Reika.RotaryCraft.API.Power.PowerTracker;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public class PowerSourceList implements PowerTracker {
 
@@ -32,6 +33,7 @@ public class PowerSourceList implements PowerTracker {
 	private ShaftMerger caller;
 
 	private boolean isLooping = false;
+	private boolean isBedrock = false;
 	private boolean errored = false;
 
 	public long getMaxGennablePower() {
@@ -79,6 +81,12 @@ public class PowerSourceList implements PowerTracker {
 			pwr.mergers.add((ShaftMerger)tile);
 			if (tile == caller) {
 				pwr.isLooping = true;
+			}
+			if (tile instanceof TileEntitySplitter && ((TileEntitySplitter)tile).isBedrock()) {
+				pwr.isBedrock = true;
+			}
+			else {
+				pwr.isBedrock = false; //require ALL to be bedrock
 			}
 		}
 
@@ -192,7 +200,9 @@ public class PowerSourceList implements PowerTracker {
 		}
 		if (sum = )
 			return true;*/
-		if (engines.isEmpty())
+		if (this.isEmpty())
+			return false;
+		if (this.isBedrock())
 			return false;
 		long sum = this.getMaxGennablePower();
 		long avg = sum/engines.size();
@@ -205,6 +215,10 @@ public class PowerSourceList implements PowerTracker {
 
 	public boolean isEmpty() {
 		return engines.isEmpty();
+	}
+
+	public boolean isBedrock() {
+		return isBedrock;
 	}
 
 	public static PowerSourceList combine(PowerSourceList in1, PowerSourceList in2, ShaftMerger caller) {
