@@ -480,7 +480,7 @@ TemperatureTE {
 
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
-		return side == ForgeDirection.DOWN ? Flow.INPUT : Flow.NONE;
+		return side == (isFlipped ? ForgeDirection.DOWN : ForgeDirection.UP) ? Flow.NONE : Flow.INPUT;
 	}
 
 }
