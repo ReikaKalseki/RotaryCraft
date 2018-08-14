@@ -64,7 +64,8 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 
 	@Override
 	public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
-		return 0; //out of 255
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		return m.isOpaque() ? 255 : 0; //out of 255
 	}
 
 	@Override

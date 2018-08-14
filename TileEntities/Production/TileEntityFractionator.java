@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
@@ -114,7 +115,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 				tank.removeLiquid(1000);
 			}
 		}
-		if (this.getTicksExisted()%20 == 0)
+		if (!world.isRemote && this.getTicksExisted()%20 == 0)
 			this.updatePressure(world, x, y, z, meta);
 		this.testIdle();
 		if (power < MINPOWER || omega < MINSPEED) {
@@ -129,13 +130,28 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 	public void updatePressure(World world, int x, int y, int z, int meta) {
-		int dp = pressure-(int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
-		pressure -= Math.signum(dp)*Math.max(1, Math.abs(dp/16));
+		int local = pressure;
+		int dp = local-(int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
+		int sub = (int)(Math.signum(dp)*Math.max(1, Math.abs(dp/16)));
+		if (torque <= 0)
+			sub *= 4;
+
+		local -= sub;
+
 		if (torque > 0)
-			pressure += 1.8*Math.sqrt(torque);
-		if (pressure > MAXPRESSURE) {
+			local += 1.8*Math.sqrt(torque);
+
+		if (local > MAXPRESSURE) {
 			this.overpressure(world, x, y, z);
-			pressure = MAXPRESSURE;
+			local = MAXPRESSURE;
+		}
+
+		//Gain pressure slowly, but lose it quickly
+		if (pressure < local) { //ascending
+			pressure += Math.max(1, Math.min(ReikaRandomHelper.getRandomPlusMinus(6, 13), (local-pressure)/4));
+		}
+		else {
+			pressure = local;
 		}
 	}
 

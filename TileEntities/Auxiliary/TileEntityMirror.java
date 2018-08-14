@@ -31,6 +31,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.SolarPlant;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SolarPlantBlock;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -38,7 +40,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityMirror extends RotaryCraftTileEntity {
+public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlantBlock {
 
 	//2.3 kW/m^2 (392MW/170000) -> 2kW/block; sunlight is 15 kW per m^2, so thus efficiency of 13%
 
@@ -58,6 +60,22 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 	private float aimFactor = 1;
 	private float lastAimFactor;
 
+	private SolarPlant plant;
+
+	public void searchForPlant(World world, int x, int y, int z) {
+		if (plant != null)
+			return;
+		plant = SolarPlant.build(world, x, y, z);
+	}
+
+	public SolarPlant getPlant() {
+		return plant;
+	}
+
+	public void setPlant(SolarPlant p) {
+		plant = p;
+	}
+
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 
@@ -76,6 +94,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity {
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (broken)
 			return;
+
+		this.searchForPlant(world, x, y, z);
+
 		if (world.isRemote && (this.getTicksExisted() < 400 || rotatingLarge || Math.abs(world.getTotalWorldTime()%8) == Math.abs(System.identityHashCode(this)%8))) {
 			this.adjustAim(world, x, y, z, meta);
 		}

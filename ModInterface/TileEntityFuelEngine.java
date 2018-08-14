@@ -160,7 +160,7 @@ TemperatureTE {
 	}
 
 	private int getConsumedFuel() {
-		return 2;
+		return 4; //was 2
 	}
 
 	private int getGenOmega() {

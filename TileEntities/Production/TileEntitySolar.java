@@ -34,6 +34,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
+import Reika.RotaryCraft.Auxiliary.SolarPlant;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiBlockMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
@@ -41,13 +42,14 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades.SodiumSolarOutput;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SodiumSolarUpgrades.SodiumSolarReceiver;
+import Reika.RotaryCraft.Auxiliary.Interfaces.SolarPlantBlock;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 
-public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, IFluidHandler {
+public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, IFluidHandler, SolarPlantBlock {
 
 	private BlockArray solarBlocks = new BlockArray();
 	private final StepTimer mirrorTimer = new StepTimer(100);
@@ -68,6 +70,22 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	private final HybridTank tank = new HybridTank("solar", 4000);
 
+	private SolarPlant plant;
+
+	public void searchForPlant(World world, int x, int y, int z) {
+		if (plant != null)
+			return;
+		plant = SolarPlant.build(world, x, y, z);
+	}
+
+	public SolarPlant getPlant() {
+		return plant;
+	}
+
+	public void setPlant(SolarPlant p) {
+		plant = p;
+	}
+
 	@Override
 	public boolean canProvidePower() {
 		//return this.isMultiBlock(worldObj, xCoord, yCoord, zCoord) && this.getMultiBlockPosition(worldObj, xCoord, yCoord, zCoord)[1] == 0;
@@ -87,6 +105,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		this.searchForPlant(world, x, y, z);
 		topLocation = this.getTopOfTower();
 		size = this.getArraySize();
 		overallBrightness = this.getArrayOverallBrightness();

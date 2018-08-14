@@ -732,6 +732,11 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		return psl;
 	}
 
+	@Override
+	public final void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
+		c.add(this.getAdjacentTileEntity(write));
+	}
+
 	public final long getMaxPower() {
 		if (type == null)
 			return 0;
@@ -880,11 +885,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	public boolean isBroken() {
 		return false;
-	}
-
-	@Override
-	public final void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
-		c.add(this.getAdjacentTileEntity(write));
 	}
 
 	@Override

@@ -9,13 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
+import java.util.Collection;
+
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 
 public interface PowerSourceTracker {
 
 	public abstract PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller);
+
+	/** c may contain nulls. */
+	public abstract void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir);
 
 	public abstract World getWorld();
 

@@ -1627,9 +1627,14 @@ public enum MachineRegistry implements TileEnum {
 			case SONICBORER:
 			case WINDER:
 			case PROJECTOR:
+			case MIRROR:
 				return true;
 			default:
 				return false;
 		}
+	}
+
+	public boolean isOpaque() {
+		return this.isSolidBottom();
 	}
 }
