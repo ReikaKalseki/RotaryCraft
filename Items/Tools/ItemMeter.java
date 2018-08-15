@@ -294,8 +294,13 @@ public class ItemMeter extends ItemRotaryTool
 				TileEntitySolar clicked = (TileEntitySolar)tile;
 				TileEntitySolar top = (TileEntitySolar)world.getTileEntity(x, clicked.getTopOfTower(), z);
 				TileEntitySolar bottom = (TileEntitySolar)world.getTileEntity(x, clicked.getBottomOfTower(), z);
-				this.sendMessage(ep, String.format("Solar plant contains %d mirrors and %d active tower pieces.", top.getArraySize(), bottom.getTowerHeight()));
-				this.sendMessage(ep, String.format("Outputting %.3fkW at %d rad/s. Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
+				if (bottom.getPlant() == null || bottom.getArraySize() <= 0) {
+					this.sendMessage(ep, String.format("Solar plant is unformed."));
+				}
+				else {
+					this.sendMessage(ep, String.format("Solar plant contains %d mirrors and %d active tower pieces (out of %d total).", top.getArraySize(), bottom.getPlant().getEffectiveTowerBlocks(), bottom.getPlant().rawTowerBlocks()));
+					this.sendMessage(ep, String.format("Outputting %.3fkW at %d rad/s. Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
+				}
 				return true;
 			}
 			if (m == MachineRegistry.WINDER) {

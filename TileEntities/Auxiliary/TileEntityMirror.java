@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Auxiliary;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -29,7 +28,6 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.SolarPlant;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SolarPlantBlock;
@@ -51,8 +49,6 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 	private float targetTheta;
 	@SideOnly(Side.CLIENT)
 	private float targetPhi;
-
-	public Coordinate targetloc;
 
 	public boolean broken;
 	private boolean rotatingLarge;
@@ -129,57 +125,29 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 		return 0;
 	}
 
-	public float getLightLevel() {
+	public boolean isFunctional() {
 		if (broken)
-			return 0;
-		if (worldObj.provider.dimensionId == -1 || worldObj.provider.dimensionId == 1)
-			return 0;
-		if (worldObj.provider.hasNoSky)
-			return 0;
+			return false;
 		if (MachineRegistry.getMachine(worldObj, xCoord, yCoord+1, zCoord) != null)
-			return 0;
+			return false;
+		/*
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
-			return 0;
-		float sun = ReikaWorldHelper.getSunIntensity(worldObj, true, 0);
-		if (InterfaceCache.ISOLARLEVEL.instanceOf(worldObj.provider)) {
-			ISolarLevel isl = (ISolarLevel)worldObj.provider;
-			sun *= isl.getSolarEnergyMultiplier();
-		}
-		if (sun > 0.21) {
-			return (int)(15*sun);
-		}
-		int moon = worldObj.provider.getMoonPhase(worldObj.getWorldInfo().getWorldTime());
-		float phase;
-		switch(moon) {
-			case 0:
-				phase = 1;
-				break;
-			case 1:
-			case 7:
-				phase = 0.8F;
-				break;
-			case 2:
-			case 6:
-				phase = 0.5F;
-				break;
-			case 3:
-			case 5:
-				phase = 0.2F;
-				break;
-			case 4:
-				phase = 0.05F;
-				break;
-			default:
-				phase = 0;
-		}
-		//ReikaJavaLibrary.pConsole(phase);
-		return 15*0.2F*phase;
+			return false;
+		 */
+		if (worldObj.getPrecipitationHeight(xCoord, zCoord) > yCoord+1)
+			return false;
+		return true;
 	}
 
 	@SideOnly(Side.CLIENT)
 	private void adjustAim(World world, int x, int y, int z, int meta) {
-		if (targetloc == null)
+		if (plant == null)
 			return;
+
+		Coordinate target = plant.getAimingPositionForMirror(this);
+		if (target == null)
+			return;
+
 		float finalphi;
 		float finaltheta;
 
@@ -194,7 +162,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 		//rises in +90 sets in 270 (+x, -x)
 		float movespeed = 0.5F;
 
-		double[] angs = ReikaPhysicsHelper.cartesianToPolar(x-targetloc.xCoord, y-targetloc.yCoord, z-targetloc.zCoord);
+		double[] angs = ReikaPhysicsHelper.cartesianToPolar(x-target.xCoord, y-target.yCoord, z-target.zCoord);
 		float targetphi = (float)angs[2];
 		float targettheta = (float)angs[1];
 
@@ -342,5 +310,10 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 
 	@Override
 	public void onEMP() {}
+
+	@Override
+	public void breakBlock() {
+		plant.invalidate(worldObj);
+	}
 
 }

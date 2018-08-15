@@ -64,8 +64,38 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 
 	@Override
 	public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
-		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-		return m.isOpaque() ? 255 : 0; //out of 255
+		return 0;
+		//MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+		//return m.isOpaque() ? 255 : 0; //out of 255
+	}
+
+	/*
+	@Override
+	public int getMixedBrightnessForBlock(IBlockAccess world, int x, int y, int z) {
+		int l = 0;
+		for (int i = 0; i < 6; i++) {
+			int dx = x+ForgeDirection.VALID_DIRECTIONS[i].offsetX;
+			int dy = y+ForgeDirection.VALID_DIRECTIONS[i].offsetY;
+			int dz = z+ForgeDirection.VALID_DIRECTIONS[i].offsetZ;
+			l = Math.max(l, world.getBlock(dx, dy, dz).getMixedBrightnessForBlock(world, dx, dy, dz));
+		}
+		return l;
+	}*/
+	/*
+	@Override
+	public float getBlockBrightness(IBlockAccess iba, int x, int y, int z)
+	{
+		return iba.getBrightness(x, y+1, z, this.getLightValue(iba, x, y+1, z));
+	}*/
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	/**
+	 * Goes straight to getLightBrightnessForSkyBlocks for Blocks, does some fancy computing for Fluids
+	 */
+	public int getMixedBrightnessForBlock(IBlockAccess iba, int x, int y, int z)
+	{
+		return iba.getLightBrightnessForSkyBlocks(x, y+1, z, this.getLightValue(iba, x, y+1, z));
 	}
 
 	@Override
@@ -146,23 +176,6 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 	public final boolean addHitEffects(World world, MovingObjectPosition tg, EffectRenderer eff)
 	{
 		return ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, tg, this, eff, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
-	}
-	/*
-	@Override
-	public float getBlockBrightness(IBlockAccess iba, int x, int y, int z)
-	{
-		return iba.getBrightness(x, y+1, z, this.getLightValue(iba, x, y+1, z));
-	}*/
-
-	@Override
-	@SideOnly(Side.CLIENT)
-
-	/**
-	 * Goes straight to getLightBrightnessForSkyBlocks for Blocks, does some fancy computing for Fluids
-	 */
-	public int getMixedBrightnessForBlock(IBlockAccess iba, int x, int y, int z)
-	{
-		return iba.getLightBrightnessForSkyBlocks(x, y+1, z, this.getLightValue(iba, x, y+1, z));
 	}
 
 	@Override

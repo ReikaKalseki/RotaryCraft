@@ -47,15 +47,12 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 
 public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, IFluidHandler, SolarPlantBlock {
 
 	private BlockArray solarBlocks = new BlockArray();
 	private final StepTimer mirrorTimer = new StepTimer(100);
-	private int numberMirrors = 0;
 
-	private float lightMultiplier = 0;
 	private float overallBrightness;
 	private int size;
 	private int topLocation = -1;
@@ -76,6 +73,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		if (plant != null)
 			return;
 		plant = SolarPlant.build(world, x, y, z);
+		size = -1;
 	}
 
 	public SolarPlant getPlant() {
@@ -84,6 +82,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	public void setPlant(SolarPlant p) {
 		plant = p;
+		size = -1;
 	}
 
 	@Override
@@ -107,8 +106,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		super.updateTileEntity();
 		this.searchForPlant(world, x, y, z);
 		topLocation = this.getTopOfTower();
-		size = this.getArraySize();
-		overallBrightness = this.getArrayOverallBrightness();
+
 		if (!world.isRemote) {
 			int temp = (int)(5*size*overallBrightness);
 			for (int i = -3; i <= 3; i++) {
@@ -133,7 +131,10 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		}
 		if (world.getBlock(x, y-1, z) == Blocks.air || MachineRegistry.getMachine(world, x, y-1, z) != this.getMachine()) {
 			//ReikaJavaLibrary.pConsole("TOWER: "+this.getTowerHeight()+";  SIZE: "+this.getArraySize());
-			this.generatePower(world, x, y, z);
+			if (plant.getPrimaryTower().to2D().equals(new Coordinate(x, 0, z)))
+				this.generatePower(world, x, y, z);
+			else
+				power = omega = torque = 0;
 		}
 		else {
 			write = null;
@@ -153,26 +154,22 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			}
 		}
 
-		mirrorTimer.update();
-		if (mirrorTimer.checkCap()) {
-			if (solarBlocks.isEmpty()) {
-				lightMultiplier = 0;
-				solarBlocks.recursiveAdd(world, x, y, z, this.getTileEntityBlockID());
-				numberMirrors = solarBlocks.getSize();
-				while (solarBlocks.getSize() > 0) {
-					Coordinate c = solarBlocks.getNextAndMoveOn();
-					MachineRegistry m = MachineRegistry.getMachine(world, c.xCoord, c.yCoord, c.zCoord);
-					if (m == MachineRegistry.MIRROR) {
-						TileEntityMirror te = (TileEntityMirror)world.getTileEntity(c.xCoord, c.yCoord, c.zCoord);
-						te.targetloc = new Coordinate(x, y, z);
-						float light = te.getLightLevel()*te.getAimingAccuracy();
-						lightMultiplier += light;
-					}
-					else numberMirrors--;
+		if (plant != null) {
+			if (this.isTopOfTower()) {
+				mirrorTimer.update();
+				if (mirrorTimer.checkCap() || size == -1) {
+					overallBrightness = plant.getOverallBrightness(world);
+					size = plant.mirrorCount();
 				}
-				lightMultiplier /= 15F;
-				lightMultiplier /= numberMirrors;
 			}
+			else {
+				overallBrightness = this.getArrayOverallBrightness();
+				size = this.getArraySize();
+			}
+		}
+		else {
+			size = -1;
+			overallBrightness = 0;
 		}
 
 		if (write != null) {
@@ -188,7 +185,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		boolean water = tank.getActualFluid() == FluidRegistry.WATER;
 		omega = water ? GENOMEGA : GENOMEGA_SODIUM;
 		torque = this.getGenTorque(world, x, y, z);
-		if (size <= 0 || torque == 0 || tank.getLevel() < amt || (!water && temperature < 800)) {
+		if (this.getArraySize() <= 0 || torque == 0 || tank.getLevel() < amt || (!water && temperature < 800)) {
 			omega = 0;
 			torque = 0;
 		}
@@ -212,13 +209,13 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	private int getGenTorque(World world, int x, int y, int z) {
-		if (tank.isEmpty())
+		if (tank.isEmpty() || plant == null)
 			return 0;
 		boolean water = tank.getActualFluid() == FluidRegistry.WATER;
 		int cap = water ? MAXTORQUE : MAXTORQUE_SODIUM;
 		float f = water ? 1 : 1.75F;
 		float p = water ? 1 : 1.5F;
-		return Math.min(cap, (int)(f*overallBrightness*Math.min(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 64)*(Math.pow(size+1, p))));
+		return Math.min(cap, (int)(f*this.getArrayOverallBrightness()*plant.getTowerMultiplier()*(Math.pow(this.getArraySize()+1, p))));
 	}
 
 	public int getConsumedWater() {
@@ -233,10 +230,6 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		if (sodium)
 			ret *= 1/128D;//0.00390625; //1/256
 		return ret;
-	}
-
-	public int getTowerHeight() {
-		return topLocation-yCoord;
 	}
 
 	@Override
@@ -268,14 +261,14 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		TileEntity tile = worldObj.getTileEntity(xCoord, topLocation, zCoord);
 		if (tile == null)
 			return 0;
-		return ((TileEntitySolar)tile).numberMirrors;
+		return ((TileEntitySolar)tile).size;
 	}
 
 	public float getArrayOverallBrightness() {
 		TileEntity tile = worldObj.getTileEntity(xCoord, topLocation, zCoord);
 		if (tile == null)
 			return 0;
-		return ((TileEntitySolar)tile).lightMultiplier;
+		return ((TileEntitySolar)tile).overallBrightness;
 	}
 
 	public int getTopOfTower() {
@@ -292,6 +285,10 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			y--;
 		}
 		return y+1;
+	}
+
+	public boolean isTopOfTower() {
+		return yCoord == this.getTopOfTower();
 	}
 
 	private void getTowerWater(World world, int x, int y, int z) {
@@ -423,6 +420,11 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	@Override
 	public void getAllOutputs(Collection<TileEntity> c, ForgeDirection dir) {
 		c.add(this.getAdjacentTileEntity(write));
+	}
+
+	@Override
+	public void breakBlock() {
+		plant.invalidate(worldObj);
 	}
 
 }
