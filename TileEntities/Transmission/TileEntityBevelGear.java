@@ -175,7 +175,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		
+
 		if (this.getTileEntityAge() == 0)
 			this.findRoute(world, x, y, z);
 
@@ -193,26 +193,26 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 			TileEntity te = this.getAdjacentTileEntity(dirs[i]);
 			if (te instanceof TileEntityIOMachine) {
 				TileEntityIOMachine io = (TileEntityIOMachine)te;
-				if (write == null) {
+				if (read == null) {
 					if (io.isWritingToCoordinate(x, y, z) || io.isWritingToCoordinate2(x, y, z)) {
-						write = dirs[i];
+						read = dirs[i];
 					}
 				}
-				if (read == null) {
+				if (write == null) {
 					if (io.isReadingFrom(this) || io.isReadingFrom2(this) || io.isReadingFrom3(this) || io.isReadingFrom4(this)) {
-						read = dirs[i];
+						write = dirs[i];
 					}
 				}
 			}
 			else if (te instanceof PowerAcceptor) {
-				if (read == null) {
+				if (write == null) {
 					if (((PowerAcceptor)te).canReadFrom(dirs[i].getOpposite())) {
-						read = dirs[i];
+						write = dirs[i];
 					}
 				}
 			}
 		}
-		if (write != null && read != null && read != write) {
+		if (write != null && read != null && read != write && read != write.getOpposite()) {
 			direction = directions.inverse().get(new ImmutablePair(read, write));
 		}
 	}
