@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,6 +49,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Interfaces.EMPControl;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -277,9 +275,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			return true;
 		if (te instanceof IEnergyProvider)
 			return true;
-		if (te instanceof IEnergySource)
-			return true;
-		if (te instanceof IEnergySink)
+		if (InterfaceCache.IC2POWERTILE.instanceOf(te))
 			return true;
 		if (InterfaceCache.NODE.instanceOf(te))
 			return true;
@@ -391,6 +387,9 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			RotaryCraftTileEntity rc = (RotaryCraftTileEntity)te;
 			if (!rc.isShutdown())
 				rc.onEMP();
+		}
+		else if (te instanceof EMPControl) {
+			((EMPControl)te).onHitWithEMP(this);
 		}
 		else {
 			shutdownLocations.add(new WorldLocation(te));

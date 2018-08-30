@@ -7,7 +7,7 @@
   Distribution of the software in any form is only allowed with
   explicit, prior permission from the owner.
 -->
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <trans>
 	<shaft>
 		最基础的动力传输设备就是轴.不太美观,且只能从一端将动力传输到另一端,既不会改变扭矩也不会改变转速.有一点要注意的就是.确保传输方向正确,不然你可就头疼了.不同材料所制成的轴有着不同的强度并且因此有着不同的扭矩和转速上限.

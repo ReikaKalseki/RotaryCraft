@@ -23,12 +23,14 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
+import Reika.GeoStrata.Registry.GeoBlocks;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.RockMelterManager;
@@ -218,6 +220,18 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 
 		if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.EssenceType.XP.getEssence() != null)
 			this.addRecipe(MagicCropHandler.EssenceType.XP.getEssence(), "mobessence", 200, 600, 360000, RecipeLevel.MODINTERACT);
+
+		if (ModList.GEOSTRATA.isLoaded()) {
+			this.addLavaRock();
+		}
+	}
+
+	@ModDependent(ModList.GEOSTRATA)
+	private void addLavaRock() {
+		for (int i = 0; i < 4; i++) {
+			ItemStack is = new ItemStack(GeoBlocks.LAVAROCK.getBlockInstance(), 1, i);
+			this.addRecipe(is, new FluidStack(FluidRegistry.LAVA, 1000), 900-200*i, ReikaThermoHelper.ROCK_MELT_ENERGY/(i+1), RecipeLevel.MODINTERACT);
+		}
 	}
 
 	@Override

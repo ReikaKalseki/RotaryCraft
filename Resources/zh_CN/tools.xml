@@ -7,7 +7,7 @@
   Distribution of the software in any form is only allowed with
   explicit, prior permission from the owner.
 -->
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <tools>
 	<spring>
 		卷线弹簧用于存储机械能. 在卷线器内卷好后,能放入另一个卷线器来产生少量动力,或用于驱动各种工具,注意卷绕线圈时有损坏的风险,弹簧卷得越紧其风险就越大.

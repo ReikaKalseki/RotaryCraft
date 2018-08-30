@@ -7,7 +7,7 @@
   Distribution of the software in any form is only allowed with
   explicit, prior permission from the owner.
 -->
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <tools>
 	<spring>
 		El wind spring es usado para almacenar energia mecanica. Una vez tensado en el coil winder, puede ser usado en otro winder para proporcionar una ligera cantidad de potencia, o puede ser usado para hacer funcionar diversas herramientas. Ten en cuenta, cuando cargues coils, que tienen riesgo de romperse, un riesgo que se incrementa a medida que la tension aumenta.

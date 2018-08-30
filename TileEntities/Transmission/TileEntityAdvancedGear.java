@@ -439,7 +439,6 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 			}
 			else if (!isCreative) {
 				long pwr = (long)torquein*(long)omegain;
-				//if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
 				if (torquein >= this.getChargingTorque() && pwr >= this.getChargingPower())
 					energy += pwr;
 			}
@@ -468,7 +467,13 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	public int getChargingTorque() {
-		return energy >= 20 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy/20), 3))/2 : 1;
+		int base = energy >= 20 ? ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy/20), 3))/2 : 1;
+		if (this.isBedrockCoil()) {
+			base = Math.max(base, energy >= 20 ? 16*ReikaMathLibrary.ceil2exp(ReikaMathLibrary.intpow2(ReikaMathLibrary.logbase2(energy/80), 3))/2 : 16);
+		}
+		if (base <= (this.isBedrockCoil() ? 16 : 1))
+			base = this.isBedrockCoil() ? 16 : 1;
+		return base;
 	}
 
 	public int getTorqueCap() {

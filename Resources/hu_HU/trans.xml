@@ -7,7 +7,7 @@
   Distribution of the software in any form is only allowed with
   explicit, prior permission from the owner.
 -->
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <trans>
 	<shaft>
 		The most basic power-transmission device is the shaft. Nothing fancy, just carries the power from one place to another, with no changes to either the torque or the speed. Pay attention, though, to the direction to avoid headaches. Different materials of shaft have different strengths and thus different limits on maximum torque and speed.

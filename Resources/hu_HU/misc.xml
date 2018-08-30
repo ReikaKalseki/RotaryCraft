@@ -7,7 +7,7 @@
   Distribution of the software in any form is only allowed with
   explicit, prior permission from the owner.
 -->
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <misc>
 	<lube>
 		Most inline gearboxes need to be lubricated to maintain their ability to transmit power. Operated without lubricant, they will gradually wear down and transmit less and less torque, and thus less power. To keep them lubricated, simply run a line of lubricant hose from a grinder to the gearbox, put some seeds in the grinder, and watch the hose transmit the oil (or just use buckets to carry it). Most gearboxes do consume the lubricant, and more of it at higher speeds, so keep an eye on the meter in the GUI. Other machines may also require lubricant to function.

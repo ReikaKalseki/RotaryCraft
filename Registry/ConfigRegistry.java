@@ -117,7 +117,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	HARDCONVERTERS("Harder Converter Unit Recipes", false),
 	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false),
 	GATEBLAST("Enable Blast Furnace recipe gating", false),
-	GATEWORK("Enable Worktable recipe gating", false);
+	GATEWORK("Enable Worktable recipe gating", false),
+	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4);
 
 	private String label;
 	private boolean defaultState;

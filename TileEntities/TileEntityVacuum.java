@@ -53,6 +53,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	private boolean isFull = false;
 
+	public static final int FALLOFF = Math.min(524288, ReikaMathLibrary.ceil2exp(Math.max(1024, ConfigRegistry.VACPOWER.getValue())));
+
 	public int getExperience() {
 		return experience;
 	}
@@ -258,17 +260,12 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	public int getRange() {
-		return ReikaMathLibrary.extrema(8+(int)(power*4/MINPOWER), this.getMaxRange(), "min");
+		return ReikaMathLibrary.extrema(8+(int)(power/FALLOFF), this.getMaxRange(), "min");
 	}
 
 	public int getSizeInventory()
 	{
 		return 54;
-	}
-
-	public static boolean func_52005_b(ItemStack par0ItemStack)
-	{
-		return true;
 	}
 
 	@Override

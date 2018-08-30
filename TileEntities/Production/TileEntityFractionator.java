@@ -134,7 +134,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		int dp = local-(int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
 		int sub = (int)(Math.signum(dp)*Math.max(1, Math.abs(dp/16)));
 		if (torque <= 0)
-			sub *= 4;
+			sub *= 8;//4;
 
 		local -= sub;
 
