@@ -25,6 +25,8 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.TinkerSmelteryHandler;
+import Reika.DragonAPI.ModInteract.DeepInteract.TinkerSmelteryHandler.SmelteryWrapper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TransvectorHandler;
 import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -95,6 +97,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 				fz = te.zCoord;
 			}
 		}
+		if (ModList.TINKERER.isLoaded()) {
+			if (TinkerSmelteryHandler.isSmelteryController(te))
+				return true;
+		}
 		return te instanceof ThermalMachine;
 	}
 
@@ -157,6 +163,12 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			 */
 			if (te instanceof ThermalMachine) {
 				this.heatMachine(world, x, y, z, (ThermalMachine)te);
+			}
+			else if (ModList.TINKERER.isLoaded() && TinkerSmelteryHandler.isSmelteryController(te)) {
+				SmelteryWrapper s = new SmelteryWrapper(te);
+				s.fuelLevel = 4000;
+				s.meltPower = temperature*25/6; //that allows the friction heater to break pyrotheum temperatures at its 1200C (~800kW)
+				s.write(te);
 			}
 		}
 	}

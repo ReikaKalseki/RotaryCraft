@@ -26,6 +26,7 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class EntityGasMinecart extends EntityMinecart {
 
@@ -320,8 +321,17 @@ public class EntityGasMinecart extends EntityMinecart {
 	}
 
 	@Override
-	public boolean isPoweredCart()
-	{
+	public boolean isPoweredCart() {
 		return true;
+	}
+
+	@Override
+	public Block func_145820_n() {
+		return MachineRegistry.BLASTFURNACE.getBlock();
+	}
+
+	@Override
+	public int getDisplayTileData() {
+		return MachineRegistry.BLASTFURNACE.getBlockMetadata();
 	}
 }

@@ -62,6 +62,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
@@ -776,7 +777,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.CENTRIFUGE) {
 			TileEntityCentrifuge tr = (TileEntityCentrifuge)tile;
 			if (tr.omega > 0 && world.isRemote) {
-
+				e.addVelocity(ReikaRandomHelper.getRandomPlusMinus(0, 1), 0.1, ReikaRandomHelper.getRandomPlusMinus(0, 1));
 			}
 		}
 	}

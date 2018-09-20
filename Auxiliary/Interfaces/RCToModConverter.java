@@ -11,4 +11,8 @@ package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 public interface RCToModConverter {
 
+	public int getGeneratedUnitsPerTick();
+
+	public String getUnitDisplay();
+
 }

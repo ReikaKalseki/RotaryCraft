@@ -20,10 +20,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
-import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
@@ -228,14 +226,6 @@ public class RotaryAux {
 			return true;
 		}
 		return false;
-	}
-
-	public static String getMessage(String tag) {
-		return StatCollector.translateToLocal("message."+tag);
-	}
-
-	public static void writeMessage(String tag) {
-		ReikaChatHelper.writeString(getMessage(tag));
 	}
 
 	public static boolean isMuffled(TileEntity te) {

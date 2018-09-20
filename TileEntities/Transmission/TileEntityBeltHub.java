@@ -41,6 +41,9 @@ Connectable, BreakAction {
 	public boolean isEmitting;
 	private int wetTimer = 0;
 
+	private boolean isSlippingTorque;
+	private boolean isSlippingOmega;
+
 	private int[] source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 	private int[] target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 
@@ -222,12 +225,14 @@ Connectable, BreakAction {
 
 	public int getTorque(int input) {
 		int max = this.isWet() ? this.getMaxTorque()/4 : this.getMaxTorque();
+		isSlippingTorque = input > max;
 		int torque = Math.min(input, max);
 		return this.isSplitting() ? torque/2 : torque;
 	}
 
 	public int getOmega(int input) {
 		int s = this.isWet() ? this.getMaxSmoothSpeed()/4 : this.getMaxSmoothSpeed();
+		isSlippingOmega = input > s;
 		int speed = input <= s ? input : (int)(s+Math.sqrt(input-s));
 		return speed;
 	}
@@ -475,5 +480,9 @@ Connectable, BreakAction {
 			c.add(belt.getAdjacentTileEntity(belt.write));
 			c.add(belt.getAdjacentTileEntity(belt.write2));
 		}
+	}
+
+	public boolean isSlipping() {
+		return isSlippingOmega || isSlippingTorque;
 	}
 }

@@ -146,24 +146,24 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
-		case 0:
-			facingDir = ForgeDirection.DOWN;
-			break;
-		case 1:
-			facingDir = ForgeDirection.UP;
-			break;
-		case 2:
-			facingDir = ForgeDirection.NORTH;
-			break;
-		case 3:
-			facingDir = ForgeDirection.WEST;
-			break;
-		case 4:
-			facingDir = ForgeDirection.SOUTH;
-			break;
-		case 5:
-			facingDir = ForgeDirection.EAST;
-			break;
+			case 0:
+				facingDir = ForgeDirection.DOWN;
+				break;
+			case 1:
+				facingDir = ForgeDirection.UP;
+				break;
+			case 2:
+				facingDir = ForgeDirection.NORTH;
+				break;
+			case 3:
+				facingDir = ForgeDirection.WEST;
+				break;
+			case 4:
+				facingDir = ForgeDirection.SOUTH;
+				break;
+			case 5:
+				facingDir = ForgeDirection.EAST;
+				break;
 		}
 		read = facingDir;
 		write = read.getOpposite();
@@ -171,18 +171,18 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 
 	public boolean isPipeConnected(ForgeDirection with) {
 		switch(this.getBlockMetadata()) {
-		case 4:
-			return with == ForgeDirection.NORTH;
-		case 5:
-			return with == ForgeDirection.WEST;
-		case 2:
-			return with == ForgeDirection.SOUTH;
-		case 3:
-			return with == ForgeDirection.EAST;
-		case 0:
-			return with == ForgeDirection.UP;
-		case 1:
-			return with == ForgeDirection.DOWN;
+			case 4:
+				return with == ForgeDirection.NORTH;
+			case 5:
+				return with == ForgeDirection.WEST;
+			case 2:
+				return with == ForgeDirection.SOUTH;
+			case 3:
+				return with == ForgeDirection.EAST;
+			case 0:
+				return with == ForgeDirection.UP;
+			case 1:
+				return with == ForgeDirection.DOWN;
 		}
 		return false;
 	}
@@ -247,6 +247,16 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	@Override
 	public int getMaxPressure() {
 		return MAXPRESSURE;
+	}
+
+	@Override
+	public int getGeneratedUnitsPerTick() {
+		return this.getGenAir();
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "mL";
 	}
 
 }

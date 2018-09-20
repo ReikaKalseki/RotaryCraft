@@ -17,4 +17,7 @@ public interface IntegratedGearboxable extends BreakAction {
 
 	public boolean applyIntegratedGear(ItemStack is);
 
+	/** Return positive for torque gearing, and either 0 for no gearing */
+	public int getIntegratedGear();
+
 }

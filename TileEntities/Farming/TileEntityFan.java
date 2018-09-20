@@ -22,11 +22,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.Registry.CropType.CropMethods;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
@@ -242,29 +244,34 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		int edity;
 		int editz;
 		for (int i = 1; i <= range; i++) {
-			editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
+			editx = x+i*facing.offsetX;
+			edity = y+i*facing.offsetY;
+			editz = z+i*facing.offsetZ;
 			this.rip2(world, editx, edity, editz);
 			this.enhanceFinPower(world, editx, edity, editz);
 
 			if (wideAreaHarvest) {
-				editx = -1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
-				editx = -1*a+x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
-
-				editx = -1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = -1*b+z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
-				editx = x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
-				editx = x+i*facing.offsetX; edity = 1+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
-
-				editx = x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
-				editx = 1*a+x+i*facing.offsetX; edity = y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
-				editx = 1*a+x+i*facing.offsetX; edity = 2+y+i*facing.offsetY; editz = 1*b+z+i*facing.offsetZ;
-				this.rip2(world, editx, edity, editz);
+				if (facing.offsetY != 0) {
+					for (int k = -1; k <= 1; k++) {
+						for (int j = -1; j <= 1; j++) {
+							editx = x+k;
+							edity = y+i*facing.offsetY;
+							editx = z+j;
+							this.rip2(world, editx, edity, editz);
+						}
+					}
+				}
+				else {
+					ForgeDirection left = ReikaDirectionHelper.getLeftBy90(facing);
+					for (int k = -1; k <= 1; k++) {
+						for (int j = 0; j <= 2; j++) {
+							editx = x+i*facing.offsetX+left.offsetX*k;
+							edity = y+i*facing.offsetY+j;
+							editx = z+i*facing.offsetZ+left.offsetZ*k;
+							this.rip2(world, editx, edity, editz);
+						}
+					}
+				}
 			}
 		}
 	}

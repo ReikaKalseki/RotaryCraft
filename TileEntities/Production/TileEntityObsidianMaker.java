@@ -84,7 +84,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		tickcount++;
 		temptick++;
 		this.getPowerBelow();
-		if (temptick >= 20) {
+		if (temptick >= 20 && !world.isRemote) {
 			this.updateTemperature(world, x, y, z, meta);
 			temptick = 0;
 		}

@@ -32,6 +32,10 @@ public abstract class TileEntitySpringPowered extends InventoriedRCTileEntity im
 		return base*((TensionStorage)is.getItem()).getStiffness(is);
 	}
 
+	public int getExpectedCoilLife() {
+		return this.getUnwindTime()*inv[this.getCoilSlot()].getItemDamage();
+	}
+
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack is) {
 		return is.getItem() instanceof TensionStorage && i == this.getCoilSlot();

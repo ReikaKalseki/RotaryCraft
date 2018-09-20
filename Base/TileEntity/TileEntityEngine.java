@@ -910,4 +910,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		this.syncAllData(true);
 		return integratedGear != 0;
 	}
+
+	public final int getIntegratedGear() {
+		return integratedGear;
+	}
 }

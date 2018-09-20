@@ -551,7 +551,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return from != (isFlipped ? ForgeDirection.DOWN : ForgeDirection.UP) && fluid.equals(FluidRegistry.getFluid("rc lubricant"));
+		return from != (isFlipped ? ForgeDirection.DOWN : ForgeDirection.UP) && fluid.equals(FluidRegistry.getFluid("rc lubricant")) && !this.isLiving();
 	}
 
 	@Override

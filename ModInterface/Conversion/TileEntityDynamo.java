@@ -112,6 +112,16 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 		return (int)(pwr/ReikaRFHelper.getWattsPerRF()*ConfigRegistry.getConverterEfficiency());
 	}
 
+	@Override
+	public int getGeneratedUnitsPerTick() {
+		return this.getGenRF();
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "RF";
+	}
+
 	private void getIOSides(World world, int x, int y, int z, int meta) {
 		switch(meta) {
 			case 2:

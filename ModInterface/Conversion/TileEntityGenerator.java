@@ -253,4 +253,14 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 	public ArrayList<String> getDisplayTags(NBTTagCompound NBT) {
 		return new ArrayList();
 	}
+
+	@Override
+	public int getGeneratedUnitsPerTick() {
+		return (int)this.getOfferedEnergy();
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "EU";
+	}
 }

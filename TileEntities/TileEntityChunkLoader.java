@@ -21,13 +21,14 @@ import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.ChunkLoadingTile;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.EntityEnderFX;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityChunkLoader extends TileEntityPowerReceiver implements ChunkLoadingTile, BreakAction {
+public class TileEntityChunkLoader extends TileEntityPowerReceiver implements ChunkLoadingTile, BreakAction, RangedEffect {
 
 	private boolean loaded;
 
@@ -141,6 +142,16 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Ch
 	public void breakBlock() {
 		if (!worldObj.isRemote)
 			this.unload();
+	}
+
+	@Override
+	public int getRange() {
+		return this.getLoadingRadius()*16;
+	}
+
+	@Override
+	public int getMaxRange() {
+		return MAX_RADIUS*16;
 	}
 
 }

@@ -739,4 +739,8 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 		return integratedGear != 0;
 	}
 
+	public final int getIntegratedGear() {
+		return integratedGear;
+	}
+
 }

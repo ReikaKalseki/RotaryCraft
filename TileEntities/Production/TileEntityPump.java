@@ -50,6 +50,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	private int soundtick = 200;
 
 	private int damage = 0;
+	public int duplicationAmount;
 
 	public final static int CAPACITY = 24*1000;
 
@@ -147,6 +148,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		}
 		if (f.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
+		duplicationAmount = mult;
 		tank.addLiquid(fs.amount*mult, f);
 		world.markBlockForUpdate(loc.xCoord, loc.yCoord, loc.zCoord);
 	}

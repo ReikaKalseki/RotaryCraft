@@ -10,70 +10,60 @@
 package Reika.RotaryCraft.Items.Tools;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Interfaces.TileEntity.ThermalTile;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
+import Reika.RotaryCraft.API.Interfaces.PressureTile;
 import Reika.RotaryCraft.API.Interfaces.Transducerable;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
-import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.IntegratedGearboxable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
-import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RCToModConverter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
-import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
-import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
-import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
-import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
+import Reika.RotaryCraft.Base.TileEntity.TileEntitySpringPowered;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.TileEntityBucketFiller;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
-import Reika.RotaryCraft.TileEntities.TileEntityWinder;
-import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityCoolingFin;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityFuelLine;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
-import Reika.RotaryCraft.TileEntities.Piping.TileEntityPipe;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
-import Reika.RotaryCraft.TileEntities.Production.TileEntityObsidianMaker;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 import Reika.RotaryCraft.TileEntities.Production.TileEntitySolar;
-import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
-import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 
 public class ItemMeter extends ItemRotaryTool
@@ -91,31 +81,21 @@ public class ItemMeter extends ItemRotaryTool
 			return true;
 		if (ConfigRegistry.CLEARCHAT.getState())
 			ReikaChatHelper.clearChat((EntityPlayerMP)ep);
-		int ratioclicked = 1;
-		String geartype = null;
-		boolean reductionclicked = true;
-		long torque = 0;
-		long omega = 0;
-		double power;
-		int damage = -1;
-		int lube = -453;
-		TileEntity tile = world.getTileEntity(x, y, z);
+
 		Block bk = world.getBlock(x, y, z);
-		String name;
-		if (tile instanceof RotaryCraftTileEntity)
-			name = ((RotaryCraftTileEntity)tile).getMultiValuedName();
-		else
-			name = "";
-		if (tile instanceof ShaftMachine) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+		String name = tile instanceof TileEntityBase ? ((TileEntityBase)tile).getName() : tile.getClass().getSimpleName();
+		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
+
+		if (tile instanceof TileEntityIOMachine) {
+			((TileEntityIOMachine)tile).iotick = 512;
+		}
+		else if (tile instanceof ShaftMachine) {
 			ShaftMachine sm = (ShaftMachine)tile;
 			sm.setIORenderAlpha(512);
 		}
-		if (tile instanceof ThermalMachine) {
-			ThermalMachine th = (ThermalMachine)tile;
-			this.sendMessage(ep, String.format("%s %s: %dC", th.getName(), Variables.TEMPERATURE, th.getTemperature()));
-		}
-		boolean flag = false;
-		boolean flag1 = false;
+		world.markBlockForUpdate(x, y, z);
+
 		if (tile instanceof Transducerable) {
 			ArrayList<String> li = ((Transducerable)tile).getMessages(world, x, y, z, s);
 			if (li != null) {
@@ -132,513 +112,232 @@ public class ItemMeter extends ItemRotaryTool
 					this.sendMessage(ep, li.get(i));
 			}
 		}
-		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
-		if (m == MachineRegistry.BLASTFURNACE) {
-			TileEntityBlastFurnace clicked = (TileEntityBlastFurnace)tile;
-			if (clicked == null)
-				return false;
-			this.sendMessage(ep, String.format("%s: %dC.", Variables.TEMPERATURE, clicked.getTemperature()));
-			if (clicked.getTemperature() < clicked.SMELTTEMP)
-				RotaryAux.writeMessage("mintemp");
-			return true;
-		}
-		if (m == MachineRegistry.COOLINGFIN) {
-			TileEntityCoolingFin clicked = (TileEntityCoolingFin)tile;
-			clicked.ticks = 512;
-		}
-		if (m == MachineRegistry.RESERVOIR) {
-			TileEntityReservoir clicked = (TileEntityReservoir)tile;
-			if (!clicked.isEmpty())
-				this.sendMessage(ep, String.format("Reservoir contains %d mB of %s.", clicked.getLevel(), clicked.getFluid().getLocalizedName()));
-			else
-				RotaryAux.writeMessage("emptyres");
-		}
-		if (m == MachineRegistry.GASTANK) {
-			TileEntityFluidCompressor clicked = (TileEntityFluidCompressor)tile;
-			if (clicked.isEmpty())
-				this.sendMessage(ep, String.format("%s is empty.", m.getName()));
-			else
-				this.sendMessage(ep, String.format("%s contains %.3fB of %s of a capacity of %.3fB.", m.getName(), clicked.getLevel()/1000D, clicked.getFluid().getLocalizedName(), clicked.getCapacity()/1000D));
-		}
-		if (m != null && m.isStandardPipe()) {
-			TileEntityPipe clicked = (TileEntityPipe)tile;
-			if (clicked == null)
-				return false;
-			if (clicked.getFluidType() == null || clicked.getFluidLevel() <= 0) {
-				RotaryAux.writeMessage("emptypipe");
-				return true;
-			}
-			this.sendMessage(ep, String.format("%s contains %.3f m^3 of %s, with %s %.3f kPa.", m.getName(), clicked.getFluidLevel()/1000D, clicked.getFluidType().getLocalizedName().toLowerCase(Locale.ENGLISH), Variables.PRESSURE, clicked.getPressure()/1000D));
-			return true;
-		}
-		if (m == MachineRegistry.FUELLINE) {
-			TileEntityFuelLine clicked = (TileEntityFuelLine)tile;
-			if (clicked == null)
-				return false;
-			this.sendMessage(ep, String.format("%s contains %.3f m^3 of fuel.", m.getName(), clicked.getFluidLevel()/1000D));
-			return true;
-		}
-		if (m == MachineRegistry.HOSE) {
-			TileEntityHose clicked = (TileEntityHose)tile;
-			if (clicked == null)
-				return false;
-			this.sendMessage(ep, String.format("%s contains %.3f m^3 of lubricant.", m.getName(), clicked.getFluidLevel()/1000D));
-			return true;
-		}/*
-		if (m == MachineRegistry.HYDRAULICLINE) {
-			TileEntityHydraulicLine clicked = (TileEntityHydraulicLine)tile;
-			if (clicked == null)
-				return false;
-			sendMessage(String.format("%s carrying %dmB/s of hydraulic fluid at %s %d kPa.", m.getName(), clicked.getFlowRate(), Variables.PRESSURE, clicked.getPressure()));
-			return true;
-		}*/
-		if (!flag && tile instanceof ShaftPowerEmitter) {
-			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
-			power = sp.getPower();
-			String pre = ReikaEngLibrary.getSIPrefix(power);
-			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
-			if (tile instanceof PowerSourceTracker) {
-				this.sendMessage(ep, String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
-			}
-			return true;
-		}
-		if (!flag1 && tile instanceof ShaftPowerReceiver) {
-			ShaftPowerReceiver sp = (ShaftPowerReceiver)tile;
-			power = sp.getPower();
-			String pre = ReikaEngLibrary.getSIPrefix(power);
-			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s receiving %.3f %sW @ %d rad/s.", sp.getName(), base, pre, sp.getOmega()));
-			if (tile instanceof PowerSourceTracker) {
-				this.sendMessage(ep, String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
-			}
-			return true;
-		}
-		if (tile instanceof TileEntityIOMachine) {
 
-			((TileEntityIOMachine)tile).iotick = 512;
-			world.markBlockForUpdate(x, y, z);
-			if (m == MachineRegistry.ENGINE) {
-				TileEntityEngine clicked = (TileEntityEngine)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				clicked.iotick = 512;
-				world.markBlockForUpdate(x, y, z);
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
-				torque = omega = 0;
-				if (clicked.getEngineType().isAirBreathing() && clicked.isDrowned(world, x, y, z))
-					RotaryAux.writeMessage("drowning");
-				if (clicked.getEngineType() == EngineType.JET) {
-					if (((TileEntityJetEngine)clicked).getChokedFraction(world, x, y, z, clicked.getBlockMetadata()) < 1)
-						RotaryAux.writeMessage("choke");
-					if (((TileEntityJetEngine)clicked).FOD >= 8)
-						RotaryAux.writeMessage("fod");
-				}
-				if (clicked.hasTemperature()) {
-					this.sendMessage(ep, String.format("%s: %dC", Variables.TEMPERATURE, clicked.temperature));
-				}
-				if (clicked.getEngineType().burnsFuel()) {
-					int time = clicked.getFuelDuration();
-					String sg = String.format("%s: %s", Variables.FUEL, ReikaFormatHelper.getSecondsAsClock(time));
-					this.sendMessage(ep, sg);
-				}
-				if (clicked.getEngineType().requiresLubricant()) {
-					int amt = clicked.getLube();
-					String sg = String.format("Lubricant: %d mB", amt);
-					this.sendMessage(ep, sg);
-				}
-				if (clicked.getEngineType().isWaterPiped()) {
-					int amt = clicked.getWater();
-					String sg = String.format("Water: %d mB", amt);
-					this.sendMessage(ep, sg);
-				}
-				if (clicked.getEngineType() == EngineType.HYDRO) {
-					String sg = String.format("Detected waterfall height: %d m", ((TileEntityHydroEngine)clicked).getWaterfallHeightForDisplay());
-					this.sendMessage(ep, sg);
-				}
-				return true;
-			}
-			if (m == MachineRegistry.PLAYERDETECTOR) {
-				TileEntityPlayerDetector clicked = (TileEntityPlayerDetector)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("Detector Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("Detector Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("Detector Receiving %.3f W @ %d rad/s.", power, omega));
-				torque = omega = 0;
-				this.sendMessage(ep, String.format("Maximum Range: %dm. Reaction Time: %.2fs", clicked.getMaxRange(), clicked.getReactionTime()/20F));
-				if (power < clicked.MINPOWER)
-					RotaryAux.writeMessage("minpower");
-				return true;
+		if (tile instanceof ThermalTile) {
+			ThermalTile th = (ThermalTile)tile;
+			this.sendMessage(ep, String.format("%s %s: %dC", name, Variables.TEMPERATURE, th.getTemperature()));
+		}
 
-			}
-			if (m == MachineRegistry.GPR) {
-				TileEntityGPR clicked = (TileEntityGPR)tile;
-				if (ep.isSneaking() && clicked.power > clicked.MINPOWER) {
-					double ratio = 100*clicked.getSpongy(world, x, y-1, z);
-					this.sendMessage(ep, String.format("The ground is %.3f%s caves here.", ratio, "%%"));
-				}
-				return true;
-			}
-			if (m == MachineRegistry.SOLARTOWER) {
-				TileEntitySolar clicked = (TileEntitySolar)tile;
-				TileEntitySolar top = (TileEntitySolar)world.getTileEntity(x, clicked.getTopOfTower(), z);
-				TileEntitySolar bottom = (TileEntitySolar)world.getTileEntity(x, clicked.getBottomOfTower(), z);
-				if (bottom.getPlant() == null || bottom.getArraySize() <= 0) {
-					this.sendMessage(ep, String.format("Solar plant is unformed."));
-				}
-				else {
-					this.sendMessage(ep, String.format("Solar plant contains %d mirrors and %d active tower pieces (out of %d total).", top.getArraySize(), bottom.getPlant().getEffectiveTowerBlocks(), bottom.getPlant().rawTowerBlocks()));
-					this.sendMessage(ep, String.format("Outputting %.3fkW at %d rad/s. Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
-				}
-				return true;
-			}
-			if (m == MachineRegistry.WINDER) {
-				TileEntityWinder clicked = (TileEntityWinder)tile;
-				String text;
-				if (clicked.winding)
-					text = "Receiving";
-				else
-					text = "Outputting";
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("Winder %s %.3f MW @ %d rad/s.", text, power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("Winder %s %.3f kW @ %d rad/s.", text, power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("Winder %s %.3f W @ %d rad/s.", text, power, omega));
-				torque = omega = 0;
-				return true;
-			}
-			if (m == MachineRegistry.OBSIDIAN) {
-				TileEntityObsidianMaker clicked = (TileEntityObsidianMaker)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
-				this.sendMessage(ep, String.format("Water: %dmB. Lava: %dmB.", clicked.getWater(), clicked.getLava()));
-				torque = omega = 0;
-				if (power < clicked.MINPOWER)
-					RotaryAux.writeMessage("minpower");
-				return true;
-			}
-			if (m == MachineRegistry.HEATRAY) {
-				TileEntityHeatRay clicked = (TileEntityHeatRay)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
-				if (power >= clicked.MINPOWER)
-					this.sendMessage(ep, String.format("%s %dm, dealing %ds of burn damage.", Variables.RANGE.toString(), clicked.getRange(), clicked.getBurnTime()));
-				torque = omega = 0;
-				if (power < clicked.MINPOWER)
-					RotaryAux.writeMessage("minpower");
-				return true;
-			}
-			if (m == MachineRegistry.BUCKETFILLER) {
-				TileEntityBucketFiller clicked = (TileEntityBucketFiller)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f MW @ %d rad/s.", m.getName(), power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f kW @ %d rad/s.", m.getName(), power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("%s Receiving %.3f W @ %d rad/s.", m.getName(), power, omega));
-				if (power >= clicked.MINPOWER) {
-					if (clicked.getLevel() > 0) {
-						String sg = String.format("Liquid Contents:\n%dmB of %s", clicked.getLevel(), clicked.getContainedFluid().getLocalizedName());
-						this.sendMessage(ep, sg);
-					}
-					else {
-						this.sendMessage(ep, String.format("%s has no liquid.", m.getName()));
-					}
-				}
-				torque = omega = 0;
-				if (power < clicked.MINPOWER)
-					RotaryAux.writeMessage("minpower");
-				return true;
-			}
-			if (m == MachineRegistry.PUMP) {
-				TileEntityPump clicked = (TileEntityPump)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("Pump Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("Pump Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("Pump Receiving %.3f W @ %d rad/s.", power, omega));
-				torque = omega = 0;
-				if (power < clicked.MINPOWER)
-					RotaryAux.writeMessage("minpower");
-				return true;
-			}
-			if (m == MachineRegistry.ADVANCEDGEARS) {
-				TileEntityAdvancedGear clicked = (TileEntityAdvancedGear)tile;
-				if (clicked.getGearType().storesEnergy()) {
-					long energy = clicked.getEnergy();
-					if (energy/20D >= 1000000000000L)
-						this.sendMessage(ep, String.format("Stored Energy: %.3f TJ.", energy/20D/1000000000000.0D, omega));
-					else if (energy/20D >= 1000000000)
-						this.sendMessage(ep, String.format("Stored Energy: %.3f GJ.", energy/20D/1000000000.0D, omega));
-					else if (energy/20D >= 1000000)
-						this.sendMessage(ep, String.format("Stored Energy: %.3f MJ.", energy/20D/1000000.0D, omega));
-					else if (energy/20D >= 1000)
-						this.sendMessage(ep, String.format("Stored Energy: %.3f kJ.", energy/20D/1000.0D, omega));
-					else
-						this.sendMessage(ep, String.format("Stored Energy: %d J.", energy, omega));
-					torque = omega = 0;
-					return true;
-				}
+		if (tile instanceof PressureTile) {
+			PressureTile th = (PressureTile)tile;
+			this.sendMessage(ep, String.format("%s %s: %d kPa", name, Variables.PRESSURE, th.getPressure()));
+		}
 
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
+		if (tile instanceof RangedEffect) {
+			RangedEffect te = (RangedEffect)tile;
+			this.sendMessage(ep, Variables.RANGE+": "+te.getRange()+" m; "+"Max Range: "+te.getMaxRange()+" m");
+		}
 
-				if (power >= 1000000000) {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
-				}
-				else if (power >= 1000000) {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
-				}
-				else if (power >= 1000) {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
-				}
-				else {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
-				}
+		if (tile instanceof DiscreteFunction) {
+			this.sendMessage(ep, Variables.OPERATIONTIME+": "+((DiscreteFunction)tile).getOperationTime()/20F+" s");
+		}
 
-				if (clicked.getGearType() == TileEntityAdvancedGear.GearType.WORM && power > 0) {
-					this.sendMessage(ep, String.format("Power Loss: %.2f%s", clicked.getCurrentLoss(), "%%"));
-				}
-			}
-			if (m == MachineRegistry.BEVELGEARS) {
-				TileEntityBevelGear clicked = (TileEntityBevelGear)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				if (power >= 1000000000) {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
-				}
-				else if (power >= 1000000) {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
-				}
-				else if (power >= 1000) {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
-				}
-				else {
-					this.sendMessage(ep, String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
-				}
-
-				int dx = clicked.getWriteDirection().offsetX;
-				int dy = clicked.getWriteDirection().offsetY;
-				int dz = clicked.getWriteDirection().offsetZ;
-				String sdx = String.valueOf(dx);
-				String sdy = String.valueOf(dy);
-				String sdz = String.valueOf(dz);
-				if (dx >= 0)
-					sdx = "+"+sdx;
-				if (dy >= 0)
-					sdy = "+"+sdy;
-				if (dz >= 0)
-					sdz = "+"+sdz;
-				this.sendMessage(ep, String.format("Output side: x%s : y%s : z%s", sdx, sdy, sdz));
-			}
-			if (m == MachineRegistry.COMPRESSOR) {
-				TileEntityAirCompressor clicked = (TileEntityAirCompressor)tile;
-				this.sendMessage(ep, String.format("%s generating %d mL/t.", clicked.getName(), clicked.getGenAir()));
-			}
-			if (tile instanceof EnergyToPowerBase) {
-				EnergyToPowerBase te = (EnergyToPowerBase)tile;
-				double p3 = ReikaMathLibrary.getThousandBase(te.power);
-				String pe = ReikaEngLibrary.getSIPrefix(te.power);
-				int units = te.getConsumedUnitsPerTick();
-				String unit = te.getUnitDisplay();
-				this.sendMessage(ep, String.format("%s Outputting %.3f%sW @ %d rad/s.", name, p3, pe, omega));
-				this.sendMessage(ep, String.format("Consuming %d %s/t.", units, unit));
-				return true;
-			}
-			if (m == MachineRegistry.BORER) {
-				TileEntityBorer clicked = (TileEntityBorer)tile;
-				this.sendMessage(ep, String.format("%s head at %d, %d", clicked.getName(), clicked.getHeadX(), clicked.getHeadZ()));
-				if (clicked.isJammed())
-					this.sendMessage(ep, String.format("%s is jammed, supply more torque or power!", clicked.getName()));
-			}
-			if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
-				TileEntityBeltHub clicked = (TileEntityBeltHub)tile;
-				if (clicked.isSplitting()) {
-					torque = ((TileEntityPowerReceiver)tile).torque*2;
-					omega = ((TileEntityPowerReceiver)tile).omega;
-					power = torque*omega;
-					if (power >= 1000000)
-						this.sendMessage(ep, name+String.format(" Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
-					if (power >= 1000 && power < 1000000)
-						this.sendMessage(ep, name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
-					if (power < 1000)
-						this.sendMessage(ep, name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
-					return false;
-				}
-			}
-			if (m == MachineRegistry.FUELENGINE) {
-				TileEntityFuelEngine clicked = (TileEntityFuelEngine)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				power = torque*omega;
-				clicked.iotick = 512;
-				world.markBlockForUpdate(x, y, z);
-				if (power >= 1000000)
-					this.sendMessage(ep, String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
-				if (power >= 1000 && power < 1000000)
-					this.sendMessage(ep, String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
-				if (power < 1000)
-					this.sendMessage(ep, String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
-				torque = omega = 0;
-			}
-			if (m == MachineRegistry.DYNAMO) {
-				TileEntityDynamo clicked = (TileEntityDynamo)tile;
-				this.sendMessage(ep, String.format("%s generating %d RF/t.", clicked.getName(), clicked.getGenRF()));
-				if ((clicked.torque > (clicked.isUpgraded() ? clicked.MAXTORQUE_UPGRADE : clicked.MAXTORQUE) || clicked.omega > clicked.MAXOMEGA))
-					this.sendMessage(ep, "Conversion limits exceeded; Power is being wasted.");
-			}
-			if (m == MachineRegistry.FLYWHEEL) {
-				ratioclicked = 16;
-				TileEntityFlywheel clicked = (TileEntityFlywheel)tile;
-				this.sendMessage(ep, String.format("Flywheel rotating at %d rad/s.", clicked.omega));
-			}
-			if (m == MachineRegistry.SHAFT) {
-				ratioclicked = 1;
-				TileEntityShaft clicked = (TileEntityShaft)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				if (clicked.getBlockMetadata() >= 6) {
-					power = ReikaMathLibrary.extrema(clicked.readtorque[0]*clicked.readomega[0], clicked.readtorque[1]*clicked.readomega[1], "max");
-					if (power >= 1000000)
-						this.sendMessage(ep, String.format("Shaft Transmitting %.3f MW and %.3f MW\nat %d rad/s and %d rad/s.", (double)clicked.readtorque[0]*clicked.readomega[0]/1000000D, (double)clicked.readtorque[1]*clicked.readomega[1]/1000000D, clicked.readomega[0], clicked.readomega[1]));
-					if (power >= 1000 && power < 1000000)
-						this.sendMessage(ep, String.format("Shaft Transmitting %.3f kW and %.3f kW\nat %d rad/s and %d rad/s.", (double)clicked.readtorque[0]*clicked.readomega[0]/1000D, (double)clicked.readtorque[1]*clicked.readomega[1]/1000D, clicked.readomega[0], clicked.readomega[1]));
-					if (power < 1000)
-						this.sendMessage(ep, String.format("Shaft Transmitting %d W and %d W\nat %d rad/s and %d rad/s.", clicked.readtorque[0]*clicked.readomega[0], clicked.readtorque[1]*clicked.readomega[1], clicked.readomega[0], clicked.readomega[1]));
-					torque = omega = 0;
-					return true;
-				}
-			}
-
-			if (m == MachineRegistry.GEARBOX) { // gearboxes
-				TileEntityGearbox clicked = (TileEntityGearbox)tile;
-				torque = clicked.torque;
-				omega = clicked.omega;
-				ratioclicked = clicked.getRatio();
-				damage = clicked.getDamage();
-				lube = clicked.getLubricant();
-				reductionclicked = clicked.reduction;
-				if (reductionclicked)
-					geartype = "Reduction";
-				else
-					geartype = "Acceleration";
-			}
-			if (tile instanceof TileEntityPowerReceiver) {
-				TileEntityPowerReceiver te = (TileEntityPowerReceiver)tile;
-				power = te.power;
-				omega = te.omega;
-				torque = te.torque;
-				if (power < te.MINPOWER)
-					this.sendMessage(ep, RotaryAux.getMessage("minpower")+" "+name+" requires "+te.MINPOWER+" W.");
-				if (!te.machine.isMinPowerOnly()) {
-					if (torque < te.MINTORQUE && !te.machine.hasNoDirectMinTorque())
-						this.sendMessage(ep, RotaryAux.getMessage("mintorque")+" "+name+" requires "+te.MINTORQUE+" Nm.");
-					if (omega < te.MINSPEED && !te.machine.hasNoDirectMinSpeed())
-						this.sendMessage(ep, RotaryAux.getMessage("minspeed")+" "+name+" requires "+te.MINSPEED+" rad/s.");
-				}
-			}
-
-			power = omega*torque;
-			if (power >= 1000000000) {
-				if (m == MachineRegistry.GEARBOX)
-					this.sendMessage(ep, String.format("%s Outputting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
-				if (m == MachineRegistry.SHAFT)
-					this.sendMessage(ep, String.format("%s Transmitting %.3f GW @ %d rad/s.", name, power/1000000000.0D, omega));
-			}
-			else if (power >= 1000000) {
-				if (m == MachineRegistry.GEARBOX)
-					this.sendMessage(ep, String.format("%s Outputting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
-				if (m == MachineRegistry.SHAFT)
-					this.sendMessage(ep, String.format("%s Transmitting %.3f MW @ %d rad/s.", name, power/1000000.0D, omega));
-			}
-			else if (power >= 1000) {
-				if (m == MachineRegistry.GEARBOX)
-					this.sendMessage(ep, String.format("%s Outputting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
-				if (m == MachineRegistry.SHAFT)
-					this.sendMessage(ep, String.format("%s Transmitting %.3f kW @ %d rad/s.", name, power/1000.0D, omega));
-			}
-			else {
-				if (m == MachineRegistry.GEARBOX)
-					this.sendMessage(ep, String.format("%s Outputting %.3f W @ %d rad/s.", name, power, omega));
-				if (m == MachineRegistry.SHAFT)
-					this.sendMessage(ep, String.format("%s Transmitting %.3f W @ %d rad/s.", name, power, omega));
-			}
-			if (m == MachineRegistry.GEARBOX) {
-				this.sendMessage(ep, String.format("Gearbox %d percent damaged. Lubricant Levels at %d.", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, damage))), lube));
-			}
-			if (m == MachineRegistry.FUELENHANCER) {
-				TileEntityFuelConverter clicked = (TileEntityFuelConverter)tile;
-				this.sendMessage(ep, String.format("%s contains %.3f m^3 of fuel and %.3f m^3 of jet fuel.", clicked.getName(), clicked.getInputLevel()/1000D, clicked.getOutputLevel()/1000D));
+		if (tile instanceof IntegratedGearboxable) {
+			IntegratedGearboxable te = (IntegratedGearboxable)tile;
+			int ratio = te.getIntegratedGear();
+			if (ratio != 0) {
+				this.sendMessage(ep, "Integrated Gearbox: "+Math.abs(ratio)+" x, "+(ratio > 0 ? "Torque" : "Speed"));
 			}
 		}
+
 		if (tile instanceof PowerSourceTracker) {
 			this.sendMessage(ep, String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
 		}
 
-		if (tile instanceof TemperatureTE) {
-			this.sendMessage(ep, Variables.TEMPERATURE+": "+((TemperatureTE)(tile)).getTemperature()+" C.");
+		if (tile instanceof TileEntityEngine) {
+			TileEntityEngine te = (TileEntityEngine)tile;
+			world.markBlockForUpdate(x, y, z);
+			long power = te.power;
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
+			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s.", name, base, pre, te.omega));
+			if (te.getEngineType().isAirBreathing() && te.isDrowned(world, x, y, z))
+				this.sendLocalizedMessage(ep, "drowning");
+			if (te.getEngineType() == EngineType.JET) {
+				if (((TileEntityJetEngine)te).getChokedFraction(world, x, y, z, te.getBlockMetadata()) < 1)
+					this.sendLocalizedMessage(ep, "choke");
+				if (((TileEntityJetEngine)te).FOD >= 8)
+					this.sendLocalizedMessage(ep, "fod");
+			}
+			if (te.getEngineType().burnsFuel()) {
+				int time = te.getFuelDuration();
+				String sg = String.format("%s: %s", Variables.FUEL, ReikaFormatHelper.getSecondsAsClock(time));
+				this.sendMessage(ep, sg);
+			}
+			if (te.getEngineType().requiresLubricant()) {
+				int amt = te.getLube();
+				String sg = String.format("Lubricant: %d mB", amt);
+				this.sendMessage(ep, sg);
+			}
+			if (te.getEngineType().isWaterPiped()) {
+				int amt = te.getWater();
+				String sg = String.format("Water: %d mB", amt);
+				this.sendMessage(ep, sg);
+			}
+			if (te.getEngineType() == EngineType.HYDRO) {
+				String sg = String.format("Detected waterfall height: %d m", ((TileEntityHydroEngine)te).getWaterfallHeightForDisplay());
+				this.sendMessage(ep, sg);
+			}
 		}
-		if (tile instanceof PressureTE) {
-			this.sendMessage(ep, Variables.PRESSURE+": "+((PressureTE)(tile)).getPressure()+" kPa.");
+		else if (tile instanceof ShaftPowerEmitter) {
+			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
+			long power = sp.getPower();
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
+			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s", name, base, pre, sp.getOmega()));
 		}
-		if (tile instanceof RangedEffect) {
-			this.sendMessage(ep, Variables.RANGE+": "+((RangedEffect)(tile)).getRange()+" m. "+"Max Range: "+((RangedEffect)(tile)).getMaxRange()+" m.");
-		}
-		if (tile instanceof DiscreteFunction) {
-			this.sendMessage(ep, Variables.OPERATIONTIME+": "+((DiscreteFunction)(tile)).getOperationTime()/20F+" s.");
-		}
-		//sendMessage(String.format("Clicked coords at %d, %d, %d; ID %d.", x, y, z, m));
+
 		if (tile instanceof TileEntityPowerReceiver) {
-			((TileEntityPowerReceiver)tile).iotick = 512;
-			//sendMessage(String.format("%d", ((TileEntityPowerReceiver)tile).iotick));
-			torque = ((TileEntityPowerReceiver)tile).torque;
-			omega = ((TileEntityPowerReceiver)tile).omega;
-			power = torque*omega;
-			if (power >= 1000000)
-				this.sendMessage(ep, name+String.format(" Receiving %.3f MW @ %d rad/s.", power/1000000.0D, omega));
-			if (power >= 1000 && power < 1000000)
-				this.sendMessage(ep, name+String.format(" Receiving %.3f kW @ %d rad/s.", power/1000.0D, omega));
-			if (power < 1000)
-				this.sendMessage(ep, name+String.format(" Receiving %.3f W @ %d rad/s.", power, omega));
+			TileEntityPowerReceiver te = (TileEntityPowerReceiver)tile;
+			long power = te.power;
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
+			this.sendMessage(ep, String.format("%s receiving %.3f %sW @ %d rad/s", name, base, pre, te.omega));
+			if (power < te.MINPOWER)
+				this.sendLocalizedMessage(ep, "minpower");
+			if (power < te.MINSPEED)
+				this.sendLocalizedMessage(ep, "mintorque");
+			if (power < te.MINTORQUE)
+				this.sendLocalizedMessage(ep, "minspeed");
 		}
+		else if (tile instanceof ShaftPowerReceiver) {
+			ShaftPowerReceiver sp = (ShaftPowerReceiver)tile;
+			long power = sp.getPower();
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
+			this.sendMessage(ep, String.format("%s receiving %.3f %sW @ %d rad/s", name, base, pre, sp.getOmega()));
+		}
+
+		if (tile instanceof TileEntityTransmissionMachine) {
+			TileEntityTransmissionMachine te = (TileEntityTransmissionMachine)tile;
+			long power = te.power;
+			String pre = ReikaEngLibrary.getSIPrefix(power);
+			double base = ReikaMathLibrary.getThousandBase(power);
+			this.sendMessage(ep, String.format("%s transmitting %.3f %sW @ %d rad/s", name, base, pre, te.omega));
+		}
+
+		if (tile instanceof RCToModConverter) {
+			RCToModConverter te = (RCToModConverter)tile;
+			int units = te.getGeneratedUnitsPerTick();
+			String unit = te.getUnitDisplay();
+			this.sendMessage(ep, String.format("Generating %d %s/t", units, unit));
+		}
+
+		if (tile instanceof EnergyToPowerBase) {
+			EnergyToPowerBase te = (EnergyToPowerBase)tile;
+			double p3 = ReikaMathLibrary.getThousandBase(te.power);
+			String pe = ReikaEngLibrary.getSIPrefix(te.power);
+			int units = te.getConsumedUnitsPerTick();
+			String unit = te.getUnitDisplay();
+			this.sendMessage(ep, String.format("%s Outputting %.3f%sW @ %d rad/s", name, p3, pe, te.omega));
+			this.sendMessage(ep, String.format("Consuming %d %s/t", units, unit));
+		}
+
+		if (tile instanceof TileEntityPiping) {
+			TileEntityPiping te = (TileEntityPiping)tile;
+			this.sendMessage(ep, String.format("Pipe has %d mB of %s", te.getFluidLevel(), te.getFluidType().getLocalizedName()));
+		}
+
+		if (tile instanceof TileEntitySpringPowered) {
+			TileEntitySpringPowered te = (TileEntitySpringPowered)tile;
+			this.sendMessage(ep, String.format("Remaining charge: %.2fs", te.getExpectedCoilLife()/20D));
+		}
+
+		if (m == MachineRegistry.GPR) {
+			TileEntityGPR te = (TileEntityGPR)tile;
+			if (ep.isSneaking() && te.power > te.MINPOWER) {
+				double ratio = 100*te.getSpongy(world, x, y-1, z);
+				this.sendMessage(ep, String.format("The ground is %.3f%s caves here", ratio, "%%"));
+			}
+		}
+		if (m == MachineRegistry.BLASTFURNACE) {
+			TileEntityBlastFurnace te = (TileEntityBlastFurnace)tile;
+			//no way to say "too cold for recipe"
+		}
+		if (m == MachineRegistry.PLAYERDETECTOR) {
+			TileEntityPlayerDetector te = (TileEntityPlayerDetector)tile;
+			this.sendMessage(ep, String.format("Reaction Time: %.2fs", te.getReactionTime()/20F));
+		}
+		if (m == MachineRegistry.SOLARTOWER) {
+			TileEntitySolar te = (TileEntitySolar)tile;
+			TileEntitySolar top = (TileEntitySolar)world.getTileEntity(x, te.getTopOfTower(), z);
+			TileEntitySolar bottom = (TileEntitySolar)world.getTileEntity(x, te.getBottomOfTower(), z);
+			if (bottom.getPlant() == null || bottom.getArraySize() <= 0) {
+				this.sendMessage(ep, String.format("Solar plant is unformed"));
+			}
+			else {
+				this.sendMessage(ep, String.format("Solar plant contains %d mirrors and %d active tower pieces (out of %d total)", top.getArraySize(), bottom.getPlant().getEffectiveTowerBlocks(), bottom.getPlant().rawTowerBlocks()));
+				this.sendMessage(ep, String.format("Outputting %.3fkW at %d rad/s; Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
+			}
+		}
+		if (m == MachineRegistry.HEATRAY) {
+			TileEntityHeatRay te = (TileEntityHeatRay)tile;
+			if (te.power >= te.MINPOWER)
+				this.sendMessage(ep, String.format("Dealing %ds of burn damage", te.getBurnTime()));
+		}
+		if (m == MachineRegistry.PUMP) {
+			TileEntityPump te = (TileEntityPump)tile;
+			if (te.power >= te.MINPOWER && te.duplicationAmount > 1)
+				this.sendMessage(ep, String.format("Duplicating water with a factor of %dx", te.duplicationAmount));
+		}
+		if (m == MachineRegistry.ADVANCEDGEARS) {
+			TileEntityAdvancedGear te = (TileEntityAdvancedGear)tile;
+			if (te.getGearType() == TileEntityAdvancedGear.GearType.WORM && te.power > 0) {
+				this.sendMessage(ep, String.format("Power Loss: %.2f%s", te.getCurrentLoss(), "%%"));
+			}
+			else if (te.getGearType().storesEnergy()) {
+				long energy = te.getEnergy()/20;
+				String pre = ReikaEngLibrary.getSIPrefix(energy);
+				double base = ReikaMathLibrary.getThousandBase(energy);
+				this.sendMessage(ep, String.format("Stored Energy: %.3f %sJ", base, pre));
+			}
+		}
+		if (m == MachineRegistry.BEVELGEARS) {
+			TileEntityBevelGear te = (TileEntityBevelGear)tile;
+			int dx = te.getWriteDirection().offsetX;
+			int dy = te.getWriteDirection().offsetY;
+			int dz = te.getWriteDirection().offsetZ;
+			String sdx = String.valueOf(dx);
+			String sdy = String.valueOf(dy);
+			String sdz = String.valueOf(dz);
+			if (dx >= 0)
+				sdx = "+"+sdx;
+			if (dy >= 0)
+				sdy = "+"+sdy;
+			if (dz >= 0)
+				sdz = "+"+sdz;
+			this.sendMessage(ep, String.format("Output side: x%s : y%s : z%s", sdx, sdy, sdz));
+		}
+		if (m == MachineRegistry.BORER) {
+			TileEntityBorer te = (TileEntityBorer)tile;
+			this.sendMessage(ep, String.format("%s head at %d, %d", te.getName(), te.getHeadX(), te.getHeadZ()));
+			if (te.isJammed())
+				this.sendMessage(ep, String.format("%s is jammed, supply more torque or power!", te.getName()));
+		}
+		if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
+			TileEntityBeltHub te = (TileEntityBeltHub)tile;
+			if (te.isSplitting()) {
+				this.sendMessage(ep, "Belt is splitting power");
+			}
+			if (te.isSlipping()) {
+				this.sendMessage(ep, "Belt is slipping and wasting power!");
+			}
+		}
+		if (m == MachineRegistry.DYNAMO) {
+			TileEntityDynamo te = (TileEntityDynamo)tile;
+			if ((te.torque > (te.isUpgraded() ? te.MAXTORQUE_UPGRADE : te.MAXTORQUE) || te.omega > te.MAXOMEGA))
+				this.sendMessage(ep, "Conversion limits exceeded; Power is being wasted.");
+		}
+		if (m == MachineRegistry.GEARBOX) {
+			TileEntityGearbox te = (TileEntityGearbox)tile;
+			this.sendMessage(ep, String.format("Gearbox %d percent damaged. Lubricant Levels at %d.", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, te.getDamage()))), te.getLubricant()));
+		}
+		if (m == MachineRegistry.FRACTIONATOR) {
+			TileEntityFractionator te = (TileEntityFractionator)tile;
+			if (te.power >= te.MINPOWER && te.omega >= te.MINSPEED)
+				this.sendMessage(ep, String.format("Efficiency: %.3f%%", te.getYieldRatio()*100));
+		}
+
 		if (m == null && tile instanceof IFluidHandler) {
 			FluidTankInfo[] info = ((IFluidHandler)tile).getTankInfo(ForgeDirection.VALID_DIRECTIONS[s]);
 			StringBuilder sb = new StringBuilder();
@@ -663,6 +362,10 @@ public class ItemMeter extends ItemRotaryTool
 		}
 
 		return true;
+	}
+
+	private void sendLocalizedMessage(EntityPlayer ep, String s) {
+		this.sendMessage(ep, StatCollector.translateToLocal("message."+s));
 	}
 
 	private void sendMessage(EntityPlayer ep, String s) {

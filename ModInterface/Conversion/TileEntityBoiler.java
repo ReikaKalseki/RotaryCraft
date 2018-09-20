@@ -244,4 +244,14 @@ public class TileEntityBoiler extends PoweredLiquidIO implements TemperatureTE, 
 		return MAXTEMP;
 	}
 
+	@Override
+	public int getGeneratedUnitsPerTick() {
+		return this.getProducedSteam(this.getWater());
+	}
+
+	@Override
+	public String getUnitDisplay() {
+		return "Steam";
+	}
+
 }

@@ -80,9 +80,9 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 			inv[0] = new ItemStack(Items.dye, 64, 15);
 		}
 
-		if (!world.isRemote && this.hasFertilizer()) {
+		if (!world.isRemote) {
 			int n = this.getUpdatesPerTick();
-			for (int i = 0; i < n; i++)
+			for (int i = 0; i < n && this.hasFertilizer(); i++)
 				this.tickBlock(world, x, y, z);
 		}
 	}
