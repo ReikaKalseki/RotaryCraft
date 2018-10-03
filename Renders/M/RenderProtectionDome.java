@@ -121,6 +121,26 @@ public class RenderProtectionDome extends RotaryTERenderer
 			}
 		}
 		var5.draw();
+
+		var5.startDrawing(GL11.GL_TRIANGLE_FAN);
+		var5.setColorRGBA_I(color, color >> 24 & 255);
+		var5.addVertexWithUV(x, y+0.5, z, 0.5, 0.5);
+		double dr = 2;
+		for (int i = 0; i < 360; i += 10) {
+			double a = Math.toRadians(i);
+			double a2 = a+Math.toRadians(System.currentTimeMillis()/20D%360);
+			double dx = Math.cos(a);
+			double dz = Math.sin(a);
+			double ux = (System.currentTimeMillis()/3100D)%10;
+			double uy = (System.currentTimeMillis()/4700D)%10;
+			double u = Math.cos(a2)+ux;
+			double v = Math.sin(a2)+uy;
+			u = u*0.25;
+			v = v*0.25;
+			var5.addVertexWithUV(x+dx*dr, y+r-0.25, z+dz*dr, u, v);
+		}
+		var5.draw();
+
 		GL11.glPopAttrib();
 
 		/*

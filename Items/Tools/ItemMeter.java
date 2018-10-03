@@ -102,8 +102,6 @@ public class ItemMeter extends ItemRotaryTool
 				for (int i = 0; i < li.size(); i++)
 					this.sendMessage(ep, li.get(i));
 			}
-			//flag = tile instanceof ShaftPowerEmitter;
-			//flag1 = tile instanceof ShaftPowerReceiver;
 		}
 		else if (bk instanceof Transducerable) {
 			ArrayList<String> li = ((Transducerable)bk).getMessages(world, x, y, z, s);
@@ -150,7 +148,7 @@ public class ItemMeter extends ItemRotaryTool
 			long power = te.power;
 			String pre = ReikaEngLibrary.getSIPrefix(power);
 			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s.", name, base, pre, te.omega));
+			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s", name, base, pre, te.omega));
 			if (te.getEngineType().isAirBreathing() && te.isDrowned(world, x, y, z))
 				this.sendLocalizedMessage(ep, "drowning");
 			if (te.getEngineType() == EngineType.JET) {
@@ -326,11 +324,11 @@ public class ItemMeter extends ItemRotaryTool
 		if (m == MachineRegistry.DYNAMO) {
 			TileEntityDynamo te = (TileEntityDynamo)tile;
 			if ((te.torque > (te.isUpgraded() ? te.MAXTORQUE_UPGRADE : te.MAXTORQUE) || te.omega > te.MAXOMEGA))
-				this.sendMessage(ep, "Conversion limits exceeded; Power is being wasted.");
+				this.sendMessage(ep, "Conversion limits exceeded; Power is being wasted");
 		}
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox te = (TileEntityGearbox)tile;
-			this.sendMessage(ep, String.format("Gearbox %d percent damaged. Lubricant Levels at %d.", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, te.getDamage()))), te.getLubricant()));
+			this.sendMessage(ep, String.format("Gearbox %d percent damaged; Lubricant Levels at %d", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, te.getDamage()))), te.getLubricant()));
 		}
 		if (m == MachineRegistry.FRACTIONATOR) {
 			TileEntityFractionator te = (TileEntityFractionator)tile;
@@ -355,7 +353,7 @@ public class ItemMeter extends ItemRotaryTool
 				}
 			}
 			else {
-				sb.append("No Tank Data.");
+				sb.append("No Tank Data");
 			}
 
 			this.sendMessage(ep, sb.toString());

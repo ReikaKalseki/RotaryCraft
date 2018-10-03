@@ -76,7 +76,7 @@ public class MulchMaterials {
 					if (leaf == null || leaf.getItem() == null) {
 						RotaryCraft.logger.logError("Tried to add mulch recipe for a stack ("+wood+" leaves) which does not exist!");
 					}
-					if (!values.containsKey(leaf))
+					else if (!values.containsKey(leaf))
 						this.addValue(leaf, PlantMaterials.LEAVES.getPlantValue()*this.getModWoodValue(wood));
 				}
 			}

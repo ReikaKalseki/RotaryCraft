@@ -43,11 +43,11 @@ import Reika.DragonAPI.Auxiliary.Trackers.CompatibilityTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.ConfigMatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.FurnaceFuelRegistry;
+import Reika.DragonAPI.Auxiliary.Trackers.IDCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
-import Reika.DragonAPI.Auxiliary.Trackers.PotionCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
@@ -292,7 +292,7 @@ public class RotaryCraft extends DragonAPIMod {
 		}
 
 		int id = ExtraConfigIDs.FREEZEID.getValue();
-		PotionCollisionTracker.instance.addPotionID(instance, id, FreezePotion.class);
+		IDCollisionTracker.instance.addPotionID(instance, id, FreezePotion.class);
 		freeze = (FreezePotion)new FreezePotion(id).setPotionName("Frozen Solid");
 
 		ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new PacketHandlerCore());
