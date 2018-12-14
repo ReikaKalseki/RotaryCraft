@@ -452,6 +452,7 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.tungsteningot, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedrockdust, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedingot, false);
+		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedingotblock, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.silumin, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.UPGRADE.getItemInstance(), true);
 

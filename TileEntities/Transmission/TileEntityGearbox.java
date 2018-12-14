@@ -242,7 +242,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 				}
 				if (rand.nextDouble()*rand.nextDouble() > this.getDamagedPowerFactor()) {
-					if (type.isFlammable())
+					if (type.isFlammable() && !world.isRemote)
 						ReikaWorldHelper.ignite(world, x, y, z);
 					world.spawnParticle("crit", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 					if (rand.nextInt(5) == 0) {
@@ -424,7 +424,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public boolean repair(int dmg) {
-		if (dmg == 0)
+		if (damage <= 0)
 			return false;
 		damage -= dmg;
 		if (damage < 0)
@@ -649,7 +649,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		if (type.isFlammable())
+		if (type.isFlammable() && !world.isRemote)
 			ReikaWorldHelper.ignite(world, x, y, z);
 	}
 

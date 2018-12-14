@@ -71,7 +71,6 @@ import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.EMPSparkRenderer;
-import Reika.RotaryCraft.Auxiliary.GrinderDamage;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
@@ -445,7 +444,7 @@ public class RotaryEventManager {
 
 	@SubscribeEvent
 	public void meatGrinding(LivingDropsEvent ev) {
-		if (ev.source instanceof GrinderDamage) {
+		if (ev.source == RotaryCraft.grind) {
 			ItemStack food = ReikaEntityHelper.getFoodItem(ev.entityLiving);
 			ev.drops.clear();
 			if (food != null) {

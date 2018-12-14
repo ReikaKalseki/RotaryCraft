@@ -46,8 +46,6 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)	{
 		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this)
 			return false;
-		if (yCoord > 96)
-			return false;
 		return true;
 	}
 
@@ -108,8 +106,6 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		if (y > 96)
-			return;
 		this.getSummativeSidedPower();
 		power = (long)omega * (long)torque;
 		if (power < MINPOWER)

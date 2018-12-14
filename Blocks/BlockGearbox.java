@@ -188,13 +188,13 @@ public class BlockGearbox extends BlockModelledMachine {
 					}
 					return true;
 				}
-				else if (ReikaItemHelper.matchStacks(held, ItemStacks.lubebucket) && held.stackSize == 1) {
+				else if (ReikaItemHelper.matchStacks(held, ItemStacks.lubebucket)) {
 					if (tile.getGearboxType().needsLubricant()) {
-						int amt = 1000;
+						int amt = 1000*held.stackSize;
 						if (tile.canTakeLubricant(amt)) {
 							tile.addLubricant(amt);
 							if (!ep.capabilities.isCreativeMode)
-								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, held.stackSize, 0));
 						}
 					}
 					return true;

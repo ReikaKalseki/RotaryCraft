@@ -476,8 +476,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				if (m == MachineRegistry.POWERBUS) {
 					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
 					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
-					omegain = pwr.getSpeedToSide(dir);
-					torquein = pwr.getTorqueToSide(dir);
+					omega = pwr.getSpeedToSide(dir);
+					torque = pwr.getTorqueToSide(dir);
 				}
 				if (m == MachineRegistry.SPLITTER) {
 					TileEntitySplitter devicein = (TileEntitySplitter)te;

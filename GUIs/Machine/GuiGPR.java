@@ -87,9 +87,9 @@ public class GuiGPR extends GuiPowerOnlyMachine
 
 	private void drawRadar(int a, int b) {
 		for (int j = gpr.getBounds()[0]; j <= gpr.getBounds()[1]; j++) {
-			for (int i = 0; i < gpr.yCoord; i++) {
+			for (int i = 0; i < 96 && gpr.yCoord-i > 0; i++) {
 				int color = 0xff000000 | gpr.getColor(i, j);
-				this.drawRect(a+7+UNIT*j, b+16+UNIT*i, a+7+UNIT+UNIT*j, b+16+UNIT*i+UNIT, color);
+				this.drawRect(a+7+UNIT*j, b+16+UNIT*i-2, a+7+UNIT+UNIT*j, b+16+UNIT*i+UNIT, color);
 			}
 		}
 
@@ -98,7 +98,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		GL11.glScaled(d, d, d);
 		String s = gpr.getLookDirection().toString();
 		int w = fontRendererObj.getStringWidth(s);
-		fontRendererObj.drawString(s, (int)((a+w/2)/d), (int)((b+16)/d), 0xffffff);
+		fontRendererObj.drawStringWithShadow(s, (int)((a+w/2)/d), (int)((b+16)/d), 0xffffff);
 		GL11.glPopMatrix();
 	}
 
