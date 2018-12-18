@@ -133,33 +133,21 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 
 				//this.printTEs(source, target);
 
+				InventoryType src = this.getTypeForInventory(source);
+
 				if (target instanceof IInventory) {
-					if (InterfaceCache.DSU.instanceOf(target)) {
-						this.transferItems(null, (IInventory)source, (IInventory)target, dir);
-					}
-					else if (this.tryPatternInsertion((IInventory)source, target)) {
+					InventoryType tgt = this.getTypeForInventory(target);
+					if (this.tryPatternInsertion((IInventory)source, target)) {
 
 					}
 					else {
-						HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
 						//ReikaJavaLibrary.pConsole(map);
-						if (map != null && !map.isEmpty())
-							this.transferItems(map, (IInventory)source, (IInventory)target, dir);
+						this.transferItems(source, target, src, tgt, dir, from);
 					}
 					//ReikaJavaLibrary.pConsole(map, Side.SERVER);
 				}
-				else if (target == null && ConfigRegistry.BLOWERSPILL.getState()) {
-					if (tg.isEmpty()) {
-						if (InterfaceCache.DSU.instanceOf(source)) {
-							this.dumpItems(null, (IInventory)source, tg);
-						}
-						else {
-							HashMap<Integer, ItemStack> map = ReikaInventoryHelper.getLocatedTransferrables(from, (IInventory)source);
-							if (map != null && !map.isEmpty()) {
-								this.dumpItems(map, (IInventory)source, tg);
-							}
-						}
-					}
+				else if (target == null && ConfigRegistry.BLOWERSPILL.getState() && tg.isEmpty()) {
+					this.dumpItems(source, src, tg, from);
 				}
 			}
 		}
@@ -205,184 +193,71 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 		return (int)(power/1024);
 	}
 
-	/** Supply null map for custom handling like DSU. */
-	private void transferItems(HashMap<Integer, ItemStack> map, IInventory source, IInventory target, ForgeDirection dir) {
+	private void transferItems(TileEntity source, TileEntity target, InventoryType src, InventoryType tgt, ForgeDirection from, ForgeDirection dir) {
 		int max = this.getNumberTransferrableItems();
 		if (max <= 0)
 			return;
 
-		if (map == null) {
-			IDeepStorageUnit dsu = (IDeepStorageUnit)target;
+		if (src == InventoryType.DSU) {
+			IDeepStorageUnit dsu = (IDeepStorageUnit)source;
 			ItemStack is = dsu.getStoredItemType();
 			if (is != null && this.isItemTransferrable(is)) {
-				int add = this.takeItemFromInventory(is, source, max, dir, -1, false);
-				if (add > 0) {
-					int rem = this.addItemToInventory(is, target, add, dir);
-					this.takeItemFromInventory(is, source, rem, dir, -1, true);
-					max -= rem;
-				}
+				int has = src.removeItem(source, max, -1, false);
+				int added = tgt.insertItem(target, is, has, dir);
+				src.removeItem(source, added, -1, true);
 			}
 		}
 		else {
+			HashMap<Integer, ItemStack> map = src.getMovableSlots(from, source);
 			for (int slot : map.keySet()) {
 				ItemStack is = map.get(slot);
-				is = ReikaItemHelper.getSizedItemStack(is, 1);
-				if (this.isItemTransferrable(is)) {
-					int add = this.takeItemFromInventory(is, source, max, dir, slot, false);
-					if (add > 0) {
-						//ReikaJavaLibrary.pConsole("Took "+add+" of "+is+" from "+source);
-						int rem = this.addItemToInventory(is, target, add, dir);
-						this.takeItemFromInventory(is, source, rem, dir, slot, true);
-						max -= rem;
-						;//break; //only one slot at a time if not a DSU or similar
-					}
+				if (max > 0 && this.isItemTransferrable(is)) {
+					int has = src.removeItem(source, max, slot, false);
+					int added = tgt.insertItem(target, is, has, dir);
+					src.removeItem(source, added, slot, true);
+					max -= added;
 				}
-				if (max <= 0)
-					break;
 			}
 		}
 	}
 
-	/** Supply null map for custom handling like DSU. */
-	private void dumpItems(HashMap<Integer, ItemStack> map, IInventory source, WorldLocation loc) {
+	private void dumpItems(TileEntity source, InventoryType src, WorldLocation loc, ForgeDirection from) {
 		int max = this.getNumberTransferrableItems();
 		if (max <= 0)
 			return;
 
-		if (map == null) {
+		if (src == InventoryType.DSU) {
 			IDeepStorageUnit dsu = (IDeepStorageUnit)source;
 			ItemStack is = dsu.getStoredItemType();
 			if (is != null && this.isItemTransferrable(is)) {
-				int drop = Math.min(max, is.stackSize);
-				int rem = this.dropItem(is, null, -1, drop, loc);
-				dsu.setStoredItemCount(is.stackSize-rem);
+				int has = src.removeItem(source, max, -1, true);
+				this.dropItem(is, has, loc);
 			}
 		}
 		else {
+			HashMap<Integer, ItemStack> map = src.getMovableSlots(from, source);
 			for (int slot : map.keySet()) {
 				ItemStack is = map.get(slot);
-				if (this.isItemTransferrable(is)) {
-					this.dropItem(is, source, slot, max, loc);
+				if (max > 0 && this.isItemTransferrable(is)) {
+					int has = src.removeItem(source, max, slot, true);
+					this.dropItem(is, has, loc);
+					max -= has;
 				}
 			}
 		}
 	}
 
-	/** Supply null source for custom handling like DSU. */
-	private int dropItem(ItemStack is, IInventory source, int slot, int amt, WorldLocation loc) {
-		int items = 0;
-		int maxadd = Math.min(amt-items, is.getMaxStackSize());
-		for (int i = 0; i < maxadd; i++) {
-			if (source == null || (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0)) {
-				loc.dropItem(ReikaItemHelper.getSizedItemStack(is, 1), 2+rand.nextDouble()*4);
-				if (source != null)
-					ReikaInventoryHelper.decrStack(slot, source, 1);
-				items += 1;
-			}
-			if (items >= amt)
-				return amt;
-		}
-		return items;
+	private void dropItem(ItemStack is, int amt, WorldLocation loc) {
+		for (int i = 0; i < amt; i++)
+			loc.dropItem(ReikaItemHelper.getSizedItemStack(is, 1), 2+rand.nextDouble()*4);
 	}
 
-	private int addItemToInventory(ItemStack is, IInventory target, int amt, ForgeDirection dir) {
-		int items = 0;
-		if (target instanceof IDeepStorageUnit) {
-			IDeepStorageUnit dsu = (IDeepStorageUnit)target;
-			int has = dsu.getStoredItemType().stackSize;
-			int space = dsu.getMaxStoredCount()-has;
-			int add = Math.min(amt, space);
-			dsu.setStoredItemCount(has+add);
-			items = add;
+	private InventoryType getTypeForInventory(TileEntity te) {
+		for (InventoryType t : InventoryType.values()) {
+			if (t.isValid(te))
+				return t;
 		}
-		else {
-			boolean flag = true;
-			while(flag && amt > 0) {
-				//ReikaJavaLibrary.pConsole("Attempting to add "+is+" to "+target);
-				if (this.addToIInv(is, target, dir)) {
-					amt--;
-					items++;
-					//ReikaJavaLibrary.pConsole("Success");
-				}
-				else {
-					flag = false;
-					//ReikaJavaLibrary.pConsole("Failure");
-				}
-			}
-			/*
-			int size = target.getSizeInventory();
-			int maxadd = Math.min(amt-items, Math.min(is.getMaxStackSize(), target.getInventoryStackLimit()));
-			ItemStack one = ReikaItemHelper.getSizedItemStack(is, 1);
-			for (int i = 0; i < maxadd; i++) {
-				for (int k = 0; k < size; k++) {
-					if (source.getStackInSlot(slot) != null && source.getStackInSlot(slot).stackSize > 0) {
-						if (target instanceof ISidedInventory) {
-							if (((ISidedInventory)target).canInsertItem(k, is, dir.getOpposite().ordinal())) {
-								if (ReikaInventoryHelper.addToIInv(one, target)) {
-									if (source != null)
-										ReikaInventoryHelper.decrStack(slot, source, 1);
-									items += 1;
-								}
-							}
-						}
-						else {
-							if (ReikaInventoryHelper.addToIInv(one, target)) {
-								ReikaInventoryHelper.decrStack(slot, source, 1);
-								items += 1;
-							}
-						}
-						if (items >= amt)
-							return amt;
-					}
-				}
-			}*/
-		}
-		return items;
-	}
-
-	private boolean addToIInv(ItemStack is, IInventory ii, ForgeDirection dir) {
-		if (ii instanceof ISidedInventory) {
-			for (int k = 0; k < ii.getSizeInventory(); k++) {
-				if (((ISidedInventory)ii).canInsertItem(k, is, dir.getOpposite().ordinal())) {
-					if (ReikaInventoryHelper.addToIInv(is, ii)) {
-						return true;
-					}
-				}
-			}
-		}
-		else {
-			if (ReikaInventoryHelper.addToIInv(is, ii)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private int takeItemFromInventory(ItemStack is, IInventory source, int amt, ForgeDirection dir, int slot, boolean remove) {
-		int items = 0;
-		if (source instanceof IDeepStorageUnit) {
-			IDeepStorageUnit dsu = (IDeepStorageUnit)source;
-			int has = dsu.getStoredItemType().stackSize;
-			int rem = Math.min(amt, has);
-			if (remove)
-				dsu.setStoredItemCount(has-rem);
-			items = rem;
-		}
-		else {
-			if (remove) {
-				boolean flag = true;
-				while(flag && amt > 0) {
-					ReikaInventoryHelper.decrStack(slot, source, 1);
-					amt--;
-					flag = source.getStackInSlot(slot) != null;
-					items++;
-				}
-			}
-			else {
-				items = source.getStackInSlot(slot) != null ? Math.min(source.getStackInSlot(slot).stackSize, amt) : 0;
-			}
-		}
-		return items;
+		return null;
 	}
 
 	public boolean isIntake() {
@@ -507,6 +382,111 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 			return te.getFacingDir() != this.getFacingDir() ? 0 : 1;
 		}
 		return 0;
+	}
+
+	public static enum InventoryType {
+		CHEST(),
+		DSU(),
+		//PLAYER(),
+		;
+
+		public boolean isValid(TileEntity te) {
+			switch(this) {
+				case CHEST:
+					return te instanceof IInventory && !DSU.isValid(te);
+				case DSU:
+					return InterfaceCache.DSU.instanceOf(te);
+			}
+			return false;
+		}
+
+		public HashMap<Integer, ItemStack> getMovableSlots(ForgeDirection dir, TileEntity te) {
+			switch(this) {
+				case CHEST:
+					return ReikaInventoryHelper.getLocatedTransferrables(dir, (IInventory)te);
+				case DSU:
+					return null;//ReikaJavaLibrary.makeMapOf(-1, ((IDeepStorageUnit)te).getStoredItemType());
+			}
+			return null;
+		}
+
+		public int removeItem(TileEntity te, int amt, int slot, boolean remove) {
+			switch(this) {
+				case CHEST:
+					IInventory ii = (IInventory)te;
+					int items = 0;
+					if (remove) {
+						boolean flag = true;
+						while(flag && amt > 0) {
+							ReikaInventoryHelper.decrStack(slot, ii, 1);
+							amt--;
+							flag = ii.getStackInSlot(slot) != null;
+							items++;
+						}
+						return items;
+					}
+					else {
+						return ii.getStackInSlot(slot) != null ? Math.min(ii.getStackInSlot(slot).stackSize, amt) : 0;
+					}
+				case DSU:
+					IDeepStorageUnit dsu = (IDeepStorageUnit)te;
+					int has = dsu.getStoredItemType().stackSize;
+					int rem = Math.min(amt, has);
+					if (remove)
+						dsu.setStoredItemCount(has-rem);
+					return rem;
+			}
+			return 0;
+		}
+
+		public int insertItem(TileEntity te, ItemStack is, int amt, ForgeDirection dir) {
+			switch(this) {
+				case CHEST:
+					IInventory ii = (IInventory)te;
+					int items = 0;
+					boolean flag = true;
+					is = ReikaItemHelper.getSizedItemStack(is, 1);
+					while(flag && amt > 0) {
+						//ReikaJavaLibrary.pConsole("Attempting to add "+is+" to "+target);
+						if (this.addToIInv(is, ii, dir)) {
+							amt--;
+							items++;
+							//ReikaJavaLibrary.pConsole("Success");
+						}
+						else {
+							flag = false;
+							//ReikaJavaLibrary.pConsole("Failure");
+						}
+					}
+					return items;
+				case DSU:
+					IDeepStorageUnit dsu = (IDeepStorageUnit)te;
+					int has = dsu.getStoredItemType().stackSize;
+					int space = dsu.getMaxStoredCount()-has;
+					int add = Math.min(amt, space);
+					dsu.setStoredItemCount(has+add);
+					return add;
+			}
+			return 0;
+		}
+
+		private boolean addToIInv(ItemStack is, IInventory ii, ForgeDirection dir) {
+			if (ii instanceof ISidedInventory) {
+				for (int k = 0; k < ii.getSizeInventory(); k++) {
+					if (((ISidedInventory)ii).canInsertItem(k, is, dir.getOpposite().ordinal())) {
+						if (ReikaInventoryHelper.addToIInv(is, ii)) {
+							return true;
+						}
+					}
+				}
+			}
+			else {
+				if (ReikaInventoryHelper.addToIInv(is, ii)) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 
 }

@@ -84,7 +84,7 @@ public class ItemMeter extends ItemRotaryTool
 
 		Block bk = world.getBlock(x, y, z);
 		TileEntity tile = world.getTileEntity(x, y, z);
-		String name = tile instanceof TileEntityBase ? ((TileEntityBase)tile).getName() : tile.getClass().getSimpleName();
+		String name = tile != null ? (tile instanceof TileEntityBase ? ((TileEntityBase)tile).getName() : tile.getClass().getSimpleName()) : "null";
 		MachineRegistry m = MachineRegistry.getMachine(world, x, y, z);
 
 		if (tile instanceof TileEntityIOMachine) {

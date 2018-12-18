@@ -49,6 +49,8 @@ public class RotaryRenderList {
 	}
 
 	public static RotaryTERenderer instantiateRenderer(MachineRegistry m) {
+		if (RotaryCraft.instance.isLocked())
+			return null;
 		try {
 			RotaryTERenderer r = (RotaryTERenderer)Class.forName(m.getRenderer()).newInstance();
 			if (addRender(m, r))

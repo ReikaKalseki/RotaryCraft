@@ -60,6 +60,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public static final int UPPER_ADDITIVE = 14;
 	public static final int PATTERN_SLOT = 15;
 
+	public static final int OUTPUT_CENTER = 10;
+	public static final int OUTPUT_UPPER = 12;
+	public static final int OUTPUT_LOWER = 13;
+
 	private float xp;
 
 	private BlastFurnacePattern pattern;
@@ -88,6 +92,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 		if (rec == null)
 			return null;
+
+		if (rec.requiresEmptyOutput()) {
+			if (inv[10] != null || inv[13] != null || inv[12] != null)
+				return null;
+		}
 
 		ItemStack out = rec.outputItem();
 		int num = this.getProducedFor(rec);

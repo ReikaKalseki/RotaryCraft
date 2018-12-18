@@ -113,17 +113,28 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerRenderers() {
-		pipeRender = RenderingRegistry.getNextAvailableRenderId();
-		pipe = new PipeBodyRenderer(pipeRender);
-		RenderingRegistry.registerBlockHandler(pipeRender, pipe);
+		if (RotaryCraft.instance.isLocked()) {
+			pipeRender = cubeRender = connectedRender = 0;
+		}
+		else {
+			if (pipeRender == 0) {
+				pipeRender = RenderingRegistry.getNextAvailableRenderId();
+				pipe = new PipeBodyRenderer(pipeRender);
+				RenderingRegistry.registerBlockHandler(pipeRender, pipe);
+			}
 
-		cubeRender = RenderingRegistry.getNextAvailableRenderId();
-		cube = new CubicalMachineRenderer(cubeRender);
-		RenderingRegistry.registerBlockHandler(cubeRender, cube);
+			if (cubeRender == 0) {
+				cubeRender = RenderingRegistry.getNextAvailableRenderId();
+				cube = new CubicalMachineRenderer(cubeRender);
+				RenderingRegistry.registerBlockHandler(cubeRender, cube);
+			}
 
-		connectedRender = RenderingRegistry.getNextAvailableRenderId();
-		connected = new ConnectedGlassRenderer(connectedRender);
-		RenderingRegistry.registerBlockHandler(connectedRender, connected);
+			if (connectedRender == 0) {
+				connectedRender = RenderingRegistry.getNextAvailableRenderId();
+				connected = new ConnectedGlassRenderer(connectedRender);
+				RenderingRegistry.registerBlockHandler(connectedRender, connected);
+			}
+		}
 
 		if (DragonOptions.NORENDERS.getState()) {
 			RotaryCraft.logger.log("Disabling all machine renders for FPS and lag profiling.");
@@ -219,7 +230,7 @@ public class ClientProxy extends CommonProxy
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (ir.isPlacer()) {
-				MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), machineItems);
+				MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), RotaryCraft.instance.isLocked() ? null : machineItems);
 			}
 		}
 
@@ -237,11 +248,16 @@ public class ClientProxy extends CommonProxy
 			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getItemInstance()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (!ir.isPlacer()) {
-				if (ir.isMultiSheet()) {
-					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), multisheets[-ir.getTextureSheet()]);
+				if (RotaryCraft.instance.isLocked()) {
+					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), null);
 				}
 				else {
-					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), items[ir.getTextureSheet()]);
+					if (ir.isMultiSheet()) {
+						MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), multisheets[-ir.getTextureSheet()]);
+					}
+					else {
+						MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), items[ir.getTextureSheet()]);
+					}
 				}
 			}
 		}

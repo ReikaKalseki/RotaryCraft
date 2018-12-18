@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Math.MovingAverage;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -50,6 +51,8 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	private static final HashSet<KeyedItemStack> ingredients = new HashSet();
 	private static final Interpolation yield = new Interpolation(false);
+
+	private final MovingAverage torqueInput = new MovingAverage(20);
 
 	static {
 		ingredients.add(new KeyedItemStack(Items.blaze_powder).setSimpleHash(true));
@@ -115,6 +118,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 				tank.removeLiquid(1000);
 			}
 		}
+		torqueInput.addValue(torque);
 		if (!world.isRemote && this.getTicksExisted()%20 == 0)
 			this.updatePressure(world, x, y, z, meta);
 		this.testIdle();
@@ -133,13 +137,16 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		int local = pressure;
 		int dp = local-(int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
 		int sub = (int)(Math.signum(dp)*Math.max(1, Math.abs(dp/16)));
-		if (torque <= 0)
+
+		int avg = (int)torqueInput.getAverage();
+
+		if (avg <= 0)
 			sub *= 8;//4;
 
 		local -= sub;
 
-		if (torque > 0)
-			local += 1.8*Math.sqrt(torque);
+		if (avg > 0)
+			local += 1.8*Math.sqrt(avg);
 
 		if (local > MAXPRESSURE) {
 			this.overpressure(world, x, y, z);

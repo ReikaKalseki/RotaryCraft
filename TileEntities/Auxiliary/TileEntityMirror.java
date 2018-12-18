@@ -313,7 +313,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 
 	@Override
 	public void breakBlock() {
-		plant.invalidate(worldObj);
+		if (plant != null)
+			plant.invalidate(worldObj);
 	}
 
 }

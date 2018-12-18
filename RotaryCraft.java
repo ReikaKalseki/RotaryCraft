@@ -45,6 +45,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.FurnaceFuelRegistry;
 import Reika.DragonAPI.Auxiliary.Trackers.IDCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.ModLockController;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
@@ -176,8 +177,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 	static final Random rand = new Random();
 
-	private boolean isLocked = false;
-
 	public static final Block[] blocks = new Block[BlockRegistry.blockList.length];
 	public static final Item[] items = new Item[ItemRegistry.itemList.length];
 
@@ -209,7 +208,7 @@ public class RotaryCraft extends DragonAPIMod {
 	}
 
 	public final boolean isLocked() {
-		return isLocked;
+		return !ModLockController.instance.verify(this);
 	}
 
 	private final boolean checkForLock() {
@@ -259,22 +258,6 @@ public class RotaryCraft extends DragonAPIMod {
 		config.initProps(evt);
 		proxy.registerSounds();
 
-		isLocked = this.checkForLock();
-		if (this.isLocked()) {
-			ReikaJavaLibrary.pConsole("");
-			ReikaJavaLibrary.pConsole("\t========================================= ROTARYCRAFT ===============================================");
-			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of RotaryCraft.");
-			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
-			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
-			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
-			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
-			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
-			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the RotaryCraft content, and then reload the game. All functionality");
-			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
-			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
-			ReikaJavaLibrary.pConsole("");
-		}
-
 		logger = new ModLogger(instance, ConfigRegistry.ALARM.getState());
 		if (DragonOptions.FILELOG.getState())
 			logger.setOutput("**_Loading_Log.log");
@@ -283,13 +266,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
 		FMLCommonHandler.instance().bus().register(RotaryEventManager.instance);
-
-		if (!this.isLocked()) {
-			if (ConfigRegistry.ACHIEVEMENTS.getState()) {
-				achievements = new Achievement[RotaryAchievements.list.length];
-				RotaryAchievements.registerAchievements();
-			}
-		}
 
 		int id = ExtraConfigIDs.FREEZEID.getValue();
 		IDCollisionTracker.instance.addPotionID(instance, id, FreezePotion.class);
@@ -324,6 +300,32 @@ public class RotaryCraft extends DragonAPIMod {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		this.startTiming(LoadPhase.LOAD);
+
+		ModLockController.instance.registerMod(this);
+		if (this.checkForLock()) {
+			ModLockController.instance.unverify(this);
+		}
+		if (this.isLocked()) {
+			ReikaJavaLibrary.pConsole("");
+			ReikaJavaLibrary.pConsole("\t========================================= ROTARYCRAFT ===============================================");
+			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of RotaryCraft.");
+			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
+			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
+			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
+			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
+			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
+			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the RotaryCraft content, and then reload the game. All functionality");
+			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
+			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
+			ReikaJavaLibrary.pConsole("");
+		}
+
+		if (!this.isLocked()) {
+			if (ConfigRegistry.ACHIEVEMENTS.getState()) {
+				achievements = new Achievement[RotaryAchievements.list.length];
+				RotaryAchievements.registerAchievements();
+			}
+		}
 
 		if (this.isLocked())
 			PlayerHandler.instance.registerTracker(LockNotification.instance);
@@ -452,7 +454,6 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.tungsteningot, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedrockdust, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedingot, false);
-		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedingotblock, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.silumin, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.UPGRADE.getItemInstance(), true);
 
@@ -644,6 +645,10 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@EventHandler
 	public void overrideRecipes(FMLServerStartedEvent evt) {
+		this.reinitRecipes();
+	}
+
+	public void reinitRecipes() {
 		if (!this.isLocked()) {
 			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.BLASTFURNACE.getCraftedProduct())) {
 				GameRegistry.addRecipe(new ShapedOreRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), RotaryRecipes.getBlastFurnaceIngredients()));

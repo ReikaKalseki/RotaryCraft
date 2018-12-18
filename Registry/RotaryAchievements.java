@@ -114,6 +114,8 @@ public enum RotaryAchievements {
 	public void triggerAchievement(EntityPlayer ep) {
 		if (!ConfigRegistry.ACHIEVEMENTS.getState())
 			return;
+		if (RotaryCraft.instance.isLocked())
+			return;
 		if (ep == null) {
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 				//ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");

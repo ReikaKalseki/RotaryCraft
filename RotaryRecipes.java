@@ -991,10 +991,10 @@ public class RotaryRecipes {
 		ItemRegistry.BEDGRAFTER.addBlastRecipe(1000, 4, "  S", " s ", "s  ", 'S', ItemStacks.bedingot, 's', ItemStacks.shaftitem);
 		ItemRegistry.BEDSAW.addBlastRecipe(1000, 4, "sss", " SS", " bb", 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem, 'S', Items.iron_ingot);
 		//ItemRegistry.BEDKNIFE.addBlastRecipe(1000, 4, "  s", "qs ", "bb ", 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem, 'q', AppEngHandler.getInstance().getCertusQuartz());
-		ItemRegistry.BEDHELM.addEnchantedBlastRecipe(1200, 4, "III", "I I", 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDBOOTS.addEnchantedBlastRecipe(1200, 4, "I I", "I I", 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDCHEST.addEnchantedBlastRecipe(1200, 4, "I I", "III", "III", 'I', ItemStacks.bedingot);
-		ItemRegistry.BEDLEGS.addEnchantedBlastRecipe(1200, 4, "III", "I I", "I I", 'I', ItemStacks.bedingot);
+		ItemRegistry.BEDHELM.addEnchantedBlastRecipe(1200, 4, "III", "IaI", 'I', ItemStacks.bedingot, 'a', RotaryCraft.config.getBedrockArmorGatingMaterial(true, null));
+		ItemRegistry.BEDBOOTS.addEnchantedBlastRecipe(1200, 4, "I I", "IaI", 'I', ItemStacks.bedingot, 'a', RotaryCraft.config.getBedrockArmorGatingMaterial(true, null));
+		ItemRegistry.BEDCHEST.addEnchantedBlastRecipe(1200, 4, "IaI", "III", "III", 'I', ItemStacks.bedingot, 'a', RotaryCraft.config.getBedrockArmorGatingMaterial(true, null));
+		ItemRegistry.BEDLEGS.addEnchantedBlastRecipe(1200, 4, "III", "IaI", "I I", 'I', ItemStacks.bedingot, 'a', RotaryCraft.config.getBedrockArmorGatingMaterial(true, null));
 
 		ItemRegistry.STEELPICK.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELPICK.getStackOf(), "BBB", " S ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
 		ItemRegistry.STEELAXE.addRecipe(new ShapedOreRecipe(ItemRegistry.STEELAXE.getStackOf(), "BB ", "BS ", " S ", 'S', "stickWood", 'B', ItemStacks.steelingot));
@@ -1018,7 +1018,7 @@ public class RotaryRecipes {
 		ItemRegistry.MOTION.addRecipe(" nr", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.screen, 'n', ItemStacks.sonar, 'r', ItemStacks.radar);
 		ItemRegistry.VACUUM.addRecipe(" n ", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.impeller, 'n', ItemStacks.diffuser);
 		ItemRegistry.STUNGUN.addRecipe(" n ", "scs", " s ", 's', ItemStacks.steelingot, 'c', ItemStacks.sonar, 'n', ItemStacks.diffuser);
-		ItemRegistry.GRAVELGUN.addRecipe(" d ", "gcg", "sss", 's', ItemStacks.steelingot, 'c', Blocks.chest, 'd', Blocks.dispenser, 'g', ItemStacks.steelgear);
+		ItemRegistry.GRAVELGUN.addRecipe(" d ", "gcg", "sas", 'a', RotaryCraft.config.getGravelGunGatingMaterial(true, ItemStacks.steelingot), 's', ItemStacks.steelingot, 'c', Blocks.chest, 'd', Blocks.dispenser, 'g', ItemStacks.steelgear);
 		ItemRegistry.RANGEFINDER.addRecipe(" e ", "rGr", "sss", 'G', Blocks.glowstone, 's', ItemStacks.steelingot, 'r', Items.redstone, 'e', Items.ender_pearl);
 		ItemRegistry.FIREBALL.addRecipe("b b", "scs", "srs", 's', ItemStacks.steelingot, 'c', ItemStacks.combustor, 'r', Items.redstone, 'b', Items.blaze_rod);
 		ItemRegistry.HANDCRAFT.addRecipe(" g ", "scs", " g ", 's', ItemStacks.steelingot, 'g', Items.gold_ingot, 'c', Blocks.crafting_table);

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.awt.Color;
+import java.util.Calendar;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -52,6 +53,11 @@ public class RotaryAux {
 
 	static {
 		//addShaftBlacklist("example.author.unauthorizedconverter.teclass");
+	}
+
+	public static boolean loadXmasTextures() {
+		Calendar c = Calendar.getInstance();
+		return (c.get(Calendar.MONTH) == Calendar.DECEMBER && c.get(Calendar.DAY_OF_MONTH) >= 21) || (c.get(Calendar.MONTH) == Calendar.JANUARY && c.get(Calendar.DAY_OF_MONTH) <= 4);
 	}
 
 	public static boolean isBlacklistedIOMachine(TileEntity te) {

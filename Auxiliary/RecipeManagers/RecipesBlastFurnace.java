@@ -77,6 +77,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		in2 = new BlastInput(Items.gunpowder, 1.8F*9, 1);
 		in3 = new BlastInput(Blocks.sand, 0.1F*9, 1);
 		BlastRecipe hslablock = new BlastRecipe(in1, in2, in3, Blocks.iron_block, ItemStacks.steelblock, false, TileEntityBlastFurnace.SMELT_XP*9, TileEntityBlastFurnace.SMELTTEMP);
+		hslablock.setNeedsEmpty();
 		this.addRecipe(hslablock, RecipeLevel.CORE);
 
 		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
@@ -251,6 +252,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			li.add(output);
 			return li;
 		}
+
+		@Override
+		public boolean requiresEmptyOutput() {
+			return false;
+		}
 	}
 
 	public static interface BlastFurnacePattern extends MachineRecipe {
@@ -264,6 +270,8 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public boolean isAlloying();
 
 		public int getRequiredTemperature();
+
+		public boolean requiresEmptyOutput();
 	}
 
 	public static final class BlastInput {
@@ -351,7 +359,9 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public final boolean hasBonus;
 		public final float xp;
 		public final int temperature;
+
 		private boolean alloy;
+		private boolean needsEmpty;
 
 		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Item main, ItemStack out, boolean bonus, float xp, int temp) {
 			this(in1, in2, in3, new ItemStack(main), out, bonus, xp, temp);
@@ -408,6 +418,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		private BlastRecipe setAlloy() {
 			alloy = true;
+			return this;
+		}
+
+		private BlastRecipe setNeedsEmpty() {
+			needsEmpty = true;
 			return this;
 		}
 
@@ -514,6 +529,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			li.addAll(this.getMainItems());
 			li.add(output);
 			return li;
+		}
+
+		@Override
+		public boolean requiresEmptyOutput() {
+			return needsEmpty;
 		}
 	}
 

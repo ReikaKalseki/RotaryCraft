@@ -46,6 +46,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Auxiliary.Trackers.ModLockController.ModReVerifyEvent;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
 import Reika.DragonAPI.Instantiable.Event.EnderLookAggroEvent;
@@ -53,6 +54,7 @@ import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FarmlandTrampleEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
+import Reika.DragonAPI.Instantiable.Event.MTReloadEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
@@ -104,6 +106,17 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void reverify(ModReVerifyEvent evt) {
+		RotaryCraft.proxy.registerRenderers();
+	}
+
+	@SubscribeEvent
+	public void handleMTReload(MTReloadEvent evt) {
+		RotaryCraft.instance.reinitRecipes();
 	}
 
 	@SubscribeEvent

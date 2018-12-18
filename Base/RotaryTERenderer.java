@@ -17,6 +17,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
@@ -146,24 +147,24 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		for (int i = 0; i < 6; i++) {
 			int a = 0; int b = 0; int c = 0;
 			switch(i) {
-			case 0:
-				b = -3;
-				break;
-			case 1:
-				b = 3;
-				break;
-			case 2:
-				c = -3;
-				break;
-			case 3:
-				c = 3;
-				break;
-			case 4:
-				a = -3;
-				break;
-			case 5:
-				a = 3;
-				break;
+				case 0:
+					b = -3;
+					break;
+				case 1:
+					b = 3;
+					break;
+				case 2:
+					c = -3;
+					break;
+				case 3:
+					c = 3;
+					break;
+				case 4:
+					a = -3;
+					break;
+				case 5:
+					a = 3;
+					break;
 			}
 			v5.startDrawing(GL11.GL_LINES);
 			v5.setColorRGBA(colors[i].getRed(), colors[i].getGreen(), colors[i].getBlue(), alpha);
@@ -208,6 +209,11 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+
+	@Override
+	protected final DragonAPIMod getOwnerMod() {
+		return RotaryCraft.instance;
 	}
 
 	@Override
