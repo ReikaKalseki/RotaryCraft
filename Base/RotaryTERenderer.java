@@ -47,6 +47,10 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		return RotaryCraft.class;
 	}
 
+	protected boolean loadXmasTextures() {
+		return RotaryAux.loadXmasTextures();
+	}
+
 	protected void renderFaceColors(TileEntityIOMachine te, double p2, double p4, double p6) {
 		double offset = 0.0625;
 		int alpha = te.iotick;

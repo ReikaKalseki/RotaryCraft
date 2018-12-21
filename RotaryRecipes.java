@@ -98,9 +98,7 @@ import blusunrize.immersiveengineering.api.energy.DieselHandler;
 import blusunrize.immersiveengineering.api.energy.DieselHandler.SqueezerRecipe;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 import forestry.api.fuels.GeneratorFuel;
 
 public class RotaryRecipes {
@@ -459,7 +457,7 @@ public class RotaryRecipes {
 		//InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
 		InfusionRecipe ir = new BedrockRevealingInfusion(6, al, recipe);
 		ThaumcraftApi.getCraftingRecipes().add(ir);
-		String page = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? RotaryDescriptions.getParentPage()+"thaum.xml" : "";
+		String page = RotaryDescriptions.getParentPage()+"thaum.xml";
 		ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page).setParents("GOGGLES");
 	}
 
@@ -1397,16 +1395,21 @@ public class RotaryRecipes {
 	public static Object[] getWorktableIngredients() {
 		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEWORK.getState() && !ConfigRegistry.TABLEMACHINES.getState(), null, null, ReikaItemHelper.stoneSlab, ReikaItemHelper.stoneSlab);
 
-		Object[] args = {
-				"aCb", "SBS", "crd", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]
-		};
+		ArrayList<Object> li = new ArrayList(Arrays.asList("aCb", "SBS", "crd", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]));
 
 		if (c[0] == null)
-			args[0] = ((String)args[0]).replace("a", " ");
+			li.set(0, ((String)li.get(0)).replace("a", " "));
 		if (c[1] == null)
-			args[0] = ((String)args[0]).replace("b", " ");
+			li.set(0, ((String)li.get(0)).replace("b", " "));
 
-		return args;
+		for (int i = li.size()-1; i >= 0; i -= 2) {
+			if (li.get(i) == null) {
+				li.remove(i);
+				li.remove(i-1);
+			}
+		}
+
+		return li.toArray();
 	}
 
 	private static final Collection<RecipeHandler> recipeHandlers = new OneWayList();

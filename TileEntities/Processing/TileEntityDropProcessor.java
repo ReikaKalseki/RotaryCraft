@@ -35,6 +35,7 @@ import net.minecraft.world.World;
 import thaumcraft.api.internal.WeightedRandomLoot;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
+import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -673,6 +674,9 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 			if (c != null) {
 				int totalWeight = WeightedRandom.getTotalWeight(c);
 				for (WeightedRandomLoot w : c) {
+					if (w.item == null) {
+						throw new InstallationException(ModList.THAUMCRAFT.getDisplayName(), "You have specified a null item in the TC loot bags! Check your configs or MT scripts!");
+					}
 					ItemStack is = w.item.copy();
 					if (is.stackTagCompound == null)
 						is.stackTagCompound = new NBTTagCompound();

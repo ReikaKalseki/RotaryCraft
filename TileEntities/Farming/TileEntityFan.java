@@ -267,7 +267,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 						for (int j = 0; j <= 2; j++) {
 							editx = x+i*facing.offsetX+left.offsetX*k;
 							edity = y+i*facing.offsetY+j;
-							editx = z+i*facing.offsetZ+left.offsetZ*k;
+							editz = z+i*facing.offsetZ+left.offsetZ*k;
 							this.rip2(world, editx, edity, editz);
 						}
 					}

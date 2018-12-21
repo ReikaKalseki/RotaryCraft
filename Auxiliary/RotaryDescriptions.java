@@ -411,6 +411,7 @@ public final class RotaryDescriptions {
 	public static class ReloadListener {
 
 		@SubscribeEvent
+		@SideOnly(Side.CLIENT)
 		public void reload(ResourceReloadEvent evt) {
 			RotaryDescriptions.reload();
 		}
