@@ -1,0 +1,80 @@
+﻿<?xml version="1.0"?>
+<tools>
+	<spring>
+		A mola é utilizada para armazenar energia mecânica. Uma vez colocada no enrolador de mola, ela pode ser utilizada em outro enrolador para fornecer uma pequena quantidade de energia, ou ela pode ser usada para energizar várias ferramentas. Note que, quando enrolar molas, elas correm o risco de quebrar, um risco que fica cada vez maior à medida que são enroladas mais e mais.
+	</spring>
+	<strongspring>
+		Para eliminar a possibilidade de ruptura, a resistência à tração da mola pode ser atualizada do aço para diamante e rocha matriz. Devido ao tamanho da rigidez que estas novas molas têm, no entanto, elas exigem 16 vezes mais torque para alcançar a mesma carga. Estas molas também fornecem muito mais energia quando desenroladas em um enrolador de molas.
+	</strongspring>
+	<ultra>
+		O ultra-som emite ruídos de alta frequência através de blocos para determinar a sua densidade. A partir disto, é capaz de detectar locais de baixa densidade próximos, como o ar, ou variações na densidade, como veios de minério. Ele também pode detectar o silverfish dentro de blocos infestados.
+	</ultra>
+	<motion>
+		O detector de movimento emite um som e um pulso de radar para detectar qualquer criatura e avaliar a sua distância e velocidade. A partir daí, ele pode informá-lo de mobs nas proximidades (incluindo se eles estão atacando você), mesmo através de paredes.
+	</motion>
+	<vac>
+		O aspirador portátil é uma variação do aspirador de itens. Clique-direito com ele para sugar itens e XP para você, supondo que você tenha espaço no inventário. Shift-clique com o botão direito em um bloco de armazenamento pode ser usado para esvaziá-lo de uma só vez.
+	</vac>
+	<stun>
+		A arma de repulsão não causa dano direto, mas pode ser usada para enviar mobs fazendo-os voar para trás, mantendo-os longe. Usando shift-botão direito do mouse, a sua explosão de som potente também pode ser usada para perfurar áreas conexas de material solto, como cascalho, folhas e minérios.
+	</stun>
+	<gravel>
+		O estilingue lança pedaços de pederneira em alta velocidade em um alvo. Em níveis mais elevados de carga, as peças podem causar dano suficiente para matar a maioria dos mobs com um tiro. Devido à sua baixa massa e velocidade enorme, a pedra não é afetada pela gravidade ao longo de sua trajetória. Esta ferramenta usa pederneira como munição e só pode atirar em uma entidade viva, e não coisas como blocos, máquinas, ou itens.
+	</gravel>
+	<fireball>
+		O lançador de bola de fogo dispara bolas de fogo com as de um ghast em um alvo. Ele pode ser carregado como um arco, até a potência máxima em azul escuro. Níveis de carga mais elevados significam explosões mais potentes, até duas vezes a de uma explosão de TNT. Esta ferramenta exige cargas de fogo como munição.
+	</fireball>
+	<handcraft>
+		O fabricador portátil é exatamente o que o nome indica; ele pode ser usado como uma crafting table portátil sem ter de colocá-lo no chão.
+	</handcraft>
+	<nvg>
+		Óculos de visão noturna permite que você veja com clareza, mesmo em escuridão completa. No entanto, eles usam o slot do capacete da armadura e não oferecem proteção defensiva. Para aliviar isso, eles podem ser trabalhados com um elmo de rocha matriz para um tipo de capacete de visão noturna.
+	</nvg>
+	<buckets>
+		Baldes de lubrificante ou de combustível de jato podem ser feitos colocando baldes vazios nos slots apropriados do triturador ou de umm unidade fraccionadora. Eles podem então ser carregados a uma máquina que precisa deles, para poupar tubulações de longas distâncias. O etanol também pode ser coletado com um balde de dentro e para dentro dos motores e tanques.
+	</buckets>
+	<bedtools>
+		Ferramentas de roha matriz são feitas a partir de lingotes dela. Elas têm durabilidade infinita, são mais rápidas, são mais eficazes em blocos de colheita e são extremamente afiadas. A picareta pega qualquer bloco, como se estivesse permanentemente encantada com Toque Suave. Uma espada assim é muito eficaz contra armadura e aumenta o looting dos mobs. Tesouras de rocha matriz são capazes de colher até mesmo a mais delicada das plantas. A enxada pode ser usada para lavrar uma área de 5x5, ou, ao mesmo tempo, ser usada para replantar sementes de grama.
+	</bedtools>
+	<bedarmor>
+		Armaduras também podem ser feitas de lingotes de rocha matriz. E, assim como ferramentas de rocha matriz, elas também têm durabilidade infinita.
+	</bedarmor>
+	<targeter>
+		O direcionador de TNT permite escolher facilmente o alvo do canhão de TNT. Basta olhar para o seu alvo, colocando sua mira diretamente sobre ele, e o canhão de TNT, se estiver definido para o modo de alvo, terá como alvo o bloco que você estiver olhando. Esta ferramenta pode não funcionar para alvos extremamente distantes, mas... Estão fora do alcance do canhão de TNT de qualquer maneira, então...
+	</targeter>
+	<iogoggles>
+		O óculos de entrada e saída (ES) é um dispositivo muito útil para ver os lados de entrada e saída de máquinas em todos os momentos, útil ao depurar configurações complexas.
+	</iogoggles>
+	<ckey>
+		A chave de canhão é usada para configurar as máquinas do tipo canhão, como a torreta a laser. Se o proprietário clica com o botão direito em uma máquina com ela, é possível editar sua whitelist. Se alguém clica com o botão direito na máquina com ela, é adicionado à whitelist.
+	</ckey>
+	<minecart>
+		O minecart a etanol é uma forma mais rápida e mais pesada de minecart com fornalha do vanilla e, assim, é bem adequado para empurrar grandes quantidades de carrinho. Ele, como seu motor, usa cristais de etanol.
+	</minecart>
+	<tileselect>
+		O seletor de tiles é usado para adicionar coisas à memória de algumas máquinas, como o Terraformador. Se você clicar com o botão direito na máquina com a ferramenta, ela se liga a ferramenta. Se, em seguida, você clicar com o botão direito do mouse em qualquer outro lugar, acrescenta aquele bloco ao armazenamento da máquina. Para adicionar blocos de máquina, use shift-botão direito do mouse.
+	</tileselect>
+	<jetpack>
+		Uma mochila a jato lhe permite voar, facilitando a construção, navegação (ou mesmo combate). Ele consome sim uma grande quantidade de combustível. Usar combustível de jato, fornece um turbo, assim como o faz ao adicionar em um motor de avião. Além disso, adiionando três lingotes ao redor da parte superior em uma mesa de trabalho, adiciona uma asa, ajudando a sua capacidade de planar.
+		
+		Uma armadura de rocha matriz pode ser combinada com a mochila a jato para obter tanto a habilidade de voar, quanto a protecção do peitoral. Por causa da massa adicionada, é um pouco menos potente e responde um pouco mais lentamente.
+	</jetpack>
+	<steeltools>
+		O aço HSLA pode ser transformado em ferramentas. Isso faz com que as ferramentas que durem 600 usos, mas são, por outro lado, equivalentes a ferramentas de ferro.
+	</steeltools>
+	<steelarmor>
+		Armadura também pode ser feita usando aço HSLA. Ele fornece um pouco mais de proteção do que o ferro e dura bastante tempo.
+	</steelarmor>
+	<itempump>
+		A bomba de corda permite que você pegue grandes quantidades de líquido do mundo dentro do tanque interno da ferramenta. Este líquido pode então ser depositado em um tanque clicando com o botão direito sobre ele.
+	</itempump>
+	<jumpboots>
+		Botas de velocidade dão ao usuário uma maior agilidade e mobilidade, aumentando a sua altura de salto e velocidade de corrida. Elas também funcionam como amortecedores, diminuindo o dano de queda.
+	</jumpboots>
+	<tanks>
+		Tanques de combustível de reserva permitem transportar algum combustível extra para coisas como mochilas a jata, para o caso de emergências. Eles podem ser preenchidos na estação de preenchimento. O botão direito do mouse os esvazia em seu item de destino.
+	</tanks>
+	<disk>
+		O disco de música permite copiar músicas entre caixas de música. Clique com o botão direito do mouse em uma caixa de música programada com um disco vazio para criar uma cópia escrita; clicar com o botão direito numa caixa de música com um disco escrito substitui a caixa de música com o conteúdo do disco.
+	</disk>
+</tools>

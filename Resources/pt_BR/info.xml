@@ -1,0 +1,58 @@
+﻿<?xml version="1.0"?>
+<info>
+	<terms>
+		"W" ou "kW" ou "MW" são Watts, Kilowatts e Megawatts: uma unidade de energia (energia por unidade de tempo).
+		1W = 1 Joule por segundo.
+		"Nm" é Newton-metros, uma unidade de torque (força vezes distância).
+		"rad/s" é Radianos por segundo = Uma unidade de velocidade angular (rotação).
+		1 rad/s = 9,55 rpm (rotações por minuto).
+		"Radianos" é uma unidade de ângulo, igual a 180/pi (57,3) graus; existem 6,28 radianos em um círculo completo.
+	</terms>
+	<physics>
+		Torque é a "força" de uma volta; maiores torques podem gerar cargas maiores. Portanto, uma máquina que exige mais força para operar, como o compactador, naturalmente requer mais torque do que uma como o Lenhador.
+		
+		Velocidade angular é a velocidade da rotação. Por exemplo, uma máquina que mistura rapidamente as coisas, tais como o fraccionador, exigem uma velocidade angular maior do que uma que os mistura mais lentamente, como o fermentador.
+	</physics>
+	<material>
+		Diferentes materiais têm diferentes pontos fortes, o que controla quando os eixos e rodas feitas deles falhar. Rodas falham com base na densidade e na força de tração (FT), enquanto eixos podem falhar com sobrecarga de tensão ou desgaste (TD).
+		
+		Madeira: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
+		Pedra: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
+		Ferro: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
+		Aço: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
+		Ouro: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
+		Diamante: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
+	</material>
+	<shafts>
+		Estes são os limites de carga para os eixos e caixas de engrenagens. Exceder estes valores resultam em falha. Para uma caixa de engrenagem, ambos, as velocidades de entrada e de saída, e o torque, devem ser considerados.
+		
+		Madeira: %dNm a %d rad/s
+		Stone: %dNm a %d rad/s
+		Aço: %dNm a %d rad/s
+		Diamond: %dNm a %d rad/s
+		Rocha Matriz: Infinito
+	</shafts>
+	<flywheels>
+		Estas são as velocidades de falhas para os volantes. Exceder estes valores irá resultar em falha violenta.
+		
+		Madeira: %d rad/s
+		Pedra: %d rad/s
+		Ferro: %d rad/s
+		Ouro: %d rad/s
+	</flywheels>
+	<transfer>
+		Potência de eixo comporta-se de forma completamente diferente de tipos tradicionais de poder: elétricos, pneumáticos ou outros. Ou seja, potência de eixo é poder verdadeiro, não a energia. E, como tal, não se encaixam em máquinas ou eixos que não têm saída; ele deve ser usado logo após a sua criação. Além disso, a carga em um eixo não afeta seu consumo de energia - um eixo desconectado ainda recebe todo e qualquer poder dado a ele, mas apenas o desperdiça. Isso é diferente de um fio, onde as saídas desconectadas redirecionariam esse poder para saídas restantes.
+	</transfer>
+	<tiers>
+		Nem todas as máquinas são iguais; algumas são muito mais difíceis de operar do que outras. Uma boa métrica da posição relativa de uma máquina na Árvore tecnológica é a exigência de potência, se for o caso. Existem exceções a esta regra e, claro, diferentes estilos de jogo podem significar diferentes caminhos a tomar, mas é geralmente recomendado estar ciente desta hierarquia. Além disso, note que um mínimo de zero apenas significa que não há corte mínimo e que os efeitos de aumento de potência são mais complexos.
+	</tiers>
+	<timing>
+		Máquinas que executam operações discretas, muitas vezes levam menos tempo por operação conforme a velocidade de entrada aumenta. Passe o mouse sobre uma máquina para obter seus dados de tempo. O "x" nestas fórmulas é a velocidade de entrada e os tempos estão em ticks (0,05s por tick).
+	</timing>
+	<muffling>
+		Muitas máquinas fazem muito barulho como um efeito colateral de sua operação. Isso é especialmente verdade para motores e qualquer coisa que realize combustão. Para ajudar a reduzir o barulho, é possível criar um arco de lã ou algo similar por cima de qualquer lado da máquina. Se o espaço não permitir, também é possível colocar acima e abaixo.
+	</muffling>
+	<interdim>
+		Eixos funcionam mesmo através de portais, desde que estes estejam na mesma localização - levando em conta a diferença de escala entre algumas dimensões - e que a direção do eixo esteja correta. Ambos os lados devem ter a chunk carregada. Isso funciona com o Nether, o Fim, a Twilight Forest e os portais do MystCraft.
+	</interdim>
+</info>

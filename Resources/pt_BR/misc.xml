@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<misc>
+	<lube>
+		A maioria das caixas de engrenagens em linha precisam ser lubrificadas para manter sua capacidade de transmitir energia. Se operadas sem lubrificante, elas se desgastam e transmitem cada vez menos torque e, portanto, menos energia. Para mantê-las lubrificadas, basta conectar um duto de lubrificante de um tirurador à caixa de engrenagem. Coloque algumas sementes no triturador, e veja o duto transmitir o óleo (ou então use baldes para transportá-lo). A maioria das caixas de engrenagens consomem o lubrificante e, mais do mesmo a velocidades mais altas. Outras máquinas também exigem lubrificante para funcionar.
+	</lube>
+	<canola>
+		Encontre algumas sementes de canola na grama alta, plante-as na terra e veja-as crescer. Quando surgirem pequenas flores amarelas, as plantas estão prontas para serem colhidas e vão dropar sementes. Elas compartilham os mesmos requisitos do trigo, em termos de nível de luz, abastecimento de água e assim por diante. Pés de Canola exigem muita água, por isso não se surpreenda se elas morrerem na terra seca. Sementes de canola também podem ser compactadas em uma moita densa para facilitar o armazenamento.
+	</canola>
+	<meter>
+		O transdutor angular é uma ferramenta indispensável para aqueles com sistemas de eixos grandes ou complexos. Clique com o botão direito do mouse em qualquer motor, caixa de engrenagens, ou em uma máquina com ele e você será informado sobre a potência e a velocidade entrando ou saindo. A maioria das máquinas também terá informações adicionais.
+	</meter>
+	<screw>
+		Isto é para máquinas que eram tanto extraviadas ou eram difíceis de colocar corretamente. Shift-clique, muitas vezes desempenha uma função diferente, como alternar entre dividir ou mesclar modos numa junção de eixos. A chave de fenda também reorienta pistões e escadas.
+	</screw>
+	<modinterface>
+		Estas são as taxas de conversão e comportamentos entre máquinas movidos a eixos e máquinas de outros mods e itens.
+		
+		RF/t para Watts: 1 RF/t = %.3f %sW
+		
+		Taxas de duplicação no extrator:
+		Minerais normais: %d por cento de chance por etapa
+		Minerais do Nether: %d por cento de chance por etapa
+		Minerais raros: %d por cento de chance por etapa
+	</modinterface>
+	<enchanting>
+		Algumas máquinas podem ser encantadas. Fazendo isso irá adicionar recursos ou funcionalidades semelhantes aos efeitos dos encantamentos. Por exemplo, o tunelador pode receber Toque Suave, Fortuna e Eficiência, com cada um fazendo o mesmo com a máquina como eles fazem para uma ferramenta. Para encantar uma máquina, clique com o botão direito nela com um livro encantado.
+		
+		As seguintes máquinas podem ser encantadas: %s
+	</enchanting>
+	<computercraft>
+		Se você tem ComputerCraft ou OpenComputers instalado, você pode usá-los para ler e, por vezes, controlar várias máquinas. Basta usar a máquina como faria com qualquer outro periférico e chamar um dos métodos listados. Note que nem todas as máquinas têm acesso a todos os métodos; por exemplo, o reservatório não tem inventário, potência, ou área de alcance, uma vez que não teria sentido.
+	</computercraft>
+</misc>
