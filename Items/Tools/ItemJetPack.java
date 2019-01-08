@@ -164,7 +164,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		boolean isFlying = KeyWatcher.instance.isKeyDown(ep, Key.JUMP);
 		boolean hoverMode = isFlying && ep.isSneaking();
 		boolean jetbonus = !ConfigRegistry.JETFUELPACK.getState() && this.isJetFueled(is);
-		boolean horiz = KeyWatcher.instance.isKeyDown(ep, Key.FOWARD) || KeyWatcher.instance.isKeyDown(ep, Key.BACK);
+		boolean horiz = KeyWatcher.instance.isKeyDown(ep, Key.FORWARD) || KeyWatcher.instance.isKeyDown(ep, Key.BACK);
 		horiz = horiz || KeyWatcher.instance.isKeyDown(ep, Key.LEFT) || KeyWatcher.instance.isKeyDown(ep, Key.RIGHT);
 		float maxSpeed = jetbonus ? 3 : 1.25F;
 		double hspeed = ReikaMathLibrary.py3d(ep.motionX, 0, ep.motionZ);
@@ -203,7 +203,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 					ep.motionY = Math.min(ep.motionY+deltav, maxSpeed);
 				}
 
-				if (KeyWatcher.instance.isKeyDown(ep, Key.FOWARD)) {
+				if (KeyWatcher.instance.isKeyDown(ep, Key.FORWARD)) {
 					ep.moveFlying(0, thrust, thrust);
 					if (ep.worldObj.getTotalWorldTime()%2 == 0 && !ep.capabilities.isCreativeMode)
 						this.use(is, this.getFuelUsageMultiplier());

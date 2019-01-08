@@ -27,6 +27,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import Reika.ChromatiCraft.Registry.ChromaEnchants;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
@@ -183,11 +186,18 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, type);
 				b.player = ep;
 				b.fortune = fortune;
+				if (ModList.CHROMATICRAFT.isLoaded() && this.hasAutoCollect(is))
+					b.dropInventory = ep.inventory;
 				ProgressiveRecursiveBreaker.instance.addCoordinate(world, b);
 				return true;
 			}
 		}
 		return false;
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private boolean hasAutoCollect(ItemStack is) {
+		return ReikaEnchantmentHelper.hasEnchantment(ChromaEnchants.AUTOCOLLECT.getEnchantment(), is);
 	}
 
 	private void cutEntireTree(ItemStack is, World world, TreeReader tree, int dx, int dy, int dz, EntityPlayer ep) {

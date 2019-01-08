@@ -593,7 +593,7 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.durability = 600;
 				mat.damageBoost = 3;
 				mat.harvestLevel = 2;
-				mat.miningSpeed = 1800;
+				mat.miningSpeed = 1200;
 				mat.handleModifier = 1.2F;
 				mat.chatColor = EnumChatFormatting.LIGHT_PURPLE.toString();
 				mat.renderColor = 0xCACBF2;
