@@ -584,7 +584,7 @@ public final class HandbookAuxData {
 				BiomeTransform data = transforms.get(k);
 				BiomeGenBase from = data.change.start;
 				BiomeGenBase from_ = from;
-				from = ReikaBiomeHelper.getParentBiomeType(from);
+				from = ReikaBiomeHelper.getParentBiomeType(from, false);
 				BiomeGenBase to = data.change.finish;
 				api.drawTexturedModalRect(posX+16, posY+22, 32*(from.biomeID%8), 32*(from.biomeID/8), 32, 32);
 				api.drawTexturedModalRect(posX+80, posY+22, 32*(to.biomeID%8), 32*(to.biomeID/8), 32, 32);

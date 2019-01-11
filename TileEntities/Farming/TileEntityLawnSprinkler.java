@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
@@ -41,6 +42,11 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class TileEntityLawnSprinkler extends SprinklerBlock {
+
+	//Pipes cap at 2.4MPa = 24atm, so we need a modifier
+	private static final int PRESSURE_MODIFIER = 10;
+	public static final int PRESSURE_TO_HURT = 8000000/PRESSURE_MODIFIER; //typical pressure washers range from 1.5 to 4ksi = 10-30MPa
+	public static final int PRESSURE_TO_KILL = 20000000/PRESSURE_MODIFIER; //high enough to cause fluid injection injuries
 
 	private static int[] GROWTH_PATTERN = {8, 5, 3, 1, 1}; //tick distribution
 
@@ -102,8 +108,8 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				this.washMachines(world, x, y, z);
 			if (ModList.REACTORCRAFT.isLoaded() && rand.nextInt(2400) == 0)
 				this.clearRadiation(world, x, y, z);
-			if (this.getPressure() > 300000)
-				this.damageMobs(world, x, y, z);
+			if (this.getPressure() > PRESSURE_TO_HURT)
+				this.damageMobs(world, x, y, z, this.getPressure() >= PRESSURE_TO_KILL ? 4 : 1);
 		}
 		this.spreadWater(world, x, y, z);
 	}
@@ -207,12 +213,16 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 		return r;
 	}
 
-	private void damageMobs(World world, int x, int y, int z) {
+	private void damageMobs(World world, int x, int y, int z, int dmg) {
 		int r = this.getRange();
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(x, y, z).offset(0, 1, 0).expand(r, 1, r);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (EntityLivingBase e : li) {
-			e.attackEntityFrom(DamageSource.generic, 0.5F);
+			RayTracer rt = new RayTracer(x+0.5, y+0.5, z+0.5, e.posX, e.posY+0.5, e.posZ);
+			rt.airOnly = true;
+			if (rt.isClearLineOfSight(world)) {
+				e.attackEntityFrom(DamageSource.drown, 0.5F);
+			}
 		}
 	}
 

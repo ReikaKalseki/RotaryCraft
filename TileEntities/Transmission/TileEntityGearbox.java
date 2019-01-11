@@ -716,7 +716,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean isFull() {
-		return this.getLubricant() >= this.getMaxLubricant();
+		return this.getLubricant()+120 >= this.getMaxLubricant(); //+120 to not have bursts sent and waste 95%
 	}
 
 	@Override
