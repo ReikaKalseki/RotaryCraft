@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,13 +12,6 @@ package Reika.RotaryCraft.Registry;
 import java.util.HashMap;
 import java.util.Locale;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
@@ -45,10 +38,12 @@ import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemDisk;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
+import Reika.RotaryCraft.Items.ItemExplosiveShell;
 import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemModOre;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
 import Reika.RotaryCraft.Items.ItemSlide;
+import Reika.RotaryCraft.Items.ItemVoidMetalRailgunAmmo;
 import Reika.RotaryCraft.Items.Placers.ItemAdvGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemEnginePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
@@ -104,6 +99,13 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSickle;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public enum ItemRegistry implements ItemEnum {
 
@@ -116,7 +118,7 @@ public enum ItemRegistry implements ItemEnum {
 	ETHANOL(64, 1, false, 			"item.ethanol", 			ItemBasic.class),
 	CANOLA(80, 1, true, 			"item.canola", 				ItemCanolaSeed.class),
 	SPRING(96, 1, true, 			"item.spring", 				ItemCoil.class),
-	ULTRASOUND(128, 1, true, 		"item.ultrasound", 			ItemUltrasound.class),
+	ULTRASOUND(128, 1, true, 		"item.ultrasound", 				ItemUltrasound.class),
 	MOTION(144, 1, true, 			"item.motion", 				ItemMotionTracker.class),
 	VACUUM(160, 1, true, 			"item.vacuum", 				ItemVacuum.class),
 	STUNGUN(192, 1, true, 			"item.stungun", 			ItemStunGun.class),
@@ -128,13 +130,13 @@ public enum ItemRegistry implements ItemEnum {
 	NVG(97, 1, true, 				"item.nvg", 				ItemNightVisionGoggles.class),
 	//NVH(48, 1, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
 	HANDCRAFT(33, 1, false, 		"item.handcraft", 			ItemHandheldCrafting.class),
-	RAILGUN(113, 1, true, 			"item.railgun", 			ItemRailGunAmmo.class),
+	RAILGUN(129, 1, true, 			"item.railgun", 			ItemRailGunAmmo.class),
 	BUCKET(104, 106, 1, true, 		"item.rcbucket", 			ItemFuelLubeBucket.class),
 	TARGET(98, 1, false, 			"item.target", 				ItemTarget.class),
 	IOGOGGLES(1, 1, false,			"item.iogoggles", 			ItemIOGoggles.class),
 	SLIDE(2, 1, true, 				"item.slide", 				ItemSlide.class),
 	KEY(4, 1, false,				"item.key",					ItemCannonKey.class),
-	SHELL(5, 1, false,				"item.shell",				ItemBasic.class),
+	SHELL(5, 1, false,				"item.shell",				ItemExplosiveShell.class),
 	MINECART(6, 1, false,			"item.ethacart",			ItemEthanolMinecart.class),
 	BEDHELM(7, 1, false,			"item.bedhelm",				ItemBedrockArmor.class),
 	BEDCHEST(9, 1, false,			"item.bedchest",			ItemBedrockArmor.class),
@@ -195,7 +197,9 @@ public enum ItemRegistry implements ItemEnum {
 	RANGEFINDER(42, 1, true,		"item.rangefinder",			ItemRangeFinder.class),
 	GEARUPGRADE(65, 1, true,		"item.gearupgrade",			ItemIntegratedGearbox.class),
 	HELDPISTON(43, 1, true,			"item.springpiston",		ItemHandheldPiston.class),
-	;//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
+	VOIDRAIL(133, 1, false,			"item.voidrailgun",			ItemVoidMetalRailgunAmmo.class);
+	//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
+	;
 
 	private final int index;
 	private final int imageSheet;
@@ -789,6 +793,7 @@ public enum ItemRegistry implements ItemEnum {
 				break;
 			case BEDPICK:
 				is.addEnchantment(Enchantment.silkTouch, 1);
+				is.addEnchantment(Enchantment.fortune, 5);
 				break;
 			case BEDJUMP:
 				ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantments());

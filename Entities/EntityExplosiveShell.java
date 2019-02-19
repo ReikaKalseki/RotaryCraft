@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,13 @@ package Reika.RotaryCraft.Entities;
 
 import java.util.List;
 
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
+import Reika.RotaryCraft.Base.EntityRailgunShotBase;
+import Reika.RotaryCraft.Items.ItemExplosiveShell;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,14 +27,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.API.Interfaces.TargetEntity;
-import Reika.RotaryCraft.Base.EntityTurretShot;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
 
-public class EntityExplosiveShell extends EntityTurretShot {
+public class EntityExplosiveShell extends EntityRailgunShotBase {
 
 	public static final float EXPLOSION = 8F;
 
@@ -36,7 +37,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 	}
 
 	public EntityExplosiveShell(World world, double x, double y, double z, double vx, double vy, double vz, TileEntityRailGun r) {
-		super(world, x, y, z, 0, 0, 0, r);
+		super(world, x, y, z, 0, 0, 0, r, ItemExplosiveShell.ExplosiveRailGunAmmo.instance);
 		motionX = vx;
 		motionY = vy;
 		motionZ = vz;
@@ -79,7 +80,7 @@ public class EntityExplosiveShell extends EntityTurretShot {
 	@Override
 	protected void applyAttackEffectsToEntity(World world, Entity el) {
 		if (el instanceof TargetEntity) {
-			((TargetEntity)el).onRailgunImpact(gun, 4096, true);
+			((TargetEntity)el).onRailgunImpact(gun, this.getType());
 		}
 	}
 

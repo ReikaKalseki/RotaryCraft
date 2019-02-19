@@ -1,14 +1,25 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -21,17 +32,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 
@@ -134,7 +134,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		EntityFallingBlock e = new EntityFallingBlock(world, x+0.5, y+1+0.5, z+0.5, b.toFire.blockID, b.toFire.metadata);
 		if (b.toFire.blockID == Blocks.mob_spawner) {
 			TileEntityMobSpawner spw = new TileEntityMobSpawner();
-			ReikaSpawnerHelper.setSpawnerFromItemNBT(b.referenceItem, spw);
+			ReikaSpawnerHelper.setSpawnerFromItemNBT(b.referenceItem, spw, true);
 			NBTTagCompound nbt = new NBTTagCompound();
 			spw.writeToNBT(nbt);
 			e.field_145810_d = nbt;

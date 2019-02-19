@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,23 +14,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.stats.Achievement;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
@@ -55,6 +38,7 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
+import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.SimpleCropHandler;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaDispenserHelper;
@@ -134,6 +118,23 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.recipes.RecipeManagers;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.stats.Achievement;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 
 @Mod( modid = "RotaryCraft", name="RotaryCraft", version = "v@MAJOR_VERSION@@MINOR_VERSION@", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
@@ -148,10 +149,10 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final CreativeTabs tabSpawner = new TabSpawner();
 
 	private static final int[] dmgs = {
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(0),
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(1),
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(2),
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(3)
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(0),
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(1),
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(2),
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(3)
 	};
 
 	public static final ArmorMaterial NVHM = EnumHelper.addArmorMaterial("NVHelmet", ArmorMaterial.DIAMOND.getDurability(0), dmgs, ArmorMaterial.GOLD.getEnchantability());
@@ -492,6 +493,9 @@ public class RotaryCraft extends DragonAPIMod {
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.cokeblock, 12*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthrablock, 24*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.sawdust, 0.25F);
+
+		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTGLASS.getBlockInstance());
+		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTPANE.getBlockInstance());
 
 		if (ModList.AGRICRAFT.isLoaded()) {
 			AgriCanola.register();

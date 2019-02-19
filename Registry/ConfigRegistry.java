@@ -1,15 +1,14 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import net.minecraft.util.MathHelper;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
@@ -22,6 +21,7 @@ import Reika.DragonAPI.Interfaces.Configuration.StringConfig;
 import Reika.DragonAPI.Interfaces.Configuration.UserSpecificConfig;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.RotaryCraft;
+import net.minecraft.util.MathHelper;
 
 
 public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, IntegerConfig, BooleanConfig, DecimalConfig, StringConfig, MatchingConfig, UserSpecificConfig {
@@ -118,7 +118,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false),
 	GATEBLAST("Enable Blast Furnace recipe gating", false),
 	GATEWORK("Enable Worktable recipe gating", false),
-	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4);
+	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4),
+	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8);
 
 	private String label;
 	private boolean defaultState;

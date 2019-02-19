@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,39 +11,39 @@ package Reika.RotaryCraft.TileEntities.Weaponry.Turret;
 
 import java.util.List;
 
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.RailGunAmmo;
+import Reika.RotaryCraft.API.Interfaces.RailGunAmmo.RailGunAmmoType;
+import Reika.RotaryCraft.API.Interfaces.TargetEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoriedCannon;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.API.Interfaces.TargetEntity;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoriedCannon;
-import Reika.RotaryCraft.Entities.EntityExplosiveShell;
-import Reika.RotaryCraft.Entities.EntityRailGunShot;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityRailGun extends TileEntityInventoriedCannon {
 
-	private boolean isExplosiveShell = false;
-
-	public int getPowerLevel() {
-		int meta = ReikaInventoryHelper.findMaxMetadataOfID(ItemRegistry.RAILGUN.getItemInstance(), inv);
-		return meta;
-	}
+	private RailGunAmmoType ammoType;
 
 	@Override
 	public boolean hasAmmo() {
-		if (ReikaInventoryHelper.checkForItem(ItemRegistry.RAILGUN.getItemInstance(), inv)) {
-			isExplosiveShell = false;
-			return true;
-		}
-		else {
-			isExplosiveShell = true;
-			return ReikaInventoryHelper.checkForItem(ItemRegistry.SHELL.getItemInstance(), inv);
+		this.checkAmmo();
+		return ammoType != null;
+	}
+
+	private void checkAmmo() {
+		for (int i = 0; i < inv.length; i++) {
+			RailGunAmmoType rg = this.getAmmo(inv[i]);
+			if (rg != null) {
+				if (torque >= rg.getRequiredTorque()) {
+					if (ammoType == null || rg.compareTo(ammoType) > 0)
+						ammoType = rg;
+				}
+			}
 		}
 	}
 
@@ -101,17 +101,9 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 	@Override
 	public void fire(World world, double[] xyz) {
 		double speed = 4;
-		int maxmeta = this.getMaxThrust();
-		if (isExplosiveShell) {
-			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.SHELL.getItemInstance(), inv, maxmeta);
-			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.SHELL.getItemInstance(), m, inv);
-			ReikaInventoryHelper.decrStack(slot, inv);
-		}
-		else {
-			int m = ReikaInventoryHelper.findMaxMetadataOfIDWithinMaximum(ItemRegistry.RAILGUN.getItemInstance(), inv, maxmeta);
-			int slot = ReikaInventoryHelper.locateInInventory(ItemRegistry.RAILGUN.getItemInstance(), m, inv);
-			ReikaInventoryHelper.decrStack(slot, inv);
-		}
+		ItemStack is = ammoType.getItem();
+		int slot = ReikaInventoryHelper.locateInInventory(is.getItem(), is.getItemDamage(), inv);
+		ReikaInventoryHelper.decrStack(slot, inv);
 		double[] v = new double[3];
 		v[0] = xyz[0]-xCoord;
 		v[1] = xyz[1]-yCoord;
@@ -128,18 +120,11 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 		//ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
 		if (!world.isRemote) {
 			double y = this.getFiringPositionY(dy);
-			if (isExplosiveShell) {
-				world.spawnEntityInWorld(new EntityExplosiveShell(world, xCoord+0.5+dx, y, zCoord+0.5+dz, v[0], v[1], v[2], this));
-			}
-			else {
-				int power = this.getPowerLevel();
-				world.spawnEntityInWorld(new EntityRailGunShot(world, xCoord+0.5+dx, y, zCoord+0.5+dz, v[0], v[1], v[2], power, this));
+			Entity e = ammoType.getProjectileEntity(world, xCoord+0.5+dx, y, zCoord+0.5+dz, v[0], v[1], v[2], this);
+			if (e != null) {
+				world.spawnEntityInWorld(e);
 			}
 		}
-	}
-
-	private int getMaxThrust() {
-		return (int)ReikaMathLibrary.logbase(torque*torque/512, 2);
 	}
 
 	public int getRange() {
@@ -178,7 +163,7 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return is.getItem() == ItemRegistry.RAILGUN.getItemInstance();
+		return is.getItem() instanceof RailGunAmmo;
 	}
 
 	@Override
@@ -188,7 +173,7 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 
 	@Override
 	public int getRedstoneOverride() {
-		return this.getMaxThrust();
+		return 0;
 	}
 
 	@Override
@@ -201,6 +186,15 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 			return false;
 		EntityLivingBase elb = (EntityLivingBase)ent;
 		return elb.getHealth() > 0 && this.isMobOrUnlistedPlayer(elb);
+	}
+
+	private static RailGunAmmoType getAmmo(ItemStack is) {
+		if (is == null)
+			return null;
+		if (is.getItem() instanceof RailGunAmmo) {
+			return ((RailGunAmmo)is.getItem()).getAmmo(is);
+		}
+		return null;
 	}
 
 }

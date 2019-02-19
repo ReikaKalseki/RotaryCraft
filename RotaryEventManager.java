@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,34 +15,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockWorkbench;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
-import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-import net.minecraftforge.event.world.BlockEvent;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -71,6 +43,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.EMPSparkRenderer;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
@@ -85,6 +58,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
@@ -97,6 +71,34 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockWorkbench;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent.AllowDespawn;
+import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.world.BlockEvent;
 
 public class RotaryEventManager {
 
@@ -106,6 +108,24 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void updateStreamHydros(SetBlockEvent.Pre evt) {
+		if (!evt.isWorldgen && evt.newBlock != evt.currentBlock) {
+			if (InterfaceCache.STREAM.instanceOf(evt.newBlock) || InterfaceCache.STREAM.instanceOf(evt.currentBlock)) {
+				for (int i = -1; i <= 1; i++) {
+					for (int k = -1; k <= 1; k++) {
+						for (Object o : evt.world.getChunkFromChunkCoords(evt.chunkLocation.chunkXPos+i, evt.chunkLocation.chunkZPos+k).chunkTileEntityMap.values()) {
+							TileEntity te = (TileEntity)o;
+							if (!te.isInvalid() && te instanceof TileEntityHydroEngine) {
+								((TileEntityHydroEngine)te).invalidateStream();
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent

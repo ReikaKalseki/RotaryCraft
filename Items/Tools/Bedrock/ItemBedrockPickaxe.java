@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,27 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 import Reika.ChromatiCraft.Base.CrystalBlock;
+import Reika.ChromatiCraft.Registry.ChromaEnchants;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -68,6 +49,26 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprites {
 
@@ -97,6 +98,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	{
 		ItemStack item = new ItemStack(par1, 1, 0);
 		item.addEnchantment(Enchantment.silkTouch, 1);
+		item.addEnchantment(Enchantment.fortune, 5);
 		par3List.add(item);
 	}
 
@@ -107,7 +109,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	private void forceSilkTouch(ItemStack is, World world, Entity entity, int slot) {
-		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is) || ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is) < 5) {
 			if (entity instanceof EntityPlayer) {
 				entity.playSound("random.break", 1, 1);
 				EntityPlayer ep = (EntityPlayer)entity;
@@ -169,8 +171,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 					ReikaSpawnerHelper.forceSpawn(spw, 12+itemRand.nextInt(25));
 				ItemStack item = ItemRegistry.SPAWNER.getStackOf();
 				ReikaSpawnerHelper.addMobNBTToItem(item, spw);
-				if (ReikaSpawnerHelper.hasCustomLogic(spw))
-					ReikaSpawnerHelper.setSpawnerItemNBT(item, spw.func_145881_a(), true);
+				if (ReikaSpawnerHelper.hasCustomLogic(spw) && this.shouldKeepSpawnerLogic(is))
+					ReikaSpawnerHelper.setSpawnerItemNBT(item, spw.func_145881_a(), true, true);
 				ReikaItemHelper.dropItem(world, x+itemRand.nextDouble(), y+itemRand.nextDouble(), z+itemRand.nextDouble(), item);
 				//world.setBlockToAir(x, y, z);
 				//world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 1.25F);
@@ -215,6 +217,10 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			}
 		}
 		return false;
+	}
+
+	private boolean shouldKeepSpawnerLogic(ItemStack is) {
+		return ModList.CHROMATICRAFT.isLoaded() && ReikaEnchantmentHelper.hasEnchantment(ChromaEnchants.DATAKEEP.getEnchantment(), is);
 	}
 
 	private void dropDirectBlock(ItemStack block, World world, int x, int y, int z) {
@@ -347,7 +353,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	@Override
 	public boolean onEntityItemUpdate(EntityItem ei) {
 		ItemStack is = ei.getEntityItem();
-		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is)) {
+		if (!ReikaEnchantmentHelper.hasEnchantment(Enchantment.silkTouch, is) || ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is) < 5) {
 			ei.playSound("random.break", 1, 1);
 			ei.setDead();
 		}

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,12 +13,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Math.MovingAverage;
@@ -35,6 +29,12 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements MultiOperational, ConditionalOperation, PressureTE {
 
@@ -52,7 +52,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	private static final HashSet<KeyedItemStack> ingredients = new HashSet();
 	private static final Interpolation yield = new Interpolation(false);
 
-	private final MovingAverage torqueInput = new MovingAverage(20);
+	private MovingAverage torqueInput = new MovingAverage(20);
 
 	static {
 		ingredients.add(new KeyedItemStack(Items.blaze_powder).setSimpleHash(true));
@@ -243,6 +243,23 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBTTagCompound tag = new NBTTagCompound();
+		torqueInput.writeToNBT(tag);
+		NBT.setTag("torquevals", tag);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		if (NBT.hasKey("torquevals"))
+			torqueInput = MovingAverage.readFromNBT(NBT.getCompoundTag("torquevals"));
+	}
+
+	@Override
 	public boolean hasModelTransparency() {
 		return false;
 	}
@@ -271,9 +288,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.getAllIngredients())
-			return 15;
-		return 15*tank.getLevel()/CAPACITY;
+		return (int)(this.getYieldRatio()/yield.getFinalValue()*15);
 	}
 
 	@Override

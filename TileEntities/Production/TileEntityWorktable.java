@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,15 +12,6 @@ package Reika.RotaryCraft.TileEntities.Production;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.Interfaces.TileEntity.TriggerableAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
@@ -44,6 +35,15 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class TileEntityWorktable extends InventoriedRCTileEntity implements TriggerableAction {
 
@@ -407,6 +407,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
 		if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
+			ItemStack jet = inv[jetslot];
 			ItemStack plate = inv[plateslot];
 			NBTTagCompound tag = plate.stackTagCompound != null ? (NBTTagCompound)plate.stackTagCompound.copy() : null;
 			inv[jetslot] = null;
@@ -416,6 +417,11 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 				is.stackTagCompound = new NBTTagCompound();
 			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag);
 			inv[9] = is;
+			for (PackUpgrades u : PackUpgrades.values()) {
+				if (u.existsOn(jet)) {
+					u.enable(is, true);
+				}
+			}
 		}
 	}
 

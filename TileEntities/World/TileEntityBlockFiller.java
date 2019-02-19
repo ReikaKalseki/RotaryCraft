@@ -1,14 +1,24 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.World;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Base.OneSlotMachine;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAreaFiller;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,16 +30,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import vazkii.botania.api.item.IBlockProvider;
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Base.OneSlotMachine;
-import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
-import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
-import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityAreaFiller;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
 public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISidedInventory, OneSlotMachine {
@@ -41,9 +41,10 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 		if (ModList.BOTANIA.isLoaded() && inv[0].getItem() instanceof IBlockProvider) {
 			BlockKey bk = this.getBlockFromBotania((IBlockProvider)inv[0].getItem(), inv[0]);
 			((IBlockProvider)inv[0].getItem()).provideBlock(this.getPlacer(), null, inv[0], bk.blockID, bk.metadata, true);
-			return;
 		}
-		ReikaInventoryHelper.decrStack(0, inv);
+		else {
+			ReikaInventoryHelper.decrStack(0, inv);
+		}
 	}
 
 	@Override

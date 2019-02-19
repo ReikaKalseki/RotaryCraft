@@ -1,29 +1,17 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.Interpolation;
-import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
@@ -37,6 +25,16 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, MultiOperational, ConditionalOperation {
 
@@ -58,19 +56,35 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	private final HybridTank lava = new HybridTank("lavamix", CAPACITY);
 	private final HybridTank water = new HybridTank("watermix", CAPACITY);
 
-	private static final Interpolation obsidianWeight = new Interpolation(false).addPoint(0.5, 0).addPoint(1, 100);
-	private static final Interpolation stoneWeight = new Interpolation(false).addPoint(0.05, 0).addPoint(0.5, 100).addPoint(0.95, 0);
-	private static final Interpolation cobbleWeight = new Interpolation(false).addPoint(0, 100).addPoint(0.5, 0);
+	private static final int MIN_OBSIDIAN_TEMP_0 = 500;
+	private static final int MIN_OBSIDIAN_TEMP_100 = 550;
+	private static final int MAX_OBSIDIAN_TEMP_100 = 750;
+	private static final int MAX_OBSIDIAN_TEMP_0 = 900;
 
 	private ItemStack getProducedItem() {
-		if (water.getFraction() <= 0)
-			return null;
-		WeightedRandom<Block> w = new WeightedRandom();
-		float f = lava.getFraction()/water.getFraction();
-		w.addEntry(Blocks.obsidian, obsidianWeight.getValue(f));
-		w.addEntry(Blocks.stone, stoneWeight.getValue(f));
-		w.addEntry(Blocks.cobblestone, cobbleWeight.getValue(f));
-		return new ItemStack(w.getRandomEntry());
+		if (ReikaMathLibrary.isValueInsideBoundsIncl(MIN_OBSIDIAN_TEMP_100, MAX_OBSIDIAN_TEMP_100, temperature))
+			return new ItemStack(Blocks.obsidian);
+		else if (temperature > MAX_OBSIDIAN_TEMP_100) {
+			if (temperature > MAX_OBSIDIAN_TEMP_0) {
+				return new ItemStack(Blocks.cobblestone);
+			}
+			else {
+				float f = (temperature-MAX_OBSIDIAN_TEMP_100)/(float)(MAX_OBSIDIAN_TEMP_0-MAX_OBSIDIAN_TEMP_100);
+				return ReikaRandomHelper.doWithChance(1-f) ? new ItemStack(Blocks.obsidian) : new ItemStack(Blocks.cobblestone);
+			}
+		}
+		else if (temperature < MIN_OBSIDIAN_TEMP_100) {
+			if (temperature < MIN_OBSIDIAN_TEMP_0) {
+				return new ItemStack(Blocks.cobblestone);
+			}
+			else {
+				float f = (MIN_OBSIDIAN_TEMP_100-temperature)/(float)(MIN_OBSIDIAN_TEMP_100-MIN_OBSIDIAN_TEMP_0);
+				return ReikaRandomHelper.doWithChance(1-f) ? new ItemStack(Blocks.obsidian) : new ItemStack(Blocks.cobblestone);
+			}
+		}
+		else {
+			return new ItemStack(Blocks.bedrock); //never happens
+		}
 	}
 
 	@Override
@@ -120,6 +134,7 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		overred = 0;
 
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		int max = MAXTEMP;
 
 		//if (rand.nextInt(20/20) == 0) {
 		if (temperature > Tamb) {
@@ -129,19 +144,30 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 			temperature++;
 		}
 
-		if (!lava.isEmpty() && water.isEmpty())
-			temperature += 3;
+		if (!water.isEmpty()) {
+			max = 600;
+			if (lava.isEmpty())
+				temperature = Math.max(temperature-2, Tamb);
+		}
+
+		if (!lava.isEmpty())
+			temperature = Math.min(temperature+3, max);
 		//}
 
-		if (temperature > MAXTEMP/2) { //500C
+		if (temperature > 600+(MAXTEMP-600)/2) {
 			overred = 0.25F;
 		}
-		if (temperature > MAXTEMP/1.25) { //800C
+		if (temperature > 600+(MAXTEMP-600)/1.375) {
 			overred = 0.4F;
 			overgreen = 0.1F;
 			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
 		}
-		if (temperature > MAXTEMP && ConfigRegistry.BLOCKDAMAGE.getState()) { //1000C
+		if (temperature > 600+(MAXTEMP-600)/1.1) {
+			overred = 0.55F;
+			overgreen = 0.2F;
+			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
+		}
+		if (temperature >= MAXTEMP && ConfigRegistry.BLOCKDAMAGE.getState()) {
 			this.overheat(world, x, y, z);
 		}
 	}
@@ -159,13 +185,14 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		if (slot == -1)
 			return;
 		//ReikaJavaLibrary.pConsole(is);
-		int lavaamt = !ReikaItemHelper.matchStackWithBlock(is, Blocks.obsidian) ? 5 : 1000;
+		boolean obsid = ReikaItemHelper.matchStackWithBlock(is, Blocks.obsidian);
+		int lavaamt = obsid ? 1000 : 50;
 		if (lava.getLevel() < lavaamt || water.getLevel() < 1000)
 			return;
 		ReikaInventoryHelper.addOrSetStack(is, inv, slot);
 		if (!ReikaItemHelper.matchStackWithBlock(is, Blocks.cobblestone))
 			lava.removeLiquid(lavaamt);
-		water.removeLiquid(1000);
+		water.removeLiquid(obsid ? 2500 : 1000);
 		worldObj.playSoundEffect(xCoord+0.5, yCoord+0.5, zCoord+0.5, "random.fizz", 0.5F+0.5F*rand.nextFloat(), 0.7F+0.3F*rand.nextFloat());
 		for (double x = xCoord+0.25; x <= xCoord+0.75; x += 0.25) {
 			for (double z = zCoord+0.25; z <= zCoord+0.75; z += 0.25) {
@@ -207,10 +234,6 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		return true;
 	}
 
-	/**
-	 * Returns an integer between 0 and the passed value representing how close the current item is to being completely
-	 * cooked
-	 */
 	public int getCookProgressScaled(int par1)
 	{
 		return (mixTime * par1) / (600-(int)(40*ReikaMathLibrary.logbase(omega, 2)));
@@ -227,11 +250,12 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		NBT.setInteger("mix", mixTime);
 
 		NBT.setInteger("temp", temperature);
+
+		NBT.setFloat("red", overred);
+		NBT.setFloat("green", overgreen);
+		NBT.setFloat("blue", overblue);
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
@@ -243,6 +267,10 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		mixTime = NBT.getInteger("mix");
 
 		temperature = NBT.getInteger("temp");
+
+		overred = NBT.getFloat("red");
+		overgreen = NBT.getFloat("green");
+		overblue = NBT.getFloat("blue");
 	}
 
 	@Override
