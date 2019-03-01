@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Containers.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.RotaryCraft.Base.TileEntity.RemoteControlMachine;
 

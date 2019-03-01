@@ -10,6 +10,7 @@
 package Reika.RotaryCraft;
 
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.ModInterface.Lua.LuaMethods;
 import Reika.RotaryCraft.Registry.DifficultyEffects;

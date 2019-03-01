@@ -9,10 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;

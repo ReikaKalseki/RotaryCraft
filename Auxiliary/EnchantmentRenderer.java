@@ -11,9 +11,9 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
 
-import net.minecraft.tileentity.TileEntity;
-
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.tileentity.TileEntity;
 
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.RotaryCraft.Base.GuiEngine;
 import Reika.RotaryCraft.Containers.Machine.ContainerSteam;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntitySteamEngine;

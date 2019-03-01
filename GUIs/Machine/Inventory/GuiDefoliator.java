@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;

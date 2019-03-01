@@ -9,11 +9,11 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.Effects.Glow;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
@@ -35,6 +35,7 @@ import Reika.RotaryCraft.Models.Engine.ModelSteam;
 import Reika.RotaryCraft.Models.Engine.ModelWind;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

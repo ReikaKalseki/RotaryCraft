@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -28,10 +28,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap.CollectionType;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -46,7 +48,7 @@ public class TileEntityAutoBreeder extends InventoriedPowerReceiver implements R
 
 	public static final int FALLOFF = 2048; //2kW per extra meter
 
-	private static final MultiMap<Class, KeyedItemStack> feedItems = new MultiMap(new MultiMap.HashSetFactory());
+	private static final MultiMap<Class, KeyedItemStack> feedItems = new MultiMap(CollectionType.HASHSET);
 
 	@Override
 	public boolean isIdle() {

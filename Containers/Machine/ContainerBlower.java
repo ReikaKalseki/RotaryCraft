@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Containers.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Instantiable.GUI.Slot.GhostSlot;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Base.ContainerIOMachine;

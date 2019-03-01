@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
+
 import Reika.DragonAPI.Base.ContainerStackingStorage;
 import Reika.RotaryCraft.PacketHandlerCore;
 import Reika.RotaryCraft.TileEntities.TileEntityVacuum;

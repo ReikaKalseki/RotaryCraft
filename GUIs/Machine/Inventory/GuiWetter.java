@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.RotaryCraft.Base.GuiOneSlotInv;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityWetter;

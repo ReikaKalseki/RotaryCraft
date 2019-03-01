@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -32,10 +33,10 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
 import Reika.DragonAPI.Instantiable.Data.Maps.CountMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
+import Reika.DragonAPI.Instantiable.ModInteract.MEWorkTracker;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
-import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.ChangeCallback;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
@@ -44,6 +45,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import appeng.api.AEApi;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.IGridBlock;
@@ -56,7 +58,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 @Strippable(value={"appeng.api.networking.IActionHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
-public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/, ChangeCallback {
+public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/ {
 
 	private static final String LOGGER_ID = "autocrafter_workflag";
 
@@ -85,7 +87,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	private static final int OUTPUT_OFFSET = SIZE;
 	private static final int CONTAINER_OFFSET = SIZE*2;
 
-	private boolean hasWork = true;
+	private MEWorkTracker hasWork = new MEWorkTracker();
 
 	static {
 		ModularLogger.instance.addLogger(RotaryCraft.instance, LOGGER_ID);
@@ -260,11 +262,12 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (power >= MINPOWER) {
 			tick++;
 			if (!world.isRemote) {
-				if (hasWork) {
+				hasWork.tick();
+				if (hasWork.hasWork()) {
 					//ReikaJavaLibrary.pConsole("Executing tick");
 					mode.tick(this);
 					if (ModList.APPENG.isLoaded() && network != null && !network.isEmpty)
-						hasWork = false;
+						hasWork.reset();
 				}
 				this.injectItems();
 			}
@@ -353,10 +356,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 					ItemStack[] in = this.getIngredients(pattern);
 					for (int k = 0; k < in.length; k++) {
 						if (in[k] != null)
-							network.addCallback(in[k], this);
+							network.addCallback(in[k], hasWork);
 					}
 					ItemStack out = this.getSlotRecipeOutput(i);
-					network.addCallback(out, this);
+					network.addCallback(out, hasWork);
 				}
 			}
 		}
@@ -767,12 +770,5 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	@ModDependent(ModList.APPENG)
 	public IGridNode getActionableNode() {
 		return (IGridNode)aeGridNode;
-	}
-
-	@Override
-	public void onItemChange(IAEItemStack iae) {
-		hasWork = true;
-		//ModularLogger.instance.log(LOGGER_ID, "Activating "+this+" due to change in "+iae.getItemStack());
-		//ReikaJavaLibrary.pConsole("Activating "+this+" due to change in "+(iae != null ? iae.getItemStack() : "Network"));
 	}
 }

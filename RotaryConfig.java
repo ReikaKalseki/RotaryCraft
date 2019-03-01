@@ -12,6 +12,7 @@ package Reika.RotaryCraft;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;

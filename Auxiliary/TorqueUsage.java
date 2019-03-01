@@ -14,6 +14,7 @@ import java.util.HashSet;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.RotaryCraft.API.Power.PowerAcceptor;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;

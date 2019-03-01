@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 

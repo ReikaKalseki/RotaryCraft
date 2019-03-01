@@ -11,6 +11,8 @@ package Reika.RotaryCraft.Renders;
 
 import java.lang.reflect.Field;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
@@ -20,8 +22,6 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;

@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraft.entity.Entity;
+
 import Reika.DragonAPI.Interfaces.Registry.EntityEnum;
 import Reika.RotaryCraft.Entities.EntityCustomTNT;
 import Reika.RotaryCraft.Entities.EntityDischarge;

@@ -9,18 +9,20 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import ic2.api.reactor.IReactor;
-import ic2.api.reactor.IReactorChamber;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import ic2.api.reactor.IReactor;
+import ic2.api.reactor.IReactorChamber;
 
 public class TileEntityCoolingFin extends RotaryCraftTileEntity implements TemperatureTE {
 

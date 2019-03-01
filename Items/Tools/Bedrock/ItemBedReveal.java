@@ -15,14 +15,16 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import thaumcraft.api.IGoggles;
-import thaumcraft.api.IVisDiscountGear;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.IRevealer;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import thaumcraft.api.IGoggles;
+import thaumcraft.api.IVisDiscountGear;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.IRevealer;
 
 @Strippable(value = {"thaumcraft.api.nodes.IRevealer", "thaumcraft.api.IGoggles", "thaumcraft.api.IVisDiscountGear"})
 public class ItemBedReveal extends ItemBedrockArmor implements IRevealer, IGoggles, IVisDiscountGear {

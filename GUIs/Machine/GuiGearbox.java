@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.Machine.ContainerGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;

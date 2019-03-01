@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;

@@ -1,8 +1,9 @@
 package Reika.RotaryCraft.Base;
 
+import net.minecraft.creativetab.CreativeTabs;
+
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.RailGunAmmo;
-import net.minecraft.creativetab.CreativeTabs;
 
 public abstract class ItemRailgunAmmoBase extends ItemBasic implements RailGunAmmo {
 

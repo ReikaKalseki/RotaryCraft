@@ -11,8 +11,10 @@ package Reika.RotaryCraft.ModInterface.Statements;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModInteract.Statements.StatementBase;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+
 import buildcraft.api.statements.IStatementParameter;
 
 public class StatementHasWork extends StatementBase {

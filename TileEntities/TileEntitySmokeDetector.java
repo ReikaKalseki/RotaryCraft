@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;

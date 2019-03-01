@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Containers.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Instantiable.GUI.ArmorSlot;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;

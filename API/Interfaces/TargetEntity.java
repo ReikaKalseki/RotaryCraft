@@ -11,8 +11,9 @@ package Reika.RotaryCraft.API.Interfaces;
 
 import java.util.UUID;
 
-import Reika.RotaryCraft.API.Interfaces.RailGunAmmo.RailGunAmmoType;
 import net.minecraft.tileentity.TileEntity;
+
+import Reika.RotaryCraft.API.Interfaces.RailGunAmmo.RailGunAmmoType;
 
 /** Implement this on an entity to make the defence turrets target it. */
 public interface TargetEntity {

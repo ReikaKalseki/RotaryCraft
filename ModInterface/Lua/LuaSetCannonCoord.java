@@ -10,9 +10,11 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Auxiliary.Interfaces.LocationTarget;
+
 import dan200.computercraft.api.lua.LuaException;
 
 public class LuaSetCannonCoord extends LuaMethod {

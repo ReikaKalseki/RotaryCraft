@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public abstract class TileEntityTransmissionMachine extends TileEntityIOMachine {

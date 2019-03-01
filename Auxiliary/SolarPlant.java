@@ -13,11 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
@@ -29,6 +28,8 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SolarPlantBlock;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
+
+import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 
 
 public class SolarPlant {

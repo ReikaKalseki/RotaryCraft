@@ -12,13 +12,15 @@ package Reika.RotaryCraft.ModInterface.Minetweaker;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.minecraft.item.ItemStack;
+
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
+
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
-import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 
 @ZenClass("mods.rotarycraft.Friction")
 public class FrictionTweaker {

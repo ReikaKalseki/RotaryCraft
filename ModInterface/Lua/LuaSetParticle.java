@@ -10,9 +10,11 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityParticleEmitter;
+
 import dan200.computercraft.api.lua.LuaException;
 
 public class LuaSetParticle extends LuaMethod {

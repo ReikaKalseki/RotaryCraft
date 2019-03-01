@@ -10,8 +10,10 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+
 import dan200.computercraft.api.lua.LuaException;
 
 public class LuaGetEnergy extends LuaMethod {

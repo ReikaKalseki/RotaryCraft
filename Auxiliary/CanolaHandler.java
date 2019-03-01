@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.CustomCropHandler;
 import Reika.DragonAPI.Interfaces.Registry.ModEntry;
@@ -103,5 +104,10 @@ public final class CanolaHandler implements CustomCropHandler {
 	public boolean neverDropsSecondSeed() {
 		return false;
 	}
+	/*
+	@Override
+	public CropFormat getShape() {
+		return CropFormat.PLANT;
+	}*/
 
 }

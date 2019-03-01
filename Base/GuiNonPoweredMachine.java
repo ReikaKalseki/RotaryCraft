@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Base;
 
 import net.minecraft.inventory.Container;
+
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 
 public abstract class GuiNonPoweredMachine extends GuiMachine {

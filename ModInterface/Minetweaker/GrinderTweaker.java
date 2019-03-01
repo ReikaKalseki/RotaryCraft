@@ -13,14 +13,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
+
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
-import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 
 @ZenClass("mods.rotarycraft.Grinder")
 public class GrinderTweaker {

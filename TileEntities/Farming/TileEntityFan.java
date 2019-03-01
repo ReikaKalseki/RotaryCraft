@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,9 +23,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.Registry.CropType;
 import Reika.DragonAPI.Interfaces.Registry.CropType.CropMethods;
-import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
@@ -344,26 +345,21 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	 */
 	//Meta is block meta, not fan meta
 	private void harvest(World world, int x, int y, int z, int meta, Block id) {
-		ModCrop mod = ModCropList.getModCrop(id, meta);
-		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
-		if (mod != null && mod.isRipe(world, x, y, z)) {
-			if (mod.destroyOnHarvest()) {
+		CropType crop = ReikaCropHelper.getCrop(id);
+		if (crop == null)
+			crop = ModCropList.getModCrop(id, meta);
+		if (crop != null && crop.isRipe(world, x, y, z)/* && (omega > HARVESTSPEED*4 || !crop.getShape().isSolid())*/) {
+			if (crop.destroyOnHarvest()) {
 				ArrayList<ItemStack> li = id.getDrops(world, x, y, z, meta, 0);
 				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
 				world.setBlockToAir(x, y, z);
 			}
 			else {
-				ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
-				CropMethods.removeOneSeed(mod, li);
+				ArrayList<ItemStack> li = crop.getDrops(world, x, y, z, 0);
+				CropMethods.removeOneSeed(crop, li);
 				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-				mod.setHarvested(world, x, y, z);
+				crop.setHarvested(world, x, y, z);
 			}
-		}
-		if (crop != null && crop.isRipe(meta)) {
-			ArrayList<ItemStack> li = crop.getDrops(world, x, y, z, 0);
-			CropMethods.removeOneSeed(crop, li);
-			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-			crop.setHarvested(world, x, y, z);
 		}
 		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 	}

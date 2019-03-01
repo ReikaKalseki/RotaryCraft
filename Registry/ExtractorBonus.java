@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,10 +16,12 @@ import java.util.Random;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap.CollectionType;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -74,7 +76,7 @@ public enum ExtractorBonus {
 	private static final ItemHashMap<ItemStack> itemmap = new ItemHashMap().setOneWay();
 	private static final ItemHashMap<ExtractorBonus> bonusmap = new ItemHashMap().setOneWay();
 	private static final OneWayMap<OreType, OreType> oremap = new OneWayMap();
-	private static final MultiMap<OreType, OreType> backwards = new MultiMap(new MultiMap.HashSetFactory()).setNullEmpty();
+	private static final MultiMap<OreType, OreType> backwards = new MultiMap(CollectionType.HASHSET).setNullEmpty();
 	private static final Random rand = new Random();
 
 	private ExtractorBonus(ItemStack in, ItemStack is, float chance, ModList req) {

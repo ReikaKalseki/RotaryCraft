@@ -9,16 +9,18 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import Reika.RotaryCraft.Auxiliary.TurretDamage;
-import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import Reika.RotaryCraft.Auxiliary.TurretDamage;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
 
 public abstract class EntityTurretShot extends EntityFireball implements IEntityAdditionalSpawnData {
 

@@ -13,9 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import pneumaticCraft.api.tileentity.AirHandlerSupplier;
-import pneumaticCraft.api.tileentity.IAirHandler;
-import pneumaticCraft.api.tileentity.IPneumaticMachine;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
@@ -27,6 +25,10 @@ import Reika.DragonAPI.ModInteract.Power.ReikaPneumaticHelper;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
+import pneumaticCraft.api.tileentity.AirHandlerSupplier;
+import pneumaticCraft.api.tileentity.IAirHandler;
+import pneumaticCraft.api.tileentity.IPneumaticMachine;
 
 @Strippable(value={"pneumaticCraft.api.tileentity.IPneumaticMachine"})
 public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPneumaticMachine {

@@ -9,10 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import net.minecraft.tileentity.TileEntity;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import net.minecraft.tileentity.TileEntity;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Base.RotaryTERenderer;

@@ -9,9 +9,9 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import net.minecraft.inventory.Container;
-
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.inventory.Container;
 
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;

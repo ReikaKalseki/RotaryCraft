@@ -9,10 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer.PlayerRotationData;
 import Reika.DragonAPI.Instantiable.InertItem;

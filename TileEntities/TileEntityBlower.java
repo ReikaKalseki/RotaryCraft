@@ -23,7 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
-import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
@@ -37,8 +37,10 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import appeng.api.implementations.ICraftingPatternItem;
 import cpw.mods.fml.relauncher.Side;
+import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
 
 public class TileEntityBlower extends TileEntityPowerReceiver {
 

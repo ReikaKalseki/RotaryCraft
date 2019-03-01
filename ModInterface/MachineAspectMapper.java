@@ -12,11 +12,13 @@ package Reika.RotaryCraft.ModInterface;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
+
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class MachineAspectMapper {
 

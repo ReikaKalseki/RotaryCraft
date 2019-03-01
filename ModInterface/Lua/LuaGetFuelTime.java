@@ -10,9 +10,11 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+
 import dan200.computercraft.api.lua.LuaException;
 
 public class LuaGetFuelTime extends LuaMethod {

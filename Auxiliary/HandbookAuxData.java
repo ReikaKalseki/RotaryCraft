@@ -14,6 +14,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NavigableSet;
 
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.TreeMultimap;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -25,8 +29,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
@@ -68,8 +70,6 @@ import Reika.RotaryCraft.Registry.MobBait;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer.BiomeTransform;
-
-import com.google.common.collect.TreeMultimap;
 
 public final class HandbookAuxData {
 	/** One GuiHandbook.SECOND in nanoGuiHandbook.SECONDs. */

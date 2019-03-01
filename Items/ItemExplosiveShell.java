@@ -1,13 +1,14 @@
 package Reika.RotaryCraft.Items;
 
-import Reika.RotaryCraft.Base.ItemRailgunAmmoBase;
-import Reika.RotaryCraft.Entities.EntityExplosiveShell;
-import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import Reika.RotaryCraft.Base.ItemRailgunAmmoBase;
+import Reika.RotaryCraft.Entities.EntityExplosiveShell;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
 
 
 public class ItemExplosiveShell extends ItemRailgunAmmoBase {

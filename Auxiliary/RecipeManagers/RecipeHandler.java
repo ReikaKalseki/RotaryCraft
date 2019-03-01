@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,12 +13,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 
+import com.google.common.collect.HashBiMap;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap.CollectionType;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -32,13 +36,11 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-import com.google.common.collect.HashBiMap;
-
 public abstract class RecipeHandler {
 
 	private static final boolean enableRegistries = ConfigRegistry.RECIPEMOD.getState();
 
-	private final MultiMap<RecipeLevel, String> recipesByLevel = new MultiMap(new MultiMap.HashSetFactory());
+	private final MultiMap<RecipeLevel, String> recipesByLevel = new MultiMap(CollectionType.HASHSET);
 	private final HashMap<String, RecipeLevel> recipeLevels = new HashMap();
 
 	private final HashBiMap<MachineRecipe, String> recipeKeys = HashBiMap.create();

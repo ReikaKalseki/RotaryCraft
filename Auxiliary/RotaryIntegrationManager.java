@@ -13,6 +13,7 @@ import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
 

@@ -12,6 +12,8 @@ package Reika.RotaryCraft.Base;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -25,6 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
+
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.ChromatiCraft.Registry.ChromaBlocks;
 import Reika.DragonAPI.ModList;
@@ -42,8 +45,6 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockShears;
-
-import com.InfinityRaider.AgriCraft.api.v2.ICrop;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 

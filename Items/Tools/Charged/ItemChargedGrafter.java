@@ -15,9 +15,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+
 import forestry.api.arboriculture.IToolGrafter;
 
 @Strippable(value = {"forestry.api.arboriculture.IToolGrafter"})

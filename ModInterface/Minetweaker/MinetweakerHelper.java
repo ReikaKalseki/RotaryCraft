@@ -12,12 +12,13 @@ package Reika.RotaryCraft.ModInterface.Minetweaker;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC.MineTweakerMC;
 import minetweaker.api.oredict.IOreDictEntry;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class MinetweakerHelper {
 

@@ -10,11 +10,13 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Instrument;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Note;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.NoteLength;
+
 import dan200.computercraft.api.lua.LuaException;
 
 public class LuaAddNote extends LuaMethod {

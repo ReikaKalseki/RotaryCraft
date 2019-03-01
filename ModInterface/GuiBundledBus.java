@@ -12,7 +12,9 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.StatCollector;
+
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

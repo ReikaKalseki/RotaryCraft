@@ -10,8 +10,10 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
+
 import dan200.computercraft.api.lua.LuaException;
 
 public class LuaGetAPIPower extends LuaMethod {

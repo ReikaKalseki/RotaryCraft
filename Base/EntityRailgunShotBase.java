@@ -1,12 +1,14 @@
 package Reika.RotaryCraft.Base;
 
-import Reika.RotaryCraft.API.Interfaces.RailGunAmmo.RailGunAmmoType;
-import Reika.RotaryCraft.Items.ItemRailGunAmmo;
-import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import Reika.RotaryCraft.API.Interfaces.RailGunAmmo.RailGunAmmoType;
+import Reika.RotaryCraft.Items.ItemRailGunAmmo;
+import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityRailGun;
+
+import io.netty.buffer.ByteBuf;
 
 public abstract class EntityRailgunShotBase extends EntityTurretShot {
 

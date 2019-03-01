@@ -39,7 +39,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import thaumcraft.common.entities.monster.EntityWisp;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -74,9 +74,11 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.VoidMonster.Entity.EntityVoidMonster;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thaumcraft.common.entities.monster.EntityWisp;
 
 public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine, UpgradeableMachine {
 
