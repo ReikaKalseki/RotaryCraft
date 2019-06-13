@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,20 +10,22 @@
 package Reika.RotaryCraft.TileEntities.Engine;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaRedstoneHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RedstoneCycleTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MagnetizationCore;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityACEngine extends TileEntityEngine implements MagnetizationCore {
 
-	/** Used in acPower */
-	private boolean[] lastPower = new boolean[3];
+	private final RedstoneCycleTracker redstone = new RedstoneCycleTracker(3);
 
 	@Override
 	protected void consumeFuel() {
@@ -49,7 +51,8 @@ public class TileEntityACEngine extends TileEntityEngine implements Magnetizatio
 		if (is.stackTagCompound.getInteger("magnet") <= 0)
 			return false;
 
-		boolean ac = ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower);
+		redstone.update(world, x, y, z);
+		boolean ac = redstone.isAlternating();
 
 		if (!world.isRemote && ac && timer.checkCap("fuel")) {
 			int m = is.stackTagCompound.getInteger("magnet");
@@ -102,6 +105,50 @@ public class TileEntityACEngine extends TileEntityEngine implements Magnetizatio
 	@Override
 	public int getCoreMagnetization() {
 		return inv[0] != null && inv[0].stackTagCompound != null ? inv[0].stackTagCompound.getInteger("magnet") : 0;
+	}
+
+	@Override
+	public void addRedstoneUpgrade() {
+		redstone.addIntegrated();
+	}
+
+	@Override
+	public boolean hasRedstoneUpgrade() {
+		return redstone.hasIntegrated();
+	}
+
+	@Override
+	public void upgrade(ItemStack is) {
+		this.addRedstoneUpgrade();
+	}
+
+	@Override
+	public boolean canUpgradeWith(ItemStack item) {
+		return !this.hasRedstoneUpgrade() && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.REDSTONE.ordinal();
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+
+		NBT.setBoolean("redstoneUpgrade", redstone.hasIntegrated());
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+
+		redstone.reset();
+		if (NBT.getBoolean("redstoneUpgrade"))
+			redstone.addIntegrated();
+	}
+
+	@Override
+	public void breakBlock() {
+		super.breakBlock();
+		if (this.hasRedstoneUpgrade()) {
+			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.REDSTONE.ordinal()));
+		}
 	}
 
 }

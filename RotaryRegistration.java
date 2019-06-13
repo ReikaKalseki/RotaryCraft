@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -71,6 +71,7 @@ public class RotaryRegistration {
 	public static void loadOreDictionary() {
 		if (!ModList.GREGTECH.isLoaded()) {//GT unificator causes an exploit, and no mods even use this anyways
 			OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot); //though he has an entry, he does not add an alternative manufacture
+			OreDictionary.registerOre("RotaryCraft:ingotTungstenAlloy", ItemStacks.tungsteningot); //though he has an entry, he does not add an alternative manufacture
 
 			OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
 			OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);

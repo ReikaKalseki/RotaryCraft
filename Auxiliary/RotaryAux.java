@@ -238,10 +238,10 @@ public class RotaryAux {
 	}
 
 	public static boolean isMuffled(TileEntity te) {
-		World world = te.worldObj;
-		int x = te.xCoord;
-		int y = te.yCoord;
-		int z = te.zCoord;
+		return isMuffled(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+	}
+
+	public static boolean isMuffled(World world, int x, int y, int z) {
 		if (ReikaWorldHelper.getMaterial(world, x, y+1, z) == Material.cloth && ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.cloth) {
 			return true;
 		}

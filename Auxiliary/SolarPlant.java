@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2018
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -34,12 +34,15 @@ import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 
 public class SolarPlant {
 
-	private final ValueSortedMap<Coordinate, SolarTower> towers = new ValueSortedMap();
-	private final HashMap<Coordinate, Coordinate> mirrors = new HashMap();
-
 	private static final float TOWER_FALLOFF = 0.72F;
 	public static int MAX_TOWER_HEIGHT = 32;
 	public static int MAX_TOWER_VALUE = 96;
+
+	private final ValueSortedMap<Coordinate, SolarTower> towers = new ValueSortedMap();
+	private final HashMap<Coordinate, Coordinate> mirrors = new HashMap();
+	private final HashMap<Coordinate, Integer> mirrorLevels = new HashMap();
+
+	//private final SolarSkyCache skyCache = new SolarSkyCache();
 
 	public static SolarPlant build(World world, int x, int y, int z) {
 		SolarPlant p = new SolarPlant();
@@ -81,11 +84,19 @@ public class SolarPlant {
 			p.towers.put(c, s);
 		}
 		for (Coordinate c : li) {
-			p.mirrors.put(c, getClosestTower(c, towerLocations.keySet()));
+			p.addMirror(c, getClosestTower(c, towerLocations.keySet()));
 		}
 		//ReikaJavaLibrary.pConsole("Added mirrors "+p.mirrors.keySet(), Side.SERVER);
 		//ReikaJavaLibrary.pConsole("Added towers "+p.towers.keySet(), Side.SERVER);
 		return p;
+	}
+
+	private void addMirror(Coordinate c, Coordinate tower) {
+		mirrors.put(c, tower);
+		Integer get = mirrorLevels.get(c.to2D());
+		int val = get != null ? get.intValue() : -1;
+		int max = Math.max(val, c.yCoord);
+		mirrorLevels.put(c.to2D(), max);
 	}
 
 	private static Coordinate getClosestTower(Coordinate c, Collection<Coordinate> locs) {
@@ -99,6 +110,11 @@ public class SolarPlant {
 			}
 		}
 		return closest;
+	}
+
+	private boolean isHighestMirror(TileEntityMirror te) {
+		Integer get = mirrorLevels.get(new Coordinate(te).to2D());
+		return get != null ? te.yCoord >= get : false;
 	}
 
 	public int towerCount() {
@@ -239,6 +255,11 @@ public class SolarPlant {
 			return ret != 0 ? ret : Integer.compare(this.hashCode(), o.hashCode());
 		}
 
+	}
+
+	public boolean canSeeTheSky(TileEntityMirror te) {
+		//return skyCache.canSeeTheSky(world, x, y, z);
+		return te.worldObj.canBlockSeeTheSky(te.xCoord, te.yCoord+1, te.zCoord) && this.isHighestMirror(te);
 	}
 
 }

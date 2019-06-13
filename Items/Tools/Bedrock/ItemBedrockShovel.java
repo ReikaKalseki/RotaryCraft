@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -180,6 +180,12 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		addDrop(Blocks.soul_sand, 0, Items.blaze_powder, 4);
 		addDrop(Blocks.soul_sand, 0, Items.nether_wart, 5);
 		addDrop(Blocks.soul_sand, 0, Items.quartz, 2);
+
+		if (ModList.MAGICBEES.isLoaded()) {
+			ItemStack is = ReikaItemHelper.lookupItem("MagicBees:miscResources:3");
+			if (is != null)
+				addDrop(Blocks.soul_sand, 0, is, 1);
+		}
 	}
 
 	private static void addDrop(Block b, int meta, Block i, float chance) {

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -136,9 +136,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return false;
 		 */
-		if (worldObj.getPrecipitationHeight(xCoord, zCoord) > yCoord+1)
-			return false;
-		return true;
+		//if (worldObj.getPrecipitationHeight(xCoord, zCoord) > yCoord+1)
+		//	return false;
+		return plant != null && /*plant.canSeeTheSky(worldObj, xCoord, yCoord, zCoord)*/ plant.canSeeTheSky(this);
 	}
 
 	@SideOnly(Side.CLIENT)

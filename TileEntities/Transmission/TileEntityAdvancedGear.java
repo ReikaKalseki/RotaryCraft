@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -28,7 +28,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
@@ -86,8 +85,6 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	private boolean isBedrockCoil = false;
 
 	private boolean isCreative;
-
-	private StepTimer redstoneTimer = new StepTimer(40);
 
 	public boolean torquemode = true;
 
@@ -413,12 +410,6 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
 
 		this.basicPowerReceiver();
-
-		if (this.getGearType().storesEnergy()) {
-			redstoneTimer.update();
-			if (redstoneTimer.checkCap())
-				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
-		}
 	}
 
 	public boolean isBedrockCoil() {

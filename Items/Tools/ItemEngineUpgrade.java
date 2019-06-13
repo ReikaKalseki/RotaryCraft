@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -89,7 +89,8 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 		MAGNETOSTATIC5("upgrade.tier5"), //Made with bedrock
 		AFTERBURNER("upgrade.afterburn"),
 		EFFICIENCY("upgrade.efficiency"),
-		FLUX("upgrade.flux");
+		FLUX("upgrade.flux"),
+		REDSTONE("upgrade.redstone");
 
 		private final String desc;
 

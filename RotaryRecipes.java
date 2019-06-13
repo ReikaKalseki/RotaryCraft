@@ -93,6 +93,7 @@ import blusunrize.immersiveengineering.api.energy.DieselHandler;
 import blusunrize.immersiveengineering.api.energy.DieselHandler.SqueezerRecipe;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
+import buildcraft.silicon.ItemRedstoneChipset;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.fuels.GeneratorFuel;
 import ic2.api.recipe.ISemiFluidFuelManager.BurnProperty;
@@ -244,6 +245,12 @@ public class RotaryRecipes {
 		ItemStack enderium = ModList.THERMALFOUNDATION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotEnderium", 1) : ItemStacks.bedingot;
 		ItemStack electrum = ModList.THERMALFOUNDATION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotElectrum", 1) : ItemStacks.redgoldingot;
 		ItemRegistry.UPGRADE.addMetaRecipe(Upgrades.FLUX.ordinal(), "BeB", "tEt", "BeB", 'e', electrum, 'B', ItemStacks.basepanel, 'E', enderium, 't', ItemStacks.tungsteningot);
+
+		ItemStack ender = ModList.BCSILICON.isLoaded() ? ItemRedstoneChipset.Chipset.PULSATING.getStack() : new ItemStack(Items.ender_pearl);
+		ItemStack latch = ReikaItemHelper.lookupItem("ProjRed|Integration:projectred.integration.gate:17");
+		if (latch == null)
+			latch = new ItemStack(Items.clock);
+		ItemRegistry.UPGRADE.addMetaRecipe(9, "rQr", "qsq", "rEr", 'r', Items.redstone, 's', ItemStacks.steelingot, 'q', Items.quartz, 'E', ender, 'Q', latch);
 
 		if (ModList.TINKERER.isLoaded()) {
 			GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', ItemStacks.steelingot, 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));

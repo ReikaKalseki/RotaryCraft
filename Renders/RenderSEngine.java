@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,15 +12,20 @@ package Reika.RotaryCraft.Renders;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Instantiable.Effects.Glow;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
+import Reika.RotaryCraft.Auxiliary.Interfaces.AlternatingRedstoneUser;
+import Reika.RotaryCraft.Auxiliary.Interfaces.RedstoneUpgradeable;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -246,19 +251,97 @@ public class RenderSEngine extends RotaryTERenderer
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityEngineAt((TileEntityEngine)tile, par2, par4, par6, par8);
+		if (tile instanceof RedstoneUpgradeable) {
+			if (((RotaryCraftTileEntity)tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 0) {
+				this.renderRedstoneFrame((TileEntityEngine)tile, par2, par4, par6, par8);
+			}
+		}
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);/*
 			TileEntityEngine eng = (TileEntityEngine)tile;
 			if (eng.type == EngineType.JET && eng.power > 0)
 				this.renderGlow(tile, par2, par4, par6);
 			 */
-			TileEntityEngine eng = (TileEntityEngine)tile;
-			eng.power = 1;
+			//TileEntityEngine eng = (TileEntityEngine)tile;
+			//eng.power = 1;
 			//if (eng.getEngineType() == EngineType.JET && eng.power > 0) {
 			//	jetGlow.setPosition(tile.xCoord+0.5, tile.yCoord+0.5, tile.zCoord+0.5);
 			//	jetGlow.render();
 			//}
 		}
+	}
+
+	private void renderRedstoneFrame(TileEntityEngine tile, double par2, double par4, double par6, float par8) {
+		RedstoneUpgradeable ar = (RedstoneUpgradeable)tile;
+		if (!ar.hasRedstoneUpgrade())
+			return;
+		boolean bright = true;
+		if (tile instanceof AlternatingRedstoneUser)
+			bright = (tile.getTicksExisted()/3)%2 == 0;
+		int c = bright ? 0xff0000 : 0x900000;
+		int c2 = bright ? 0xffa7a7 : 0xda0000;
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+		GL11.glPushMatrix();
+		GL11.glTranslated(par2, par4, par6);
+		if (bright)
+			GL11.glDisable(GL11.GL_LIGHTING);
+		//GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+		double o = 0.005;
+		double t = 0.05;
+		double p = 0.125;
+		double h = tile.isFlipped ? 1-p-o : p+o+t;
+		double h2 = tile.isFlipped ? 1-p-o-t : p+o;
+		double w = 0.475;
+
+		ReikaTextureHelper.bindTerrainTexture();
+		IIcon ico = Blocks.redstone_block.blockIcon;
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float du = ico.getMaxU();
+		float dv = ico.getMaxV();
+
+		Tessellator v5 = Tessellator.instance;
+		v5.startDrawingQuads();
+		v5.setBrightness(240);
+		v5.setColorRGBA_I(c, 255/*240*/);
+		if (tile.isFlipped) {
+			v5.addVertexWithUV(0.5-w, h2, 0.5-w, u, dv);
+			v5.addVertexWithUV(0.5+w, h2, 0.5-w, du, dv);
+			v5.addVertexWithUV(0.5+w, h2, 0.5+w, du, v);
+			v5.addVertexWithUV(0.5-w, h2, 0.5+w, u, v);
+		}
+		else {
+			v5.addVertexWithUV(0.5-w, h, 0.5+w, u, v);
+			v5.addVertexWithUV(0.5+w, h, 0.5+w, du, v);
+			v5.addVertexWithUV(0.5+w, h, 0.5-w, du, dv);
+			v5.addVertexWithUV(0.5-w, h, 0.5-w, u, dv);
+		}
+
+		v5.addVertexWithUV(0.5+w, h2, 0.5-w, u, v);
+		v5.addVertexWithUV(0.5-w, h2, 0.5-w, du, v);
+		v5.addVertexWithUV(0.5-w, h, 0.5-w, du, dv);
+		v5.addVertexWithUV(0.5+w, h, 0.5-w, u, dv);
+
+		v5.addVertexWithUV(0.5+w, h, 0.5+w, u, v);
+		v5.addVertexWithUV(0.5-w, h, 0.5+w, du, v);
+		v5.addVertexWithUV(0.5-w, h2, 0.5+w, du, dv);
+		v5.addVertexWithUV(0.5+w, h2, 0.5+w, u, dv);
+
+		v5.addVertexWithUV(0.5-w, h, 0.5+w, u, v);
+		v5.addVertexWithUV(0.5-w, h, 0.5-w, du, v);
+		v5.addVertexWithUV(0.5-w, h2, 0.5-w, du, dv);
+		v5.addVertexWithUV(0.5-w, h2, 0.5+w, u, dv);
+
+		v5.addVertexWithUV(0.5+w, h2, 0.5+w, u, v);
+		v5.addVertexWithUV(0.5+w, h2, 0.5-w, du, v);
+		v5.addVertexWithUV(0.5+w, h, 0.5-w, du, dv);
+		v5.addVertexWithUV(0.5+w, h, 0.5+w, u, dv);
+		v5.draw();
+
+		GL11.glPopMatrix();
+		GL11.glPopAttrib();
 	}
 
 	private void renderGlow(TileEntity tile, double par2, double par4, double par6) {

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Production;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -19,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.Interfaces.RefrigeratorAttachment;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
@@ -32,6 +34,8 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	public int time;
 	private StepTimer timer = new StepTimer(20);
 	private StepTimer soundTimer = new StepTimer(20);
+
+	private final RefrigeratorAttachment[] attachments = new RefrigeratorAttachment[6];
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -100,12 +104,20 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 
 	private void cycle() {
 		ReikaInventoryHelper.decrStack(0, inv);
-		tank.addLiquid(this.getProducedLN2(), FluidRegistry.getFluid("rc liquid nitrogen"));
-		if (rand.nextInt(4) == 0) {
-			int n = rand.nextInt(20) == 0 ? 4 : (rand.nextInt(4) == 0 ? 2 : 1);
-			if (inv[1] != null)
-				n = Math.min(n, ItemStacks.dryice.getMaxStackSize()-inv[1].stackSize);
-			ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(ItemStacks.dryice, n), inv, 1);
+		int amt = this.getProducedLN2();
+		tank.addLiquid(amt, FluidRegistry.getFluid("rc liquid nitrogen"));
+		if (amt > 0) {
+			for (RefrigeratorAttachment r : attachments) {
+				if (r != null) {
+					r.onCompleteCycle(amt);
+				}
+			}
+			if (rand.nextInt(4) == 0) {
+				int n = rand.nextInt(20) == 0 ? 4 : (rand.nextInt(4) == 0 ? 2 : 1);
+				if (inv[1] != null)
+					n = Math.min(n, ItemStacks.dryice.getMaxStackSize()-inv[1].stackSize);
+				ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(ItemStacks.dryice, n), inv, 1);
+			}
 		}
 	}
 
@@ -199,6 +211,15 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 
 	public int getLiquidScaled(int i) {
 		return tank.getLevel() * i / tank.getCapacity();
+	}
+
+	public void addAttachment(RefrigeratorAttachment te, ForgeDirection dir) {
+		attachments[dir.ordinal()] = te;
+	}
+
+	@Override
+	protected void onPlacedNextToThis(TileEntity te, ForgeDirection dir) {
+		attachments[dir.ordinal()] = null;
 	}
 
 }

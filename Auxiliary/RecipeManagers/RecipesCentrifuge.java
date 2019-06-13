@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -22,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,11 +39,13 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithC
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.HarvestCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
@@ -54,6 +58,7 @@ import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CentrifugeManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import cpw.mods.fml.common.Loader;
@@ -390,6 +395,29 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
 		this.addRecipe(new ItemStack(Blocks.clay), new FluidStack(FluidRegistry.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.dirt), 100, ItemStacks.silicondust, 75, ItemStacks.ironoreflakes, 0.5F, ItemStacks.goldoreflakes, 0.2F, is, 2.5F);
 
+		this.addGrassToSeeds();
+	}
+
+	private void addGrassToSeeds() {
+		ChancedOutputList c = new ChancedOutputList(false);
+		ItemHashMap<Integer> weights = new ItemHashMap();
+		float total = 0;
+		List<WeightedRandom.Item> li = (List<net.minecraft.util.WeightedRandom.Item>)ReikaObfuscationHelper.get("seedList", null);
+		for (WeightedRandom.Item wi : li) {
+			ItemStack seed = (ItemStack)ReikaObfuscationHelper.get("seed", wi);
+			if (HarvestCraftHandler.getInstance().isSeedItem(seed)) //pollutes with 113435948745609 seeds
+				continue;
+			if (weights.size() >= (weights.containsKey(ItemRegistry.CANOLA.getItemInstance(), 0) ? 9 : 8))
+				continue;
+			total += wi.itemWeight;
+			weights.put(seed, wi.itemWeight);
+		}
+		for (ItemStack is : weights.keySet()) {
+			int wt = weights.get(is);
+			c.addItem(is, ItemRegistry.CANOLA.matchItem(is) ? 10 : wt/total);
+		}
+		this.addRecipe(ReikaItemHelper.tallgrass, c, null, RecipeLevel.PERIPHERAL);
+		this.addRecipe(ReikaItemHelper.fern, c, null, RecipeLevel.PERIPHERAL);
 	}
 
 	@Override

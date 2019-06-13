@@ -35,6 +35,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import Reika.ChromatiCraft.Base.CrystalBlock;
+import Reika.ChromatiCraft.Block.Dimension.BlockBedrockCrack;
 import Reika.ChromatiCraft.Registry.ChromaEnchants;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
@@ -278,6 +279,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 8F;
 		if (ModList.CHROMATICRAFT.isLoaded() && b instanceof CrystalBlock)
 			return 24F;
+		if (ModList.CHROMATICRAFT.isLoaded() && b instanceof BlockBedrockCrack)
+			return 30F;
 
 		if (ThaumItemHelper.BlockEntry.TOTEMNODE.match(b, meta))
 			return 96F;

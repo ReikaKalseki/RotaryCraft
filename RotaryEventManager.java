@@ -461,18 +461,11 @@ public class RotaryEventManager {
 			ArrayList<EntityItem> li = ev.drops;
 			li.clear();
 			e.captureDrops = true;
-			try {
-				ReikaObfuscationHelper.getMethod("dropFewItems").invoke(e, true, looting);
-				ReikaObfuscationHelper.getMethod("dropEquipment").invoke(e, true, dmg.hasInfinity() ? 100 : looting*4);
-				int rem = RotaryCraft.rand.nextInt(200) - looting*4;
-				if (rem <= 5 || dmg.hasInfinity())
-					ReikaObfuscationHelper.getMethod("dropRareDrop").invoke(e, 1);
-			}
-			catch (Exception ex) {
-				RotaryCraft.logger.debug("Could not process harvester drops event!");
-				if (RotaryCraft.logger.shouldDebug())
-					ex.printStackTrace();
-			}
+			ReikaObfuscationHelper.invoke("dropFewItems", e, true, looting);
+			ReikaObfuscationHelper.invoke("dropEquipment", e, true, dmg.hasInfinity() ? 100 : looting*4);
+			int rem = RotaryCraft.rand.nextInt(200) - looting*4;
+			if (rem <= 5 || dmg.hasInfinity())
+				ReikaObfuscationHelper.invoke("dropRareDrop", e, 1);
 			e.captureDrops = false;
 		}
 	}
