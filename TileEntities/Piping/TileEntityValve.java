@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -25,7 +25,7 @@ public class TileEntityValve extends TileEntityPiping {
 	private int level;
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry p) {
+	public boolean canConnectToPipe(MachineRegistry p, ForgeDirection dir) {
 		return p.isStandardPipe() || p == MachineRegistry.HOSE || p == MachineRegistry.FUELLINE || p == MachineRegistry.SEPARATION;
 	}
 

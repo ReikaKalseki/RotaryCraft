@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Interfaces.TileEntity.PlaceNotification;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -42,6 +43,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -191,6 +193,11 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			}
 			return true;
 		}
+
+		if (m.isPipe()) {
+			((TileEntityPiping)world.getTileEntity(x, y, z)).onPlacedAgainst(ForgeDirection.VALID_DIRECTIONS[side].getOpposite());
+		}
+
 		if (m.hasModel()) {
 			if (m.is6Sided())
 				te.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
@@ -219,6 +226,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			if (m.isZFlipped()) {
 				RotaryAux.flipZMetadatas(world.getTileEntity(x, y, z));
 			}
+
 		}
 		return true;
 	}

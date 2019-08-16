@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -97,7 +97,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	}
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry m) {
+	public boolean canConnectToPipe(MachineRegistry m, ForgeDirection dir) {
 		return m == MachineRegistry.BEDPIPE || m.isStandardPipe() || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 

@@ -616,18 +616,21 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.registerSmelteryCasting(ItemStacks.steelingot, hslaFluid, 750, ItemStacks.steelblock);
 			}
 
-			if (ModList.CHROMATICRAFT.isLoaded()) {
-				for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-					MachineRegistry m = MachineRegistry.machineList.get(i);
-					if (!m.allowsAcceleration()) {
+			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+				MachineRegistry m = MachineRegistry.machineList.get(i);
+				if (!m.allowsAcceleration()) {
+					if (ModList.CHROMATICRAFT.isLoaded()) {
 						AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
-						TimeTorchHelper.blacklistTileEntity(m.getTEClass());
 					}
+					TimeTorchHelper.blacklistTileEntity(m.getTEClass());
 				}
-				for (int i = 0; i < EngineType.engineList.length; i++) {
-					EngineType type = EngineType.engineList[i];
+			}
+			for (int i = 0; i < EngineType.engineList.length; i++) {
+				EngineType type = EngineType.engineList[i];
+				if (ModList.CHROMATICRAFT.isLoaded()) {
 					AcceleratorBlacklist.addBlacklist(type.engineClass, type.name(), BlacklistReason.EXPLOIT);
 				}
+				TimeTorchHelper.blacklistTileEntity(type.engineClass);
 			}
 
 			if (ModList.THAUMCRAFT.isLoaded()) {

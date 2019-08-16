@@ -1029,7 +1029,7 @@
 	</particle>
 	<lawnsprinkler>
 		<desc>
-			The ground sprinkler is a ground-mounted variety of the overheat sprinkler, and can put out fire, hydrate farmland, and increase the growth rate of crops. Due to the higher water volume it consumes, it is more effective than its ceiling variety. Note that high water pressures can be dangerous.
+			The ground sprinkler is a ground-mounted variety of the overhead sprinkler, and can put out fire, hydrate farmland, and increase the growth rate of crops. Due to the higher water volume it consumes, it is more effective than its ceiling variety. Note that high water pressures can be dangerous.
 		</desc>
 		<note>
 		</note>

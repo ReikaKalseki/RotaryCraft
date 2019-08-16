@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -237,8 +237,13 @@ public final class OreForcer {
 
 	private void intercraftEssence() {
 		ItemStack ore = EssenceType.ESSENCE.getEssence();
-		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
-		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
+		if (ore != null) {
+			GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
+			RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
+		}
+		else {
+			RotaryCraft.logger.logError("Could not find essence item, cannot add intercraft recipe!");
+		}
 	}
 
 	private void convertUranium() {

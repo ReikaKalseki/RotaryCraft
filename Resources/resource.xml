@@ -52,7 +52,7 @@
 		Yeast is cultivated in the fermenter by adding sugar and water to dirt. It grows best at temperatures between 20 and 40 degrees, peaking at 25 degrees. Outside this range, it will grow slowly or not at all. Be careful - at temperatures above 60C, yeast will die. Ethanol sludge is made from adding yeast to plant matter and water. It is created most rapidly at around 35C.
 	</yeast>
 	<ethanol>
-		Ethanol crystals are made from fermenting, purifying, then drying plant matter. These crystals can then be used as fuel in the ethanol and performance engines, as well as some other things.
+		Ethanol crystals are made from fermenting, then purifying in a centrifuge, then drying plant matter. These crystals can then be used as fuel in the ethanol and performance engines, as well as some other things.
 	</ethanol>
 	<bedingot>
 		A bedrock ingot is used in the crafting of bedrock tools, armor, and some machines.

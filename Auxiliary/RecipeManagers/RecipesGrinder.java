@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -387,7 +387,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 				n *= 3;
 			for (ItemStack is : li) {
 				if (recipes.containsKey(is)) {
-					OreType mod = (OreType)ExtractorModOres.getOreFromExtract(recipes.get(is).output);
+					OreType mod = ExtractorModOres.getOreFromExtract(recipes.get(is).output);
 					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for grinder registration as "+ore+" as it is already registered to "+mod);
 				}
 				else {
@@ -428,9 +428,17 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 	@Override
 	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
-		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
+		String ore = lb.getString("ore_input");
+		if (ore != null && !ore.isEmpty()) {
+			Collection<ItemStack> c = OreDictionary.getOres(ore);
+			for (ItemStack in : c) {
+				this.addCustomRecipe(in, out);
+			}
+			return true;
+		}
+		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		this.addCustomRecipe(in, out);
 		return true;
 	}

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -50,7 +50,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 	}
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry m) {
+	public boolean canConnectToPipe(MachineRegistry m, ForgeDirection dir) {
 		return m == MachineRegistry.FUELLINE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 

@@ -73,7 +73,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	/** Fuel capacity */
 	public static final int FUELCAP = 240*1000;
-
 	public static final int LUBECAP = 24*1000;
 
 	protected final HybridTank lubricant = new HybridTank("enginelube", LUBECAP);

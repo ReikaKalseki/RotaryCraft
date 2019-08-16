@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -104,6 +104,9 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	private static final RayTracer tracer;
 
+	public static final int BASE_CONSUMPTION = 10;
+	public static final int AFTERBURNER_CONSUMPTION = 25;
+
 	static {
 		tracer = new RayTracer(0, 0, 0, 0, 0, 0);
 	}
@@ -120,7 +123,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	@Override
 	protected int getConsumedFuel() {
-		return this.isAfterburning() ? 25 : 10;
+		return this.isAfterburning() ? AFTERBURNER_CONSUMPTION : BASE_CONSUMPTION;
 	}
 
 	@Override

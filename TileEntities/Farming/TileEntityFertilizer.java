@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,9 @@ package Reika.RotaryCraft.TileEntities.Farming;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneComparator;
+import net.minecraft.block.BlockRedstoneDiode;
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -104,6 +107,8 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		int r = this.getRange();
 		int dx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 		int dy = ReikaRandomHelper.getRandomPlusMinus(y, r);
+		while (dy > y+1)
+			dy = ReikaRandomHelper.getRandomPlusMinus(y, r);
 		int dz = ReikaRandomHelper.getRandomPlusMinus(z, r);
 		Block id = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
@@ -111,7 +116,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		int ddy = dy-y;
 		int ddz = dz-z;
 		double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
-		if (id != Blocks.air && dd <= this.getRange()) {
+		if (id != Blocks.air && dd <= this.getRange() && this.canTick(world, dx, dy, dz)) {
 			int n = this.getConsecutiveUpdates();
 			for (int i = 0; i < n; i++) {
 				id.updateTick(world, dx, dy, dz, rand);
@@ -127,6 +132,11 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 				ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.FERTILIZER.getMinValue(), dx, dy, dz, new PacketTarget.RadiusTarget(world, dx, dy, dz, 32));
 			}
 		}
+	}
+
+	private boolean canTick(World world, int dx, int dy, int dz) {
+		Block b = world.getBlock(dx, dy, dz);
+		return !(b instanceof BlockRedstoneDiode || b instanceof BlockRedstoneComparator || b instanceof BlockRedstoneWire);
 	}
 
 	private void consumeItem() {

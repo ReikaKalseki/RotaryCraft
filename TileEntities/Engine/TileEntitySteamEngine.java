@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -133,6 +133,8 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
+		if (water.isEmpty())
+			return;
 		temperature = MAXTEMP;
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 17, false, 1F, false, true, 2F);
 		RotaryAchievements.OVERPRESSURE.triggerAchievement(this.getPlacer());

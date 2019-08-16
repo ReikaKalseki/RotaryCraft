@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -90,7 +90,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	public abstract int getFluidLevel();
 
-	public abstract boolean canConnectToPipe(MachineRegistry p);
+	public abstract boolean canConnectToPipe(MachineRegistry p, ForgeDirection side);
 
 	protected abstract void setFluid(Fluid f);
 
@@ -186,7 +186,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			return false;
 		MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
 		if (m != null && m.isPipe())
-			return this.canConnectToPipe(m);
+			return this.hasReciprocalConnectivity((TileEntityPiping)this.getAdjacentTileEntity(side), side);
 		TileEntity te = this.getAdjacentTileEntity(side);
 		if (te instanceof WorldRift) {
 			return true;
@@ -259,7 +259,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
-					if (this.canConnectToPipe(tp.getMachine()) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
+					if (this.hasReciprocalConnectivity(tp, dir) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
 						//ReikaJavaLibrary.pConsole(dir, this.getSide() == Side.SERVER && this instanceof TileEntitySeparatorPipe);
 						if (tp.canIntakeFluid(f)) {
 							int otherlevel = tp.getFluidLevel();
@@ -339,7 +339,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 				if (te instanceof TileEntityPiping) {
 					TileEntityPiping tp = (TileEntityPiping)te;
-					if (this.canConnectToPipe(tp.getMachine()) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
+					if (this.hasReciprocalConnectivity(tp, dir) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
 						Fluid f = tp.getFluidType();
 						int amt = tp.getFluidLevel();
 						int dL = amt-this.getFluidLevel();
@@ -481,7 +481,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			return true;
 		}
 		if (tile instanceof TileEntityPiping)
-			return ((TileEntityPiping) tile).canConnectToPipe(m);
+			return this.hasReciprocalConnectivity((TileEntityPiping)tile, dir);
 		else if (tile instanceof PipeConnector) {
 			PipeConnector pc = (PipeConnector)tile;
 			return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir.getOpposite());
@@ -560,7 +560,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	@Override
 	public final boolean canTransferTo(PumpablePipe p, ForgeDirection dir) {
-		return p instanceof TileEntityPiping && this.canConnectToPipe(((TileEntityPiping)p).getMachine());
+		return p instanceof TileEntityPiping && this.hasReciprocalConnectivity((TileEntityPiping)p, dir);
+	}
+
+	public final boolean hasReciprocalConnectivity(TileEntityPiping te, ForgeDirection dir) {
+		return te != null && this.canConnectToPipe(te.getMachine(), dir) && te.canConnectToPipe(this.getMachine(), dir.getOpposite());
 	}
 
 	@Override
@@ -572,6 +576,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			if (te.getFluidLevel() == 0)
 				te.setFluid(null);
 		}
+	}
+
+	public void onPlacedAgainst(ForgeDirection dir) {
+
 	}
 
 	public static enum TransferAmount {
