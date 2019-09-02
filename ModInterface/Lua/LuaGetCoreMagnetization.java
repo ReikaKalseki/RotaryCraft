@@ -16,9 +16,9 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.MagnetizationCore;
 
 import dan200.computercraft.api.lua.LuaException;
 
-public class LuaCoreMagnetization extends LuaMethod {
+public class LuaGetCoreMagnetization extends LuaMethod {
 
-	public LuaCoreMagnetization() {
+	public LuaGetCoreMagnetization() {
 		super("getMagnetization", MagnetizationCore.class);
 	}
 

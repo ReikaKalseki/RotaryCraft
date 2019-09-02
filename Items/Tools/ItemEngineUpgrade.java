@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
 import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -90,7 +91,10 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 		AFTERBURNER("upgrade.afterburn"),
 		EFFICIENCY("upgrade.efficiency"),
 		FLUX("upgrade.flux"),
-		REDSTONE("upgrade.redstone");
+		REDSTONE("upgrade.redstone"),
+		LODESTONE("upgrade.lodestone"); //Requires ReC lodestone
+
+		public static final Upgrades[] list = values();
 
 		private final String desc;
 
@@ -100,6 +104,10 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 
 		public String getName() {
 			return StatCollector.translateToLocal(desc);
+		}
+
+		public ItemStack getStack() {
+			return ItemRegistry.UPGRADE.getStackOfMetadata(this.ordinal());
 		}
 	}
 

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
+import Reika.DragonAPI.Instantiable.Rendering.TessellatorVertexList;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -51,22 +52,22 @@ public class RenderClutch extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 90;
-				break;
-			case 3:
-				var11 = 270;
-				break;
-			case 4:
-			case 5:
-				var11 = 0;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 90;
+					break;
+				case 3:
+					var11 = 270;
+					break;
+				case 4:
+				case 5:
+					var11 = 0;
+					break;
 			}
 
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
@@ -104,38 +105,48 @@ public class RenderClutch extends RotaryTERenderer
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-		double h = tile.getBlockMetadata() >= 4 ? 0.5625 : 0.35;
-		double h2 = h-0.125;
+		boolean vert = tile.getBlockMetadata() >= 4;
+		double h = vert ? 0.6 : 0.35;
+		double h2 = vert ? 1-h : h-0.125;
+		if (tile.getBlockMetadata() < 4 && tile.isFlipped) {
+			h = 1-h;
+			h2 = 1-h2;
+		}
 		double w = 0.225;
 
+		TessellatorVertexList tv5 = new TessellatorVertexList();
 		Tessellator v5 = Tessellator.instance;
+		tv5.addVertex(0.5-w, h, 0.5+w);
+		tv5.addVertex(0.5+w, h, 0.5+w);
+		tv5.addVertex(0.5+w, h, 0.5-w);
+		tv5.addVertex(0.5-w, h, 0.5-w);
+
+		tv5.addVertex(0.5+w, h2, 0.5-w);
+		tv5.addVertex(0.5-w, h2, 0.5-w);
+		tv5.addVertex(0.5-w, h, 0.5-w);
+		tv5.addVertex(0.5+w, h, 0.5-w);
+
+		tv5.addVertex(0.5+w, h, 0.5+w);
+		tv5.addVertex(0.5-w, h, 0.5+w);
+		tv5.addVertex(0.5-w, h2, 0.5+w);
+		tv5.addVertex(0.5+w, h2, 0.5+w);
+
+		tv5.addVertex(0.5-w, h, 0.5+w);
+		tv5.addVertex(0.5-w, h, 0.5-w);
+		tv5.addVertex(0.5-w, h2, 0.5-w);
+		tv5.addVertex(0.5-w, h2, 0.5+w);
+
+		tv5.addVertex(0.5+w, h2, 0.5+w);
+		tv5.addVertex(0.5+w, h2, 0.5-w);
+		tv5.addVertex(0.5+w, h, 0.5-w);
+		tv5.addVertex(0.5+w, h, 0.5+w);
+
 		v5.startDrawingQuads();
-		v5.setBrightness(240);
 		v5.setColorRGBA_I(c, 240);
-		v5.addVertex(0.5-w, h, 0.5+w);
-		v5.addVertex(0.5+w, h, 0.5+w);
-		v5.addVertex(0.5+w, h, 0.5-w);
-		v5.addVertex(0.5-w, h, 0.5-w);
-
-		v5.addVertex(0.5+w, h2, 0.5-w);
-		v5.addVertex(0.5-w, h2, 0.5-w);
-		v5.addVertex(0.5-w, h, 0.5-w);
-		v5.addVertex(0.5+w, h, 0.5-w);
-
-		v5.addVertex(0.5+w, h, 0.5+w);
-		v5.addVertex(0.5-w, h, 0.5+w);
-		v5.addVertex(0.5-w, h2, 0.5+w);
-		v5.addVertex(0.5+w, h2, 0.5+w);
-
-		v5.addVertex(0.5-w, h, 0.5+w);
-		v5.addVertex(0.5-w, h, 0.5-w);
-		v5.addVertex(0.5-w, h2, 0.5-w);
-		v5.addVertex(0.5-w, h2, 0.5+w);
-
-		v5.addVertex(0.5+w, h2, 0.5+w);
-		v5.addVertex(0.5+w, h2, 0.5-w);
-		v5.addVertex(0.5+w, h, 0.5-w);
-		v5.addVertex(0.5+w, h, 0.5+w);
+		v5.setBrightness(240);
+		if (tile.isFlipped)
+			tv5.reverse();
+		tv5.render();
 		v5.draw();
 
 		v5.startDrawing(GL11.GL_LINE_LOOP);

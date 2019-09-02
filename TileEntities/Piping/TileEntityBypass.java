@@ -48,6 +48,7 @@ public class TileEntityBypass extends TileEntityPiping {
 					tb.tryForcedConnection[dir.getOpposite().ordinal()] = true;
 					this.forceConnect(dir);
 					tb.forceConnect(dir.getOpposite());
+					tb.queueConnectionEvaluation(2);
 				}
 			}
 		}

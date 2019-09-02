@@ -128,7 +128,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	}
 
 	public void reloadData() {
-		data = inv[0] != null ? new MatchData(inv[0]).loadFrom(data) : null;
+		this.setData(inv[0] != null ? new MatchData(inv[0]).loadFrom(data) : null);
 	}
 
 	@Override
@@ -158,13 +158,14 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				((BasicAEInterface)aeGridBlock).setPowerCost(power >= MINPOWER ? 2 : 1);
 			}
 
-			if (network != null && !world.isRemote && inv[1] == null && !MEStacks.isEmpty() && data != null) {
+			if (!world.isRemote && network != null && data != null && inv[1] == null && !MEStacks.isEmpty()) {
 				int idx = rand.nextInt(MEStacks.size());
 				ItemStack is = MEStacks.get(idx);
 				is = ReikaItemHelper.getSizedItemStack(is, is.getMaxStackSize());
 				int ret = (int)network.removeItem(is, false, true);
 				if (ret > 0) {
 					inv[1] = ReikaItemHelper.getSizedItemStack(is, ret);
+					MEStacks.remove(idx);
 				}
 			}
 		}
@@ -224,6 +225,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 	public void setData(MatchData dat) {
 		data = dat;
+		MEStacks.clear();
 	}
 
 	@Override

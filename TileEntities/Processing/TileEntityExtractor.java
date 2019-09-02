@@ -464,9 +464,12 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.canProcess(0) && !this.canProcess(1) && !this.canProcess(2) && !this.canProcess(3))
-			return 15;
-		return 0;
+		int bits = 0b1111;
+		for (int i = 0; i < 4; i++) {
+			if (this.canProcess(i))
+				bits &= ~(1 << i);
+		}
+		return bits;
 	}
 
 	@Override

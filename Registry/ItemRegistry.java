@@ -421,7 +421,7 @@ public enum ItemRegistry implements ItemEnum {
 			case RAILGUN:
 				return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
 			case UPGRADE:
-				return ItemEngineUpgrade.Upgrades.values()[dmg].getName();
+				return ItemEngineUpgrade.Upgrades.list[dmg].getName();
 			case MODEXTRACTS:
 				return RotaryNames.getModExtractName(dmg);
 			case MODINGOTS:
@@ -591,7 +591,7 @@ public enum ItemRegistry implements ItemEnum {
 			case BUCKET:
 				return 5;
 			case UPGRADE:
-				return ItemEngineUpgrade.Upgrades.values().length;
+				return ItemEngineUpgrade.Upgrades.list.length;
 			case MODEXTRACTS:
 				return 4*ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
 			case MODINGOTS:

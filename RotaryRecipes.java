@@ -276,17 +276,22 @@ public class RotaryRecipes {
 
 			SmelteryRecipeHandler.addMelting(ItemStacks.ironoreflakes, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
 			SmelteryRecipeHandler.addMelting(ItemStacks.goldoreflakes, new ItemStack(Blocks.gold_block), 500, base, "gold.molten");
-			ModOreList[] ores = {ModOreList.COPPER, ModOreList.TIN, ModOreList.ALUMINUM, ModOreList.SILVER, ModOreList.NICKEL, ModOreList.LEAD, ModOreList.PLATINUM};
+			ModOreList[] ores = {
+					ModOreList.COPPER, ModOreList.TIN, ModOreList.ALUMINUM, ModOreList.SILVER, ModOreList.NICKEL, ModOreList.LEAD, ModOreList.PLATINUM, ModOreList.COBALT, ModOreList.ARDITE
+			};
 			for (ModOreList ore : ores) {
 				if (ore.existsInGame()) {
 					f = ore.name().toLowerCase(Locale.ENGLISH)+".molten";
 					if (FluidRegistry.isFluidRegistered(f)) {
 						temp = ore == ModOreList.ALUMINUM || ore == ModOreList.TIN || ore == ModOreList.LEAD ? 300 : 600;
+						if (ore == ModOreList.COBALT || ore == ModOreList.ARDITE)
+							temp = 800;
 						ItemStack block = ore.getFirstOreBlock();
 						ArrayList<ItemStack> compact = OreDictionary.getOres("block"+ReikaStringParser.capFirstChar(ore.name()));
 						if (!compact.isEmpty())
 							block = compact.get(0);
 						SmelteryRecipeHandler.addMelting(ExtractorModOres.getFlakeProduct(ore), block, temp, base, f);
+						SmelteryRecipeHandler.addMelting(ExtractorModOres.getSmeltedIngot(ore), block, temp*5/4, base, f);
 					}
 				}
 			}

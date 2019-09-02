@@ -55,21 +55,23 @@ public abstract class RecipeHandler {
 		if (enableRegistries) {
 			String s = recipeKeys.get(recipe);
 			if (s == null) {
-				this.generateKey(recipe);
+				s = this.generateKey(recipe);
 			}
+			if (s == null)
+				return;
 			recipesByLevel.addValue(rl, s);
 			recipeLevels.put(s, rl);
 		}
 	}
 
-	private void generateKey(MachineRecipe recipe) {
+	private String generateKey(MachineRecipe recipe) {
 		String s = machine.name()+"$"+recipe.getClass().getSimpleName()+"#("+recipe.getUniqueID();
 		if (RotaryCraft.logger.shouldDebug())
 			ReikaJavaLibrary.pConsole("Recipe Loaded: "+recipe+"="+s);
 		if (recipeKeys.containsValue(s)) {
 			MachineRecipe pre = recipeKeys.inverse().get(s);
 			if (pre == null || pre.equals(recipe)) {
-				return; //do nothing
+				return null; //do nothing
 			}
 			else {
 				RotaryCraft.logger.logError("Found duplicate recipe key when adding recipe "+recipe.getAllInfo()+" in place of "+pre.getAllInfo());
@@ -85,6 +87,7 @@ public abstract class RecipeHandler {
 			}
 		}
 		recipeKeys.put(recipe, s);
+		return s;
 	}
 
 	protected static final String fullIDKeys(Collection<KeyedItemStack> c) {
@@ -131,9 +134,10 @@ public abstract class RecipeHandler {
 				return false;
 			}
 			try {
-				if (this.removeRecipe(rec)) {
+				if (this.removeRecipe(recipe)) {
 					recipesByLevel.remove(rl, rec);
 					recipeLevels.remove(rec);
+					recipeKeys.remove(recipe);
 					return true;
 				}
 				else {

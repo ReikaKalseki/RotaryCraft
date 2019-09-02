@@ -60,6 +60,8 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	private boolean[] connections = new boolean[6];
 	private boolean[] interaction = new boolean[6];
 
+	private int connectionDelay = 0;
+
 	public final int getPressure() {
 		Fluid f = this.getFluidType();
 		int amt = this.getFluidLevel();
@@ -157,6 +159,15 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 				this.overpressure(world, x, y, z);
 			}
 		}
+
+		if (!world.isRemote) {
+			if (connectionDelay > 0) {
+				connectionDelay--;
+				if (connectionDelay == 0) {
+					this.recomputeConnections(world, x, y, z);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -172,6 +183,10 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	@Override
 	public final int getRedstoneOverride() {
 		return 0;
+	}
+
+	protected void queueConnectionEvaluation(int delay) {
+		connectionDelay = 2;
 	}
 
 	protected final boolean canInteractWith(World world, int x, int y, int z, ForgeDirection side) {
@@ -523,6 +538,18 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 		if (worldObj != null && update)
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+		NBT.setInteger("conndelay", connectionDelay);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+		connectionDelay = NBT.getInteger("conndelay");
 	}
 
 	public boolean isConnectedToNonSelf(ForgeDirection dir) {

@@ -77,8 +77,8 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.stone_stairs, new ItemStack(Blocks.gravel, 2, 0), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.cobblestone, 2, 0), RecipeLevel.PERIPHERAL);
 
-		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
-		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE); //create a tar
+		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, RecipeLevel.CORE);
+		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE);
 
 		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 3), RecipeLevel.PERIPHERAL);
 		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), RecipeLevel.CORE);
@@ -312,8 +312,8 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addDualOreDictRecipe("rodBlitz", "dustBlitz", 6, RecipeLevel.MODINTERACT);
 		this.addDualOreDictRecipe("rodBasalz", "dustBasalz", 6, RecipeLevel.MODINTERACT);
 
-		this.addOreDictRecipe("netherrack", ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
-		this.addOreDictRecipe("soulsand", ItemStacks.tar, RecipeLevel.CORE); //create a tar
+		this.addOreDictRecipe("netherrack", ItemStacks.netherrackdust, RecipeLevel.CORE);
+		this.addOreDictRecipe("soulsand", ItemStacks.tar, RecipeLevel.CORE);
 
 		if (ModList.BOTANIA.isLoaded()) {
 			Item petal = GameRegistry.findItem(ModList.BOTANIA.modLabel, "petal");

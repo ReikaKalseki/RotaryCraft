@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -113,6 +113,15 @@ public class BlockDeco extends BlockBasic {
 			return 30;
 		if (world.getBlockMetadata(x, y, z) == ItemStacks.cokeblock.getItemDamage())
 			return 20;
+		return 0;
+	}
+
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+		if (world.getBlockMetadata(x, y, z) == ItemStacks.anthrablock.getItemDamage())
+			return 4;
+		if (world.getBlockMetadata(x, y, z) == ItemStacks.cokeblock.getItemDamage())
+			return 3;
 		return 0;
 	}
 

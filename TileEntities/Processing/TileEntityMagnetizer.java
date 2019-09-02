@@ -31,6 +31,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction, ConditionalOperation, MagnetizationCore {
 
 	private final RedstoneCycleTracker redstone = new RedstoneCycleTracker(3);
+	private boolean hasLodestone = false;
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -139,7 +140,8 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 
 	@Override
 	public int getOperationTime() {
-		return DurationRegistry.MAGNETIZER.getOperationTime(omega);
+		int base = DurationRegistry.MAGNETIZER.getOperationTime(omega);
+		return this.hasLodestoneUpgrade() ? base/2 : base;
 	}
 
 	@Override
@@ -167,14 +169,39 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		return redstone.hasIntegrated();
 	}
 
+	public void addLodestoneUpgrade() {
+		hasLodestone = true;
+	}
+
+	public boolean hasLodestoneUpgrade() {
+		return hasLodestone;
+	}
+
 	@Override
 	public void upgrade(ItemStack is) {
-		this.addRedstoneUpgrade();
+		switch(Upgrades.list[is.getItemDamage()]) {
+			case REDSTONE:
+				this.addRedstoneUpgrade();
+			case LODESTONE:
+				this.addLodestoneUpgrade();
+			default:
+				break;
+		}
 	}
 
 	@Override
 	public boolean canUpgradeWith(ItemStack item) {
-		return !this.hasRedstoneUpgrade() && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.REDSTONE.ordinal();
+		if (ItemRegistry.UPGRADE.matchItem(item)) {
+			switch(Upgrades.list[item.getItemDamage()]) {
+				case REDSTONE:
+					return !this.hasRedstoneUpgrade();
+				case LODESTONE:
+					return !this.hasLodestoneUpgrade();
+				default:
+					return false;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -182,6 +209,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("redstoneUpgrade", redstone.hasIntegrated());
+		NBT.setBoolean("lodestoneUpgrade", hasLodestone);
 	}
 
 	@Override
@@ -191,12 +219,16 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		redstone.reset();
 		if (NBT.getBoolean("redstoneUpgrade"))
 			redstone.addIntegrated();
+		hasLodestone = NBT.getBoolean("lodestoneUpgrade");
 	}
 
 	@Override
 	public void breakBlock() {
 		if (this.hasRedstoneUpgrade()) {
 			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.REDSTONE.ordinal()));
+		}
+		if (this.hasLodestoneUpgrade()) {
+			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.LODESTONE.ordinal()));
 		}
 	}
 
