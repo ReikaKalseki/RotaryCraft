@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,7 +12,7 @@ package Reika.RotaryCraft;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.ModInterface.Lua.LuaMethods;
+import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
@@ -64,7 +64,7 @@ public class CommonProxy
 		ReikaJavaLibrary.initClass(EngineType.class);
 		ReikaJavaLibrary.initClass(PacketRegistry.class);
 		ReikaJavaLibrary.initClass(PowerReceivers.class);
-		ReikaJavaLibrary.initClass(LuaMethods.class);
+		LuaMethod.registerMethods("Reika.RotaryCraft.ModInterface.Lua");
 	}
 
 	public void loadDonatorRender() {

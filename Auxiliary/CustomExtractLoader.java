@@ -137,6 +137,11 @@ public class CustomExtractLoader {
 		public int getDropCount() {
 			return 1;
 		}
+
+		@Override
+		public String getDisplayName() {
+			return displayName;
+		}
 	}
 
 	public final String getSaveFileName() {

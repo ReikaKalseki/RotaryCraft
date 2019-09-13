@@ -128,6 +128,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -255,6 +256,18 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					((TileEntityBase)te).syncAllData(true);
 					return true;
 				}
+			}
+		}
+		if (m == MachineRegistry.FLOODLIGHT) {
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.lens)) {
+				TileEntityFloodlight tile = (TileEntityFloodlight)te;
+				if (!tile.fresnel) {
+					tile.fresnel = true;
+					if (!ep.capabilities.isCreativeMode)
+						is.stackSize--;
+				}
+				((TileEntityBase)te).syncAllData(true);
+				return true;
 			}
 		}
 		if (m == MachineRegistry.BORER) {

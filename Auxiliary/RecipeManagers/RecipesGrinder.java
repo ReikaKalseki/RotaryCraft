@@ -340,6 +340,13 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			this.addRecipe(Blocks.end_stone, endDust, RecipeLevel.MODINTERACT);
 		}
 
+		if (ModList.HARVESTCRAFT.isLoaded()) {
+			ItemStack corn = ReikaItemHelper.lookupItem("harvestcraft:cornItem");
+			ItemStack fla = ReikaItemHelper.lookupItem("harvestcraft:cornflakesItem");
+			if (corn != null && fla != null)
+				this.addRecipe(corn, ReikaItemHelper.getSizedItemStack(fla, 3), RecipeLevel.MODINTERACT);
+		}
+
 		this.addOreDictRecipe("cropCinderpearl", new ItemStack(Items.blaze_powder, 3, 0), RecipeLevel.MODINTERACT);
 		this.addOreDictRecipe("cropShimmerleaf", ReikaItemHelper.getSizedItemStack(ExtractorModOres.getSmeltedIngot(ModOreList.CINNABAR), 3), RecipeLevel.MODINTERACT);
 	}

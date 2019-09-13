@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -72,6 +72,14 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 	protected final double getFiringPositionY(double dy) {
 		double a = dir == 1 ? 0.75 : -0.25;
 		return yCoord+voffset*0+a+dy;
+	}
+
+	public final boolean isValidTheta(double incl) {
+		if (theta < MAXLOWANGLE && dir == 1)
+			return false;
+		if (theta > -MAXLOWANGLE && dir == -1)
+			return false;
+		return true;
 	}
 
 	@Override
@@ -154,23 +162,28 @@ public abstract class TileEntityAimedCannon extends TileEntityPowerReceiver impl
 		double dz = z+0.5-t[2];
 		double[] tg = ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz);
 		tg[1] = Math.abs(tg[1])-90+0.25;
-		tg[1] += this.getThetaOffset();
-		//ReikaJavaLibrary.pConsole("PHI: "+phi+" THETA: "+theta+" for "+tg[2]+", "+tg[1]);
-		if (tg[2] - phi > 180)
-			tg[2] -= 360;
+		this.adjustAim(tg[2], tg[1]);
+	}
+
+	public boolean adjustAim(double ang, double incl) {
+		incl += this.getThetaOffset();
+		//ReikaJavaLibrary.pConsole("PHI: "+phi+" THETA: "+theta+" for "+ang+", "+incl);
+		if (ang - phi > 180)
+			ang -= 360;
 		float movespeed = this.getAimingSpeed();
-		if (phi < tg[2])
+		if (phi < ang)
 			phi += movespeed*2;
-		if (phi > tg[2])
+		if (phi > ang)
 			phi -= movespeed*2;
-		if (theta < tg[1])
+		if (theta < incl)
 			theta += movespeed;
-		if (theta > tg[1])
+		if (theta > incl)
 			theta -= movespeed;
 		if (theta < MAXLOWANGLE && dir == 1)
 			theta = MAXLOWANGLE;
 		if (theta > -MAXLOWANGLE && dir == -1)
 			theta = MAXLOWANGLE;
+		return ReikaMathLibrary.approxr(phi, ang, 3) && ReikaMathLibrary.approxr(theta, incl, 3);
 	}
 
 	protected double getThetaOffset() {

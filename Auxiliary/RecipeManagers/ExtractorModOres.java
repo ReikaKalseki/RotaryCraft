@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -232,5 +232,19 @@ public class ExtractorModOres {
 		FLAKES();
 
 		private static final ExtractorStage[] list = values();
+
+		public String getDisplayName(OreType ore) {
+			switch(this) {
+				case DUST:
+					return "Powdered "+ore.getDisplayName();
+				case SLURRY:
+					return ore.getDisplayName()+" Slurry";
+				case SOLUTION:
+					return ore.getDisplayName()+" Solution";
+				case FLAKES:
+					return ore.getDisplayName()+" Flakes";
+			}
+			return "Invalid";
+		}
 	}
 }

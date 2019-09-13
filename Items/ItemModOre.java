@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,7 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import Reika.DragonAPI.Interfaces.Item.MultisheetItem;
-import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
@@ -87,7 +86,7 @@ public class ItemModOre extends AutoOreItem implements MultisheetItem {
 			return "Null Ore Item";
 		if (ItemRegistry.MODEXTRACTS.matchItem(is)) {
 			ExtractorStage s = ExtractorModOres.getStageFromMetadata(is);
-			return s != null ? ore.displayName+" "+ReikaStringParser.capFirstChar(s.name()) : "null";
+			return s != null ? s.getDisplayName(ore) : "null";
 		}
 		else {
 			return ore.displayName+" "+ore.getTypeName();
