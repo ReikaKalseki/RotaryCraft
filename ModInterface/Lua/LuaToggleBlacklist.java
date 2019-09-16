@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaToggleBlacklist extends LuaMethod {
 
 	public LuaToggleBlacklist() {
@@ -23,7 +21,7 @@ public class LuaToggleBlacklist extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		((TileEntityBlower)te).isWhitelist = !((TileEntityBlower)te).isWhitelist;
 		return null;
 	}

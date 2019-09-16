@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaSetTurret extends LuaMethod {
 
 	public LuaSetTurret() {
@@ -23,13 +21,13 @@ public class LuaSetTurret extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAimedCannon can = (TileEntityAimedCannon) te;
 		can.isCustomAim = true;
 		double tphi = ((Double)args[0]).doubleValue();
 		double ttheta = ((Double)args[1]).doubleValue();
 		if (!can.isValidTheta(ttheta))
-			throw new LuaException("Invalid angle; out of gimbal limits ("+can.MAXLOWANGLE+" degrees below horizontal)");
+			throw new LuaMethodException("Invalid angle; out of gimbal limits ("+can.MAXLOWANGLE+" degrees below horizontal)");
 		boolean ret = can.adjustAim(tphi, ttheta);
 		return new Object[] {ret};
 	}

@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaGetPower extends LuaMethod {
 
 	public LuaGetPower() {
@@ -23,7 +21,7 @@ public class LuaGetPower extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityIOMachine io = (TileEntityIOMachine)te;
 		Object[] o = new Object[3];
 		o[0] = io.power;

@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaGetName extends LuaMethod {
 
 	public LuaGetName() {
@@ -23,7 +21,7 @@ public class LuaGetName extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		return new Object[]{((RotaryCraftTileEntity)te).getMultiValuedName()};
 	}
 

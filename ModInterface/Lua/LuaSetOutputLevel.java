@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaSetOutputLevel extends LuaMethod {
 
 	public LuaSetOutputLevel() {
@@ -23,7 +21,7 @@ public class LuaSetOutputLevel extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		EnergyToPowerBase e = (EnergyToPowerBase) te;
 		if (!e.setOmega(((Integer)args[0]).intValue()))
 			throw new IllegalArgumentException("Invalid power setting out of bounds.");

@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaSetJunction extends LuaMethod {
 
 	public LuaSetJunction() {
@@ -23,7 +21,7 @@ public class LuaSetJunction extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntitySplitter spl = (TileEntitySplitter) te;
 		int ratio = ((Double)args[0]).intValue();
 		int test = Math.abs(ratio);

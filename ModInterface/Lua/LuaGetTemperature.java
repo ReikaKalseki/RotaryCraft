@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaGetTemperature extends LuaMethod {
 
 	public LuaGetTemperature() {
@@ -23,7 +21,7 @@ public class LuaGetTemperature extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		return new Object[]{((TemperatureTE)te).getTemperature()};
 	}
 

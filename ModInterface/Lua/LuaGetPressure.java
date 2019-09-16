@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaGetPressure extends LuaMethod {
 
 	public LuaGetPressure() {
@@ -23,7 +21,7 @@ public class LuaGetPressure extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		return new Object[]{((PressureTE)te).getPressure()};
 	}
 

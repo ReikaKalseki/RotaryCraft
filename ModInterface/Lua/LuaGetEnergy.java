@@ -14,8 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaGetEnergy extends LuaMethod {
 
 	public LuaGetEnergy() {
@@ -23,7 +21,7 @@ public class LuaGetEnergy extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear) te;
 		return adv.getGearType().storesEnergy() ? new Object[]{adv.getEnergy()/20, adv.getMaxStorageCapacity()} : null;
 	}

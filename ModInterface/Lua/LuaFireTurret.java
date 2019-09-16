@@ -15,8 +15,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaFireTurret extends LuaMethod {
 
 	public LuaFireTurret() {
@@ -24,7 +22,7 @@ public class LuaFireTurret extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAimedCannon can = (TileEntityAimedCannon) te;
 		double[] xyz = ReikaPhysicsHelper.polarToCartesian(1, can.theta, can.phi);
 		can.fire(te.worldObj, xyz);

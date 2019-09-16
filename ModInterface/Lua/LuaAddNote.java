@@ -17,8 +17,6 @@ import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Instrument;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.Note;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityMusicBox.NoteLength;
 
-import dan200.computercraft.api.lua.LuaException;
-
 public class LuaAddNote extends LuaMethod {
 
 	public LuaAddNote() {
@@ -26,7 +24,7 @@ public class LuaAddNote extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityMusicBox mus = (TileEntityMusicBox) te;
 		int pitch = ((Double)args[0]).intValue();
 		int channel = ((Double)args[1]).intValue();
