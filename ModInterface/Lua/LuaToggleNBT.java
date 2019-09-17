@@ -21,7 +21,7 @@ public class LuaToggleNBT extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		((TileEntityBlower)te).checkNBT = !((TileEntityBlower)te).checkNBT;
 		return null;
 	}

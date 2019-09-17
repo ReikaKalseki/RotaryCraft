@@ -21,7 +21,7 @@ public class LuaClearChannel extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityMusicBox mus = (TileEntityMusicBox) te;
 		int channel = ((Double)args[0]).intValue();
 		mus.clearChannel(channel);

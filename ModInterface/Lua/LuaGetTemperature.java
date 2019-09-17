@@ -21,7 +21,7 @@ public class LuaGetTemperature extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		return new Object[]{((TemperatureTE)te).getTemperature()};
 	}
 

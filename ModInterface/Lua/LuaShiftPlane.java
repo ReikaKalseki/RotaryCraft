@@ -21,7 +21,7 @@ public class LuaShiftPlane extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityGPR tg = (TileEntityGPR)te;
 		int dir = (int)Math.signum((Double)args[0]);
 		tg.shiftInt(dir);

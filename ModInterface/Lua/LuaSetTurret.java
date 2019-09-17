@@ -21,7 +21,7 @@ public class LuaSetTurret extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAimedCannon can = (TileEntityAimedCannon) te;
 		can.isCustomAim = true;
 		double tphi = ((Double)args[0]).doubleValue();

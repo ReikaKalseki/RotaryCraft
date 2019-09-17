@@ -22,7 +22,7 @@ public class LuaSetTorque extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear) te;
 		if (adv.getGearType() == GearType.COIL) {
 			int tq = ((Double)args[0]).intValue();

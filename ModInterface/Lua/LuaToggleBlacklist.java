@@ -21,7 +21,7 @@ public class LuaToggleBlacklist extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		((TileEntityBlower)te).isWhitelist = !((TileEntityBlower)te).isWhitelist;
 		return null;
 	}

@@ -21,7 +21,7 @@ public class LuaGetEnergy extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear) te;
 		return adv.getGearType().storesEnergy() ? new Object[]{adv.getEnergy()/20, adv.getMaxStorageCapacity()} : null;
 	}

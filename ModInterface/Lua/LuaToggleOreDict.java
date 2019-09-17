@@ -21,7 +21,7 @@ public class LuaToggleOreDict extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		((TileEntityBlower)te).useOreDict = !((TileEntityBlower)te).useOreDict;
 		return null;
 	}

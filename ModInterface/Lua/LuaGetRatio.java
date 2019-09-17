@@ -22,7 +22,7 @@ public class LuaGetRatio extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAdvancedGear adv = (TileEntityAdvancedGear) te;
 		return adv.getGearType() == GearType.CVT ? new Object[]{adv.getRatio()} : null;
 	}

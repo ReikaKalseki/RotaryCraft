@@ -21,7 +21,7 @@ public class LuaGetName extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		return new Object[]{((RotaryCraftTileEntity)te).getMultiValuedName()};
 	}
 

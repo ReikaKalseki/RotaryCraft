@@ -22,7 +22,7 @@ public class LuaSetAfterburner extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		if (((TileEntityJetEngine)te).canAfterBurn()) {
 			((TileEntityJetEngine)te).setBurnerActive((Boolean)args[1]);
 		}

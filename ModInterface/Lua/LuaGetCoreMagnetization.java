@@ -21,7 +21,7 @@ public class LuaGetCoreMagnetization extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		int core = ((MagnetizationCore)te).getCoreMagnetization();
 		return new Object[]{core};
 	}

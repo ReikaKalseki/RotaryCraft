@@ -21,7 +21,7 @@ public class LuaGetAPIPower extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		ShaftMachine s = (ShaftMachine) te;
 		return new Object[]{s.getPower(), s.getTorque(), s.getOmega()};
 	}

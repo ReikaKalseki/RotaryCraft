@@ -22,7 +22,7 @@ public class LuaFireTurret extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityAimedCannon can = (TileEntityAimedCannon) te;
 		double[] xyz = ReikaPhysicsHelper.polarToCartesian(1, can.theta, can.phi);
 		can.fire(te.worldObj, xyz);

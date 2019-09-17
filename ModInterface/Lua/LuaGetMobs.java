@@ -34,7 +34,7 @@ public class LuaGetMobs extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		List<EntityLivingBase> li = ((TileEntityMobRadar)te).getEntities();
 		ArrayList<Object[]> entities = new ArrayList();
 		for (EntityLivingBase e : li) {

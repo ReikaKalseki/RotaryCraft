@@ -22,7 +22,7 @@ public class LuaSetCannonCoord extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		LocationTarget can = (LocationTarget) te;
 		int x = ((Double)args[0]).intValue();
 		int y = ((Double)args[1]).intValue();

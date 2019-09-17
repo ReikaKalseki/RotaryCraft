@@ -22,7 +22,7 @@ public class LuaGetFuelTime extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		int time = ((TileEntityEngine)te).getFuelDuration();
 		return new Object[]{ReikaFormatHelper.getSecondsAsClock(time)};
 	}

@@ -21,7 +21,7 @@ public class LuaGetPower extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityIOMachine io = (TileEntityIOMachine)te;
 		Object[] o = new Object[3];
 		o[0] = io.power;
