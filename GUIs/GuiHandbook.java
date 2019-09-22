@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -290,37 +291,12 @@ public class GuiHandbook extends GuiScreen
 	}
 
 	protected int getNewScreenByTOCButton(int id) {
-		switch(id) {
-			case 0:
-				return HandbookRegistry.TERMS.getScreen();
-			case 1:
-				return HandbookRegistry.MISCDESC.getScreen();
-			case 2:
-				return HandbookRegistry.ENGINEDESC.getScreen();
-			case 3:
-				return HandbookRegistry.TRANSDESC.getScreen();
-			case 4:
-				return HandbookRegistry.PRODMACHINEDESC.getScreen();
-			case 5:
-				return HandbookRegistry.PROCMACHINEDESC.getScreen();
-			case 6:
-				return HandbookRegistry.FARMMACHINEDESC.getScreen();
-			case 7:
-				return HandbookRegistry.ACCMACHINEDESC.getScreen();
-			case 8:
-				return HandbookRegistry.WEPMACHINEDESC.getScreen();
-			case 9:
-				return HandbookRegistry.SURVMACHINEDESC.getScreen();
-			case 10:
-				return HandbookRegistry.COSMACHINEDESC.getScreen();
-			case 11:
-				return HandbookRegistry.UTILMACHINEDESC.getScreen();
-			case 12:
-				return HandbookRegistry.TOOLDESC.getScreen();
-			case 13:
-				return HandbookRegistry.RESOURCEDESC.getScreen();
+		List<HandbookRegistry> li = HandbookRegistry.getCategoryTabs(true);
+		if (id >= li.size()) {
+			ReikaJavaLibrary.pConsole("Could not load screen for #"+id);
+			return 0;
 		}
-		return 0;
+		return li.get(id).getScreen();
 	}
 
 	public void refreshScreen() {
@@ -337,9 +313,10 @@ public class GuiHandbook extends GuiScreen
 		my = Mouse.getY();
 	}
 
-	/** 0 = crafting, 1 = plain, 2 = smelt, 3 = extractor, 4 = compressor, 5 = fermenter, 6 = fractionator, 7 = grinder, 8 = blast */
 	protected PageType getGuiLayout() {
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
+		if (this.isOnTOC())
+			return PageType.TOC;
 		if (h.isPlainGui())
 			return PageType.PLAIN;
 		if (h == HandbookRegistry.BAITBOX && subpage == 1)
@@ -393,7 +370,7 @@ public class GuiHandbook extends GuiScreen
 		if (h == HandbookRegistry.STRONGSPRING)
 			return PageType.BLASTFURNACE;
 
-		if (h.isMachine() || h.isEngine() || h.isTrans()) {
+		if (h.isMachine() || h.isEngine() || h.isTrans() || h.getParent() == HandbookRegistry.CONVERTERDESC) {
 			return PageType.MACHINERENDER;
 		}
 
@@ -415,7 +392,8 @@ public class GuiHandbook extends GuiScreen
 		MACHINERENDER("m"),
 		GREYBOX("n"),
 		BLACKBOX("o"),
-		SOLID("p");
+		SOLID("p"),
+		TOC("a");
 
 		private final String endString;
 
@@ -636,6 +614,9 @@ public class GuiHandbook extends GuiScreen
 		fontRendererObj.drawString(s, posX+xo+6, posY+yo+6, disable ? 0xff0000 : 0x000000);
 		int c = disable ? 0x777777 : 0xffffff;
 		int px = posX+descX;
+		if (this.isOnTOC()) {
+			posY -= 44;
+		}
 		if (subpage == 0 || h.sameTextAllSubpages()) {
 			fontRendererObj.drawSplitString(String.format("%s", h.getData()), px, posY+descY, 242, c);
 		}

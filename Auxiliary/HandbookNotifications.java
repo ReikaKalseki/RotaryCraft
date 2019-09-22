@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -103,7 +103,8 @@ public class HandbookNotifications {
 			this.addEntry(ConfigRegistry.BORERMAINTAIN, Level.SEVERE, "The Borer has been set to require maintenance.");
 			this.addEntry(ConfigRegistry.JETFUELPACK, Level.WARNING, "The jetpack requires jet fuel to operate.");
 			this.addEntry(ConfigRegistry.CONVERTERLOSS, Level.SEVERE, ConfigRegistry.enableConverters() ? "RC to Mod Power Converter Losses Added." : "RC to Mod Power Converters Disabled.");
-			this.addEntry(ConfigRegistry.BEEYEAST, Level.WARNING, "Yeast is a bee product, not a Fermenter output.");
+			if (!ConfigRegistry.enableFermenterYeast())
+				this.addEntry(ConfigRegistry.BEEYEAST, Level.WARNING, "Yeast is a bee product, not a Fermenter output.");
 		}
 
 		private void addEntry(ConfigRegistry cfg, Level lvl, String sg) {

@@ -29,7 +29,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
+import Reika.DragonAPI.Instantiable.Data.Collections.InventoryCache;
 import Reika.DragonAPI.Instantiable.Data.Maps.CountMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
@@ -64,7 +64,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	public static final int SIZE = 18;
 
-	private final ItemCollection ingredients = new ItemCollection();
+	private final InventoryCache ingredients = new InventoryCache();
 	public int[] crafting = new int[SIZE];
 
 	@ModDependent(ModList.APPENG)

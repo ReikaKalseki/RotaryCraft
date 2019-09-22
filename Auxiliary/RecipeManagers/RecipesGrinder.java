@@ -438,7 +438,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
 		String ore = lb.getString("ore_input");
-		if (ore != null && !ore.isEmpty()) {
+		if (ore != null && !ore.isEmpty() && !ore.equals("[NULL DATA]")) {
 			Collection<ItemStack> c = OreDictionary.getOres(ore);
 			for (ItemStack in : c) {
 				this.addCustomRecipe(in, out);

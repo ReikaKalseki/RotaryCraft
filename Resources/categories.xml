@@ -9,17 +9,20 @@
 -->
 <?xml version="1.0"?>
 <categories>
-	<misc>
+	<info>
 		Some important information on operating some machines and some essential tools.
-	</misc>
+	</info>
 	<engine>
 		Perhaps the most crucial of all the machines, engines are used to supply power. Each has their own torque and speed characteristic, but they all generally are high speed and low torque. Each engine also has its own requirements in terms of energy supply, and some engines have their own special quirks that it is wise to know.
 	</engine>
 	<trans>
 		The possibilities would be rather limited if power produced by the engines had to be consumed at the source. Fortunately, it is simple and easy to transport this power, almost losslessly, across any distance you care to. One important thing to note about many of these is that they are directional - they transmit power in only one direction. Machines will render a green cage around their input block(s) and a red one around their output block(s).
 	</trans>
+	<converter>
+		These engines convert between shaft power and another energy source, such as that from another mod.
+	</converter>
 	<procmachine>
-		These machines are used to process materials, either creating new materials, increasing yields, or converting items between mods.
+		These machines are used to process materials, either creating new materials, increasing yields, or refining products.
 	</procmachine>
 	<utilmachine>
 		These are machines which fill specific purposes not easily categorized into the other groups.
@@ -40,8 +43,11 @@
 		Cosmetic machines provide little to no utilitarian bonus, but provide visual or acoustic appeal.
 	</cosmachine>
 	<accmachine>
-		Not terribly useful alone, these machines are designed to work with others to enhance their functionality.
+		Generally not terribly useful alone, these machines are designed to work with others to enhance their functionality.
 	</accmachine>
+	<pipemachine>
+		These "machines" are not really machines, simply pipes to carry fluids from one machine or storage to another.
+	</pipemachine>
 	<tool>
 		These are the tools powered by wound-up coils. Their coil depletes slightly with each use. To recharge them, craft them with a new coil and you will get the old coil back, which can be used again.
 	</tool>

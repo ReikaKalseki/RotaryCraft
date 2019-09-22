@@ -20,7 +20,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
+import Reika.DragonAPI.Instantiable.Data.Collections.InventoryCache;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Instantiable.ModInteract.MEWorkTracker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -49,7 +49,7 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 	private Object aeGridNode;
 	private int AEPowerCost = 1;
 
-	private final ItemCollection output = new ItemCollection();
+	private final InventoryCache output = new InventoryCache();
 
 	private StepTimer checkTimer = new StepTimer(10);
 	private StepTimer cacheTimer = new StepTimer(40);

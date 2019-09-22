@@ -52,13 +52,13 @@ public enum ExtractorBonus {
 	IRIDIUM(ExtractorModOres.getSolutionProduct(ModOreList.IRIDIUM), ExtractorModOres.getFlakeProduct(ModOreList.PLATINUM), 0.5F),
 	TUNGSTEN(ExtractorModOres.getSolutionProduct(ModOreList.TUNGSTEN), ItemStacks.ironoreflakes, 0.75F),
 	OSMIUM(ExtractorModOres.getSolutionProduct(ModOreList.OSMIUM), ItemStacks.ironoreflakes, 0.125F),
-	LAPIS(ItemStacks.lapissolution, ItemStacks.aluminumpowder, 0.125F),
+	LAPIS(ItemStacks.lapissolution, getAluminumOutput(), 0.125F),
 	RUBY(ExtractorModOres.getSolutionProduct(ModOreList.RUBY), ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM), 0.0625F),
 	SAPPHIRE(ExtractorModOres.getSolutionProduct(ModOreList.SAPPHIRE), ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM), 0.0625F),
 	QUARTZ(ItemStacks.quartzsolution, ExtractorModOres.getFlakeProduct(ModOreList.CERTUSQUARTZ), 0.0625F),
 	CERTUS(ExtractorModOres.getSolutionProduct(ModOreList.CERTUSQUARTZ), ItemStacks.quartzflakes, 0.5F),
 	COBALT(ExtractorModOres.getSolutionProduct(ModOreList.COBALT), ExtractorModOres.getFlakeProduct(ModOreList.NICKEL), 0.125F),
-	REDSTONE(ItemStacks.redsolution, ItemStacks.aluminumpowder, 0.25F),
+	REDSTONE(ItemStacks.redsolution, getAluminumOutput(), 0.25F),
 	MAGNETITE(ExtractorModOres.getSolutionProduct(ModOreList.MAGNETITE), ItemStacks.ironoreflakes, 0.2F),
 	MONAZIT(ExtractorModOres.getSolutionProduct(ModOreList.MONAZIT), ExtractorModOres.getFlakeProduct(ModOreList.THORIUM), 0.15F, ModList.REACTORCRAFT),
 	EMERALD(ItemStacks.emeraldsolution, ExtractorModOres.getFlakeProduct(ModOreList.RUBY), 0.1F);
@@ -118,6 +118,10 @@ public enum ExtractorBonus {
 		}
 
 		RotaryCraft.logger.log("Adding extractor bonus "+this.toString());
+	}
+
+	private static ItemStack getAluminumOutput() {
+		return ConfigRegistry.OREALUDUST.getState() ? ExtractorModOres.getFlakeProduct(ModOreList.ALUMINUM) : ItemStacks.aluminumpowder;
 	}
 
 	public static void addCustomOreDelegate(CustomExtractEntry cus) {

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -103,6 +103,7 @@ public final class RotaryDescriptions {
 	private static final XMLInterface parents = loadData("categories");
 	private static final XMLInterface machines = loadData("machines");
 	private static final XMLInterface trans = loadData("trans");
+	private static final XMLInterface converter = loadData("converter");
 	private static final XMLInterface engines = loadData("engines");
 	private static final XMLInterface tools = loadData("tools");
 	private static final XMLInterface resources = loadData("resource");
@@ -205,66 +206,31 @@ public final class RotaryDescriptions {
 	}
 
 	public static void loadData() {
-		List<HandbookRegistry> parenttabs = HandbookRegistry.getCategoryTabs();
+		List<HandbookRegistry> parenttabs = HandbookRegistry.getCategoryTabs(false);
 
-		HandbookRegistry[] enginetabs = HandbookRegistry.getEngineTabs();
+		List<HandbookRegistry> enginetabs = HandbookRegistry.getEngineTabs();
+		List<HandbookRegistry> transtabs = HandbookRegistry.getTransTabs();
+		List<HandbookRegistry> convertertabs = HandbookRegistry.getConverterTabs();
 		List<HandbookRegistry> machinetabs = HandbookRegistry.getMachineTabs();
-		HandbookRegistry[] transtabs = HandbookRegistry.getTransTabs();
-		HandbookRegistry[] tooltabs = HandbookRegistry.getToolTabs();
-		HandbookRegistry[] resourcetabs = HandbookRegistry.getResourceTabs();
-		HandbookRegistry[] misctabs = HandbookRegistry.getMiscTabs();
-		HandbookRegistry[] infotabs = HandbookRegistry.getInfoTabs();
+		List<HandbookRegistry> tooltabs = HandbookRegistry.getToolTabs();
+		List<HandbookRegistry> resourcetabs = HandbookRegistry.getResourceTabs();
+		List<HandbookRegistry> misctabs = HandbookRegistry.getMiscTabs();
+		List<HandbookRegistry> infotabs = HandbookRegistry.getInfoTabs();
 
-		for (int i = 0; i < parenttabs.size(); i++) {
-			HandbookRegistry h = parenttabs.get(i);
+		for (HandbookRegistry h : parenttabs) {
 			String desc = parents.getValueAtNode("categories:"+h.name().toLowerCase(Locale.ENGLISH).substring(0, h.name().length()-4));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < machinetabs.size(); i++) {
-			HandbookRegistry h = machinetabs.get(i);
-			MachineRegistry m = h.getMachine();
-			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
-			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
-			Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
-			desc = String.format(desc, machineData.get(m));
-			aux = String.format(aux, machineNotes.get(m, 0));
-
-			if (XMLInterface.NULL_VALUE.equals(desc))
-				desc = "There is no handbook data for this machine yet.";
-
-			//ReikaJavaLibrary.pConsole(m.name().toLowerCase()+":"+desc);
-
-			if (m.isDummiedOut()) {
-				desc += "\nThis machine is currently unavailable.";
-				if (m.getModDependency() != null && !m.getModDependency().isLoaded())
-					desc += "\nThis machine depends on another mod.";
-				aux += "\nNote: Dummied Out";
-			}
-			if (m.hasPrerequisite()) {
-				aux += "\nDependencies: "+m.getPrerequisite();
-			}
-			if (m.isIncomplete()) {
-				desc += "\nThis machine is incomplete. Use at your own risk.";
-			}
-
-			addEntry(h, desc);
-			notes.put(aux, h, 0);
-
-			if (sub != null) {
-				int k = 0;
-				for (String s : sub) {
-					String val = machines.getValueAtNode(s);
-					val = String.format(val, machineNotes.get(m, k));
-					notes.put(val, h, k);
-					k++;
-					lengths.put(h, k);
-				}
-			}
+		for (HandbookRegistry h : machinetabs) {
+			loadMachineTab(h, machines);
 		}
 
-		for (int i = 0; i < transtabs.length; i++) {
-			HandbookRegistry h = transtabs[i];
+		for (HandbookRegistry h : convertertabs) {
+			loadMachineTab(h, converter);
+		}
+
+		for (HandbookRegistry h : transtabs) {
 			MachineRegistry m = h.getMachine();
 			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase(Locale.ENGLISH));
 			Collection<String> sub = trans.getNodesWithin("trans:"+h.name().toLowerCase(Locale.ENGLISH)+SUBNOTE_SUFFIX);
@@ -299,8 +265,7 @@ public final class RotaryDescriptions {
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < tooltabs.length; i++) {
-			HandbookRegistry h = tooltabs[i];
+		for (HandbookRegistry h : tooltabs) {
 			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase(Locale.ENGLISH));
 			Collection<String> sub = tools.getNodesWithin("tools:"+h.name().toLowerCase(Locale.ENGLISH)+SUBNOTE_SUFFIX);
 
@@ -324,35 +289,31 @@ public final class RotaryDescriptions {
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < resourcetabs.length; i++) {
-			HandbookRegistry h = resourcetabs[i];
+		for (HandbookRegistry h : resourcetabs) {
 			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase(Locale.ENGLISH));
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < misctabs.length; i++) {
-			HandbookRegistry h = misctabs[i];
+		for (HandbookRegistry h : misctabs) {
 			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase(Locale.ENGLISH));
 			//ReikaJavaLibrary.pConsole(desc);
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < infotabs.length; i++) {
-			HandbookRegistry h = infotabs[i];
+		for (HandbookRegistry h : infotabs) {
 			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase(Locale.ENGLISH));
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < enginetabs.length; i++) {
-			HandbookRegistry h = enginetabs[i];
+		for (HandbookRegistry h : enginetabs) {
 			String desc;
 			String aux;
 			Collection<String> sub = null;
-			if (i < EngineType.engineList.length) {
-				EngineType e = EngineType.engineList[i];
+			EngineType e = h.getEngine();
+			if (e != null) {
 				desc = engines.getValueAtNode("engines:"+e.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
 				aux = engines.getValueAtNode("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
 				sub = engines.getNodesWithin("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
@@ -375,14 +336,54 @@ public final class RotaryDescriptions {
 				int k = 0;
 				for (String s : sub) {
 					String val = engines.getValueAtNode(s);
-					if (k == 0 && i < EngineType.engineList.length) {
-						EngineType e = EngineType.engineList[i];
+					if (k == 0 && e != null) {
 						val = String.format(val, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
 					}
 					notes.put(val, h, k);
 					k++;
 					lengths.put(h, k);
 				}
+			}
+		}
+	}
+
+	private static void loadMachineTab(HandbookRegistry h, XMLInterface xml) {
+		MachineRegistry m = h.getMachine();
+		String desc = xml.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
+		String aux = xml.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
+		Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
+		desc = String.format(desc, machineData.get(m));
+		aux = String.format(aux, machineNotes.get(m, 0));
+
+		if (XMLInterface.NULL_VALUE.equals(desc))
+			desc = "There is no handbook data for this machine yet.";
+
+		//ReikaJavaLibrary.pConsole(m.name().toLowerCase()+":"+desc);
+
+		if (m.isDummiedOut()) {
+			desc += "\nThis machine is currently unavailable.";
+			if (m.getModDependency() != null && !m.getModDependency().isLoaded())
+				desc += "\nThis machine depends on another mod.";
+			aux += "\nNote: Dummied Out";
+		}
+		if (m.hasPrerequisite()) {
+			aux += "\nDependencies: "+m.getPrerequisite();
+		}
+		if (m.isIncomplete()) {
+			desc += "\nThis machine is incomplete. Use at your own risk.";
+		}
+
+		addEntry(h, desc);
+		notes.put(aux, h, 0);
+
+		if (sub != null) {
+			int k = 0;
+			for (String s : sub) {
+				String val = xml.getValueAtNode(s);
+				val = String.format(val, machineNotes.get(m, k));
+				notes.put(val, h, k);
+				k++;
+				lengths.put(h, k);
 			}
 		}
 	}

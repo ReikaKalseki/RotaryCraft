@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -224,7 +224,7 @@ public final class HandbookAuxData {
 
 	public static void drawPage(FontRenderer f, RenderItem ri, int screen, int page, int subpage, int dx, int dy) {
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
-		if (h.isMachine() || h.isTrans() || h.isEngine()) {
+		if (h.isMachine() || h.isTrans() || h.isEngine() || h.getParent() == HandbookRegistry.CONVERTERDESC) {
 			List<ItemStack> out = h.getCrafting();
 			if (out == null || out.size() <= 0)
 				return;

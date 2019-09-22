@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Registry;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,12 +43,14 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	//---------------------TOC--------------------//
 	TOC("Table of Contents", "TOC"),
-	MISC("Misc"),
+	INFO("Information"),
 	ENGINES("Engines"),
 	TRANS("Transmission"),
+	CONVERTER("Converters"),
 	PRODMACHINES("Production"),
 	PROCMACHINES("Processing"),
 	FARMMACHINES("Farming"),
+	PIPEMACHINES("Piping"),
 	ACCMACHINES("Accessory"),
 	WEPMACHINES("Weaponry"),
 	SURVMACHINES("Surveying"),
@@ -54,6 +58,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	UTILMACHINES("Utility"),
 	TOOLS("Tools"),
 	RESOURCE("Resources"),
+
 	//---------------------INFO--------------------//
 	TERMS("Basic Terms", "Terms and Physics Explanations"),
 	PHYSICS("Relevant Physics"),
@@ -67,8 +72,9 @@ public enum HandbookRegistry implements HandbookEntry {
 	INTERDIM("Interdimensional Power Transport"),
 	ALERTS("Config Alerts"),
 	PACKMODS("Modpack Changes"),
+
 	//---------------------MISC--------------------//
-	MISCDESC("Important Notes", "Important Notes"),
+	INFODESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
 	CANOLA("Canola", ItemRegistry.CANOLA),
 	METER("Angular Transducer", ItemRegistry.METER),
@@ -76,17 +82,18 @@ public enum HandbookRegistry implements HandbookEntry {
 	ENCHANTING("Enchanting Machines"),
 	MODINTERFACE("Inter-Mod Interactions"),
 	COMPUTERCRAFT("ComputerCraft"),
+
 	//---------------------ENGINES--------------------//
 	ENGINEDESC("Power Supply", "Engines"),
-	DCENGINE(MachineRegistry.ENGINE, EngineType.DC.ordinal()),
-	WINDENGINE(MachineRegistry.ENGINE, EngineType.WIND.ordinal()),
-	STEAMENGINE(MachineRegistry.ENGINE, EngineType.STEAM.ordinal()),
-	GASENGINE(MachineRegistry.ENGINE, EngineType.GAS.ordinal()),
-	ACENGINE(MachineRegistry.ENGINE, EngineType.AC.ordinal()),
-	PERFENGINE(MachineRegistry.ENGINE, EngineType.SPORT.ordinal()),
-	HYDROENGINE(MachineRegistry.ENGINE, EngineType.HYDRO.ordinal()),
-	MICROTURB(MachineRegistry.ENGINE, EngineType.MICRO.ordinal()),
-	JETENGINE(MachineRegistry.ENGINE, EngineType.JET.ordinal()),
+	DCENGINE(MachineRegistry.ENGINE, EngineType.DC),
+	WINDENGINE(MachineRegistry.ENGINE, EngineType.WIND),
+	STEAMENGINE(MachineRegistry.ENGINE, EngineType.STEAM),
+	GASENGINE(MachineRegistry.ENGINE, EngineType.GAS),
+	ACENGINE(MachineRegistry.ENGINE, EngineType.AC),
+	PERFENGINE(MachineRegistry.ENGINE, EngineType.SPORT),
+	HYDROENGINE(MachineRegistry.ENGINE, EngineType.HYDRO),
+	MICROTURB(MachineRegistry.ENGINE, EngineType.MICRO),
+	JETENGINE(MachineRegistry.ENGINE, EngineType.JET),
 	SOLAR(MachineRegistry.SOLARTOWER),
 
 	//---------------------TRANSMISSION--------------------//
@@ -108,6 +115,18 @@ public enum HandbookRegistry implements HandbookEntry {
 	BUS(MachineRegistry.POWERBUS),
 	CHAIN(MachineRegistry.CHAIN),
 
+	//---------------------CONVERTER--------------------//
+	CONVERTERDESC("Conversion Engines", "Converters"),
+	STATIC(MachineRegistry.DYNAMO), //Rotational Dynamo
+	GENERATOR(MachineRegistry.GENERATOR),
+	BOILER(MachineRegistry.BOILER),
+	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
+	DYNAMO(MachineRegistry.MAGNETIC), //Magnetostatic
+	MOTOR(MachineRegistry.ELECTRICMOTOR),
+	STEAMTURB(MachineRegistry.STEAMTURBINE),
+	PNEUMATIC(MachineRegistry.PNEUENGINE),
+	FUELENGINE(MachineRegistry.FUELENGINE),
+
 	//---------------------MACHINES--------------------//
 	PRODMACHINEDESC("Production Machines", "Production"),
 	BLAST(MachineRegistry.BLASTFURNACE),
@@ -118,13 +137,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	BORER(MachineRegistry.BORER),
 	PUMP(MachineRegistry.PUMP),
 	OBSIDIAN(MachineRegistry.OBSIDIAN),
-	PNEUMATIC(MachineRegistry.PNEUENGINE),
-	STEAMTURB(MachineRegistry.STEAMTURBINE),
 	LAVAMAKER(MachineRegistry.LAVAMAKER),
-	MOTOR(MachineRegistry.ELECTRICMOTOR),
 	AGGREGATOR(MachineRegistry.AGGREGATOR),
-	FUELENGINE(MachineRegistry.FUELENGINE),
-	DYNAMO(MachineRegistry.MAGNETIC),
 	FRIDGE(MachineRegistry.REFRIGERATOR),
 
 	PROCMACHINEDESC("Processing Machines", "Processing"),
@@ -135,12 +149,8 @@ public enum HandbookRegistry implements HandbookEntry {
 	PURIFIER(MachineRegistry.PURIFIER),
 	ENHANCER(MachineRegistry.FUELENHANCER),
 	MAGNET(MachineRegistry.MAGNETIZER),
-	AIRCOMPRESSOR(MachineRegistry.COMPRESSOR),
-	BOILER(MachineRegistry.BOILER),
-	GENERATOR(MachineRegistry.GENERATOR),
 	DISTILER(MachineRegistry.DISTILLER),
 	FURNACE(MachineRegistry.BIGFURNACE),
-	STATIC(MachineRegistry.DYNAMO),
 	CRYSTAL(MachineRegistry.CRYSTALLIZER),
 	COMPOST(MachineRegistry.COMPOSTER),
 	CENTRIFUGE(MachineRegistry.CENTRIFUGE),
@@ -160,7 +170,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	LAWNSPRINKLER(MachineRegistry.LAWNSPRINKLER),
 	HYDRATOR(MachineRegistry.HYDRATOR),
 
-	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
+	PIPEMACHINEDESC("Piping", "Piping"),
 	HOSE(MachineRegistry.HOSE.getName(), MachineRegistry.HOSE),
 	PIPE(MachineRegistry.PIPE.getName(), MachineRegistry.PIPE),
 	FUELLINE(MachineRegistry.FUELLINE.getName(), MachineRegistry.FUELLINE),
@@ -168,6 +178,9 @@ public enum HandbookRegistry implements HandbookEntry {
 	BYPASS(MachineRegistry.BYPASS.getName(), MachineRegistry.BYPASS),
 	SEPARATOR(MachineRegistry.SEPARATION.getName(), MachineRegistry.SEPARATION),
 	SUCTION(MachineRegistry.SUCTION.getName(), MachineRegistry.SUCTION),
+	BEDPIPE(MachineRegistry.BEDPIPE.getName(), MachineRegistry.BEDPIPE),
+
+	ACCMACHINEDESC("Accessory Machines", "Aux Machines"),
 	FURNACEHEATER(MachineRegistry.FRICTION),
 	HEATER(MachineRegistry.HEATER),
 	VACUUM(MachineRegistry.VACUUM),
@@ -271,6 +284,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	JUMPBOOTS("Spring Boots"),
 	TANKS(ItemRegistry.FUEL),
 	DISK(ItemRegistry.DISK),
+
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),
@@ -310,7 +324,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	private String title;
 	private ItemStack crafted;
 	private String name;
-
+	private EngineType engine;
 
 	public static final HandbookRegistry[] tabList = HandbookRegistry.values();
 
@@ -319,7 +333,16 @@ public enum HandbookRegistry implements HandbookEntry {
 		offset = o;
 		isParent = false;
 		item = null;
-		crafted = m.getCraftedMetadataProduct(o);
+		crafted = m.getCraftedMetadataProduct(offset);
+	}
+
+	private HandbookRegistry(MachineRegistry m, EngineType o) {
+		machine = m;
+		engine = o;
+		offset = o != null ? o.ordinal() : -1;
+		isParent = false;
+		item = null;
+		crafted = offset >= 0 ? m.getCraftedMetadataProduct(offset) : m.getCraftedProduct();
 	}
 
 	private HandbookRegistry(MachineRegistry m) {
@@ -402,13 +425,23 @@ public enum HandbookRegistry implements HandbookEntry {
 		return -1;
 	}
 
-	public static HandbookRegistry[] getEngineTabs() {
-		int size = TRANSDESC.ordinal()-ENGINEDESC.ordinal()-1;
-		HandbookRegistry[] tabs = new HandbookRegistry[size];
-		System.arraycopy(tabList, ENGINEDESC.ordinal()+1, tabs, 0, size);
-		return tabs;
+	public static List<HandbookRegistry> getEngineTabs() {
+		ArrayList<HandbookRegistry> li = getSubList(ENGINEDESC);
+		Collections.sort(li, tabSorter);
+		return li;
 	}
 
+	public static List<HandbookRegistry> getTransTabs() {
+		ArrayList<HandbookRegistry> li = getSubList(TRANSDESC);
+		Collections.sort(li, tabSorter);
+		return li;
+	}
+
+	public static List<HandbookRegistry> getConverterTabs() {
+		ArrayList<HandbookRegistry> li = getSubList(CONVERTERDESC);
+		Collections.sort(li, tabSorter);
+		return li;
+	}
 
 	public static List<HandbookRegistry> getMachineTabs() {
 		List<HandbookRegistry> tabs = new ArrayList<HandbookRegistry>();
@@ -420,45 +453,43 @@ public enum HandbookRegistry implements HandbookEntry {
 		return tabs;
 	}
 
-	public static HandbookRegistry[] getTransTabs() {
-		int size = PRODMACHINEDESC.ordinal()-TRANSDESC.ordinal()-1;
-		HandbookRegistry[] tabs = new HandbookRegistry[size];
-		System.arraycopy(tabList, TRANSDESC.ordinal()+1, tabs, 0, size);
-		return tabs;
+	public static List<HandbookRegistry> getToolTabs() {
+		ArrayList<HandbookRegistry> li = getSubList(TOOLDESC);
+		return li;
 	}
 
-	public static HandbookRegistry[] getToolTabs() {
-		int size = RESOURCEDESC.ordinal()-TOOLDESC.ordinal()-1;
-		HandbookRegistry[] tabs = new HandbookRegistry[size];
-		System.arraycopy(tabList, TOOLDESC.ordinal()+1, tabs, 0, size);
-		return tabs;
+	public static List<HandbookRegistry> getResourceTabs() {
+		ArrayList<HandbookRegistry> li = getSubList(RESOURCEDESC);
+		return li;
 	}
 
-	public static HandbookRegistry[] getResourceTabs() {
-		int size = tabList.length-RESOURCEDESC.ordinal()-1;
-		HandbookRegistry[] tabs = new HandbookRegistry[size];
-		System.arraycopy(tabList, RESOURCEDESC.ordinal()+1, tabs, 0, size);
-		return tabs;
+	public static List<HandbookRegistry> getMiscTabs() {
+		ArrayList<HandbookRegistry> li = getSubList(INFODESC);
+		return li;
 	}
 
-	public static HandbookRegistry[] getMiscTabs() {
-		int size = ENGINEDESC.ordinal()-MISCDESC.ordinal()-1;
-		HandbookRegistry[] tabs = new HandbookRegistry[size];
-		System.arraycopy(tabList, MISCDESC.ordinal()+1, tabs, 0, size);
-		return tabs;
+	public static List<HandbookRegistry> getInfoTabs() {
+		ArrayList<HandbookRegistry> li = getSubList(TERMS);
+		li.add(0, TERMS);
+		return li;
 	}
 
-	public static HandbookRegistry[] getInfoTabs() {
-		int size = MISCDESC.ordinal()-TERMS.ordinal();
-		HandbookRegistry[] tabs = new HandbookRegistry[size];
-		System.arraycopy(tabList, TERMS.ordinal(), tabs, 0, size);
-		return tabs;
+	private static ArrayList<HandbookRegistry> getSubList(HandbookRegistry parent) {
+		ArrayList<HandbookRegistry> li = new ArrayList();
+		for (int i = parent.ordinal(); i < tabList.length; i++) {
+			HandbookRegistry h = tabList[i];
+			if (h != parent && h.isParent)
+				break;
+			if (!h.isParent)
+				li.add(h);
+		}
+		return li;
 	}
 
-	public static List<HandbookRegistry> getCategoryTabs() {
+	public static List<HandbookRegistry> getCategoryTabs(boolean info) {
 		ArrayList<HandbookRegistry> li = new ArrayList<HandbookRegistry>();
 		for (int i = 0; i < tabList.length; i++) {
-			if (tabList[i].isParent && tabList[i] != TOC && tabList[i] != TERMS)
+			if (tabList[i].isParent && tabList[i] != TOC && (info || tabList[i] != TERMS))
 				li.add(tabList[i]);
 		}
 		return li;
@@ -475,6 +506,10 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	public String getTOCTitle() {
 		return name;
+	}
+
+	public EngineType getEngine() {
+		return engine;
 	}
 
 	public boolean isMachine() {
@@ -494,6 +529,10 @@ public enum HandbookRegistry implements HandbookEntry {
 			return true;
 		if (this.getParent() == ACCMACHINEDESC)
 			return true;
+		if (this.getParent() == PIPEMACHINEDESC)
+			return true;
+		//if (this.getParent() == CONVERTERDESC)
+		//	return true;
 		return false;
 	}
 
@@ -696,7 +735,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	public String getTitle() {
 		if (this == TOC)
-			return "Info";
+			return "Table Of Contents";
 		if (isParent)
 			return title;
 		if (this.getParent() == ENGINEDESC) {
@@ -705,7 +744,7 @@ public enum HandbookRegistry implements HandbookEntry {
 			else
 				return RotaryNames.getEngineName(offset);
 		}
-		if (this.isMachine())
+		if (this.isMachine() || this.getParent() == CONVERTERDESC)
 			return machine.getName();
 		if (machine == MachineRegistry.ADVANCEDGEARS)
 			return RotaryNames.getAdvGearName(offset);
@@ -943,6 +982,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return true;
 		if (this.getParent() == TRANSDESC)
 			return true;
+		if (this.getParent() == CONVERTERDESC)
+			return true;
 		if (this.isMachine())
 			return true;
 		if (machine != null && machine.isPipe())
@@ -1019,16 +1060,20 @@ public enum HandbookRegistry implements HandbookEntry {
 			return ItemStacks.gearunit;
 		if (this == ENGINES)
 			return EngineType.AC.getCraftedProduct();
-		if (this == MISC)
+		if (this == INFO)
 			return ItemRegistry.SCREWDRIVER.getStackOf();
 		if (this == TRANS)
 			return MachineRegistry.GEARBOX.getCraftedMetadataProduct(RotaryNames.getNumberGearTypes()-3);
+		if (this == CONVERTER)
+			return MachineRegistry.MAGNETIC.getCraftedProduct();
 		if (this == PRODMACHINES)
 			return MachineRegistry.BEDROCKBREAKER.getCraftedProduct();
 		if (this == PROCMACHINES)
 			return MachineRegistry.EXTRACTOR.getCraftedProduct();
 		if (this == FARMMACHINES)
 			return MachineRegistry.FAN.getCraftedProduct();
+		if (this == PIPEMACHINES)
+			return MachineRegistry.FUELLINE.getCraftedProduct();
 		if (this == ACCMACHINES)
 			return MachineRegistry.FRICTION.getCraftedProduct();
 		if (this == WEPMACHINES)
@@ -1119,6 +1164,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return false;
 		if (this.getParent() == ENGINEDESC)
 			return true;
+		if (this.getParent() == CONVERTERDESC)
+			return true;
 		if (this.isMachine())
 			return true;
 		if (this == TIERS)
@@ -1140,7 +1187,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
 	@Override
 	public boolean hasMachineRender() {
-		return this.isEngine() || this.isTrans() || this.isMachine();
+		return this.isEngine() || this.isTrans() || this.isMachine() || this.getParent() == CONVERTERDESC;
 	}
 
 	@Override
@@ -1159,5 +1206,33 @@ public enum HandbookRegistry implements HandbookEntry {
 	public int getBonusSubpages() {
 		return RotaryDescriptions.getNotesLength(this)-1;
 	}
+
+	private static Comparator<HandbookRegistry> tabSorter = new Comparator<HandbookRegistry>() {
+
+		@Override
+		public int compare(HandbookRegistry o1, HandbookRegistry o2) {
+			if (o1.isParent != o2.isParent) {
+				if (o1.isParent) {
+					return Integer.MIN_VALUE;
+				}
+				else {
+					return Integer.MAX_VALUE;
+				}
+			}
+			if (o1.machine != null && o2.machine != null) {
+				return o1.machine.compareTo(o2.machine);
+			}
+			else if (o1.machine != null) {
+				return Integer.MIN_VALUE;
+			}
+			else if (o2.machine != null) {
+				return Integer.MAX_VALUE;
+			}
+			else {
+				return o1.compareTo(o2);
+			}
+		}
+
+	};
 
 }

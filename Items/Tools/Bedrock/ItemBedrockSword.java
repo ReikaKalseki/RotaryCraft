@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -129,8 +129,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	}
 
 	@Override
-	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
-	{
+	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
 		return false;
 	}
 
