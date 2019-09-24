@@ -523,7 +523,7 @@ public class RotaryEventManager {
 				if (i != 0 || k != 0) {
 					if (world.getBlock(x+i, y-1, z+k) != Blocks.brick_block)
 						return false;
-					if (!ReikaWorldHelper.matchWithItemStack(world, x+i, y-2, z+k, ReikaItemHelper.stoneDoubleSlab))
+					if (!ReikaWorldHelper.matchWithItemStack(world, x+i, y-2, z+k, ReikaItemHelper.stoneDoubleSlab.asItemStack()))
 						return false;
 				}
 			}

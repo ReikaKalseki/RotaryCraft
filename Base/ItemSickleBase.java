@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -91,7 +91,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool {
 								ReikaSoundHelper.playBreakSound(world, dx, y, dz, Blocks.tallgrass);
 								double ch = this.isBreakable() ? 40 : 80;
 								if (ReikaRandomHelper.doWithChance(ch))
-									ReikaItemHelper.dropItem(world, dx+0.5, y+0.5, dz+0.5, ReikaItemHelper.tallgrass.copy());
+									ReikaItemHelper.dropItem(world, dx+0.5, y+0.5, dz+0.5, ReikaItemHelper.tallgrass.asItemStack());
 							}
 						}
 					}

@@ -1051,7 +1051,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == TIMING)
 			return new ItemStack(Items.clock);
 		if (this == MUFFLING)
-			return ReikaItemHelper.whiteWool;
+			return ReikaItemHelper.whiteWool.asItemStack();
 		if (this == INTERDIM)
 			return new ItemStack(Blocks.portal);
 		if (this == COMPUTERCRAFT)

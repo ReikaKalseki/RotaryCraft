@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -168,7 +168,7 @@ public class BlockShaft extends BlockModelledMachine {
 							todrop = new ItemStack(Blocks.planks, 5, 0);
 							break;
 						case STONE:
-							todrop = ReikaItemHelper.getSizedItemStack(ReikaItemHelper.cobbleSlab, 5);
+							todrop = ReikaItemHelper.getSizedItemStack(ReikaItemHelper.cobbleSlab.asItemStack(), 5);
 							break;
 						case STEEL:
 							todrop = ItemStacks.mount.copy();	//drop mount

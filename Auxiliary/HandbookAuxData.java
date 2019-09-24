@@ -406,7 +406,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.oakWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.oakWood.asItemStack(), dx+166, dy+28);
 					break;
 				case 2:
 					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.BLACK.getStackOf(), dx+72+36, dy+10);
@@ -414,7 +414,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.spruceWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.spruceWood.asItemStack(), dx+166, dy+28);
 					break;
 				case 3:
 					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.WHITE.getStackOf(), dx+72+36, dy+10);
@@ -422,7 +422,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.birchWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.birchWood.asItemStack(), dx+166, dy+28);
 					break;
 				case 4:
 					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.RED.getStackOf(), dx+72+36, dy+10);
@@ -430,7 +430,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.jungleWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.jungleWood.asItemStack(), dx+166, dy+28);
 					break;
 			}
 		}

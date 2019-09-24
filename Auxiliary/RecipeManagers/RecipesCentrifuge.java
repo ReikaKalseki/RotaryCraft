@@ -353,7 +353,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				this.addRecipe(berry, fs, 100, RecipeLevel.MODINTERACT);
 			}
 
-			ItemStack chaff = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
+			ItemStack chaff = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass.asItemStack();
 			ItemStack blueslime = ReikaItemHelper.lookupItem("TConstruct:strangeFood");
 			this.addRecipe(ModWoodList.SLIME.getSaplingID(), null, RecipeLevel.MODINTERACT, new ItemStack(Items.slime_ball), 70, blueslime, 20, chaff, 100);
 		}
@@ -392,7 +392,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			}
 		}
 
-		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
+		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass.asItemStack();
 		this.addRecipe(new ItemStack(Blocks.clay), new FluidStack(FluidRegistry.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.dirt), 100, ItemStacks.silicondust, 75, ItemStacks.ironoreflakes, 0.5F, ItemStacks.goldoreflakes, 0.2F, is, 2.5F);
 
 		this.addGrassToSeeds();
@@ -416,8 +416,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			int wt = weights.get(is);
 			c.addItem(is, ItemRegistry.CANOLA.matchItem(is) ? 10 : wt/total);
 		}
-		this.addRecipe(ReikaItemHelper.tallgrass, c, null, RecipeLevel.PERIPHERAL);
-		this.addRecipe(ReikaItemHelper.fern, c, null, RecipeLevel.PERIPHERAL);
+		this.addRecipe(ReikaItemHelper.tallgrass.asItemStack(), c, null, RecipeLevel.PERIPHERAL);
+		this.addRecipe(ReikaItemHelper.fern.asItemStack(), c, null, RecipeLevel.PERIPHERAL);
 	}
 
 	@Override

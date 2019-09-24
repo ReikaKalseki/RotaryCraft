@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -60,7 +60,7 @@ public enum MobBait {
 	GHAST(EntityGhast.class, 56, Items.glowstone_dust, Items.bow),
 	SILVERFISH(EntitySilverfish.class, 60, Blocks.stonebrick, Items.wooden_pickaxe),
 	VILLAGER(EntityVillager.class, 120, Items.emerald, Blocks.cactus),
-	IRONGOLEM(EntityIronGolem.class, 99, Blocks.wool, ReikaItemHelper.redWool.getItemDamage(), Items.lava_bucket, -1),
+	IRONGOLEM(EntityIronGolem.class, 99, Blocks.wool, ReikaItemHelper.redWool.metadata, Items.lava_bucket, -1),
 	WITCH(EntityWitch.class, 66, Items.nether_wart, Items.ender_pearl),
 	SNOWGOLEM(EntitySnowman.class, 97, Items.carrot, Blocks.torch),
 	BAT(EntityBat.class, 65, Items.melon, Blocks.noteblock),
