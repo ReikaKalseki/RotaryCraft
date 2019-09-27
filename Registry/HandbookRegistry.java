@@ -256,6 +256,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	CHUNKLOADER(MachineRegistry.CHUNKLOADER),
 	FILLER(MachineRegistry.FILLER),
 	SPILLWAY(MachineRegistry.SPILLWAY),
+	BUNDLEDBUS(MachineRegistry.BUNDLEDBUS),
 
 	//---------------------TOOLS--------------------//
 	TOOLDESC("Tool Items", "Tools"),

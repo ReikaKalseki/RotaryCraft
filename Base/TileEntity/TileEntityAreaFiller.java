@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -56,7 +56,7 @@ public abstract class TileEntityAreaFiller extends TileEntityPowerReceiver imple
 				if (blocks.isEmpty()) {
 					int r = ConfigRegistry.SPILLERRANGE.getValue();
 					if (r > 0) {
-						blocks.recursiveAddWithBounds(world, x, y-1, z, Blocks.air, x-r, 0, z-r, x+r, y-1, z+r);
+						blocks.recursiveAddWithBounds(world, x, y-1, z, Blocks.air, x-r, 1, z-r, x+r, y-1, z+r);
 						if (this.allowFluidOverwrite())
 							blocks.recursiveAddLiquidWithBounds(world, x, y-1, z, x-r, 0, z-r, x+r, y-1, z+r, null);
 						if (ReikaBlockHelper.isLiquid(bk.blockID))

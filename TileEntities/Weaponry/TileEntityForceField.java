@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -133,6 +133,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 			if (threat instanceof EntityRailGunShot) {
 				EntityRailGunShot e = (EntityRailGunShot)threat;
 				e.onImpact(null);
+				tickcount = 0;
 			}
 			if (threat instanceof EntityPotion) {
 				if (!threat.isDead) {
@@ -194,7 +195,20 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 				tickcount = 0;
 			}
 			if (threat instanceof EntityPlayer) {
-
+				if (!threat.getUniqueID().equals(placerUUID)) {
+					double dx = threat.posX-xCoord-0.5;
+					double dy = threat.posY-yCoord-1;
+					double dz = threat.posZ-zCoord-0.5;
+					double dd = ReikaMathLibrary.py3d(dx, dy, dz);
+					if (dd >= this.getRange()-1.5) {
+						double v = 1;
+						threat.motionX = v*dx/dd;
+						threat.motionY = v*dy/dd;
+						threat.motionZ = v*dz/dd;
+						threat.velocityChanged = true;
+						tickcount = 0;
+					}
+				}
 			}
 			if (threat instanceof EntityArrow) {
 				if (threat.motionX != 0 || threat.motionZ != 0)
@@ -204,6 +218,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 				if (threat.motionY > 0)
 					threat.motionY = 0;
 				threat.motionZ = 0;
+				tickcount = 0;
 			}
 			if (threat instanceof EntityTNTPrimed) {
 				threat.setDead();
@@ -268,9 +283,9 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 	}
 
 	private boolean isAtBorder(double x, double y, double z) {
-		double dx = x-xCoord;
-		double dy = y-yCoord;
-		double dz = z-zCoord;
+		double dx = x-xCoord-0.5;
+		double dy = y-yCoord-0.5;
+		double dz = z-zCoord-0.5;
 		double dist = ReikaMathLibrary.py3d(dx, dy, dz);
 		if (dist > this.getRange())
 			return false;

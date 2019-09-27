@@ -226,6 +226,20 @@ public class RotaryEventManager {
 		}
 	}
 
+	public void openConduitGUIWithScrewdriver(PlayerInteractEvent evt) {
+		if (!evt.entityPlayer.worldObj.isRemote && evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && ItemRegistry.SCREWDRIVER.matchItem(evt.entityPlayer.getCurrentEquippedItem())) {
+			Block b = evt.world.getBlock(evt.x, evt.y, evt.z);
+			if (b.getClass().getName().equals("crazypants.enderio.conduit.BlockConduitBundle")) {
+				try {
+					conduitGui.invoke(null, evt.world, evt.x, evt.y, evt.z, evt.entityPlayer);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	/*
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)

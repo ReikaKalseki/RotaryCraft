@@ -124,13 +124,13 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 							ArrayList<ItemStack> li = world.getBlock(x, y, z).getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 							ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
 						}
+						return true;
 					}
-					return true;
 				}
 			}
 		}
 		Block b = world.getBlock(x, y, z);
-		if (!ep.isSneaking() && b.rotateBlock(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[s])) {
+		if (!world.isRemote && !ep.isSneaking() && b.rotateBlock(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[s])) {
 			return true;
 		}
 		return false;

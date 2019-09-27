@@ -232,7 +232,7 @@
 	</heater>
 	<obsidian>
 		<desc>
-			The obsidian factory will mix piped-in water and lava to produce obsidian. Be careful; if the machine is left full of only lava too long, it will start to overheat and will eventually melt.
+			The obsidian factory will mix piped-in water and lava to produce obsidian. Be careful; if the machine is left full of only lava too long, it will start to overheat and will eventually melt. Its ability to produce obsidian is temperature-dependent; too hot or cold and it will produce increasingly large amounts of stone or cobblestone instead.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -453,7 +453,8 @@
 			The liquid spiller is designed to fill a depression with liquid piped into it. Each bucket worth pumped in equates to one placed liquid block. It will fill the lowest layers first.
 		</desc>
 		<note>
-			Required Power: %dW
+			Base Required Power: %dW
+			Rises with increased fluid viscosity
 			Power Input: Any side
 			
 			Requires piped liquid to operate
@@ -959,7 +960,7 @@
 			Power Input: Bottom
 			Required Power: %dW
 			Required Torque: %d Nm
-			Storage Capacity: f*10^(0.5*log_2(torque))/40 mB, f = 1 for liquids and 8 for gases
+			Storage Capacity: f*10^(log_2(torque)/2)/40 mB, f = 1 for liquids and 8 for gases
 		</note>
 	</gastank>
 	<crafter>
@@ -1095,14 +1096,14 @@
 			Can run on ethanol or jet fuel; the latter burns hotter and more damagingly
 		</note>
 	</flameturret>
-	<name>
+	<bundledbus>
 		<desc>
-			
+			The bundled signal extractor is a 16-in-1 export bus, controllable with ProjectRed-style bundled cable. This is particularly useful with computer control, as it can in the space of one block dynamically export up to 16 item types into a processing machine.
 		</desc>
 		<note>
 			
 		</note>
-	</name>
+	</bundledbus>
 	<name>
 		<desc>
 			

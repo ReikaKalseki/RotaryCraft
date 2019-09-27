@@ -36,6 +36,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
 import Reika.RotaryCraft.API.Interfaces.CustomFanEntity;
@@ -78,6 +79,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		power = (long)omega*(long)torque;
+		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+			return;
 		this.makeBeam(world, x, y, z, meta);
 		sound.update();
 		if (omega > 0) {

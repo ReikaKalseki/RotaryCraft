@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -139,7 +139,8 @@ public class ItemGravelGun extends ItemChargedTool {
 			if (infov.size() > 0) {
 				if (!ep.capabilities.isCreativeMode)
 					ReikaInventoryHelper.findAndDecrStack(Blocks.gravel, -1, ep.inventory.mainInventory);
-				return new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-this.getChargeConsumed(is.getItemDamage()));
+				is.setItemDamage(is.getItemDamage()-this.getChargeConsumed(is.getItemDamage()));
+				return is;
 			}
 		}
 		return is;

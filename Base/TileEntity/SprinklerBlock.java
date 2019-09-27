@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -65,7 +66,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getLiq(world, x, y, z, meta);
 
-		if (this.canPerformEffects()) {
+		if (this.canPerformEffects() && !AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false)) {
 			this.performEffects(world, x, y, z);
 			soundTimer.update();
 			if (soundTimer.checkCap()) {

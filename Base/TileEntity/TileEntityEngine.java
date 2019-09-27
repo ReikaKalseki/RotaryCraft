@@ -41,6 +41,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -61,7 +62,6 @@ import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
-import micdoodle8.mods.galacticraft.api.world.OxygenHooks;
 
 @Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
 public abstract class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
@@ -160,11 +160,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		}
 		if (this.isDrowned(world, x, y, z))
 			return false;
-		if (ModList.GALACTICRAFT.isLoaded()) {
-			if (OxygenHooks.noAtmosphericCombustion(world.provider)) {
-				return OxygenHooks.inOxygenBubble(world, x+0.5, y+0.5, z+0.5) && OxygenHooks.checkTorchHasOxygen(world, blockType, x, y, z);
-			}
-		}
+		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, true))
+			return false;
 		return true;
 	}
 

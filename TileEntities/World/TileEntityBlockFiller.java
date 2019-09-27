@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
@@ -75,6 +76,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 		return bk.blockID != Blocks.air ? bk : null;
 	}
 
+	@ModDependent(ModList.BOTANIA)
 	private BlockKey getBlockFromBotania(IBlockProvider item, ItemStack is) {
 		if (is.stackTagCompound == null)
 			return null;
@@ -135,8 +137,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 		blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 
-		if (this.getBlockType() != Blocks.air)
-		{
+		if (this.getBlockType() != Blocks.air) {
 			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
 		}
 		//this.onInventoryChanged();
@@ -176,8 +177,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
+	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -196,8 +196,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
+	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
 		NBTTagList nbttaglist = NBT.getTagList("Items", NBTTypes.COMPOUND.ID);

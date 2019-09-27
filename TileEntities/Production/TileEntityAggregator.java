@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,6 +20,7 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidProducer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -52,6 +53,9 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 			return;
 
 		if (temperature >= this.getMaxTemperature())
+			return;
+
+		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
 			return;
 
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
