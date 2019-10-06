@@ -600,7 +600,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.WOODCUTTER.addCrafting("IS ", "PGS", "PPI", 'I', ItemStacks.steelingot, 'S', ItemStacks.saw, 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit);
 
-		MachineRegistry.VACUUM.addCrafting("SwS", "wIw", "SCS", 'C', Blocks.chest, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'w', ReikaItemHelper.blackWool.asItemStack());
+		MachineRegistry.VACUUM.addCrafting("SwS", "wIw", "SCS", 'C', Blocks.chest, 'S', ItemStacks.steelingot, 'I', ItemStacks.impeller, 'w', ReikaItemHelper.blackWool);
 
 		MachineRegistry.BORER.addCrafting("SSS", "DGC", "BBB", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'G', ItemStacks.gearunit, 'C', ItemStacks.pcb);
 
@@ -655,7 +655,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.FILLER.addCrafting("sss", "sps", "s s", 'p', Blocks.chest, 's', ItemStacks.steelingot);
 
-		MachineRegistry.SMOKEDETECTOR.addCrafting(" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab.asItemStack(), 'R', Items.redstone, 'N', Blocks.noteblock);
+		MachineRegistry.SMOKEDETECTOR.addCrafting(" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab, 'R', Items.redstone, 'N', Blocks.noteblock);
 
 		MachineRegistry.IGNITER.addCrafting("OGO", "GCG", "OGO", 'O', Blocks.obsidian, 'G', Items.gold_ingot, 'C', ItemStacks.combustor);
 
@@ -1092,7 +1092,7 @@ public class RotaryRecipes {
 
 		ItemRegistry.FUEL.addRecipe("SBS", "BGB", "SPS", 'P', ItemStacks.pipe, 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'G', Blocks.glass);
 
-		ItemRegistry.DISK.addSizedRecipe(4, "wRw", "RSR", "wRw", 'w', ReikaItemHelper.blackWool.asItemStack(), 'R', Items.redstone, 'S', ItemStacks.steelingot);
+		ItemRegistry.DISK.addSizedRecipe(4, "wRw", "RSR", "wRw", 'w', ReikaItemHelper.blackWool, 'R', Items.redstone, 'S', ItemStacks.steelingot);
 
 		ItemRegistry.CRAFTPATTERN.addSizedRecipe(4, " S ", " B ", " S ", 'S', ItemStacks.steelingot, 'B', ItemStacks.basepanel);
 
@@ -1313,7 +1313,7 @@ public class RotaryRecipes {
 		MachineRegistry.FLYWHEEL.addMetaCrafting(3, "W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount);
 
 		MachineRegistry.SHAFT.addSizedOreRecipe(8, "BSB", "BBB", 'B', "plankWood", 'S', "stickWood");
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 1, "sSs", "sss", 's', ReikaItemHelper.stoneSlab.asItemStack(), 'S', ItemStacks.stonerod);
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 1, "sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod);
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 2, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem);
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 4, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft);
@@ -1362,13 +1362,13 @@ public class RotaryRecipes {
 		MachineRegistry.GEARBOX.addRecipe(new ShapedOreRecipe(gear, new Object[]{"MGM", "MMM", 'M', "plankWood", 'G', ItemStacks.wood16x}));
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(1));
-		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab.asItemStack(), 'G', ItemStacks.stone2x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone2x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(6));
-		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab.asItemStack(), 'G', ItemStacks.stone4x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone4x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(11));
-		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab.asItemStack(), 'G', ItemStacks.stone8x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone8x});
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(16));
-		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab.asItemStack(), 'G', ItemStacks.stone16x});
+		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"MGM", "MMM", 'M', ReikaItemHelper.stoneSlab, 'G', ItemStacks.stone16x});
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(2));
 		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit});
@@ -1441,13 +1441,13 @@ public class RotaryRecipes {
 		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEBLAST.getState(), ReikaItemHelper.stoneBricks, ReikaItemHelper.stoneBricks, ReikaItemHelper.stoneBricks, ReikaItemHelper.stoneBricks);
 
 		Object[] args = {
-				"BaB", "brc", "BdB", 'B', ReikaItemHelper.stoneBricks.asItemStack(), 'r', Items.redstone, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]
+				"BaB", "brc", "BdB", 'B', ReikaItemHelper.stoneBricks, 'r', Items.redstone, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]
 		};
 		return args;
 	}
 
 	public static Object[] getWorktableIngredients() {
-		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEWORK.getState() && !ConfigRegistry.TABLEMACHINES.getState(), null, null, ReikaItemHelper.stoneSlab.asItemStack(), ReikaItemHelper.stoneSlab.asItemStack());
+		Object[] c = RotaryCraft.config.getBlastFurnaceGatingMaterials(ConfigRegistry.GATEWORK.getState() && !ConfigRegistry.TABLEMACHINES.getState(), null, null, ReikaItemHelper.stoneSlab, ReikaItemHelper.stoneSlab);
 
 		ArrayList<Object> li = new ArrayList(Arrays.asList("aCb", "SBS", "crd", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 'a', c[0], 'b', c[1], 'c', c[2], 'd', c[3]));
 

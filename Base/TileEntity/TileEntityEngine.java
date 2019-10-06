@@ -920,13 +920,11 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	@ModDependent(ModList.BCTRANSPORT)
 	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
-		switch(type) {
-			case FLUID:
-				return this.hasATank() && this.canConnectToPipeOnSide(MachineRegistry.BEDPIPE, side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
-			case ITEM:
-				return this.hasAnInventory() ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
-			default:
-				return ConnectOverride.DEFAULT;
-		}
+		if (type == PipeType.FLUID)
+			return this.hasATank() && this.canConnectToPipeOnSide(MachineRegistry.BEDPIPE, side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+		else if (type == PipeType.ITEM)
+			return this.hasAnInventory() ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+		else
+			return ConnectOverride.DEFAULT;
 	}
 }

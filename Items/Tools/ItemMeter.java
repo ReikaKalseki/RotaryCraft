@@ -27,6 +27,7 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.TileEntity.ThermalTile;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Interfaces.PressureTile;
@@ -300,19 +301,7 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (m == MachineRegistry.BEVELGEARS) {
 			TileEntityBevelGear te = (TileEntityBevelGear)tile;
-			int dx = te.getWriteDirection().offsetX;
-			int dy = te.getWriteDirection().offsetY;
-			int dz = te.getWriteDirection().offsetZ;
-			String sdx = String.valueOf(dx);
-			String sdy = String.valueOf(dy);
-			String sdz = String.valueOf(dz);
-			if (dx >= 0)
-				sdx = "+"+sdx;
-			if (dy >= 0)
-				sdy = "+"+sdy;
-			if (dz >= 0)
-				sdz = "+"+sdz;
-			this.sendMessage(ep, String.format("Output side: x%s : y%s : z%s", sdx, sdy, sdz));
+			this.sendMessage(ep, String.format("Output side: %s", ReikaStringParser.capFirstChar(te.getWriteDirection().name())));
 		}
 		if (m == MachineRegistry.BORER) {
 			TileEntityBorer te = (TileEntityBorer)tile;
@@ -341,7 +330,7 @@ public class ItemMeter extends ItemRotaryTool
 		if (m == MachineRegistry.FRACTIONATOR) {
 			TileEntityFractionator te = (TileEntityFractionator)tile;
 			if (te.power >= te.MINPOWER && te.omega >= te.MINSPEED)
-				this.sendMessage(ep, String.format("Efficiency: %.3f%%", te.getYieldRatio()*100));
+				this.sendMessage(ep, String.format("Efficiency: %.3f%%%%", te.getYieldRatio()*100));
 		}
 
 		if (m == null && tile instanceof IFluidHandler) {
