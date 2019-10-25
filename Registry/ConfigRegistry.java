@@ -278,6 +278,11 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	}
 
 	@Override
+	public boolean isAccessible() {
+		return true;
+	}
+
+	@Override
 	public boolean saveIfUnspecified() {
 		switch (this) {
 			case STRONGRECIPEMOD:

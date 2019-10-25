@@ -1,0 +1,6 @@
+{
+	type = "test1"
+	input_fluid = "rc jet fuel"
+	input_amount = 17
+	output = "rotarycraft_stack:redgoldingot*2"
+}

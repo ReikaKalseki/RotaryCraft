@@ -437,9 +437,12 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
-		String ore = lb.getString("ore_input");
-		if (ore != null && !ore.isEmpty() && !ore.equals("[NULL DATA]")) {
+		String ore = lb.containsKey("ore_input") ? lb.getString("ore_input") : null;
+		if (ore != null && !ore.isEmpty() && !ore.startsWith("[NULL")) {
 			Collection<ItemStack> c = OreDictionary.getOres(ore);
+			if (c.isEmpty()) {
+				throw new IllegalArgumentException("Ore tag '"+ore+"' does not map to any existing OreDict tag!");
+			}
 			for (ItemStack in : c) {
 				this.addCustomRecipe(in, out);
 			}

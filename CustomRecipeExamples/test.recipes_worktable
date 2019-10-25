@@ -1,0 +1,23 @@
+--Here is a comment. Pet pet pet. :P
+{
+	type = "test1"
+	shaped = true
+	input_top = "ore:stone, ore:stone, null"
+	input_middle = "minecraft:gold_ingot, null, null"
+	input_bottom = "ore:ingotGold, null, rotarycraft_stack:tungstenflakes"
+	output = "rotarycraft_stack:compost*37"
+}
+{
+	type = "test2"
+	shaped = true
+	input_top = "ore:flower, minecraft:redstone, ore:ingotIron"
+	input_middle = "null, minecraft:cauldron, null"
+	input_bottom = "ore:stone, minecraft:planks:1, rotarycraft_stack:tungstenflakes"
+	output = "rotarycraft_stack:sludge*11"
+}
+{
+	type = "test3"
+	shaped = false
+	input = "ore:flower, minecraft:redstone, ore:ingotIron, minecraft:blaze_rod, ore:stone, minecraft:planks:1, rotarycraft_stack:tungstenflakes"
+	output = "rotarycraft_stack:dryice*13"
+}

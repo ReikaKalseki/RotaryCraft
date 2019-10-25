@@ -1,0 +1,14 @@
+{
+	type = "test1"
+	input = "minecraft:wool:14"
+	output = "minecraft:planks:3"
+	temperature = 420
+	pressure = 1800000
+}
+{
+	type = "test2"
+	input = "minecraft:planks:3"
+	output = "minecraft:planks:2"
+	temperature = 240
+	pressure = 1200000
+}

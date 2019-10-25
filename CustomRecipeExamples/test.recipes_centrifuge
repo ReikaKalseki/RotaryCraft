@@ -1,0 +1,45 @@
+{
+	type = "test1"
+	input = "minecraft:stone"
+	output_fluid = {
+		type = "water"
+		amount = 200
+		chance = 100
+	}
+	output_items = {
+		{
+			item = "minecraft:leaves*3"
+			chance = 40
+		},
+		{
+			item = "rotarycraft_stack:silumin"
+			nbt = {
+				tag1 = false
+			}
+			chance = 0.2
+		}
+	}
+}
+{
+	type = "test2"
+	input = "minecraft:wool:14"
+	output_items = {
+		{
+			item = "minecraft:leaves*3"
+			chance = 20
+		},
+		{
+			item = "rotarycraft_stack:silumin"
+			chance = 0.8
+		}
+	}
+}
+{
+	type = "test3"
+	input = "minecraft:planks"
+	output_fluid = {
+		type = "lava"
+		amount = 500
+		chance = 20
+	}
+}
