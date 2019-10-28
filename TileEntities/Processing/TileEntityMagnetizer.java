@@ -182,8 +182,10 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		switch(Upgrades.list[is.getItemDamage()]) {
 			case REDSTONE:
 				this.addRedstoneUpgrade();
+				break;
 			case LODESTONE:
 				this.addLodestoneUpgrade();
+				break;
 			default:
 				break;
 		}

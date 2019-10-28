@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -242,7 +243,11 @@ public class ItemMeter extends ItemRotaryTool
 
 		if (tile instanceof TileEntityPiping) {
 			TileEntityPiping te = (TileEntityPiping)tile;
-			this.sendMessage(ep, String.format("Pipe has %d mB of %s", te.getFluidLevel(), te.getFluidType().getLocalizedName()));
+			Fluid f = te.getFluidType();
+			if (f != null)
+				this.sendMessage(ep, String.format("Pipe has %d mB of %s", te.getFluidLevel(), f.getLocalizedName()));
+			else
+				this.sendMessage(ep, "Pipe is empty.");
 		}
 
 		if (tile instanceof TileEntitySpringPowered) {
