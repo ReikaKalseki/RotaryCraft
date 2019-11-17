@@ -1015,8 +1015,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			Fluid out = liq.getFluidInOutput();
 			int amtin = liq.getInputLevel();
 			int amtout = liq.getOutputLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getCapacity(), in.getLocalizedName()) : "Empty";
-			String output = out != null ? String.format("%d/%d mB of %s", amtout, liq.getCapacity(), out.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getInputCapacity(), in.getLocalizedName()) : "Empty";
+			String output = out != null ? String.format("%d/%d mB of %s", amtout, liq.getOutputCapacity(), out.getLocalizedName()) : "Empty";
 			currenttip.add("Input Tank: "+input);
 			currenttip.add("Output Tank: "+output);
 		}

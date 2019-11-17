@@ -11,9 +11,11 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -23,9 +25,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Math.MovingAverage;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -51,25 +55,18 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 
 	public boolean idle = false;
 
-	private static final HashSet<KeyedItemStack> ingredients = new HashSet();
+	private static final HashMap<KeyedItemStack, Float> ingredients = new HashMap();
 	private static final Interpolation yield = new Interpolation(false);
 
 	private MovingAverage torqueInput = new MovingAverage(20);
-	/*
-	private final MultiStageProgressBar progress = new MultiStageProgressBar()
-			.addBar(new MachineProgressBar(this, 0.1F))
-			.addBar(new MachineProgressBar(this, 0.2F))
-			.addBar(new MachineProgressBar(this, 0.3F))
-			.addBar(new MachineProgressBar(this, 0.05F))
-			.addBar(new MachineProgressBar(this, 0.35F));
-	 */
+
 	static {
-		ingredients.add(new KeyedItemStack(Items.blaze_powder).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(ItemStacks.coaldust).setIgnoreMetadata(false).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(Items.magma_cream).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(new ItemStack(Items.redstone)).setIgnoreMetadata(false).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(ItemStacks.netherrackdust).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(ItemStacks.tar).setSimpleHash(true));
+		ingredients.put(key(Items.blaze_powder), 1.5F);
+		ingredients.put(key(ItemStacks.coaldust), 1F);
+		ingredients.put(key(Items.magma_cream), 0.75F);
+		ingredients.put(key(ReikaItemHelper.pinkDye), 0.5F);
+		ingredients.put(key(ItemStacks.netherrackdust), 2F);
+		ingredients.put(key(ItemStacks.tar), 1.5F);
 
 		yield.addPoint(0, 0.01);
 		yield.addPoint(100, 0.05); //~ atm
@@ -78,6 +75,14 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 		yield.addPoint(720, 1); //~4MW if minimal-speed gearing, the breakeven point
 		yield.addPoint(850, 1.5); //~6MW
 		yield.addPoint(1000, 2.5); //max
+	}
+
+	private static KeyedItemStack key(Item i) {
+		return key(new ItemStack(i));
+	}
+
+	private static KeyedItemStack key(ItemStack is) {
+		return new KeyedItemStack(is).setSimpleHash(true).setIgnoreMetadata(!is.getHasSubtypes());
 	}
 
 	/*
@@ -90,15 +95,15 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 	 */
 
 	public static boolean isJetFuelIngredient(ItemStack is) {
-		return ingredients.contains(new KeyedItemStack(is).setSimpleHash(true));
+		return ingredients.containsKey(key(is));
 	}
 
 	public static Collection<KeyedItemStack> getIngredients() {
-		return Collections.unmodifiableCollection(ingredients);
+		return Collections.unmodifiableCollection(ingredients.keySet());
 	}
 
 	public void testIdle() {
-		idle = !this.getAllIngredients();
+		idle = !this.hasAllIngredients();
 	}
 
 	@Override
@@ -107,12 +112,15 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 	}
 
 	public int getFuelScaled(int par1) {
-		return (output.getLevel()*par1)/CAPACITY;
+		return (output.getLevel()*par1)/this.getOutputCapacity();
 	}
 
-	public int getMixScaled(int par1) {
-		//ReikaChatHelper.writeInt(this.omega);
-		return (mixTime*par1)/this.getOperationTime();
+	public int getEthanolScaled(int par1) {
+		return (input.getLevel()*par1)/this.getInputCapacity();
+	}
+
+	public int getPressureScaled(int par1) {
+		return (pressure*par1)/MAXPRESSURE;
 	}
 
 	@Override
@@ -182,12 +190,25 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 
 	private void make() {
 		RotaryAchievements.JETFUEL.triggerAchievement(this.getPlacer());
-		for (int i = 0; i < ingredients.size(); i++) {
-			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
-				ReikaInventoryHelper.decrStack(i, inv);
+		if (!worldObj.isRemote) {
+			float consume = ingredients.size()*DifficultyEffects.CONSUMEFRAC.getChance();
+			WeightedRandom<Integer> wr = new WeightedRandom();
+			for (int i = 0; i < ingredients.size(); i++) {
+				ItemStack is = inv[i];
+				KeyedItemStack ks = key(is);
+				float wt = ingredients.get(ks);
+				wr.addEntry(i, wt);
+			}
+			while (consume > 0) {
+				int slot = wr.getRandomEntry();
+				if (consume >= 1 || ReikaRandomHelper.doWithChance(consume))
+					ReikaInventoryHelper.decrStack(slot, inv);
+				wr.remove(slot);
+				consume -= 1;
+			}
 		}
-		if (DifficultyEffects.FRACTIONTEAR.testChance())
-			ReikaInventoryHelper.decrStack(ingredients.size(), inv);
+		float amt = 1000*DifficultyEffects.CONSUMEFRAC.getChance();
+		input.removeLiquid((int)amt);
 		output.addLiquid((int)(this.getYieldRatio()*DifficultyEffects.PRODUCEFRAC.getInt()), FluidRegistry.getFluid("rc jet fuel"));
 	}
 
@@ -203,20 +224,20 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 			return false;
 		if (inv[ingredients.size()].getItem() != Items.ghast_tear) //need a ghast tear as fuel solvent
 			return false;
-		if (!this.getAllIngredients())
+		if (!this.hasAllIngredients())
 			return false;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(allitems));
 		return true;
 	}
 
-	private boolean getAllIngredients() {
-		HashSet<KeyedItemStack> check = new HashSet(ingredients);
+	private boolean hasAllIngredients() {
+		HashSet<KeyedItemStack> check = new HashSet(ingredients.keySet());
 		for (int i = 0; i < ingredients.size(); i++) {
 			if (inv[i] == null)
 				return false;
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ingredients[i.getItem, ingredients[i].getItemDamage()));
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", i)+String.valueOf(this.haveIngredient(ingredients[i.getItem, ingredients[i].getItemDamage())));
-			KeyedItemStack ks = new KeyedItemStack(inv[i]).setSimpleHash(true);
+			KeyedItemStack ks = key(inv[i]);
 			if (!check.contains(ks))
 				return false;
 			check.remove(ks);
@@ -310,6 +331,11 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 	}
 
 	@Override
+	public int getInputCapacity() {
+		return 16000;
+	}
+
+	@Override
 	public int getCapacity() {
 		return CAPACITY;
 	}
@@ -367,7 +393,7 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 
 	@Override
 	public boolean canIntakeFromPipe(MachineRegistry p) {
-		return p.isStandardPipe();
+		return this.canOutputToPipe(p);
 	}
 
 	@Override
