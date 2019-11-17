@@ -120,7 +120,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	GATEBLAST("Enable Blast Furnace recipe gating", false),
 	GATEWORK("Enable Worktable recipe gating", false),
 	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4),
-	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8);
+	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8),
+	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F);
 
 	private String label;
 	private boolean defaultState;
@@ -303,6 +304,10 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 
 	public static boolean enableBeeYeast() {
 		return BEEYEAST.getValue() >= 1;
+	}
+
+	public static float getSmelteryFlakeYield() {
+		return MathHelper.clamp_float(TINKERFLAKES.getFloat(), 0.25F, 2F);
 	}
 
 	@Override

@@ -38,10 +38,13 @@ import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Formula.MathExpression;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MoleculeHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
@@ -274,24 +277,65 @@ public class RotaryRecipes {
 
 			SmelteryRecipeHandler.addMelting(ItemStacks.ironscrap, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
 
-			SmelteryRecipeHandler.addMelting(ItemStacks.ironoreflakes, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
-			SmelteryRecipeHandler.addMelting(ItemStacks.goldoreflakes, new ItemStack(Blocks.gold_block), 500, base, "gold.molten");
-			ModOreList[] ores = {
-					ModOreList.COPPER, ModOreList.TIN, ModOreList.ALUMINUM, ModOreList.SILVER, ModOreList.NICKEL, ModOreList.LEAD, ModOreList.PLATINUM, ModOreList.COBALT, ModOreList.ARDITE
-			};
-			for (ModOreList ore : ores) {
+			ArrayList<OreType> ores = ReikaJavaLibrary.makeListFrom(ModOreList.COPPER, ModOreList.TIN, ModOreList.ALUMINUM, ModOreList.SILVER, ModOreList.NICKEL, ModOreList.LEAD, ModOreList.PLATINUM, ModOreList.COBALT, ModOreList.ARDITE);
+			ores.addAll(0, ReikaJavaLibrary.makeListFromArray(ReikaOreHelper.oreList));
+
+			for (OreType ore : ores) {
 				if (ore.existsInGame()) {
-					f = ore.name().toLowerCase(Locale.ENGLISH)+".molten";
+					String suff = ore == ReikaOreHelper.EMERALD ? "liquid" : "molten";
+					f = ore.name().toLowerCase(Locale.ENGLISH)+"."+suff;
 					if (FluidRegistry.isFluidRegistered(f)) {
+						base = ore == ReikaOreHelper.EMERALD ? 640 : SmelteryRecipeHandler.INGOT_AMOUNT;
+						int flakeYield = (int)(base*ConfigRegistry.getSmelteryFlakeYield());
+
 						temp = ore == ModOreList.ALUMINUM || ore == ModOreList.TIN || ore == ModOreList.LEAD ? 300 : 600;
 						if (ore == ModOreList.COBALT || ore == ModOreList.ARDITE)
 							temp = 800;
+						if (ore == ReikaOreHelper.GOLD || ore == ReikaOreHelper.REDSTONE)
+							temp = 500;
+						if (ore == ReikaOreHelper.EMERALD || ore == ReikaOreHelper.DIAMOND)
+							temp = 700;
 						ItemStack block = ore.getFirstOreBlock();
-						ArrayList<ItemStack> compact = OreDictionary.getOres("block"+ReikaStringParser.capFirstChar(ore.name()));
-						if (!compact.isEmpty())
-							block = compact.get(0);
-						SmelteryRecipeHandler.addMelting(ExtractorModOres.getFlakeProduct(ore), block, temp, base, f);
-						SmelteryRecipeHandler.addMelting(ExtractorModOres.getSmeltedIngot(ore), block, temp*5/4, base, f);
+						if (ore instanceof ReikaOreHelper) {
+							switch((ReikaOreHelper)ore) {
+								case COAL:
+									block = new ItemStack(Blocks.coal_block);
+									break;
+								case IRON:
+									block = new ItemStack(Blocks.iron_block);
+									break;
+								case GOLD:
+									block = new ItemStack(Blocks.gold_block);
+									break;
+								case REDSTONE:
+									block = new ItemStack(Blocks.redstone_block);
+									break;
+								case LAPIS:
+									block = new ItemStack(Blocks.lapis_block);
+									break;
+								case DIAMOND:
+									block = new ItemStack(Blocks.diamond_block);
+									break;
+								case EMERALD:
+									block = new ItemStack(Blocks.emerald_block);
+									break;
+								case QUARTZ:
+									block = new ItemStack(Blocks.quartz_block);
+									break;
+							}
+						}
+						else if (ore instanceof ModOreList) {
+							ArrayList<ItemStack> compact = OreDictionary.getOres("block"+ReikaStringParser.capFirstChar(ore.name()));
+							if (!compact.isEmpty())
+								block = compact.get(0);
+						}
+						if (ore instanceof ReikaOreHelper) {
+							SmelteryRecipeHandler.addMelting(ItemStacks.getFlake((ReikaOreHelper)ore), block, temp, flakeYield, f);
+						}
+						else if (ore instanceof ModOreList) {
+							SmelteryRecipeHandler.addMelting(ExtractorModOres.getFlakeProduct((ModOreList)ore), block, temp, flakeYield, f);
+							SmelteryRecipeHandler.addMelting(ExtractorModOres.getSmeltedIngot((ModOreList)ore), block, temp*5/4, base, f);
+						}
 					}
 				}
 			}

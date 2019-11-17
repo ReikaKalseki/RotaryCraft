@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -47,7 +47,7 @@ public class GuiFractionator extends GuiMachine
 		if (api.isMouseInBox(j+138, j+145, k+17, k+68)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", fct.getLevel(), fct.CAPACITY), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", fct.getInputLevel(), fct.CAPACITY), mx-j, my-k);
 		}
 	}
 
