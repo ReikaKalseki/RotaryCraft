@@ -242,7 +242,7 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 				return false;
 			check.remove(ks);
 		}
-		return true;
+		return input.getLevel() >= 1000*DifficultyEffects.CONSUMEFRAC.getChance();
 	}
 
 	public int getSizeInventory() {

@@ -35,6 +35,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.PlanetDimensionHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
@@ -49,7 +50,6 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import streams.block.FixedFlowBlock;
 
 public class TileEntityHydroEngine extends TileEntityEngine {
@@ -386,10 +386,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 	private double getGravity(World world) {
 		double grav = ReikaPhysicsHelper.g;
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			grav += ig.getGravity()*20; //*20 since tick/s
-		}
+		grav += PlanetDimensionHandler.getExtraGravity(world)*20; //*20 since tick/s
 		return grav;
 	}
 

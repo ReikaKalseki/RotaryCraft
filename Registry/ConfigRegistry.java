@@ -121,7 +121,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	GATEWORK("Enable Worktable recipe gating", false),
 	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4),
 	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8),
-	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F);
+	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F),
+	IC2BLAZECOMPRESS("Increase blaze powder to rod cost in IC2 compressor (exploit fix)", true);
 
 	private String label;
 	private boolean defaultState;

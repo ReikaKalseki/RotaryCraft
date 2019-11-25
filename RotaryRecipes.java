@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
@@ -99,7 +101,10 @@ import buildcraft.energy.fuels.FuelManager;
 import buildcraft.silicon.ItemRedstoneChipset;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.fuels.GeneratorFuel;
+import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.ISemiFluidFuelManager.BurnProperty;
+import ic2.api.recipe.RecipeInputItemStack;
+import ic2.api.recipe.RecipeOutput;
 import ic2.api.recipe.Recipes;
 import minechem.api.RecipeAPI;
 import thaumcraft.api.ThaumcraftApi;
@@ -234,6 +239,10 @@ public class RotaryRecipes {
 			catch (Exception e) {
 				e.printStackTrace();
 				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.IC2, e);
+			}
+
+			if (ConfigRegistry.IC2BLAZECOMPRESS.getState()) {
+				changeIC2BlazePowderCompression();
 			}
 		}
 		MachineRegistry.ELECTRICMOTOR.addCrafting("cGS", "BCB", "SGS", 'c', ConfigRegistry.HARDCONVERTERS.getState() && cool != null ? cool : ItemStacks.steelingot, 'G', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'B', ItemStacks.basepanel, 'C', ItemStacks.diamondshaftcore);
@@ -469,6 +478,24 @@ public class RotaryRecipes {
 		}
 
 		MachineRegistry.BUNDLEDBUS.addCrafting("BrB", "CpF", "BrB", 'C', ItemStacks.pcb, 'B', ItemStacks.basepanel, 'r', ReikaItemHelper.lookupItem("ProjRed|Transmission:projectred.transmission.wire:17"), 'p', AppEngHandler.getInstance().getGoldProcessor(), 'F', AppEngHandler.getInstance().getFluixCrystal());
+	}
+
+	private static void changeIC2BlazePowderCompression() {
+		Map<IRecipeInput, RecipeOutput> map = Recipes.compressor.getRecipes();
+		for (Entry<IRecipeInput, RecipeOutput> e : new ArrayList<Entry<IRecipeInput, RecipeOutput>>(map.entrySet())) {
+			IRecipeInput in = e.getKey();
+			if (in.matches(new ItemStack(Items.blaze_powder)) && in.getAmount() < 8) {
+				RecipeOutput out = e.getValue();
+				for (ItemStack is : out.items) {
+					if (is.getItem() == Items.blaze_rod) {
+						in = new RecipeInputItemStack(new ItemStack(Items.blaze_powder), 8);
+						map.put(in, e.getValue());
+						map.remove(e.getKey());
+						return;
+					}
+				}
+			}
+		}
 	}
 
 	@ModDependent(ModList.THAUMCRAFT)

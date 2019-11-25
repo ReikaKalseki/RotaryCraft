@@ -22,14 +22,13 @@ import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.AtmosphereHandler;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.DragonAPI.ModInteract.DeepInteract.PlanetDimensionHandler;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 
 public class TileEntityWindEngine extends TileEntityEngine {
 
@@ -109,10 +108,7 @@ public class TileEntityWindEngine extends TileEntityEngine {
 		clearance.tick(world);
 
 		float f = 1F-clearance.getPenalty();
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			f *= ig.getWindLevel();
-		}
+		f *= PlanetDimensionHandler.getWindFactor(world);
 		return Math.min(1, f);
 	}
 
