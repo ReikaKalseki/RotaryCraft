@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
@@ -69,7 +68,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	/** Water capacity */
 	public static final int CAPACITY = 60*1000;
-	public final int MAXTEMP = this.getMaxTemperature();
 
 	/** Fuel capacity */
 	public static final int FUELCAP = 240*1000;
@@ -136,7 +134,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	}
 
 	public final int getTempScaled(int par1) {
-		return temperature*par1/MAXTEMP;
+		return temperature*par1/this.getMaxTemperature();
 	}
 
 	public final int getFuelScaled(int par1) {
@@ -185,21 +183,21 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		//BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		temperature = Math.max(temperature, Tamb);
 		//ReikaChatHelper.writeInt(temperature);
-		if (temperature > Tamb && omega == 0 && torque == 0 && type == EngineType.SPORT) { //If off and hot
-			if (temperature > Tamb+300)
-				temperature -= (temperature-Tamb)/100;
-			else if (temperature > Tamb+100)
-				temperature -= (temperature-Tamb)/50;
-			else if (temperature > Tamb+40)
-				temperature -= (temperature-Tamb)/10;
-			else if (temperature > Tamb+4)
-				temperature -= (temperature-Tamb)/2;
-			else
-				temperature = Tamb;
+		if (temperature > Tamb && !isOn) {
+			this.offlineCooldown(world, x, y, z, Tamb);
 		}
+	}
+
+	protected void offlineCooldown(World world, int x, int y, int z, int Tamb) {
+		temperature -= Math.max(1, (temperature-Tamb)/256);
+	}
+
+	public final boolean isOn() {
+		return isOn;
 	}
 
 	@Override

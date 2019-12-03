@@ -42,6 +42,11 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	}
 
 	@Override
+	protected void offlineCooldown(World world, int x, int y, int z, int Tamb) {
+
+	}
+
+	@Override
 	protected int getConsumedFuel() {
 		int amt = 10;
 		if (temperature >= 130) {
@@ -127,7 +132,7 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/96;
 		}
-		if (temperature > MAXTEMP)
+		if (temperature > this.getMaxTemperature())
 			this.overheat(world, x, y, z);
 	}
 
@@ -135,7 +140,7 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	public void overheat(World world, int x, int y, int z) {
 		if (water.isEmpty())
 			return;
-		temperature = MAXTEMP;
+		temperature = this.getMaxTemperature();
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 17, false, 1F, false, true, 2F);
 		RotaryAchievements.OVERPRESSURE.triggerAchievement(this.getPlacer());
 		world.setBlockToAir(x, y, z);

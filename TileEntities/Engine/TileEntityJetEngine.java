@@ -215,8 +215,15 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	}
 
 	private void heatJet(World world, int x, int y, int z, int meta) {
-		int temp = this.isAfterburning() ? 1750 : 1200;
-		int T = temp*omega/type.getSpeed();
+		if (this.isOn() && this.getTicksExisted()%10 == 0) {
+			int max = this.getMaxExhaustTemperature()*omega/type.getSpeed();
+			if (max > temperature)
+				temperature = Math.min(temperature+Math.max(1, (max-temperature)/16), max);
+			else if (!this.isAfterburning()) {
+				temperature = Math.max(temperature-Math.max(1, (temperature-max)/32), max);
+			}
+		}
+		int T = temperature;
 		int r = this.isAfterburning() ? 6 : 4;
 		for (int i = 1; i < r; i++) {
 			int dx = x+write.offsetX*i;
@@ -244,6 +251,15 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		for (EntityLivingBase e : li) {
 			e.attackEntityFrom(DamageSource.onFire, this.isAfterburning() ? 4 : 1);
 		}
+	}
+
+	public int getMaxExhaustTemperature() {
+		return this.isAfterburning() ? 1750 : 1200;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return this.isAfterburning() ? 2000 : 1500;
 	}
 
 	/** Like BC obsidian pipe - suck in entities in a "funnel" in front of the engine, and deal damage (50 hearts).
@@ -451,7 +467,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		FOD++;
 		if (DifficultyEffects.JETINGESTFAIL.testChance()) {
 			isJetFailing = true;
-			temperature = 800;
+			temperature = Math.max(temperature, 800);
 		}
 		//SoundRegistry.JETDAMAGE.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord);
 	}
@@ -546,7 +562,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	public void repairJet() {
 		FOD = 0;
 		isJetFailing = false;
-		temperature = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
+		temperature = Math.max(ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord), temperature/2);
 	}
 
 	public void repairJetPartial() {
@@ -748,7 +764,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	@Override
 	public boolean hasTemperature() {
-		return isJetFailing || this.isAfterburning();
+		return true;
 	}
 
 	@Override
@@ -834,9 +850,9 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	private void doAfterburning(World world, int x, int y, int z) {
 		if (this.isAfterburning()) {
 			this.afterBurnParticles(world, x, y, z);
-			if (this.getTicksExisted()%40 == 0) {
+			if (this.getTicksExisted()%200 == 0) {
 				temperature += 1;
-				if (temperature > 1000) {
+				if (temperature > this.getMaxTemperature()) {
 					this.fail(world, x, y, z);
 				}
 				else if (temperature >= 600) {
@@ -994,9 +1010,10 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	public void setBurnerActive(boolean burn) {
 		burnerActive = burn;
+		/*
 		if (!burn && !isJetFailing) {
 			temperature = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
-		}
+		}*/
 	}
 
 	@Override

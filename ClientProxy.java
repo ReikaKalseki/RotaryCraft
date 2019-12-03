@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,6 +23,9 @@ import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.PatreonController;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
+import Reika.DragonAPI.IO.Shaders.ShaderProgram;
+import Reika.DragonAPI.IO.Shaders.ShaderRegistry;
+import Reika.DragonAPI.IO.Shaders.ShaderRegistry.ShaderDomain;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.BlockSheetTexRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.ForcedTextureArmorModel;
@@ -71,13 +74,13 @@ public class ClientProxy extends CommonProxy
 	//public static final int BlockSheetTexRenderID = RenderingRegistry.getNextAvailableRenderId();
 
 	private static final ItemSpriteSheetRenderer[] items = {
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items2.png"),
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items3.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items2.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items3.png"),
 	};
 
 	private static final MultiSheetItemRenderer[] multisheets = {
-		new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class),
+			new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class),
 	};
 
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
@@ -90,6 +93,8 @@ public class ClientProxy extends CommonProxy
 	public static PipeBodyRenderer pipe;
 	public static CubicalMachineRenderer cube;
 	public static ConnectedGlassRenderer connected;
+
+	private static ShaderProgram heatRipple;
 
 	//public static final ForcedTextureArmorModel bed1 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
 	//public static final ForcedTextureArmorModel bed2 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_2.png");
@@ -104,6 +109,10 @@ public class ClientProxy extends CommonProxy
 	private static final HashMap<ItemRegistry, ForcedTextureArmorModel> armorTextures = new HashMap();
 	private static final HashMap<ItemRegistry, String> armorAssets = new HashMap();
 
+	public static ShaderProgram getHeatRippleShader() {
+		return heatRipple;
+	}
+
 	@Override
 	public void registerSounds() {
 		new SoundLoader(SoundRegistry.soundList).register();
@@ -115,6 +124,8 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerRenderers() {
+		heatRipple = ShaderRegistry.createShader(RotaryCraft.instance, "heatripple", RotaryCraft.class, "Shaders/", ShaderDomain.GLOBALNOGUI).setEnabled(false);
+
 		if (RotaryCraft.instance.isLocked()) {
 			pipeRender = cubeRender = connectedRender = 0;
 		}
