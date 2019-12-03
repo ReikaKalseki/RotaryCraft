@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import java.util.HashMap;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -21,16 +19,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import Reika.DragonAPI.IO.Shaders.ShaderHook;
-import Reika.DragonAPI.IO.Shaders.ShaderProgram;
-import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.Effects.Glow;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.RotaryCraft.ClientProxy;
+import Reika.RotaryCraft.Auxiliary.HeatRippleRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Auxiliary.Interfaces.AlternatingRedstoneUser;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RedstoneUpgradeable;
@@ -54,7 +49,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderSEngine extends RotaryTERenderer implements ShaderHook
+public class RenderSEngine extends RotaryTERenderer
 {
 
 	private ModelDC DCModel = new ModelDC();
@@ -261,9 +256,6 @@ public class RenderSEngine extends RotaryTERenderer implements ShaderHook
 			double dx = 0.625*tile.getWriteDirection().offsetX;
 			double dz = 0.625*tile.getWriteDirection().offsetZ;
 			EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
-			RayTracer LOS = RayTracer.getVisualLOS();
-			ClientProxy.getHeatRippleShader().setHook(this);
-			boolean flag = false;
 			GL11.glPushMatrix();
 			GL11.glTranslated(0, 1, -0.625);
 			double dist = ep.getDistance(tile.xCoord+0.5+dx, tile.yCoord+0.5, tile.zCoord+0.5+dz);
@@ -279,38 +271,14 @@ public class RenderSEngine extends RotaryTERenderer implements ShaderHook
 			for (double d = 0; d <= 3; d += dd) {
 				dx += dd*tile.getWriteDirection().offsetX;
 				dz += dd*tile.getWriteDirection().offsetZ;
-				LOS.setOrigins(tile.xCoord+0.5+dx, tile.yCoord+0.5, tile.zCoord+0.5+dz, ep.posX, ep.posY, ep.posZ);
-				if (LOS.isClearLineOfSight(tile.worldObj)) {
-					HashMap<String, Object> map = new HashMap();
-					map.put("distance", dist*dist);
-					map.put("factor", fac);
-					ClientProxy.getHeatRippleShader().addFocus(tile);
-					ClientProxy.getHeatRippleShader().modifyLastCompoundFocus(f, map);
-					flag = true;
-				}
+				HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.xCoord+0.5+dx, tile.yCoord+0.5, tile.zCoord+0.5+dz, ep, dist, f, fac, 1, 1);
 				GL11.glTranslated(0, 0, -dd);
 				fac *= te.isAfterburning() ? 0.875 : 0.825;
 				if (fac <= 0.01)
 					break;
 			}
 			GL11.glPopMatrix();
-			if (flag) {
-				ClientProxy.getHeatRippleShader().setEnabled(true);
-				ClientProxy.getHeatRippleShader().setIntensity(1);
-			}
 		}
-	}
-
-	public void onPreRender(ShaderProgram s) {
-
-	}
-
-	public void onPostRender(ShaderProgram s) {
-		s.setEnabled(s.hasOngoingFoci());
-	}
-
-	public void updateEnabled(ShaderProgram s) {
-
 	}
 
 	@Override

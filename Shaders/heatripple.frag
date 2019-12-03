@@ -1,11 +1,13 @@
 uniform float distance;
 uniform float factor;
+uniform float scale;
+uniform float fade;
 
 void main() {
 	vec2 focusXY = getScreenPos(0.0, 0.0, 0.0);
 	
 	float distv = distsq(focusXY, texcoord);
-	float distfac_vertex = max(0.0, min(1.0, 2.25-65.0*distv*distance/factor)-factor*min(1.0, 0.008/(distv*distance)));
+	float distfac_vertex = max(0.0, min(1.0, 2.25-65.0/scale*distv*distance/factor)-factor*fade*min(1.0, 0.008/(distv*distance)));
 	float vf = intensity*distfac_vertex*0.05*factor;
 	
 	float ds = pow(distance, 0.125)/1.5;

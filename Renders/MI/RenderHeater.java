@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.RotaryCraft.Auxiliary.HeatRippleRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -60,6 +61,14 @@ public class RenderHeater extends RotaryTERenderer
 		int var11 = 0;	 //used to rotate the model about metadata
 
 		var14.renderAll(tile, null);
+
+		if (tile.isInWorld()) {
+			float f = tile.temperature/(float)tile.MAXTEMP;
+			GL11.glTranslated(0, 0.675, 0);
+			HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.xCoord+0.5, tile.yCoord+0.75, tile.zCoord+0.5, f, 0.5F, 2F, 0);
+			GL11.glTranslated(0, -0.4, 0);
+			HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.xCoord+0.5, tile.yCoord+1.75, tile.zCoord+0.5, f, 0.25F, 2.5F, 0);
+		}
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
