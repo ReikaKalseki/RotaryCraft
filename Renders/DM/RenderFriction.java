@@ -84,10 +84,9 @@ public class RenderFriction extends RotaryTERenderer
 		if (tile.isInWorld()) {
 			GL11.glTranslated(0, 1, -0.5);
 			float f = tile.getTemperature()/(float)tile.MAXTEMP;
-			f = 1;
 			double dx = tile.getReadDirection().getOpposite().offsetX*0.5;
 			double dz = tile.getReadDirection().getOpposite().offsetZ*0.5;
-			HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.xCoord+0.5+dx, tile.yCoord+0.5, tile.zCoord+0.5+dz, f, 0.3F, 3F, 0);
+			HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.xCoord+0.5+dx, tile.yCoord+0.5, tile.zCoord+0.5+dz, f, 0.08F, 35F, 0);
 		}
 
 		this.closeGL(tile);
