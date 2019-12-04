@@ -21,10 +21,12 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Instantiable.Effects.Glow;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.Auxiliary.HeatRippleRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Auxiliary.Interfaces.AlternatingRedstoneUser;
@@ -115,6 +117,8 @@ public class RenderSEngine extends RotaryTERenderer
 				break;
 			case JET:
 				String s = ((TileEntityJetEngine)tile).canAfterBurn() ? "_b": "";
+				if (tile.isInWorld())
+					;//s = s+"_with_alpha";
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex"+s+".png");
 				break;
 		}
@@ -243,7 +247,60 @@ public class RenderSEngine extends RotaryTERenderer
 				var19.renderAll(tile, null, -tile.phi);
 				break;
 			case JET:
+				float f = 1;
+				/*
+				ShaderProgram sh = ClientProxy.getHeatGlowShader();
+				sh.setEnabled(f > 0);
+				sh.setIntensity(f);
+				sh.setField("glowRed", ReikaColorAPI.getRed(c));
+				sh.setField("glowGreen", ReikaColorAPI.getGreen(c));
+				sh.setField("glowBlue", ReikaColorAPI.getBlue(c));
+				ShaderRegistry.runShader(sh);
+				 */
 				var20.renderAll(tile, null, -tile.phi);
+				//ShaderRegistry.completeShader();
+				if (f > 0) {
+					int temp = Math.max(tile.temperature-600, (tile.temperature-1000)*5/2);
+					int c = ReikaPhysicsHelper.getColorForTemperature(temp);
+					GL11.glPushMatrix();
+					GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+					double s = 1.005;
+					ReikaRenderHelper.disableLighting();
+					ReikaRenderHelper.disableEntityLighting();
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glColor4f(ReikaColorAPI.getRed(c)/255F, ReikaColorAPI.getGreen(c)/255F, ReikaColorAPI.getBlue(c)/255F, 1);
+					BlendMode.ADDITIVEDARK.apply();
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex_glow_mask2.png");
+
+					GL11.glPushMatrix();
+					GL11.glTranslated(0, 1-s, (1-s)/4);
+					GL11.glScaled(s, s, s);
+					var20.renderAll(tile, null, -tile.phi);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glTranslated(0, s-1, -(1-s)/4);
+					GL11.glScaled(1/s, 1/s, 1/s);
+					var20.renderAll(tile, null, -tile.phi);
+					GL11.glPopMatrix();
+
+					GL11.glDisable(GL11.GL_TEXTURE_2D);
+					Tessellator.instance.startDrawing(GL11.GL_TRIANGLE_FAN);
+					Tessellator.instance.setColorOpaque_I(ReikaColorAPI.getColorWithBrightnessMultiplier(c, 0.65F));
+					Tessellator.instance.addTranslation(-0.5F, 0.5625F, -0.45F);
+					Tessellator.instance.addVertex(0.5, 0.5, 0);
+					Tessellator.instance.addVertex(0.3, 0.8, 0);
+					Tessellator.instance.addVertex(0.7, 0.8, 0);
+					Tessellator.instance.addVertex(0.8, 0.5, 0);
+					Tessellator.instance.addVertex(0.7, 0.2, 0);
+					Tessellator.instance.addVertex(0.3, 0.2, 0);
+					Tessellator.instance.addVertex(0.2, 0.5, 0);
+					Tessellator.instance.addVertex(0.3, 0.8, 0);
+					Tessellator.instance.addTranslation(0.5F, -0.5625F, 0.45F);
+					Tessellator.instance.draw();
+
+					GL11.glPopAttrib();
+					GL11.glPopMatrix();
+				}
 				break;
 		}
 
@@ -377,57 +434,6 @@ public class RenderSEngine extends RotaryTERenderer
 
 		GL11.glPopMatrix();
 		GL11.glPopAttrib();
-	}
-
-	private void renderGlow(TileEntity tile, double par2, double par4, double par6) {
-		Tessellator v5 = Tessellator.instance;
-		GL11.glTranslated(par2, par4, par6);
-		int meta = tile.getBlockMetadata();
-		double x = 0;
-		double z = 0;
-		boolean side = meta < 2;
-		int r = 255;
-		int g = 200;
-		int b = 20;
-		int a = 32;
-
-		x = 0.125;
-		z = 0.125;
-
-		double s = 0.125;
-
-		ReikaRenderHelper.prepareGeoDraw(a < 255);
-		double d = -0.5*s*2;
-		BlendMode.PREALPHA.apply();
-		for (float i = 0; i < 360; i += 22.5F) {
-			GL11.glTranslated(0.5, 0.5, 0);
-			GL11.glRotated(i, 0, 0, 1);
-			GL11.glTranslated(0, d, 0);
-			GL11.glScaled(s, s, s);
-			v5.startDrawingQuads();
-			v5.setColorRGBA(r, g, b, a);
-			if (side) {
-				v5.addVertex(x, 0, 0);
-				v5.addVertex(x, 0, 1);
-				v5.addVertex(x, 1, 1);
-				v5.addVertex(x, 1, 0);
-			}
-			else {
-				v5.addVertex(0, 0, z);
-				v5.addVertex(1, 0, z);
-				v5.addVertex(1, 1, z);
-				v5.addVertex(0, 1, z);
-			}
-			v5.draw();
-			GL11.glScaled(1D/s, 1D/s, 1D/s);
-			GL11.glTranslated(0, -d, 0);
-			GL11.glRotated(-i, 0, 0, 1);
-			GL11.glTranslated(-0.5, -0.5, 0);
-			GL11.glTranslated(0, 0, 0.01);
-		}
-		BlendMode.DEFAULT.apply();
-		ReikaRenderHelper.exitGeoDraw();
-		GL11.glTranslated(-par2, -par4, -par6);
 	}
 
 	@Override

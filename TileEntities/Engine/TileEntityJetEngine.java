@@ -853,6 +853,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			if (this.getTicksExisted()%200 == 0) {
 				temperature += 1;
 				if (temperature > this.getMaxTemperature()) {
+					temperature = this.getMaxTemperature();
 					this.fail(world, x, y, z);
 				}
 				else if (temperature >= 600) {
