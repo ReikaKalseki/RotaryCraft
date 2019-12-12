@@ -95,7 +95,7 @@ public class ClientProxy extends CommonProxy
 	public static ConnectedGlassRenderer connected;
 
 	private static ShaderProgram heatRipple;
-	private static ShaderProgram heatGlow;
+	//private static ShaderProgram heatGlow;
 
 	//public static final ForcedTextureArmorModel bed1 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
 	//public static final ForcedTextureArmorModel bed2 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_2.png");
@@ -114,10 +114,6 @@ public class ClientProxy extends CommonProxy
 		return heatRipple;
 	}
 
-	public static ShaderProgram getHeatGlowShader() {
-		return heatGlow;
-	}
-
 	@Override
 	public void registerSounds() {
 		new SoundLoader(SoundRegistry.soundList).register();
@@ -130,7 +126,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenderers() {
 		heatRipple = ShaderRegistry.createShader(RotaryCraft.instance, "heatripple", RotaryCraft.class, "Shaders/", ShaderDomain.GLOBALNOGUI).setEnabled(false);
-		heatGlow = ShaderRegistry.createShader(RotaryCraft.instance, "heatglow", RotaryCraft.class, "Shaders/", ShaderDomain.TESR).setEnabled(false);
+		//heatGlow = ShaderRegistry.createShader(RotaryCraft.instance, "heatglow", RotaryCraft.class, "Shaders/", ShaderDomain.TESR).setEnabled(false);
 
 		if (RotaryCraft.instance.isLocked()) {
 			pipeRender = cubeRender = connectedRender = 0;

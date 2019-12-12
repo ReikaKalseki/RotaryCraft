@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -81,11 +81,11 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	}
 
 	private int getHeight() {
-		return 3;
+		return Math.min(6, 2+Math.max(0, (int)power/524288));
 	}
 
 	public AxisAlignedBB getLaser() {
-		return AxisAlignedBB.getBoundingBox(xCoord+0.4, yCoord+1, zCoord+0.4, xCoord+0.6, yCoord+3, zCoord+0.6);
+		return AxisAlignedBB.getBoundingBox(xCoord+0.4, yCoord+1, zCoord+0.4, xCoord+0.6, yCoord+this.getHeight(), zCoord+0.6);
 	}
 
 	public boolean applyEnchants(ItemStack is) {
