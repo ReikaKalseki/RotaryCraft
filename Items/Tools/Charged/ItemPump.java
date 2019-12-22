@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -36,6 +36,8 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class ItemPump extends ItemChargedTool implements EnchantableItem {
 
@@ -134,8 +136,8 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 	}
 
 	@Override
-	public boolean isEnchantValid(Enchantment e, ItemStack is) {
-		return e == Enchantment.aquaAffinity;
+	public Result getEnchantValidity(Enchantment e, ItemStack is) {
+		return e == Enchantment.aquaAffinity ? Result.ALLOW : Result.DENY;
 	}
 
 	@Override
