@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.client.MinecraftForgeClient;
 
+import Reika.DragonAPI.Auxiliary.Trackers.SpecialDayTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Base.TileEntityRenderBase;
@@ -48,8 +49,9 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		return RotaryCraft.class;
 	}
 
+	@Override
 	protected boolean loadXmasTextures() {
-		return RotaryAux.loadXmasTextures();
+		return SpecialDayTracker.instance.loadXmasTextures();
 	}
 
 	protected void renderFaceColors(TileEntityIOMachine te, double p2, double p4, double p6) {

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -21,6 +20,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.IntHashMap;
 
 import Reika.DragonAPI.DragonOptions;
+import Reika.DragonAPI.Auxiliary.Trackers.SpecialDayTracker;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
@@ -74,8 +74,7 @@ public class OldTextureLoader {
 			return false;
 		long time = System.currentTimeMillis();
 		if (time-cachedLoadTime > 60000) {
-			Calendar c = Calendar.getInstance();
-			boolean flag = c.get(Calendar.MONTH) == Calendar.APRIL && c.get(Calendar.DAY_OF_MONTH) <= 2;
+			boolean flag = SpecialDayTracker.instance.loadAprilTextures();
 			if (flag != cachedLoadState && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 				ReikaRenderHelper.rerenderAllChunks();
 			}
