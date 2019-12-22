@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -83,6 +83,14 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		ItemStack[] center = new ItemStack[9];
 		System.arraycopy(inv, 1, center, 0, 9);
 		BlastCrafting c = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
+
+		if (c != null && leaveLastItem) {
+			for (int i = 1; i <= 9; i++) {
+				if (c.usesSlot(i-1) && inv[i] != null && inv[i].stackSize == 1)
+					return null;
+			}
+		}
+
 		return c;
 	}
 
@@ -107,7 +115,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 		if (leaveLastItem) {
 			for (int i = 1; i <= 9; i++) {
-				if (inv[i] != null && inv[i].stackSize == 1)
+				if (rec.usesSlot(i-1) && inv[i] != null && inv[i].stackSize == 1)
 					return null;
 			}
 		}

@@ -89,6 +89,7 @@ import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
 import Reika.RotaryCraft.Registry.GuiRegistry;
@@ -770,7 +771,21 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == null)
 			return;
 		RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tr = (TileEntityReservoir)tile;
+			if (e instanceof EntityLivingBase) {
+				tr.applyFluidEffectsToEntity((EntityLivingBase)e);
+			}
+		}
+		if (m == MachineRegistry.CENTRIFUGE) {
+			TileEntityCentrifuge tr = (TileEntityCentrifuge)tile;
+			if (tr.omega > 0 && world.isRemote) {
+				e.addVelocity(ReikaRandomHelper.getRandomPlusMinus(0, 1), 0.1, ReikaRandomHelper.getRandomPlusMinus(0, 1));
+			}
+		}
 		if (!(e instanceof EntityItem || e instanceof EntityXPOrb)) {
+			if (e instanceof EntityLivingBase && ItemBedrockArmor.isWearingFullSuitOf((EntityLivingBase)e))
+				return;
 			if (tile instanceof DamagingContact) {
 				DamagingContact dg = (DamagingContact)tile;
 				int dmg = dg.getContactDamage();
@@ -783,18 +798,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					e.attackEntityFrom(DamageSource.lava, dmg);
 					e.setFire(6);
 				}
-			}
-		}
-		if (m == MachineRegistry.RESERVOIR) {
-			TileEntityReservoir tr = (TileEntityReservoir)tile;
-			if (e instanceof EntityLivingBase) {
-				tr.applyFluidEffectsToEntity((EntityLivingBase)e);
-			}
-		}
-		if (m == MachineRegistry.CENTRIFUGE) {
-			TileEntityCentrifuge tr = (TileEntityCentrifuge)tile;
-			if (tr.omega > 0 && world.isRemote) {
-				e.addVelocity(ReikaRandomHelper.getRandomPlusMinus(0, 1), 0.1, ReikaRandomHelper.getRandomPlusMinus(0, 1));
 			}
 		}
 	}

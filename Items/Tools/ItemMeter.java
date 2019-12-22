@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
@@ -80,10 +79,10 @@ public class ItemMeter extends ItemRotaryTool
 	{
 		if (super.onItemUse(is, ep, world, x, y, z, s, a, b, c))
 			return true;
+		if (world.isRemote && ConfigRegistry.CLEARCHAT.getState())
+			ReikaChatHelper.clearChat();
 		if (world.isRemote)
 			return true;
-		if (ConfigRegistry.CLEARCHAT.getState())
-			ReikaChatHelper.clearChat((EntityPlayerMP)ep);
 
 		Block bk = world.getBlock(x, y, z);
 		TileEntity tile = world.getTileEntity(x, y, z);

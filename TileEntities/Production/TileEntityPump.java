@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -149,7 +150,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		}
 		if (f.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
-		duplicationAmount = mult;
+		duplicationAmount = (int)(mult*ConfigRegistry.getFreeWaterProduction());
 		tank.addLiquid(fs.amount*mult, f);
 		world.markBlockForUpdate(loc.xCoord, loc.yCoord, loc.zCoord);
 	}

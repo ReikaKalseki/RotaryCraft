@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -44,7 +44,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 		spawnercontroller = spw;
 		ySize = 75;
 		ep = p5ep;
-		timer = spawnercontroller.setDelay;
+		timer = spawnercontroller.getDelay();
 		disabled = spawnercontroller.disable;
 		hasPower = (spawnercontroller.power >= spawnercontroller.machine.getMinPower());
 	}
@@ -143,7 +143,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 				color = 0xcccccc;
 			fontRendererObj.drawString("Spawn Delay:", xSize/2-64, 51, color);
 			if (!input.isFocused() && !disabled) {
-				fontRendererObj.drawString(String.format("%d", spawnercontroller.setDelay), xSize/2+5, 51, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", spawnercontroller.getDelay()), xSize/2+5, 51, 0xffffffff);
 			}
 		}
 	}

@@ -354,9 +354,11 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 				ItemStack pattern = inv[i];
 				if (this.isItemValidForSlot(i, pattern)) {
 					ItemStack[] in = this.getIngredients(pattern);
-					for (int k = 0; k < in.length; k++) {
-						if (in[k] != null)
-							network.addCallback(in[k], hasWork);
+					if (in != null) {
+						for (int k = 0; k < in.length; k++) {
+							if (in[k] != null)
+								network.addCallback(in[k], hasWork);
+						}
 					}
 					ItemStack out = this.getSlotRecipeOutput(i);
 					network.addCallback(out, hasWork);

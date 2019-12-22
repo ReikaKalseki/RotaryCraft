@@ -125,7 +125,8 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerRenderers() {
-		heatRipple = ShaderRegistry.createShader(RotaryCraft.instance, "heatripple", RotaryCraft.class, "Shaders/", ShaderDomain.GLOBALNOGUI).setEnabled(false);
+		if (heatRipple == null)
+			heatRipple = ShaderRegistry.createShader(RotaryCraft.instance, "heatripple", RotaryCraft.class, "Shaders/", ShaderDomain.GLOBALNOGUI).setEnabled(false);
 		//heatGlow = ShaderRegistry.createShader(RotaryCraft.instance, "heatglow", RotaryCraft.class, "Shaders/", ShaderDomain.TESR).setEnabled(false);
 
 		if (RotaryCraft.instance.isLocked()) {

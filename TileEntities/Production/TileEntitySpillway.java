@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,12 +31,13 @@ import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
 public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
 
-	public static final int CAPACITY= 8000;
+	public static final int CAPACITY = 8000;
 
 	private final HybridTank tank = new HybridTank("spillway", CAPACITY);
 
@@ -77,7 +78,7 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 		else if (f == FluidRegistry.WATER) {
 			if (ReikaWorldHelper.isLiquidAColumn(world, dx, dy+1, dz)) {
 				liquidPool = null;
-				tank.addLiquid(50, FluidRegistry.WATER);
+				tank.addLiquid((int)(50*ConfigRegistry.getFreeWaterProduction()), FluidRegistry.WATER);
 				this.setActive();
 			}
 			else

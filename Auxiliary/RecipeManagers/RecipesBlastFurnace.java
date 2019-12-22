@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -259,6 +259,10 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public boolean requiresEmptyOutput() {
 			return false;
 		}
+
+		public boolean usesSlot(int i) {
+			return ReikaRecipeHelper.getRecipeArray(recipe)[i] != null;
+		}
 	}
 
 	public static interface BlastFurnacePattern extends MachineRecipe {
@@ -274,6 +278,8 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public int getRequiredTemperature();
 
 		public boolean requiresEmptyOutput();
+
+		public boolean usesSlot(int slot);
 	}
 
 	public static final class BlastInput {
@@ -536,6 +542,10 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		@Override
 		public boolean requiresEmptyOutput() {
 			return needsEmpty;
+		}
+
+		public boolean usesSlot(int i) {
+			return true;
 		}
 	}
 

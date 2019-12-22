@@ -33,7 +33,8 @@ public class TileEntityBypass extends TileEntityPiping {
 
 	@Override
 	public void onPlacedAgainst(ForgeDirection dir) {
-		tryForcedConnection[dir.ordinal()] = true;
+		if (MachineRegistry.getMachine(worldObj, xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ) == this.getMachine())
+			tryForcedConnection[dir.ordinal()] = true;
 	}
 
 	@Override

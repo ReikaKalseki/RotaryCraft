@@ -122,7 +122,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4),
 	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8),
 	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F),
-	IC2BLAZECOMPRESS("Increase blaze powder to rod cost in IC2 compressor (exploit fix)", true);
+	IC2BLAZECOMPRESS("Increase Blaze Powder To Rod Cost In IC2 Compressor (Exploit Fix)", true),
+	FREEWATER("Free Water Production Factor", 1F);
 
 	private String label;
 	private boolean defaultState;
@@ -309,6 +310,10 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 
 	public static float getSmelteryFlakeYield() {
 		return MathHelper.clamp_float(TINKERFLAKES.getFloat(), 0.25F, 2F);
+	}
+
+	public static float getFreeWaterProduction() {
+		return MathHelper.clamp_float(FREEWATER.getFloat(), 0.1F, 2F);
 	}
 
 	@Override

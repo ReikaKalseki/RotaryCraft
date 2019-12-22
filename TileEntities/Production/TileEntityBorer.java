@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -148,6 +148,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	public void reset() {
 		step = 1;
+		this.syncAllData(true);
 	}
 
 	public int getHeadX() {

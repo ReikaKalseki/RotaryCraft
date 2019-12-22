@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -37,6 +37,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCallback {
@@ -90,6 +91,10 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 				if (recipe.hasKey(s)) {
 					NBTTagCompound tag = recipe.getCompoundTag(s);
 					ItemStack in = ItemStack.loadItemStackFromNBT(tag);
+					if (in == null && tag != null && !tag.hasNoTags()) { //item no longer exists, clear the pattern
+						is.stackTagCompound = null;
+						return null;
+					}
 					items[i] = in;
 				}
 			}
@@ -161,12 +166,16 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 	}
 
 	public static void setMode(ItemStack is, RecipeMode md) {
+		if (!ItemRegistry.CRAFTPATTERN.matchItem(is))
+			return;
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("mode", md.ordinal());
 	}
 
 	public static void changeStackLimit(ItemStack is, int change) {
+		if (!ItemRegistry.CRAFTPATTERN.matchItem(is))
+			return;
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		int limit = getStackInputLimit(is);
