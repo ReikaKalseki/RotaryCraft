@@ -26,8 +26,8 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.TileEntity.ThermalTile;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.MathSci.ReikaDateHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Interfaces.PressureTile;
@@ -161,7 +161,7 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			if (te.getEngineType().burnsFuel()) {
 				int time = te.getFuelDuration();
-				String sg = String.format("%s: %s", Variables.FUEL, ReikaFormatHelper.getSecondsAsClock(time));
+				String sg = String.format("%s: %s", Variables.FUEL, ReikaDateHelper.getSecondsAsClock(time));
 				this.sendMessage(ep, sg);
 			}
 			if (te.getEngineType().requiresLubricant()) {

@@ -12,12 +12,10 @@ package Reika.RotaryCraft.Base;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +32,6 @@ import net.minecraftforge.fluids.Fluid;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Interfaces.Block.SidedTextureIndex;
-import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
@@ -238,27 +235,13 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face)
-	{
+	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		return 0;
 	}
 
 	@Override
-	public boolean canHarvestBlock(EntityPlayer player, int meta)
-	{
+	public boolean canHarvestBlock(EntityPlayer player, int meta) {
 		return ForgeHooks.canHarvestBlock(this, player, meta);
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
-	{
-		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof IInventory)
-			ReikaItemHelper.dropInventory(world, x, y, z);
-		if (te instanceof BreakAction) {
-			((BreakAction)te).breakBlock();
-		}
-		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
 	public final String getTextureFile(){

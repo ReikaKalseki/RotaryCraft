@@ -25,7 +25,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,7 +51,6 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Block.FluidBlockSurrogate;
 import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
-import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
@@ -749,13 +747,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 	@Override
 	public final void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
 		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof IInventory && !(te instanceof TileEntityScaleableChest))
-			ReikaItemHelper.dropInventory(world, x, y, z);
 		if (te instanceof TileEntityDropProcessor)
 			((TileEntityDropProcessor)te).dropCache();
-		if (te instanceof BreakAction) {
-			((BreakAction)te).breakBlock();
-		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 

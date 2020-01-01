@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -44,10 +44,10 @@ public class BlockColorMapper {
 
 	public static final BlockColorMapper instance = new BlockColorMapper();
 
-	public static final int UNKNOWN_COLOR = 0xffD47EFF;
-	public static final int AIR_COLOR = ReikaColorAPI.GStoHex(33);
+	public static final GPRBlockColor UNKNOWN_COLOR = new BasicBlockColor(0xffD47EFF);
+	public static final GPRBlockColor AIR_COLOR = new BasicBlockColor(ReikaColorAPI.GStoHex(33));
 
-	private final BlockMap<Integer> map = new BlockMap();
+	private final BlockMap<GPRBlockColor> map = new BlockMap();
 	private final BlockMap<BlockKey> mimics = new BlockMap();
 
 	private BlockColorMapper() {
@@ -413,6 +413,10 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 		}
 	}
 
+	private void addBlockColor(Block b, GPRBlockColor rgb) {
+		this.addBlockColor(new BlockKey(b), rgb);
+	}
+
 	private void addBlockColor(Block b, int rgb) {
 		this.addBlockColor(new BlockKey(b), rgb);
 	}
@@ -422,7 +426,14 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	}
 
 	private void addBlockColor(BlockKey bk, int rgb) {
-		map.put(bk, rgb);
+		this.addBlockColor(bk, new BasicBlockColor(rgb));
+	}
+
+	public void addBlockColor(BlockKey bk, GPRBlockColor rgb) {
+		if (map.containsKey(bk))
+			RotaryCraft.logger.logError("GPR Color Mapping - block "+bk+" already mapped to a color!");
+		else
+			map.put(bk, rgb);
 	}
 
 	private void addBlockColor(BlockRegistry b, int rgb) {
@@ -514,29 +525,34 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 		return this.getColorForBlock(bk.blockID, bk.metadata);
 	}
 
-	public int getColorForBlock(Block b, int meta) {
+	private GPRBlockColor lookupColorForBlock(Block b, int meta) {
 		if (b == Blocks.air)
 			return AIR_COLOR;
 		if (b == null)
 			return UNKNOWN_COLOR;
 		BlockKey mimic = this.getMimic(b, meta);
 		if (mimic != null)
-			return this.getColorForBlock(mimic.blockID, mimic.metadata);
-		Integer c = map.get(b, meta);
+			return this.lookupColorForBlock(mimic.blockID, mimic.metadata);
+		GPRBlockColor c = map.get(b, meta);
 		if (c == null) {
-			c = BlockColorInterface.getColor(b, meta);
-			if (c != null) {
+			Integer clr = BlockColorInterface.getColor(b, meta);
+			if (clr != null) {
+				c = new BasicBlockColor(clr);
 				map.put(b, meta, c);
 			}
 		}
 		if (c == null) {
 			Fluid f = FluidRegistry.lookupFluidForBlock(b);
 			if (f != null) {
-				c = f.getColor();
+				c = new BasicBlockColor(f.getColor());
 				map.put(b, meta, c);
 			}
 		}
 		return c != null ? c : UNKNOWN_COLOR;
+	}
+
+	public int getColorForBlock(Block b, int meta) {
+		return this.lookupColorForBlock(b, meta).getColor();
 	}/*
 
 	public void addModBlockColor(int blockID, int metadata, int color) {
@@ -591,6 +607,27 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 
 	private final String getFullSavePath() {
 		return RotaryCraft.config.getConfigFolder().getAbsolutePath()+"/"+this.getSaveFileName();
+	}
+
+	public static interface GPRBlockColor {
+
+		public int getColor();
+
+	}
+
+	private static class BasicBlockColor implements GPRBlockColor {
+
+		private final int color;
+
+		private BasicBlockColor(int c) {
+			color = c;
+		}
+
+		@Override
+		public int getColor() {
+			return color;
+		}
+
 	}
 
 }

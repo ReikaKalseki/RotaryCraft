@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -128,7 +128,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 
 	@SideOnly(Side.CLIENT)
 	private int getBlockColor(BlockKey bk) {
-		return bk != null ? BlockColorMapper.instance.getColorForBlock(bk.blockID, bk.metadata) : BlockColorMapper.UNKNOWN_COLOR;
+		return bk != null ? BlockColorMapper.instance.getColorForBlock(bk.blockID, bk.metadata) : BlockColorMapper.UNKNOWN_COLOR.getColor();
 	}
 
 	private void eval2(World world, int x, int y, int z, int meta, int[] bounds) {

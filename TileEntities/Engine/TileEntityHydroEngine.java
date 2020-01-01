@@ -553,7 +553,10 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	}
 
 	public void makeBedrock() {
-		bedrock = true;
+		if (!bedrock) {
+			bedrock = true;
+			failed = false;
+		}
 	}
 
 	@Override

@@ -11,7 +11,7 @@ package Reika.RotaryCraft.ModInterface;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaDateHelper;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 
 public class GuiFuelEngine extends GuiNonPoweredMachine
@@ -37,7 +37,7 @@ public class GuiFuelEngine extends GuiNonPoweredMachine
 		int y = api.getMouseRealY();
 		if (api.isMouseInBox(j+84, j+90, k+16, k+71)) {
 			int time = eng.getFuelDuration();
-			String sg = String.format("Fuel: %s", ReikaFormatHelper.getSecondsAsClock(time));
+			String sg = String.format("Fuel: %s", ReikaDateHelper.getSecondsAsClock(time));
 			api.drawTooltipAt(fontRendererObj, sg, x-j, y-k);
 		}
 	}

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -67,7 +67,10 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getPowerBelow();
+		if (isFlipped)
+			this.getPowerAbove();
+		else
+			this.getPowerBelow();
 
 		if (power >= MINPOWER && omega >= MINSPEED) {
 			int n = this.getNumberConsecutiveOperations();

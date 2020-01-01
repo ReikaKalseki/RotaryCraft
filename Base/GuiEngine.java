@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumChatFormatting;
 
-import Reika.DragonAPI.Libraries.IO.ReikaFormatHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaDateHelper;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 
 
@@ -50,7 +50,7 @@ public abstract class GuiEngine extends GuiNonPoweredMachine {
 					color = EnumChatFormatting.GOLD.toString();
 				else if (time < 60)
 					color = EnumChatFormatting.YELLOW.toString();
-				String sg = String.format("%sFuel: %s", color, ReikaFormatHelper.getSecondsAsClock(time));
+				String sg = String.format("%sFuel: %s", color, ReikaDateHelper.getSecondsAsClock(time));
 				api.drawTooltipAt(fontRendererObj, sg, x-j, y-k);
 			}
 		}
