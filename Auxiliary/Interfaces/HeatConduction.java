@@ -12,4 +12,6 @@ public interface HeatConduction extends ThermalTile {
 
 	public abstract double heatEnergyPerDegree();
 
+	public int getAmbientTemperature();
+
 }
