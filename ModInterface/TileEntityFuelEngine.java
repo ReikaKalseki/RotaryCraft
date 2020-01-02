@@ -423,6 +423,11 @@ TemperatureTE {
 	}
 
 	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
+	@Override
 	public boolean allowExternalHeating() {
 		return false;
 	}

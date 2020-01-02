@@ -665,6 +665,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
+	@Override
 	public boolean allowExternalHeating() {
 		return false;
 	}

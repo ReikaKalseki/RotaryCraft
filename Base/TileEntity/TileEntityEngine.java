@@ -200,11 +200,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		return isOn;
 	}
 
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
-	}
-
 	public void overheat(World world, int x, int y, int z) {
 
 	}
@@ -715,6 +710,21 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	public boolean allowExternalHeating() {
 		return false;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return this.canBeCooledWithFins();
+	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	@Override
+	public double heatEnergyPerDegree() {
+		return 2*super.heatEnergyPerDegree();
 	}
 
 	@Override

@@ -189,4 +189,14 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 
 	}
 
+	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }

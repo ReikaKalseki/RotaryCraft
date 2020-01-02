@@ -291,6 +291,11 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
+	@Override
 	public boolean allowExternalHeating() {
 		return false;
 	}

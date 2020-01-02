@@ -609,6 +609,27 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 
 	}
 
+	public final boolean allowExternalHeating() {
+		return false;
+	}
+
+	public final boolean allowHeatExtraction() {
+		return false;
+	}
+
+	public final boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	@Override
+	public final double heatEnergyPerDegree() {
+		double base = super.heatEnergyPerDegree();
+		if (this.getFluidType() != null) {
+			base += this.getFluidType().getDensity();
+		}
+		return base;
+	}
+
 	public static enum TransferAmount {
 		UNITY(),
 		BUCKET(),

@@ -417,6 +417,11 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 		return true;
 	}
 
+	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}

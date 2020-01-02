@@ -182,6 +182,11 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Tempe
 		return true;
 	}
 
+	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}

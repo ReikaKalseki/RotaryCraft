@@ -252,15 +252,6 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		liquidLevel += amt;
 	}
 	 */
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
-	}
-
-	@Override
-	public boolean allowExternalHeating() {
-		return false;
-	}
 
 	public final void setTemperature(int temp) {
 		temperature = temp;

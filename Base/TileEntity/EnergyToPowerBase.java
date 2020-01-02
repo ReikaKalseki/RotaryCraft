@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -675,7 +675,12 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 	}
 
 	@Override
-	public boolean allowExternalHeating() {
+	public final boolean allowExternalHeating() {
+		return false;
+	}
+
+	@Override
+	public final boolean allowHeatExtraction() {
 		return false;
 	}
 

@@ -516,6 +516,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		return false;
 	}
 
+	@Override
+	public boolean allowHeatExtraction() {
+		return true;
+	}
+
 	public void setTemperature(int temp) {
 		temperature = temp;
 	}

@@ -1025,4 +1025,14 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		}
 	}
 
+	@Override
+	public boolean allowHeatExtraction() {
+		return true;
+	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
 }
