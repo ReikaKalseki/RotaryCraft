@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import java.util.ArrayList;
-
 import com.carpentersblocks.api.ICarpentersHammer;
 
 import net.minecraft.block.Block;
@@ -23,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -61,7 +58,6 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
 import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
 import cofh.api.tileentity.IReconfigurableFacing;
-import ic2.api.tile.IWrenchable;
 import mrtjp.projectred.api.IScrewdriver;
 import powercrystals.minefactoryreloaded.api.IMFRHammer;
 import santa.api.interfaces.wrench.IWrench;
@@ -106,7 +102,7 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 		TileEntity te = world.getTileEntity(x, y, z);
 		return !(te instanceof RotaryCraftTileEntity || te instanceof Screwdriverable);
 	}
-
+	/* causes issues
 	@Override
 	public boolean onItemUseFirst(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
@@ -134,7 +130,7 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10) {

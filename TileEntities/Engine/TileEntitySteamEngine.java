@@ -138,8 +138,11 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		if (water.isEmpty())
+		if (water.isEmpty()) {
+			world.setBlock(x, y, z, Blocks.flowing_lava);
+			world.playSound(x+0.5, y+0.5, z+0.5, "random.fizz", 2, 1, true);
 			return;
+		}
 		temperature = this.getMaxTemperature();
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 17, false, 1F, false, true, 2F);
 		RotaryAchievements.OVERPRESSURE.triggerAchievement(this.getPlacer());

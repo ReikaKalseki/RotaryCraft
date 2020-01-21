@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -358,20 +358,16 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		te.addToContainer(Aspect.MECHANISM, (short)2000);
 		switch(te.getNodeType()) {
 			case UNSTABLE:
-				if (rand.nextInt(2) == 0) {
+				if (rand.nextInt(3) > 0)
 					te.setNodeType(NodeType.DARK);
-				}
 				else
 					te.setNodeType(NodeType.PURE);
 				break;
 			case DARK:
-				te.setNodeType(NodeType.TAINTED);
+				te.setNodeType(rand.nextBoolean() ? NodeType.TAINTED : NodeType.HUNGRY);
 				break;
 			case NORMAL:
 				te.setNodeType(NodeType.UNSTABLE);
-				break;
-			case TAINTED:
-				te.setNodeType(NodeType.HUNGRY);
 				break;
 			default:
 				break;

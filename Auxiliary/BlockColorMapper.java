@@ -36,10 +36,7 @@ import Reika.RotaryCraft.API.BlockColorInterface;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
+//@SideOnly(Side.CLIENT)
 public class BlockColorMapper {
 
 	public static final BlockColorMapper instance = new BlockColorMapper();

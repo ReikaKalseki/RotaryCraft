@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
@@ -27,8 +29,10 @@ import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.SmelteryRecipeHandler;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CrystallizerManager;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -169,11 +173,47 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 					if (ReikaItemHelper.matchStacks(cast, TinkerToolHandler.getInstance().getIngotCast())) {
 						ItemStack out = SmelteryRecipeHandler.getRecipeOutput(o);
 						FluidStack fs = SmelteryRecipeHandler.getRecipeFluid(o);
+
+						if (ModList.IC2.isLoaded() && fs.getFluid().getName().toLowerCase(Locale.ENGLISH).equals("steel.molten")) { //prevent steel -> refined iron
+							out = getNonRefinedIronSteel(out);
+						}
+
 						this.addRecipe(fs.getFluid(), fs.amount, out, RecipeLevel.MODINTERACT);
 					}
 				}
 			}
 		}
+	}
+
+	public static ItemStack getNonRefinedIronSteel(ItemStack out) {
+		ItemStack refiron = IC2Handler.IC2Stacks.REFINEDIRON.getItem();
+		ItemStack refblock = ReikaItemHelper.lookupItem("IC2:blockMetal:5");
+		if (ReikaItemHelper.matchStacks(refiron, out) || ReikaItemHelper.matchStacks(refblock, out)) {
+			RotaryCraft.logger.log("Handling steel casting to refined iron, finding alternate.");
+			String tag = null;
+			int[] ids = OreDictionary.getOreIDs(out);
+			for (int id : ids) {
+				String s = OreDictionary.getOreName(id);
+				if (s.toLowerCase(Locale.ENGLISH).contains("steel")) {
+					tag = s;
+					break;
+				}
+			}
+			RotaryCraft.logger.log("OreDict tag is '"+tag+"'.");
+			if (tag == null)
+				return out;
+			List<ItemStack> ingots = OreDictionary.getOres(tag);
+			if (ingots.size() > 1) {
+				for (ItemStack ing : ingots) {
+					if (!ReikaItemHelper.matchStacks(refiron, ing) && !ReikaItemHelper.matchStacks(refblock, ing)) {
+						out = ReikaItemHelper.getSizedItemStack(ing, out.stackSize);
+						RotaryCraft.logger.log("Converting to "+out+" ("+fullID(out)+")");
+						break;
+					}
+				}
+			}
+		}
+		return out;
 	}
 
 	@Override

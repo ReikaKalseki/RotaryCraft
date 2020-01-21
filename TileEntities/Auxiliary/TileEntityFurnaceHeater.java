@@ -26,6 +26,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerSmelteryHandler;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerSmelteryHandler.SmelteryWrapper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TransvectorHandler;
@@ -102,6 +103,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			if (TinkerSmelteryHandler.isSmelteryController(te))
 				return true;
 		}
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			if (ReikaThaumHelper.isAlchemicalFurnace(te))
+				return true;
+		}
 		return te instanceof ThermalMachine;
 	}
 
@@ -170,6 +175,9 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 				s.fuelLevel = 4000;
 				s.meltPower = temperature*25/6; //that allows the friction heater to break pyrotheum temperatures at its 1200C (~800kW)
 				s.write(te);
+			}
+			else if (ModList.THAUMCRAFT.isLoaded() && ReikaThaumHelper.isAlchemicalFurnace(te)) {
+				ReikaThaumHelper.setAlchemicalBurnTime(te, 1+temperature/20);
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -237,7 +237,15 @@ public class WorktableRecipes extends RecipeHandler {
 			IRecipe ir = wr.recipe;
 			ItemStack is2 = ir.getRecipeOutput();
 			if (ReikaItemHelper.matchStacks(is, is2) && is.stackSize >= is2.stackSize) {
-				return ir;
+				/*
+				if (is.getItem() == ItemRegistry.GEARBOX.getItemInstance()) {
+					if (is.stackTagCompound != null && is.stackTagCompound.getBoolean("living")) {
+
+					}
+				}
+				 */
+				if (ItemStack.areItemStackTagsEqual(is, is2))
+					return ir;
 			}
 		}
 		return null;
@@ -298,6 +306,16 @@ public class WorktableRecipes extends RecipeHandler {
 
 		public RecyclingRecipe getRecycling() {
 			return this.isRecycling() ? (RecyclingRecipe)recipe : null;
+		}
+
+		@Override
+		public int hashCode() {
+			return this.getUniqueID().hashCode();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			return o instanceof WorktableRecipe && ((WorktableRecipe)o).getUniqueID().equals(this.getUniqueID());
 		}
 
 	}

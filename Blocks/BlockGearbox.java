@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,6 +23,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
+import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -165,7 +167,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return false;
 		TileEntityGearbox tile = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		//if (ep.isSneaking()) {
-		if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().getItem() == Items.bucket) {
+		if (ep.getCurrentEquippedItem() != null && KeyWatcher.instance.isKeyDown(ep, Key.LCTRL) && ep.getCurrentEquippedItem().getItem() == Items.bucket) {
 			tile.clearLubricant();
 			return true;
 		}

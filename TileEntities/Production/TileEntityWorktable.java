@@ -265,18 +265,20 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 						return false;
 					else {
 						List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
-						boolean flag = true;
-						for (int k = 0; k < 9; k++) {
-							if (in[k] != null && !in[k].isEmpty()) {
-								if (inv[k+9] != null) {
-									if (!ReikaItemHelper.collectionContainsItemStack(in[k], inv[k+9]))
-										flag = false;
-									if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
-										flag = false;
+						if (in != null) {
+							boolean flag = true;
+							for (int k = 0; k < 9; k++) {
+								if (in[k] != null && !in[k].isEmpty()) {
+									if (inv[k+9] != null) {
+										if (!ReikaItemHelper.collectionContainsItemStack(in[k], inv[k+9]))
+											flag = false;
+										if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
+											flag = false;
+									}
 								}
 							}
+							can = flag;
 						}
-						can = flag;
 					}
 				}
 			}
@@ -316,6 +318,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		ItemStack is = inv[4];
 		IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
 		List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
+		if (in == null)
+			return;
 
 		for (int i = 0; i < ir.getRecipeOutput().stackSize; i++)
 			ReikaInventoryHelper.decrStack(4, inv);

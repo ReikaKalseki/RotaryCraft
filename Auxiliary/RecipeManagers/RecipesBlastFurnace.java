@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -261,7 +262,8 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		}
 
 		public boolean usesSlot(int i) {
-			return ReikaRecipeHelper.getRecipeArray(recipe)[i] != null;
+			List<ItemStack>[] arr = ReikaRecipeHelper.getRecipeArray(recipe);
+			return arr != null && arr[i] != null;
 		}
 	}
 

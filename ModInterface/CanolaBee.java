@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -39,6 +39,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
@@ -257,7 +258,7 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public IAllele getEffectAllele() {
+	public IAlleleBeeEffect getEffectAllele() {
 		return Effect.NONE.getAllele();
 	}
 

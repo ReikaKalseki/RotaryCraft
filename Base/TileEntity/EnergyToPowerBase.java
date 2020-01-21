@@ -301,7 +301,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 	protected final void updateSpeed() {
 		int maxspeed = this.isEmitting() ? this.getMaxSpeed() : 0;
 		float mult = 1;
-		boolean accel = omega <= maxspeed && this.hasEnoughEnergy();
+		boolean accel = omega <= maxspeed && this.hasEnoughEnergy() && !this.isShutdown();
 		if (accel) {
 			if (omega < maxspeed)
 				mult = 1.5F;

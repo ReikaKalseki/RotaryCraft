@@ -423,8 +423,11 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 
 	@ModDependent(ModList.CHROMATICRAFT)
 	public final Result getEnchantValidity(Enchantment e, ItemStack is) {
-		if (is.getItem() == this && e == ChromaEnchants.AUTOCOLLECT.getEnchantment()) {
-			return Result.ALLOW;
+		if (is.getItem() == this) {
+			if (e == Enchantment.fortune || e == Enchantment.efficiency || e == Enchantment.unbreaking)
+				return Result.ALLOW;
+			if (e == ChromaEnchants.AIRMINER.getEnchantment() || e == ChromaEnchants.AUTOCOLLECT.getEnchantment())
+				return Result.ALLOW;
 		}
 		return Result.DEFAULT;
 	}

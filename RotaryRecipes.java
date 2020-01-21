@@ -292,10 +292,10 @@ public class RotaryRecipes {
 			for (OreType ore : ores) {
 				if (ore.existsInGame()) {
 					String suff = ore == ReikaOreHelper.EMERALD ? "liquid" : "molten";
-					f = ore.name().toLowerCase(Locale.ENGLISH)+"."+suff;
+					f = ore == ReikaOreHelper.REDSTONE ? "redstone" : ore.name().toLowerCase(Locale.ENGLISH)+"."+suff;
 					if (FluidRegistry.isFluidRegistered(f)) {
 						base = ore == ReikaOreHelper.EMERALD ? 640 : SmelteryRecipeHandler.INGOT_AMOUNT;
-						int flakeYield = (int)(base*ConfigRegistry.getSmelteryFlakeYield());
+						int flakeYield = (int)(base*ore.getDropCount()*ConfigRegistry.getSmelteryFlakeYield());
 
 						temp = ore == ModOreList.ALUMINUM || ore == ModOreList.TIN || ore == ModOreList.LEAD ? 300 : 600;
 						if (ore == ModOreList.COBALT || ore == ModOreList.ARDITE)
