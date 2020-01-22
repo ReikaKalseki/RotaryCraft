@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -30,7 +30,7 @@ public final class BedrockRevealingInfusion extends InfusionRecipe {
 
 	public BedrockRevealingInfusion(int inst, AspectList al, ItemStack[] recipe) {
 		super("BEDREVEAL", ItemRegistry.BEDREVEAL.getEnchantedStack(), inst, al, ItemRegistry.BEDHELM.getEnchantedStack(), recipe);
-		cachedCentralInput = this.getRecipeInput();
+		cachedCentralInput = this.getRecipeInput().copy();
 	}
 
 	@Override

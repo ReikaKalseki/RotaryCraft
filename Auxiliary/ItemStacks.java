@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryNames;
@@ -273,6 +274,29 @@ public final class ItemStacks {
 
 	public static ItemStack getFlake(ReikaOreHelper ore) {
 		return ItemRegistry.EXTRACTS.getStackOfMetadata(ReikaOreHelper.oreList.length*3+ore.ordinal());
+	}
+
+	/** Does NOT include multiplication yields! */
+	public static ItemStack getSmeltedProduct(ReikaOreHelper ore) {
+		switch (ore) {
+			case COAL:
+				return new ItemStack(Items.coal);
+			case IRON:
+				return new ItemStack(Items.iron_ingot);
+			case GOLD:
+				return new ItemStack(Items.gold_ingot);
+			case REDSTONE:
+				return new ItemStack(Items.redstone);
+			case LAPIS:
+				return ReikaItemHelper.lapisDye.copy();
+			case DIAMOND:
+				return new ItemStack(Items.diamond);
+			case EMERALD:
+				return new ItemStack(Items.emerald);
+			case QUARTZ:
+				return new ItemStack(Items.quartz);
+		}
+		return null;
 	}
 
 	/** In nuggets. *//*

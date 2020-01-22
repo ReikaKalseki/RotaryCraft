@@ -584,6 +584,27 @@ public class RotaryRecipes {
 		InfusionRecipe ir = new BedrockRevealingInfusion(6, al, recipe);
 		ThaumcraftApi.getCraftingRecipes().add(ir);
 		ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page).setParents("GOGGLES");
+
+		for (ReikaOreHelper ore : ReikaOreHelper.oreList) {
+			ItemStack flake = ItemStacks.getFlake(ore);
+			ItemStack out = ItemStacks.getSmeltedProduct(ore);
+			out.stackSize = calculateThaumBonusStackSize(ore);
+			ThaumcraftApi.addSmeltingBonus(flake, out);
+		}
+		for (ModOreList ore : ModOreList.oreList) {
+			ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
+			ItemStack out = ExtractorModOres.getSmeltedIngot(ore);
+			out.stackSize = calculateThaumBonusStackSize(ore);
+			ThaumcraftApi.addSmeltingBonus(flake, out);
+		}
+	}
+
+	private static int calculateThaumBonusStackSize(OreType ore) { //at stacksize 0, average drop is 0.25 base or 0.44 per bellow (up to three bellows = 1.32)
+		int drops = ore.getDropCount();
+		if (drops > 1) {
+			return -1+drops*3/4;
+		}
+		return -1;
 	}
 
 	public static ItemStack getConverterGatingItem() {

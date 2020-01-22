@@ -46,7 +46,7 @@ public final class BasicPowerHandler {
 		iotick = io;
 	}
 
-	public void derementIOTick(int amt) {
+	public void decrementIOTick(int amt) {
 		iotick = Math.max(0, iotick-amt);
 	}
 
