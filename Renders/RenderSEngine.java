@@ -368,7 +368,7 @@ public class RenderSEngine extends RotaryTERenderer
 		if (!ar.hasRedstoneUpgrade())
 			return;
 		boolean bright = true;
-		if (tile instanceof AlternatingRedstoneUser)
+		if (tile instanceof AlternatingRedstoneUser && !ar.hasRedstoneSignal())
 			bright = (tile.getTicksExisted()/3)%2 == 0;
 		int c = bright ? 0xff0000 : 0x900000;
 		int c2 = bright ? 0xffa7a7 : 0xda0000;

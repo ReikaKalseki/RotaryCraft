@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -39,6 +39,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.ModDependency;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
@@ -174,6 +175,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityChainDrive;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
@@ -359,7 +361,8 @@ public enum MachineRegistry implements TileEnum {
 	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon"),
 	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway"),
 	FLAMETURRET(		"machine.flameturret",		BlockMMachine.class,		TileEntityFlameTurret.class,		22, "RenderFlameTurret"),
-	BUNDLEDBUS(			"machine.bundledbus",		BlockDMachine.class,		TileEntityBundledBus.class,			5, ModList.APPENG, ModList.PROJRED);
+	BUNDLEDBUS(			"machine.bundledbus",		BlockDMachine.class,		TileEntityBundledBus.class,			5, ModList.APPENG, ModList.PROJRED),
+	DISTRIBCLUTCH(		"machine.distribclutch",	BlockTrans.class,			TileEntityDistributionClutch.class,	5,	"RenderDistribClutch");
 
 	private final String name;
 	private final Class te;
@@ -681,6 +684,8 @@ public enum MachineRegistry implements TileEnum {
 			return 0.375F;
 		if (this == FRICTION)
 			return 0.9375F;
+		if (this == DISTRIBCLUTCH)
+			return 0.75F;
 		return 1;
 	}
 
@@ -867,6 +872,7 @@ public enum MachineRegistry implements TileEnum {
 			case REFRIGERATOR:
 			case DROPS:
 			case SPILLWAY:
+			case DISTRIBCLUTCH:
 				return true;
 			default:
 				return false;
@@ -1017,6 +1023,10 @@ public enum MachineRegistry implements TileEnum {
 
 	public boolean isPoweredTransmissionMachine() {
 		return TransmissionReceiver.class.isAssignableFrom(te);
+	}
+
+	public boolean isComplexIO() {
+		return ComplexIO.class.isAssignableFrom(te);
 	}
 
 	public boolean hasSubdivisions() {

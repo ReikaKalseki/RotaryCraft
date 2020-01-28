@@ -48,6 +48,7 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -242,6 +243,13 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 				if (ep.isSneaking()) {
 					TileEntityClutch tc = (TileEntityClutch)te;
 					tc.needsRedstone = !tc.needsRedstone;
+					return true;
+				}
+			}
+			if (m == MachineRegistry.DISTRIBCLUTCH) {
+				if (ep.isSneaking()) {
+					TileEntityDistributionClutch tc = (TileEntityDistributionClutch)te;
+					tc.stepMode();
 					return true;
 				}
 			}

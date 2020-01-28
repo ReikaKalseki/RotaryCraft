@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,9 +11,24 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import net.minecraft.world.World;
 
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
 public abstract class TileEntityTransmissionMachine extends TileEntityIOMachine {
+
+	protected void readFromCross(TileEntityShaft cross) {
+		if (cross.isWritingTo(this)) {
+			omega = cross.readomega[0];
+			torque = cross.readtorque[0];
+		}
+		else if (cross.isWritingTo2(this)) {
+			omega = cross.readomega[1];
+			torque = cross.readtorque[1];
+		}
+		else {
+			omega = torque = 0;
+		}
+	}
 
 	protected void readFromSplitter(World world, int x, int y, int z, TileEntitySplitter spl) { //Complex enough to deserve its own function
 		int sratio = spl.getRatioFromMode();

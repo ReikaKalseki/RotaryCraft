@@ -69,6 +69,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
@@ -622,6 +623,12 @@ public class PacketHandlerCore implements PacketHandler {
 					else {
 						EMPSparkRenderer.instance.removeSparkingLocation(new WorldLocation(data[0], data[1], data[2], data[3]));
 					}
+					break;
+				case DISTRIBCLUTCH:
+					((TileEntityDistributionClutch)te).setSideEnabled(ForgeDirection.VALID_DIRECTIONS[data[0]+2], data[1] > 0);
+					break;
+				case DISTRIBCLUTCHPOWER:
+					((TileEntityDistributionClutch)te).setTorqueRequests(data);
 					break;
 			}
 		}

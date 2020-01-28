@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -21,6 +21,7 @@ import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.API.Power.PowerTracker;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -276,8 +277,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						else
 							torquein = omegain = 0;
 					}
-					if (m == MachineRegistry.POWERBUS) {
-						TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+					if (m.isComplexIO()) {
+						ComplexIO pwr = (ComplexIO)te;
 						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 						omegain = pwr.getSpeedToSide(dir);
 						torquein = pwr.getTorqueToSide(dir);
@@ -337,7 +338,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						else
 							torquein2 = omegain2 = 0;
 					}
-					if (m2 == MachineRegistry.POWERBUS) {
+					if (m2.isComplexIO()) {
 						TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
 						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 						omegain2 = pwr.getSpeedToSide(dir);
@@ -474,7 +475,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						torque = omega = 0;
 				}
 
-				if (m == MachineRegistry.POWERBUS) {
+				if (m.isComplexIO()) {
 					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
 					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 					omega = pwr.getSpeedToSide(dir);

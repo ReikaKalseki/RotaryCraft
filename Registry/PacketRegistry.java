@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -56,7 +56,10 @@ public enum PacketRegistry {
 	SPRINKLER(78),
 	BLASTLEAVEONE(79),
 	EMPEFFECT(80),
-	SPARKLOC(81);
+	SPARKLOC(81),
+	DISTRIBCLUTCH(82),
+	DISTRIBCLUTCHPOWER(83),
+	;
 
 	private int min;
 	private int max;
@@ -110,6 +113,10 @@ public enum PacketRegistry {
 			return 5;
 		if (this == EMPEFFECT)
 			return 0;
+		if (this == DISTRIBCLUTCH)
+			return 2;
+		if (this == DISTRIBCLUTCHPOWER)
+			return 4;
 		return 1;
 	}
 

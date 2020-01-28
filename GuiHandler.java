@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -89,6 +89,7 @@ import Reika.RotaryCraft.GUIs.Machine.GuiBevel;
 import Reika.RotaryCraft.GUIs.Machine.GuiBlower;
 import Reika.RotaryCraft.GUIs.Machine.GuiBorer;
 import Reika.RotaryCraft.GUIs.Machine.GuiCoil;
+import Reika.RotaryCraft.GUIs.Machine.GuiDistributionClutch;
 import Reika.RotaryCraft.GUIs.Machine.GuiGPR;
 import Reika.RotaryCraft.GUIs.Machine.GuiGearbox;
 import Reika.RotaryCraft.GUIs.Machine.GuiJet;
@@ -200,6 +201,7 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
@@ -639,6 +641,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityBundledBus) {
 			return new GuiBundledBus(player, (TileEntityBundledBus) te);
+		}
+		if (te instanceof TileEntityDistributionClutch) {
+			return new GuiDistributionClutch(player, (TileEntityDistributionClutch) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

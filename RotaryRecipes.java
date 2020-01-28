@@ -589,13 +589,13 @@ public class RotaryRecipes {
 			ItemStack flake = ItemStacks.getFlake(ore);
 			ItemStack out = ItemStacks.getSmeltedProduct(ore);
 			out.stackSize = calculateThaumBonusStackSize(ore);
-			ThaumcraftApi.addSmeltingBonus(flake, out);
+			ReikaThaumHelper.addSmeltingBonusWithStackSize(flake, out);
 		}
 		for (ModOreList ore : ModOreList.oreList) {
 			ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
 			ItemStack out = ExtractorModOres.getSmeltedIngot(ore);
 			out.stackSize = calculateThaumBonusStackSize(ore);
-			ThaumcraftApi.addSmeltingBonus(flake, out);
+			ReikaThaumHelper.addSmeltingBonusWithStackSize(flake, out);
 		}
 	}
 
@@ -891,6 +891,8 @@ public class RotaryRecipes {
 		MachineRegistry.FLAMETURRET.addCrafting("FIP", "GFS", " FB", 'B', ItemStacks.railbase, 'F', ItemStacks.fuelline, 'I', ItemStacks.igniter, 'P', ItemStacks.pipe, 'g', ItemStacks.impeller, 'S', ItemStacks.shaftitem);
 
 		MachineRegistry.SPILLWAY.addCrafting("S  ", "PSP", "PpP", 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe);
+
+		MachineRegistry.DISTRIBCLUTCH.addCrafting("sgs", "SGS", "PrP", 'r', ItemStacks.pcb, 's', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'S', ItemStacks.shaftitem, 'g', ItemStacks.steelgear, 'G', ItemStacks.gearunit);
 	}
 
 	private static void addCraftItems() {
