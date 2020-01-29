@@ -321,20 +321,23 @@ public class PacketHandlerCore implements PacketHandler {
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 					adv.stepMode();
+					break;
 				}
 				case CVTRATIO: {
 					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 					adv.setRatio(data[0]);
+					break;
 				}
 				case CVTTARGET: {
 					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 					adv.setTargetTorque(data[0]);
+					break;
 				}
 				case CVTREDSTONESTATE: {
 					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 					adv.incrementCVTState(data[0] > 0);
+					break;
 				}
-				break;
 				case CANNONFIRINGVALS: {
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					TileEntityLaunchCannon cannon = (TileEntityLaunchCannon)te;

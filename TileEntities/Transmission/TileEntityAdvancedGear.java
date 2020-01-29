@@ -113,6 +113,11 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 	public void stepMode() {
 		cvtMode = cvtMode.next();
+		this.syncAllData(false);
+	}
+
+	public int getTargetTorque() {
+		return targetTorque;
 	}
 
 	public void setController(CVTController c) {
@@ -748,6 +753,10 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		}
 	}
 
+	public int getTorqueIn() {
+		return torquein;
+	}
+
 	private int updateAutoRatio() {
 		if (torquein >= targetTorque && torquein < targetTorque*2) { //already meeting, and cannot do any more
 			return 1;
@@ -755,11 +764,11 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		else if (torquein > targetTorque) { //can get extra speed
 			int val = 1;
 			int has = torquein;
-			while (has >= targetTorque*2 && val < this.getMaxRatio()) {
+			while (has >= targetTorque && val < this.getMaxRatio()) {
 				val++;
 				has = torquein/val;
 			}
-			return val;
+			return val-1;
 		}
 		else {
 			int val = 1;
@@ -779,7 +788,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		NBT.setLong("e", energy);
 		NBT.setInteger("relo", releaseOmega);
 		NBT.setInteger("relt", releaseTorque);
-		NBT.setInteger("cvtmode", cvtMode.ordinal());
+		NBT.setInteger("mode", cvtMode.ordinal());
 		NBT.setInteger("cvton", this.getCVTState(true).ordinal());
 		NBT.setInteger("cvtoff", this.getCVTState(false).ordinal());
 		NBT.setBoolean("bedrock", isBedrockCoil);

@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCVT;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -68,9 +69,9 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 		switch(mode) {
 			case AUTO:
-				input = new GuiTextField(fontRendererObj, j+xSize/2+24, k+39, 26, 16);
+				input = new GuiTextField(fontRendererObj, j+xSize/2+24, k+48, 76, 16);
 				input.setFocused(false);
-				input.setMaxStringLength(3);
+				input.setMaxStringLength(9);
 				break;
 			case MANUAL:
 				if (ratio > 0)
@@ -113,7 +114,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 			buttontimer = 8;
 		if (button.id == 0) {
 			mode = mode.next();
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTMODE.ordinal(), cvt, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTMODE.ordinal(), cvt);
 		}
 
 		switch(mode) {
@@ -151,17 +152,17 @@ public class GuiCVT extends GuiNonPoweredMachine
 			if (input.getText().isEmpty())
 				return;
 			PacketRegistry p = mode == CVTMode.AUTO ? PacketRegistry.CVTTARGET : PacketRegistry.CVTRATIO;
+			int val = 1;
 			if (!(input.getText().matches("^[0-9 ]+$"))) {
-				ratio = 1;
 				input.deleteFromCursor(-1);
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, p.ordinal(), cvt, ratio);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, p.ordinal(), cvt, val);
 				return;
 			}
-			ratio = ReikaJavaLibrary.safeIntParse(input.getText());
-			if (reduction)
-				ratio = -ratio;
-			if (ratio != 0)
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, p.ordinal(), cvt, ratio);
+			val = ReikaJavaLibrary.safeIntParse(input.getText());
+			if (mode == CVTMode.MANUAL && reduction)
+				val = -val;
+			if (val != 0)
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, p.ordinal(), cvt, val);
 		}
 	}
 
@@ -173,9 +174,6 @@ public class GuiCVT extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
-		int dy = mode == CVTMode.REDSTONE ? 17 : 0;
-		int dx = mode == CVTMode.REDSTONE ? -14 : 0;
-		fontRendererObj.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
 
 		if (cvt.hasLubricant()) {
 			Fluid f = FluidRegistry.getFluid("rc lubricant");
@@ -190,13 +188,6 @@ public class GuiCVT extends GuiNonPoweredMachine
 			api.drawTooltipAt(fontRendererObj, s, -j+api.getMouseRealX()+55-fontRendererObj.getStringWidth(s), -k+api.getMouseRealY());
 		}
 
-		api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Items.redstone), xSize/2+94, 7);
-
-		if (api.isMouseInBox(j+xSize/2+92, j+xSize/2+112, -1+k+7, -1+k+27)) {
-			String s = "Redstone Control";
-			api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-5-fontRendererObj.getStringWidth(s), api.getMouseRealY());
-		}
-
 		switch(mode) {
 			case REDSTONE:
 				api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.redstone_torch), 129, 31);
@@ -204,14 +195,35 @@ public class GuiCVT extends GuiNonPoweredMachine
 
 				this.drawCenteredString(fontRendererObj, cvt.getCVTString(true), 188, 37, 0xffffff);
 				this.drawCenteredString(fontRendererObj, cvt.getCVTString(false), 188, 60, 0xffffff);
+
+				int dy = 17;
+				int dx = -14;
+				fontRendererObj.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
+
+				api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Items.redstone), xSize/2+94, 7);
 				break;
 			case MANUAL:
 				if (!input.isFocused()) {
 					fontRendererObj.drawString(String.format("%d", Math.abs(cvt.getRatio())), xSize/2+36, 31, 0xffffffff);
 				}
+				fontRendererObj.drawString("Belt Ratio:", xSize/2-32, 31, 4210752);
+				this.drawCenteredString(fontRendererObj, "M", xSize/2+102, 12, 0xffffffff);
 				break;
 			case AUTO:
+				if (!input.isFocused()) {
+					fontRendererObj.drawString(String.format("%d", Math.abs(cvt.getTargetTorque())), xSize/2+36, 40, 0xffffffff);
+				}
+				fontRendererObj.drawString("Target Torque:", xSize/2-48, 40, 4210752);
+				fontRendererObj.drawString(String.format("Current Input: %d Nm", cvt.getTorqueIn()), xSize/2-30, 60, 4210752);
+				int r = cvt.getRatio();
+				fontRendererObj.drawString(String.format("Current Ratio: %dx (%s)", Math.abs(r), r < 0 ? "Torque" : "Speed"), xSize/2-30, 72, 4210752);
+				api.drawItemStack(itemRender, fontRendererObj, ItemStacks.pcb, xSize/2+94, 8);
 				break;
+		}
+
+		if (api.isMouseInBox(j+xSize/2+92, j+xSize/2+112, -1+k+7, -1+k+27)) {
+			String s = "Control Mode";
+			api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-5-fontRendererObj.getStringWidth(s), api.getMouseRealY());
 		}
 	}
 
@@ -223,9 +235,11 @@ public class GuiCVT extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
+		if (input != null)
+			input.drawTextBox();
+
 		switch(mode) {
 			case MANUAL:
-				input.drawTextBox();
 				if (ratio > cvt.getMaxRatio())
 					api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
 				else if (ratio == 0)
