@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -64,10 +64,10 @@ public class GuiEnergyToPower extends GuiNonPoweredMachine {
 		super.actionPerformed(b);
 		PacketTarget pt = PacketTarget.server;
 		if (b.id == 4) {
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+2, engine, pt);
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.CONVERTERREDSTONE.ordinal(), engine, pt);
 		}
 		else if (b.id < 24000) {
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.PNEUMATIC.getMinValue()+b.id-2, engine, pt);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CONVERTERPOWER.ordinal(), engine, b.id == 3 ? 1 : 0);
 		}
 		this.initGui();
 	}

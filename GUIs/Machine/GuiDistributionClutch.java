@@ -111,7 +111,7 @@ public class GuiDistributionClutch extends GuiNonPoweredMachine
 			}
 		}
 		if (packet)
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCHPOWER.getMinValue(), clutch, selected[0], selected[1], selected[2], selected[3]);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCHPOWER.ordinal(), clutch, selected[0], selected[1], selected[2], selected[3]);
 	}
 
 	private int parseInt(GuiTextField g) {
@@ -131,7 +131,7 @@ public class GuiDistributionClutch extends GuiNonPoweredMachine
 		if (button.id < 4) {
 			enabled[button.id] = !enabled[button.id];
 			this.initGui();
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCH.getMinValue(), clutch, button.id, enabled[button.id] ? 1 : 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCH.ordinal(), clutch, button.id, enabled[button.id] ? 1 : 0);
 		}
 	}
 

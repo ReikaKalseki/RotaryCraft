@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -88,7 +88,7 @@ public class GuiScaleChest extends GuiPowerOnlyMachine
 			page--;
 		if (page == oldpage)
 			return;
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CHEST.getMinValue(), scale, page);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CHEST.ordinal(), scale, page);
 		//ep.closeScreen();
 		//this.refresh();
 		//this.setValues();

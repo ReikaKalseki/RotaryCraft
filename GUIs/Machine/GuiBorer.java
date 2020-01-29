@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -90,7 +90,7 @@ public class GuiBorer extends GuiMachine
 			drops = true;
 		}
 
-		this.sendPacket(PacketRegistry.BORER.getMinValue()+1);
+		this.sendPacket(PacketRegistry.BORERDROPS.ordinal());
 	}
 
 	@Override
@@ -100,9 +100,9 @@ public class GuiBorer extends GuiMachine
 			this.toggleDrops();
 		}
 		if (button.id == 8)
-			this.sendPacket(PacketRegistry.BORER.getMinValue()+3);
+			this.sendPacket(PacketRegistry.BORERRESET.ordinal());
 		if (button.id < 7) { //toggle
-			this.sendPacket(PacketRegistry.BORER.getMinValue()+2);
+			this.sendPacket(PacketRegistry.BORERTOGGLEALL.ordinal());
 			for (int i = 0; i < 5; i++) {
 				for (int j = 0; j < 7; j++) {
 					dig[j][i] = !dig[j][i];
@@ -117,7 +117,7 @@ public class GuiBorer extends GuiMachine
 			packetID = (button.id-10);
 			if (button.id == 10)
 				packetID = 100;
-			this.sendPacket(PacketRegistry.BORER.getMinValue());
+			this.sendPacket(PacketRegistry.BORER.ordinal());
 		}
 		if (button.id >= 50 && button.id < 24000) {
 			int rows = (button.id-50)/7;
@@ -127,7 +127,7 @@ public class GuiBorer extends GuiMachine
 			packetID = (button.id-50);
 			if (button.id == 50)
 				packetID = 100;
-			this.sendPacket(PacketRegistry.BORER.getMinValue());
+			this.sendPacket(PacketRegistry.BORER.ordinal());
 		}
 		this.updateScreen();
 
@@ -139,18 +139,18 @@ public class GuiBorer extends GuiMachine
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			outputStream.writeInt(a);
-			if (a == PacketRegistry.BORER.getMinValue()+1) {
+			if (a == PacketRegistry.BORERDROPS.ordinal()) {
 				if (drops)
 					outputStream.writeInt(1); //set drops to 0 (false)
 				else
 					outputStream.writeInt(0);
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			}
-			if (a == PacketRegistry.BORER.getMinValue()+2)
+			if (a == PacketRegistry.BORERTOGGLEALL.ordinal())
 				outputStream.writeInt(-1);
-			if (a > PacketRegistry.BORER.getMinValue()+2)
+			if (a > PacketRegistry.BORERTOGGLEALL.ordinal())
 				outputStream.writeInt(-1);
-			if (a == PacketRegistry.BORER.getMinValue()) {
+			if (a == PacketRegistry.BORER.ordinal()) {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(3434));
 				int rows = packetID/7;
 				int cols = packetID-rows*7;

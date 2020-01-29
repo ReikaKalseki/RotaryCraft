@@ -107,7 +107,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 					double m = ReikaEntityHelper.getEntityMass(e);
 					//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
 					if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
-						ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
+						ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
 						e.attackEntityFrom(DamageSource.cactus, 1);
 						this.breakMirror(world, x, y, z);
 						break;

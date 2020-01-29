@@ -111,6 +111,10 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		return "CEIL2_pseudo(SQRT(energy)/4)";
 	}
 
+	public void stepMode() {
+		cvtMode = cvtMode.next();
+	}
+
 	public void setController(CVTController c) {
 		controller = c;
 	}
@@ -533,6 +537,10 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		}
 	}
 
+	public void setTargetTorque(int target) {
+		targetTorque = target;
+	}
+
 	public int getMaxRatio() {
 		if (belts[0] == null)
 			return 1;
@@ -765,8 +773,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setInteger("ratio", ratio);
 		NBT.setLong("e", energy);
@@ -778,6 +785,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		NBT.setBoolean("bedrock", isBedrockCoil);
 		NBT.setBoolean("creative", isCreative);
 		NBT.setBoolean("trq", torquemode);
+		NBT.setInteger("target", targetTorque);
 
 		NBT.setBoolean("t_enable", enabled);
 
@@ -785,8 +793,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		ratio = NBT.getInteger("ratio");
 		energy = NBT.getLong("e");
@@ -800,6 +807,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		isBedrockCoil = NBT.getBoolean("bedrock");
 		isCreative = NBT.getBoolean("creative");
 		torquemode = NBT.getBoolean("trq");
+		targetTorque = NBT.getInteger("target");
 
 		if (NBT.hasKey("t_enable"))
 			enabled = NBT.getBoolean("t_enable");

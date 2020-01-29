@@ -291,7 +291,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	private void fire(World world, int x, int y, int z) {
 		fired = true;
-		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.EMPEFFECT.getMinValue(), this, 128);
+		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.EMPEFFECT.ordinal(), this, 128);
 		for (int i = 0; i < blocks.size(); i++) {
 			TileEntity te = blocks.get(i).getTileEntity(world);
 			if (ModList.CHROMATICRAFT.isLoaded() && te instanceof TileEntityCrystalPylon)
@@ -380,7 +380,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			return;
 		if (this.isBlacklisted(te))
 			return;
-		ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord, 1);
+		ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.ordinal(), te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord, 1);
 		if (te instanceof RotaryCraftTileEntity) {
 			RotaryCraftTileEntity rc = (RotaryCraftTileEntity)te;
 			if (!rc.isShutdown())
@@ -441,7 +441,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	public static void resetCoordinate(World world, int x, int y, int z) {
 		if (shutdownLocations.remove(new WorldLocation(world, x, y, z)))
-			ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), world.provider.dimensionId, x, y, z, 0);
+			ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.ordinal(), world.provider.dimensionId, x, y, z, 0);
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -49,7 +49,7 @@ public class GuiBlastFurnace extends GuiNonPoweredMachine {
 
 		if (b.id == 0) {
 			blast.leaveLastItem = !blast.leaveLastItem;
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BLASTLEAVEONE.getMinValue(), blast, blast.leaveLastItem ? 1 : 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BLASTLEAVEONE.ordinal(), blast, blast.leaveLastItem ? 1 : 0);
 			this.initGui();
 		}
 	}

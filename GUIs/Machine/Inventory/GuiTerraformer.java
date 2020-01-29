@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -80,7 +80,7 @@ public class GuiTerraformer extends GuiPowerOnlyMachine {
 		}
 		else if (b.id < targets.size()) {
 			BiomeGenBase biome = targets.get(b.id);
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.getMinValue(), terra, biome.biomeID);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.ordinal(), terra, biome.biomeID);
 		}
 
 		this.initGui();

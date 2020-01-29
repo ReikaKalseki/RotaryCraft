@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -59,7 +59,7 @@ public class GuiMultiClutch extends GuiNonPoweredMachine {
 		if (b.id < 16) {
 			int side = multi.getNextSideForState(b.id);
 			multi.setSideOfState(b.id, side);
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.REDGEAR.getMinValue(), multi, b.id, side);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MULTISIDE.ordinal(), multi, b.id, side);
 		}
 		this.initGui();
 	}

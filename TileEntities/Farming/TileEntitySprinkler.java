@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -113,7 +113,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 	}
 
 	private void sendParticle(int dx, int dy, int dz, boolean drip) {
-		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.SPRINKLER.getMinValue(), this, 48, dx, dy, dz, drip ? 1 : 0);
+		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.SPRINKLER.ordinal(), this, 48, dx, dy, dz, drip ? 1 : 0);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -63,9 +63,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private int[] playIndex = new int[16];
 
 	private static final int[] channelColors = {
-		0x3636FF, 0xD336FF, 0xFFACAC, 0xFF3636, 0xFFAC36, 0xD3D336,
-		0x65BC8F, 0x36D336, 0x36FFFF, 0x58ABF9, 0x8484FF, 0xFF36FF,
-		0x8436FF, 0xB49C8A, 0x8FA9B5, 0x94B581
+			0x3636FF, 0xD336FF, 0xFFACAC, 0xFF3636, 0xFFAC36, 0xD3D336,
+			0x65BC8F, 0x36D336, 0x36FFFF, 0x58ABF9, 0x8484FF, 0xFF36FF,
+			0x8436FF, 0xB49C8A, 0x8FA9B5, 0x94B581
 	};
 
 	public TileEntityMusicBox() {
@@ -197,7 +197,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		if (!n.isRest()) {
 			for (int i = 0; i < 3; i++)
 				n.play(worldObj, xCoord, yCoord, zCoord);
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
 		}
 		playDelay[channel] = n.length.tickLength;
 		playIndex[channel]++;
@@ -273,7 +273,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	private void dispatchTrack(MusicScore mus) {
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, this);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.ordinal(), this);
 		for (int i = 0; i < mus.countTracks(); i++) {
 			Map<Integer, Collection<MusicScore.Note>> track = mus.getTrack(i);
 			int lastNoteTime = -1;
@@ -733,7 +733,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	@SideOnly(Side.CLIENT)
 	public void sendNote(int pitch, int channel, NoteLength len, Instrument voice) {
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), this, pitch, channel, len.ordinal(), voice.ordinal());
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICNOTE.ordinal(), this, pitch, channel, len.ordinal(), voice.ordinal());
 	}
 
 }

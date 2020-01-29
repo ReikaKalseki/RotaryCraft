@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -67,17 +67,17 @@ public class GuiBasicRange extends GuiPowerOnlyMachine
 			range = 0;
 			input.deleteFromCursor(-1);
 			if (pwr instanceof TileEntityForceField)
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.FORCE.getMinValue(), pwr, range);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.FORCE.ordinal(), pwr, range);
 			else if (pwr instanceof TileEntityContainment)
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CONTAINMENT.getMinValue(), pwr, range);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CONTAINMENT.ordinal(), pwr, range);
 			return;
 		}
 		range = Integer.parseInt(input.getText());
 		if (range >= 0) {
 			if (pwr instanceof TileEntityForceField)
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.FORCE.getMinValue(), pwr, range);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.FORCE.ordinal(), pwr, range);
 			else if (pwr instanceof TileEntityContainment)
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CONTAINMENT.getMinValue(), pwr, range);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CONTAINMENT.ordinal(), pwr, range);
 		}
 	}
 

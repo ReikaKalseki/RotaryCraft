@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -143,7 +143,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		nbt.setInteger("posX", tile.xCoord);
 		nbt.setInteger("posY", tile.yCoord);
 		nbt.setInteger("posZ", tile.zCoord);
-		ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.getMinValue(), nbt, PacketTarget.server);
+		ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.ordinal(), nbt, PacketTarget.server);
 	}
 
 	@Override

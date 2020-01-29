@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -75,12 +75,12 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			range = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, range);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.ordinal(), playerdetector, range);
 			return;
 		}
 		range = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (range >= 0)
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, range);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.ordinal(), playerdetector, range);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -69,7 +69,7 @@ public class GuiCraftingPattern extends GuiContainer {
 				RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
 				ItemCraftPattern.setMode(this.getItem(), next);
 				((ContainerCraftingPattern)player.openContainer).clearRecipe();
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), PacketTarget.server, next.ordinal());
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.ordinal(), PacketTarget.server, next.ordinal());
 			}
 		}
 		else if (b.id == 1 || b.id == 2) {
@@ -79,7 +79,7 @@ public class GuiCraftingPattern extends GuiContainer {
 			if (amt > 1 && ItemCraftPattern.getStackInputLimit(this.getItem()) == 1)
 				amt--;
 			ItemCraftPattern.changeStackLimit(this.getItem(), amt);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1, PacketTarget.server, amt);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNLIMIT.ordinal(), PacketTarget.server, amt);
 		}
 		this.initGui();
 	}

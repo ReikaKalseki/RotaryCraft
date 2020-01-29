@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,10 +27,10 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 public class GuiBevel extends GuiNonPoweredMachine
 {
 	/** Side colors:
-	 * 
+	 *
 	 * Cyan y-1; blue y+1; yellow -z; black +z; orange -x; magenta +x;<br>
 	 * 0 y-1; 1 y+1; 2 -z; 3 +z; 4 -x; 5 +x;
-	 * 
+	 *
 	 */
 	private int posn;
 	private ForgeDirection in;
@@ -115,7 +115,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 		this.getDirectionFromIO();
 		this.initGui();
 		bevel.direction = posn;
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.getMinValue(), bevel, posn);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.ordinal(), bevel, posn);
 	}
 
 	@Override

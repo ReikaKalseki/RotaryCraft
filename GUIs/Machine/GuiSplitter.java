@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -65,7 +65,7 @@ public class GuiSplitter extends GuiNonPoweredMachine
 		if (button.id <= 32) {
 			//this.updateMode(button.id);
 			mode = button.id;
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPLITTER.getMinValue(), splitter, mode);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPLITTERMODE.ordinal(), splitter, mode);
 		}
 		this.updateScreen();
 		this.updateMode(mode);

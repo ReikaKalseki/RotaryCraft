@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -98,7 +98,7 @@ public class GuiSafePlayerList extends GuiScreen {
 			return;
 		}
 		activePlayer = playerList.get(button.id);
-		ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SAFEPLAYER.getMinValue(), activePlayer, te);
+		ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SAFEPLAYER.ordinal(), activePlayer, te);
 		playerList.remove(button.id);
 		this.initGui();
 	}

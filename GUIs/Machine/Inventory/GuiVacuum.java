@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -60,7 +60,7 @@ public class GuiVacuum extends GuiPowerOnlyMachine
 	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id == 0)
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.VACUUM.getMinValue(), vac, PacketTarget.server);
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.VACUUMXP.ordinal(), vac, PacketTarget.server);
 	}
 
 	/**

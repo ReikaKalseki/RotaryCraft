@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -110,14 +110,14 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			freq = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMinValue(), sonic, freq);
+			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONICPITCH.ordinal(), sonic, freq);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			dB = 0;
 			this.getVolFromdB();
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMaxValue(), sonic, vol);
+			ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONICVOLUME.ordinal(), sonic, vol);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -127,13 +127,13 @@ public class GuiSonic extends GuiPowerOnlyMachine
 		if (valid1) {
 			freq = Long.parseLong(input.getText());
 			if (freq >= 0)
-				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMinValue(), sonic, freq);
+				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONICPITCH.ordinal(), sonic, freq);
 		}
 		if (valid2) {
 			dB = ReikaJavaLibrary.safeIntParse(input2.getText());
 			if (dB >= 0) {
 				this.getVolFromdB();
-				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONIC.getMaxValue(), sonic, vol);
+				ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel, PacketRegistry.SONICVOLUME.ordinal(), sonic, vol);
 			}
 		}
 	}

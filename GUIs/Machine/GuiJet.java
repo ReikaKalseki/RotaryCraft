@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -56,7 +56,7 @@ public class GuiJet extends GuiEngine
 
 		if (b.id == 0 && jet != null && jet.canAfterBurn()) {
 			burn = !burn;
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.getMinValue(), eng, burn ? 1 : 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.ordinal(), eng, burn ? 1 : 0);
 			jet.setBurnerActive(burn);
 			this.initGui();
 		}

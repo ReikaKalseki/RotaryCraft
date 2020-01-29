@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -88,13 +88,13 @@ public class GuiCoil extends GuiNonPoweredMachine
 		if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
 			omega = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, omega);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
 			torque = 0;
 			input2.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, torque);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
 			valid2 = false;
 		}
 		if (!valid1 && !valid2)
@@ -110,7 +110,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 					omega = coil.getMaximumEmission();
 					input.setText(String.valueOf(coil.getMaximumEmission()));
 				}
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COIL.getMinValue(), coil, omega);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
 			}
 		}
 		if (valid2) {
@@ -122,7 +122,7 @@ public class GuiCoil extends GuiNonPoweredMachine
 					torque = coil.getMaximumEmission();
 					input2.setText(String.valueOf(coil.getMaximumEmission()));
 				}
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COIL.getMaxValue(), coil, torque);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
 			}
 		}
 	}

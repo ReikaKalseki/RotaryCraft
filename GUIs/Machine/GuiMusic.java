@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -133,25 +133,25 @@ public class GuiMusic extends GuiNonPoweredMachine implements MusicGui {
 		boolean flag = true;
 		if (button.id < 24000) {
 			if (button.id == 100) {
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+1, music, 0, 0, 0, 0); //data not used
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICSAVE.ordinal()+1, music);
 			}
 			else if (button.id == 101) {
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+2, music, 0, 0, 0, 0);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICREAD.ordinal()+2, music);
 			}
 			else if (button.id == 102) {
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+3, music, 0, 0, 0, 0); //demo
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICDEMO.ordinal(), music);
 			}
 			else if (button.id == 103) {
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+4, music, activeChannel, activeType.ordinal(), 0, 0); //rest
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICREST.ordinal(), music, activeChannel, activeType.ordinal(), 0, 0); //rest
 			}
 			else if (button.id == 104) {
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+5, music, activeChannel, 0, 0, 0); //bksp
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICBKSP.ordinal(), music, activeChannel); //bksp
 			}
 			else if (button.id == 105) {
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+6, music, activeChannel, 0, 0, 0); //ch clr
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEARCH.ordinal(), music, activeChannel); //ch clr
 			}
 			else if (button.id == 106) {
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, music, 0, 0, 0, 0); //clrall
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.ordinal(), music); //clrall
 			}
 			else if (button.id >= 400) {
 				int i = button.id-400+1;
