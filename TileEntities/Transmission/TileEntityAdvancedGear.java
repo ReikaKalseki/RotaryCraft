@@ -70,24 +70,19 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	private int releaseOmega = 0;
 	/** Stored energy, in joules */
 	private long energy;
+	private boolean isBedrockCoil = false;
+	private boolean isCreative;
 
 	public static final int WORMRATIO = 64;
 
-	private CVTController controller;
-
-	private ItemStack[] belts = new ItemStack[31];
-
+	public boolean torquemode = true;
 	private final HybridTank lubricant = new HybridTank("advgear", 20000);
 
 	private final CVTState[] cvtState = new CVTState[2];
-
-	public boolean isRedstoneControlled;
-
-	private boolean isBedrockCoil = false;
-
-	private boolean isCreative;
-
-	public boolean torquemode = true;
+	private CVTMode cvtMode = CVTMode.MANUAL;
+	private CVTController controller;
+	private ItemStack[] belts = new ItemStack[31];
+	private int targetTorque = 1;
 
 	private boolean enabled = true;
 
@@ -365,13 +360,15 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	private int getCVTRatio() {
-		if (isRedstoneControlled) {
-			int ratio = this.getCVTState(this.hasRedstoneSignal()).gearRatio;
-			return (int)Math.signum(ratio)*Math.min(Math.abs(ratio), this.getMaxRatio());
+		switch(cvtMode) {
+			case AUTO:
+			case MANUAL:
+				return ratio;
+			case REDSTONE:
+				int ratio = this.getCVTState(this.hasRedstoneSignal()).gearRatio;
+				return (int)Math.signum(ratio)*Math.min(Math.abs(ratio), this.getMaxRatio());
 		}
-		else {
-			return ratio;
-		}
+		return 1;
 	}
 
 	private double getPowerLossFraction(int speed) {
@@ -676,6 +673,9 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 					}
 					break;
 				case CVT:
+					if (cvtMode == CVTMode.AUTO) {
+						ratio = this.updateAutoRatio();
+					}
 					int ratio = this.getCVTRatio();
 					if (this.hasLubricant()) {
 						boolean speed = true;
@@ -740,6 +740,30 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		}
 	}
 
+	private int updateAutoRatio() {
+		if (torquein >= targetTorque && torquein < targetTorque*2) { //already meeting, and cannot do any more
+			return 1;
+		}
+		else if (torquein > targetTorque) { //can get extra speed
+			int val = 1;
+			int has = torquein;
+			while (has >= targetTorque*2 && val < this.getMaxRatio()) {
+				val++;
+				has = torquein/val;
+			}
+			return val;
+		}
+		else {
+			int val = 1;
+			int has = torquein;
+			while (has < targetTorque && val < this.getMaxRatio()) {
+				val++;
+				has = torquein*val;
+			}
+			return -val;
+		}
+	}
+
 	@Override
 	protected void writeSyncTag(NBTTagCompound NBT)
 	{
@@ -748,7 +772,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		NBT.setLong("e", energy);
 		NBT.setInteger("relo", releaseOmega);
 		NBT.setInteger("relt", releaseTorque);
-		NBT.setBoolean("redstone", isRedstoneControlled);
+		NBT.setInteger("cvtmode", cvtMode.ordinal());
 		NBT.setInteger("cvton", this.getCVTState(true).ordinal());
 		NBT.setInteger("cvtoff", this.getCVTState(false).ordinal());
 		NBT.setBoolean("bedrock", isBedrockCoil);
@@ -768,7 +792,9 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		energy = NBT.getLong("e");
 		releaseOmega = NBT.getInteger("relo");
 		releaseTorque = NBT.getInteger("relt");
-		isRedstoneControlled = NBT.getBoolean("redstone");
+		cvtMode = CVTMode.list[NBT.getInteger("mode")];
+		if (NBT.getBoolean("redstone")) //porting pre-placed redstone ones
+			cvtMode = CVTMode.REDSTONE;
 		cvtState[0] = CVTState.list[NBT.getInteger("cvtoff")];
 		cvtState[1] = CVTState.list[NBT.getInteger("cvton")];
 		isBedrockCoil = NBT.getBoolean("bedrock");
@@ -971,6 +997,10 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		return this.getCVTState(on).toString();
 	}
 
+	public CVTMode getMode() {
+		return cvtMode;
+	}
+
 	private static enum CVTState {
 		S1(1),
 		S2(2),
@@ -987,7 +1017,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 		public final int gearRatio;
 
-		public static final CVTState[] list = values();
+		private static final CVTState[] list = values();
 
 		private CVTState(int ratio) {
 			gearRatio = ratio;
@@ -1009,6 +1039,21 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		@Override
 		public String toString() {
 			return Math.abs(gearRatio)+"x "+(gearRatio > 0 ? "Speed" : "Torque");
+		}
+	}
+
+	public static enum CVTMode {
+		MANUAL(),
+		REDSTONE(),
+		AUTO();
+
+		private static final CVTMode[] list = values();
+
+		public CVTMode next() {
+			if (this.ordinal() == list.length-1)
+				return list[0];
+			else
+				return list[this.ordinal()+1];
 		}
 	}
 

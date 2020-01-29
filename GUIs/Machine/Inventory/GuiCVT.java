@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,13 +29,14 @@ import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerCVT;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.CVTMode;
 
 public class GuiCVT extends GuiNonPoweredMachine
 {
 	private TileEntityAdvancedGear cvt;
 	public int ratio;
 	private boolean reduction;
-	private boolean redstone;
+	private CVTMode mode;
 	private int buttontimer = 0;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 	private GuiTextField input;
@@ -53,7 +54,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 		if (ratio > cvt.getMaxRatio())
 			ratio = cvt.getMaxRatio();
 		reduction = ratio < 0;
-		redstone = cvt.isRedstoneControlled;
+		mode = cvt.getMode();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.ratio));
 	}
 
@@ -63,34 +64,43 @@ public class GuiCVT extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2+8;
 		int k = (height - ySize) / 2 - 12;
 
-		if (redstone) {
-			buttonList.add(new GuiButton(1, j+xSize/2+25, -1+k+44, 71, 20, ""));
-			buttonList.add(new GuiButton(2, j+xSize/2+25, -1+k+67, 71, 20, ""));
-		}
-		else {
-			if (ratio > 0)
-				buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Speed"));
-			else
-				buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Torque"));
-			input = new GuiTextField(fontRendererObj, j+xSize/2+24, k+39, 26, 16);
-			input.setFocused(false);
-			input.setMaxStringLength(3);
+		input = null;
+
+		switch(mode) {
+			case AUTO:
+				input = new GuiTextField(fontRendererObj, j+xSize/2+24, k+39, 26, 16);
+				input.setFocused(false);
+				input.setMaxStringLength(3);
+				break;
+			case MANUAL:
+				if (ratio > 0)
+					buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Speed"));
+				else
+					buttonList.add(new GuiButton(1, j+xSize/2-6, -1+k+64, 80, 20, "Torque"));
+				input = new GuiTextField(fontRendererObj, j+xSize/2+24, k+39, 26, 16);
+				input.setFocused(false);
+				input.setMaxStringLength(3);
+				break;
+			case REDSTONE:
+				buttonList.add(new GuiButton(1, j+xSize/2+25, -1+k+44, 71, 20, ""));
+				buttonList.add(new GuiButton(2, j+xSize/2+25, -1+k+67, 71, 20, ""));
+				break;
 		}
 
 		buttonList.add(new GuiButton(0, j+xSize/2+84, -1+k+19, 20, 20, ""));
 	}
 
 	@Override
-	protected void keyTyped(char c, int i){
+	protected void keyTyped(char c, int i) {
 		super.keyTyped(c, i);
-		if (!redstone)
+		if (input != null)
 			input.textboxKeyTyped(c, i);
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k){
+	protected void mouseClicked(int i, int j, int k) {
 		super.mouseClicked(i, j, k);
-		if (!redstone)
+		if (input != null)
 			input.mouseClicked(i, j, k);
 	}
 
@@ -133,10 +143,7 @@ public class GuiCVT extends GuiNonPoweredMachine
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		if (redstone) {
-
-		}
-		else {
+		if (input != null) {
 			if (input.getText().isEmpty())
 				return;
 			if (!(input.getText().matches("^[0-9 ]+$"))) {
@@ -161,8 +168,8 @@ public class GuiCVT extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 		super.drawGuiContainerForegroundLayer(a, b);
-		int dy = redstone ? 17 : 0;
-		int dx = redstone ? -14 : 0;
+		int dy = mode == CVTMode.REDSTONE ? 17 : 0;
+		int dx = mode == CVTMode.REDSTONE ? -14 : 0;
 		fontRendererObj.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
 
 		if (cvt.hasLubricant()) {
@@ -185,17 +192,21 @@ public class GuiCVT extends GuiNonPoweredMachine
 			api.drawTooltipAt(fontRendererObj, s, api.getMouseRealX()-5-fontRendererObj.getStringWidth(s), api.getMouseRealY());
 		}
 
-		if (redstone) {
-			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.redstone_torch), 129, 31);
-			api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.unlit_redstone_torch), 129, 54);
+		switch(mode) {
+			case REDSTONE:
+				api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.redstone_torch), 129, 31);
+				api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Blocks.unlit_redstone_torch), 129, 54);
 
-			this.drawCenteredString(fontRendererObj, cvt.getCVTString(true), 188, 37, 0xffffff);
-			this.drawCenteredString(fontRendererObj, cvt.getCVTString(false), 188, 60, 0xffffff);
-		}
-		else {
-			if (!input.isFocused()) {
-				fontRendererObj.drawString(String.format("%d", Math.abs(cvt.getRatio())), xSize/2+36, 31, 0xffffffff);
-			}
+				this.drawCenteredString(fontRendererObj, cvt.getCVTString(true), 188, 37, 0xffffff);
+				this.drawCenteredString(fontRendererObj, cvt.getCVTString(false), 188, 60, 0xffffff);
+				break;
+			case MANUAL:
+				if (!input.isFocused()) {
+					fontRendererObj.drawString(String.format("%d", Math.abs(cvt.getRatio())), xSize/2+36, 31, 0xffffffff);
+				}
+				break;
+			case AUTO:
+				break;
 		}
 	}
 
@@ -207,23 +218,26 @@ public class GuiCVT extends GuiNonPoweredMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		if (redstone) {
-
-		}
-		else {
-			input.drawTextBox();
-			if (ratio > cvt.getMaxRatio())
-				api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
-			else if (ratio == 0)
-				api.drawCenteredStringNoShadow(fontRendererObj, "(1)", j+xSize/2+88, k+31, 0xff0000);
-			else
-				api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", Math.abs(cvt.getRatio())), j+xSize/2+88, k+31, 4210752);
+		switch(mode) {
+			case MANUAL:
+				input.drawTextBox();
+				if (ratio > cvt.getMaxRatio())
+					api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", cvt.getMaxRatio()), j+xSize/2+88, k+31, 0xff0000);
+				else if (ratio == 0)
+					api.drawCenteredStringNoShadow(fontRendererObj, "(1)", j+xSize/2+88, k+31, 0xff0000);
+				else
+					api.drawCenteredStringNoShadow(fontRendererObj, String.format("(%d)", Math.abs(cvt.getRatio())), j+xSize/2+88, k+31, 4210752);
+				break;
+			case AUTO:
+				break;
+			case REDSTONE:
+				break;
 		}
 	}
 
 	@Override
 	protected String getGuiTexture() {
-		return redstone ? "cvtgui2" : "cvtgui";
+		return mode == CVTMode.REDSTONE ? "cvtgui2" : "cvtgui";
 	}
 
 }
