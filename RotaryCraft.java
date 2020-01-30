@@ -296,6 +296,9 @@ public class RotaryCraft extends DragonAPIMod {
 		ConfigMatcher.instance.addConfigList(this, ConfigRegistry.optionList);
 		ConfigMatcher.instance.addConfigList(this, ExtraConfigIDs.idList);
 
+		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTGLASS.getBlockInstance());
+		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTPANE.getBlockInstance());
+
 		this.basicSetup(evt);
 		this.finishTiming();
 	}
@@ -495,9 +498,6 @@ public class RotaryCraft extends DragonAPIMod {
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.cokeblock, 12*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.anthrablock, 24*FurnaceFuelRegistry.instance.getBlockOverItemFactor());
 		FurnaceFuelRegistry.instance.registerItemSimple(ItemStacks.sawdust, 0.25F);
-
-		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTGLASS.getBlockInstance());
-		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTPANE.getBlockInstance());
 
 		if (ModList.AGRICRAFT.isLoaded()) {
 			AgriCanola.register();

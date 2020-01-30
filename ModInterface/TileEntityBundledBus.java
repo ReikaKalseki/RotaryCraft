@@ -40,7 +40,7 @@ import cpw.mods.fml.relauncher.Side;
 import mrtjp.projectred.api.IBundledTile;
 import mrtjp.projectred.api.ProjectRedAPI;
 
-@Strippable(value={"mrtjp.projectred.api.IBundledTile", "appeng.api.networking.IActionHost"})
+@Strippable(value={"mrtjp.projectred.api.IBundledTile", "appeng.api.networking.security.IActionHost"})
 public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBundledTile, IActionHost {
 
 	@ModDependent(ModList.APPENG)

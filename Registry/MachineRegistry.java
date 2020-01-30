@@ -39,7 +39,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.PowerTypes;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.ModDependency;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
@@ -1023,10 +1022,6 @@ public enum MachineRegistry implements TileEnum {
 
 	public boolean isPoweredTransmissionMachine() {
 		return TransmissionReceiver.class.isAssignableFrom(te);
-	}
-
-	public boolean isComplexIO() {
-		return ComplexIO.class.isAssignableFrom(te);
 	}
 
 	public boolean hasSubdivisions() {

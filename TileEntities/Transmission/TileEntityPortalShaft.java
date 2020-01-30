@@ -308,7 +308,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 					omegain = devicein.omega;
 				}
 			}
-			if (m.isComplexIO()) {
+			if (te instanceof ComplexIO) {
 				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);

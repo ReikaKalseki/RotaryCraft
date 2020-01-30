@@ -92,4 +92,7 @@
 	<chain>
 		The chain drive is a more advanced version of the belt hub. It can take twice as much torque, at up to 65536 rad/s before it fails. It is also impervious to rain.
 	</chain>
+	<distribclutch>
+			The distribution clutch can take input power and distribute a specified quantity of the torque to either perpendicular direction, with the remainder being sent to the opposite side. This, combined with independently toggleable sides allows for the creation of a highly dynamic power distribution system, where selected amounts of power can be "tapped off" to a given output without starving machines "downstream" of the junction. It can be controlled in one of four modes: with GUI, redstone, bundled redstone, or computers.
+	</distribclutch>
 </trans>

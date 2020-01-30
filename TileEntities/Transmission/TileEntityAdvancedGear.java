@@ -638,7 +638,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 				}
 			}
 
-			if (m.isComplexIO()) {
+			if (te instanceof ComplexIO) {
 				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);

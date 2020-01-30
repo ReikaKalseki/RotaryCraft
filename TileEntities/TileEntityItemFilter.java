@@ -52,7 +52,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Strippable(value={"appeng.api.networking.IActionHost"})
+@Strippable(value={"appeng.api.networking.security.IActionHost"})
 public class TileEntityItemFilter extends InventoriedPowerReceiver implements IActionHost {
 
 	private static final String LOGGER_ID = "ItemFilter";

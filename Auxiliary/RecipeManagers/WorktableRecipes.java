@@ -244,7 +244,7 @@ public class WorktableRecipes extends RecipeHandler {
 					}
 				}
 				 */
-				if (ItemStack.areItemStackTagsEqual(is, is2))
+				if (is.stackTagCompound == null || ItemStack.areItemStackTagsEqual(is, is2))
 					return ir;
 			}
 		}

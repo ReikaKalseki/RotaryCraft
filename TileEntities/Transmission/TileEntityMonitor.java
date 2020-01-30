@@ -58,7 +58,7 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					omegain = devicein.omega;
 				}
 			}
-			if (m.isComplexIO()) {
+			if (te instanceof ComplexIO) {
 				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);

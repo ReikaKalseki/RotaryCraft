@@ -196,6 +196,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.readx, this.yCoord, this.readz, 20);
 	}
 
+	@Override
 	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
@@ -277,7 +278,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						else
 							torquein = omegain = 0;
 					}
-					if (m.isComplexIO()) {
+					if (te instanceof ComplexIO) {
 						ComplexIO pwr = (ComplexIO)te;
 						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 						omegain = pwr.getSpeedToSide(dir);
@@ -338,7 +339,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						else
 							torquein2 = omegain2 = 0;
 					}
-					if (m2.isComplexIO()) {
+					if (te2 instanceof ComplexIO) {
 						TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
 						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 						omegain2 = pwr.getSpeedToSide(dir);
@@ -475,7 +476,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						torque = omega = 0;
 				}
 
-				if (m.isComplexIO()) {
+				if (te instanceof ComplexIO) {
 					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
 					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 					omega = pwr.getSpeedToSide(dir);

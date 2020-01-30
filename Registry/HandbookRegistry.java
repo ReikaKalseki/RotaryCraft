@@ -114,6 +114,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	BUSCONTROLLER(MachineRegistry.BUSCONTROLLER),
 	BUS(MachineRegistry.POWERBUS),
 	CHAIN(MachineRegistry.CHAIN),
+	DISTRIBCLUTCH(MachineRegistry.DISTRIBCLUTCH),
 
 	//---------------------CONVERTER--------------------//
 	CONVERTERDESC("Conversion Engines", "Converters"),

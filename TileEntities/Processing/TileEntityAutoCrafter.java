@@ -57,7 +57,7 @@ import appeng.api.util.AECableType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-@Strippable(value={"appeng.api.networking.IActionHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
+@Strippable(value={"appeng.api.networking.security.IActionHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
 public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/ {
 
 	private static final String LOGGER_ID = "autocrafter_workflag";

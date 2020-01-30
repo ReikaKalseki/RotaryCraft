@@ -220,7 +220,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (m.isComplexIO()) {
+			if (te instanceof ComplexIO) {
 				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = read.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
@@ -302,7 +302,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 					omegain = devicein.omega;
 				}
 			}
-			if (m.isComplexIO()) {
+			if (te instanceof ComplexIO) {
 				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = read2.getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
@@ -401,7 +401,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 						omegain = devicein.omega;
 					}
 				}
-				if (id1.isComplexIO()) {
+				if (te1 instanceof ComplexIO) {
 					ComplexIO pwr = (ComplexIO)te1;
 					ForgeDirection dir = in.getOpposite();
 					omegain = pwr.getSpeedToSide(dir);

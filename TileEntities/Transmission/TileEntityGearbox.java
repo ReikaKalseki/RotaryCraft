@@ -329,7 +329,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			else if (te instanceof SimpleProvider) {
 				this.copyStandardPower(te);
 			}
-			else if (m.isComplexIO()) {
+			else if (te instanceof ComplexIO) {
 				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);

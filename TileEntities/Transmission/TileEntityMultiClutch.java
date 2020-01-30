@@ -55,7 +55,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(te);
 			}
-			if (m.isComplexIO()) {
+			if (te instanceof ComplexIO) {
 				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
