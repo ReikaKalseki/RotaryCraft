@@ -764,7 +764,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		else if (torquein > targetTorque) { //can get extra speed
 			int val = 1;
 			int has = torquein;
-			while (has >= targetTorque && val < this.getMaxRatio()) {
+			while (has >= targetTorque && val <= this.getMaxRatio()) {
 				val++;
 				has = torquein/val;
 			}

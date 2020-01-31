@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,7 +37,9 @@ import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Instantiable.ModInteract.MEWorkTracker;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.AEPatternHandling;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
@@ -47,12 +50,9 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import appeng.api.AEApi;
-import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.IGridBlock;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.networking.security.IActionHost;
-import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AECableType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -437,20 +437,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null) {
 			return ItemCraftPattern.getItems(is);
 		}
-		else if (ModList.APPENG.isLoaded() && is.getItem() instanceof ICraftingPatternItem) {
-			ICraftingPatternDetails icpd = ((ICraftingPatternItem)is.getItem()).getPatternForItem(is, worldObj);
-			if (icpd.isCraftable()) {
-				ItemStack[] ret = new ItemStack[9];
-				IAEItemStack[] in = icpd.getInputs();
-				for (int i = 0; i < ret.length && i < in.length; i++) {
-					if (in[i] != null)
-						ret[i] = in[i].getItemStack();
-				}
-				return ret;
-			}
-			else {
+		else if (ModList.APPENG.isLoaded() && InterfaceCache.AEPATTERN.instanceOf(is.getItem())) {
+			if (!AEPatternHandling.isCraftingRecipe(is, worldObj))
 				return null;
-			}
+			return AEPatternHandling.getPatternInput(is, worldObj);
 		}
 		else {
 			return null;
@@ -461,9 +451,11 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING) {
 			return ItemCraftPattern.getRecipeOutput(is);
 		}
-		else if (ModList.APPENG.isLoaded() && is.getItem() instanceof ICraftingPatternItem) {
-			ICraftingPatternDetails icpd = ((ICraftingPatternItem)is.getItem()).getPatternForItem(is, worldObj);
-			return icpd.isCraftable() ? icpd.getCondensedOutputs()[0].getItemStack() : null;
+		else if (ModList.APPENG.isLoaded() && InterfaceCache.AEPATTERN.instanceOf(is.getItem())) {
+			if (!AEPatternHandling.isCraftingRecipe(is, worldObj))
+				return null;
+			ArrayList<ItemStack> li = AEPatternHandling.getPatternOutputs(is, worldObj);
+			return li == null || li.isEmpty() ? null : li.get(0);
 		}
 		else {
 			return null;
