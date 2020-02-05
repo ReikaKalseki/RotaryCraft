@@ -795,6 +795,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		NBT.setBoolean("creative", isCreative);
 		NBT.setBoolean("trq", torquemode);
 		NBT.setInteger("target", targetTorque);
+		NBT.setInteger("torquein", torquein);
 
 		NBT.setBoolean("t_enable", enabled);
 
@@ -817,6 +818,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		isCreative = NBT.getBoolean("creative");
 		torquemode = NBT.getBoolean("trq");
 		targetTorque = NBT.getInteger("target");
+		torquein = NBT.getInteger("torquein");
 
 		if (NBT.hasKey("t_enable"))
 			enabled = NBT.getBoolean("t_enable");

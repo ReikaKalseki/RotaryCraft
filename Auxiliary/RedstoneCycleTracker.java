@@ -19,9 +19,8 @@ public class RedstoneCycleTracker {
 	}
 
 	public void update(World world, int x, int y, int z) {
-		alternating = this.hasIntegrated() || ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower);
-		alternating &= !world.isBlockIndirectlyGettingPowered(x, y, z);
-		if (this.hasIntegrated()) {
+		alternating = (this.hasIntegrated() && !world.isBlockIndirectlyGettingPowered(x, y, z)) || ReikaRedstoneHelper.isGettingACRedstone(world, x, y, z, lastPower);
+		if (this.hasIntegrated() && alternating) {
 			if (world.getTotalWorldTime()%6 == 0) {
 				float f = RotaryAux.isMuffled(world, x,  y, z) ? 0.05F : 0.25F;
 				ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.click", f, 0.66F);

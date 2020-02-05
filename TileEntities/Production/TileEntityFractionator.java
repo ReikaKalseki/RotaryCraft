@@ -147,7 +147,11 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 
 	public void updatePressure(World world, int x, int y, int z, int meta) {
 		int local = pressure;
-		int dp = local-(int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
+		double Pamb = ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
+		if (Pamb > 101.3) {
+			Pamb = 101.3+0.02*(Pamb-101.3);
+		}
+		int dp = local-(int)Pamb;
 		int sub = (int)(Math.signum(dp)*Math.max(1, Math.abs(dp/16)));
 
 		int avg = (int)torqueInput.getAverage();

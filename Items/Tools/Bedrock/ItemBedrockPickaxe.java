@@ -87,6 +87,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 		efficiencyOnProperMaterial = 12F;
 		damageVsEntity = 5;
 		this.setNoRepair();
+		this.setHarvestLevel("pickaxe", Integer.MAX_VALUE);
+		this.setHarvestLevel("pick", Integer.MAX_VALUE);
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 

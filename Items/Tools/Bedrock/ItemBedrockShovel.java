@@ -58,6 +58,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		// this.efficiencyOnProperMaterial = par3ToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 4;
 		this.setNoRepair();
+		this.setHarvestLevel("shovel", Integer.MAX_VALUE);
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 

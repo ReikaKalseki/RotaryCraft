@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -65,6 +65,8 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		efficiencyOnProperMaterial = 12F;
 		damageVsEntity = 6;
 		this.setNoRepair();
+		this.setHarvestLevel("axe", Integer.MAX_VALUE);
+
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 

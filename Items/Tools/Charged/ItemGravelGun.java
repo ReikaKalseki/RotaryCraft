@@ -15,6 +15,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,16 +62,16 @@ public class ItemGravelGun extends ItemChargedTool {
 			Vec3 look = ep.getLookVec();
 			double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, i);
 			AxisAlignedBB fov = AxisAlignedBB.getBoundingBox(looks[0]-0.5, looks[1]-0.5, looks[2]-0.5, looks[0]+0.5, looks[1]+0.5, looks[2]+0.5);
-			List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
-			ArrayList<EntityLivingBase> infov = new ArrayList();
-			for (EntityLivingBase e : li) {
+			List<Entity> li = world.getEntitiesWithinAABB(Entity.class, fov);
+			ArrayList<Entity> infov = new ArrayList();
+			for (Entity e : li) {
 				if (!this.isFiringPlayer(e, ep)) {
 					if (!ep.equals(e) && this.isEntityAttackable(e) && ReikaWorldHelper.lineOfSight(world, ep, e)) {
 						infov.add(e);
 					}
 				}
 			}
-			for (EntityLivingBase ent : infov) {
+			for (Entity ent : infov) {
 				double dist = ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ);
 				double x = ep.posX+look.xCoord;
 				double y = ep.posY+ep.getEyeHeight()+look.yCoord;
@@ -99,34 +100,38 @@ public class ItemGravelGun extends ItemChargedTool {
 						EntityDragon ed = (EntityDragon)ent;
 						ed.attackEntityFromPart(ed.dragonPartBody, DamageSource.causePlayerDamage(ep), this.getAttackDamage(is.getItemDamage()));
 					}
+					else if (ent instanceof EntityEnderCrystal) {
+						ent.attackEntityFrom(DamageSource.causePlayerDamage(ep), this.getAttackDamage(is.getItemDamage()));
+					}
 					else {
+						EntityLivingBase e = (EntityLivingBase)ent;
 						float dmg = this.getAttackDamage(is.getItemDamage());
 						if (ent instanceof EntityPlayer) {
 							for (int n = 1; n < 5; n++) {
-								ItemRegistry ir = ItemRegistry.getEntry(ent.getEquipmentInSlot(n));
+								ItemRegistry ir = ItemRegistry.getEntry(e.getEquipmentInSlot(n));
 								if (ir != null) {
 									if (ir.isBedrockArmor())
 										dmg *= 0.75;
 								}
 							}
 						}
-						float pre = ent.getHealth();
+						float pre = e.getHealth();
 						ent.attackEntityFrom(new GravelGunDamage(ep), dmg);
-						float post = ent.getHealth();
+						float post = e.getHealth();
 						if (post > 0) {
 							float newh = Math.min(post, pre-Math.min(10, dmg));
 							if (newh <= 0) {
-								ent.setHealth(0.01F);
+								e.setHealth(0.01F);
 								ent.attackEntityFrom(new GravelGunDamage(ep), dmg);
 							}
 							else {
-								ent.setHealth(newh);
+								e.setHealth(newh);
 							}
 						}
 						if (dmg >= 500)
 							RotaryAchievements.MASSIVEHIT.triggerAchievement(ep);
 					}
-					if (ent instanceof EntityMob && (ent.isDead || ent.getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 80)
+					if (ent instanceof EntityMob && (ent.isDead || ((EntityLivingBase)ent).getHealth() <= 0) && ReikaMathLibrary.py3d(ep.posX-ent.posX, ep.posY-ent.posY, ep.posZ-ent.posZ) >= 80)
 						RotaryAchievements.GRAVELGUN.triggerAchievement(ep);
 				}
 				//ReikaWorldHelper.spawnParticleLine(world, x, y, z, ent.posX, ent.posY+ent.height/2, ent.posZ, "crit", 0, 0, 0, 60);
@@ -146,13 +151,15 @@ public class ItemGravelGun extends ItemChargedTool {
 		return is;
 	}
 
-	private boolean isFiringPlayer(EntityLivingBase e, EntityPlayer ep) {
+	private boolean isFiringPlayer(Entity e, EntityPlayer ep) {
 		return e instanceof EntityPlayer && (e.getCommandSenderName().equals(ep.getCommandSenderName()));
 	}
 
-	private boolean isEntityAttackable(EntityLivingBase ent) {
+	private boolean isEntityAttackable(Entity ent) {
 		if (ent instanceof EntityPlayer && ReikaPlayerAPI.isReika((EntityPlayer)ent))
 			return false;
+		if (!(ent instanceof EntityLivingBase))
+			return ent instanceof EntityEnderCrystal;
 		return ConfigRegistry.GRAVELPLAYER.getState() || !(ent instanceof EntityPlayer);
 	}
 

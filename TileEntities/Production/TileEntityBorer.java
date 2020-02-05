@@ -447,6 +447,14 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		}
 	}
 
+	public int getRequiredTorque() {
+		return mintorque;
+	}
+
+	public long getRequiredPower() {
+		return reqpow;
+	}
+
 	private void support(World world, int x, int y, int z, int metadata) {
 		int a = 0;
 		if (metadata > 1)

@@ -11,6 +11,8 @@ package Reika.RotaryCraft.TileEntities.Processing;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -30,6 +32,7 @@ import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.InventoryCache;
 import Reika.DragonAPI.Instantiable.Data.Maps.CountMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
@@ -86,6 +89,8 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	private static final int OUTPUT_OFFSET = SIZE;
 	private static final int CONTAINER_OFFSET = SIZE*2;
+
+	private static final HashMap<KeyedItemStack, CraftingLoopCache> loopCache = new HashMap();
 
 	private MEWorkTracker hasWork = new MEWorkTracker();
 
@@ -521,8 +526,31 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		return true;
 	}
 
-	private boolean isLoopable(ItemStack out, ItemHashMap<Integer> req) { //recipe contains output, or recipes for inputs contain output
+	private boolean isLoopable(ItemStack out, ItemHashMap<Integer> req) {
+		KeyedItemStack kout = this.key(out);
+		CraftingLoopCache cache = loopCache.get(kout);
+		if (cache == null) {
+			cache = new CraftingLoopCache(out);
+			loopCache.put(kout, cache);
+		}
 		Collection<ItemStack> c = req.keySet();
+		HashSet<KeyedItemStack> set = new HashSet();
+		for (ItemStack is : c) {
+			set.add(this.key(is));
+		}
+		Boolean seek = cache.loopingSets.get(set);
+		if (seek == null) {
+			seek = this.calculateLoopability(out, c);
+			cache.loopingSets.put(new HashSet(set), seek); //clone set to avoid it being modified
+		}
+		return seek.booleanValue();
+	}
+
+	private KeyedItemStack key(ItemStack is) {
+		return new KeyedItemStack(is).setIgnoreMetadata(false).setIgnoreNBT(true).setSized(false).setSimpleHash(true);
+	}
+
+	private boolean calculateLoopability(ItemStack out, Collection<ItemStack> c) { //recipe contains output, or recipes for inputs contain output
 		if (ReikaItemHelper.collectionContainsItemStack(c, out))
 			return true;
 		for (ItemStack is : c) {
@@ -764,5 +792,16 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	@ModDependent(ModList.APPENG)
 	public IGridNode getActionableNode() {
 		return (IGridNode)aeGridNode;
+	}
+
+	private static class CraftingLoopCache {
+
+		private final ItemStack output;
+		private final HashMap<HashSet<KeyedItemStack>, Boolean> loopingSets = new HashMap();
+
+		private CraftingLoopCache(ItemStack is) {
+			output = is;
+		}
+
 	}
 }

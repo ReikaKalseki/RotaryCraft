@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -36,6 +36,7 @@ public class ItemSteelAxe extends ItemAxe implements IndexedItemSprites {
 		damageVsEntity += 1;
 		this.setMaxDamage(600);
 		this.setIndex(tex);
+		this.setHarvestLevel("axe", ToolMaterial.IRON.getHarvestLevel());
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 

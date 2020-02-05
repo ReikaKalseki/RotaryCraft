@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,10 +20,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Interfaces.Block.SemiTransparent;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Event.HeatRayNetherDetonationEvent;
 import Reika.RotaryCraft.API.Interfaces.Laserable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
@@ -396,6 +398,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
     	}*/
 			if (id == Blocks.netherrack && tickcount >= 6) {
 				world.newExplosion(null, x+step*facing.offsetX+0.5, y+step*facing.offsetY+0.5, z+step*facing.offsetZ+0.5, 3F, true, true);
+				MinecraftForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ));
 				if (world.provider.dimensionId == -1 && step >= 500)
 					RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
 				step = maxdist;

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -38,6 +38,8 @@ public class ItemSteelPick extends ItemPickaxe implements IndexedItemSprites {
 		damageVsEntity += 1;
 		this.setMaxDamage(600);
 		this.setIndex(tex);
+		this.setHarvestLevel("pickaxe", ToolMaterial.IRON.getHarvestLevel());
+		this.setHarvestLevel("pick", ToolMaterial.IRON.getHarvestLevel());
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
