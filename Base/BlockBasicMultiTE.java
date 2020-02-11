@@ -837,6 +837,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			TileEntitySmokeDetector tp = (TileEntitySmokeDetector)iba.getTileEntity(x, y, z);
 			return tp.isAlarming() ? 15 : 0;
 		}
+		else if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tp = (TileEntityReservoir)iba.getTileEntity(x, y, z);
+			return tp.getFluid() == FluidRegistry.getFluid("redstone") ? (int)Math.round(tp.getLevel()*15F/tp.CAPACITY) : 0;
+		}
 		else {
 			return 0;
 		}

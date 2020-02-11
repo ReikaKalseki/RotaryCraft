@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -49,6 +49,10 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			ItemStack[] in = recipe.getDisplayArray();
+			if (in == null) {
+				RotaryCraft.logger.logError("Recipe "+recipe+" has null display array?!");
+				return stacks;
+			}
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					ItemStack is = in[i*3+j];

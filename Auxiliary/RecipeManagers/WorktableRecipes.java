@@ -233,17 +233,16 @@ public class WorktableRecipes extends RecipeHandler {
 	}
 
 	public IRecipe getInputRecipe(ItemStack is) {
+		is = is.copy();
+		if (is.stackTagCompound != null) {
+			is.stackTagCompound.removeTag("lubricant");
+			is.stackTagCompound.removeTag("lube");
+			is.stackTagCompound.removeTag("energy");
+		}
 		for (WorktableRecipe wr : recipes) {
 			IRecipe ir = wr.recipe;
 			ItemStack is2 = ir.getRecipeOutput();
 			if (ReikaItemHelper.matchStacks(is, is2) && is.stackSize >= is2.stackSize) {
-				/*
-				if (is.getItem() == ItemRegistry.GEARBOX.getItemInstance()) {
-					if (is.stackTagCompound != null && is.stackTagCompound.getBoolean("living")) {
-
-					}
-				}
-				 */
 				if (is.stackTagCompound == null || ItemStack.areItemStackTagsEqual(is, is2))
 					return ir;
 			}

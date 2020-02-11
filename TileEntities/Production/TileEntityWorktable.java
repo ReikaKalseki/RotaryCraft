@@ -34,7 +34,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableReci
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
-import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerWorktable;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
@@ -197,7 +197,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 			cm.setInventorySlotContents(i, this.getStackInSlot(i));
 		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
 		if (wr != null) {
-			return this.handleCrafting(wr, ep);
+			return this.handleCrafting(wr, ep, false);
 		}
 		return false;
 	}
@@ -210,7 +210,9 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		return true;
 	}
 
-	public boolean handleCrafting(WorktableRecipe wr, EntityPlayer ep) {
+	public boolean handleCrafting(WorktableRecipe wr, EntityPlayer ep, boolean craftAll) {
+		int maxCrafts = craftAll ? this.getSmallestInputStack() : 1;
+		int crafts = 0;
 		if (wr.isRecycling()) {
 			ArrayList<ItemStack> li = wr.getRecycling().getSplitOutput();
 			int i = 9;
@@ -219,24 +221,46 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 				i++;
 			}
 			RotaryAchievements.RECYCLE.triggerAchievement(ep);
+			crafts = 1;
 		}
 		else {
-			ItemStack is = wr.getOutput();
-			if (inv[13] != null && inv[13].stackSize+is.stackSize > is.getMaxStackSize())
-				return false;
-			is.onCrafting(worldObj, ep, is.stackSize);
-			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
-			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, is));
+			for (int i = 0; i < maxCrafts; i++) {
+				ItemStack is = wr.getOutput();
+				if (inv[13] != null && inv[13].stackSize+is.stackSize > Math.min(this.getInventoryStackLimit(), is.getMaxStackSize()))
+					break;
+				is.onCrafting(worldObj, ep, is.stackSize);
+				ReikaInventoryHelper.addOrSetStack(is, inv, 13);
+				crafts++;
+			}
+			ItemStack out = wr.getOutput().copy();
+			out.stackSize *= crafts;
+			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, out));
 		}
+		if (crafts > 0) {
+			for (int i = 0; i < 9; ++i) {
+				ItemStack item = this.getStackInSlot(i);
+				if (item != null) {
+					//noUpdate = true;
+					ReikaInventoryHelper.decrStack(i, this, crafts);
+				}
+			}
+			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	private int getSmallestInputStack() {
+		int smallest = Integer.MAX_VALUE;
 		for (int i = 0; i < 9; ++i) {
 			ItemStack item = this.getStackInSlot(i);
-			if (item != null) {
-				//noUpdate = true;
-				ReikaInventoryHelper.decrStack(i, inv);
+			if (item != null && item.stackSize < smallest) {
+				smallest = item.stackSize;
 			}
 		}
-		SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
-		return true;
+		return smallest < Integer.MAX_VALUE ? smallest : -1;
 	}
 
 	private void makeBedjump() {

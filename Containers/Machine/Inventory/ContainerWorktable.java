@@ -1,13 +1,13 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.RotaryCraft.Containers.Machine;
+package Reika.RotaryCraft.Containers.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,6 +19,8 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
+import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.Slot.SlotApprovedItems;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -116,7 +118,7 @@ public class ContainerWorktable extends CoreContainer {
 	}
 
 	private void craft(WorktableRecipe wr, EntityPlayer ep) {
-		tile.handleCrafting(wr, ep);
+		tile.handleCrafting(wr, ep, KeyWatcher.instance.isKeyDown(ep, Key.LSHIFT));
 		this.updateCraftMatrix();
 		tile.craftable = false;
 	}

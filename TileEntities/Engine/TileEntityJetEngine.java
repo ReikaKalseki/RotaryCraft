@@ -45,6 +45,7 @@ import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Effects.EntityBlockTexFX;
 import Reika.DragonAPI.Instantiable.Effects.EntityLiquidParticleFX;
+import Reika.DragonAPI.Interfaces.Entity.EtherealEntity;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
@@ -474,6 +475,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	private boolean canDamageEngine(Entity caught) {
 		if (caught.noClip)
+			return false;
+		if (caught instanceof EtherealEntity)
 			return false;
 		if (caught instanceof EntityChicken)
 			return false;

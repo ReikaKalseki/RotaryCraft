@@ -118,10 +118,12 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 	}
 
 	public static void setRecipe(ItemStack is, InventoryCrafting ic, World world) {
+		RecipeMode mode = getMode(is);
 		resetNBT(is);
+		setMode(is, mode);
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
-		ItemStack out = getMode(is).getRecipe(ic, world);
+		ItemStack out = mode.getRecipe(ic, world);
 		boolean valid = out != null;
 		NBTTagCompound recipe = new NBTTagCompound();
 		for (int i = 0; i < 9; i++) {

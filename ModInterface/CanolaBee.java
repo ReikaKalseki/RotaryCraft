@@ -74,13 +74,15 @@ public class CanolaBee extends BeeSpecies {
 
 	private final class AlleleCanola extends BasicGene implements IAlleleFlowers {
 
+		private final FlowerProviderCanola flowers = new FlowerProviderCanola();
+
 		public AlleleCanola() {
 			super("flower.canola", "Canola", EnumBeeChromosome.FLOWER_PROVIDER);
 		}
 
 		@Override
 		public IFlowerProvider getProvider() {
-			return new FlowerProviderCanola();
+			return flowers;
 		}
 	}
 

@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
-import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerWorktable;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
 
 public class GuiWorktable extends GuiNonPoweredMachine {
