@@ -38,6 +38,7 @@ import Reika.ChromatiCraft.Base.CrystalBlock;
 import Reika.ChromatiCraft.Block.Dimension.BlockBedrockCrack;
 import Reika.ChromatiCraft.Registry.ChromaEnchants;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
@@ -225,7 +226,12 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	private boolean shouldKeepSpawnerLogic(ItemStack is) {
-		return ModList.CHROMATICRAFT.isLoaded() && ReikaEnchantmentHelper.hasEnchantment(ChromaEnchants.DATAKEEP.getEnchantment(), is);
+		return ModList.CHROMATICRAFT.isLoaded() && this.hasDataKeep(is);
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private boolean hasDataKeep(ItemStack is) {
+		return ReikaEnchantmentHelper.hasEnchantment(ChromaEnchants.DATAKEEP.getEnchantment(), is);
 	}
 
 	private void dropDirectBlock(ItemStack block, World world, int x, int y, int z) {

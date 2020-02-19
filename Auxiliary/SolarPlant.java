@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -21,7 +22,6 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Maps.ValueSortedMap;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SolarPlantBlock;
@@ -38,11 +38,26 @@ public class SolarPlant {
 	public static int MAX_TOWER_HEIGHT = 32;
 	public static int MAX_TOWER_VALUE = 96;
 
+	private static final TreeMap<Integer, Integer> towerRounding = new TreeMap();
+
 	private final ValueSortedMap<Coordinate, SolarTower> towers = new ValueSortedMap();
 	private final HashMap<Coordinate, Coordinate> mirrors = new HashMap();
 	private final HashMap<Coordinate, Integer> mirrorLevels = new HashMap();
 
 	//private final SolarSkyCache skyCache = new SolarSkyCache();
+
+	static {
+		for (int i = 0; i <= 6; i++) {
+			towerRounding.put(i, i);
+		}
+		for (int i = 8; i <= 12; i += 2) {
+			towerRounding.put(i, i);
+		}
+		for (int i = 16; i <= 24; i += 4) {
+			towerRounding.put(i, i);
+		}
+		towerRounding.put(MAX_TOWER_HEIGHT, MAX_TOWER_HEIGHT);
+	}
 
 	public static SolarPlant build(World world, int x, int y, int z) {
 		SolarPlant p = new SolarPlant();
@@ -139,6 +154,7 @@ public class SolarPlant {
 			sum += val.effectiveHeight*f;
 			f *= TOWER_FALLOFF;
 		}
+		sum = towerRounding.floorEntry(sum).getValue();
 		return sum;
 	}
 
@@ -209,7 +225,7 @@ public class SolarPlant {
 	}
 
 	public int getTowerMultiplier() {
-		return Math.min(ReikaMathLibrary.ceil2exp(this.getEffectiveTowerBlocks()), MAX_TOWER_VALUE);
+		return Math.min(this.getEffectiveTowerBlocks(), MAX_TOWER_VALUE);
 	}
 
 	public void invalidate(World world) {

@@ -32,6 +32,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerCraftingPattern;
 import Reika.RotaryCraft.Containers.ContainerHandCraft;
+import Reika.RotaryCraft.Containers.ContainerMatchFilter;
 import Reika.RotaryCraft.Containers.ContainerWorldEdit;
 import Reika.RotaryCraft.Containers.Machine.ContainerBlower;
 import Reika.RotaryCraft.Containers.Machine.ContainerGearbox;
@@ -82,6 +83,7 @@ import Reika.RotaryCraft.GUIs.GuiCraftingPattern;
 import Reika.RotaryCraft.GUIs.GuiHandCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.GUIs.GuiHandbookPage;
+import Reika.RotaryCraft.GUIs.GuiMatchFilter;
 import Reika.RotaryCraft.GUIs.GuiSafePlayerList;
 import Reika.RotaryCraft.GUIs.GuiSlide;
 import Reika.RotaryCraft.GUIs.GuiWorldEdit;
@@ -235,6 +237,8 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerWorldEdit(player, world);
 		if (gr == GuiRegistry.PATTERN)
 			return new ContainerCraftingPattern(player, world);
+		if (gr == GuiRegistry.FILTER)
+			return new ContainerMatchFilter(player, world);
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (!(tile instanceof RotaryCraftTileEntity))
 			return null;
@@ -441,6 +445,8 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiSlide(player.getCurrentEquippedItem());
 		if (gr == GuiRegistry.PATTERN)
 			return new GuiCraftingPattern(player, world);
+		if (gr == GuiRegistry.FILTER)
+			return new GuiMatchFilter(player, world);
 		if (te instanceof TileEntityPulseFurnace) {
 			return new GuiPulseFurnace(player, (TileEntityPulseFurnace) te);
 		}

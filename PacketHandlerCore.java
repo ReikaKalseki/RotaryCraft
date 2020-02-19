@@ -204,6 +204,21 @@ public class PacketHandlerCore implements PacketHandler {
 					control = inputStream.readInt();
 					pack = PacketRegistry.getEnum(control);
 					NBT = ((DataPacket)packet).asNBT();
+					if (NBT.hasKey("x")) {
+						x = NBT.getInteger("x");
+						y = NBT.getInteger("y");
+						z = NBT.getInteger("z");
+					}
+					else if (NBT.hasKey("xCoord")) {
+						x = NBT.getInteger("xCoord");
+						y = NBT.getInteger("yCoord");
+						z = NBT.getInteger("zCoord");
+					}
+					else if (NBT.hasKey("posX")) {
+						x = NBT.getInteger("posX");
+						y = NBT.getInteger("posY");
+						z = NBT.getInteger("posZ");
+					}
 					break;
 				case STRINGINT:
 				case STRINGINTLOC:
@@ -540,10 +555,6 @@ public class PacketHandlerCore implements PacketHandler {
 					ItemCraftPattern.changeStackLimit(ep.getCurrentEquippedItem(), data[0]);
 					break;
 				case FILTERSETTING:
-					x = NBT.getInteger("posX");
-					y = NBT.getInteger("posY");
-					z = NBT.getInteger("posZ");
-					te = world.getTileEntity(x, y, z);
 					MatchData dat = MatchData.createFromNBT(NBT);
 					((TileEntityItemFilter)te).setData(dat);
 					break;

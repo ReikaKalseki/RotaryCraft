@@ -148,8 +148,12 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				else if (inv[i].stackSize < inv[i].getMaxStackSize()) {
 					if (ReikaItemHelper.matchStacks(inv[i], inv[i+3])) {
-						inv[i].stackSize++;
-						ReikaInventoryHelper.decrStack(i+3, inv);
+						int amt = Math.min(inv[i+3].stackSize, inv[i+3].getMaxStackSize()-inv[i+3].stackSize);
+						amt = Math.min(amt, this.getNumberConsecutiveOperations(i));
+						if (amt > 0) {
+							inv[i].stackSize += amt;
+							ReikaInventoryHelper.decrStack(i+3, inv, amt);
+						}
 					}
 				}
 			}
@@ -216,9 +220,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (DragonAPICore.debugtest)
 			tank.addLiquid(1000, FluidRegistry.WATER);
 		this.testIdle();
-		this.throughPut();
 		if (world.isRemote)
 			return;
+		this.throughPut();
 		if (!bedrock) {
 			if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
 				if (drillTime <= 0 && inv[9] != null && ReikaItemHelper.matchStacks(inv[9], ItemStacks.drill)) {

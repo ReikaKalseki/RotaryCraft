@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -59,6 +59,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	private int topLocation = -1;
 
 	private int temperature;
+	private int currentConsumption;
 
 	public static final int GENOMEGA = 512;
 	public static final int GENOMEGA_SODIUM = 4096;
@@ -180,7 +181,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 
 	private void generatePower(World world, int x, int y, int z) {
 		this.getTowerWater(world, x, y, z);
-		int amt = this.getConsumedWater();
+		int amt = this.getConsumedFluid();
 		write = ForgeDirection.DOWN;
 		//omega = 1*ReikaMathLibrary.extrema(ReikaMathLibrary.ceil2exp(this.getTowerHeight()), 8, "min")*(this.getArraySize()+1);
 		boolean water = tank.getActualFluid() == FluidRegistry.WATER;
@@ -194,6 +195,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		if (tank.getActualFluid() == FluidRegistry.getFluid("rc sodium")) {
 			amt = (int)Math.max(1, amt*power/((double)GENOMEGA_SODIUM*MAXTORQUE_SODIUM));
 		}
+		currentConsumption = amt;
 		if (power > 0 && tank.getLevel() > 0 && amt > 0) {
 			if (!water) {
 				TileEntity te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
@@ -204,8 +206,9 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 					}
 				}
 			}
-			if (amt > 0)
+			if (amt > 0) {
 				tank.removeLiquid(amt);
+			}
 		}
 	}
 
@@ -219,9 +222,12 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		return Math.min(cap, (int)(f*this.getArrayOverallBrightness()*plant.getTowerMultiplier()*(Math.pow(this.getArraySize()+1, p))));
 	}
 
-	public int getConsumedWater() {
+	public int getConsumedFluid() {
 		boolean sodium = tank.getActualFluid() == FluidRegistry.getFluid("rc sodium");
-		int base = 10+(sodium ? 64 : 16)*ReikaMathLibrary.logbase2(power);
+		int p = ReikaMathLibrary.logbase2(power);
+		if (sodium)
+			p = Math.max(1, p-2*0);
+		int base = 10+(sodium ? 64 : 16)*p;
 		int rnd = 10;
 		if (base >= 1000)
 			rnd = 1000;
@@ -231,6 +237,10 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		if (sodium)
 			ret *= 1/128D;//0.00390625; //1/256
 		return ret;
+	}
+
+	public int getCurrentConsumption() {
+		return currentConsumption;
 	}
 
 	@Override
@@ -311,23 +321,23 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		tank.writeToNBT(NBT);
 
 		NBT.setInteger("temp", temperature);
+		NBT.setInteger("flow", currentConsumption);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		tank.readFromNBT(NBT);
 
 		temperature = NBT.getInteger("temp");
+		currentConsumption = NBT.getInteger("flow");
 	}
 
 	@Override

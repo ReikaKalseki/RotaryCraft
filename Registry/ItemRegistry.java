@@ -68,6 +68,7 @@ import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemIntegratedGearbox;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
+import Reika.RotaryCraft.Items.Tools.ItemMatchFilter;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Items.Tools.ItemTarget;
@@ -199,8 +200,9 @@ public enum ItemRegistry implements ItemEnum {
 	RANGEFINDER(42, 1, true,		"item.rangefinder",			ItemRangeFinder.class),
 	GEARUPGRADE(65, 1, true,		"item.gearupgrade",			ItemIntegratedGearbox.class),
 	HELDPISTON(43, 1, true,			"item.springpiston",		ItemHandheldPiston.class),
-	VOIDRAIL(133, 1, false,			"item.voidrailgun",			ItemVoidMetalRailgunAmmo.class);
+	VOIDRAIL(133, 1, false,			"item.voidrailgun",			ItemVoidMetalRailgunAmmo.class),
 	//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
+	MATCHFILTER(50,	1, false,		"item.matchfilter",			ItemMatchFilter.class),
 	;
 
 	private final int index;

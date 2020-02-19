@@ -314,7 +314,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		if (id != Blocks.snow && id != Blocks.web && id != Blocks.leaves && id != Blocks.leaves2 && id != Blocks.tallgrass &&
 				id != Blocks.fire && !crop)
 			return;
-		if ((rand.nextInt(600) > 0 && id != Blocks.tallgrass) || (rand.nextInt(200) > 0 && id == Blocks.tallgrass))
+		int c = this.getHarvestingRand();
+		if (id == Blocks.tallgrass)
+			c /= 3;
+		c = Math.max(1, c);
+		if (rand.nextInt(c) > 0)
 			return;
 		if (id == Blocks.web && omega < WEBSPEED)
 			return;
@@ -335,6 +339,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.dropBlocks(world, x, y, z, id, meta);
 		world.setBlockToAir(x, y, z);
 	}
+
+	private int getHarvestingRand() {
+		return Math.max(50, 600-25*ReikaMathLibrary.logbase2(omega));
+	}
+
 	/*
 	private void harvest(World world, int x, int y, int z, BlowableCrop b) {
 		if (b.isReadyToHarvest(world, x, y, z)) {

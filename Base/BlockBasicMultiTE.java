@@ -1096,7 +1096,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		}
 		if (te instanceof TileEntitySolar) {
 			TileEntitySolar sol = (TileEntitySolar)te;
-			currenttip.add("Consuming "+sol.getConsumedWater()+" mB/t of fluid.");
+			currenttip.add("Consuming "+sol.getCurrentConsumption()+" mB/t of fluid.");
 		}
 		if (te.getMachine().isEnchantable()) {
 			if (((EnchantableMachine)te).hasEnchantments()) {
