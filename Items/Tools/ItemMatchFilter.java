@@ -80,8 +80,4 @@ public class ItemMatchFilter extends ItemRotaryTool implements SpriteRenderCallb
 		return false;
 	}
 
-	private static enum MatchCategory {
-
-	}
-
 }

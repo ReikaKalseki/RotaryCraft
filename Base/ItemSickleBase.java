@@ -339,6 +339,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
 						ReikaPlantHelper plant2 = ReikaPlantHelper.getPlant(id2);
 						if (plant2 == plant) {
+							if (plant == ReikaPlantHelper.FLOWER && !ep.isSneaking() && (id != id2 || meta2 != meta))
+								continue;
 							Block b2 = id2;
 							if (this.canActAsShears()) {
 								if (ItemBedrockShears.getHarvestResult(b2, meta2, ep, world, x+i, y+j, z+k) == Result.ALLOW)
