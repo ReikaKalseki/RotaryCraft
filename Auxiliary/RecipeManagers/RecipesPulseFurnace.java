@@ -25,6 +25,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
@@ -291,10 +292,12 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 					"armor.steel.legs",
 					"armor.steel.boots",
 					"tool.steel.shears",
+					"tool.crowbar",
+					"tool.crowbar.reinforced"
 			};
 
 			int[] n = {
-					3, 3, 2, 2, 1, 5, 8, 7, 4, 2
+					3, 3, 2, 2, 1, 5, 8, 7, 4, 2, 3, 3
 			};
 
 			for (int i = 0; i < items.length; i++) {
@@ -302,9 +305,13 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			}
 
 			ItemStack out = ReikaItemHelper.lookupItem(ModList.RAILCRAFT, "ingot", 0);
+			ItemStack[] outarr = ReikaArrayHelper.getArrayOf(out, items.length);
+			outarr[outarr.length-2] = new ItemStack(Items.iron_ingot);
+
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
-					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+					ItemStack outb = outarr[i];
+					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(outb, n[i]), RecipeLevel.MODINTERACT);
 				}
 			}
 		}

@@ -1101,7 +1101,7 @@
 			The bundled signal extractor is a 16-in-1 export bus, controllable with ProjectRed-style bundled cable. This is particularly useful with computer control, as it can in the space of one block dynamically export up to 16 item types into a processing machine.
 		</desc>
 		<note>
-			
+			Each kW of power activates one additional channel
 		</note>
 	</bundledbus>
 	<name>

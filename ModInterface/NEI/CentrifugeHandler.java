@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -130,6 +130,12 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rccentri")) {
 			Collection<ItemStack> li = RecipesCentrifuge.getRecipes().getAllCentrifugables();
+			for (ItemStack is : li)
+				arecipes.add(new CentrifugeNEIRecipe(RecipesCentrifuge.getRecipes().getRecipeResult(is)));
+		}
+		else if (outputId != null && outputId.equals("liquid")) {
+			FluidStack fs = (FluidStack)results[0];
+			ArrayList<ItemStack> li = RecipesCentrifuge.getRecipes().getSources(fs.getFluid());
 			for (ItemStack is : li)
 				arecipes.add(new CentrifugeNEIRecipe(RecipesCentrifuge.getRecipes().getRecipeResult(is)));
 		}

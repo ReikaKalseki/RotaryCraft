@@ -248,11 +248,11 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@ModDependent(ModList.OPENCOMPUTERS)
 	public final Visibility getOCNetworkVisibility() {
 		if (this.getMachine().isTransmissionMachine())
-			return this.getMachine().isAdvancedTransmission() ? Visibility.Network : Visibility.Neighbors;
+			return this.getMachine().isAdvancedTransmission() ? Visibility.Network : Visibility.None;
 		else if (this.getMachine().isPipe())
-			return Visibility.Neighbors;
+			return Visibility.None;
 		else
-			return this instanceof TileEntityBeltHub ? Visibility.Neighbors : Visibility.Network;
+			return this instanceof TileEntityBeltHub ? Visibility.None : Visibility.Network;
 	}
 
 	public int getItemMetadata() {

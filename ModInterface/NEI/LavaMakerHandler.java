@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -111,6 +111,13 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 			Collection<ItemStack> li = RecipesLavaMaker.getRecipes().getAllRecipes();
 			for (ItemStack is : li)
 				arecipes.add(new LavaMakerRecipe(is));
+		}
+		else if (outputId != null && outputId.equals("liquid")) {
+			FluidStack fs = (FluidStack)results[0];
+			ArrayList<ItemStack> li = RecipesLavaMaker.getRecipes().getSourceItems(fs.getFluid());
+			if (li != null && !li.isEmpty()) {
+				arecipes.add(new LavaMakerRecipe(li));
+			}
 		}
 		super.loadCraftingRecipes(outputId, results);
 	}

@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
+import Reika.DragonAPI.Instantiable.ItemFilter;
 import Reika.DragonAPI.Interfaces.Item.CustomMatchingItem;
 import Reika.DragonAPI.Interfaces.Item.SpriteRenderCallback;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
@@ -77,7 +78,14 @@ public class ItemMatchFilter extends ItemRotaryTool implements SpriteRenderCallb
 
 	@Override
 	public boolean match(ItemStack is) {
+		//TODO
 		return false;
+	}
+
+	@Override
+	public ItemFilter getFilter(ItemStack is) {
+		//TODO
+		return null;
 	}
 
 }

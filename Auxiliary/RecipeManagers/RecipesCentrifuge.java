@@ -254,6 +254,13 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		if (ModList.FORESTRY.isLoaded()) {
 			for (ItemStack in : ForestryRecipeHelper.getInstance().getSqueezerRecipes()) {
 				ImmutablePair<ChancedOutputList, FluidStack> out = ForestryRecipeHelper.getInstance().getSqueezerOutput(in);
+				FluidStack fs = out.right;
+				if (fs != null) {
+					String n = fs.getFluid().getName();
+					if (n.equals("seedoil") || n.equals("juice")) {
+						continue;
+					}
+				}
 				ChancedOutputList co = out.left != null ? out.left.copy() : null;
 				if (co != null) {
 					co.manipulateChances(new ChanceExponentiator(2.5));
@@ -262,7 +269,6 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				else {
 					co = new ChancedOutputList(false);
 				}
-				FluidStack fs = out.right;
 				if (fs != null) {
 					fs = fs.copy();
 					fs.amount *= 1.25;

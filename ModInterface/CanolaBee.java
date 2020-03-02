@@ -44,7 +44,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
@@ -205,7 +204,7 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public IAllele getFlowerAllele() {
+	public IAlleleFlowers getFlowerAllele() {
 		return canola;
 	}
 

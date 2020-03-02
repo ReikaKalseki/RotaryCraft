@@ -226,6 +226,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	public void setData(MatchData dat) {
 		data = dat;
 		MEStacks.clear();
+		updateTimer.setTick(updateTimer.getCap()+2);
 	}
 
 	@Override
@@ -648,7 +649,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				HashSet<Class> ints2 = ReikaJavaLibrary.makeSetFromArray(c2.getInterfaces());
 				for (Class c : ints1) {
 					m = matchClass.get(s+"%"+c.getSimpleName());
-					if (!m.check(ints2.contains(ints1)))
+					if (!m.check(ints2.contains(c)))
 						return false;
 				}
 				c1 = c1.getSuperclass();
