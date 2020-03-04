@@ -396,6 +396,11 @@ public class RotaryRecipes {
 			GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(siliconWafer, 16), "S", "s", 'S', saw, 's', siliconCylinder);
 		}
 
+		if (ModList.ENDERIO.isLoaded()) {
+			ItemStack eiosilicon = ReikaItemHelper.lookupItem("EnderIO:itemMaterial");
+			GameRegistry.addShapelessRecipe(eiosilicon, ItemStacks.silicon);
+		}
+
 		if (ModList.THAUMCRAFT.isLoaded()) {
 			addThaumcraft();
 		}
