@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import net.minecraft.nbt.NBTTagCompound;
+
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+
 public enum PacketRegistry {
 
 	BORER(1),
@@ -103,6 +107,15 @@ public enum PacketRegistry {
 
 	public static PacketRegistry getEnum(int index) {
 		return list[index];
+	}
+
+	public Coordinate getCoordinate(NBTTagCompound NBT) {
+		switch(this) {
+			case FILTERSETTING:
+				return new Coordinate(NBT.getInteger("posX"), NBT.getInteger("posY"), NBT.getInteger("posZ"));
+			default:
+				return null;
+		}
 	}
 
 }

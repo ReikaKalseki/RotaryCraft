@@ -14,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -126,7 +125,7 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 		if (Tamb < 0 && fire)
 			Tamb += 30;
 		if (temperature < Tamb)
-			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			temperature += Math.max((Tamb-temperature)/40, 1);
 		if (!fire && !lava && temperature > Tamb)
 			temperature--;
 		if (temperature > Tamb) {

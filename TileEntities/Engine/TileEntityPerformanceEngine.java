@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -109,7 +108,7 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temperature < Tamb)
-			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			temperature += Math.max((Tamb-temperature)/40, 1);
 		if (omega > 0 && torque > 0) { //If engine is on
 			temperature += 1;
 			if (water.getLevel() > 0 && temperature > Tamb) {

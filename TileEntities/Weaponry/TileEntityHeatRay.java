@@ -24,7 +24,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Interfaces.Block.SemiTransparent;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Event.HeatRayNetherDetonationEvent;
 import Reika.RotaryCraft.API.Interfaces.Laserable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -128,7 +127,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		if (ConfigRegistry.ATTACKBLOCKS.getState()) {
 			if (id == Blocks.stone || id == Blocks.cobblestone || id == Blocks.stonebrick || id == Blocks.sandstone) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x, y, z, Blocks.flowing_lava);
@@ -136,14 +135,14 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}
 			if (id == Blocks.sand) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x, y, z, Blocks.glass);
 			}
 			if (id == Blocks.gravel) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x, y, z, Blocks.cobblestone);
@@ -162,21 +161,21 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}
 			if (id == Blocks.dirt || id == Blocks.farmland) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x, y, z, Blocks.sand);
 			}
 			if (id == Blocks.grass || id == Blocks.mycelium) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x, y, z, Blocks.dirt);
 			}
 			if (id == Blocks.ice || id == Blocks.snow) {
 				int chance = (int)((power-MINPOWER)/(1024 * step / 4));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x, y, z, Blocks.flowing_water);
@@ -186,7 +185,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 					id == Blocks.deadbush || id == Blocks.wheat || id == Blocks.carrots || id == Blocks.potatoes || id == Blocks.vine ||
 					id == Blocks.melon_stem || id == Blocks.pumpkin_stem || id == Blocks.waterlily) {
 				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
 						world.setBlockToAir(x, y, z);
@@ -197,7 +196,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			if (id == Blocks.flowing_water || id == Blocks.water) {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
 				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
 						world.setBlockToAir(x, y, z);
@@ -371,7 +370,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		if (ConfigRegistry.ATTACKBLOCKS.getState()) {
 			if (id == Blocks.stone || id == Blocks.cobblestone || id == Blocks.stonebrick || id == Blocks.sandstone) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_lava);
@@ -379,14 +378,14 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}
 			if (id == Blocks.sand) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.glass);
 			}
 			if (id == Blocks.gravel) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.cobblestone);
@@ -406,21 +405,21 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}
 			if (id == Blocks.dirt || id == Blocks.farmland) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.sand);
 			}
 			if (id == Blocks.grass || id == Blocks.mycelium) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.dirt);
 			}
 			if (id == Blocks.ice || id == Blocks.snow) {
 				int chance = (int)((power-MINPOWER)/(1024 * step / 4));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
 						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_water);
@@ -430,7 +429,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 					id == Blocks.deadbush || id == Blocks.wheat || id == Blocks.carrots || id == Blocks.potatoes || id == Blocks.vine ||
 					id == Blocks.melon_stem || id == Blocks.pumpkin_stem || id == Blocks.waterlily) {
 				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
 						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
@@ -441,7 +440,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			if (id == Blocks.flowing_water || id == Blocks.water) {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
 				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
+				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
 						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);

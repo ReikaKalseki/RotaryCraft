@@ -190,7 +190,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
 					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
-					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					double speedstep = Math.max(Math.abs(Math.abs(caught.motionX) + base/(mass*Math.abs(d))), AXISSPEEDCAP);
 					double a = facing.offsetX > 0 ? 0.004 : 0;
 					caught.motionX = facing.offsetX*speedstep+a;
 				}
@@ -204,7 +204,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
 					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
-					caught.motionY = facing.offsetY*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					caught.motionY = facing.offsetY*Math.max(Math.abs(Math.abs(caught.motionY) + base/(mass*Math.abs(d))), AXISSPEEDCAP);
 				}
 				if (caught.motionZ < AXISSPEEDCAP && facing.offsetZ != 0) {
 					double d = caught.posZ-z;
@@ -216,7 +216,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
 					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
-					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					double speedstep = Math.max(Math.abs(Math.abs(caught.motionZ) + base/(mass*Math.abs(d))), AXISSPEEDCAP);
 					double a = facing.offsetZ > 0 ? 0.004 : 0;
 					caught.motionZ = facing.offsetZ*speedstep+a;
 				}

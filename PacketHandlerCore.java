@@ -25,6 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -204,20 +205,11 @@ public class PacketHandlerCore implements PacketHandler {
 					control = inputStream.readInt();
 					pack = PacketRegistry.getEnum(control);
 					NBT = ((DataPacket)packet).asNBT();
-					if (NBT.hasKey("x")) {
-						x = NBT.getInteger("x");
-						y = NBT.getInteger("y");
-						z = NBT.getInteger("z");
-					}
-					else if (NBT.hasKey("xCoord")) {
-						x = NBT.getInteger("xCoord");
-						y = NBT.getInteger("yCoord");
-						z = NBT.getInteger("zCoord");
-					}
-					else if (NBT.hasKey("posX")) {
-						x = NBT.getInteger("posX");
-						y = NBT.getInteger("posY");
-						z = NBT.getInteger("posZ");
+					Coordinate c = pack.getCoordinate(NBT);
+					if (c != null) {
+						x = c.xCoord;
+						y = c.yCoord;
+						z = c.zCoord;
 					}
 					break;
 				case STRINGINT:
@@ -248,10 +240,11 @@ public class PacketHandlerCore implements PacketHandler {
 			return;
 		}
 		TileEntity te = world.getTileEntity(x, y, z);
+		/* This breaks all non-block packets
 		if (te == null) {
 
 			return;
-		}
+		}*/
 		try {
 			switch (pack) {
 				case BORERTOGGLEALL: {
@@ -584,9 +577,9 @@ public class PacketHandlerCore implements PacketHandler {
 			}
 		}
 		catch (NullPointerException e) {
-			RotaryCraft.logger.logError("Machine/item was deleted before its packet "+pack+" could be received!");
+			RotaryCraft.logger.logError("Machine/item was deleted before its packet "+pack+" could be received, or was not present at all!");
 			if (DragonOptions.CHATERRORS.getState())
-				ReikaChatHelper.writeString("Machine/item was deleted before its packet "+pack+" could be received!");
+				ReikaChatHelper.writeString("Machine/item was deleted before its packet "+pack+" could be received, or was not present at all!");
 			e.printStackTrace();
 		}
 		catch (Exception e) {

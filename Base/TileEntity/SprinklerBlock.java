@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -47,7 +46,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 					int toremove = tile.getFluidLevel()/4+1;
 					int toadd = Math.min(toremove, this.getCapacity()-liquid);
 					tile.removeLiquid(toadd);
-					liquid = ReikaMathLibrary.extrema(liquid+toadd, 0, "max");
+					liquid = Math.max(liquid+toadd, 0);
 				}
 				pressure = tile.getPressure();
 			}

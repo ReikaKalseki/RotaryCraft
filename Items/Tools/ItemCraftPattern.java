@@ -118,6 +118,8 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 	}
 
 	public static void setRecipe(ItemStack is, InventoryCrafting ic, World world) {
+		if (world.isRemote)
+			;//return;
 		RecipeMode mode = getMode(is);
 		resetNBT(is);
 		setMode(is, mode);

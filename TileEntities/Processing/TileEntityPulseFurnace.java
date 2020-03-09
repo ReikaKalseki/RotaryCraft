@@ -26,7 +26,6 @@ import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.TemperatureEffect.TemperatureCallback;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -153,7 +152,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	public void heatAmbient(World world, int x, int y, int z, int meta) {
 		if (fuel.getLevel() > 0 && this.canHeatUp())
-			temperature += ReikaMathLibrary.extrema((MAXTEMP-temperature)/8, 4, "max");
+			temperature += Math.max((MAXTEMP-temperature)/8, 4);
 
 		if (water.getLevel() > 0) {
 			if (rand.nextInt(3) == 0) {

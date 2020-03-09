@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -82,18 +82,18 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 2:
-			read = ForgeDirection.NORTH;
-			break;
-		case 3:
-			read = ForgeDirection.SOUTH;
-			break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 2:
+				read = ForgeDirection.NORTH;
+				break;
+			case 3:
+				read = ForgeDirection.SOUTH;
+				break;
 		}
 	}
 
@@ -120,7 +120,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 	}
 
 	public int getOperationTime() {
-		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4, "max");
+		return Math.max(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4);
 	}
 
 	private void fire(World world, int x, int y, int z, int meta) {
@@ -128,22 +128,22 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		double vz = 0;
 		double v = this.getFirePower();
 		switch(meta) {
-		case 1:
-			x++;
-			vx = v;
-			break;
-		case 0:
-			x--;
-			vx = -v;
-			break;
-		case 2:
-			z++;
-			vz = v;
-			break;
-		case 3:
-			z--;
-			vz = -v;
-			break;
+			case 1:
+				x++;
+				vx = v;
+				break;
+			case 0:
+				x--;
+				vx = -v;
+				break;
+			case 2:
+				z++;
+				vz = v;
+				break;
+			case 3:
+				z--;
+				vz = -v;
+				break;
 		}
 		EntityArrow ar = new EntityArrow(world);
 		ar.setLocationAndAngles(x+0.5, y+0.8, z+0.5, 0, 0);
@@ -163,22 +163,22 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).contract(d, d, d);
 		int r = this.getRange();
 		switch(meta) {
-		case 1:
-			box.offset(1, 0, 0);
-			box.maxX += Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.EAST, r), r);
-			break;
-		case 0:
-			box.offset(-1, 0, 0);
-			box.minX -= Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.WEST, r), r);
-			break;
-		case 2:
-			box.offset(0, 0, 1);
-			box.maxZ += Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.SOUTH, r), r);
-			break;
-		case 3:
-			box.offset(0, 0, -1);
-			box.minZ -= Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.NORTH, r), r);
-			break;
+			case 1:
+				box.offset(1, 0, 0);
+				box.maxX += Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.EAST, r), r);
+				break;
+			case 0:
+				box.offset(-1, 0, 0);
+				box.minX -= Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.WEST, r), r);
+				break;
+			case 2:
+				box.offset(0, 0, 1);
+				box.maxZ += Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.SOUTH, r), r);
+				break;
+			case 3:
+				box.offset(0, 0, -1);
+				box.minZ -= Math.min(ReikaWorldHelper.getFreeDistance(world, x, y, z, ForgeDirection.NORTH, r), r);
+				break;
 		}
 
 		return box;

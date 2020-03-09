@@ -44,6 +44,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.HarvestCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
@@ -68,7 +69,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private static final RecipesCentrifuge CentrifugeBase = new RecipesCentrifuge();
 
-	private ItemHashMap<CentrifugeRecipe> recipeList = new ItemHashMap();
+	private ItemHashMap<CentrifugeRecipe> recipeList = new ItemHashMap().enableNBT();
 
 	private ArrayList<ItemStack> outputs = new ArrayList();
 
@@ -104,12 +105,14 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		public final int maxStack;
 		private final ChancedOutputList out;
 		private final FluidOut fluid;
+		public final boolean hasNBT;
 
 		private CentrifugeRecipe(ItemStack is, ChancedOutputList li, FluidOut fs, int cycles) {
 			in = is;
 			out = li;
 			fluid = fs;
 			maxStack = cycles;
+			hasNBT = is.stackTagCompound != null;
 		}
 
 		@Override
@@ -171,6 +174,12 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl, int stack) {
+		in = in.copy();
+		in.stackTagCompound = null; //clear NBT on inputs
+		this.addDirectStackRecipe(in, out, fs, rl, stack);
+	}
+
+	private void addDirectStackRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl, int stack) {
 		if (out.size() > 9)
 			throw new IllegalArgumentException("Too many output items for "+in.getDisplayName()+" centrifuge recipe; only 9 inventory slots!");
 		out.lock();
@@ -207,8 +216,15 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	public CentrifugeRecipe getRecipeResult(ItemStack item) {
-		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
-		return cr != null ? cr : null;
+		if (item == null)
+			return null;
+		ItemStack in = item.copy();
+		CentrifugeRecipe cr = recipeList.get(in);
+		if (cr != null && cr.hasNBT) {
+			if (!ItemStack.areItemStackTagsEqual(item, cr.in))
+				return null;
+		}
+		return cr;
 	}
 
 	private Collection<ItemStack> getRecipeOutputs(ItemStack item) {
@@ -371,6 +387,17 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
 				FluidStack fs = ReikaXPFluidHelper.getFluid(5);
 				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
+			}
+		}
+
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			for (Aspect a : ReikaThaumHelper.getAllAspects()) {
+				ItemStack in = ThaumItemHelper.getPhialEssentia(a); //worth 8
+				ChancedOutputList co = new ChancedOutputList(false);
+				co.addItem(ThaumItemHelper.ItemEntry.PHIAL.getItem(), 100);
+				for (int i = 0; i < 8; i++)
+					co.addItem(ThaumItemHelper.getCrystallizedEssentia(a), 100);
+				this.addDirectStackRecipe(in, co, null, RecipeLevel.MODINTERACT, 1);
 			}
 		}
 

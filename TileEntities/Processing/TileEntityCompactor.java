@@ -113,7 +113,7 @@ MultiOperational, ConditionalOperation {
 		if (!this.getIOSides(worldObj, xCoord, yCoord, zCoord, this.getBlockMetadata()))
 			return;
 		super.getPower(false);
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 1200-this.omega, "max")));
+		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", Math.max(2, 1200-this.omega, "max")));
 		return;
 	}
 
@@ -208,11 +208,11 @@ MultiOperational, ConditionalOperation {
 		int Pamb = (int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, true);
 
 		if (pressure > Pamb && world.getBiomeGenForCoords(x, z) != BiomeGenBase.hell)
-			pressure -= ReikaMathLibrary.extrema((pressure-Pamb)/200, 1, "max");
+			pressure -= Math.max((pressure-Pamb)/200, 1);
 		if (pressure > Pamb && world.getBiomeGenForCoords(x, z) == BiomeGenBase.hell)
-			pressure -= ReikaMathLibrary.extrema((pressure-Pamb)/600, 1, "max");
+			pressure -= Math.max((pressure-Pamb)/600, 1);
 		if (pressure < Pamb)
-			pressure += ReikaMathLibrary.extrema((Pamb-pressure)/40, 1, "max");
+			pressure += Math.max((Pamb-pressure)/40, 1);
 
 		if (omega > 0) {
 			pressure += 128*ReikaMathLibrary.logbase(torque, 2);
@@ -230,9 +230,9 @@ MultiOperational, ConditionalOperation {
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temperature > Tamb)
-			temperature -= ReikaMathLibrary.extrema((temperature-Tamb)/200, 1, "max");
+			temperature -= Math.max((temperature-Tamb)/200, 1);
 		if (temperature < Tamb)
-			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			temperature += Math.max((Tamb-temperature)/40, 1);
 
 		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", 0));
 
@@ -325,7 +325,7 @@ MultiOperational, ConditionalOperation {
 	private boolean doOperation(boolean multiple) {
 		if (this.canSmelt()) {
 			compactorCookTime++;
-			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
+			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", Math.max(2, 600-this.omega, "max")));
 			if (compactorCookTime >= this.getOperationTime()) {
 				compactorCookTime = 0;
 				this.smeltItem();

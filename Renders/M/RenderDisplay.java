@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -21,7 +21,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelDisplay;
@@ -226,7 +225,7 @@ public class RenderDisplay extends RotaryTERenderer {
 		float scroll = cache.size() > tile.displayHeight ? (core*4)%(180*cache.size())/180F : 0;
 		int linescroll = scroll-(int)scroll > 0.5F ? (int)scroll+1 : (int)scroll;//tile.getRoundedScroll();
 		//ReikaJavaLibrary.pConsole(tile.getMessageLine(0));
-		int len = ReikaMathLibrary.extrema(cache.size()-1, tile.displayHeight+linescroll-1, "min");
+		int len = Math.min(cache.size()-1, tile.displayHeight+linescroll-1);
 		for (int i = linescroll; i < len+1; i++) {
 			String s2 = cache.get(i);
 			//ReikaJavaLibrary.pConsole("Printing line "+i+" of "+tile.getMessageLength()+": "+tile.getMessageLine(i));

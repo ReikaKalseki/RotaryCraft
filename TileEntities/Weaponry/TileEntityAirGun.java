@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -54,18 +54,18 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 3:
-			read = ForgeDirection.NORTH;
-			break;
-		case 2:
-			read = ForgeDirection.SOUTH;
-			break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 3:
+				read = ForgeDirection.NORTH;
+				break;
+			case 2:
+				read = ForgeDirection.SOUTH;
+				break;
 		}
 	}
 
@@ -74,7 +74,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 	}
 
 	public int getOperationTime() {
-		return ReikaMathLibrary.extrema(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4, "max");
+		return Math.max(16-(int)ReikaMathLibrary.logbase(omega+1, 2), 4);
 	}
 
 	private void fire(World world, int x, int y, int z, int meta, List<EntityLivingBase> li) {
@@ -82,18 +82,18 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		double vz = 0;
 		double v = this.getFirePower()/4;
 		switch(meta) {
-		case 1:
-			vx = v;
-			break;
-		case 0:
-			vx = -v;
-			break;
-		case 3:
-			vz = v;
-			break;
-		case 2:
-			vz = -v;
-			break;
+			case 1:
+				vx = v;
+				break;
+			case 0:
+				vx = -v;
+				break;
+			case 3:
+				vz = v;
+				break;
+			case 2:
+				vz = -v;
+				break;
 		}
 		boolean flag = false;
 		for (EntityLivingBase e : li) {
@@ -123,22 +123,22 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 		double d = 0.1;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).contract(d, d, d);
 		switch(meta) {
-		case 1:
-			box.offset(1, 0, 0);
-			box.maxX += this.getRange();
-			break;
-		case 0:
-			box.offset(-1, 0, 0);
-			box.minX -= this.getRange();
-			break;
-		case 3:
-			box.offset(0, 0, 1);
-			box.maxZ += this.getRange();
-			break;
-		case 2:
-			box.offset(0, 0, -1);
-			box.minZ -= this.getRange();
-			break;
+			case 1:
+				box.offset(1, 0, 0);
+				box.maxX += this.getRange();
+				break;
+			case 0:
+				box.offset(-1, 0, 0);
+				box.minX -= this.getRange();
+				break;
+			case 3:
+				box.offset(0, 0, 1);
+				box.maxZ += this.getRange();
+				break;
+			case 2:
+				box.offset(0, 0, -1);
+				box.minZ -= this.getRange();
+				break;
 		}
 
 		return box;

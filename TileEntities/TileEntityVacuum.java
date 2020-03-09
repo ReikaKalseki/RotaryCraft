@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -261,7 +261,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	public int getRange() {
-		return ReikaMathLibrary.extrema(8+(int)(power/FALLOFF), this.getMaxRange(), "min");
+		return Math.min(8+(int)(power/FALLOFF), this.getMaxRange());
 	}
 
 	public int getSizeInventory()
