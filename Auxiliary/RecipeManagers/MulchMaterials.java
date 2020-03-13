@@ -20,6 +20,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
@@ -56,6 +57,15 @@ public class MulchMaterials {
 
 		if (ModList.EMASHER.isLoaded()) {
 			this.addValue(ModCropList.ALGAE.blockID, 3);
+		}
+
+		if (ModList.IC2.isLoaded()) {
+			ItemStack plantball = ReikaItemHelper.lookupItem("IC2:itemFuelPlantBall");
+			if (plantball != null)
+				this.addValue(plantball, 2);
+			ItemStack chaff = IC2Handler.IC2Stacks.BIOCHAFF.getItem();
+			if (chaff != null)
+				this.addValue(chaff, 1);
 		}
 
 		if (ModList.BOTANIA.isLoaded()) {

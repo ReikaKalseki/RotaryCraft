@@ -23,6 +23,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.PatreonController;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
+import Reika.DragonAPI.Auxiliary.Trackers.SettingInterferenceTracker;
 import Reika.DragonAPI.IO.Shaders.ShaderProgram;
 import Reika.DragonAPI.IO.Shaders.ShaderRegistry;
 import Reika.DragonAPI.IO.Shaders.ShaderRegistry.ShaderDomain;
@@ -284,6 +285,7 @@ public class ClientProxy extends CommonProxy
 		super.initClasses();
 		ReikaJavaLibrary.initClass(HandbookRegistry.class);
 		ReikaJavaLibrary.initClass(SoundRegistry.class);
+		SettingInterferenceTracker.instance.registerSettingHandler(SettingInterferenceTracker.muteInterference);
 	}
 
 	// Override any other methods that need to be handled differently client side.

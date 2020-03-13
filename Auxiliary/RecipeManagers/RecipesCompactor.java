@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,11 +16,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CompactorManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -144,7 +146,13 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 
 	@Override
 	public void addPostLoadRecipes() {
-
+		if (ModList.IC2.isLoaded()) {
+			ItemStack plantball = ReikaItemHelper.lookupItem("IC2:itemFuelPlantBall");
+			ItemStack chaff = IC2Handler.IC2Stacks.BIOCHAFF.getItem();
+			if (chaff != null && plantball != null) {
+				this.addRecipe(chaff, ReikaItemHelper.getSizedItemStack(plantball, 4), 500, 0, RecipeLevel.MODINTERACT);
+			}
+		}
 	}
 
 	@Override

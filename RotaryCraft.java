@@ -351,8 +351,9 @@ public class RotaryCraft extends DragonAPIMod {
 
 		ReikaDispenserHelper.addDispenserAction(ItemStacks.compost, ReikaDispenserHelper.bonemealEffect);
 
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			RotaryDescriptions.loadData();
+		}
 		//DemoMusic.addTracks();
 
 		RotaryRegistration.loadOreDictionary();
@@ -437,10 +438,12 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.FLYWHEEL.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.GEARBOX.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MACHINE.getItemInstance(), true);
+		/*
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.SHAFTCRAFT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.BORECRAFT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.ENGINECRAFT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MISCCRAFT.getItemInstance(), true);
+		 */
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (!ir.isDummiedOut()) {
