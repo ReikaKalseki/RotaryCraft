@@ -22,6 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
+import Reika.ChromatiCraft.API.Interfaces.AdjacencyUpgradeAPI;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -55,13 +57,16 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		for (EntityLiving ent : inbox) {
 			if (!(ent instanceof EntityVillager)) {
 				oneplus = true;
-				if (ep != null && this.getDamage() > 0) {
-					ent.attackEntityFrom(new HarvesterDamage(this), this.getDamage());
-					if (this.getEnchantment(Enchantment.silkTouch) > 0 && rand.nextInt(20) == 0)
-						ReikaEntityHelper.dropHead(ent);
-					//Looting is handled with the LivingDropsEvent
-					if (this.getEnchantment(Enchantment.fireAspect) > 0)
-						ent.setFire(this.getEnchantment(Enchantment.fireAspect)*2);
+				if (ep != null) {
+					int dmg = this.getDamage();
+					if (dmg > 0) {
+						ent.attackEntityFrom(new HarvesterDamage(this), dmg);
+						if (this.getEnchantment(Enchantment.silkTouch) > 0 && rand.nextInt(20) == 0)
+							ReikaEntityHelper.dropHead(ent);
+						//Looting is handled with the LivingDropsEvent
+						if (this.getEnchantment(Enchantment.fireAspect) > 0)
+							ent.setFire(this.getEnchantment(Enchantment.fireAspect)*2);
+					}
 				}
 				ent.motionY = 0;
 			}
@@ -72,7 +77,11 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	public int getDamage() {
 		double pdiff = 2+(0.5*power/MINPOWER);
 		double ppdiff = ReikaMathLibrary.intpow(pdiff, 6);
-		return (int)ReikaMathLibrary.logbase(ppdiff, 2)+2*this.getEnchantment(Enchantment.sharpness);
+		double base = ReikaMathLibrary.logbase(ppdiff, 2)+2*this.getEnchantment(Enchantment.sharpness);
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			base *= AdjacencyUpgradeAPI.getFactorSimple(worldObj, xCoord, yCoord, zCoord, "PINK");
+		}
+		return (int)base;
 	}
 
 	public AxisAlignedBB getBox() {

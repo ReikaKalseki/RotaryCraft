@@ -24,7 +24,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import Reika.ChromatiCraft.API.Interfaces.AdjacencyUpgradeAPI;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -127,6 +129,9 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		double vx = 0;
 		double vz = 0;
 		double v = this.getFirePower();
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			v *= AdjacencyUpgradeAPI.getFactorSimple(worldObj, xCoord, yCoord, zCoord, "PINK");
+		}
 		switch(meta) {
 			case 1:
 				x++;

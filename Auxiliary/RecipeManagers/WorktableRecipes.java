@@ -30,6 +30,7 @@ import Reika.ChromatiCraft.Magic.ElementTagCompound;
 import Reika.ChromatiCraft.Magic.ItemElementCalculator;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -127,6 +128,9 @@ public class WorktableRecipes extends RecipeHandler {
 			}
 			else if (items[i+1] instanceof ItemStack) {
 				input = (ItemStack)items[i+1];
+			}
+			else if (items[i+1] instanceof BlockKey) {
+				input = ((BlockKey)items[i+1]).asItemStack();
 			}
 			else if (items[i+1] == null || ((items[i+1] instanceof ItemStack && ((ItemStack)items[i+1]).getItem() == null))) {
 				throw new IllegalArgumentException("Null item in recipe! Possible mod conflict?");
