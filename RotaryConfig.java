@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -91,7 +91,7 @@ public class RotaryConfig extends ControlledConfig {
 			return obj;
 		}
 		else {
-			ItemStack ret = ReikaItemHelper.parseItem(g.getItem());
+			ItemStack ret = ReikaItemHelper.parseItem(g.getItem(), false);
 			if (ret == null) {
 				RotaryCraft.logger.logError("Selected gating material "+g+" could not be found; either the item does not exist or its mods have not yet loaded.");
 			}

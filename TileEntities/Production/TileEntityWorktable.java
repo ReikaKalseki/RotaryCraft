@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -22,6 +21,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
+import Reika.DragonAPI.Instantiable.Recipe.CraftingInputMatrix;
+import Reika.DragonAPI.Interfaces.CraftingContainer;
+import Reika.DragonAPI.Interfaces.TileEntity.CraftingTile;
 import Reika.DragonAPI.Interfaces.TileEntity.TriggerableAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
@@ -29,6 +31,7 @@ import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
+import Reika.RotaryCraft.Auxiliary.Interfaces.AlternatingRedstoneUser;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
@@ -37,6 +40,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerWorktable;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
@@ -46,15 +50,22 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityWorktable extends InventoriedRCTileEntity implements TriggerableAction {
+public class TileEntityWorktable extends InventoriedRCTileEntity implements CraftingTile<WorktableRecipe>, TriggerableAction, AlternatingRedstoneUser {
 
-	public boolean craftable = false;
-	private ItemStack toCraft;
-	//private boolean hasProgram;
+	private final CraftingInputMatrix matrix = new CraftingInputMatrix(this);
+
+	private boolean hasUpgrade;
+	private WorktableRecipe toCraft;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote) {
+			matrix.update();
+			if (matrix.isEmpty())
+				return;
+			if (hasUpgrade && this.getTicksExisted()%4 == 0) {
+				this.onPositiveRedstoneEdge();
+			}
 			if (this.isReadyToCraft()) {
 				if (this.getTicksExisted()%4 == 0) {
 					this.chargeTools();
@@ -189,15 +200,19 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		}
 	}
 
+	public CraftingContainer constructContainer() {
+		return new ContainerWorktable(this.getPlacer(), this, worldObj, false);
+	}
+
+	@Override
+	public int getOutputSlot() {
+		return 13;
+	}
+
 	private boolean craft() {
-		EntityPlayer ep = this.getPlacer();
-		ContainerWorktable cw = new ContainerWorktable(ep, this, worldObj);
-		InventoryCrafting cm = new InventoryCrafting(cw, 3, 3);
-		for (int i = 0; i < 9; i++)
-			cm.setInventorySlotContents(i, this.getStackInSlot(i));
-		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
+		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(matrix, worldObj);
 		if (wr != null) {
-			return this.handleCrafting(wr, ep, false);
+			return this.handleCrafting(wr, this.getPlacer(), false);
 		}
 		return false;
 	}
@@ -496,31 +511,18 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		return i >= 9 && i != 18;
 	}
 
-	public ItemStack getToCraft() {
-		if (toCraft == null)
-			return null;
-		return toCraft.copy();
-	}
-
-	public void setToCraft(ItemStack is) {
-		if (is != null)
-			toCraft = is.copy();
-		else
-			toCraft = null;
-	}
-
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
-		//NBT.setBoolean("prog", hasProgram);
+
+		NBT.setBoolean("redstoneUpgrade", hasUpgrade);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
-		//hasProgram = NBT.getBoolean("prog");
+
+		hasUpgrade = NBT.getBoolean("redstoneUpgrade");
 	}
 
 	@Override
@@ -552,5 +554,42 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	@Override
 	public boolean trigger() {
 		return this.craft();
+	}
+
+	@Override
+	public void upgrade(ItemStack is) {
+		this.addRedstoneUpgrade();
+	}
+
+	@Override
+	public boolean canUpgradeWith(ItemStack item) {
+		return !this.hasRedstoneUpgrade() && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.REDSTONE.ordinal();
+	}
+
+	@Override
+	public void addRedstoneUpgrade() {
+		hasUpgrade = true;
+	}
+
+	@Override
+	public boolean hasRedstoneUpgrade() {
+		return hasUpgrade;
+	}
+
+	@Override
+	public void breakBlock() {
+		if (this.hasRedstoneUpgrade()) {
+			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.REDSTONE.ordinal()));
+		}
+	}
+
+	@Override
+	public WorktableRecipe getToCraft() {
+		return toCraft;
+	}
+
+	@Override
+	public void setToCraft(WorktableRecipe wr) {
+		toCraft = wr;
 	}
 }

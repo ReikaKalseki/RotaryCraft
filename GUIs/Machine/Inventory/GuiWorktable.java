@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerWorktable;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityWorktable;
@@ -23,7 +24,7 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 	//private int rstep = 0;
 
 	public GuiWorktable(EntityPlayer pl, TileEntityWorktable te, World world) {
-		super(new ContainerWorktable(pl, te, world), te);
+		super(new ContainerWorktable(pl, te, world, true), te);
 		ep = pl;
 		table = te;
 	}
@@ -103,10 +104,12 @@ public class GuiWorktable extends GuiNonPoweredMachine {
 		int u = rollout <= 8 ? 240 : 176;
 		this.drawTexturedModalRect(j+176, k+78, u, 78, rollout, 64);
 		 */
-		if (!table.craftable || !table.isReadyToCraft())
+		if (!table.isReadyToCraft())
 			return;
 		this.drawTexturedModalRect(j+79, k+35, 176, 35, 18, 15);
-		api.drawItemStackWithTooltip(itemRender, fontRendererObj, table.getToCraft(), j+116, k+35);
+		WorktableRecipe wr = table.getToCraft();
+		if (wr != null)
+			api.drawItemStackWithTooltip(itemRender, fontRendererObj, wr.isRecycling() ? wr.getRecycling().getRecipeOutput() : wr.getOutput(), j+116, k+35);
 	}
 
 	@Override

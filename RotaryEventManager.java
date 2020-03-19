@@ -60,6 +60,7 @@ import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
+import Reika.DragonAPI.Instantiable.Event.TileEntityMoveEvent;
 import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.EntityRenderingLoopEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.PlayerInteractEventClient;
@@ -70,7 +71,6 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
@@ -335,7 +335,7 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent
-	public void cancelFramez(FrameUsageEvent evt) {
+	public void cancelFramez(TileEntityMoveEvent evt) {
 		if (!this.isMovable(evt.tile)) {
 			evt.setCanceled(true);
 		}

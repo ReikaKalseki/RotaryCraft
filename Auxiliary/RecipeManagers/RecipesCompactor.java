@@ -147,10 +147,12 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 	@Override
 	public void addPostLoadRecipes() {
 		if (ModList.IC2.isLoaded()) {
-			ItemStack plantball = ReikaItemHelper.lookupItem("IC2:itemFuelPlantBall");
-			ItemStack chaff = IC2Handler.IC2Stacks.BIOCHAFF.getItem();
-			if (chaff != null && plantball != null) {
-				this.addRecipe(chaff, ReikaItemHelper.getSizedItemStack(plantball, 4), 500, 0, RecipeLevel.MODINTERACT);
+			ItemStack plantball = IC2Handler.IC2Stacks.PLANTBALL.getItem();
+			if (plantball != null) {
+				Object[] items = new Object[] {Items.wheat, Items.carrot, Blocks.leaves, Blocks.leaves2, Blocks.tallgrass, Blocks.red_flower, Blocks.yellow_flower};
+				for (Object in : items) {
+					this.addRecipe(ReikaItemHelper.parseItem(in, true), ReikaItemHelper.getSizedItemStack(plantball, 1), 500, 0, RecipeLevel.MODINTERACT); //4:1 is 2x better than handcraft
+				}
 			}
 		}
 	}

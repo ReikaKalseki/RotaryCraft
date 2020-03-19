@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -357,27 +357,46 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		for (ItemStack todrop : drops) {
 			if (ReikaItemHelper.matchStacks(todrop, sapling)) {
 				if (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize()) {
-					if (!this.chestCheck(todrop))
+					this.chestCheck(todrop);
+					if (todrop.stackSize > 0)
 						ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
 				}
 				else
 					ReikaInventoryHelper.addOrSetStack(todrop, inv, 0);
 			}
 			else {
-				if (!this.chestCheck(todrop))
+				this.chestCheck(todrop);
+				if (todrop.stackSize > 0)
 					ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
 			}
 		}
 	}
 
-	private boolean chestCheck(ItemStack is) {
+	private void chestCheck(ItemStack is) {
 		TileEntity te = worldObj.getTileEntity(xCoord, yCoord-1, zCoord);
 		if (te instanceof IInventory) {
 			IInventory ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
+
+			//build in auto collation
+			int max = Math.min(ii.getInventoryStackLimit(), is.getMaxStackSize());
+			for (int i = 0; i < ii.getSizeInventory(); i++) {
+				ItemStack in = ii.getStackInSlot(i);
+				if (in != null && ReikaItemHelper.areStacksCombinable(is, in, max)) {
+					int fit = max-in.stackSize;
+					int add = Math.min(fit, is.stackSize);
+					if (add > 0) {
+						is.stackSize -= add;
+						in.stackSize += add;
+					}
+					if (is.stackSize <= 0)
+						return;
+				}
+			}
+
+			if (ReikaInventoryHelper.addToIInv(is, ii)) {
+				is.stackSize = 0;
+			}
 		}
-		return false;
 	}
 
 	private void dumpInventory() {

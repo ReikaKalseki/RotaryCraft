@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,15 @@ public class ItemBedrockGrafter extends ItemRotaryTool implements IToolGrafter {
 	@Override
 	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, int x, int y, int z) {
 		return 100;
+	}
+
+	@Override
+	public float getDigSpeed(ItemStack is, Block b, int meta) {
+		if (b == null)
+			return 0;
+		if (b instanceof BlockLeavesBase)
+			return 30;
+		return super.getDigSpeed(is, b, meta);
 	}
 
 	@Override

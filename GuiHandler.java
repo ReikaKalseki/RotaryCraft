@@ -331,7 +331,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerItemCannon(player, (TileEntityItemCannon)te);
 		}
 		if (te instanceof TileEntityWorktable) {
-			return new ContainerWorktable(player, (TileEntityWorktable)te, world);
+			return new ContainerWorktable(player, (TileEntityWorktable)te, world, true);
 		}
 		if (te instanceof TileEntityLandmine) {
 			return new ContainerLandmine(player, (TileEntityLandmine)te);
