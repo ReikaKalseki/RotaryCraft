@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -117,8 +117,9 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 				ArrayList<TileEntity> li = new ArrayList();
 				while (target instanceof TileEntityBlower) {
 					TileEntityBlower te = (TileEntityBlower)target;
-					target = te.getAdjacentTileEntity(te.getFacingDir());
-					tg = tg.move(te.getFacingDir(), 1);
+					dir = te.getFacingDir();
+					target = te.getAdjacentTileEntity(dir);
+					tg = tg.move(dir, 1);
 
 					if (li.contains(target))
 						return;
@@ -144,7 +145,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 					}
 					else {
 						//ReikaJavaLibrary.pConsole(map);
-						this.transferItems(source, target, src, tgt, dir, from);
+						this.transferItems(source, target, src, tgt, from, dir);
 					}
 					//ReikaJavaLibrary.pConsole(map, Side.SERVER);
 				}

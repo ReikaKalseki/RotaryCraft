@@ -22,7 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-import Reika.ChromatiCraft.API.Interfaces.AdjacencyUpgradeAPI;
+import Reika.ChromatiCraft.API.AdjacencyUpgradeAPI;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;

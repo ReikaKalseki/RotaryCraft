@@ -86,6 +86,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), RecipeLevel.PROTECTED);//, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));
 		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15), RecipeLevel.PROTECTED);
 		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0), RecipeLevel.PROTECTED);
+		this.addRecipe(Blocks.ice, new ItemStack(Items.snowball, 4, 0), RecipeLevel.PROTECTED);
 
 		for (int i = 0; i < ReikaTreeHelper.treeList.length; i++) {
 			ReikaTreeHelper tree = ReikaTreeHelper.treeList[i];
