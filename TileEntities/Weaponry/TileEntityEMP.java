@@ -48,6 +48,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
+import Reika.RotaryCraft.Auxiliary.EMPTileWatcher;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -390,7 +391,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			((EMPControl)te).onHitWithEMP(this);
 		}
 		else {
-			shutdownLocations.add(new WorldLocation(te));
+			addShutdownLocation(te);
 		}/*
 		else if (ConfigRegistry.ATTACKBLOCKS.getState())
 			this.shutdownFallback(te);*/
@@ -432,16 +433,23 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	public static boolean isShutdown(TileEntity te) {
-		return shutdownLocations.contains(new WorldLocation(te));
+		return !shutdownLocations.isEmpty() && shutdownLocations.contains(new WorldLocation(te));
 	}
 
 	public static boolean isShutdown(World world, int x, int y, int z) {
-		return shutdownLocations.contains(new WorldLocation(world, x, y, z));
+		return !shutdownLocations.isEmpty() && shutdownLocations.contains(new WorldLocation(world, x, y, z));
 	}
 
 	public static void resetCoordinate(World world, int x, int y, int z) {
 		if (shutdownLocations.remove(new WorldLocation(world, x, y, z)))
 			ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.ordinal(), world.provider.dimensionId, x, y, z, 0);
+		if (shutdownLocations.isEmpty())
+			EMPTileWatcher.instance.unregisterTileWatcher();
+	}
+
+	private static void addShutdownLocation(TileEntity te) {
+		shutdownLocations.add(new WorldLocation(te));
+		EMPTileWatcher.instance.registerTileWatcher();
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {

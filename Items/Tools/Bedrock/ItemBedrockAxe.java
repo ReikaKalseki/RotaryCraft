@@ -34,6 +34,7 @@ import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker;
 import Reika.DragonAPI.Auxiliary.ProgressiveRecursiveBreaker.ProgressiveBreaker;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Interfaces.Registry.TreeType;
@@ -43,6 +44,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
@@ -185,6 +187,10 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			this.cutEntireTree(is, world, tree, x, y, z, ep);
 			return true;
 		}
+		else if (ModList.FORESTRY.isLoaded() && ForestryHandler.BlockEntry.LOG.getBlock() == id) {
+			this.cutEntireForestryTree(is, world, x, y, z, ep);
+			return true;
+		}
 		else if (!world.isRemote) {
 			if (type != null) {
 				ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.getTreeBreaker(world, x, y, z, type);
@@ -226,6 +232,17 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 				world.setBlockToAir(x, y, z);
 			}
 		}
+	}
+
+	private void cutEntireForestryTree(ItemStack is, World world, int x, int y, int z, EntityPlayer ep) {
+		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+		ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.addCoordinateWithReturn(world, x, y, z, 64);
+		b.addBlock(new BlockKey(ForestryHandler.BlockEntry.LOG.getBlock()));
+		b.addBlock(new BlockKey(ForestryHandler.BlockEntry.LEAF.getBlock()));
+		b.player = ep;
+		b.fortune = fortune;
+		if (ModList.CHROMATICRAFT.isLoaded() && this.hasAutoCollect(is))
+			b.dropInventory = ep.inventory;
 	}
 
 	public String getTextureFile() {

@@ -61,7 +61,6 @@ import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.TileEntityMoveEvent;
-import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.EntityRenderingLoopEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.PlayerInteractEventClient;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -259,12 +258,6 @@ public class RotaryEventManager {
 			TileEntityEMP.resetCoordinate(evt.world, evt.xCoord, evt.yCoord, evt.zCoord);
 	}
 
-	@SubscribeEvent
-	public void applyEMPEffects(TileUpdateEvent evt) {
-		if (TileEntityEMP.isShutdown(evt.getWorld(), evt.getTileX(), evt.getTileY(), evt.getTileZ())) {
-			evt.setCanceled(true);
-		}
-	}
 	/*
 	@SubscribeEvent
 	public void cleanUpDecoTankCrafting(PlayerEvent.ItemCraftedEvent evt) {
