@@ -85,6 +85,14 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 			return ReikaJavaLibrary.makeListFrom(ReikaFluidHelper.getFluidStackAsItem(input));
 		}
 
+		public ItemStack getOutput() {
+			return output.copy();
+		}
+
+		public FluidStack getFluid() {
+			return input.copy();
+		}
+
 	}
 
 	public void addAPIRecipe(Fluid f, int amount, ItemStack out) {
@@ -103,21 +111,20 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 			this.addRecipe(f, amount, out, rl);
 	}
 
-	public ItemStack getFreezingResult(FluidStack liquid)
-	{
+	public ItemStack getFreezingResult(FluidStack liquid) {
 		Fluid f = liquid.getFluid();
-		CrystallizerRecipe cr = recipeList.get(liquid);
+		CrystallizerRecipe cr = recipeList.getForValue(liquid);
 		if (cr == null)
 			return null;
 		int req = cr.input.amount;
 		if (req > liquid.amount)
 			return null;
-		return recipeList.get(liquid).output.copy();
+		return cr.output.copy();
 	}
 
-	public Fluid getRecipe(ItemStack result) {
-		for (FluidStack f : recipeList.keySet()) {
-			CrystallizerRecipe cr = recipeList.get(f);
+	public CrystallizerRecipe getRecipe(ItemStack result) {
+		for (CrystallizerRecipe cr : recipeList.values()) {
+			/*
 			if (cr == null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
@@ -125,36 +132,26 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 				sb.append("\nReport this to Reika!");
 				throw new IllegalStateException(sb.toString());
 			}
+			 */
 			if (ReikaItemHelper.matchStacks(result, cr.output))
-				return f.getFluid();
+				return cr;
 		}
 		return null;
 	}
 
 	public int getRecipeConsumption(ItemStack result) {
-		for (FluidStack f : recipeList.keySet()) {
-			CrystallizerRecipe cr = recipeList.get(f);
-			if (cr == null) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
-				sb.append("\nMap data: "+recipeList.toString());
-				sb.append("\nReport this to Reika!");
-				throw new IllegalStateException(sb.toString());
-			}
-			if (ReikaItemHelper.matchStacks(result, cr.output))
-				return cr.input.amount;
-		}
-		return 0;
+		CrystallizerRecipe cr = this.getRecipe(result);
+		return cr != null ? cr.input.amount : 0;
 	}
 
 	public boolean isValidFluid(Fluid f) {
 		return recipeList.containsKey(f);
 	}
 
-	public Collection<Fluid> getAllRecipes() {
-		HashSet<Fluid> c = new HashSet();
+	public Collection<CrystallizerRecipe> getAllRecipes() {
+		HashSet<CrystallizerRecipe> c = new HashSet();
 		for (CrystallizerRecipe cr : recipeList.values()) {
-			c.add(cr.input.getFluid());
+			c.add(cr);
 		}
 		return c;
 	}

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,6 +29,7 @@ import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer.CrystallizerRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiCrystallizer;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer;
 
@@ -37,19 +38,18 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class CrystallizerHandler extends TemplateRecipeHandler {
 
-	public class CrystallizerRecipe extends CachedRecipe {
+	public class CrystallizerNEIRecipe extends CachedRecipe {
 
-		private Fluid input;
+		private final CrystallizerRecipe input;
 
-		public CrystallizerRecipe(Fluid in) {
+		public CrystallizerNEIRecipe(CrystallizerRecipe in) {
 			input = in;
 		}
 
 		@Override
 		public PositionedStack getResult() {
 			if (input != null) {
-				ItemStack is = this.getOutput();
-				return new PositionedStack(is, 75, 25);
+				return new PositionedStack(input.getOutput(), 75, 25);
 			}
 			return null;
 		}
@@ -58,14 +58,6 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 		public PositionedStack getIngredient()
 		{
 			return null;//new PositionedStack(this.getEntry(), 120, 5);
-		}
-
-		private ItemStack getOutput() {
-			return RecipesCrystallizer.getRecipes().getFreezingResult(new FluidStack(input, 16000));
-		}
-
-		public FluidStack getEntry() {
-			return new FluidStack(input, RecipesCrystallizer.getRecipes().getRecipeConsumption(this.getOutput()));
 		}
 	}
 
@@ -105,9 +97,9 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rccrystall")) {
-			Collection<Fluid> li = RecipesCrystallizer.getRecipes().getAllRecipes();
-			for (Fluid f : li)
-				arecipes.add(new CrystallizerRecipe(f));
+			Collection<CrystallizerRecipe> li = RecipesCrystallizer.getRecipes().getAllRecipes();
+			for (CrystallizerRecipe f : li)
+				arecipes.add(new CrystallizerNEIRecipe(f));
 		}
 		super.loadCraftingRecipes(outputId, results);
 	}
@@ -122,9 +114,9 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		Fluid f = RecipesCrystallizer.getRecipes().getRecipe(result);
+		CrystallizerRecipe f = RecipesCrystallizer.getRecipes().getRecipe(result);
 		if (f != null) {
-			arecipes.add(new CrystallizerRecipe(f));
+			arecipes.add(new CrystallizerNEIRecipe(f));
 		}
 	}
 
@@ -134,7 +126,7 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 		if (fs != null) {
 			ItemStack is = RecipesCrystallizer.getRecipes().getFreezingResult(fs);
 			if (is != null) {
-				arecipes.add(new CrystallizerRecipe(fs.getFluid()));
+				arecipes.add(new CrystallizerNEIRecipe(RecipesCrystallizer.getRecipes().getRecipe(is)));
 			}
 		}
 	}
@@ -153,8 +145,8 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 	}
 
 	private void drawTemperatures(int recipe) {
-		CrystallizerRecipe r = (CrystallizerRecipe)arecipes.get(recipe);
-		FluidStack fs = r.getEntry();
+		CrystallizerNEIRecipe r = (CrystallizerNEIRecipe)arecipes.get(recipe);
+		FluidStack fs = r.input.getFluid();
 		if (fs != null) {
 			int freeze = TileEntityCrystallizer.getFreezingPoint(fs);
 			FontRenderer f = Minecraft.getMinecraft().fontRenderer;
@@ -164,8 +156,8 @@ public class CrystallizerHandler extends TemplateRecipeHandler {
 	}
 
 	private void drawFluids(int recipe) {
-		CrystallizerRecipe r = (CrystallizerRecipe)arecipes.get(recipe);
-		FluidStack fs = r.getEntry();
+		CrystallizerNEIRecipe r = (CrystallizerNEIRecipe)arecipes.get(recipe);
+		FluidStack fs = r.input.getFluid();
 		if (fs != null) {
 			Fluid f = fs.getFluid();
 			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
