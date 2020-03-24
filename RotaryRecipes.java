@@ -482,7 +482,16 @@ public class RotaryRecipes {
 			RecipeAPI.addDecompositionFluidRecipe(new FluidStack(FluidRegistry.getFluid("rc jet fuel"), 100), "4 octane", "2.2 hexane", "2.1 decane", "3.7 methylhexane", "1.2 cyclohexane", "2.3 methylcyclohexane", "0.5 benzene", "1.3 toluene", "0.5 napthalene");
 		}
 
-		MachineRegistry.BUNDLEDBUS.addCrafting("BrB", "CpF", "BrB", 'C', ItemStacks.pcb, 'B', ItemStacks.basepanel, 'r', ReikaItemHelper.lookupItem("ProjRed|Transmission:projectred.transmission.wire:17"), 'p', AppEngHandler.getInstance().getGoldProcessor(), 'F', AppEngHandler.getInstance().getFluixCrystal());
+		if (ModList.IMMERSIVEENG.isLoaded()) {
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(ItemRegistry.BEDDRILL.getStackOf(), 1200, 2, 0, "bbb", "bdb", " b ", 'b', ItemStacks.bedrockdust, 'd', ItemStacks.drill);
+		}
+
+		if (ModList.CHISEL.isLoaded()) {
+			RecipesBlastFurnace.getRecipes().add3x3Crafting(ItemRegistry.BEDCHISEL.getStackOf(), 1200, 2, 0, " ob", " bo", "s  ", 'o', Blocks.obsidian, 'b', ItemStacks.bedingot, 's', ItemStacks.shaftitem);
+		}
+
+		if (ModList.PROJRED.isLoaded() && ModList.APPENG.isLoaded())
+			MachineRegistry.BUNDLEDBUS.addCrafting("BrB", "CpF", "BrB", 'C', ItemStacks.pcb, 'B', ItemStacks.basepanel, 'r', ReikaItemHelper.lookupItem("ProjRed|Transmission:projectred.transmission.wire:17"), 'p', AppEngHandler.getInstance().getGoldProcessor(), 'F', AppEngHandler.getInstance().getFluixCrystal());
 	}
 
 	private static void changeIC2BlazePowderCompression() {

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
@@ -19,6 +20,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -27,7 +29,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
+import Reika.ChromatiCraft.ChromaticEventManager;
 import Reika.ChromatiCraft.Registry.ChromaEnchants;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -39,6 +44,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Interfaces.Registry.TreeType;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -183,12 +189,12 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			}
 			return true;
 		}
-		else if (!tree.isEmpty() && tree.isValidTree()) {
-			this.cutEntireTree(is, world, tree, x, y, z, ep);
-			return true;
-		}
 		else if (ModList.FORESTRY.isLoaded() && ForestryHandler.BlockEntry.LOG.getBlock() == id) {
 			this.cutEntireForestryTree(is, world, x, y, z, ep);
+			return true;
+		}
+		else if (!tree.isEmpty() && tree.isValidTree()) {
+			this.cutEntireTree(is, world, tree, x, y, z, ep);
 			return true;
 		}
 		else if (!world.isRemote) {
@@ -215,6 +221,16 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		boolean rainbow = tree.isRainbowTree();
 		if (rainbow) {
 			ArrayList<ItemStack> items = tree.getAllDroppedItems(world, fortune, ep);
+			if (ModList.CHROMATICRAFT.isLoaded() && this.hasAutoCollect(is)) {
+				Iterator<ItemStack> it = items.iterator();
+				while (it.hasNext()) {
+					ItemStack in = it.next();
+					if (MinecraftForge.EVENT_BUS.post(new EntityItemPickupEvent(ep, new EntityItem(world, dx+0.5, dy+0.5, dz+0.5, is))))
+						it.remove();
+					else if (ReikaInventoryHelper.addToIInv(in, ep.inventory))
+						it.remove();
+				}
+			}
 			ReikaItemHelper.dropItems(world, dx, dy, dz, items);
 		}
 		for (int i = 0; i < tree.getSize(); i++) {
@@ -224,17 +240,30 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			int z = c.zCoord;
 			Block b = world.getBlock(x, y, z);
 			int meta = world.getBlockMetadata(x, y, z);
-			;
 			if (b != null) {
 				ReikaSoundHelper.playBreakSound(world, x, y, z, b, 0.75F, 1);
-				if (!rainbow)
+				if (!rainbow) {
+					if (ModList.CHROMATICRAFT.isLoaded() && this.hasAutoCollect(is)) {
+						this.setCollectionPlayer(ep);
+					}
 					b.dropBlockAsItem(world, x, y, z, meta, fortune);
+					if (ModList.CHROMATICRAFT.isLoaded()) {
+						this.setCollectionPlayer(null);
+					}
+				}
 				world.setBlockToAir(x, y, z);
 			}
 		}
 	}
 
+	@ModDependent(ModList.CHROMATICRAFT)
+	private void setCollectionPlayer(EntityPlayer ep) {
+		ChromaticEventManager.instance.collectItemPlayer = ep;
+	}
+
 	private void cutEntireForestryTree(ItemStack is, World world, int x, int y, int z, EntityPlayer ep) {
+		if (world.isRemote)
+			return;
 		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 		ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.addCoordinateWithReturn(world, x, y, z, 64);
 		b.addBlock(new BlockKey(ForestryHandler.BlockEntry.LOG.getBlock()));

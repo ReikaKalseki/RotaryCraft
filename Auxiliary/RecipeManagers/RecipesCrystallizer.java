@@ -54,6 +54,7 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 		RecipeInterface.crystallizer = this;
 
 		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice), RecipeLevel.CORE);
+		this.addRecipe(FluidRegistry.WATER, 200, new ItemStack(Items.snowball), RecipeLevel.PROTECTED);
 		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone), RecipeLevel.PERIPHERAL);
 
 		this.addRecipe("rc ethanol", 1000, ItemRegistry.ETHANOL.getStackOf(), RecipeLevel.PROTECTED);

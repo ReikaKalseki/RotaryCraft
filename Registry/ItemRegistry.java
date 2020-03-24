@@ -77,6 +77,8 @@ import Reika.RotaryCraft.Items.Tools.ItemWorldEdit;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedReveal;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockAxe;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockChisel;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockDrillHead;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockGrafter;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockHoe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockPickaxe;
@@ -203,6 +205,8 @@ public enum ItemRegistry implements ItemEnum {
 	VOIDRAIL(133, 1, false,			"item.voidrailgun",			ItemVoidMetalRailgunAmmo.class),
 	//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
 	MATCHFILTER(50,	1, false,		"item.matchfilter",			ItemMatchFilter.class),
+	BEDDRILL(134, 1, false,			"item.beddrill",			ItemBedrockDrillHead.class,	ModList.IMMERSIVEENG),
+	BEDCHISEL(45, 1, false,			"item.bedchisel",			ItemBedrockChisel.class, ModList.CHISEL),
 	;
 
 	private final int index;

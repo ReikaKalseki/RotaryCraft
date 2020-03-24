@@ -133,7 +133,8 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 		}
 		if (world.getBlock(x, y-1, z) == Blocks.air || MachineRegistry.getMachine(world, x, y-1, z) != this.getMachine()) {
 			//ReikaJavaLibrary.pConsole("TOWER: "+this.getTowerHeight()+";  SIZE: "+this.getArraySize());
-			if (plant.getPrimaryTower().to2D().equals(new Coordinate(x, 0, z)))
+			Coordinate c = plant.getPrimaryTower();
+			if (c != null && c.to2D().equals(new Coordinate(x, 0, z)))
 				this.generatePower(world, x, y, z);
 			else
 				power = omega = torque = 0;

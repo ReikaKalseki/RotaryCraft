@@ -28,6 +28,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.TriggerableAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
@@ -63,8 +64,11 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Craf
 			matrix.update();
 			if (matrix.isEmpty())
 				return;
-			if (hasUpgrade && this.getTicksExisted()%4 == 0) {
+			if (hasUpgrade && this.getTicksExisted()%6 == 0 && !this.hasRedstoneSignal()) {
 				this.onPositiveRedstoneEdge();
+				if (this.getTicksExisted()%6 == 0) {
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.click", 0.5F, 0.675F);
+				}
 			}
 			if (this.isReadyToCraft()) {
 				if (this.getTicksExisted()%4 == 0) {
