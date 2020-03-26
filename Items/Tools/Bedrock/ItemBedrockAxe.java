@@ -189,8 +189,8 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 			}
 			return true;
 		}
-		else if (ModList.FORESTRY.isLoaded() && ForestryHandler.BlockEntry.LOG.getBlock() == id) {
-			this.cutEntireForestryTree(is, world, x, y, z, ep);
+		else if (ModList.FORESTRY.isLoaded() && ForestryHandler.getInstance().isLog(id)) {
+			this.cutEntireForestryTree(is, world, x, y, z, ep, id, meta);
 			return true;
 		}
 		else if (!tree.isEmpty() && tree.isValidTree()) {
@@ -261,13 +261,16 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		ChromaticEventManager.instance.collectItemPlayer = ep;
 	}
 
-	private void cutEntireForestryTree(ItemStack is, World world, int x, int y, int z, EntityPlayer ep) {
+	private void cutEntireForestryTree(ItemStack is, World world, int x, int y, int z, EntityPlayer ep, Block id, int meta) {
 		if (world.isRemote)
 			return;
 		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 		ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.addCoordinateWithReturn(world, x, y, z, 64);
-		b.addBlock(new BlockKey(ForestryHandler.BlockEntry.LOG.getBlock()));
-		b.addBlock(new BlockKey(ForestryHandler.BlockEntry.LEAF.getBlock()));
+		//b.addBlock(new BlockKey(id, meta));
+		for (int i = 0; i < 16; i++) {
+			b.addBlock(new BlockKey(id, i));
+			b.addBlock(new BlockKey(ForestryHandler.BlockEntry.LEAF.getBlock(), i));
+		}
 		b.player = ep;
 		b.fortune = fortune;
 		if (ModList.CHROMATICRAFT.isLoaded() && this.hasAutoCollect(is))

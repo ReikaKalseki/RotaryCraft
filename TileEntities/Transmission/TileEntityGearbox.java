@@ -687,6 +687,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public NBTTagCompound getTagsToWriteToStack() {
 		NBTTagCompound NBT = new NBTTagCompound();
+		//if (this.getGearboxType().isDamageableGear())
 		NBT.setInteger("damage", this.getDamage());
 		NBT.setInteger("lube", this.getLubricant());
 		NBT.setBoolean("living", this.isLiving());
