@@ -503,7 +503,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		}
 
 		private boolean tick(World world, float chanceFactor) {
-			boolean flag = age >= 10;
+			boolean flag = age >= 20;
 			for (int y : effectMap.keySet()) {
 				Block b = world.getBlock(xCoord, y, zCoord);
 				for (ColumnAction ca : effectMap.get(y)) {
