@@ -303,7 +303,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		private FieldColumn getOrFindLevel(World world, int dx, int dz, int y) {
 			Coordinate c = new Coordinate(dx, 0, dz);
 			FieldColumn f = levels.get(c);
-			if (f == null || f.age >= 10) {
+			if (f == null || f.age >= 20) {
 				if (f == null) {
 					f = new FieldColumn(dx, dz, y);
 					levels.put(c, f);
