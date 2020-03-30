@@ -367,7 +367,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		//private boolean doDripParticles;
 		//private int calculatedY;
 
-		private HashSet<ColumnAction>[] effectMap = new HashSet[256];
+		private ColumnAction[][] effectMap = new ColumnAction[256][];
 
 		private FieldColumn(int dx, int dz, int y) {
 			xCoord = dx;
@@ -383,7 +383,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 
 			NBTTagList li = new NBTTagList();
 			for (int y = 0; y < 256; y++) {
-				Collection<ColumnAction> cc = effectMap[y];
+				ColumnAction[] cc = effectMap[y];
 				if (cc == null)
 					continue;
 				NBTTagCompound nbt = new NBTTagCompound();
@@ -409,13 +409,13 @@ public class TileEntitySprinkler extends SprinklerBlock {
 			for (Object o : li.tagList) {
 				NBTTagCompound nbt = (NBTTagCompound)o;
 				int dy = nbt.getInteger("y");
-				HashSet<ColumnAction> cc = new HashSet();
+				Collection<ColumnAction> cc = new HashSet();
 				NBTTagList li2 = nbt.getTagList("entries", NBTTypes.COMPOUND.ID);
 				for (Object o2 : li2.tagList) {
 					NBTTagCompound nbt2 = (NBTTagCompound)o2;
 					cc.add(ColumnAction.readFromNBT(nbt2));
 				}
-				ret.effectMap[dy] = cc;
+				ret.effectMap[dy] = cc.toArray(new ColumnAction[cc.size()]);
 			}
 
 			return ret;
@@ -426,7 +426,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 			int dy = sprinklerY;
 			boolean flag = false;
 			//doDripParticles = false;
-			effectMap = new HashSet[256];
+			effectMap = new ColumnAction[256][];
 			while (dy > 0 && sprinklerY-dy < 12 && !flag) {
 				Block b = world.getBlock(xCoord, dy, zCoord);
 				if (!b.isAir(world, xCoord, dy, zCoord)) {
@@ -502,18 +502,17 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		}
 
 		private void addEffectValue(int dy, ColumnAction ca) {
-			HashSet<ColumnAction> set = effectMap[dy];
-			if (set == null) {
-				set = new HashSet();
-				effectMap[dy] = set;
-			}
-			set.add(ca);
+			ColumnAction[] set = effectMap[dy];
+			int len = set == null ? 0 : set.length;
+			ColumnAction[] ret = new ColumnAction[len+1];
+			System.arraycopy(set, 0, ret, 0, len);
+			effectMap[dy] = ret;
 		}
 
 		private boolean tick(World world, float chanceFactor) {
 			boolean flag = age >= 20;
 			for (int y = 0; y < effectMap.length; y++) {
-				Collection<ColumnAction> map = effectMap[y];
+				ColumnAction[] map = effectMap[y];
 				if (map == null)
 					continue;
 				Block b = world.getBlock(xCoord, y, zCoord);
@@ -534,7 +533,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		@SideOnly(Side.CLIENT)
 		private void doParticles(World world) {
 			for (int y = 0; y < effectMap.length; y++) {
-				Collection<ColumnAction> map = effectMap[y];
+				ColumnAction[] map = effectMap[y];
 				for (ColumnAction ca : map) {
 					if (ca.doDripParticles && rand.nextInt(8) == 0) {
 						ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord, ca.zCoord+rand.nextDouble());
