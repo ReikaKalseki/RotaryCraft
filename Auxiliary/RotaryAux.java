@@ -34,8 +34,10 @@ import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource;
 import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource.SourceType;
+import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -332,13 +334,13 @@ public class RotaryAux {
 		return String.format("%.3f%sPa", val, sg);
 	}
 
-	public static String formatTorque(int t) {
+	public static String formatTorque(double t) {
 		double val = ReikaMathLibrary.getThousandBase(t);
 		String sg = ReikaEngLibrary.getSIPrefix(t);
 		return String.format("%.3f%s Nm");
 	}
 
-	public static String formatSpeed(int s) {
+	public static String formatSpeed(double s) {
 		double val = ReikaMathLibrary.getThousandBase(s);
 		String sg = ReikaEngLibrary.getSIPrefix(s);
 		return String.format("%.3f%s rad/s");
@@ -348,5 +350,30 @@ public class RotaryAux {
 		double val = ReikaMathLibrary.getThousandBase(p);
 		String sg = ReikaEngLibrary.getSIPrefix(p);
 		return String.format("%.3f%sW");
+	}
+
+	public static String formatEnergy(long e) {
+		double val = ReikaMathLibrary.getThousandBase(e);
+		String sg = ReikaEngLibrary.getSIPrefix(e);
+		return String.format("%.3f%sJ");
+	}
+
+	public static String formatPowerIO(TileEntityIOMachine te) {
+		double valp = ReikaMathLibrary.getThousandBase(te.power);
+		String sgp = ReikaEngLibrary.getSIPrefix(te.power);
+		return String.format("%.3f %sW @ %d rad/s", valp, sgp, te.omega);
+	}
+
+	public static String formatPowerIO(ShaftMachine te) {
+		long p = te.getPower();
+		double valp = ReikaMathLibrary.getThousandBase(p);
+		String sgp = ReikaEngLibrary.getSIPrefix(p);
+		return String.format("%.3f %sW @ %d rad/s", valp, sgp, te.getOmega());
+	}
+
+	public static String formatDistance(double dist) {
+		double val = ReikaMathLibrary.getThousandBase(dist);
+		String sg = ReikaEngLibrary.getSIPrefix(dist);
+		return String.format("%.3f%sm", val, sg);
 	}
 }

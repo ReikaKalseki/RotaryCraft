@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,8 +23,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -118,8 +116,8 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 				MaterialRegistry mat = MaterialRegistry.matList[i];
 				double torque = mat.getMaxShaftTorque();
 				double speed = mat.getMaxShaftSpeed();
-				li.add(String.format("Max Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(speed), ReikaEngLibrary.getSIPrefix(speed)));
-				li.add(String.format("Max Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(torque), ReikaEngLibrary.getSIPrefix(torque)));
+				li.add(String.format("Max Speed: %s", RotaryAux.formatSpeed(speed)));
+				li.add(String.format("Max Torque: %s", RotaryAux.formatTorque(torque)));
 			}
 			else {
 				StringBuilder sb = new StringBuilder();

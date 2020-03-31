@@ -618,10 +618,10 @@ public class GuiHandbook extends GuiScreen
 			posY -= 44;
 		}
 		if (subpage == 0 || h.sameTextAllSubpages()) {
-			fontRendererObj.drawSplitString(String.format("%s", h.getData()), px, posY+descY, 242, c);
+			fontRendererObj.drawSplitString(this.parseHandbookText(h.getData()), px, posY+descY, 242, c);
 		}
 		else {
-			fontRendererObj.drawSplitString(String.format("%s", h.getNotes(subpage)), px, posY+descY, 242, c);
+			fontRendererObj.drawSplitString(this.parseHandbookText(h.getNotes(subpage)), px, posY+descY, 242, c);
 		}
 		if (disable) {
 			fontRendererObj.drawSplitString("This machine has been disabled by your server admin or modpack creator.", px, posY+descY, 242, 0xffffff);
@@ -644,6 +644,10 @@ public class GuiHandbook extends GuiScreen
 			this.drawMachineRender(posX, posY);
 
 		RenderHelper.disableStandardItemLighting();
+	}
+
+	private String parseHandbookText(String s) {
+		return s;
 	}
 
 	protected HandbookEntry getEntry() {

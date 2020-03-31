@@ -28,12 +28,12 @@ import Reika.DragonAPI.Interfaces.TileEntity.ThermalTile;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaDateHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Interfaces.PressureTile;
 import Reika.RotaryCraft.API.Interfaces.Transducerable;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -115,17 +115,17 @@ public class ItemMeter extends ItemRotaryTool
 
 		if (tile instanceof ThermalTile) {
 			ThermalTile th = (ThermalTile)tile;
-			this.sendMessage(ep, String.format("%s %s: %dC", name, Variables.TEMPERATURE, th.getTemperature()));
+			this.sendMessage(ep, String.format("%s %s: %s", name, Variables.TEMPERATURE, RotaryAux.formatTemperature(th.getTemperature())));
 		}
 
 		if (tile instanceof PressureTile) {
 			PressureTile th = (PressureTile)tile;
-			this.sendMessage(ep, String.format("%s %s: %d kPa", name, Variables.PRESSURE, th.getPressure()));
+			this.sendMessage(ep, String.format("%s %s: %s", name, Variables.PRESSURE, RotaryAux.formatPressure(th.getPressure())));
 		}
 
 		if (tile instanceof RangedEffect) {
 			RangedEffect te = (RangedEffect)tile;
-			this.sendMessage(ep, Variables.RANGE+": "+te.getRange()+" m; "+"Max Range: "+te.getMaxRange()+" m");
+			this.sendMessage(ep, Variables.RANGE+": "+RotaryAux.formatDistance(te.getRange())+"; "+"Max Range: "+RotaryAux.formatDistance(te.getMaxRange()));
 		}
 
 		if (tile instanceof DiscreteFunction) {
@@ -148,9 +148,7 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityEngine te = (TileEntityEngine)tile;
 			world.markBlockForUpdate(x, y, z);
 			long power = te.power;
-			String pre = ReikaEngLibrary.getSIPrefix(power);
-			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s", name, base, pre, te.omega));
+			this.sendMessage(ep, String.format("%s producing %s", name, RotaryAux.formatPowerIO(te)));
 			if (te.getEngineType().isAirBreathing() && te.isDrowned(world, x, y, z))
 				this.sendLocalizedMessage(ep, "drowning");
 			if (te.getEngineType() == EngineType.JET) {
@@ -181,25 +179,20 @@ public class ItemMeter extends ItemRotaryTool
 					}
 				}
 				else {
-					String sg = String.format("Detected waterfall height: %d m", ((TileEntityHydroEngine)te).getWaterfallHeightForDisplay());
+					String sg = String.format("Detected waterfall height: %s", RotaryAux.formatDistance(((TileEntityHydroEngine)te).getWaterfallHeightForDisplay()));
 					this.sendMessage(ep, sg);
 				}
 			}
 		}
 		else if (tile instanceof ShaftPowerEmitter) {
 			ShaftPowerEmitter sp = (ShaftPowerEmitter)tile;
-			long power = sp.getPower();
-			String pre = ReikaEngLibrary.getSIPrefix(power);
-			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s producing %.3f %sW @ %d rad/s", name, base, pre, sp.getOmega()));
+			this.sendMessage(ep, String.format("%s producing %s", name, RotaryAux.formatPowerIO(sp)));
 		}
 
 		if (tile instanceof TileEntityPowerReceiver) {
 			TileEntityPowerReceiver te = (TileEntityPowerReceiver)tile;
 			long power = te.power;
-			String pre = ReikaEngLibrary.getSIPrefix(power);
-			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s receiving %.3f %sW @ %d rad/s", name, base, pre, te.omega));
+			this.sendMessage(ep, String.format("%s receiving %s", name, RotaryAux.formatPowerIO(te)));
 			if (power < te.MINPOWER)
 				this.sendLocalizedMessage(ep, "minpower");
 			if (power < te.MINSPEED)
@@ -209,18 +202,12 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		else if (tile instanceof ShaftPowerReceiver) {
 			ShaftPowerReceiver sp = (ShaftPowerReceiver)tile;
-			long power = sp.getPower();
-			String pre = ReikaEngLibrary.getSIPrefix(power);
-			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s receiving %.3f %sW @ %d rad/s", name, base, pre, sp.getOmega()));
+			this.sendMessage(ep, String.format("%s receiving %s", name, RotaryAux.formatPowerIO(sp)));
 		}
 
 		if (tile instanceof TileEntityTransmissionMachine) {
 			TileEntityTransmissionMachine te = (TileEntityTransmissionMachine)tile;
-			long power = te.power;
-			String pre = ReikaEngLibrary.getSIPrefix(power);
-			double base = ReikaMathLibrary.getThousandBase(power);
-			this.sendMessage(ep, String.format("%s transmitting %.3f %sW @ %d rad/s", name, base, pre, te.omega));
+			this.sendMessage(ep, String.format("%s transmitting %s", name, RotaryAux.formatPowerIO(te)));
 		}
 
 		if (tile instanceof RCToModConverter) {
@@ -232,11 +219,9 @@ public class ItemMeter extends ItemRotaryTool
 
 		if (tile instanceof EnergyToPowerBase) {
 			EnergyToPowerBase te = (EnergyToPowerBase)tile;
-			double p3 = ReikaMathLibrary.getThousandBase(te.power);
-			String pe = ReikaEngLibrary.getSIPrefix(te.power);
 			int units = te.getConsumedUnitsPerTick();
 			String unit = te.getUnitDisplay();
-			this.sendMessage(ep, String.format("%s Outputting %.3f%sW @ %d rad/s", name, p3, pe, te.omega));
+			this.sendMessage(ep, String.format("%s Outputting %s", name, RotaryAux.formatPowerIO(te)));
 			this.sendMessage(ep, String.format("Consuming %d %s/t", units, unit));
 		}
 
@@ -298,9 +283,7 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			else if (te.getGearType().storesEnergy()) {
 				long energy = te.getEnergy()/20;
-				String pre = ReikaEngLibrary.getSIPrefix(energy);
-				double base = ReikaMathLibrary.getThousandBase(energy);
-				this.sendMessage(ep, String.format("Stored Energy: %.3f %sJ", base, pre));
+				this.sendMessage(ep, String.format("Stored Energy: %s", RotaryAux.formatEnergy(energy)));
 			}
 		}
 		if (m == MachineRegistry.BEVELGEARS) {
