@@ -284,8 +284,8 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			Fluid out = liq.getFluidInOutput();
 			int amtin = liq.getInputLevel();
 			int amtout = liq.getOutputLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getInputCapacity(), in.getLocalizedName()) : "Empty";
-			String output = out != null ? String.format("%d/%d mB of %s", amtout, liq.getOutputCapacity(), out.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtin, liq.getInputCapacity()), in.getLocalizedName()) : "Empty";
+			String output = out != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtout, liq.getOutputCapacity()), out.getLocalizedName()) : "Empty";
 			currenttip.add("Input Tank: "+input);
 			currenttip.add("Output Tank: "+output);
 		}
@@ -293,14 +293,14 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			PoweredLiquidReceiver liq = (PoweredLiquidReceiver)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		if (te instanceof PoweredLiquidProducer) {
 			PoweredLiquidProducer liq = (PoweredLiquidProducer)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		if (te instanceof TileEntityGearbox) {
@@ -317,7 +317,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		if (te instanceof TileEntityAdvancedGear) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 			if (adv.getGearType().consumesLubricant()) {
-				currenttip.add(String.format("Lubricant: %d mB", adv.getLubricant()));
+				currenttip.add(String.format("Lubricant: %s", RotaryAux.formatLiquidAmount(adv.getLubricant())));
 			}
 			if (adv.getGearType() == GearType.HIGH) {
 				currenttip.add(adv.torquemode ? "Torque Mode" : "Speed Mode");
@@ -326,14 +326,14 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		if (te instanceof TileEntityEngine) {
 			TileEntityEngine eng = (TileEntityEngine)te;
 			if (eng.getEngineType().requiresLubricant()) {
-				currenttip.add(String.format("Lubricant: %d mB", eng.getLube()));
+				currenttip.add(String.format("Lubricant: %s", RotaryAux.formatLiquidAmount(eng.getLube())));
 			}
 			if (eng.getEngineType().burnsFuel()) {
-				currenttip.add(String.format("Fuel: %d mB", eng.getFuelLevel()));
+				currenttip.add(String.format("Fuel: %s", RotaryAux.formatLiquidAmount(eng.getFuelLevel())));
 			}
 			if (eng instanceof TileEntityPerformanceEngine) {
-				currenttip.add(String.format("Additives: %d mB", ((TileEntityPerformanceEngine)eng).additives));
-				currenttip.add(String.format("Water: %d mB", ((TileEntityPerformanceEngine)eng).getWater()));
+				currenttip.add(String.format("Additives: %s", RotaryAux.formatLiquidAmount(((TileEntityPerformanceEngine)eng).additives)));
+				currenttip.add(String.format("Water: %s", RotaryAux.formatLiquidAmount(((TileEntityPerformanceEngine)eng).getWater())));
 			}
 			if (eng.hasTemperature()) {
 				currenttip.add(Variables.TEMPERATURE+": "+RotaryAux.formatTemperature(eng.getTemperature()));

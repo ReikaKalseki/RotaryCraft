@@ -132,6 +132,53 @@ public class OldTextureLoader {
 		return magnetoNames.get((int)((System.currentTimeMillis()/4000)%magnetoNames.size()))+" Engine";
 	}
 
+	/*
+	public String parseAndConvertUnits(String s) {
+		String[] words = s.split(" ");
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < words.length; i++) {
+			String sg = words[i];
+			if (sg.contains("W")) {
+				if (sg.equals("W")) {
+
+				}
+				else {
+
+				}
+			}
+			if (sg.contains("Nm")) {
+				if (sg.equals("Nm")) {
+					words[i] = "ft-lb";
+				}
+				else {
+
+				}
+			}
+			if (sg.contains("rad/s")) {
+				if (sg.equals("rad/s")) {
+					words[i] = "rpm";
+				}
+				else {
+
+				}
+			}
+			if (sg.contains("C")) {
+				if (sg.equals("C")) {
+
+				}
+				else {
+
+				}
+			}
+		}
+		for (int i = 0; i < words.length; i++) {
+			sb.append(words[i]);
+			if (i < words.length-1)
+				sb.append(" ");
+		}
+		return sb.toString();
+	}
+	 */
 	private static class IconSide {
 
 		public final int fallback;

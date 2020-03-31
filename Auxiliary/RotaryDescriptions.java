@@ -318,8 +318,8 @@ public final class RotaryDescriptions {
 				aux = engines.getValueAtNode("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
 				sub = engines.getNodesWithin("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
 
-				desc = String.format(desc, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
-				aux = String.format(aux, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
+				desc = RotaryAux.formatTorqueSpeedPowerForBook(desc, e.getTorque(), e.getSpeed(), e.getPower());
+				aux = RotaryAux.formatTorqueSpeedPowerForBook(aux, e.getTorque(), e.getSpeed(), e.getPower());
 			}
 			else {
 				desc = engines.getValueAtNode("engines:"+"solar".toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
@@ -337,7 +337,7 @@ public final class RotaryDescriptions {
 				for (String s : sub) {
 					String val = engines.getValueAtNode(s);
 					if (k == 0 && e != null) {
-						val = String.format(val, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
+						val = RotaryAux.formatTorqueSpeedPowerForBook(val, e.getTorque(), e.getSpeed(), e.getPower());
 					}
 					notes.put(val, h, k);
 					k++;
@@ -352,8 +352,8 @@ public final class RotaryDescriptions {
 		String desc = xml.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
 		String aux = xml.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
 		Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
-		desc = String.format(desc, machineData.get(m));
-		aux = String.format(aux, machineNotes.get(m, 0));
+		desc = RotaryAux.formatValuesForBook(desc, machineData.get(m));
+		aux = RotaryAux.formatValuesForBook(aux, machineNotes.get(m, 0));
 
 		if (XMLInterface.NULL_VALUE.equals(desc))
 			desc = "There is no handbook data for this machine yet.";
@@ -380,7 +380,7 @@ public final class RotaryDescriptions {
 			int k = 0;
 			for (String s : sub) {
 				String val = xml.getValueAtNode(s);
-				val = String.format(val, machineNotes.get(m, k));
+				val = RotaryAux.formatValuesForBook(val, machineNotes.get(m, k));
 				notes.put(val, h, k);
 				k++;
 				lengths.put(h, k);

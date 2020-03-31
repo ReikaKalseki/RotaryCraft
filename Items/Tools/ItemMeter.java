@@ -164,12 +164,12 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			if (te.getEngineType().requiresLubricant()) {
 				int amt = te.getLube();
-				String sg = String.format("Lubricant: %d mB", amt);
+				String sg = String.format("Lubricant: %s", RotaryAux.formatLiquidAmount(amt));
 				this.sendMessage(ep, sg);
 			}
 			if (te.getEngineType().isWaterPiped()) {
 				int amt = te.getWater();
-				String sg = String.format("Water: %d mB", amt);
+				String sg = String.format("Water: %s", RotaryAux.formatLiquidAmount(amt));
 				this.sendMessage(ep, sg);
 			}
 			if (te.getEngineType() == EngineType.HYDRO) {
@@ -229,7 +229,7 @@ public class ItemMeter extends ItemRotaryTool
 			TileEntityPiping te = (TileEntityPiping)tile;
 			Fluid f = te.getFluidType();
 			if (f != null)
-				this.sendMessage(ep, String.format("Pipe has %d mB of %s", te.getFluidLevel(), f.getLocalizedName()));
+				this.sendMessage(ep, String.format("Pipe has %s of %s", RotaryAux.formatLiquidAmount(te.getFluidLevel()), f.getLocalizedName()));
 			else
 				this.sendMessage(ep, "Pipe is empty.");
 		}
@@ -263,7 +263,7 @@ public class ItemMeter extends ItemRotaryTool
 			}
 			else {
 				this.sendMessage(ep, String.format("Solar plant contains %d mirrors and %d active tower pieces (out of %d total)", top.getArraySize(), bottom.getPlant().getEffectiveTowerBlocks(), bottom.getPlant().rawTowerBlocks()));
-				this.sendMessage(ep, String.format("Outputting %.3fkW at %d rad/s; Efficiency %.1f%s", bottom.power/1000D, bottom.omega, bottom.getArrayOverallBrightness()*100F, "%%"));
+				this.sendMessage(ep, String.format("Outputting %s; Efficiency %.1f%s", RotaryAux.formatPowerIO(bottom), bottom.getArrayOverallBrightness()*100F, "%%"));
 			}
 		}
 		if (m == MachineRegistry.HEATRAY) {
@@ -312,7 +312,7 @@ public class ItemMeter extends ItemRotaryTool
 		}
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox te = (TileEntityGearbox)tile;
-			this.sendMessage(ep, String.format("Gearbox %d percent damaged; Lubricant Levels at %d", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, te.getDamage()))), te.getLubricant()));
+			this.sendMessage(ep, String.format("Gearbox %d percent damaged; Lubricant Levels at %s", (int)(100*(1-ReikaMathLibrary.doubpow(0.99, te.getDamage()))), RotaryAux.formatLiquidAmount(te.getLubricant())));
 		}
 		if (m == MachineRegistry.FRACTIONATOR) {
 			TileEntityFractionator te = (TileEntityFractionator)tile;
@@ -329,7 +329,7 @@ public class ItemMeter extends ItemRotaryTool
 						sb.append("Tank "+i+": ");
 						FluidStack fs = info[i].fluid;
 						if (fs != null && fs.getFluid() != null)
-							sb.append(fs.amount+" mB of "+fs.getFluid().getLocalizedName()+"/"+info[i].capacity+" mB Capacity");
+							sb.append(RotaryAux.formatLiquidAmount(fs.amount)+" of "+fs.getFluid().getLocalizedName()+"/"+RotaryAux.formatLiquidAmount(info[i].capacity)+" Capacity");
 						else
 							sb.append("Empty");
 						sb.append("\n");

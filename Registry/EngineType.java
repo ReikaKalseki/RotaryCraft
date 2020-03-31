@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -80,7 +80,7 @@ public enum EngineType {
 	public long getPower() {
 		return (long)torque*(long)omega;
 	}
-
+	/*
 	public double getPowerKW() {
 		return this.getPower()/1000D;
 	}
@@ -100,7 +100,7 @@ public enum EngineType {
 			return this.getPowerKW();
 		return this.getPowerMW();
 	}
-
+	 */
 	public boolean isJetFueled() {
 		return this == JET || this == MICRO;
 	}

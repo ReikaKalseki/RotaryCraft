@@ -1014,8 +1014,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			Fluid out = liq.getFluidInOutput();
 			int amtin = liq.getInputLevel();
 			int amtout = liq.getOutputLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getInputCapacity(), in.getLocalizedName()) : "Empty";
-			String output = out != null ? String.format("%d/%d mB of %s", amtout, liq.getOutputCapacity(), out.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtin, liq.getInputCapacity()), in.getLocalizedName()) : "Empty";
+			String output = out != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtout, liq.getOutputCapacity()), out.getLocalizedName()) : "Empty";
 			currenttip.add("Input Tank: "+input);
 			currenttip.add("Output Tank: "+output);
 		}
@@ -1023,14 +1023,14 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			PoweredLiquidReceiver liq = (PoweredLiquidReceiver)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		else if (te instanceof PoweredLiquidProducer) {
 			PoweredLiquidProducer liq = (PoweredLiquidProducer)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		else if (te instanceof IFluidHandler) {
@@ -1039,7 +1039,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				for (int i = 0; i < tanks.length; i++) {
 					FluidTankInfo info = tanks[i];
 					FluidStack fs = info.fluid;
-					String input = fs != null ? String.format("%d/%d mB of %s", fs.amount, info.capacity, fs.getFluid().getLocalizedName(fs)) : "Empty";
+					String input = fs != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(fs.amount, info.capacity), fs.getFluid().getLocalizedName(fs)) : "Empty";
 					currenttip.add("Tank "+i+": "+input);
 				}
 			}
@@ -1078,7 +1078,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				currenttip.add("Pump impeller is broken");
 		}
 		if (te instanceof TileEntityAggregator) {
-			currenttip.add(String.format("Producing %d mB per tick", ((TileEntityAggregator)te).getProductionPerTick(acc.getWorld().getBiomeGenForCoords(te.xCoord, te.zCoord))));
+			currenttip.add(String.format("Producing %s per tick", RotaryAux.formatLiquidAmount(((TileEntityAggregator)te).getProductionPerTick(acc.getWorld().getBiomeGenForCoords(te.xCoord, te.zCoord)))));
 		}
 		if (te instanceof TileEntityFractionator) {
 			currenttip.add(String.format("Efficiency Factor: %.2f%s", ((TileEntityFractionator)te).getYieldRatio()*100D, "%"));
@@ -1087,13 +1087,13 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();
 			if (bus != null) {
 				currenttip.add("Power Bus Receiving "+RotaryAux.formatTorque(bus.getInputTorque())+" @ "+RotaryAux.formatSpeed(bus.getSpeed()));
-				currenttip.add(bus.getInputPower()+"W is being split to "+bus.getTotalOutputSides()+" devices");
+				currenttip.add(RotaryAux.formatPower(bus.getInputPower())+" is being split to "+bus.getTotalOutputSides()+" devices");
 				currenttip.add("(Power per side is "+RotaryAux.formatPower(bus.getInputPower()/bus.getTotalOutputSides())+")");
 			}
 		}
 		if (te instanceof TileEntitySolar) {
 			TileEntitySolar sol = (TileEntitySolar)te;
-			currenttip.add("Consuming "+sol.getCurrentConsumption()+" mB/t of fluid.");
+			currenttip.add("Consuming "+RotaryAux.formatLiquidAmount(sol.getCurrentConsumption())+"/t of fluid.");
 		}
 		if (te.getMachine().isEnchantable()) {
 			if (((EnchantableMachine)te).hasEnchantments()) {
@@ -1115,15 +1115,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			int lvl = tpf.getAccelerant();
 			if (lvl > 0) {
 				Fluid f = tpf.getAccelerantType();
-				currenttip.add(String.format("Accelerant: %dmB of %s", lvl, f.getLocalizedName()));
+				currenttip.add(String.format("Accelerant: %s of %s", RotaryAux.formatLiquidAmount(lvl), f.getLocalizedName()));
 			}
 			else
 				currenttip.add("Accelerant: Empty");
 		}
-		if (te instanceof TileEntityPulseFurnace) {
+		if (te instanceof TileEntityFluidCompressor) {
 			TileEntityFluidCompressor tfc = (TileEntityFluidCompressor)te;
 			if (!tfc.isEmpty())
-				currenttip.add(String.format("Capacity: %.3fB", tfc.getCapacity()));
+				currenttip.add(String.format("Capacity: %s", RotaryAux.formatLiquidAmountWithSI(tfc.getCapacity())));
 		}
 		return currenttip;
 	}

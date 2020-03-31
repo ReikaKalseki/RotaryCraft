@@ -324,56 +324,180 @@ public class RotaryAux {
 		return false;
 	}
 
-	public static String formatTemperature(int temp) {
-		return String.format("%dC", temp);
+	public static String formatTemperature(double temp) {
+		String unit = "C";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "F";
+			temp = temp*1.8+32;
+		}
+		return String.format("%.0f%s", temp, unit);
 	}
 
-	public static String formatPressure(int press) {
+	public static String formatPressure(double press) {
+		String unit = "Pa";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "bar";
+			press /= 10130;
+		}
 		double val = ReikaMathLibrary.getThousandBase(press);
 		String sg = ReikaEngLibrary.getSIPrefix(press);
-		return String.format("%.3f%sPa", val, sg);
+		return String.format("%.3f%s%s", val, sg, unit);
 	}
 
 	public static String formatTorque(double t) {
+		String unit = "Nm";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "ft-lb";
+			t *= 0.738;
+		}
 		double val = ReikaMathLibrary.getThousandBase(t);
 		String sg = ReikaEngLibrary.getSIPrefix(t);
-		return String.format("%.3f%s Nm");
+		return String.format("%.0f %s%s", val, sg, unit);
 	}
 
 	public static String formatSpeed(double s) {
+		String unit = "rad/s";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "rpm";
+			s *= 9.55;
+		}
 		double val = ReikaMathLibrary.getThousandBase(s);
 		String sg = ReikaEngLibrary.getSIPrefix(s);
-		return String.format("%.3f%s rad/s");
+		return String.format("%.0f %s%s", val, sg, unit);
 	}
 
-	public static String formatPower(long p) {
+	public static String formatPower(double p) {
+		String unit = "W";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "hp";
+			p /= 745.7;
+		}
 		double val = ReikaMathLibrary.getThousandBase(p);
 		String sg = ReikaEngLibrary.getSIPrefix(p);
-		return String.format("%.3f%sW");
+		return String.format("%.3f%s%s", val, sg, unit);
 	}
 
-	public static String formatEnergy(long e) {
+	public static String formatEnergy(double e) {
+		String unit = "J";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "ft-lb";
+			e /= 1.356;
+		}
 		double val = ReikaMathLibrary.getThousandBase(e);
 		String sg = ReikaEngLibrary.getSIPrefix(e);
-		return String.format("%.3f%sJ");
+		return String.format("%.3f%s%s", val, sg, unit);
 	}
 
 	public static String formatPowerIO(TileEntityIOMachine te) {
-		double valp = ReikaMathLibrary.getThousandBase(te.power);
-		String sgp = ReikaEngLibrary.getSIPrefix(te.power);
-		return String.format("%.3f %sW @ %d rad/s", valp, sgp, te.omega);
+		String unit1 = "W";
+		String unit2 = "rad/s";
+		double p = te.power;
+		double s = te.omega;
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit1 = "hp";
+			p /= 745.7;
+			unit2 = "rpm";
+			s *= 9.55;
+		}
+		double valp = ReikaMathLibrary.getThousandBase(p);
+		String sgp = ReikaEngLibrary.getSIPrefix(p);
+		return String.format("%.3f%s%s @ %.0f %s", valp, sgp, unit1, s, unit2);
 	}
 
 	public static String formatPowerIO(ShaftMachine te) {
-		long p = te.getPower();
+		String unit1 = "W";
+		String unit2 = "rad/s";
+		double p = te.getPower();
+		double s = te.getOmega();
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit1 = "hp";
+			p /= 745.7;
+			unit2 = "rpm";
+			s *= 9.55;
+		}
 		double valp = ReikaMathLibrary.getThousandBase(p);
 		String sgp = ReikaEngLibrary.getSIPrefix(p);
-		return String.format("%.3f %sW @ %d rad/s", valp, sgp, te.getOmega());
+		return String.format("%.3f%s%s @ %.0f %s", valp, sgp, unit1, s, unit2);
+	}
+
+	public static String formatTorqueSpeedPowerForBook(String text, double torque, double speed, double power) {
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			speed *= 9.55;
+			torque *= 0.738;
+			power /= 745.7;
+			char[] arr = text.toCharArray();
+			String[] pieces = new String[arr.length];
+			for (int i = 0; i < arr.length; i++) {
+				pieces[i] = String.valueOf(arr[i]);
+			}
+			boolean primed = false;
+			for (int i = 0; i < arr.length; i++) {
+				char c = arr[i];
+				if (c == '%') {
+					primed = true;
+					if (arr[i+1] == 'd') {
+						pieces[i+1] = ".3f";
+					}
+				}
+			}
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < pieces.length; i++) {
+				String s = pieces[i];
+				sb.append(s);
+			}
+			text = sb.toString();
+			text = text.replace("rad/s", "rpm");
+			text = text.replace("W", "hp");
+			text = text.replace("Nm", "ft-lb");
+		}
+		return String.format(text, torque, speed, power);
+	}
+
+	public static String formatValuesForBook(String text, Object[] vals) {
+		if (OldTextureLoader.instance.loadOldTextures()) {
+
+		}
+		return String.format(text, vals);
 	}
 
 	public static String formatDistance(double dist) {
+		String unit = "m";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "ft";
+			dist *= 3.28;
+		}
 		double val = ReikaMathLibrary.getThousandBase(dist);
 		String sg = ReikaEngLibrary.getSIPrefix(dist);
-		return String.format("%.3f%sm", val, sg);
+		return String.format("%.3f%s%s", val, sg, unit);
+	}
+
+	public static String formatLiquidAmount(double amt) {
+		String unit = "mB";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			amt *= 0.264;
+			unit = "gal";
+		}
+		return String.format("%.0f%s", amt, unit);
+	}
+
+	public static String formatLiquidAmountWithSI(double amt) {
+		String unit = "B";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			amt *= 0.264;
+			unit = "gal";
+		}
+		double val = ReikaMathLibrary.getThousandBase(amt);
+		String sg = ReikaEngLibrary.getSIPrefix(amt);
+		return String.format("%.3f%s%s", val, sg, unit);
+	}
+
+	public static String formatLiquidFillFraction(double amt, double capacity) {
+		String unit = "mB";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			amt *= 0.264;
+			capacity *= 0.264;
+			unit = "gal";
+		}
+		return String.format("%.0f/%.0f %s", amt, capacity, unit);
 	}
 }

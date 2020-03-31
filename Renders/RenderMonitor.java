@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.ModelMonitor;
@@ -52,18 +53,18 @@ public class RenderMonitor extends RotaryTERenderer
 
 		if (tile.isInWorld()) {
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 90;
-				break;
-			case 3:
-				var11 = 270;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 90;
+					break;
+				case 3:
+					var11 = 270;
+					break;
 			}
 
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
@@ -93,35 +94,15 @@ public class RenderMonitor extends RotaryTERenderer
 				if (i == 1)
 					GL11.glScalef(-1, 1, 1);
 				var17.drawString("Power:", -37, 140, 0xffffff);
-				long power = tile.power;
-				if (power < 1000)
-					var15 = String.format("%dW", tile.power);
-				else if (power < 1000000)
-					var15 = String.format("%.3fkW", tile.power/1000D);
-				else if (power < 1000000000)
-					var15 = String.format("%.3fMW", tile.power/1000000D);
-				else
-					var15 = String.format("%.3fGW", tile.power/1000000000D);
+				var15 = RotaryAux.formatPower(tile.power);
 				var17.drawString(var15, -28, 148, 0xffffff);
 
 				var17.drawString("Torque:", -37, 164, 0xffffff);
-				int torque = tile.torque;
-				if (torque < 1000)
-					var15 = String.format("%d Nm", tile.torque);
-				else if (torque < 1000000)
-					var15 = String.format("%.3f kNm", tile.torque/1000D);
-				else
-					var15 = String.format("%.3f MNm", tile.torque/1000000D);
+				var15 = RotaryAux.formatTorque(tile.torque);
 				var17.drawString(var15, -28, 172, 0xffffff);
 
 				var17.drawString("Speed:", -37, 188, 0xffffff);
-				int omega = tile.omega;
-				if (omega < 1000)
-					var15 = String.format("%d rad/s", tile.omega);
-				else if (omega < 1000000)
-					var15 = String.format("%d krad/s", tile.omega/1000);
-				else
-					var15 = String.format("%d Mrad/s", tile.omega/1000000);
+				var15 = RotaryAux.formatSpeed(tile.omega);
 				var17.drawString(var15, -28, 196, 0xffffff);
 
 			}
