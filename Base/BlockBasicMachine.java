@@ -39,6 +39,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
@@ -274,9 +275,9 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);
 		if (te instanceof TemperatureTE && !(te instanceof TileEntityEngine))
-			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
+			currenttip.add(Variables.TEMPERATURE+": "+RotaryAux.formatTemperature(((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)
-			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
+			currenttip.add(Variables.PRESSURE+": "+RotaryAux.formatPressure(((PressureTE) te).getPressure()));
 		if (te instanceof PoweredLiquidIO) {
 			PoweredLiquidIO liq = (PoweredLiquidIO)te;
 			Fluid in = liq.getFluidInInput();
@@ -335,7 +336,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 				currenttip.add(String.format("Water: %d mB", ((TileEntityPerformanceEngine)eng).getWater()));
 			}
 			if (eng.hasTemperature()) {
-				currenttip.add(String.format("Temperature: %dC", eng.getTemperature()));
+				currenttip.add(Variables.TEMPERATURE+": "+RotaryAux.formatTemperature(eng.getTemperature()));
 			}
 		}
 		return currenttip;

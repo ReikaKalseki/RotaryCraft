@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
@@ -318,5 +320,33 @@ public class RotaryAux {
 			}
 		}
 		return false;
+	}
+
+	public static String formatTemperature(int temp) {
+		return String.format("%dC", temp);
+	}
+
+	public static String formatPressure(int press) {
+		double val = ReikaMathLibrary.getThousandBase(press);
+		String sg = ReikaEngLibrary.getSIPrefix(press);
+		return String.format("%.3f%sPa", val, sg);
+	}
+
+	public static String formatTorque(int t) {
+		double val = ReikaMathLibrary.getThousandBase(t);
+		String sg = ReikaEngLibrary.getSIPrefix(t);
+		return String.format("%.3f%s Nm");
+	}
+
+	public static String formatSpeed(int s) {
+		double val = ReikaMathLibrary.getThousandBase(s);
+		String sg = ReikaEngLibrary.getSIPrefix(s);
+		return String.format("%.3f%s rad/s");
+	}
+
+	public static String formatPower(long p) {
+		double val = ReikaMathLibrary.getThousandBase(p);
+		String sg = ReikaEngLibrary.getSIPrefix(p);
+		return String.format("%.3f%sW");
 	}
 }

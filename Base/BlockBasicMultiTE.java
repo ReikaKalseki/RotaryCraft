@@ -60,8 +60,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
@@ -71,6 +69,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
+import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
@@ -990,9 +989,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);
 		if (te instanceof TemperatureTE)
-			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
+			currenttip.add(Variables.TEMPERATURE+": "+RotaryAux.formatTemperature(((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)
-			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
+			currenttip.add(Variables.PRESSURE+": "+RotaryAux.formatPressure(((PressureTE) te).getPressure()));
 		if (te instanceof TileEntitySplitter) {
 			TileEntitySplitter spl = (TileEntitySplitter)te;
 			if (spl.isSplitting()) {
@@ -1067,9 +1066,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				currenttip.add(String.format("%s", f.getLocalizedName()));
 				if (tp instanceof TileEntityPipe) {
 					int p = ((TileEntityPipe)tp).getPressure();
-					double val = ReikaMathLibrary.getThousandBase(p);
-					String sg = ReikaEngLibrary.getSIPrefix(p);
-					currenttip.add(String.format("Pressure: %.3f%sPa", val, sg));
+					currenttip.add(Variables.PRESSURE+": "+RotaryAux.formatPressure(p));
 				}
 			}
 		}
@@ -1089,9 +1086,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();
 			if (bus != null) {
-				currenttip.add("Power Bus Receiving "+bus.getInputTorque()+" Nm @ "+bus.getSpeed()+" rad/s");
+				currenttip.add("Power Bus Receiving "+RotaryAux.formatTorque(bus.getInputTorque())+" @ "+RotaryAux.formatSpeed(bus.getSpeed()));
 				currenttip.add(bus.getInputPower()+"W is being split to "+bus.getTotalOutputSides()+" devices");
-				currenttip.add("(Power per side is "+bus.getInputPower()/bus.getTotalOutputSides()+"W)");
+				currenttip.add("(Power per side is "+RotaryAux.formatPower(bus.getInputPower()/bus.getTotalOutputSides())+")");
 			}
 		}
 		if (te instanceof TileEntitySolar) {
