@@ -9,13 +9,14 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.DragonAPI.IO.Shaders.ShaderHook;
 import Reika.DragonAPI.IO.Shaders.ShaderProgram;
 import Reika.DragonAPI.Instantiable.RayTracer;
+import Reika.DragonAPI.Instantiable.RayTracer.RayTracerWithCache;
 import Reika.RotaryCraft.ClientProxy;
 
 public class HeatRippleRenderer implements ShaderHook {
 
 	public static final HeatRippleRenderer instance = new HeatRippleRenderer();
 
-	private final RayTracer LOS = RayTracer.getVisualLOS();
+	private final RayTracerWithCache LOS = RayTracer.getVisualLOSForRenderCulling();
 
 	private HeatRippleRenderer() {
 		ClientProxy.getHeatRippleShader().setHook(this);
@@ -40,8 +41,9 @@ public class HeatRippleRenderer implements ShaderHook {
 	}
 
 	public boolean addHeatRippleEffectIfLOS(TileEntity tile, double x, double y, double z, EntityPlayer ep, double dist, float f, float fac, float scale, float centerFade) {
+		//LOS.update(tile);
 		LOS.setOrigins(x, y, z, ep.posX, ep.posY, ep.posZ);
-		if (LOS.isClearLineOfSight(tile.worldObj)) {
+		if (LOS.isClearLineOfSight(tile)) {
 			HeatRippleRenderer.instance.addHeatRippleEffect(tile, dist, f, fac, scale, centerFade);
 			return true;
 		}

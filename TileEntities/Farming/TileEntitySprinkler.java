@@ -505,7 +505,9 @@ public class TileEntitySprinkler extends SprinklerBlock {
 			ColumnAction[] set = effectMap[dy];
 			int len = set == null ? 0 : set.length;
 			ColumnAction[] ret = new ColumnAction[len+1];
-			System.arraycopy(set, 0, ret, 0, len);
+			if (set != null)
+				System.arraycopy(set, 0, ret, 0, len);
+			ret[ret.length-1] = ca;
 			effectMap[dy] = ret;
 		}
 
@@ -534,6 +536,8 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		private void doParticles(World world) {
 			for (int y = 0; y < effectMap.length; y++) {
 				ColumnAction[] map = effectMap[y];
+				if (map == null)
+					continue;
 				for (ColumnAction ca : map) {
 					if (ca.doDripParticles && rand.nextInt(8) == 0) {
 						ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord, ca.zCoord+rand.nextDouble());
