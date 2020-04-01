@@ -8,8 +8,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 
+@Strippable("com.cricketcraft.chisel.api.IChiselItem")
 public class ItemBedrockChisel extends ItemRotaryTool implements IChiselItem {
 
 	public ItemBedrockChisel(int index) {

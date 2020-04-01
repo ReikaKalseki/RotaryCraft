@@ -365,12 +365,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private void readFile(String path, boolean internal) {
 		this.clearMusic();
 		int linecount = -1;
-		try {
-			BufferedReader p;
-			if (internal)
-				p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path)));
-			else
-				p = ReikaFileReader.getReader(path);
+		try(BufferedReader p = internal ? new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path))) : ReikaFileReader.getReader(path)) {
 			String line = p.readLine();
 			while (line != null) {
 				linecount++;
@@ -384,7 +379,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				}
 				line = p.readLine();
 			}
-			p.close();
 		}
 		catch (Exception e) {
 			if (linecount >= 0)

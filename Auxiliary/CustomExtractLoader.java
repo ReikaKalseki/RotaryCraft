@@ -158,8 +158,7 @@ public class CustomExtractLoader {
 		if (!f.exists())
 			if (!this.createOreFile(f))
 				return;
-		try {
-			BufferedReader p = ReikaFileReader.getReader(f);
+		try(BufferedReader p = ReikaFileReader.getReader(f)) {
 			String line = "";
 			while (line != null) {
 				line = p.readLine();
@@ -181,7 +180,6 @@ public class CustomExtractLoader {
 					}
 				}
 			}
-			p.close();
 		}
 		catch (Exception e) {
 			RotaryCraft.logger.log(e.getMessage()+", and it caused the read to fail!");

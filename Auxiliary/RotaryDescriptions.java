@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -134,10 +136,16 @@ public final class RotaryDescriptions {
 		return "Resources/";
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static boolean hasLocalizedFor(Language language) {
 		String lang = language.getLanguageCode();
-		Object o = RotaryCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml");
-		return o != null;
+		try (InputStream o = RotaryCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml")) {
+			return o != null;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static int getCategoryCount() {

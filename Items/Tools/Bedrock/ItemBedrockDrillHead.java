@@ -4,12 +4,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 
 import blusunrize.immersiveengineering.api.tool.IDrillHead;
 
-
+@Strippable("blusunrize.immersiveengineering.api.tool.IDrillHead")
 public class ItemBedrockDrillHead extends ItemRotaryTool implements IDrillHead {
 
 	public ItemBedrockDrillHead(int index) {
