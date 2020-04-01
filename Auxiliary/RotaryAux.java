@@ -336,8 +336,10 @@ public class RotaryAux {
 	public static String formatPressure(double press) {
 		String unit = "Pa";
 		if (OldTextureLoader.instance.loadOldTextures()) {
-			unit = "bar";
-			press /= 10130;
+			//unit = "bar";
+			//press /= 10130;
+			unit = "psi";
+			press *= 0.000145;
 		}
 		double val = ReikaMathLibrary.getThousandBase(press);
 		String sg = ReikaEngLibrary.getSIPrefix(press);
@@ -449,8 +451,9 @@ public class RotaryAux {
 			text = text.replace("rad/s", "rpm");
 			text = text.replace("W", "hp");
 			text = text.replace("Nm", "ft-lb");
+			return String.format(text, torque, speed, power);
 		}
-		return String.format(text, torque, speed, power);
+		return String.format(text, (int)torque, (int)speed, power);
 	}
 
 	public static String formatValuesForBook(String text, Object[] vals) {

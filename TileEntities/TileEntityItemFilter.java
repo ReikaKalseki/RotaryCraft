@@ -364,6 +364,9 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				matchMetadata = data.matchMetadata;
 				matchMod = data.matchMod;
 				doCheckNBT = data.doCheckNBT;
+				doCheckOre = data.doCheckOre;
+				matchClass.clear();
+				matchClass.putAll(data.matchClass);
 			}
 			return this;
 		}
