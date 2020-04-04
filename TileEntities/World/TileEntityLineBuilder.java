@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -113,7 +114,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		SoundRegistry.LINEBUILDER.playSoundAtBlock(world, x, y, z);
 		if (!this.canShift(world, x, y, z))
 			return false;
-		ItemStack is = this.getNextBlockToAdd();
+		BlockKey is = this.getNextBlockToAdd();
 		if (is == null)
 			return false;
 		int r = this.getLineLength();
@@ -132,7 +133,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		int rx = x+dir.offsetX;
 		int ry = y+dir.offsetY;
 		int rz = z+dir.offsetZ;
-		ReikaWorldHelper.setBlock(world, rx, ry, rz, is);
+		is.place(world, rx, ry, rz);
 		SoundRegistry.LINEBUILDER.playSoundAtBlock(world, rx, ry, rz);
 		return true;
 	}
@@ -146,11 +147,11 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 		return softend && r <= this.getMaxRange() && r > 0;
 	}
 
-	public ItemStack getNextBlockToAdd() {
+	public BlockKey getNextBlockToAdd() {
 		ItemStack is = ReikaInventoryHelper.getNextBlockInInventory(inv, true);
 		if (is == null)
 			return null;
-		return ReikaItemHelper.getWorldBlockFromItem(is).asItemStack();
+		return ReikaItemHelper.getWorldBlockFromItem(is);
 	}
 
 	@Override

@@ -90,7 +90,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 		for (int i = 0; i < ReikaTreeHelper.treeList.length; i++) {
 			ReikaTreeHelper tree = ReikaTreeHelper.treeList[i];
-			this.addRecipe(tree.getLog(), this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
+			this.addRecipe(tree.getLog().asItemStack(), this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
 			this.addRecipe(new ItemStack(Blocks.planks, 1, tree.ordinal()), this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
 		}
 		this.addRecipe(Blocks.noteblock, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);

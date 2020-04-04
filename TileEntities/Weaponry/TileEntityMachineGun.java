@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.enchantment.Enchantment;
@@ -20,6 +18,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,13 +26,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.ChromatiCraft.API.AdjacencyUpgradeAPI;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -42,7 +42,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMachineGun extends InventoriedPowerReceiver implements RangedEffect, EnchantableMachine, DiscreteFunction {
 
-	private HashMap<Enchantment, Integer> enchantments = new HashMap();
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.infinity).addFilter(Enchantment.power);
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -118,7 +118,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 	}
 
 	private double getFirePower() {
-		return this.getEnchantment(Enchantment.power)*0.5+ReikaMathLibrary.logbase(torque+1, 2);
+		return enchantments.getEnchantment(Enchantment.power)*0.5+ReikaMathLibrary.logbase(torque+1, 2);
 	}
 
 	public int getOperationTime() {
@@ -158,7 +158,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 			ar.velocityChanged = true;
 			world.spawnEntityInWorld(ar);
 		}
-		if (!this.hasEnchantment(Enchantment.infinity))
+		if (!enchantments.hasEnchantment(Enchantment.infinity))
 			ReikaInventoryHelper.decrStack(this.getArrowSlot(), inv);
 		ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.bow", 1, 1);
 	}
@@ -219,53 +219,22 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 	}
 
 	@Override
-	public boolean applyEnchants(ItemStack is) {
-		boolean accepted = false;
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
-			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
-			accepted = true;
-		}
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.power, is)) {
-			enchantments.put(Enchantment.power, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.power, is));
-			accepted = true;
-		}
-		return accepted;
-	}
-
-	public HashMap<Enchantment,Integer> getEnchantments() {
+	public MachineEnchantmentHandler getEnchantmentHandler() {
 		return enchantments;
 	}
 
 	@Override
-	public boolean hasEnchantment(Enchantment e) {
-		return this.getEnchantments().containsKey(e);
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBT.setTag("enchants", enchantments.writeToNBT());
 	}
 
 	@Override
-	public int getEnchantment(Enchantment e) {
-		if (!this.hasEnchantment(e))
-			return 0;
-		else
-			return this.getEnchantments().get(e);
-	}
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
 
-	@Override
-	public boolean hasEnchantments() {
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public ArrayList<Enchantment> getValidEnchantments() {
-		ArrayList<Enchantment> li = new ArrayList();
-		li.add(Enchantment.infinity);
-		li.add(Enchantment.power);
-		return li;
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
 	}
 
 }

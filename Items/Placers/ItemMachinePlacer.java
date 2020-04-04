@@ -113,7 +113,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			((PlaceNotification)te).onPlaced();
 		if (te instanceof EnchantableMachine) {
 			EnchantableMachine e = (EnchantableMachine)te;
-			e.applyEnchants(is);
+			e.getEnchantmentHandler().applyEnchants(is);
 		}
 		if (te instanceof EnergyToPowerBase) {
 			((EnergyToPowerBase)te).setDataFromItemStackTag(is.stackTagCompound);

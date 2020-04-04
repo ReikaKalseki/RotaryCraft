@@ -10,8 +10,8 @@
 package Reika.RotaryCraft.Base;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -223,7 +223,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			return false;
 		}
 		if (is != null && is.getItem() == Items.enchanted_book && m.isEnchantable()) {
-			if (((EnchantableMachine)te).applyEnchants(is)) {
+			if (((EnchantableMachine)te).getEnchantmentHandler().applyEnchants(is)) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, null);
 				((TileEntityBase)te).syncAllData(true);
@@ -672,7 +672,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		TileEntity tile = world.getTileEntity(target.blockX, target.blockY, target.blockZ);
 		ItemStack core = m.getCraftedProduct();
 		if (m.isEnchantable()) {
-			HashMap<Enchantment, Integer> ench = ((EnchantableMachine)tile).getEnchantments();
+			Map<Enchantment, Integer> ench = ((EnchantableMachine)tile).getEnchantmentHandler().getEnchantments();
 			ReikaEnchantmentHelper.applyEnchantments(core, ench);
 		}
 		if (m.hasNBTVariants()) {
@@ -720,7 +720,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				is = MachineRegistry.SHAFT.getCraftedMetadataProduct(((TileEntityPortalShaft)te).material.ordinal());
 			List li;
 			if (m.isEnchantable()) {
-				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
+				Map<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantmentHandler().getEnchantments();
 				ReikaEnchantmentHelper.applyEnchantments(is, map);
 			}
 			if (m.hasNBTVariants()) {
@@ -1096,12 +1096,12 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			currenttip.add("Consuming "+RotaryAux.formatLiquidAmount(sol.getCurrentConsumption())+"/t of fluid.");
 		}
 		if (te.getMachine().isEnchantable()) {
-			if (((EnchantableMachine)te).hasEnchantments()) {
+			if (((EnchantableMachine)te).getEnchantmentHandler().hasEnchantments()) {
 				currenttip.add("Enchantments: ");
-				ArrayList<Enchantment> li = ((EnchantableMachine)te).getValidEnchantments();
+				ArrayList<Enchantment> li = ((EnchantableMachine)te).getEnchantmentHandler().getValidEnchantments();
 				for (int i = 0; i < li.size(); i++) {
 					Enchantment e = li.get(i);
-					int level = ((EnchantableMachine)te).getEnchantment(e);
+					int level = ((EnchantableMachine)te).getEnchantmentHandler().getEnchantment(e);
 					if (level > 0)
 						currenttip.add("  "+EnumChatFormatting.LIGHT_PURPLE.toString()+e.getTranslatedName(level));
 				}

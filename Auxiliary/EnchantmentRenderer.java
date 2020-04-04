@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -51,7 +51,7 @@ public abstract class EnchantmentRenderer {
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 		if (!tile.hasWorldObj()) {
-			GL11.glTranslated(-1, 0, 0);
+			//GL11.glTranslated(-1, 0, 0);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 		}
 

@@ -34,7 +34,7 @@ public class ItemBedrockDrillHead extends ItemRotaryTool implements IDrillHead {
 
 	@Override
 	public int getMiningDepth(ItemStack head) {
-		return Integer.MAX_VALUE;
+		return 9;
 	}
 
 	@Override

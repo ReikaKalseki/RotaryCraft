@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -178,8 +178,8 @@ public class ItemMachineRenderer implements IItemRenderer {
 				TileEntity te = this.getRenderingInstance(machine, 0);
 				if (machine.isEnchantable()) {
 					EnchantableMachine em = (EnchantableMachine)te;
-					em.getEnchantments().clear();
-					em.applyEnchants(item);
+					em.getEnchantmentHandler().clear();
+					em.getEnchantmentHandler().applyEnchants(item);
 				}
 				if (machine.hasNBTVariants()) {
 					((NBTMachine)te).setDataFromItemStackTag(item.stackTagCompound);

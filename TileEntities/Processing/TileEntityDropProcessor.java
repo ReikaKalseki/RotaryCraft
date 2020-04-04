@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -35,7 +34,6 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -48,6 +46,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
@@ -69,7 +68,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 	private final ArrayList<ItemStack> overflow = new ArrayList();
 
-	private HashMap<Enchantment, Integer> enchantments = new HashMap();
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.fortune);
 
 	public int dropProcessTime;
 
@@ -157,7 +156,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 	private Collection<ItemStack> runHandler(DropProcessing dp, ItemStack in) {
 		try {
-			int fortune = this.getEnchantment(Enchantment.fortune);
+			int fortune = enchantments.getEnchantment(Enchantment.fortune);
 			EntityPlayer ep = this.getPlacer();
 			return dp.generateItems(worldObj, xCoord, yCoord, zCoord, fortune, ep, rand, in);
 		}
@@ -260,13 +259,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				if (lvl > 0)
-					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
-			}
-		}
+		NBT.setTag("enchants", enchantments.writeToNBT());
 
 		NBTTagList li = new NBTTagList();
 		NBT.setTag("extra", li);
@@ -281,13 +274,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		enchantments = new HashMap<Enchantment,Integer>();
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
-				enchantments.put(Enchantment.enchantmentsList[i], lvl);
-			}
-		}
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
 
 		NBTTagList li = NBT.getTagList("extra", NBTTypes.COMPOUND.ID);
 		overflow.clear();
@@ -320,69 +307,14 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	}
 
 	@Override
-	public boolean applyEnchants(ItemStack is) {
-		boolean accepted = false;
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
-			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
-			accepted = true;
-		}
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
-			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
-			accepted = true;
-		}
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.efficiency, is))	 {
-			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
-			accepted = true;
-		}
-		return accepted;
-	}
-
-	public ArrayList<Enchantment> getValidEnchantments() {
-		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
-		li.add(Enchantment.fortune);
-		return li;
-	}
-
-	@Override
-	public HashMap<Enchantment, Integer> getEnchantments() {
-		return enchantments;
-	}
-
-	@Override
-	public boolean hasEnchantment(Enchantment e) {
-		return this.getEnchantments().containsKey(e);
-	}
-
-	@Override
-	public boolean hasEnchantments() {
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public int getEnchantment(Enchantment e) {
-		if (!this.hasEnchantment(e))
-			return 0;
-		else
-			return this.getEnchantments().get(e);
-	}
-
-	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		dropProcessTime = NBT.getShort("CookTime");
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setShort("CookTime", (short)dropProcessTime);
 	}
@@ -396,6 +328,11 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	public void dropCache() {
 		ReikaItemHelper.dropItems(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, overflow);
 		overflow.clear();
+	}
+
+	@Override
+	public MachineEnchantmentHandler getEnchantmentHandler() {
+		return enchantments;
 	}
 
 	static {

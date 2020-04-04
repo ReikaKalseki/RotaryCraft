@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -28,11 +28,11 @@ public class HarvesterDamage extends EntityDamageSource {
 	}
 
 	public int getLootingLevel() {
-		return tile.getEnchantment(Enchantment.looting);
+		return tile.getEnchantmentHandler().getEnchantment(Enchantment.looting);
 	}
 
 	public boolean hasInfinity() {
-		return tile.getEnchantment(Enchantment.infinity) > 0;
+		return tile.getEnchantmentHandler().hasEnchantment(Enchantment.infinity);
 	}
 
 }

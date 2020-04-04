@@ -1385,7 +1385,7 @@ public enum MachineRegistry implements TileEnum {
 			if (m.isEnchantable()) {
 				Object[] o = new Object[2];
 				o[0] = m;
-				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender(0))).getValidEnchantments();
+				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender(0))).getEnchantmentHandler().getValidEnchantments();
 				li.add(o);
 			}
 		}

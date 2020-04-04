@@ -15,9 +15,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneComparator;
 import net.minecraft.block.BlockRedstoneDiode;
 import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -29,6 +31,7 @@ import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -40,15 +43,19 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.BlowableCrop;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
-public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver implements RangedEffect, ConditionalOperation {
+public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver implements RangedEffect, ConditionalOperation, EnchantableMachine {
 
 	private static final ArrayList<Block> fertilizables = new ArrayList();
+
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.efficiency).addFilter(Enchantment.aquaAffinity).addFilter(Enchantment.fortune).addFilter(Enchantment.unbreaking).addFilter(Enchantment.power);
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
@@ -94,7 +101,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	private int getUpdatesPerTick() {
 		if (power < MINPOWER)
 			return 0;
-		return 4*ReikaMathLibrary.logbase2(omega);
+		return 4*ReikaMathLibrary.logbase2(omega)+enchantments.getEnchantment(Enchantment.efficiency)*3;
 	}
 
 	private int getConsecutiveUpdates() {
@@ -117,7 +124,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		int ddz = dz-z;
 		double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
 		if (id != Blocks.air && dd <= this.getRange() && this.canTick(world, dx, dy, dz)) {
-			int n = this.getConsecutiveUpdates();
+			int n = this.getConsecutiveUpdates()+enchantments.getEnchantment(Enchantment.fortune);
 			for (int i = 0; i < n; i++) {
 				id.updateTick(world, dx, dy, dz, rand);
 				BlockTickEvent.fire(world, dx, dy, dz, id, UpdateFlags.FORCED.flag);
@@ -140,8 +147,8 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	private void consumeItem() {
-		tank.removeLiquid(5);
-		if (rand.nextInt(4) == 0) {
+		tank.removeLiquid(Math.max(1, 5-enchantments.getEnchantment(Enchantment.aquaAffinity)/2));
+		if (rand.nextInt(4+enchantments.getEnchantment(Enchantment.unbreaking)) == 0) {
 			for (int i = 0; i < inv.length; i++) {
 				if (inv[i] != null) {
 					ReikaInventoryHelper.decrStack(i, inv);
@@ -175,7 +182,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	public int getRange() {
 		if (torque <= 0)
 			return 0;
-		int r = 2*(int)ReikaMathLibrary.logbase(torque, 2);
+		int r = 2*(int)ReikaMathLibrary.logbase(torque, 2)+enchantments.getEnchantment(Enchantment.power);
 		if (r > this.getMaxRange())
 			return this.getMaxRange();
 		return r;
@@ -264,5 +271,22 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	@Override
 	public String getOperationalStatus() {
 		return tank.isEmpty() ? "No Water" : this.areConditionsMet() ? "Operational" : "No Fertilizer Items";
+	}
+
+	@Override
+	protected void writeSyncTag(NBTTagCompound NBT) {
+		super.writeSyncTag(NBT);
+		NBT.setTag("enchants", enchantments.writeToNBT());
+	}
+
+	@Override
+	protected void readSyncTag(NBTTagCompound NBT) {
+		super.readSyncTag(NBT);
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
+	}
+
+	@Override
+	public MachineEnchantmentHandler getEnchantmentHandler() {
+		return enchantments;
 	}
 }

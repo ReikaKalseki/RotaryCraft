@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -81,12 +81,12 @@ public class RenderHarvester extends RotaryTERenderer
 			ReikaAABBHelper.renderAABB(((TileEntityMobHarvester)tile).getBox(), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 255, 127, 0, true);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			this.renderLaser((TileEntityMobHarvester)tile, par2, par4, par6);
-			if (((TileEntityMobHarvester)tile).hasEnchantments())
+			if (((TileEntityMobHarvester)tile).getEnchantmentHandler().hasEnchantments())
 				//EnchantmentRenderer.renderShine(0, 0, 0, par2, par4, par6);
 				EnchantmentRenderer.renderGlint(tile, HarvesterModel, null, par2, par4, par6);
 		}
 		else if (!tile.hasWorldObj()) {
-			if (((TileEntityMobHarvester)tile).hasEnchantments())
+			if (((TileEntityMobHarvester)tile).getEnchantmentHandler().hasEnchantments())
 				EnchantmentRenderer.renderGlint(tile, HarvesterModel, null, par2, par4, par6);
 		}
 	}

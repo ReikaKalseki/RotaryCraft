@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +32,6 @@ import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.entity.projectile.EntityWitherSkull;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -44,13 +41,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.ModInteract.ModExplosiveHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.MeteorCraft.API.MeteorEntity;
 import Reika.RotaryCraft.API.Event.ForceFieldEvent;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityProtectionDome;
 import Reika.RotaryCraft.Entities.EntityRailGunShot;
@@ -61,7 +59,7 @@ import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class TileEntityForceField extends TileEntityProtectionDome implements EnchantableMachine {
 
-	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.protection);
 
 	public static final int FALLOFF = 32768;
 
@@ -78,7 +76,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 
 	@Override
 	public int getRangeBoost() {
-		return 8*this.getEnchantment(Enchantment.protection);
+		return 8*enchantments.getEnchantment(Enchantment.protection);
 	}
 
 	@Override
@@ -303,15 +301,13 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setInteger("setRange", setRange);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		setRange = NBT.getInteger("setRange");
 	}
@@ -320,76 +316,19 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				if (lvl > 0)
-					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
-			}
-		}
+		NBT.setTag("enchants", enchantments.writeToNBT());
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		enchantments = new HashMap<Enchantment,Integer>();
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
-				enchantments.put(Enchantment.enchantmentsList[i], lvl);
-			}
-		}
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
 	}
 
 	@Override
 	public MachineRegistry getMachine() {
 		return MachineRegistry.FORCEFIELD;
-	}
-
-	@Override
-	public boolean applyEnchants(ItemStack is) {
-		boolean accepted = false;
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.protection, is)) {
-			enchantments.put(Enchantment.protection, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.protection, is));
-			accepted = true;
-		}
-		return accepted;
-	}
-
-	public ArrayList<Enchantment> getValidEnchantments() {
-		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
-		li.add(Enchantment.protection);
-		return li;
-	}
-
-	@Override
-	public HashMap<Enchantment,Integer> getEnchantments() {
-		return enchantments;
-	}
-
-	@Override
-	public boolean hasEnchantment(Enchantment e) {
-		return this.getEnchantments().containsKey(e);
-	}
-
-	@Override
-	public boolean hasEnchantments() {
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public int getEnchantment(Enchantment e) {
-		if (!this.hasEnchantment(e))
-			return 0;
-		else
-			return this.getEnchantments().get(e);
 	}
 
 	@Override
@@ -400,5 +339,10 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 	@Override
 	public int getFallOff() {
 		return FALLOFF;
+	}
+
+	@Override
+	public MachineEnchantmentHandler getEnchantmentHandler() {
+		return enchantments;
 	}
 }
