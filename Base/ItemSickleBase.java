@@ -279,6 +279,32 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 				is.damageItem(1, ep);
 			return true;
 		}
+		else if (ModList.BOP.isLoaded() && id == BoPBlockHandler.getInstance().foliage) {
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
+			int r = this.getPlantRange();
+			for (int i = -r; i <= r; i++) {
+				for (int j = -r; j <= r; j++) {
+					for (int k = -r; k <= r; k++) {
+						Block id2 = world.getBlock(x+i, y+j, z+k);
+						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
+						if (id == id2 && (ignoreMeta || meta2 == meta)) {
+							Block b2 = id2;
+							if (this.canActAsShears()) {
+								this.dropItem(is, ep, world, x+i+0.5, y+j+0.5, z+k+0.5, new ItemStack(b2, 1, meta2));
+							}
+							else {
+								this.dropBlockAsItem(is, ep, b2, world, x+i, y+j, z+k, meta2, fortune);
+							}
+							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, b2);
+							world.setBlockToAir(x+i, y+j, z+k);
+						}
+					}
+				}
+			}
+			if (this.isBreakable())
+				is.damageItem(1, ep);
+			return true;
+		}
 		else if (crop != null) {
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = this.getCropRange();
