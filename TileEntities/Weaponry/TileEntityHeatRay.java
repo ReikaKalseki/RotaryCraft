@@ -63,7 +63,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				if (id != Blocks.air && id.isFlammable(world, dx, dy, dz, ForgeDirection.UP))
 					this.ignite(world, dx, dy, dz, metadata, step);
 				//ReikaJavaLibrary.pConsole(Blocks.blocksList[id]);
-				if (this.affectBlock(world, x, y, z, step, id, meta2, maxdist)) {
+				if (this.affectBlock(world, dx, dy, dz, step, id, meta2, maxdist)) {
 					blocked = true;
 					tickcount = 0;
 				}
@@ -182,15 +182,15 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			world.setBlock(x, y, z-1, Blocks.fire);
 	}
 
-	private boolean affectBlock(World world, int x, int y, int z, int step, Block id, int metadata, int maxdist) {
+	private boolean affectBlock(World world, int dx, int dy, int dz, int step, Block id, int metadata, int maxdist) {
 		boolean value = false;
 		if (id == Blocks.air)
 			return false;
 		if (id.hasTileEntity(metadata)) {
-			TileEntity te = world.getTileEntity(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
+			TileEntity te = world.getTileEntity(dx, dy, dz);
 			if (te instanceof Laserable) {
-				((Laserable)te).whenInBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power, step);
-				if (((Laserable)te).blockBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power))
+				((Laserable)te).whenInBeam(world, dx, dy, dz, power, step);
+				if (((Laserable)te).blockBeam(world, dx, dy, dz, power))
 					return true;
 			}
 		}
@@ -200,31 +200,31 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_lava);
-				world.spawnParticle("lava", x+step*facing.offsetX+rand.nextFloat(), y+step*facing.offsetY+rand.nextFloat(), z+step*facing.offsetZ+rand.nextFloat(), 0, 0, 0);
+						world.setBlock(dx, dy, dz, Blocks.flowing_lava);
+				world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
 			}
 			if (id == Blocks.sand) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.glass);
+						world.setBlock(dx, dy, dz, Blocks.glass);
 			}
 			if (id == Blocks.gravel) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.cobblestone);
+						world.setBlock(dx, dy, dz, Blocks.cobblestone);
 			}/*
     	if (id == Blocks.netherrack) {
-    		if (world.getBlock(x+step*facing.offsetX, 1+y+step*facing.offsetY, z+step*facing.offsetZ) == 0) {
-    			world.setBlock(x+step*facing.offsetX, 1+y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.fire);
+    		if (world.getBlock(dx, 1+dy, dz) == 0) {
+    			world.setBlock(dx, 1+dy, dz, Blocks.fire);
     		}
     	}*/
 			if (id == Blocks.netherrack && tickcount >= 6) {
-				world.newExplosion(null, x+step*facing.offsetX+0.5, y+step*facing.offsetY+0.5, z+step*facing.offsetZ+0.5, 3F, true, true);
-				MinecraftForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ));
+				world.newExplosion(null, dx+0.5, dy+0.5, dz+0.5, 3F, true, true);
+				MinecraftForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, dx, dy, dz));
 				if (world.provider.dimensionId == -1 && step >= 500)
 					RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
 				step = maxdist;
@@ -235,21 +235,21 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.sand);
+						world.setBlock(dx, dy, dz, Blocks.sand);
 			}
 			if (id == Blocks.grass || id == Blocks.mycelium) {
 				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.dirt);
+						world.setBlock(dx, dy, dz, Blocks.dirt);
 			}
 			if (id == Blocks.ice || id == Blocks.snow) {
 				int chance = (int)((power-MINPOWER)/(1024 * step / 4));
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_water);
+						world.setBlock(dx, dy, dz, Blocks.flowing_water);
 			}
 			if (id == Blocks.tallgrass || id == Blocks.web || id == Blocks.yellow_flower || id == Blocks.snow ||
 					id == Blocks.red_flower || id == Blocks.red_mushroom || id == Blocks.brown_mushroom ||
@@ -259,9 +259,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
+						world.setBlockToAir(dx, dy, dz);
 						if (id == Blocks.snow)
-							world.playSoundEffect(x+step*facing.offsetX + 0.5D, y+step*facing.offsetY + 0.5D, z+step*facing.offsetZ + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+							world.playSoundEffect(dx + 0.5D, dy + 0.5D, dz + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
 					}
 			}
 			if (id == Blocks.flowing_water || id == Blocks.water) {
@@ -270,21 +270,21 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				chance = Math.max(chance, 1);
 				if (rand.nextInt(chance) != 0)
 					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
-						world.playSoundEffect(x+step*facing.offsetX + 0.5D, y+step*facing.offsetY + 0.5D, z+step*facing.offsetZ + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+						world.setBlockToAir(dx, dy, dz);
+						world.playSoundEffect(dx + 0.5D, dy + 0.5D, dz + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
 					}
 			}
 			if (id == Blocks.tnt) {
-				world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
-				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*facing.offsetX+0.5D, y+step*facing.offsetY+0.5D, z+step*facing.offsetZ+0.5D, null);
+				world.setBlockToAir(dx, dy, dz);
+				EntityTNTPrimed var6 = new EntityTNTPrimed(world, dx+0.5D, dy+0.5D, dz+0.5D, null);
 				if (!world.isRemote)
 					world.spawnEntityInWorld(var6);
 				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-				world.spawnParticle("lava", x+step*facing.offsetX+rand.nextFloat(), y+step*facing.offsetY+rand.nextFloat(), z+step*facing.offsetZ+rand.nextFloat(), 0, 0, 0);
+				world.spawnParticle("lava", dx+rand.nextFloat(), dy+rand.nextFloat(), dz+rand.nextFloat(), 0, 0, 0);
 			}
 			if (id instanceof Laserable) {
-				((Laserable)id).whenInBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power, step);
-				if (((Laserable)id).blockBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power))
+				((Laserable)id).whenInBeam(world, dx, dy, dz, power, step);
+				if (((Laserable)id).blockBeam(world, dx, dy, dz, power))
 					return true;
 			}
 
