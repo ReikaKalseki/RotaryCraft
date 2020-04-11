@@ -154,7 +154,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		int step;
 		if (power >= MINPOWER) { //2MW+ (real military laser)
 			int maxdist = this.getRange();
-			Random r = new Random(new WorldLocation(this).hashCode());
+			Random r = new Random(new WorldLocation(this).hashCode() | tickcount << 24);
 			r.nextBoolean();
 			r.nextBoolean();
 			for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
@@ -288,7 +288,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		else if (ConfigRegistry.ATTACKBLOCKS.getState()) {
 			LaserEffect e = blockEffects.get(new BlockKey(id, metadata));
 			if (e != null) {
-				int n = e.getChanceDenom(id, metadata, power-MINPOWER, step, tickcount);
+				long surp = power/MINPOWER;//ReikaMathLibrary.logbase2(this.power-)
+				int n = e.getChanceDenom(id, metadata, surp, step, tickcount);
 				if (n < 0)
 					return true;
 				n = Math.max(1, n);
@@ -353,7 +354,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 
 		@Override
 		public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
-			return (int)Math.min(Integer.MAX_VALUE, (surplus/(1024 * dist)));
+			return (int)Math.min(Integer.MAX_VALUE, (32 * dist)/surplus);
 		}
 
 	}
@@ -404,7 +405,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			int d = 2;
 			if (fluid == FluidRegistry.WATER)
 				d = 8;
-			return (int)Math.min(Integer.MAX_VALUE, (surplus/(1024 * dist / d)));
+			return (int)Math.min(Integer.MAX_VALUE, (32 * dist / (d*surplus)));
 		}
 
 	}
@@ -420,7 +421,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 
 		@Override
 		public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
-			return (int)Math.min(Integer.MAX_VALUE, (surplus/(1024 * dist / 8)));
+			return (int)Math.min(Integer.MAX_VALUE, (32 * dist / (8 * surplus)));
 		}
 
 	}
