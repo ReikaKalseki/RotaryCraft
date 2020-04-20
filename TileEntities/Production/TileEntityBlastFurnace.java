@@ -200,10 +200,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		int made = num;
 		ItemStack out = rec.outputItem();
 
-		if (rec.hasBonus) {
+		if (rec.bonusYield > 0) {
 			double chance = DifficultyEffects.BONUSSTEEL.getDouble()*(ReikaMathLibrary.intpow(1.005, num*num)-1);
 			if (ReikaRandomHelper.doWithChance(chance)) {
-				num *= 1+rand.nextFloat();
+				num *= 1+rand.nextFloat()*rec.bonusYield;
 			}
 		}
 

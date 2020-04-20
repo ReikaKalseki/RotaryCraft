@@ -1,13 +1,15 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.API;
+
+import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -80,12 +82,12 @@ public class RecipeInterface {
 
 		/**
 		 * The first nine arguments are for the 3 slots on the left - three groups of ItemStack, chance-to-consume, and number-to-consume.
-		 * To ignore a slot, supply a null item.
-		 * 
+		 * To ignore a slot, supply an empty collection, NOT null.
+		 *
 		 * The other arguments control the rest of the recipe. 'Main' is the main grid item (like iron for HSLA), 'req' is how many of it are required
-		 * (supply -1 for "any"), 'bonus' is whether bonus output amounts can be given.
+		 * (supply -1 for "any"), 'bonus' is whether and how much bonus output amounts can be given (>0 to give any, with the actual value as a multiplier).
 		 */
-		public void addAPIAlloying(ItemStack in1, float c1, int decr1, ItemStack in2, float c2, int decr2, ItemStack in3, float c3, int decr3, ItemStack main, ItemStack out, int req, boolean bonus, float xp, int temp);
+		public void addAPIAlloying(Collection<ItemStack> in1, float c1, int decr1, Collection<ItemStack> in2, float c2, int decr2, Collection<ItemStack> in3, float c3, int decr3, ItemStack main, ItemStack out, int req, float bonus, float xp, int temp);
 
 		/** For adding 3x3 crafting recipes like bedrock tool crafting. 'Speed' works inversely; higher values mean slower recipes. */
 		public void addAPIRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp);

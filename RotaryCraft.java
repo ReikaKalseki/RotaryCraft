@@ -573,6 +573,8 @@ public class RotaryCraft extends DragonAPIMod {
 					e.printStackTrace();
 					logger.logError("Could not add Forestry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
 				}
+
+				//MobBait.addBait("BUTTERFLY", ReikaBeeHelper.getButterflyClass(), -1, ForestryHandler.ItemEntry.POLLEN.getItem(), Items.gunpowder);
 			}
 
 			if (ModList.TINKERER.isLoaded() && (Pulses.TOOLS.isLoaded() || Pulses.WEAPONS.isLoaded())) {

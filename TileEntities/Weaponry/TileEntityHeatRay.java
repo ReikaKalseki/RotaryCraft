@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Weaponry;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -28,7 +27,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
-import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.Block.SemiTransparent;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Event.HeatRayNetherDetonationEvent;
@@ -109,7 +107,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}
 
 			@Override
-			public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
+			public int getDelayTick(Block b, int meta, long surplus, int dist) {
 				return 0;
 			}
 		});
@@ -127,8 +125,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			}
 
 			@Override
-			public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
-				return tickcount < 6 ? -1 : 0;
+			public int getDelayTick(Block b, int meta, long surplus, int dist) {
+				return 6;
 			}
 		});
 	}
@@ -154,9 +152,6 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		int step;
 		if (power >= MINPOWER) { //2MW+ (real military laser)
 			int maxdist = this.getRange();
-			Random r = new Random(new WorldLocation(this).hashCode() | tickcount << 24);
-			r.nextBoolean();
-			r.nextBoolean();
 			for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
 				int dx = x+step*facing.offsetX;
 				int dy = y+step*facing.offsetY;
@@ -166,9 +161,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				if (id != Blocks.air && id.isFlammable(world, dx, dy, dz, ForgeDirection.UP))
 					ReikaWorldHelper.ignite(world, dx, dy, dz);
 				//ReikaJavaLibrary.pConsole(Blocks.blocksList[id]);
-				if (this.affectBlock(world, dx, dy, dz, step, id, meta2, maxdist, r)) {
+				if (this.affectBlock(world, dx, dy, dz, step, id, meta2, maxdist)) {
 					blocked = true;
-					tickcount = 0;
 				}
 				if (id != world.getBlock(dx, dy, dz) || meta2 != world.getBlockMetadata(dx, dy, dz))
 					world.markBlockForUpdate(dx, dy, dz);
@@ -270,7 +264,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz);//.expand(0.25D, 0.25D, 0.25D);
 	}
 
-	private boolean affectBlock(World world, int dx, int dy, int dz, int step, Block id, int metadata, int maxdist, Random r) {
+	private boolean affectBlock(World world, int dx, int dy, int dz, int step, Block id, int metadata, int maxdist) {
 		if (id == Blocks.air)
 			return false;
 		if (id.hasTileEntity(metadata)) {
@@ -289,11 +283,9 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 			LaserEffect e = blockEffects.get(new BlockKey(id, metadata));
 			if (e != null) {
 				long surp = power/MINPOWER;//ReikaMathLibrary.logbase2(this.power-)
-				int n = e.getChanceDenom(id, metadata, surp, step, tickcount);
-				if (n < 0)
-					return true;
-				n = Math.max(1, n);
-				if (r.nextInt(n) == 0) {
+				int n = e.getDelayTick(id, metadata, surp, step);
+				if (tickcount >= n) {
+					tickcount = 0;
 					return e.doEffect(world, dx, dy, dz, power, step, tickcount, this);
 				}
 				else {
@@ -353,8 +345,8 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		}
 
 		@Override
-		public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
-			return (int)Math.min(Integer.MAX_VALUE, (32 * dist)/surplus);
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
+			return (int)Math.min(Integer.MAX_VALUE, (4 * dist)/surplus);
 		}
 
 	}
@@ -368,7 +360,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		}
 
 		@Override
-		public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
 			return 0;
 		}
 
@@ -401,11 +393,11 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		}
 
 		@Override
-		public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
 			int d = 2;
 			if (fluid == FluidRegistry.WATER)
 				d = 8;
-			return (int)Math.min(Integer.MAX_VALUE, (32 * dist / (d*surplus)));
+			return (int)Math.min(Integer.MAX_VALUE, (4 * dist / (d*surplus)));
 		}
 
 	}
@@ -420,15 +412,15 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		}
 
 		@Override
-		public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount) {
-			return (int)Math.min(Integer.MAX_VALUE, (32 * dist / (8 * surplus)));
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
+			return (int)Math.min(Integer.MAX_VALUE, (4 * dist / (8 * surplus)));
 		}
 
 	}
 
 	private static interface LaserEffect {
 
-		public int getChanceDenom(Block b, int meta, long surplus, int dist, int tickcount);
+		public int getDelayTick(Block b, int meta, long surplus, int dist);
 
 		boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te);
 

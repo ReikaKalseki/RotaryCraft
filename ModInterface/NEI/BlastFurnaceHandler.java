@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -271,7 +271,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 				dy += f.FONT_HEIGHT+2;
 			}
 
-			f.drawString("Bonus output: "+(br.hasBonus ? "Yes" : "No"), 21, 72+dy, 0);
+			f.drawString("Bonus output: "+(br.bonusYield > 0 ? br.bonusYield+"x" : "None"), 21, 72+dy, 0);
 		}
 		else if (r instanceof BlastFurnCrafting) {
 			BlastCrafting br = ((BlastFurnCrafting)r).recipe;
