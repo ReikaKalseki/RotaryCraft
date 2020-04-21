@@ -30,21 +30,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-import Reika.DragonAPI.APIPacketHandler.PacketIDs;
-import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.EntityPathSpline;
 import Reika.DragonAPI.Instantiable.AI.AITaskAvoidMachine;
 import Reika.DragonAPI.Instantiable.AI.AITaskSeekMachine;
-import Reika.DragonAPI.Instantiable.Data.RoutingWeb;
 import Reika.DragonAPI.Interfaces.TileEntity.MobAttractor;
 import Reika.DragonAPI.Interfaces.TileEntity.MobRepellent;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.Bees.ReikaBeeHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
@@ -55,11 +50,13 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
+import forestry.api.lepidopterology.IEntityButterfly;
+
 public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation, MobAttractor, MobRepellent {
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
-	private RoutingWeb pathfinder;
+	private EntityPathSpline pathfinder;
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -69,21 +66,12 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	@Override
 	protected void onFirstTick(World world, int x, int y, int z) {
 		if (ModList.FORESTRY.isLoaded() && !world.isRemote)
-			pathfinder = new RoutingWeb(this, this.getMaxRange()/4, this.getMaxRange()/4, this.getMaxRange()/4, true);
+			;//pathfinder = new EntityPathSpline(this);
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		if (pathfinder != null && !pathfinder.isDone()) {
-			if (pathfinder.runCalc(world)) {
-				pathfinder.buildPaths();
-				ReikaSoundHelper.playSoundFromServerAtBlock(world, x, y, z, "note.pling", 1, 0.5F, true);
-			}
-			else {
-				ReikaPacketHelper.sendDataPacketWithRadius(DragonAPIInit.packetChannel, PacketIDs.PARTICLE.ordinal(), this, 32, ReikaParticleHelper.AMBIENTMOBSPELL.ordinal(), 4);
-			}
-		}
 		tickcount++;
 		this.getSummativeSidedPower();
 		if (power < MINPOWER)
@@ -99,9 +87,14 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 				else if (this.canAttract(ent)) {
 					this.applyEffect(world, x, y, z, ent, true);
 				}
+				if (ModList.FORESTRY.isLoaded() && pathfinder != null && ent instanceof IEntityButterfly) {
+					pathfinder.addEntity(ent);
+				}
 			}
 		}
-		if (ModList.FORESTRY.isLoaded() && pathfinder != null && pathfinder.isDone() && ReikaInventoryHelper.checkForItem(ForestryHandler.ItemEntry.POLLEN.getItem(), inv)) {
+		if (ModList.FORESTRY.isLoaded() && ReikaInventoryHelper.checkForItem(ForestryHandler.ItemEntry.POLLEN.getItem(), inv)) {
+			if (pathfinder != null)
+				pathfinder.removeDeadEntities(world);
 			ReikaBeeHelper.attractButterflies(world, x+0.5, y+1.5, z+0.5, range, pathfinder);
 			ReikaBeeHelper.collectButterflies(world, ReikaAABBHelper.getBlockAABB(this).expand(4, 2, 4), null);
 		}
