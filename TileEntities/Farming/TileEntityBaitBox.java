@@ -34,6 +34,9 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.EntityPathSpline;
 import Reika.DragonAPI.Instantiable.AI.AITaskAvoidMachine;
 import Reika.DragonAPI.Instantiable.AI.AITaskSeekMachine;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.AbstractSearch.PassablePropagation;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.AbstractSearch.PropagationCondition;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.MobAttractor;
 import Reika.DragonAPI.Interfaces.TileEntity.MobRepellent;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
@@ -57,6 +60,15 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
 	private EntityPathSpline pathfinder;
+
+	private static final PropagationCondition butterflyPathRule = new PropagationCondition() {
+
+		@Override
+		public boolean isValidLocation(World world, int x, int y, int z, Coordinate from) {
+			return PassablePropagation.instance.isValidLocation(world, x, y, z, from) || world.getBlock(x, y, z).isLeaves(world, x, y, z);
+		}
+
+	};
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -88,11 +100,13 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 					this.applyEffect(world, x, y, z, ent, true);
 				}
 				if (ModList.FORESTRY.isLoaded() && pathfinder != null && ent instanceof IEntityButterfly) {
-					pathfinder.addEntity(ent);
+					pathfinder.addEntity(ent, butterflyPathRule);
 				}
 			}
 		}
 		if (ModList.FORESTRY.isLoaded() && ReikaInventoryHelper.checkForItem(ForestryHandler.ItemEntry.POLLEN.getItem(), inv)) {
+			if (pathfinder != null)
+				pathfinder.removeDeadEntities(world);
 			ReikaBeeHelper.attractButterflies(world, x+0.5, y+1.5, z+0.5, range, pathfinder);
 			ReikaBeeHelper.collectButterflies(world, ReikaAABBHelper.getBlockAABB(this).expand(4, 2, 4), null);
 		}
