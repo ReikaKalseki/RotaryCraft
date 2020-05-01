@@ -25,6 +25,7 @@ import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap.CollectionType;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient.IngredientIDHandler;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
@@ -36,7 +37,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public abstract class RecipeHandler {
+public abstract class RecipeHandler implements IngredientIDHandler {
 
 	private static final boolean enableRegistries = ConfigRegistry.RECIPEMOD.getState();
 
@@ -88,6 +89,10 @@ public abstract class RecipeHandler {
 		}
 		recipeKeys.put(recipe, s);
 		return s;
+	}
+
+	public final String fullIDForItems(Collection<KeyedItemStack> c) {
+		return this.fullIDKeys(c);
 	}
 
 	protected static final String fullIDKeys(Collection<KeyedItemStack> c) {

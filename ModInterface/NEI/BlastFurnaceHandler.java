@@ -22,6 +22,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
 import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -30,7 +31,6 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastInput;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
 
@@ -250,21 +250,21 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		int dy = 0;
 		if (r instanceof BlastFurnRecipe) {
 			BlastRecipe br = ((BlastFurnRecipe)r).recipe;
-			BlastInput in1 = br.primary;
+			FlexibleIngredient in1 = br.primary;
 			if (in1.exists()) {
 				String sg = String.format("%s: x%d (%.1f%%)", in1.getItemForDisplay().getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
 				f.drawString(sg, 21, 72, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
-			BlastInput in2 = br.secondary;
+			FlexibleIngredient in2 = br.secondary;
 			if (in2.exists()) {
 				String sg = String.format("%s: x%d (%.1f%%)", in2.getItemForDisplay().getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
-			BlastInput in3 = br.tertiary;
+			FlexibleIngredient in3 = br.tertiary;
 			if (in3.exists()) {
 				String sg = String.format("%s: x%d (%.1f%%)", in3.getItemForDisplay().getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
