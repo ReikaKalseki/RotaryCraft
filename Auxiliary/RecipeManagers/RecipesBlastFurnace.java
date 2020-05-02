@@ -119,6 +119,12 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		in3 = FlexibleIngredient.EMPTY;
 		BlastRecipe silu = new BlastRecipe(in1, in2, in3, "ingotAluminum", ItemStacks.silumin, 0, 0, 900);
 		this.addRecipe(silu, RecipeLevel.CORE);
+
+		in1 = new FlexibleIngredient(ItemStacks.tungstenflakes, 5F, 1);
+		in2 = FlexibleIngredient.EMPTY;
+		in3 = new FlexibleIngredient(Blocks.obsidian, 20F, 1);
+		BlastRecipe springtung = new BlastRecipe(in1, in2, in3, ItemStacks.springingot, ItemStacks.springtungsten, 0, 0, 1200);
+		this.addRecipe(springtung, RecipeLevel.CORE);
 	}
 
 	private void addRecipe(BlastRecipe br, RecipeLevel rl) {

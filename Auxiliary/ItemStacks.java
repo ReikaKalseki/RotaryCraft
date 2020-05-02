@@ -61,6 +61,7 @@ public final class ItemStacks {
 	public static final ItemStack springingot		= ItemRegistry.COMPACTS.getStackOfMetadata(9);
 	public static final ItemStack silicon			= ItemRegistry.COMPACTS.getStackOfMetadata(10);
 	public static final ItemStack silumin			= ItemRegistry.COMPACTS.getStackOfMetadata(11);
+	public static final ItemStack springtungsten	= ItemRegistry.COMPACTS.getStackOfMetadata(12);
 
 	public static final ItemStack basepanel 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(0);
 	public static final ItemStack steelingot 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(1);

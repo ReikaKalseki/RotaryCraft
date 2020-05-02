@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -87,7 +87,7 @@ public enum MaterialRegistry {
 	}
 
 	public boolean consumesLubricant() {
-		return /*this == WOOD ||*/ this == STONE || this == STEEL;
+		return /*this == WOOD ||*/ this == STONE || this == STEEL || this == DIAMOND;
 	}
 
 	public boolean takesTemperatureDamage() {

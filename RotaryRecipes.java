@@ -1493,13 +1493,21 @@ public class RotaryRecipes {
 		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.gearunit16});
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(3));
+		gear = addDiamondTypeTag(gear, "diamond", true);
 		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond2x});
+		GameRegistry.addShapelessRecipe(gear, gear); //conversion to new
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(8));
+		gear = addDiamondTypeTag(gear, "diamond", true);
 		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond4x});
+		GameRegistry.addShapelessRecipe(gear, gear); //conversion to new
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(13));
+		gear = addDiamondTypeTag(gear, "diamond", true);
 		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond8x});
+		GameRegistry.addShapelessRecipe(gear, gear); //conversion to new
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(18));
+		gear = addDiamondTypeTag(gear, "diamond", true);
 		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.diamond16x});
+		GameRegistry.addShapelessRecipe(gear, gear); //conversion to new
 
 		gear = addDamageNBT(MachineRegistry.GEARBOX.getCraftedMetadataProduct(4));
 		MachineRegistry.GEARBOX.addRecipe(gear, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', ItemStacks.bedrock2x});
@@ -1536,6 +1544,13 @@ public class RotaryRecipes {
 	private static ItemStack addDamageNBT(ItemStack is) {
 		is.setTagCompound(new NBTTagCompound());
 		is.stackTagCompound.setInteger("damage", 0);
+		return is;
+	}
+
+	private static ItemStack addDiamondTypeTag(ItemStack is, String tag, boolean value) {
+		if (is.stackTagCompound == null)
+			is.setTagCompound(new NBTTagCompound());
+		is.stackTagCompound.setBoolean(tag, value);
 		return is;
 	}
 

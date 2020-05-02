@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -101,6 +101,10 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 		if (is.stackTagCompound.hasKey("damage") && mat.isDamageableGear()) {
 			int dmg = TileEntityGearbox.getDamagePercent(is.stackTagCompound.getInteger("damage"));
 			par3List.add("Damage: "+dmg+"%");
+		}
+
+		if (mat == MaterialRegistry.DIAMOND && !is.stackTagCompound.getBoolean("diamond")) {
+			par3List.add("Legacy; craft into new version");
 		}
 
 		if (is.stackTagCompound.hasKey("lube") && mat.needsLubricant()) {

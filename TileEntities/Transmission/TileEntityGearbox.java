@@ -74,11 +74,14 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	private static final int MAX_DAMAGE = 480;
 
 	private boolean isLiving;
+	private boolean isTungsten;
+	private boolean isDiamond;
 
 	public TileEntityGearbox(MaterialRegistry type) {
 		if (type == null)
 			type = MaterialRegistry.WOOD;
 		this.type = type;
+		isDiamond = type == MaterialRegistry.DIAMOND;
 	}
 
 	public TileEntityGearbox() {
@@ -112,7 +115,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public int getMaxLubricant() {
-		return this.getMaxLubricant(type);
+		return this.isTungsten() ? getMaxLubricant(MaterialRegistry.STEEL) : this.getMaxLubricant(type);
 	}
 
 	public int getDamage() {
@@ -253,7 +256,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 					}
 				}
 			}
-			else if (!world.isRemote && type.consumesLubricant()) {
+			else if (!world.isRemote && type.consumesLubricant() && !this.isLegacyDiamond() && (type != MaterialRegistry.DIAMOND || omegain > 16384)) {
 				if (tickcount >= 80) {
 					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(omegain, 2)/4)));
 					tickcount = 0;
@@ -414,7 +417,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				item = ItemStacks.scrap.copy();
 				break;
 			case DIAMOND:
-				item = new ItemStack(Items.diamond, 1, 0);
+				if (this.isTungsten())
+					item = ItemStacks.tungstenflakes.copy();
+				else
+					item = new ItemStack(Items.diamond, 1, 0);
 				break;
 			case BEDROCK:
 				item = ItemStacks.bedrockdust.copy();
@@ -467,6 +473,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		NBT.setInteger("temp", temperature);
 
 		NBT.setBoolean("living", this.isLiving());
+		NBT.setBoolean("diamond", isDiamond);
+		NBT.setBoolean("tungsten", isTungsten);
 
 		tank.writeToNBT(NBT);
 	}
@@ -481,6 +489,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		temperature = NBT.getInteger("temp");
 
 		isLiving = NBT.getBoolean("living");
+		isDiamond = NBT.getBoolean("diamond");
+		isTungsten = NBT.getBoolean("tungsten");
 
 		tank.readFromNBT(NBT);
 	}
@@ -691,6 +701,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		NBT.setInteger("damage", this.getDamage());
 		NBT.setInteger("lube", this.getLubricant());
 		NBT.setBoolean("living", this.isLiving());
+		NBT.setBoolean("diamond", isDiamond);
+		NBT.setBoolean("tungsten", isTungsten);
 		return NBT;
 	}
 
@@ -701,6 +713,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			this.setLubricant(tag.getInteger("lube"));
 
 			isLiving = tag.getBoolean("living");
+			isDiamond = tag.getBoolean("diamond");
+			isTungsten = tag.getBoolean("tungsten");
 		}
 	}
 
@@ -716,6 +730,14 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	public boolean isLiving() {
 		return isLiving && ModList.BOTANIA.isLoaded();
+	}
+
+	public boolean isTungsten() {
+		return type == MaterialRegistry.DIAMOND && isTungsten;
+	}
+
+	public boolean isLegacyDiamond() {
+		return type == MaterialRegistry.DIAMOND && !isTungsten && !isDiamond;
 	}
 
 	@Override
