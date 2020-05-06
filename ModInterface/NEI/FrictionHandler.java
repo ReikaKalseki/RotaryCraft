@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -94,9 +94,10 @@ public class FrictionHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		FrictionRecipe rec = RecipesFrictionHeater.getRecipes().getRecipeByOutput(result);
+		Collection<FrictionRecipe> rec = RecipesFrictionHeater.getRecipes().getRecipesByOutput(result);
 		if (rec != null) {
-			arecipes.add(new FrictionHeaterRecipe(rec.getInput()));
+			for (FrictionRecipe f : rec)
+				arecipes.add(new FrictionHeaterRecipe(f.getInput()));
 		}
 	}
 

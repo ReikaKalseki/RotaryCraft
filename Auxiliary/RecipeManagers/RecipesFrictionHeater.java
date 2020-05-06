@@ -1,14 +1,15 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -28,7 +29,7 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 	private static final RecipesFrictionHeater instance = new RecipesFrictionHeater();
 
 	private final ItemHashMap<FrictionRecipe> recipes = new ItemHashMap();
-	private final ItemHashMap<FrictionRecipe> outputs = new ItemHashMap();
+	private final ItemHashMap<Collection<FrictionRecipe>> outputs = new ItemHashMap();
 
 	public static RecipesFrictionHeater getRecipes() {
 		return instance;
@@ -45,7 +46,12 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 	private void addRecipe(ItemStack in, ItemStack out, int temp, int time, RecipeLevel rl) {
 		FrictionRecipe rec = new FrictionRecipe(in, out, temp, time);
 		recipes.put(in, rec);
-		outputs.put(out, rec);
+		Collection<FrictionRecipe> c = outputs.get(out);
+		if (c == null) {
+			c = new ArrayList();
+			outputs.put(out, c);
+		}
+		c.add(rec);
 		this.onAddRecipe(rec, rl);
 	}
 
@@ -66,8 +72,8 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 		return rec != null ? (temperature >= rec.requiredTemperature ? rec : null) : null;
 	}
 
-	public FrictionRecipe getRecipeByOutput(ItemStack out) {
-		return outputs.get(out);
+	public Collection<FrictionRecipe> getRecipesByOutput(ItemStack out) {
+		return Collections.unmodifiableCollection(outputs.get(out));
 	}
 
 	public FrictionRecipe getRecipeByInput(ItemStack in) {
@@ -123,7 +129,7 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 
 	@Override
 	protected boolean removeRecipe(MachineRecipe recipe) {
-		return recipes.removeValue((FrictionRecipe)recipe) && outputs.removeValue((FrictionRecipe)recipe);
+		return recipes.removeValue((FrictionRecipe)recipe) && outputs.get(((FrictionRecipe)recipe).output).remove(recipe);
 	}
 
 	@Override
