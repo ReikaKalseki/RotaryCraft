@@ -453,7 +453,8 @@ public class RotaryAux {
 			text = text.replace("Nm", "ft-lb");
 			return String.format(text, torque, speed, power);
 		}
-		return String.format(text, (int)torque, (int)speed, power);
+		String ret = String.format(text, (int)torque, (int)speed, power);
+		return ret.replace(".000", "");
 	}
 
 	public static String formatValuesForBook(String text, Object[] vals) {

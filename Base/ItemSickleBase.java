@@ -341,7 +341,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 							if (mod2.isRipe(world, x+i, y+j, z+k)) {
 								Block b2 = id2;
 								//dropItems(is, ep, world, x+i+0.5, y+j+0.5, z+k+0.5, b2.getDrops(world, x, y, z, meta2, fortune));
-								this.dropItems(is, ep, world, x+i+0.5, y+j+0.5, z+k+0.5, mod2.getDrops(world, x, y, z, fortune));
+								this.dropItems(is, ep, world, x+i+0.5, y+j+0.5, z+k+0.5, mod2.getDrops(world, x+i, y+j, z+k, fortune));
 								if (mod2.destroyOnHarvest())
 									world.setBlockToAir(x+i, y+j, z+k);
 								else

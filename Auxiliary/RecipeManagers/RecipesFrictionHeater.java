@@ -73,7 +73,8 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 	}
 
 	public Collection<FrictionRecipe> getRecipesByOutput(ItemStack out) {
-		return Collections.unmodifiableCollection(outputs.get(out));
+		Collection<FrictionRecipe> c = outputs.get(out);
+		return c != null ? Collections.unmodifiableCollection(c) : null;
 	}
 
 	public FrictionRecipe getRecipeByInput(ItemStack in) {
