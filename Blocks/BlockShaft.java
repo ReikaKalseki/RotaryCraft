@@ -27,6 +27,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
@@ -153,6 +154,9 @@ public class BlockShaft extends BlockModelledMachine {
 						case STEEL:
 							todrop = ItemStacks.mount.copy();	//drop mount
 							break;
+						case TUNGSTEN:
+							todrop = ItemStacks.mount.copy();	//drop mount
+							break;
 						case DIAMOND:
 							todrop = ItemStacks.mount.copy();	//drop mount
 							break;
@@ -182,7 +186,7 @@ public class BlockShaft extends BlockModelledMachine {
 				Items.delayBeforeCanPickup = 10;
 				if (!world.isRemote && !ep.capabilities.isCreativeMode)
 					world.spawnEntityInWorld(item);*/
-				ItemStack todrop = ItemStacks.shaftcross.copy(); //drop shaft cross
+				ItemStack todrop = RotaryAux.getShaftCrossItem(); //drop shaft cross
 				if (sha.isUnHarvestable()) {
 					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}

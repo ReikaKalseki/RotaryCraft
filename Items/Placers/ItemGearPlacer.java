@@ -23,7 +23,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
@@ -118,13 +117,15 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.GEARBOX.isAvailableInCreativeInventory()) {
-			for (int i = 0; i < RotaryNames.getNumberGearTypes(); i++) {
-				ItemStack item = new ItemStack(id, 1, i);
-				if (item.stackTagCompound == null)
-					item.setTagCompound(new NBTTagCompound());
-				item.stackTagCompound.setInteger("damage", 0);
-				item.stackTagCompound.setInteger("lube", 0);
-				list.add(item);
+			for (GearboxTypes gear : GearboxTypes.typeList) {
+				for (int r = 2; r <= 16; r *= 2) {
+					ItemStack item = gear.getGearboxItem(r);
+					if (item.stackTagCompound == null)
+						item.stackTagCompound = new NBTTagCompound();
+					item.stackTagCompound.setInteger("damage", 0);
+					item.stackTagCompound.setInteger("lube", 0);
+					list.add(item);
+				}
 			}
 		}
 	}

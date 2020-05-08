@@ -22,7 +22,6 @@ import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -71,8 +70,6 @@ public final class ItemStacks {
 	public static final ItemStack pipe 				= MachineRegistry.PIPE.getCraftedProduct();
 	public static final ItemStack fuelline 			= MachineRegistry.FUELLINE.getCraftedProduct();
 	public static final ItemStack bedpipe 			= MachineRegistry.BEDPIPE.getCraftedProduct();
-
-	public static final ItemStack shaftcross 		= ItemRegistry.SHAFT.getStackOfMetadata(RotaryNames.getNumberShaftTypes()-1);
 
 	public static final ItemStack shaftitem 		= GearboxTypes.STEEL.getShaftUnitItem();
 	public static final ItemStack gearunit	 		= GearboxTypes.STEEL.getGearUnitItem(2);

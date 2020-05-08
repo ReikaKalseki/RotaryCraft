@@ -449,11 +449,11 @@ public enum ItemRegistry implements ItemEnum {
 			case MODINTERFACE:
 				return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
 			case SHAFT:
-				return RotaryNames.getShaftName(dmg);
+				return this.getBasicName();
 			case ENGINE:
 				return RotaryNames.getEngineName(dmg);
 			case GEARBOX:
-				return RotaryNames.getGearboxName(dmg);
+				return this.getBasicName();
 			case FLYWHEEL:
 				return RotaryNames.getFlywheelName(dmg);
 			case ADVGEAR:
@@ -623,11 +623,11 @@ public enum ItemRegistry implements ItemEnum {
 			case GEARUPGRADE:
 				return 5;
 			case SHAFT:
-				return RotaryNames.getNumberShaftTypes();
+				return MaterialRegistry.matList.length;
 			case ENGINE:
 				return RotaryNames.getNumberEngineTypes();
 			case GEARBOX:
-				return RotaryNames.getNumberGearTypes();
+				return 1;
 			case FLYWHEEL:
 				return RotaryNames.getNumberFlywheelTypes();
 			case ADVGEAR:

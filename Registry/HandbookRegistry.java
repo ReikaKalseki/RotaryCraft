@@ -1021,7 +1021,7 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == INFO)
 			return ItemRegistry.SCREWDRIVER.getStackOf();
 		if (this == TRANS)
-			return MachineRegistry.GEARBOX.getCraftedMetadataProduct(RotaryNames.getNumberGearTypes()-3);
+			return GearboxTypes.STEEL.getGearboxItem(8);
 		if (this == CONVERTER)
 			return MachineRegistry.MAGNETIC.getCraftedProduct();
 		if (this == PRODMACHINES)

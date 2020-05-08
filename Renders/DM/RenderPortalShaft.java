@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -37,27 +37,7 @@ public class RenderPortalShaft extends RenderShaft {
 		ModelShaft var14 = ShaftModel;
 		ModelShaftV var15 = VShaftModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-
-		if (tile.getShaftType() == null)
-			return;
-		switch(tile.getShaftType()) {
-		case WOOD:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexw.png");
-			break;
-		case STONE:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexs.png");
-			break;
-		case STEEL:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-			break;
-		case DIAMOND:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexd.png");
-			break;
-		case BEDROCK:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttexb.png");
-			break;
-		}
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -68,18 +48,18 @@ public class RenderPortalShaft extends RenderShaft {
 		meta = tile.getBlockMetadata();
 		if (tile.isInWorld()) {
 			switch(meta) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 90;
-				break;
-			case 3:
-				var11 = 270;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 90;
+					break;
+				case 3:
+					var11 = 270;
+					break;
 			}
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
 		}
@@ -132,30 +112,6 @@ public class RenderPortalShaft extends RenderShaft {
 			return null;
 		String name;
 		TileEntityPortalShaft tile = (TileEntityPortalShaft)te;
-		String p;
-		if (tile.getBlockMetadata() > 3)
-			p = "v";
-		else
-			p = "";
-		switch(tile.getShaftType()) {
-		case WOOD:
-			name = p+"shafttexw.png";
-			break;
-		case STONE:
-			name = p+"shafttexs.png";
-			break;
-		case STEEL:
-			name = p+"shafttex.png";
-			break;
-		case DIAMOND:
-			name = p+"shafttexd.png";
-			break;
-		case BEDROCK:
-			name = p+"shafttexb.png";
-			break;
-		default:
-			name = p+"crosstex.png";
-		}
-		return name;
+		return tile.getShaftType().getBaseShaftTexture();
 	}
 }

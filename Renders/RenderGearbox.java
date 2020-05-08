@@ -36,7 +36,6 @@ import Reika.RotaryCraft.Models.Animated.ModelGearbox;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox16;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox4;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox8;
-import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
@@ -47,7 +46,6 @@ public class RenderGearbox extends RotaryTERenderer
 	private ModelGearbox4 GearboxModel4 = new ModelGearbox4();
 	private ModelGearbox8 GearboxModel8 = new ModelGearbox8();
 	private ModelGearbox16 GearboxModel16 = new ModelGearbox16();
-	private int itemMetadata = 0;
 
 	private static Field manaIcon;
 
@@ -93,13 +91,11 @@ public class RenderGearbox extends RotaryTERenderer
 		ModelGearbox8 var16 = GearboxModel8;
 		ModelGearbox16 var17 = GearboxModel16;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-
 		this.setupGL(tile, par2, par4, par6);
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+tile.getGearboxType().getBaseGearboxTexture());
 
 		int var11 = 0;	 //used to rotate the model about metadata
 		if (tile.isInWorld()) {
-			this.bindTextureByName(tile.getGearboxType().getBaseGearboxTexture());
 			switch(tile.getBlockMetadata()&3) {
 				case 0:
 					var11 = 0;
@@ -135,10 +131,7 @@ public class RenderGearbox extends RotaryTERenderer
 		else {
 			//ReikaChatHelper.write(this.itemMetadata);
 			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-			GearboxTypes type = GearboxTypes.getMaterialFromGearboxItem(is);
-			this.bindTextureByName(type.getBaseGearboxTexture());
-			int ratio = ?;
-			switch(ratio) {
+			switch(tile.getRatio()) {
 				case 2:
 					var14.renderAll(tile, null);
 					break;
@@ -259,70 +252,7 @@ public class RenderGearbox extends RotaryTERenderer
 			return null;
 		String name;
 		TileEntityGearbox tile = (TileEntityGearbox)te;
-		if (tile.isInWorld()) {
-			switch(tile.getGearboxType()) {
-				case WOOD:
-					name = "geartexw.png";
-					break;
-				case STONE:
-					name = "geartexs.png";
-					break;
-				case STEEL:
-					name = "geartex.png";
-					break;
-				case DIAMOND:
-					name = "geartexd.png";
-					break;
-				case BEDROCK:
-					name = "geartexb.png";
-					break;
-				default:
-					name = null;
-			}
+		return tile.getGearboxType().getBaseGearboxTexture();
 
-		}
-		else {
-			name = "geartex.png";
-			switch(itemMetadata) {
-				case 1:
-				case 6:
-				case 11:
-				case 16:
-				case 21:
-					name = "geartexw.png";
-					break;
-				case 2:
-				case 7:
-				case 12:
-				case 17:
-				case 22:
-					name = "geartexs.png";
-					break;
-				case 3:
-				case 8:
-				case 13:
-				case 18:
-				case 23:
-					name = "geartex.png";
-					break;
-				case 4:
-				case 9:
-				case 14:
-				case 19:
-				case 24:
-					name = "geartexd.png";
-					break;
-				case 5:
-				case 10:
-				case 15:
-				case 20:
-				case 25:
-					name = "geartexb.png";
-					break;
-				default:
-					name = null;
-			}
-		}
-		return name;
 	}
 }

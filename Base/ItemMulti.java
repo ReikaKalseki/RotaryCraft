@@ -33,6 +33,7 @@ import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityACEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 
@@ -242,10 +243,10 @@ public class ItemMulti extends ItemBasic {
 				j = RotaryNames.interfaceNames.length;
 				break;
 			case SHAFT: //shafts
-				j = RotaryNames.getNumberShaftTypes();
+				j = MaterialRegistry.matList.length;
 				break;
 			case GEARBOX: //gearboxes
-				j = RotaryNames.getNumberGearTypes();
+				j = 0;//j = RotaryNames.getNumberGearTypes();
 				break;
 			case GEARCRAFT: //gearunits
 				j = GearboxTypes.typeList.length*16;
@@ -253,14 +254,21 @@ public class ItemMulti extends ItemBasic {
 			default:
 				j = 0;
 				break;
+		}/*
+		if (ItemRegistry.GEARBOX.getItemInstance() == par1) {
+			for (GearboxTypes gear : GearboxTypes.typeList) {
+				for (int r = 2; r <= 16; r *= 2) {
+					ItemStack item = gear.getGearboxItem(r);
+					if (item.stackTagCompound == null)
+						item.stackTagCompound = new NBTTagCompound();
+					item.stackTagCompound.setInteger("damage", 0);
+					par3List.add(item);
+				}
+			}
 		}
+		else {*/
 		for (int i = 0; i < j; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
-			if (ItemRegistry.GEARBOX.matchItem(item)) {
-				if (item.stackTagCompound == null)
-					item.stackTagCompound = new NBTTagCompound();
-				item.stackTagCompound.setInteger("damage", 0);
-			}
 			if (ItemRegistry.GEARCRAFT.matchItem(item) && item.getItemDamage()%16 >= GearPart.list.length) {
 				continue;
 			}
@@ -283,6 +291,7 @@ public class ItemMulti extends ItemBasic {
 				mag.stackTagCompound.setInteger("magnet", Integer.MAX_VALUE/4);
 				par3List.add(mag);
 			}
+			//}
 		}
 	}
 
@@ -321,10 +330,10 @@ public class ItemMulti extends ItemBasic {
 				s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
 				break;
 			case SHAFT:
-				s = super.getUnlocalizedName() + "." + RotaryNames.getShaftName(d);
+				s = MaterialRegistry.matList[d].getShaftUnlocName();
 				break;
 			case GEARBOX:
-				s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
+				//s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
 				break;
 			case MODINTERFACE:
 				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];

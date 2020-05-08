@@ -36,7 +36,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Variables;
@@ -202,11 +201,11 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 			meta = sha.getBlockMetadata();
-			if (meta >= 6)
-				return new ItemStack(ItemRegistry.SHAFT.getItemInstance(), 1, RotaryNames.getNumberShaftTypes()-1);
+			if (sha.isCross())
+				return RotaryAux.getShaftCrossItem();
 			if (sha.getShaftType() == null)
 				return null;
-			return new ItemStack(ItemRegistry.SHAFT.getItemInstance(), 1, sha.getShaftType().ordinal());
+			return sha.getShaftType().getShaftItem();
 		}
 		if (m == MachineRegistry.FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)world.getTileEntity(x, y, z);

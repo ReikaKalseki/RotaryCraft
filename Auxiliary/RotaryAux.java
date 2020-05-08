@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -40,6 +41,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
@@ -505,5 +507,16 @@ public class RotaryAux {
 			unit = "gal";
 		}
 		return String.format("%.0f/%.0f %s", amt, capacity, unit);
+	}
+
+	public static ItemStack getShaftCrossItem() {
+		ItemStack is = ItemRegistry.SHAFT.getStackOf();
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setBoolean("cross", true);
+		return is;
+	}
+
+	public static boolean isShaftCross(ItemStack is) {
+		return ItemRegistry.SHAFT.matchItem(is) && is.stackTagCompound != null && is.stackTagCompound.getBoolean("cross");
 	}
 }

@@ -41,6 +41,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public int[] readtorque = new int[2];
@@ -52,6 +55,11 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	private MaterialRegistry type;
 	private boolean failed = false;
+
+	@SideOnly(Side.CLIENT)
+	public boolean isVerticalRender;
+	@SideOnly(Side.CLIENT)
+	public boolean isCrossForRender;
 
 	public TileEntityShaft(MaterialRegistry type) {
 		if (type == null)
@@ -83,6 +91,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				case STEEL:
 					item = ItemStacks.scrap.copy();
 					break;
+				case TUNGSTEN:
+					item = ItemStacks.scrap.copy();
+					break;
 				case DIAMOND:
 					item = new ItemStack(Items.diamond, 1, 0);
 					break;
@@ -111,6 +122,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					item = new ItemStack(Blocks.cobblestone, 1, 0);
 					break;
 				case STEEL:
+					item = ItemStacks.shaftitem.copy();
+					break;
+				case TUNGSTEN:
 					item = ItemStacks.shaftitem.copy();
 					break;
 				case DIAMOND:

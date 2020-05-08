@@ -24,8 +24,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -73,7 +71,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
 			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlock(), is.getItemDamage(), 3);
-			if (is.getItemDamage() == ItemStacks.shaftcross.getItemDamage()) {
+			if (RotaryAux.isShaftCross(is)) {
 				TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 				if (sha != null) {
 					//sha.type = MaterialRegistry.STEEL;
@@ -100,9 +98,8 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.SHAFT.isAvailableInCreativeInventory()) {
-			for (int i = 0; i < RotaryNames.getNumberShaftTypes(); i++) {
-				ItemStack item = new ItemStack(id, 1, i);
-				list.add(item);
+			for (int i = 0; i < MaterialRegistry.matList.length; i++) {
+				list.add(MaterialRegistry.matList[i].getShaftItem());
 			}
 		}
 	}

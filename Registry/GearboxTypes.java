@@ -3,6 +3,7 @@ package Reika.RotaryCraft.Registry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -71,11 +72,7 @@ public enum GearboxTypes {
 	}
 
 	public String getBaseGearboxTexture() {
-		return "/Reika/RotaryCraft/Textures/TileEntityTex/geartexb.png";
-	}
-
-	public String getBaseShaftTexture() {
-		return "";
+		return "geartex.png";
 	}
 
 	public ItemStack getGearItem() {
@@ -123,7 +120,7 @@ public enum GearboxTypes {
 	}
 
 	public ItemStack getGearboxItem(int ratio) {
-		ItemStack is = MachineRegistry.GEARBOX.getCraftedProduct();
+		ItemStack is = MachineRegistry.GEARBOX.getCraftedMetadataProduct(ratio);
 		is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setString("type", this.name());
 		return is;
@@ -199,6 +196,10 @@ public enum GearboxTypes {
 		public int getMetaOffset() {
 			return this.ordinal();
 		}
+	}
+
+	public String getLocalizedName(int ratio) {
+		return StatCollector.translateToLocal("material."+material.name())+" "+ratio+":1 "+MachineRegistry.GEARBOX.getName();
 	}
 
 }

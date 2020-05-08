@@ -613,13 +613,15 @@ public class RotaryRecipes {
 		if (ReikaItemHelper.oreItemsExist("ingotCopper", "ingotSilver"))
 			MachineRegistry.FLOODLIGHT.addOreRecipe("ISO", "Ggd", "I#O", '#', ItemStacks.basepanel, 'I', "ingotSilver", 'd', "ingotCopper", 'S', ItemStacks.steelingot, 'G', Blocks.glass, 'g', Blocks.glowstone, 'O', Blocks.obsidian);
 
-		MachineRegistry.SHAFT.addMetaCrafting(RotaryNames.getNumberShaftTypes()-1, " S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem); //Shaft cross
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("cross", true);
+		MachineRegistry.SHAFT.addNBTCrafting(nbt, " S ", "SSS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem); //Shaft cross
 
 		//addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.redstone, 'S', ItemStacks.steelingot, 'B', Blocks.brick_block, 'C', Blocks.crafting_table, 's', ReikaItemHelper.stoneSlab);
 
 		MachineRegistry.BEVELGEARS.addSizedCrafting(4, "ISB", "SGB", "BBB", 'B', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
 
-		NBTTagCompound nbt = new NBTTagCompound();
+		nbt = new NBTTagCompound();
 		nbt.setBoolean("bedrock", false);
 		MachineRegistry.SPLITTER.addSizedNBTCrafting(nbt, 2, "ISP", "SGP", "ISP", 'P', ItemStacks.basepanel, 'I', ItemStacks.steelingot, 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear);
 

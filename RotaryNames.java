@@ -13,8 +13,6 @@ import net.minecraft.util.StatCollector;
 
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public class RotaryNames {
 
@@ -35,34 +33,12 @@ public class RotaryNames {
 			"flywheel.wood", "flywheel.stone", "flywheel.iron", "flywheel.gold"
 	};
 
-	private static final String[] shaftItemNames = {
-			"shaft.wood", "shaft.stone", "shaft.steel", "shaft.diamond", "shaft.bedrock", "shaft.cross"
-	};
-
 	private static final String[] liquidNames = {
 			"fluid.rc lubricant", "fluid.rc jet fuel", "fluid.rc ethanol", "fluid.rc liquid nitrogen", "fluid.molten hsla"
 	};
 
 	private static final String[] canolaNames = {
 			"canola.seed", "canola.dense", "canola.husk"
-	};
-
-	//Never presented directly, not in .lang
-	private static final String[] gearboxItemNames = {
-			"Wooden 2:1 Gearbox", "Stone 2:1 Gearbox", "Steel 2:1 Gearbox", "Diamond 2:1 Gearbox", "Bedrock 2:1 Gearbox",
-			"Wooden 4:1 Gearbox", "Stone 4:1 Gearbox", "Steel 4:1 Gearbox", "Diamond 4:1 Gearbox", "Bedrock 4:1 Gearbox",
-			"Wooden 8:1 Gearbox", "Stone 8:1 Gearbox", "Steel 8:1 Gearbox", "Diamond 8:1 Gearbox", "Bedrock 8:1 Gearbox",
-			"Wooden 16:1 Gearbox", "Stone 16:1 Gearbox", "Steel 16:1 Gearbox", "Diamond 16:1 Gearbox", "Bedrock 16:1 Gearbox",
-	};
-
-	//Not to be edited
-	public static final String[] gearboxRatios = {
-			"2:1", "4:1", "8:1", "16:1"
-	};
-
-	//Not to be edited
-	public static final String[] gearUnitRatios = {
-			"2x", "4x", "8x", "16x"
 	};
 
 	public static final String[] enginePartNames = {
@@ -134,7 +110,8 @@ public class RotaryNames {
 	private static String getName(String[] names, int i) {
 		return StatCollector.translateToLocal(names[i]);
 	}
-
+	/*
+	@Deprecated
 	public static String getGearboxName(int i) {
 		String mat = MaterialRegistry.matList[i%MaterialRegistry.matList.length].getName();
 		String ratio = gearboxRatios[i/5];
@@ -142,13 +119,14 @@ public class RotaryNames {
 		return mat+" "+ratio+" "+name;
 	}
 
+	@Deprecated
 	public static String getGearUnitName(int i) {
 		MaterialRegistry[] mats = {MaterialRegistry.WOOD, MaterialRegistry.STONE, MaterialRegistry.DIAMOND, MaterialRegistry.BEDROCK};
 		String mat = mats[i%4].getName();
 		String ratio = gearUnitRatios[i/5];
 		return mat+" "+ratio+" "+StatCollector.translateToLocal("crafting.gearunit");
 	}
-
+	 */
 	public static String getName(String tag, boolean tech) {
 		String sg = StatCollector.translateToLocal(tag);
 		if (tech && DragonOptions.DEBUGMODE.getState())
@@ -174,20 +152,8 @@ public class RotaryNames {
 		return getName(hydraulicItemNames, i);
 	}
 
-	public static String getShaftName(int i) {
-		return getName(shaftItemNames, i);
-	}
-
 	public static String getFlywheelName(int i) {
 		return getName(flywheelItemNames, i);
-	}
-
-	public static int getNumberShaftTypes() {
-		return shaftItemNames.length;
-	}
-
-	public static int getNumberGearTypes() {
-		return gearboxItemNames.length;
 	}
 
 	public static int getNumberAdvGearTypes() {

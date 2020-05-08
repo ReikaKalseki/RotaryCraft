@@ -88,6 +88,10 @@ public enum MaterialRegistry {
 		return "mob.blaze.hit";
 	}
 
+	public String getBaseShaftTexture() {
+		return "shafttex.png";
+	}
+
 	public boolean isHarvestablePickaxe(ItemStack tool) {
 		if (harvestLevel < 0)
 			return true;
@@ -208,5 +212,9 @@ public enum MaterialRegistry {
 
 	public double getSpeedForceExponent() {
 		return 1-(0.11D*this.ordinal());
+	}
+
+	public String getShaftUnlocName() {
+		return "material."+this.name();
 	}
 }

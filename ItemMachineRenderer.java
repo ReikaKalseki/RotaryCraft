@@ -25,7 +25,6 @@ import net.minecraftforge.client.IItemRenderer;
 import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
@@ -151,10 +150,7 @@ public class ItemMachineRenderer implements IItemRenderer {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 				a = -0.5F; b = -0.5F;
 			}
-			if (item.getItemDamage() == ItemStacks.shaftcross.getItemDamage())
-				TileEntityRendererDispatcher.instance.renderTileEntityAt(sha, a, 0.0D, b, -10000F);
-			else
-				TileEntityRendererDispatcher.instance.renderTileEntityAt(sha, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(sha, a, 0.0D, b, 0);
 		}
 		else if (ItemRegistry.MACHINE.matchItem(item)) {
 			GL11.glEnable(GL11.GL_BLEND);
