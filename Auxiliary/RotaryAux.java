@@ -55,6 +55,8 @@ public class RotaryAux {
 
 	public static final boolean getPowerOnClient = ConfigRegistry.POWERCLIENT.getState() || ReikaObfuscationHelper.isDeObfEnvironment();
 
+	public static final double tungstenDensity = ReikaEngLibrary.rhoiron*0.8+0.2*ReikaEngLibrary.rhotungsten;
+
 	private static Set<Class<? extends TileEntity>> shaftPowerBlacklist = new OneWaySet<Class<? extends TileEntity>>();
 
 	static {

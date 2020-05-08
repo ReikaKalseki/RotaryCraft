@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,6 +29,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityACEngine;
@@ -211,42 +213,42 @@ public class ItemMulti extends ItemBasic {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) { //Adds the metadata blocks to the creative inventory
 		int j;
-		switch (type) {
-			case 0: //shaftcraft
+		switch (ItemRegistry.getEntryByID(this)) {
+			case SHAFTCRAFT: //shaftcraft
 				j = RotaryNames.shaftPartNames.length;
 				break;
-			case 1: //enginecraft
+			case ENGINECRAFT: //enginecraft
 				j = RotaryNames.enginePartNames.length;
 				break;
-			case 2: //heatcraft
+			case MISCCRAFT: //heatcraft
 				j = RotaryNames.miscPartNames.length;
 				break;
-			case 3: //misccraft 2
+			case BORECRAFT: //misccraft 2
 				j = RotaryNames.borerPartNames.length;
 				break;
-			case 4: //extracts
+			case EXTRACTS: //extracts
 				j = RotaryNames.extractNames.length;
 				break;
-			case 6: //compacts
+			case COMPACTS: //compacts
 				j = RotaryNames.compactNames.length;
 				break;
-			case 7: //engines
+			case ENGINE: //engines
 				j = EngineType.engineList.length;
 				break;
-			case 8: //powders
+			case POWDERS: //powders
 				j = RotaryNames.powderNames.length;
 				break;
-			case 14: //mod interface
+			case MODINTERFACE: //mod interface
 				j = RotaryNames.interfaceNames.length;
 				break;
-			case 11: //shafts
+			case SHAFT: //shafts
 				j = RotaryNames.getNumberShaftTypes();
 				break;
-			case 12: //gearboxes
+			case GEARBOX: //gearboxes
 				j = RotaryNames.getNumberGearTypes();
 				break;
-			case 23: //gearunits
-				j = RotaryNames.gearUnitNames.length;
+			case GEARCRAFT: //gearunits
+				j = GearboxTypes.typeList.length*16;
 				break;
 			default:
 				j = 0;
@@ -259,12 +261,10 @@ public class ItemMulti extends ItemBasic {
 					item.stackTagCompound = new NBTTagCompound();
 				item.stackTagCompound.setInteger("damage", 0);
 			}
-			if (ItemRegistry.COMPACTS.matchItem(item)) {
-				par3List.add(item);
+			if (ItemRegistry.GEARCRAFT.matchItem(item) && item.getItemDamage()%16 >= GearPart.list.length) {
+				continue;
 			}
-			else {
-				par3List.add(item);
-			}
+			par3List.add(item);
 			if (ReikaItemHelper.matchStacks(item, ItemStacks.shaftcore)) {
 				ItemStack mag = item.copy();
 				if (DragonAPICore.isReikasComputer()) {
@@ -295,45 +295,44 @@ public class ItemMulti extends ItemBasic {
 	public String getUnlocalizedName(ItemStack is) {
 		int d = is.getItemDamage();
 		String s = super.getUnlocalizedName();
-		switch(type) {
-			case 0:
+		switch (ItemRegistry.getEntryByID(this)) {
+			case SHAFTCRAFT:
 				s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
 				break;
-			case 1:
+			case ENGINECRAFT:
 				s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
 				break;
-			case 2:
+			case MISCCRAFT:
 				s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
 				break;
-			case 3:
+			case BORECRAFT:
 				s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
 				break;
-			case 4:
+			case EXTRACTS:
 				s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
 				break;
-			case 6:
+			case COMPACTS:
 				s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
 				break;
-			case 7:
+			case ENGINE:
 				s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
 				break;
-			case 8:
+			case POWDERS:
 				s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
 				break;
-			case 10:
-				s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
-				break;
-			case 11:
+			case SHAFT:
 				s = super.getUnlocalizedName() + "." + RotaryNames.getShaftName(d);
 				break;
-			case 12:
+			case GEARBOX:
 				s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
 				break;
-			case 16:
+			case MODINTERFACE:
 				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
 				break;
-			case 23:
-				s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
+			case GEARCRAFT:
+				s = super.getUnlocalizedName() + "." + GearboxTypes.getMaterialFromCraftingItem(is)+"."+GearPart.list[d%16];
+				break;
+			default:
 				break;
 		}
 		return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
@@ -360,6 +359,9 @@ public class ItemMulti extends ItemBasic {
 		//if (ReikaItemHelper.matchStacks(item, ItemStacks.bedrockdust) && this.offsetDustName(item)) {
 		//	return ((ItemMulti)ItemStacks.salt.getItem()).getItemSpriteIndex(ItemStacks.salt);
 		//}
+		if (ItemRegistry.GEARCRAFT.matchItem(item)) {
+			return /*GearboxTypes.getMaterialFromCraftingItem(item).metaOffset+*/item.getItemDamage();
+		}
 		int row = type%16+item.getItemDamage()/16;
 		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)
 			return 16*9+item.getItemDamage()-32;

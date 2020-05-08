@@ -1164,9 +1164,4 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		enabled = enable;
 		this.syncAllData(false);
 	}
-
-	@Override
-	public int getItemMetadata() {
-		return this.getGearType().ordinal();
-	}
 }

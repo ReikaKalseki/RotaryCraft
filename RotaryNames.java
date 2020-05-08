@@ -67,14 +67,14 @@ public class RotaryNames {
 
 	public static final String[] enginePartNames = {
 			"crafting.impeller", "crafting.compressor", "crafting.turbine", "crafting.diffuser", "crafting.combustor", "crafting.cylinder",
-			"crafting.radiator", "crafting.condenser", "crafting.goldcoil", "crafting.woodgear", "crafting.stonegear", "crafting.diamondgear",
-			"crafting.bedrockgear", "crafting.paddle", "crafting.shaftcore", "crafting.ignition", "crafting.diamondcore", "crafting.compoundcompress",
+			"crafting.radiator", "crafting.condenser", "crafting.goldcoil", "", "", "",
+			"", "crafting.paddle", "crafting.shaftcore", "crafting.ignition", "crafting.diamondcore", "crafting.compoundcompress",
 			"crafting.alucylinder", "crafting.highcombustor"
 	};
 
 	public static final String[] shaftPartNames = {
-			"crafting.panel", "crafting.ingot", "crafting.shaft", "crafting.mount", "crafting.gear", "crafting.gear2",
-			"crafting.gear4", "crafting.gear8", "crafting.gear16", "crafting.scrap", "crafting.ironscrap",
+			"crafting.panel", "crafting.ingot", "crafting.shaft", "crafting.mount", "", "",
+			"", "", "", "crafting.scrap", "crafting.ironscrap",
 			"crafting.woodcore", "crafting.stonecore", "crafting.ironcore", "crafting.goldcore", "crafting.worm"
 	};
 
@@ -84,18 +84,10 @@ public class RotaryNames {
 			"crafting.bedcoil", "crafting.chain", "crafting.beddrill"
 	};
 
-	public static final String[] gearUnitNames = {
-			"Wood 2x Gear Unit", "Wood 4x Gear Unit", "Wood 8x Gear Unit", "Wood 16x Gear Unit",
-			"Stone 2x Gear Unit", "Stone 4x Gear Unit", "Stone 8x Gear Unit", "Stone 16x Gear Unit",
-			"Diamond 2x Gear Unit", "Diamond 4x Gear Unit", "Diamond 8x Gear Unit", "Diamond 16x Gear Unit",
-			"Bedrock 2x Gear Unit", "Bedrock 4x Gear Unit", "Bedrock 8x Gear Unit", "Bedrock 16x Gear Unit"
-	};
-
 	public static final String[] borerPartNames = {
 			"crafting.drill", "crafting.pressure", "crafting.radar", "crafting.sonar", "crafting.pcb", "crafting.screen", "crafting.mixer",
 			"crafting.saw", "crafting.bearing",
 			"crafting.belt", "crafting.ballbearing", "crafting.brake", "crafting.coil",
-			"crafting.stoneshaft", "crafting.diamondshaft", "crafting.bedrockshaft"
 	};
 
 	public static final String[] blockNames = {
@@ -111,10 +103,6 @@ public class RotaryNames {
 	public static final String[] interfaceNames = {
 			"interface.slipperycomb", "interface.slipperypropolis", "interface.gearcast", "interface.panelcast", "interface.shaftcast",
 			"interface.propcast", "interface.drillcast",
-			"Livingwood Gear", "Livingrock Gear",
-			"Livingwood 2x Gear Unit", "Livingrock 2x Gear Unit", "Livingwood 4x Gear Unit", "Livingrock 4x Gear Unit",
-			"Livingwood 8x Gear Unit", "Livingrock 8x Gear Unit", "Livingwood 16x Gear Unit", "Livingrock 16x Gear Unit",
-			"Livingwood Shaft Unit", "Livingrock Shaft Unit",
 	};
 
 	public static final String[] extractNames = {

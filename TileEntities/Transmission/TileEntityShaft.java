@@ -141,7 +141,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	public void testFailure() {
-		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(omega, 1-(0.11D*type.ordinal())), type.getTensileStrength())) {
+		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(omega, type.getSpeedForceExponent()), type.getTensileStrength())) {
 			this.fail(worldObj, xCoord, yCoord, zCoord, true);
 		}
 		else if (ReikaEngLibrary.mat_twistfailure(torque, 0.0625, type.getShearStrength()/16D)) {
@@ -603,13 +603,20 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	@Override
 	public void writeToNBT(NBTTagCompound NBT) {
-		NBT.setInteger("type", type.ordinal());
+		NBT.setString("shafttype", type.name());
 		super.writeToNBT(NBT);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
-		type = MaterialRegistry.setType(NBT.getInteger("type"));
+		MaterialRegistry mat = MaterialRegistry.WOOD;
+		if (NBT.hasKey("shafttype")) {
+			mat = MaterialRegistry.valueOf(NBT.getString("shafttype"));
+		}
+		else if (NBT.hasKey("type")) {
+			mat = MaterialRegistry.matList[NBT.getInteger("type")];
+		}
+		type = mat;
 		super.readFromNBT(NBT);
 	}
 
@@ -671,10 +678,5 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		else {
 			super.getAllOutputs(c, dir);
 		}
-	}
-
-	@Override
-	public int getItemMetadata() {
-		return type.ordinal();
 	}
 }

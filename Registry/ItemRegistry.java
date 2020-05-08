@@ -185,13 +185,13 @@ public enum ItemRegistry implements ItemEnum {
 	FLYWHEEL(0, true,				"item.flyplacer",			ItemFlywheelPlacer.class),
 	ADVGEAR(0, true,				"item.advplacer",			ItemAdvGearPlacer.class),
 	SHAFTCRAFT(0, true,				"item.shaftcraft",			ItemMulti.class),
+	GEARCRAFT(0, 3, true,			"item.gearcraft",			ItemMulti.class),
 	ENGINECRAFT(1, true,			"item.enginecraft",			ItemMulti.class),
 	MISCCRAFT(2, true,				"item.misccraft",			ItemMulti.class),
 	BORECRAFT(3, true,				"item.borecraft",			ItemMulti.class),
 	EXTRACTS(4, true,				"item.extracts",			ItemMulti.class),
 	COMPACTS(6, true,				"item.compacts",			ItemMulti.class),
 	POWDERS(8, true,				"item.powder",				ItemMulti.class),
-	GEARUNITS(23, true,				"item.gearunits",			ItemMulti.class),
 	MODINTERFACE(16, 2, true,		"item.modinterface",		ItemMulti.class),
 	MODEXTRACTS(-1, true,			"item.modextracts",			ItemModOre.class),
 	MODINGOTS(-1, true,				"item.modingots",			ItemModOre.class),
@@ -448,8 +448,6 @@ public enum ItemRegistry implements ItemEnum {
 				return StatCollector.translateToLocal(RotaryNames.powderNames[dmg]);
 			case MODINTERFACE:
 				return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
-			case GEARUNITS:
-				return StatCollector.translateToLocal(RotaryNames.gearUnitNames[dmg]);
 			case SHAFT:
 				return RotaryNames.getShaftName(dmg);
 			case ENGINE:
@@ -622,8 +620,6 @@ public enum ItemRegistry implements ItemEnum {
 				return RotaryNames.powderNames.length;
 			case MODINTERFACE:
 				return RotaryNames.interfaceNames.length;
-			case GEARUNITS:
-				return RotaryNames.gearUnitNames.length;
 			case GEARUPGRADE:
 				return 5;
 			case SHAFT:

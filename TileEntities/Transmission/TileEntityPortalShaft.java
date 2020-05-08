@@ -352,7 +352,14 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 
 		type = PortalType.values()[NBT.getInteger("portal")];
 
-		material = MaterialRegistry.setType(NBT.getInteger("mat"));
+		MaterialRegistry mat = MaterialRegistry.WOOD;
+		if (NBT.hasKey("shafttype")) {
+			mat = MaterialRegistry.valueOf(NBT.getString("shafttype"));
+		}
+		else if (NBT.hasKey("type")) {
+			mat = MaterialRegistry.matList[NBT.getInteger("type")];
+		}
+		material = mat;
 	}
 
 	@Override
@@ -362,7 +369,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 		if (type != null)
 			NBT.setInteger("portal", type.ordinal());
 		if (material != null)
-			NBT.setInteger("mat", material.ordinal());
+			NBT.setString("mat", material.name());
 	}
 
 	@Override

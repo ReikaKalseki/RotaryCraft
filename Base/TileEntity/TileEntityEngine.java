@@ -898,11 +898,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		return false;
 	}
 
-	@Override
-	public final int getItemMetadata() {
-		return type.ordinal();
-	}
-
 	public void breakBlock() {
 		if (integratedGear != 0) {
 			ItemStack is = ItemIntegratedGearbox.getIntegratedGearItem(integratedGear, null);

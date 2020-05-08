@@ -45,9 +45,8 @@ public class BlockGearbox extends BlockModelledMachine {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int meta)
-	{
-		return new TileEntityGearbox(MaterialRegistry.setType(meta));
+	public TileEntity createTileEntity(World world, int meta) {
+		return new TileEntityGearbox();
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox tg = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (tg == null)
 			return 0;
-		if (tg.getGearboxType().isFlammable())
+		if (tg.getGearboxType().material.isFlammable())
 			return 60;
 		return 0;
 	}
@@ -66,16 +65,19 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (gbx == null)
 			return 0;
-		MaterialRegistry type = gbx.getGearboxType();
+		MaterialRegistry type = gbx.getGearboxType().material;
 		switch(type) {
 			case WOOD:
 				return 5F;
 			case STONE:
 				return 10F;
 			case STEEL:
-			case DIAMOND:
-			case BEDROCK:
 				return 15F;
+			case TUNGSTEN:
+			case DIAMOND:
+				return 30F;
+			case BEDROCK:
+				return 90F;
 		}
 		return 0;
 	}
@@ -111,7 +113,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (gbx == null)
 			return false;
-		MaterialRegistry type = gbx.getGearboxType();
+		MaterialRegistry type = gbx.getGearboxType().material;
 		return type.isHarvestablePickaxe(player.inventory.getCurrentItem());
 	}
 

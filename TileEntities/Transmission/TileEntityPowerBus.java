@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 
 import java.util.Collection;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -22,18 +21,14 @@ import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityInventoryIOMachine;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements InertIInv, BreakAction, ComplexIO {
 
@@ -103,37 +98,11 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	public int getAbsRatio(ForgeDirection dir) {
 		if (dir.offsetY != 0)
 			return 0;
-		return this.getRatioFromItem(inv[dir.ordinal()-2]);
-	}
-
-	private int getRatioFromItem(ItemStack is) {
-		if (is == null)
-			return 0;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.gearunit))
-			return 2;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.gearunit4))
-			return 4;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.gearunit8))
-			return 8;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.gearunit16))
-			return 16;
-		if (ItemRegistry.GEARUNITS.matchItem(is))
-			return ReikaMathLibrary.intpow2(2, 1+is.getItemDamage()%4);
-		if (is.getItem() == Items.stick)
-			return 1;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.stonerod))
-			return 1;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftitem))
-			return 1;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.diamondshaft))
-			return 1;
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.bedrockshaft))
-			return 1;
-		return 0;
+		return GearboxTypes.getRatioFromPartItem(inv[dir.ordinal()-2]);
 	}
 
 	public boolean insertItem(ItemStack is, ForgeDirection side) {
-		if (this.getRatioFromItem(is) > 0 && inv[side.ordinal()-2] == null) {
+		if (GearboxTypes.getRatioFromPartItem(is) > 0 && inv[side.ordinal()-2] == null) {
 			inv[side.ordinal()-2] = is.copy();
 			return true;
 		}
@@ -221,14 +190,14 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 
 	private boolean verifySpeed(int speed, ForgeDirection dir) {
 		ItemStack is = inv[dir.ordinal()-2];
-		MaterialRegistry mat = MaterialRegistry.getMaterialFromItem(is);
-		return mat.getMaxShaftSpeed() >= speed;
+		GearboxTypes mat = GearboxTypes.getMaterialFromCraftingItem(is);
+		return mat != null && mat.material.getMaxShaftSpeed() >= speed;
 	}
 
 	private boolean verifyTorque(int torque, ForgeDirection dir) {
 		ItemStack is = inv[dir.ordinal()-2];
-		MaterialRegistry mat = MaterialRegistry.getMaterialFromItem(is);
-		return mat.getMaxShaftTorque() >= torque;
+		GearboxTypes mat = GearboxTypes.getMaterialFromCraftingItem(is);
+		return mat != null && mat.material.getMaxShaftTorque() >= torque;
 	}
 
 	private void breakItem(ForgeDirection dir) {

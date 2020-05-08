@@ -255,10 +255,6 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 			return this instanceof TileEntityBeltHub ? Visibility.None : Visibility.Network;
 	}
 
-	public int getItemMetadata() {
-		return 0;
-	}
-
 	public double heatEnergyPerDegree() {
 		return ReikaThermoHelper.STEEL_HEAT*ReikaBlockHelper.getBlockVolume(worldObj, xCoord, yCoord, zCoord)*ReikaEngLibrary.rhoiron;
 	}

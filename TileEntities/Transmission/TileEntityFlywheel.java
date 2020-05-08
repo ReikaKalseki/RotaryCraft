@@ -91,7 +91,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		return this.getTypeOrdinal().density;
 	}
 
-	private Flywheels getTypeOrdinal() {
+	public Flywheels getTypeOrdinal() {
 		return Flywheels.list[this.getBlockMetadata()/4];
 	}
 
@@ -441,11 +441,6 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	@Override
 	public void fail() {
 		this.fail(worldObj, xCoord, yCoord, zCoord, ReikaPhysicsHelper.getEnergyFromExplosion(4));
-	}
-
-	@Override
-	public final int getItemMetadata() {
-		return this.getTypeOrdinal().ordinal();
 	}
 
 	public static enum Flywheels {

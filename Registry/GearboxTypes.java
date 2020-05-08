@@ -2,8 +2,11 @@ package Reika.RotaryCraft.Registry;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
 public enum GearboxTypes {
@@ -14,23 +17,49 @@ public enum GearboxTypes {
 	TUNGSTEN(7, MaterialRegistry.TUNGSTEN),
 	DIAMOND(3, MaterialRegistry.DIAMOND),
 	BEDROCK(4, MaterialRegistry.BEDROCK),
-	LIVINGWOOD(5, MaterialRegistry.WOOD),
-	LIVINGROCK(6, MaterialRegistry.STONE);
+	LIVINGWOOD(5, MaterialRegistry.WOOD, ModList.BOTANIA),
+	LIVINGROCK(6, MaterialRegistry.STONE, ModList.BOTANIA);
 
-	public final int spriteRow;
+	public final int metaOffset;
 	public final MaterialRegistry material;
 
+	private final ModList dependency;
+
+	public static final GearboxTypes[] typeList = values();
+
 	private GearboxTypes(int row, MaterialRegistry mat) {
-		spriteRow = row;
+		this(row, mat, null);
+	}
+
+	private GearboxTypes(int row, MaterialRegistry mat, ModList mod) {
+		metaOffset = row;
 		material = mat;
+		dependency = mod;
+	}
+
+	public boolean isLoadable() {
+		return dependency == null || dependency.isLoaded();
 	}
 
 	public boolean needsLubricant() {
 		return this != WOOD && this.isDamageableGear();
 	}
 
-	public boolean consumesLubricant() {
+	public boolean consumesLubricant(int omega) {
 		return this.needsLubricant() && this != DIAMOND;
+	}
+
+	public boolean generatesHeat(int omega, int Tamb) {
+		switch(this) {
+			case WOOD:
+				return true;
+			case LIVINGWOOD:
+				return omega >= 2048 || Tamb >= 100;
+			case STONE:
+				return omega >= 8192;
+			default:
+				return false;
+		}
 	}
 
 	public boolean takesTemperatureDamage() {
@@ -42,76 +71,134 @@ public enum GearboxTypes {
 	}
 
 	public String getBaseGearboxTexture() {
-
+		return "/Reika/RotaryCraft/Textures/TileEntityTex/geartexb.png";
 	}
 
 	public String getBaseShaftTexture() {
-
-	}
-
-	public ItemStack getShaftItem() {
-		return MachineRegistry.SHAFT.getCraftedMetadataProduct(this.INDEX());
-	}
-
-	public ItemStack getGearboxItem(int ratio) {
-		int type = this.INDEX();
-		ratio = (int)ReikaMathLibrary.logbase(ratio, 2)-1;
-		return MachineRegistry.GEARBOX.getCraftedMetadataProduct(5*ratio+type);
+		return "";
 	}
 
 	public ItemStack getGearItem() {
-		switch(this) {
-			case BEDROCK:
-				return ItemStacks.bedrockgear;
-			case DIAMOND:
-				return ItemStacks.diamondgear;
-			case STEEL:
-				return ItemStacks.steelgear;
-			case STONE:
-				return ItemStacks.stonegear;
-			case WOOD:
-				return ItemStacks.woodgear;
-			case LIVINGROCK:
-				return ItemStacks.livingrockgear;
-			case LIVINGWOOD:
-				return ItemStacks.livingwoodgear;
-			case TUNGSTEN:
-				return ItemStacks.tungstengear;
-		}
-		return null;
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset+1);
 	}
 
 	public ItemStack getGearUnitItem(int ratio) {
-		int log = ReikaMathLibrary.logbase2(ratio)-1;
-		if (this == STEEL) {
-			return ItemRegistry.SHAFTCRAFT.getStackOfMetadata(5+log);
-		}
-		else {
-			int o = this == BEDROCK || this == DIAMOND ? this.INDEX()-1 : this.INDEX();
-			return ItemRegistry.GEARUNITS.getStackOfMetadata(log+o*4);
-		}
+		int log = ReikaMathLibrary.logbase2(ratio);
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset+log+1);
 	}
 
 	public ItemStack getShaftUnitItem() {
+		if (this == WOOD)
+			return new ItemStack(Items.stick);
+		if (this == TUNGSTEN)
+			return STEEL.getShaftUnitItem();
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset);
+	}
+
+	public Object getMountItem() {
+		if (this == WOOD)
+			return "plankWood";
+		if (this == STONE)
+			return ReikaItemHelper.stoneSlab.asItemStack();
+		return ItemStacks.mount;
+	}
+
+	public int getMaxLubricant() {
 		switch(this) {
 			case BEDROCK:
-				return ItemStacks.bedrockshaft;
+				return 0;
 			case DIAMOND:
-				return ItemStacks.diamondshaft;
+				return 1000;
 			case STEEL:
-				return ItemStacks.shaftitem;
-			case STONE:
-				return ItemStacks.stonerod;
-			case WOOD:
-				return new ItemStack(Items.stick);
-			case LIVINGROCK:
-				return ItemStacks.livingrockrod;
-			case LIVINGWOOD:
-				return ItemStacks.livingwoodrod;
 			case TUNGSTEN:
-				return ItemStacks.shaftitem;//ItemStacks.tungstenshaft;
+				return 24000;
+			case STONE:
+			case LIVINGROCK:
+				return 8000;
+			case WOOD:
+			case LIVINGWOOD:
+				return 0;//3000;
+		}
+		return 0;
+	}
+
+	public ItemStack getGearboxItem(int ratio) {
+		ItemStack is = MachineRegistry.GEARBOX.getCraftedProduct();
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setString("type", this.name());
+		return is;
+	}
+
+	public static GearboxTypes getMaterialFromGearboxItem(ItemStack is) {
+		if (is.stackTagCompound != null && is.stackTagCompound.hasKey("type"))
+			return GearboxTypes.valueOf(is.stackTagCompound.getString("type"));
+		return getFromMaterial(MaterialRegistry.matList[is.getItemDamage()]);
+	}
+
+	public static GearboxTypes getMaterialFromCraftingItem(ItemStack is) {
+		int idx = is.getItemDamage()%16;
+		return typeList[idx];
+	}
+
+	public static GearboxTypes getFromMaterial(MaterialRegistry mat) {
+		switch(mat) {
+			case BEDROCK:
+				return GearboxTypes.BEDROCK;
+			case DIAMOND:
+				return GearboxTypes.DIAMOND;
+			case STEEL:
+				return GearboxTypes.STEEL;
+			case STONE:
+				return GearboxTypes.STONE;
+			case WOOD:
+				return GearboxTypes.WOOD;
+			case TUNGSTEN:
+				return GearboxTypes.TUNGSTEN;
 		}
 		return null;
+	}
+
+	public static int getRatioFromPartItem(ItemStack is) {
+		if (is == null)
+			return 0;
+		if (is.getItem() == Items.stick)
+			return 1;
+		if (!ItemRegistry.GEARCRAFT.matchItem(is))
+			return 0;
+		int meta = is.getItemDamage()%16;
+		switch(meta) {
+			case 0:
+			case 1:
+				return 1;
+			case 2:
+				return 2;
+			case 3:
+				return 4;
+			case 4:
+				return 8;
+			case 5:
+				return 16;
+		}
+		return 0;
+	}
+
+	public double getOmegaForRotFailure(int omega, int omegain) {
+		return ReikaMathLibrary.doubpow(Math.max(omega, omegain), material.getSpeedForceExponent());
+	}
+
+	public static enum GearPart {
+		SHAFT(),
+		GEAR(),
+		UNIT2(),
+		UNIT4(),
+		UNIT8(),
+		UNIT16();
+
+		public static final GearPart[] list = values();
+
+		public int getMetaOffset() {
+			return this.ordinal();
+		}
 	}
 
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -36,6 +36,7 @@ import Reika.RotaryCraft.Models.Animated.ModelGearbox;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox16;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox4;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox8;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
@@ -98,30 +99,7 @@ public class RenderGearbox extends RotaryTERenderer
 
 		int var11 = 0;	 //used to rotate the model about metadata
 		if (tile.isInWorld()) {
-			switch(tile.getGearboxType()) {
-				case WOOD:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw.png");
-					break;
-				case STONE:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs.png");
-					break;
-				case STEEL:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-					break;
-				case DIAMOND:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexd.png");
-					break;
-				case BEDROCK:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexb.png");
-					break;
-			}
-
+			this.bindTextureByName(tile.getGearboxType().getBaseGearboxTexture());
 			switch(tile.getBlockMetadata()&3) {
 				case 0:
 					var11 = 0;
@@ -138,115 +116,49 @@ public class RenderGearbox extends RotaryTERenderer
 			}
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
 
+			switch(tile.getRatio()) {
+				case 2:
+					var14.renderAll(tile, null, -tile.phi);
+					break;
+				case 4:
+					var15.renderAll(tile, null, -tile.phi);
+					break;
+				case 8:
+					var16.renderAll(tile, null, -tile.phi);
+					break;
+				case 16:
+					var17.renderAll(tile, null, -tile.phi);
+					break;
+			}
+
 		}
 		else {
 			//ReikaChatHelper.write(this.itemMetadata);
 			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-			switch(itemMetadata) {
-				case 1:
-				case 6:
-				case 11:
-				case 16:
-				case 21:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw.png");
-					break;
+			GearboxTypes type = GearboxTypes.getMaterialFromGearboxItem(is);
+			this.bindTextureByName(type.getBaseGearboxTexture());
+			int ratio = ?;
+			switch(ratio) {
 				case 2:
-				case 7:
-				case 12:
-				case 17:
-				case 22:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs.png");
-					break;
-				case 3:
-				case 8:
-				case 13:
-				case 18:
-				case 23:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-					break;
-				case 4:
-				case 9:
-				case 14:
-				case 19:
-				case 24:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexd.png");
-					break;
-				case 5:
-				case 10:
-				case 15:
-				case 20:
-				case 25:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexb.png");
-					break;
-			}
-			switch(itemMetadata) {
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-				case 5:
 					var14.renderAll(tile, null);
 					break;
-				case 6:
-				case 7:
-				case 8:
-				case 9:
-				case 10:
+				case 4:
 					var15.renderAll(tile, null);
 					break;
-				case 11:
-				case 12:
-				case 13:
-				case 14:
-				case 15:
+				case 8:
 					var16.renderAll(tile, null);
 					break;
 				case 16:
-				case 17:
-				case 18:
-				case 19:
-				case 20:
 					var17.renderAll(tile, null);
 					break;
 			}
-
-			this.closeGL(tile);
-			return;
-		}
-
-		switch(tile.getRatio()) {
-			case 2:
-				var14.renderAll(tile, null, -tile.phi);
-				break;
-			case 4:
-				var15.renderAll(tile, null, -tile.phi);
-				break;
-			case 8:
-				var16.renderAll(tile, null, -tile.phi);
-				break;
-			case 16:
-				var17.renderAll(tile, null, -tile.phi);
-				break;
 		}
 
 		this.closeGL(tile);
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
-	{
-		if (par8 <= -999F) {
-			itemMetadata = (int)-par8/1000;
-			par8 = 0F;
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
-		}
+	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8) {
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityGearboxAt((TileEntityGearbox)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {

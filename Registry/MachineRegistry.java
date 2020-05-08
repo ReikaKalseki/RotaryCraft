@@ -987,13 +987,24 @@ public enum MachineRegistry implements TileEnum {
 	}
 
 	public ItemStack getCraftedProduct(TileEntity te) {
-		ItemStack is = this.getCraftedMetadataProduct(((RotaryCraftTileEntity)te).getItemMetadata());
+		ItemStack is = this.getCraftedMetadataProduct(this.getCraftedMetadata(te));
 		if (te instanceof NBTTile) {
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			((NBTTile)te).getTagsToWriteToStack(is.stackTagCompound);
 		}
 		return is;
+	}
+
+	private int getCraftedMetadata(TileEntity te) {
+		switch(this) {
+			case ADVANCEDGEARS:
+				return ((TileEntityAdvancedGear)te).getGearType().ordinal();
+			case FLYWHEEL:
+				return ((TileEntityFlywheel)te).getTypeOrdinal().ordinal();
+			default:
+				return 0;
+		}
 	}
 
 	public boolean isEnchantable() {

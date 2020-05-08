@@ -17,7 +17,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -47,7 +46,7 @@ public class BlockShaft extends BlockModelledMachine {
 	@Override
 	public TileEntity createTileEntity(World world, int meta)
 	{
-		return new TileEntityShaft(meta < 5 ? MaterialRegistry.setType(meta) : MaterialRegistry.STEEL);
+		return new TileEntityShaft(meta < 5 ? MaterialRegistry.matList[meta] : MaterialRegistry.STEEL);
 	}
 
 	@Override
@@ -69,13 +68,16 @@ public class BlockShaft extends BlockModelledMachine {
 		MaterialRegistry type = sha.getShaftType();
 		switch(type) {
 			case WOOD:
-				return 3F;
+				return 5F;
 			case STONE:
-				return 8F;
+				return 10F;
 			case STEEL:
-			case DIAMOND:
-			case BEDROCK:
 				return 15F;
+			case TUNGSTEN:
+			case DIAMOND:
+				return 30F;
+			case BEDROCK:
+				return 90F;
 		}
 		return 0;
 	}
@@ -115,30 +117,8 @@ public class BlockShaft extends BlockModelledMachine {
 			return false;
 		}
 		TileEntityShaft tile = (TileEntityShaft)world.getTileEntity(x, y, z);
-		if (tile != null) {
-			ItemStack fix;
-			if (tile.getShaftType() == null)
-				return false;
-			switch(tile.getShaftType()) {
-				case WOOD:
-					fix = new ItemStack(Items.stick);
-					break;
-				case STONE:
-					fix = ItemStacks.stonerod;
-					break;
-				case STEEL:
-					fix = ItemStacks.shaftitem;
-					break;
-				case DIAMOND:
-					fix = ItemStacks.diamondshaft;
-					break;
-				case BEDROCK:
-					fix = ItemStacks.bedrockshaft;
-					break;
-				default:
-					fix = new ItemStack(Blocks.stone);
-					break;
-			}
+		if (tile != null && tile.getShaftType() != null) {
+			ItemStack fix = tile.getShaftType().getShaftItem();
 			if (ep.getCurrentEquippedItem() != null && ReikaItemHelper.matchStacks(fix, ep.getCurrentEquippedItem())) {
 				tile.repair();
 				if (!ep.capabilities.isCreativeMode) {

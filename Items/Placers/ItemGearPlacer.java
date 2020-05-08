@@ -27,9 +27,9 @@ import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
-import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 import cpw.mods.fml.relauncher.Side;
@@ -97,19 +97,19 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
 		if (is.stackTagCompound == null)
 			return;
-		MaterialRegistry mat = MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length];
+		GearboxTypes mat = GearboxTypes.getMaterialFromGearboxItem(is);
 		if (is.stackTagCompound.hasKey("damage") && mat.isDamageableGear()) {
 			int dmg = TileEntityGearbox.getDamagePercent(is.stackTagCompound.getInteger("damage"));
 			par3List.add("Damage: "+dmg+"%");
 		}
 
-		if (mat == MaterialRegistry.DIAMOND && !is.stackTagCompound.getBoolean("diamond")) {
+		if (!is.stackTagCompound.hasKey("type")) {
 			par3List.add("Legacy; craft into new version");
 		}
 
 		if (is.stackTagCompound.hasKey("lube") && mat.needsLubricant()) {
 			int amt = is.stackTagCompound.getInteger("lube");
-			String s = is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/TileEntityGearbox.getMaxLubricant(mat)) : "Lubricant: "+amt+" mB";
+			String s = is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/mat.getMaxLubricant()) : "Lubricant: "+amt+" mB";
 			par3List.add(s);
 		}
 	}

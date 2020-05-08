@@ -290,9 +290,6 @@ public enum HandbookRegistry implements HandbookEntry {
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
 	STEELINGOT("Steel Ingot"),
-	OTHERSHAFT("Alternative Shafts"),
-	OTHERGEAR("Alternative Gearboxes"),
-	OTHERGEARUNIT("Alternative Gear Units"),
 	COKE("Coal Coke"),
 	NETHERDUST("Netherrack Dust and Tar"),
 	SAWDUST("Sawdust"),
@@ -853,41 +850,6 @@ public enum HandbookRegistry implements HandbookEntry {
 			}
 			return li;
 		}
-		if (this == OTHERGEAR) {
-			List<ItemStack> li = new ArrayList<ItemStack>();
-			li.add(ItemStacks.woodgear);
-			li.add(ItemStacks.stonegear);
-			li.add(ItemStacks.diamondgear);
-			li.add(ItemStacks.bedrockgear);
-			return li;
-		}
-		if (this == OTHERSHAFT) {
-			List<ItemStack> li = new ArrayList<ItemStack>();
-			li.add(ItemStacks.stonerod);
-			li.add(ItemStacks.diamondshaft);
-			li.add(ItemStacks.bedrockshaft);
-			return li;
-		}
-		if (this == OTHERGEARUNIT) {
-			List<ItemStack> li = new ArrayList<ItemStack>();
-			li.add(ItemStacks.wood2x);
-			li.add(ItemStacks.wood4x);
-			li.add(ItemStacks.wood8x);
-			li.add(ItemStacks.wood16x);
-			li.add(ItemStacks.stone2x);
-			li.add(ItemStacks.stone4x);
-			li.add(ItemStacks.stone8x);
-			li.add(ItemStacks.stone16x);
-			li.add(ItemStacks.diamond2x);
-			li.add(ItemStacks.diamond4x);
-			li.add(ItemStacks.diamond8x);
-			li.add(ItemStacks.diamond16x);
-			li.add(ItemStacks.bedrock2x);
-			li.add(ItemStacks.bedrock4x);
-			li.add(ItemStacks.bedrock8x);
-			li.add(ItemStacks.bedrock16x);
-			return li;
-		}
 		if (crafted != null)
 			return ReikaJavaLibrary.makeListFrom(crafted);
 		if (machine != null && machine.isPipe())
@@ -1002,12 +964,6 @@ public enum HandbookRegistry implements HandbookEntry {
 			return 3;
 		if (this == DECOBLOCKS)
 			return 1;
-		if (this == OTHERSHAFT)
-			return 2;
-		if (this == OTHERGEARUNIT)
-			return 8;
-		if (this == OTHERGEAR)
-			return 0;
 		return 0;
 	}
 

@@ -110,24 +110,21 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
-		int i = is.getItemDamage();
-		if (i < MaterialRegistry.matList.length) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				MaterialRegistry mat = MaterialRegistry.matList[i];
-				double torque = mat.getMaxShaftTorque();
-				double speed = mat.getMaxShaftSpeed();
-				li.add(String.format("Max Speed: %s", RotaryAux.formatSpeed(speed)));
-				li.add(String.format("Max Torque: %s", RotaryAux.formatTorque(torque)));
-			}
-			else {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Hold ");
-				sb.append(EnumChatFormatting.GREEN.toString());
-				sb.append("Shift");
-				sb.append(EnumChatFormatting.GRAY.toString());
-				sb.append(" for load data");
-				li.add(sb.toString());
-			}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			MaterialRegistry mat = MaterialRegistry.getMaterialFromShaftItem(is);
+			double torque = mat.getMaxShaftTorque();
+			double speed = mat.getMaxShaftSpeed();
+			li.add(String.format("Max Speed: %s", RotaryAux.formatSpeed(speed)));
+			li.add(String.format("Max Torque: %s", RotaryAux.formatTorque(torque)));
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Hold ");
+			sb.append(EnumChatFormatting.GREEN.toString());
+			sb.append("Shift");
+			sb.append(EnumChatFormatting.GRAY.toString());
+			sb.append(" for load data");
+			li.add(sb.toString());
 		}
 	}
 
