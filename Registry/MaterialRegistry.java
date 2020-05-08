@@ -74,24 +74,8 @@ public enum MaterialRegistry {
 		return rho;
 	}
 
-	public boolean isDamageableGear() {
-		return !this.isInfiniteStrength();
-	}
-
 	public boolean isInfiniteStrength() {
 		return this == BEDROCK;
-	}
-
-	public boolean needsLubricant() {
-		return this != WOOD && this.isDamageableGear();
-	}
-
-	public boolean consumesLubricant() {
-		return /*this == WOOD ||*/ this == STONE || this == STEEL || this == DIAMOND;
-	}
-
-	public boolean takesTemperatureDamage() {
-		return this == WOOD || this == STONE;
 	}
 
 	public boolean isFlammable() {
@@ -210,16 +194,6 @@ public enum MaterialRegistry {
 		return loads;
 	}
 
-	public ItemStack getShaftItem() {
-		return MachineRegistry.SHAFT.getCraftedMetadataProduct(this.ordinal());
-	}
-
-	public ItemStack getGearboxItem(int ratio) {
-		int type = this.ordinal();
-		ratio = (int)ReikaMathLibrary.logbase(ratio, 2)-1;
-		return MachineRegistry.GEARBOX.getCraftedMetadataProduct(5*ratio+type);
-	}
-
 	public static MaterialRegistry getMaterialFromItem(ItemStack is) {
 		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftitem)) {
 			return STEEL;
@@ -243,49 +217,6 @@ public enum MaterialRegistry {
 		}
 		else if (ReikaItemHelper.matchStacks(is, ItemStacks.bedrockshaft)) {
 			return BEDROCK;
-		}
-		return null;
-	}
-
-	public ItemStack getGearItem() {
-		switch(this) {
-			case BEDROCK:
-				return ItemStacks.bedrockgear;
-			case DIAMOND:
-				return ItemStacks.diamondgear;
-			case STEEL:
-				return ItemStacks.steelgear;
-			case STONE:
-				return ItemStacks.stonegear;
-			case WOOD:
-				return ItemStacks.woodgear;
-		}
-		return null;
-	}
-
-	public ItemStack getGearUnitItem(int ratio) {
-		int log = ReikaMathLibrary.logbase2(ratio)-1;
-		if (this == STEEL) {
-			return ItemRegistry.SHAFTCRAFT.getStackOfMetadata(5+log);
-		}
-		else {
-			int o = this == BEDROCK || this == DIAMOND ? this.ordinal()-1 : this.ordinal();
-			return ItemRegistry.GEARUNITS.getStackOfMetadata(log+o*4);
-		}
-	}
-
-	public ItemStack getShaftUnitItem() {
-		switch(this) {
-			case BEDROCK:
-				return ItemStacks.bedrockshaft;
-			case DIAMOND:
-				return ItemStacks.diamondshaft;
-			case STEEL:
-				return ItemStacks.shaftitem;
-			case STONE:
-				return ItemStacks.stonerod;
-			case WOOD:
-				return new ItemStack(Items.stick);
 		}
 		return null;
 	}

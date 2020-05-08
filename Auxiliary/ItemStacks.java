@@ -143,6 +143,7 @@ public final class ItemStacks {
 	public static final ItemStack stonegear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(10);
 	public static final ItemStack diamondgear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(11);
 	public static final ItemStack bedrockgear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(12);
+	public static final ItemStack tungstengear 		= ?;
 
 	public static final ItemStack drill 			= ItemRegistry.BORECRAFT.getStackOfMetadata(0);
 	public static final ItemStack presshead 		= ItemRegistry.BORECRAFT.getStackOfMetadata(1);

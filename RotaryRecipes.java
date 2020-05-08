@@ -1057,6 +1057,17 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.stone16x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.stonerod, 'G', ItemStacks.stone4x});
 
+		GameRegistry.addRecipe(ItemStacks.tungsten2x, new Object[]{
+				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.tungstengear});
+		GameRegistry.addRecipe(ItemStacks.tungsten4x, new Object[]{
+				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.tungsten2x});
+		GameRegistry.addRecipe(ItemStacks.tungsten8x, new Object[]{
+				" gB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.tungsten4x, 'g', ItemStacks.tungsten2x});
+		GameRegistry.addRecipe(ItemStacks.tungsten16x, new Object[]{
+				" gB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.tungsten8x, 'g', ItemStacks.tungsten2x});
+		GameRegistry.addRecipe(ItemStacks.tungsten16x, new Object[]{
+				" GB", "BG ", 'B', ItemStacks.shaftitem, 'G', ItemStacks.tungsten4x});
+
 		GameRegistry.addRecipe(ItemStacks.diamond2x, new Object[]{
 				" GB", "BG ", 'B', ItemStacks.diamondshaft, 'G', ItemStacks.diamondgear});
 		GameRegistry.addRecipe(ItemStacks.diamond4x, new Object[]{
@@ -1098,7 +1109,7 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.stonegear, 2), new Object[]{
 				" W ", "WWW", " W ", 'W', Blocks.stone});
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.diamondgear, 8), new Object[]{
-				" W ", "WWW", " W ", 'W', Items.diamond});
+				" W ", "WGW", " W ", 'W', Items.diamond, 'G', ItemStacks.tungstengear});
 
 		params = new Object[]{"bWb", "WWW", "bWb", 'b', ItemStacks.bedrockdust, 'W', ItemStacks.steelingot};
 		//GameRegistry.addRecipe(new ItemStack(ItemStacks.bedrockgear, 8, ItemStacks.bedrockgear.getItemDamage()), params);
@@ -1281,7 +1292,7 @@ public class RotaryRecipes {
 		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.shaftcore, 15));
 		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.waterplate, 81));
 
-		GameRegistry.addRecipe(new ItemStack(Items.diamond, 5), "ggg", "g g", "ggg", 'g', ItemStacks.diamondgear);
+		//GameRegistry.addRecipe(new ItemStack(Items.diamond, 5), "ggg", "g g", "ggg", 'g', ItemStacks.diamondgear);
 		GameRegistry.addShapelessRecipe(new ItemStack(Items.diamond), ItemStacks.diamondshaft);
 
 		for (int i = 0; i < MaterialRegistry.matList.length; i++) {
