@@ -1002,6 +1002,8 @@ public class RotaryRecipes {
 				"  B", " B ", "B  ", 'B', Blocks.stone});
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.shaftitem, DifficultyEffects.PARTCRAFT.getInt()), new Object[]{
 				"  B", " B ", "B  ", 'B', ItemStacks.steelingot});
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.tungstenshaft, DifficultyEffects.PARTCRAFT.getInt()), new Object[]{
+				"  B", " B ", "B  ", 'B', ItemStacks.springtungsten});
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.diamondshaft, DifficultyEffects.PARTCRAFT.getInt()), new Object[]{
 				"  B", " B ", "B  ", 'B', Items.diamond});
 
@@ -1348,7 +1350,7 @@ public class RotaryRecipes {
 		MachineRegistry.SHAFT.addSizedOreRecipe(8, "BSB", "BBB", 'B', "plankWood", 'S', "stickWood");
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 1, "sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod);
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 2, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem);
-		//MachineRegistry.SHAFT.addSizedMetaCrafting(8, 3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.tungstenshaft);
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.tungstenshaft);
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 4, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 5, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft);
 

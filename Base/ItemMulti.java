@@ -12,6 +12,8 @@ package Reika.RotaryCraft.Base;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.common.base.Strings;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -272,6 +274,8 @@ public class ItemMulti extends ItemBasic {
 			if (ItemRegistry.GEARCRAFT.matchItem(item) && item.getItemDamage()%16 >= GearPart.list.length) {
 				continue;
 			}
+			if (Strings.isNullOrEmpty(this.getUnlocalizedName(item)))
+				continue;
 			par3List.add(item);
 			if (ReikaItemHelper.matchStacks(item, ItemStacks.shaftcore)) {
 				ItemStack mag = item.copy();

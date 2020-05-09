@@ -604,7 +604,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-		if (type.generatesHeat(omega, Tamb)) {
+		if (omega > 0 && type.generatesHeat(omega, Tamb)) {
 			temperature++;
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.material.getDamageNoise(), 0.67F, 1);
 		}

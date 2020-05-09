@@ -76,6 +76,7 @@ public final class ItemStacks {
 	public static final ItemStack gearunit4	 		= GearboxTypes.STEEL.getGearUnitItem(4);
 	public static final ItemStack gearunit8	 		= GearboxTypes.STEEL.getGearUnitItem(8);
 	public static final ItemStack gearunit16 		= GearboxTypes.STEEL.getGearUnitItem(16);
+	public static final ItemStack tungstenshaft 		= GearboxTypes.TUNGSTEN.getShaftUnitItem();
 	public static final ItemStack diamondshaft 		= GearboxTypes.DIAMOND.getShaftUnitItem();
 	public static final ItemStack bedrockshaft 		= GearboxTypes.BEDROCK.getShaftUnitItem();
 	public static final ItemStack stonerod	 		= GearboxTypes.STONE.getShaftUnitItem();
