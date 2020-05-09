@@ -1,5 +1,7 @@
 package Reika.RotaryCraft.Registry;
 
+import java.util.Locale;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -153,7 +155,7 @@ public enum GearboxTypes {
 	}
 
 	public String getLocalizedGearboxName(int ratio) {
-		return StatCollector.translateToLocal("material."+this.name())+" "+ratio+":1 "+MachineRegistry.GEARBOX.getName();
+		return StatCollector.translateToLocal("material."+this.name().toLowerCase(Locale.ENGLISH))+" "+ratio+":1 "+MachineRegistry.GEARBOX.getName();
 	}
 
 	public static GearboxTypes getMaterialFromGearboxItem(ItemStack is) {
@@ -163,8 +165,12 @@ public enum GearboxTypes {
 	}
 
 	public static GearboxTypes getMaterialFromCraftingItem(ItemStack is) {
-		int idx = is.getItemDamage()%16;
-		return typeList[idx];
+		int idx = is.getItemDamage()/16;
+		for (GearboxTypes g : typeList) {
+			if (g.metaOffset == idx)
+				return g;
+		}
+		return null;
 	}
 
 	public static GearboxTypes getFromMaterial(MaterialRegistry mat) {
@@ -232,6 +238,7 @@ public enum GearboxTypes {
 			switch(this) {
 				case SHAFT:
 					s = "crafting.shaft";
+					break;
 				case GEAR:
 					s = "crafting.gear";
 					break;
@@ -248,7 +255,7 @@ public enum GearboxTypes {
 					s = "crafting.gear16x";
 					break;
 			}
-			return StatCollector.translateToLocal("material."+material.name())+" "+StatCollector.translateToLocal(s);
+			return StatCollector.translateToLocal("material."+material.name().toLowerCase(Locale.ENGLISH))+" "+StatCollector.translateToLocal(s);
 		}
 	}
 

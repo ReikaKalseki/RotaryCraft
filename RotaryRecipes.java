@@ -1348,8 +1348,9 @@ public class RotaryRecipes {
 		MachineRegistry.SHAFT.addSizedOreRecipe(8, "BSB", "BBB", 'B', "plankWood", 'S', "stickWood");
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 1, "sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod);
 		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 2, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem);
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 4, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft);
+		//MachineRegistry.SHAFT.addSizedMetaCrafting(8, 3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.tungstenshaft);
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 4, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
+		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 5, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft);
 
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.DC.ordinal(), "SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Items.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
 		MachineRegistry.ENGINE.addSizedMetaCrafting(2, EngineType.WIND.ordinal(), "SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub);

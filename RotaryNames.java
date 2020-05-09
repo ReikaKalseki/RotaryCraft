@@ -203,7 +203,6 @@ public class RotaryNames {
 	public static String getGearPartName(int dmg) {
 		ItemStack is = ItemRegistry.GEARCRAFT.getStackOfMetadata(dmg);
 		GearboxTypes material = GearboxTypes.getMaterialFromCraftingItem(is);
-		int ratio = GearboxTypes.getRatioFromPartItem(is);
 		return GearPart.list[is.getItemDamage()%16].getLocalizedName(material);
 	}
 }

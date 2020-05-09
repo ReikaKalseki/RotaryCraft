@@ -21,12 +21,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -123,6 +123,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
-		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
+		MaterialRegistry type = MaterialRegistry.getMaterialFromShaftItem(is);
+		return type != null ? StatCollector.translateToLocal(type.getShaftUnlocName())+" "+MachineRegistry.SHAFT.getName() : "Shaft";
 	}
 }

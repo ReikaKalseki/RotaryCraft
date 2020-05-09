@@ -22,12 +22,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.GearboxTypes;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
@@ -133,7 +133,8 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
-		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
+		GearboxTypes type = GearboxTypes.getMaterialFromGearboxItem(is);
+		return type != null ? type.getLocalizedGearboxName(ReikaMathLibrary.intpow2(2, is.getItemDamage()+1)) : "Gearbox";
 	}
 
 	@Override

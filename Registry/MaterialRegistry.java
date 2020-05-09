@@ -235,6 +235,6 @@ public enum MaterialRegistry {
 	}
 
 	public String getShaftUnlocName() {
-		return "material."+this.name();
+		return "material."+this.name().toLowerCase(Locale.ENGLISH);
 	}
 }
