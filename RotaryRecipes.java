@@ -1423,7 +1423,8 @@ public class RotaryRecipes {
 	}
 
 	private static ItemStack addDamageNBT(ItemStack is) {
-		is.setTagCompound(new NBTTagCompound());
+		if (is.stackTagCompound == null)
+			is.setTagCompound(new NBTTagCompound());
 		is.stackTagCompound.setInteger("damage", 0);
 		return is;
 	}

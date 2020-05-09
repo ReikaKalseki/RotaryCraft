@@ -768,7 +768,7 @@ public enum MachineRegistry implements TileEnum {
 		if (this == GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)tile;
 			GearboxTypes type = gbx.getGearboxType();
-			return type != null ? type.getLocalizedName(gbx.getRatio()) : this.getName();
+			return type != null ? type.getLocalizedGearboxName(gbx.getRatio()) : this.getName();
 		}
 		if (this == ENGINE) {
 			TileEntityEngine eng = (TileEntityEngine)tile;

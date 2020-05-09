@@ -152,6 +152,10 @@ public enum GearboxTypes {
 		return is;
 	}
 
+	public String getLocalizedGearboxName(int ratio) {
+		return StatCollector.translateToLocal("material."+this.name())+" "+ratio+":1 "+MachineRegistry.GEARBOX.getName();
+	}
+
 	public static GearboxTypes getMaterialFromGearboxItem(ItemStack is) {
 		if (is.stackTagCompound != null && is.stackTagCompound.hasKey("type"))
 			return GearboxTypes.valueOf(is.stackTagCompound.getString("type"));
@@ -222,10 +226,30 @@ public enum GearboxTypes {
 		public int getMetaOffset() {
 			return this.ordinal();
 		}
-	}
 
-	public String getLocalizedName(int ratio) {
-		return StatCollector.translateToLocal("material."+material.name())+" "+ratio+":1 "+MachineRegistry.GEARBOX.getName();
+		public String getLocalizedName(GearboxTypes material) {
+			String s = "";
+			switch(this) {
+				case SHAFT:
+					s = "crafting.shaft";
+				case GEAR:
+					s = "crafting.gear";
+					break;
+				case UNIT2:
+					s = "crafting.gear2x";
+					break;
+				case UNIT4:
+					s = "crafting.gear4x";
+					break;
+				case UNIT8:
+					s = "crafting.gear8x";
+					break;
+				case UNIT16:
+					s = "crafting.gear16x";
+					break;
+			}
+			return StatCollector.translateToLocal("material."+material.name())+" "+StatCollector.translateToLocal(s);
+		}
 	}
 
 }

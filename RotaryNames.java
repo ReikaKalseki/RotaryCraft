@@ -9,10 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public class RotaryNames {
 
@@ -194,5 +198,12 @@ public class RotaryNames {
 
 	public static String getCanolaName(int dmg) {
 		return getName(canolaNames, dmg);
+	}
+
+	public static String getGearPartName(int dmg) {
+		ItemStack is = ItemRegistry.GEARCRAFT.getStackOfMetadata(dmg);
+		GearboxTypes material = GearboxTypes.getMaterialFromCraftingItem(is);
+		int ratio = GearboxTypes.getRatioFromPartItem(is);
+		return GearPart.list[is.getItemDamage()%16].getLocalizedName(material);
 	}
 }

@@ -448,6 +448,8 @@ public enum ItemRegistry implements ItemEnum {
 				return StatCollector.translateToLocal(RotaryNames.powderNames[dmg]);
 			case MODINTERFACE:
 				return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
+			case GEARCRAFT:
+				return RotaryNames.getGearPartName(dmg);
 			case SHAFT:
 				return this.getBasicName();
 			case ENGINE:
