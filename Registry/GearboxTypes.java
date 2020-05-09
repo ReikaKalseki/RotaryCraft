@@ -72,16 +72,42 @@ public enum GearboxTypes {
 	}
 
 	public String getBaseGearboxTexture() {
-		return "geartex.png";
+		String tex = "geartex";
+		switch(this) {
+			case BEDROCK:
+				tex = tex+"b";
+				break;
+			case DIAMOND:
+				tex = tex+"d";
+				break;
+			case STONE:
+				tex = tex+"s";
+				break;
+			case TUNGSTEN:
+				tex = tex+"t";
+				break;
+			case WOOD:
+				tex = tex+"w";
+				break;
+			case LIVINGROCK:
+				tex = tex+"s_living";
+				break;
+			case LIVINGWOOD:
+				tex = tex+"w_living";
+				break;
+			default:
+				break;
+		}
+		return tex+".png";
 	}
 
 	public ItemStack getGearItem() {
-		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset+1);
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16+1);
 	}
 
 	public ItemStack getGearUnitItem(int ratio) {
 		int log = ReikaMathLibrary.logbase2(ratio);
-		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset+log+1);
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16+log+1);
 	}
 
 	public ItemStack getShaftUnitItem() {
@@ -89,7 +115,7 @@ public enum GearboxTypes {
 			return new ItemStack(Items.stick);
 		if (this == TUNGSTEN)
 			return STEEL.getShaftUnitItem();
-		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset);
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16);
 	}
 
 	public Object getMountItem() {
@@ -120,7 +146,7 @@ public enum GearboxTypes {
 	}
 
 	public ItemStack getGearboxItem(int ratio) {
-		ItemStack is = MachineRegistry.GEARBOX.getCraftedMetadataProduct(ratio);
+		ItemStack is = MachineRegistry.GEARBOX.getCraftedMetadataProduct(ReikaMathLibrary.logbase2(ratio)-1);
 		is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setString("type", this.name());
 		return is;

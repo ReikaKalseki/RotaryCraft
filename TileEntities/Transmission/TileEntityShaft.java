@@ -56,10 +56,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	private MaterialRegistry type;
 	private boolean failed = false;
 
-	@SideOnly(Side.CLIENT)
-	public boolean isVerticalRender;
-	@SideOnly(Side.CLIENT)
-	public boolean isCrossForRender;
+	private boolean isCrossForRender;
 
 	public TileEntityShaft(MaterialRegistry type) {
 		if (type == null)
@@ -73,6 +70,17 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public MaterialRegistry getShaftType() {
 		return type;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void setData(MaterialRegistry mat, boolean cross) {
+		type = mat;
+		isCrossForRender = cross;
+	}
+
+	public void setMaterialFromItem(ItemStack is) {
+		type = MaterialRegistry.getMaterialFromShaftItem(is);
+		this.syncAllData(true);
 	}
 
 	public void fail(World world, int x, int y, int z, boolean speed) {
@@ -297,8 +305,12 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		//ReikaJavaLibrary.pConsole(Arrays.toString(readtorque)+":"+Arrays.toString(readomega), Side.SERVER);
 	}
 
+	public boolean isVertical() {
+		return this.getBlockMetadata() >= 4;
+	}
+
 	public boolean isCross() {
-		return this.getBlockMetadata() >= 6;
+		return isCrossForRender || this.getBlockMetadata() >= 6;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int meta) {
@@ -628,7 +640,10 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			mat = MaterialRegistry.valueOf(NBT.getString("shafttype"));
 		}
 		else if (NBT.hasKey("type")) {
-			mat = MaterialRegistry.matList[NBT.getInteger("type")];
+			int idx = NBT.getInteger("type");
+			if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
+				idx++;
+			mat = MaterialRegistry.matList[idx];
 		}
 		type = mat;
 		super.readFromNBT(NBT);

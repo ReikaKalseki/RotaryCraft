@@ -72,7 +72,7 @@ public class RenderShaft extends RotaryTERenderer
 		}
 		float var13;
 
-		if (tile.isCrossForRender) {
+		if (tile.isCross()) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/crosstex.png"); // has own tex
 			switch(tile.getBlockMetadata()) {
 				case 0:
@@ -92,7 +92,7 @@ public class RenderShaft extends RotaryTERenderer
 					break;
 			}
 		}
-		else if (tile.isVerticalRender) {
+		else if (tile.isVertical()) {
 			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
 			var15.renderAll(tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
 		}
@@ -119,10 +119,10 @@ public class RenderShaft extends RotaryTERenderer
 		String name;
 		TileEntityShaft tile = (TileEntityShaft)te;
 		String tex = tile.getShaftType().getBaseShaftTexture();
-		if (tile.isCrossForRender) {
+		if (tile.isCross()) {
 			tex = "crosstex.png";
 		}
-		else if (tile.isVerticalRender) {
+		else if (tile.isVertical()) {
 			tex = "v"+tex;
 		}
 		return tex;

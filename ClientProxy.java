@@ -78,6 +78,7 @@ public class ClientProxy extends CommonProxy
 			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
 			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items2.png"),
 			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items3.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items4.png"),
 	};
 
 	private static final MultiSheetItemRenderer[] multisheets = {

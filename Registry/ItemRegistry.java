@@ -628,6 +628,8 @@ public enum ItemRegistry implements ItemEnum {
 				return RotaryNames.getNumberEngineTypes();
 			case GEARBOX:
 				return 1;
+			case GEARCRAFT:
+				return 16*GearboxTypes.typeList.length;
 			case FLYWHEEL:
 				return RotaryNames.getNumberFlywheelTypes();
 			case ADVGEAR:

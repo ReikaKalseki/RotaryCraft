@@ -94,6 +94,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		this.ratio = ratio;
 	}
 
+	public void setMaterialFromItem(ItemStack is) {
+		type = GearboxTypes.getMaterialFromGearboxItem(is);
+		this.syncAllData(true);
+	}
+
 	public int getMaxLubricant() {
 		return type.getMaxLubricant();
 	}
@@ -482,7 +487,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			gear = GearboxTypes.valueOf(NBT.getString("geartype"));
 		}
 		else if (NBT.hasKey("type")) {
-			gear = GearboxTypes.getFromMaterial(MaterialRegistry.matList[NBT.getInteger("type")]);
+			int idx = NBT.getInteger("type");
+			if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
+				idx++;
+			MaterialRegistry mat = MaterialRegistry.matList[idx];
+			gear = GearboxTypes.getFromMaterial(mat);
 		}
 		type = gear;
 		super.readFromNBT(NBT);

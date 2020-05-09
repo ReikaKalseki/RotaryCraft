@@ -181,26 +181,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		}
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
-			meta = gbx.getBlockMetadata();
 			if (gbx.getGearboxType() == null)
 				return null;
-			int dmg = gbx.getGearboxType().ordinal();
-			switch(gbx.getRatio()) {
-				case 4:
-					dmg += 5;
-					break;
-				case 8:
-					dmg += 10;
-					break;
-				case 16:
-					dmg += 15;
-					break;
-			}
-			return new ItemStack(ItemRegistry.GEARBOX.getItemInstance(), 1, dmg);
+			return gbx.getGearboxType().getGearboxItem(gbx.getRatio());
 		}
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
-			meta = sha.getBlockMetadata();
 			if (sha.isCross())
 				return RotaryAux.getShaftCrossItem();
 			if (sha.getShaftType() == null)

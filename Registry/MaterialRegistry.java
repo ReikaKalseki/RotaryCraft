@@ -89,7 +89,27 @@ public enum MaterialRegistry {
 	}
 
 	public String getBaseShaftTexture() {
-		return "shafttex.png";
+		String tex = "shafttex";
+		switch(this) {
+			case BEDROCK:
+				tex = tex+"b";
+				break;
+			case DIAMOND:
+				tex = tex+"d";
+				break;
+			case STONE:
+				tex = tex+"s";
+				break;
+			case TUNGSTEN:
+				tex = tex+"t";
+				break;
+			case WOOD:
+				tex = tex+"w";
+				break;
+			default:
+				break;
+		}
+		return tex+".png";
 	}
 
 	public boolean isHarvestablePickaxe(ItemStack tool) {

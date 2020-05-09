@@ -66,30 +66,26 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			return false;
 		if (!ep.canPlayerEdit(x, y, z, 0, is))
 			return false;
-		else
-		{
+		else {
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
 			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlock(), is.getItemDamage(), 3);
-			if (RotaryAux.isShaftCross(is)) {
-				TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
-				if (sha != null) {
-					//sha.type = MaterialRegistry.STEEL;
-					sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
-				}
-				return true;
-			}
 			TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 			if (sha != null) {
+				boolean cross = RotaryAux.isShaftCross(is);
+				sha.setMaterialFromItem(is);
+				if (cross) {
+					sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+				}
+				else {
+					sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
+				}
+				sha.setPlacer(ep);
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				//sha.type = MaterialRegistry.setType(is.getItemDamage());
+				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
+					sha.isFlipped = true;
+				}
 			}
-		}
-		TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
-		sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
-		sha.setPlacer(ep);
-		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
-			sha.isFlipped = true;
 		}
 		return true;
 	}
