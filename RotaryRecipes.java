@@ -94,6 +94,7 @@ import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 import blusunrize.immersiveengineering.api.energy.DieselHandler;
 import blusunrize.immersiveengineering.api.energy.DieselHandler.SqueezerRecipe;
@@ -1347,12 +1348,18 @@ public class RotaryRecipes {
 		MachineRegistry.FLYWHEEL.addMetaCrafting(2, "W", "M", 'W', ItemStacks.flywheelcore3, 'M', ItemStacks.mount);
 		MachineRegistry.FLYWHEEL.addMetaCrafting(3, "W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount);
 
-		MachineRegistry.SHAFT.addSizedOreRecipe(8, "BSB", "BBB", 'B', "plankWood", 'S', "stickWood");
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 1, "sSs", "sss", 's', ReikaItemHelper.stoneSlab, 'S', ItemStacks.stonerod);
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 2, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem);
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 3, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.tungstenshaft);
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 4, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
-		MachineRegistry.SHAFT.addSizedMetaCrafting(8, 5, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft);
+		for (MaterialRegistry mat : MaterialRegistry.matList) {
+			MachineRegistry.SHAFT.addSizedCrafting(8, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
+
+			Object m = mat.getMountItem();
+			ItemStack item = ReikaItemHelper.getSizedItemStack(mat.getShaftItem(), 8);
+			if (m == ItemStacks.mount) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(item, "S", "M", 'M', ItemStacks.mount, 'S', mat.getShaftUnitItem()));
+			}
+			else {
+				GameRegistry.addRecipe(new ShapedOreRecipe(item, "BSB", "BBB", 'B', m, 'S', mat.getShaftUnitItem()));
+			}
+		}
 
 		MachineRegistry.ENGINE.addMetaCrafting(EngineType.DC.ordinal(), "SSS", "SRs", "PRP", 'S', ItemStacks.steelingot, 'R', Items.redstone, 'P', ItemStacks.basepanel, 's', ItemStacks.shaftitem);
 		MachineRegistry.ENGINE.addSizedMetaCrafting(2, EngineType.WIND.ordinal(), "SSS", "SHS", "SSS", 'S', ItemStacks.prop, 'H', ItemStacks.hub);

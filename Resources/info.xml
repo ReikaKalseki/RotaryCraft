@@ -31,6 +31,7 @@
 		Iron: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Steel: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Gold: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Tungsten: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Diamond: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 	</material>
 	<shafts>
@@ -39,6 +40,7 @@
 		Wood: %dNm at %d rad/s
 		Stone: %dNm at %d rad/s
 		Steel: %dNm at %d rad/s
+		Tungsten: %dNm at %d rad/s
 		Diamond: %dNm at %d rad/s
 		Bedrock: Infinity
 	</shafts>

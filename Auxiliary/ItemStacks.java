@@ -26,6 +26,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public final class ItemStacks {
 
@@ -71,15 +72,15 @@ public final class ItemStacks {
 	public static final ItemStack fuelline 			= MachineRegistry.FUELLINE.getCraftedProduct();
 	public static final ItemStack bedpipe 			= MachineRegistry.BEDPIPE.getCraftedProduct();
 
-	public static final ItemStack shaftitem 		= GearboxTypes.STEEL.getShaftUnitItem();
 	public static final ItemStack gearunit	 		= GearboxTypes.STEEL.getGearUnitItem(2);
 	public static final ItemStack gearunit4	 		= GearboxTypes.STEEL.getGearUnitItem(4);
 	public static final ItemStack gearunit8	 		= GearboxTypes.STEEL.getGearUnitItem(8);
 	public static final ItemStack gearunit16 		= GearboxTypes.STEEL.getGearUnitItem(16);
-	public static final ItemStack tungstenshaft 		= GearboxTypes.TUNGSTEN.getShaftUnitItem();
-	public static final ItemStack diamondshaft 		= GearboxTypes.DIAMOND.getShaftUnitItem();
-	public static final ItemStack bedrockshaft 		= GearboxTypes.BEDROCK.getShaftUnitItem();
-	public static final ItemStack stonerod	 		= GearboxTypes.STONE.getShaftUnitItem();
+	public static final ItemStack shaftitem 		= MaterialRegistry.STEEL.getShaftUnitItem();
+	public static final ItemStack tungstenshaft 	= MaterialRegistry.TUNGSTEN.getShaftUnitItem();
+	public static final ItemStack diamondshaft 		= MaterialRegistry.DIAMOND.getShaftUnitItem();
+	public static final ItemStack bedrockshaft 		= MaterialRegistry.BEDROCK.getShaftUnitItem();
+	public static final ItemStack stonerod	 		= MaterialRegistry.STONE.getShaftUnitItem();
 
 	public static final ItemStack woodgear	 		= GearboxTypes.WOOD.getGearItem();
 	public static final ItemStack stonegear	 		= GearboxTypes.STONE.getGearItem();

@@ -12,6 +12,8 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public enum GearboxTypes {
 
 	WOOD(1, MaterialRegistry.WOOD),
@@ -121,11 +123,18 @@ public enum GearboxTypes {
 	}
 
 	public Object getMountItem() {
-		if (this == WOOD)
-			return "plankWood";
-		if (this == STONE)
-			return ReikaItemHelper.stoneSlab.asItemStack();
-		return ItemStacks.mount;
+		switch(this) {
+			case WOOD:
+				return "plankWood";
+			case STONE:
+				return ReikaItemHelper.stoneSlab.asItemStack();
+			case LIVINGWOOD:
+				return new ItemStack(GameRegistry.findBlock(ModList.BOTANIA.modLabel, "livingwood0Slab"));
+			case LIVINGROCK:
+				return new ItemStack(GameRegistry.findBlock(ModList.BOTANIA.modLabel, "livingrock0Slab"));
+			default:
+				return ItemStacks.mount;
+		}
 	}
 
 	public int getMaxLubricant() {
@@ -161,7 +170,7 @@ public enum GearboxTypes {
 	public static GearboxTypes getMaterialFromGearboxItem(ItemStack is) {
 		if (is.stackTagCompound != null && is.stackTagCompound.hasKey("type"))
 			return GearboxTypes.valueOf(is.stackTagCompound.getString("type"));
-		return getFromMaterial(MaterialRegistry.matList[is.getItemDamage()]);
+		return getFromMaterial(MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length-1]); //legacy
 	}
 
 	public static GearboxTypes getMaterialFromCraftingItem(ItemStack is) {

@@ -191,13 +191,13 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	private boolean verifySpeed(int speed, ForgeDirection dir) {
 		ItemStack is = inv[dir.ordinal()-2];
 		GearboxTypes mat = GearboxTypes.getMaterialFromCraftingItem(is);
-		return mat != null && mat.material.getMaxShaftSpeed() >= speed;
+		return mat != null && mat.material.getLimits().maxSpeed >= speed;
 	}
 
 	private boolean verifyTorque(int torque, ForgeDirection dir) {
 		ItemStack is = inv[dir.ordinal()-2];
 		GearboxTypes mat = GearboxTypes.getMaterialFromCraftingItem(is);
-		return mat != null && mat.material.getMaxShaftTorque() >= torque;
+		return mat != null && mat.material.getLimits().maxTorque >= torque;
 	}
 
 	private void breakItem(ForgeDirection dir) {

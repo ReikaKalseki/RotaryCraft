@@ -404,7 +404,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				item = ItemStacks.scrap.copy();
 				break;
 			case TUNGSTEN:
-				item = ItemStacks.tungstenflakes.copy();
+				item = ItemStacks.scrap.copy();
+				//item = ItemStacks.tungstenflakes.copy();
 				break;
 			case DIAMOND:
 				item = new ItemStack(Items.diamond, 1, 0);

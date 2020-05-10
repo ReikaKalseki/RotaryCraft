@@ -145,6 +145,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
 
 	public static final CreativeTabs tabRotary = new TabRotaryCraft();
+	public static final CreativeTabs tabPower = new TabRotaryPower();
 	public static final CreativeTabs tabRotaryItems = new TabRotaryItems();
 	public static final CreativeTabs tabRotaryTools = new TabRotaryTools();
 	public static final CreativeTabs tabModOres = new TabModOre();

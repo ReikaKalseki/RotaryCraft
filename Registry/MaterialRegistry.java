@@ -9,9 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -40,6 +43,8 @@ public enum MaterialRegistry {
 	private double rho;
 
 	public final int harvestLevel;
+
+	private LoadData limits;
 
 	public static final MaterialRegistry[] matList = values();
 
@@ -186,7 +191,7 @@ public enum MaterialRegistry {
 		return StatCollector.translateToLocal("material."+this.name().toLowerCase(Locale.ENGLISH));
 	}
 
-	public double getMaxShaftTorque() {
+	private double getMaxShaftTorque() {
 		if (this.isInfiniteStrength())
 			return Double.POSITIVE_INFINITY;
 		double r = 0.0625;
@@ -194,7 +199,7 @@ public enum MaterialRegistry {
 		return 0.5*Math.PI*r*r*r*tau/16D;
 	}
 
-	public double getMaxShaftSpeed() {
+	private double getMaxShaftSpeed() {
 		if (this.isInfiniteStrength())
 			return Double.POSITIVE_INFINITY;
 		double f = 1D/this.getSpeedForceExponent();
@@ -205,15 +210,32 @@ public enum MaterialRegistry {
 		return Math.pow(base, f);
 	}
 
-	public static int[] getAllLimitLoads() {
-		int[] loads = new int[matList.length*2-2];
-		for (int i = 0; i < loads.length; i += 2) {
-			int j = i/2;
-			MaterialRegistry m = matList[j];
-			loads[i] = (int)m.getMaxShaftTorque();
-			loads[i+1] = (int)m.getMaxShaftSpeed();
+	public static int[] getAllLimitLoadsAsInts() {
+		ArrayList<LoadData> li = getAllLimitLoads();
+		int[] ret = new int[li.size()*2];
+		for (int i = 0; i < li.size(); i++) {
+			LoadData l = li.get(i);
+			ret[i*2] = (int)l.maxTorque;
+			ret[i*2+1] = (int)l.maxSpeed;
 		}
-		return loads;
+		return ret;
+	}
+
+	public static ArrayList<LoadData> getAllLimitLoads() {
+		ArrayList<LoadData> li = new ArrayList();
+		for (MaterialRegistry m : MaterialRegistry.matList) {
+			if (m.isInfiniteStrength())
+				continue;
+			li.add(m.getLimits());
+		}
+		Collections.sort(li);
+		return li;
+	}
+
+	public LoadData getLimits() {
+		if (limits == null)
+			limits = new LoadData();
+		return limits;
 	}
 
 	public ItemStack getShaftItem() {
@@ -231,10 +253,52 @@ public enum MaterialRegistry {
 	}
 
 	public double getSpeedForceExponent() {
-		return 1-(0.11D*this.ordinal());
+		switch(this) {
+			case WOOD:
+			case STONE:
+			case STEEL:
+				return 1-(0.11D*this.ordinal());
+			case TUNGSTEN:
+				return 0.70;
+			case DIAMOND:
+				return 0.67;
+			default:
+				return 1;
+		}
+	}
+
+	public ItemStack getShaftUnitItem() {
+		if (this == WOOD)
+			return new ItemStack(Items.stick);
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(GearboxTypes.getFromMaterial(this).metaOffset*16);
+	}
+
+	public Object getMountItem() {
+		return GearboxTypes.getFromMaterial(this).getMountItem();
 	}
 
 	public String getShaftUnlocName() {
 		return "material."+this.name().toLowerCase(Locale.ENGLISH);
+	}
+
+	public class LoadData implements Comparable<LoadData> {
+
+		public final double maxSpeed;
+		public final double maxTorque;
+
+		private LoadData() {
+			maxSpeed = this.getOwner().getMaxShaftSpeed();
+			maxTorque = this.getOwner().getMaxShaftTorque();
+		}
+
+		@Override
+		public int compareTo(LoadData o) {
+			return this.getOwner().compareTo(o.getOwner());
+		}
+
+		private MaterialRegistry getOwner() {
+			return MaterialRegistry.this;
+		}
+
 	}
 }

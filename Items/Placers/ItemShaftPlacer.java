@@ -105,8 +105,8 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			MaterialRegistry mat = MaterialRegistry.getMaterialFromShaftItem(is);
-			double torque = mat.getMaxShaftTorque();
-			double speed = mat.getMaxShaftSpeed();
+			double torque = mat.getLimits().maxTorque;
+			double speed = mat.getLimits().maxSpeed;
 			li.add(String.format("Max Speed: %s", RotaryAux.formatSpeed(speed)));
 			li.add(String.format("Max Torque: %s", RotaryAux.formatTorque(torque)));
 		}

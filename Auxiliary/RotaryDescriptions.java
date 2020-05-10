@@ -461,6 +461,12 @@ public final class RotaryDescriptions {
 				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Sgold),
 				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Sgold),
 
+				RotaryAux.tungstenDensity,
+				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Ttungsten),
+				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Ttungsten),
+				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Stungsten),
+				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Stungsten),
+
 				ReikaEngLibrary.rhodiamond,
 				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Tdiamond),
 				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Tdiamond),
@@ -468,7 +474,7 @@ public final class RotaryDescriptions {
 				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Sdiamond)
 				);
 
-		addData(HandbookRegistry.SHAFTS, MaterialRegistry.getAllLimitLoads());
+		addData(HandbookRegistry.SHAFTS, MaterialRegistry.getAllLimitLoadsAsInts());
 		addData(HandbookRegistry.FLYWHEELS, Flywheels.WOOD.maxSpeed, Flywheels.STONE.maxSpeed, Flywheels.IRON.maxSpeed, Flywheels.GOLD.maxSpeed);
 
 		addData(HandbookRegistry.MODINTERFACE,
