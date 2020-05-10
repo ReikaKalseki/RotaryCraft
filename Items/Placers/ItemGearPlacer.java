@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
@@ -38,6 +39,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 
 	public ItemGearPlacer() {
 		super();
+		this.setCreativeTab(RotaryCraft.tabPower);
 	}
 
 	@Override
@@ -119,6 +121,8 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.GEARBOX.isAvailableInCreativeInventory()) {
 			for (GearboxTypes gear : GearboxTypes.typeList) {
+				if (!gear.isLoadable())
+					continue;
 				for (int r = 2; r <= 16; r *= 2) {
 					ItemStack item = gear.getGearboxItem(r);
 					if (item.stackTagCompound == null)

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -1655,5 +1656,11 @@ public enum MachineRegistry implements TileEnum {
 
 	public boolean isOpaque() {
 		return this.isSolidBottom();
+	}
+
+	public boolean isCreativeTabValid(CreativeTabs tab) {
+		if (this == BELT || this == CHAIN || this == POWERBUS || this == BUSCONTROLLER || TileEntityTransmissionMachine.class.isAssignableFrom(te))
+			return tab == RotaryCraft.tabPower;
+		return tab == RotaryCraft.tabRotary;
 	}
 }

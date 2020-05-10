@@ -34,6 +34,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.ItemMachineRenderer;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TutorialTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -61,6 +62,12 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 
 	public ItemMachinePlacer() {
 		super();
+	}
+
+	@Override
+	public CreativeTabs[] getCreativeTabs()
+	{
+		return new CreativeTabs[]{ RotaryCraft.tabRotary, RotaryCraft.tabPower };
 	}
 
 	@Override
@@ -240,18 +247,20 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				ItemMachineRenderer ir = ClientProxy.machineItems;
 				TileEntity te = m.createTEInstanceForRender(0);
 				ItemStack item = m.getCraftedProduct();
-				if (m.hasNBTVariants()) {
-					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
-					if (li.isEmpty())
-						li.add(new NBTTagCompound());
-					for (NBTTagCompound NBT : li) {
-						ItemStack is = m.getCraftedProduct();
-						is.stackTagCompound = NBT;
-						par3List.add(is);
+				if (m.isCreativeTabValid(par2CreativeTabs)) {
+					if (m.hasNBTVariants()) {
+						ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
+						if (li.isEmpty())
+							li.add(new NBTTagCompound());
+						for (NBTTagCompound NBT : li) {
+							ItemStack is = m.getCraftedProduct();
+							is.stackTagCompound = NBT;
+							par3List.add(is);
+						}
 					}
-				}
-				else {
-					par3List.add(item);
+					else {
+						par3List.add(item);
+					}
 				}
 			}
 		}

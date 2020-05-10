@@ -53,7 +53,7 @@ public class RotaryNames {
 	};
 
 	public static final String[] shaftPartNames = {
-			"crafting.panel", "crafting.ingot", "crafting.shaft", "crafting.mount", "", "",
+			"crafting.panel", "crafting.ingot", "", "crafting.mount", "", "",
 			"", "", "", "crafting.scrap", "crafting.ironscrap",
 			"crafting.woodcore", "crafting.stonecore", "crafting.ironcore", "crafting.goldcore", "crafting.worm"
 	};

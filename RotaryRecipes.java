@@ -1349,8 +1349,6 @@ public class RotaryRecipes {
 		MachineRegistry.FLYWHEEL.addMetaCrafting(3, "W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount);
 
 		for (MaterialRegistry mat : MaterialRegistry.matList) {
-			MachineRegistry.SHAFT.addSizedCrafting(8, "S", "M", 'M', ItemStacks.mount, 'S', ItemStacks.diamondshaft);
-
 			Object m = mat.getMountItem();
 			ItemStack item = ReikaItemHelper.getSizedItemStack(mat.getShaftItem(), 8);
 			if (m == ItemStacks.mount) {
