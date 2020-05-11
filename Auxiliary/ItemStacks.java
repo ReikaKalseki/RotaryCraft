@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -72,22 +73,27 @@ public final class ItemStacks {
 	public static final ItemStack fuelline 			= MachineRegistry.FUELLINE.getCraftedProduct();
 	public static final ItemStack bedpipe 			= MachineRegistry.BEDPIPE.getCraftedProduct();
 
-	public static final ItemStack gearunit	 		= GearboxTypes.STEEL.getGearUnitItem(2);
-	public static final ItemStack gearunit4	 		= GearboxTypes.STEEL.getGearUnitItem(4);
-	public static final ItemStack gearunit8	 		= GearboxTypes.STEEL.getGearUnitItem(8);
-	public static final ItemStack gearunit16 		= GearboxTypes.STEEL.getGearUnitItem(16);
+	public static final ItemStack gearunit	 		= GearboxTypes.STEEL.getPart(GearPart.UNIT2);
+	public static final ItemStack gearunit4	 		= GearboxTypes.STEEL.getPart(GearPart.UNIT4);
+	public static final ItemStack gearunit8	 		= GearboxTypes.STEEL.getPart(GearPart.UNIT8);
+	public static final ItemStack gearunit16 		= GearboxTypes.STEEL.getPart(GearPart.UNIT16);
 	public static final ItemStack shaftitem 		= MaterialRegistry.STEEL.getShaftUnitItem();
 	public static final ItemStack tungstenshaft 	= MaterialRegistry.TUNGSTEN.getShaftUnitItem();
 	public static final ItemStack diamondshaft 		= MaterialRegistry.DIAMOND.getShaftUnitItem();
 	public static final ItemStack bedrockshaft 		= MaterialRegistry.BEDROCK.getShaftUnitItem();
 	public static final ItemStack stonerod	 		= MaterialRegistry.STONE.getShaftUnitItem();
 
-	public static final ItemStack woodgear	 		= GearboxTypes.WOOD.getGearItem();
-	public static final ItemStack stonegear	 		= GearboxTypes.STONE.getGearItem();
-	public static final ItemStack steelgear 		= GearboxTypes.STEEL.getGearItem();
-	public static final ItemStack tungstengear 		= GearboxTypes.TUNGSTEN.getGearItem();
-	public static final ItemStack diamondgear	 	= GearboxTypes.DIAMOND.getGearItem();
-	public static final ItemStack bedrockgear	 	= GearboxTypes.BEDROCK.getGearItem();
+	public static final ItemStack woodgear	 		= GearboxTypes.WOOD.getPart(GearPart.GEAR);
+	public static final ItemStack stonegear	 		= GearboxTypes.STONE.getPart(GearPart.GEAR);
+	public static final ItemStack steelgear 		= GearboxTypes.STEEL.getPart(GearPart.GEAR);
+	public static final ItemStack tungstengear 		= GearboxTypes.TUNGSTEN.getPart(GearPart.GEAR);
+	public static final ItemStack diamondgear	 	= GearboxTypes.DIAMOND.getPart(GearPart.GEAR);
+	public static final ItemStack bedrockgear	 	= GearboxTypes.BEDROCK.getPart(GearPart.GEAR);
+
+	public static final ItemStack bearing 			= GearboxTypes.STEEL.getPart(GearPart.BEARING);
+	public static final ItemStack shaftcore 		= GearboxTypes.STEEL.getPart(GearPart.SHAFTCORE);
+	public static final ItemStack tungstenshaftcore	= GearboxTypes.TUNGSTEN.getPart(GearPart.SHAFTCORE);
+	public static final ItemStack diamondshaftcore 	= GearboxTypes.DIAMOND.getPart(GearPart.SHAFTCORE);
 
 	public static final ItemStack mount 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(3);
 	public static final ItemStack scrap 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(9);
@@ -125,9 +131,7 @@ public final class ItemStacks {
 	public static final ItemStack condenser 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(7);
 	public static final ItemStack goldcoil 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(8);
 	public static final ItemStack waterplate 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(13);
-	public static final ItemStack shaftcore 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(14);
 	public static final ItemStack igniter 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(15);
-	public static final ItemStack diamondshaftcore 	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(16);
 	public static final ItemStack compoundcompress	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(17);
 	public static final ItemStack aluminumcylinder	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(18);
 	public static final ItemStack highcombustor		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(19);
@@ -140,7 +144,6 @@ public final class ItemStacks {
 	public static final ItemStack screen 			= ItemRegistry.BORECRAFT.getStackOfMetadata(5);
 	public static final ItemStack mixer 			= ItemRegistry.BORECRAFT.getStackOfMetadata(6);
 	public static final ItemStack saw 				= ItemRegistry.BORECRAFT.getStackOfMetadata(7);
-	public static final ItemStack bearing 			= ItemRegistry.BORECRAFT.getStackOfMetadata(8);
 	public static final ItemStack belt 				= ItemRegistry.BORECRAFT.getStackOfMetadata(9);
 	public static final ItemStack ballbearing 		= ItemRegistry.BORECRAFT.getStackOfMetadata(10);
 	public static final ItemStack brake 			= ItemRegistry.BORECRAFT.getStackOfMetadata(11);

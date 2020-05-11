@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RedstoneCycleTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
@@ -232,6 +233,10 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 		if (this.hasLodestoneUpgrade()) {
 			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.LODESTONE.ordinal()));
 		}
+	}
+
+	public boolean hasCore() {
+		return ReikaItemHelper.matchStacks(inv[0], ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(inv[0], ItemStacks.tungstenshaftcore);
 	}
 
 }

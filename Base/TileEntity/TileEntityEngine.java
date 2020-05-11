@@ -548,7 +548,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	@Override
 	public final boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		if (type == EngineType.AC) {
-			if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.shaftcore)) {
+			if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(itemstack, ItemStacks.tungstenshaftcore)) {
 				if (itemstack.stackTagCompound == null)
 					return true;
 				if (itemstack.stackTagCompound.getInteger("magnet") == 0)

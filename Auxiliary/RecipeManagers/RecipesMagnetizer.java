@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -41,7 +41,8 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 		super(MachineRegistry.MAGNETIZER);
 		RecipeInterface.magnetizer = this;
 
-		this.addRecipe(ItemStacks.shaftcore, 0, 2, 1, false, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.shaftcore, 0, 2, 2, false, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.tungstenshaftcore, 0, 2, 1, false, RecipeLevel.CORE);
 		this.addRecipe(ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.MAGNETOSTATIC2.ordinal()), 32768, 1, 4, true, RecipeLevel.CORE);
 	}
 

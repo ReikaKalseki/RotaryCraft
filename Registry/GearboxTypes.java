@@ -2,6 +2,7 @@ package Reika.RotaryCraft.Registry;
 
 import java.util.Locale;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,6 +53,17 @@ public enum GearboxTypes {
 
 	public boolean consumesLubricant(int omega) {
 		return this.needsLubricant() && this != DIAMOND;
+	}
+
+	public float getLubricantConsumeRate(int omegain) {
+		switch(this) {
+			case STONE:
+				return Math.max(1, 1+omegain/8192F);
+			case TUNGSTEN:
+				return Math.min(1, 0.5F+Math.max(0, 0.03125F*(ReikaMathLibrary.logbase2(omegain)-2)));
+			default:
+				return 1;
+		}
 	}
 
 	public boolean generatesHeat(int omega, int Tamb) {
@@ -105,13 +117,8 @@ public enum GearboxTypes {
 		return tex+".png";
 	}
 
-	public ItemStack getGearItem() {
-		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16+1);
-	}
-
-	public ItemStack getGearUnitItem(int ratio) {
-		int log = ReikaMathLibrary.logbase2(ratio);
-		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16+log+1);
+	public ItemStack getPart(GearPart part) {
+		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16+part.ordinal());
 	}
 
 	public ItemStack getShaftUnitItem() {
@@ -120,6 +127,29 @@ public enum GearboxTypes {
 		if (this == TUNGSTEN)
 			return STEEL.getShaftUnitItem();
 		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16);
+	}
+
+	public Object getBaseItem() {
+		switch(this) {
+			case WOOD:
+				return "plankWood";
+			case STONE:
+				return new ItemStack(Blocks.stone);
+			case LIVINGWOOD:
+				return new ItemStack(GameRegistry.findBlock(ModList.BOTANIA.modLabel, "livingwood"));
+			case LIVINGROCK:
+				return new ItemStack(GameRegistry.findBlock(ModList.BOTANIA.modLabel, "livingrock"));
+			case STEEL:
+				return ItemStacks.steelingot;
+			case TUNGSTEN:
+				return ItemStacks.springtungsten;
+			case DIAMOND:
+				return Items.diamond;
+			case BEDROCK:
+				return ItemStacks.bedingot;
+			default:
+				return Blocks.air;
+		}
 	}
 
 	public Object getMountItem() {
@@ -234,7 +264,9 @@ public enum GearboxTypes {
 		UNIT2(),
 		UNIT4(),
 		UNIT8(),
-		UNIT16();
+		UNIT16(),
+		BEARING(),
+		SHAFTCORE();
 
 		public static final GearPart[] list = values();
 
@@ -263,8 +295,28 @@ public enum GearboxTypes {
 				case UNIT16:
 					s = "crafting.gear16x";
 					break;
+				case BEARING:
+					s = "crafting.bearing";
+					break;
+				case SHAFTCORE:
+					s = "crafting.shaftcore";
+					break;
 			}
 			return StatCollector.translateToLocal("material."+material.name().toLowerCase(Locale.ENGLISH))+" "+StatCollector.translateToLocal(s);
+		}
+
+		public static GearPart getGearUnitPartItemFromRatio(int r) {
+			switch(r) {
+				case 2:
+					return GearPart.UNIT2;
+				case 4:
+					return GearPart.UNIT4;
+				case 8:
+					return GearPart.UNIT8;
+				case 16:
+					return GearPart.UNIT16;
+			}
+			throw new IllegalArgumentException("Invalid gear ratio!");
 		}
 	}
 

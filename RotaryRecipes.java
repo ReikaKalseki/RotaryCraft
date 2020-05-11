@@ -44,7 +44,6 @@ import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -92,6 +91,7 @@ import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
 import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -413,10 +413,10 @@ public class RotaryRecipes {
 			ItemStack livingrock = new ItemStack(GameRegistry.findBlock(ModList.BOTANIA.modLabel, "livingrock"));
 			ItemStack livingrockslab = new ItemStack(GameRegistry.findBlock(ModList.BOTANIA.modLabel, "livingrock0Slab"));
 
-			GameRegistry.addRecipe(GearboxTypes.LIVINGWOOD.getGearItem(), " s ", "sss", " s ", 's', livingwood);
+			GameRegistry.addRecipe(GearboxTypes.LIVINGWOOD.getPart(GearPart.GEAR), " s ", "sss", " s ", 's', livingwood);
 			GameRegistry.addRecipe(GearboxTypes.LIVINGWOOD.getShaftUnitItem(), "  s", " s ", "s  ", 's', livingwood);
 
-			GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(GearboxTypes.LIVINGROCK.getGearItem(), 2), " s ", "sss", " s ", 's', livingrock);
+			GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(GearboxTypes.LIVINGROCK.getPart(GearPart.GEAR), 2), " s ", "sss", " s ", 's', livingrock);
 			GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(GearboxTypes.LIVINGROCK.getShaftUnitItem(), 2), "  s", " s ", "s  ", 's', livingrock);
 		}
 
@@ -847,7 +847,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.WETTER.addCrafting("S S", "gmg", "SPS", 'g', Blocks.glass_pane, 'm', ItemStacks.mixer, 'P', ItemStacks.basepanel, 'S', ItemStacks.steelingot);
 
-		MachineRegistry.CHUNKLOADER.addCrafting("sSs", "BSB", "PGP", 'B', ItemStacks.steelingot, 'S', ItemStacks.bedrockshaft, 's', Items.nether_star, 'P', ItemStacks.basepanel, 'G', GearboxTypes.BEDROCK.getGearUnitItem(16));
+		MachineRegistry.CHUNKLOADER.addCrafting("sSs", "BSB", "PGP", 'B', ItemStacks.steelingot, 'S', ItemStacks.bedrockshaft, 's', Items.nether_star, 'P', ItemStacks.basepanel, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
 
 		MachineRegistry.DROPS.addCrafting("PSP", "PDP", "PSP", 'S', ItemStacks.steelingot, 'D', ItemStacks.drill, 'P', ItemStacks.basepanel);
 
@@ -890,6 +890,9 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.compoundcompress, new Object[]{
 				" tS", "tst", "St ", 'S', ItemStacks.compressor, 's', ItemStacks.shaftcore, 't', ItemStacks.tungsteningot});
 
+		for (GearboxTypes gear : GearboxTypes.typeList) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(gear.getPart(GearPart.SHAFTCORE), new Object[]{"  s", " S ", "s  ", 'S', gear.getBaseItem(), 's', gear.getShaftUnitItem()}));
+		}
 		GameRegistry.addRecipe(ItemStacks.shaftcore, new Object[]{
 				"  s", " S ", "s  ", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
 		GameRegistry.addRecipe(ItemStacks.diamondshaftcore, new Object[]{
@@ -955,8 +958,17 @@ public class RotaryRecipes {
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.belt, DifficultyEffects.BELTCRAFT.getInt()), new Object[]{
 				"LLL", "LSL", "LLL", 'L', Items.leather, 'S', ItemStacks.steelingot});
-		GameRegistry.addRecipe(ItemStacks.bearing, new Object[]{
+
+		GameRegistry.addRecipe(GearboxTypes.STONE.getPart(GearPart.BEARING), new Object[]{
+				"LLL", "LSL", "LLL", 'L', ItemStacks.ballbearing, 'S', ItemStacks.stonegear});
+		GameRegistry.addRecipe(GearboxTypes.STEEL.getPart(GearPart.BEARING), new Object[]{
 				"LLL", "LSL", "LLL", 'L', ItemStacks.ballbearing, 'S', ItemStacks.steelingot});
+		GameRegistry.addRecipe(GearboxTypes.TUNGSTEN.getPart(GearPart.BEARING), new Object[]{
+				"LLL", "LSL", "LLL", 'L', ItemStacks.ballbearing, 'S', ItemStacks.springtungsten});
+		GameRegistry.addRecipe(GearboxTypes.DIAMOND.getPart(GearPart.BEARING), new Object[]{
+				"LLL", "LSL", "LLL", 'L', ItemStacks.ballbearing, 'S', ItemStacks.diamondgear});
+		RecipesBlastFurnace.getRecipes().add3x3Crafting(GearboxTypes.BEDROCK.getPart(GearPart.BEARING), 1000, 2, 0, "LLL", "LSL", "LLL", 'L', ItemStacks.bedrockdust, 'S', ItemStacks.bearing);
+
 		GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, 4), ItemStacks.steelingot);
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, 16), "SS", "SS", 'S', ItemStacks.steelingot);
 
@@ -981,23 +993,32 @@ public class RotaryRecipes {
 		GameRegistry.addRecipe(ItemStacks.bulb, new Object[]{
 				"GGG", "BDB", "BRB", 'D', Items.nether_star, 'G', Blocks.glowstone, 'R', Items.redstone, 'B', Items.blaze_rod});
 
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.steelgear, DifficultyEffects.PARTCRAFT.getInt()), new Object[]{
-				" B ", "BBB", " B ", 'B', ItemStacks.steelingot});
 
 		for (GearboxTypes gear : GearboxTypes.typeList) {
 			if (!gear.isLoadable())
 				continue;
-			GameRegistry.addRecipe(gear.getGearUnitItem(2), new Object[]{
-					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getGearItem()});
-			GameRegistry.addRecipe(gear.getGearUnitItem(4), new Object[]{
-					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getGearUnitItem(2)});
-			GameRegistry.addRecipe(gear.getGearUnitItem(8), new Object[]{
-					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getGearUnitItem(4), 'g', gear.getGearUnitItem(2)});
-			GameRegistry.addRecipe(gear.getGearUnitItem(16), new Object[]{
-					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getGearUnitItem(8), 'g', gear.getGearUnitItem(2)});
-			GameRegistry.addRecipe(gear.getGearUnitItem(16), new Object[]{
-					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getGearUnitItem(4)});
+			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT2), new Object[]{
+					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.GEAR)});
+			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT4), new Object[]{
+					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT2)});
+			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT8), new Object[]{
+					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT4), 'g', gear.getPart(GearPart.UNIT2)});
+			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT16), new Object[]{
+					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT8), 'g', gear.getPart(GearPart.UNIT2)});
+			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT16), new Object[]{
+					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT4)});
 		}
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.woodgear, new Object[]{
+				" W ", "WWW", " W ", 'W', "plankWood"}));
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.stonegear, 2), new Object[]{
+				" W ", "WWW", " W ", 'W', Blocks.stone});
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.steelgear, DifficultyEffects.PARTCRAFT.getInt()), new Object[]{
+				" B ", "BBB", " B ", 'B', ItemStacks.steelingot});
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.tungstengear, 5*DifficultyEffects.PARTCRAFT.getInt()/3), new Object[]{
+				" W ", "WWW", " W ", 'W', ItemStacks.springtungsten});
+		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.diamondgear, 8*DifficultyEffects.PARTCRAFT.getInt()/3), new Object[]{
+				" W ", "WGW", " W ", 'W', Items.diamond, 'G', ItemStacks.tungstengear});
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.stonerod, 2), new Object[]{
 				"  B", " B ", "B  ", 'B', Blocks.stone});
@@ -1014,15 +1035,6 @@ public class RotaryRecipes {
 
 		GameRegistry.addRecipe(ItemStacks.wormgear, new Object[]{
 				"S  ", " G ", "  S", 'S', ItemStacks.shaftitem, 'G', ItemStacks.steelgear});
-
-		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.woodgear, new Object[]{
-				" W ", "WWW", " W ", 'W', "plankWood"}));
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.stonegear, 2), new Object[]{
-				" W ", "WWW", " W ", 'W', Blocks.stone});
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.diamondgear, 8), new Object[]{
-				" W ", "WGW", " W ", 'W', Items.diamond, 'G', ItemStacks.tungstengear});
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.tungstengear, 5), new Object[]{
-				" W ", "WWW", " W ", 'W', ItemStacks.springtungsten});
 
 		params = new Object[]{"bWb", "WWW", "bWb", 'b', ItemStacks.bedrockdust, 'W', ItemStacks.steelingot};
 		//GameRegistry.addRecipe(new ItemStack(ItemStacks.bedrockgear, 8, ItemStacks.bedrockgear.getItemDamage()), params);
@@ -1145,7 +1157,7 @@ public class RotaryRecipes {
 		ItemRegistry.GEARUPGRADE.addMetaBlastRecipe(1200, 2, 0, "sSS", "SsS", "SSG", 'S', ItemStacks.steelingot, 'G', Blocks.glass_pane, 's', ItemStacks.bedrockshaft);
 
 		for (int i = 1; i <= 4; i++) {
-			ItemStack gear = GearboxTypes.BEDROCK.getGearUnitItem(ReikaMathLibrary.intpow2(2, i));
+			ItemStack gear = GearboxTypes.BEDROCK.getPart(GearPart.list[GearPart.UNIT2.ordinal()+i-1]);
 			ItemRegistry.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(ItemRegistry.GEARUPGRADE.getStackOfMetadata(i), ItemRegistry.GEARUPGRADE.getStackOfMetadata(0), gear));
 		}
 	}
@@ -1213,9 +1225,9 @@ public class RotaryRecipes {
 			//	GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(mat.getGearUnitItem(k), 2), mat.getGearUnitItem(k*2));
 			//}
 			//anything else is not an even split
-			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(gear.getGearUnitItem(4), 2), gear.getGearUnitItem(16));
-			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(gear.getGearUnitItem(2), 2), gear.getGearUnitItem(4));
-			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(gear.getGearItem(), 2), gear.getGearUnitItem(2));
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(gear.getPart(GearPart.UNIT4), 2), gear.getPart(GearPart.UNIT16));
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(gear.getPart(GearPart.UNIT2), 2), gear.getPart(GearPart.UNIT4));
+			GameRegistry.addShapelessRecipe(ReikaItemHelper.getSizedItemStack(gear.getPart(GearPart.GEAR), 2), gear.getPart(GearPart.UNIT2));
 		}
 
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);
@@ -1336,12 +1348,12 @@ public class RotaryRecipes {
 	private static void addMultiTypes() {
 
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(0, "SW ", " GS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftitem, 'W', ItemStacks.wormgear, 'G', ItemStacks.steelgear); //Worm gear
-		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, "BSB", "BSB", "sMc", 'c', ItemStacks.screen, 's', ItemStacks.pcb, 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft, 'B', ItemStacks.bearing); //CVT
+		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, "BSB", "BSB", "sMc", 'c', ItemStacks.screen, 's', ItemStacks.pcb, 'M', ItemStacks.mount, 'S', ItemStacks.bedrockshaft, 'B', GearboxTypes.DIAMOND.getPart(GearPart.BEARING)); //CVT
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(2, "BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftcore, 'B', ItemStacks.brake, 'C', ItemStacks.tenscoil); //Coil
 		NBTTagCompound NBT = new NBTTagCompound();
 		NBT.setBoolean("bedrock", true);
 		MachineRegistry.ADVANCEDGEARS.addNBTMetaCrafting(NBT, 2, "BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftcore, 'B', ItemStacks.brake, 'C', ItemStacks.bedrockcoil); //Coil
-		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(3, "SGS", "SGS", "BMB", 'S', ItemStacks.bedrockshaft, 'B', ItemStacks.bearing, 'M', ItemStacks.mount, 'G', GearboxTypes.BEDROCK.getGearUnitItem(16)); //256x
+		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(3, "SGS", "SGS", "BMB", 'S', ItemStacks.bedrockshaft, 'B', GearboxTypes.TUNGSTEN.getPart(GearPart.BEARING), 'M', ItemStacks.mount, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16)); //256x
 
 		MachineRegistry.FLYWHEEL.addMetaCrafting(0, "W", "M", 'W', ItemStacks.flywheelcore, 'M', ItemStacks.mount);
 		MachineRegistry.FLYWHEEL.addMetaCrafting(1, "W", "M", 'W', ItemStacks.flywheelcore2, 'M', ItemStacks.mount);
@@ -1398,11 +1410,12 @@ public class RotaryRecipes {
 			Object m = gear.getMountItem();
 			for (int r = 2; r <= 16; r *= 2) {
 				ItemStack item = addDamageNBT(gear.getGearboxItem(r));
+				ItemStack unit = gear.getPart(GearPart.getGearUnitPartItemFromRatio(r));
 				if (m == ItemStacks.mount) {
-					MachineRegistry.GEARBOX.addRecipe(item, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', gear.getGearUnitItem(r)});
+					MachineRegistry.GEARBOX.addRecipe(item, new Object[]{"G", "M", 'M', ItemStacks.mount, 'G', unit});
 				}
 				else {
-					MachineRegistry.GEARBOX.addRecipe(new ShapedOreRecipe(item, new Object[]{"MGM", "MMM", 'M', m, 'G', gear.getGearUnitItem(r)}));
+					MachineRegistry.GEARBOX.addRecipe(new ShapedOreRecipe(item, new Object[]{"MGM", "MMM", 'M', m, 'G', unit}));
 				}
 			}
 		}

@@ -90,6 +90,7 @@ import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
 import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -246,7 +247,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
-			if (is != null && ReikaItemHelper.matchStacks(is, GearboxTypes.BEDROCK.getGearUnitItem(2))) {
+			if (is != null && ReikaItemHelper.matchStacks(is, GearboxTypes.BEDROCK.getPart(GearPart.UNIT2))) {
 				TileEntitySplitter tile = (TileEntitySplitter)te;
 				if (!tile.isBedrock()) {
 					tile.setBedrock();

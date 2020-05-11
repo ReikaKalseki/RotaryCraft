@@ -32,6 +32,8 @@ import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -179,7 +181,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return false;
 		}
 		if (tile != null) {
-			ItemStack fix = tile.getGearboxType().getGearItem();
+			ItemStack fix = tile.getGearboxType().getPart(GearPart.GEAR);
 			ItemStack held = ep.getCurrentEquippedItem();
 			if (held != null) {
 				if ((ReikaItemHelper.matchStacks(fix, held))) {
@@ -200,6 +202,19 @@ public class BlockGearbox extends BlockModelledMachine {
 							tile.addLubricant(amt);
 							if (!ep.capabilities.isCreativeMode)
 								ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, held.stackSize, 0));
+						}
+					}
+					return true;
+				}
+				else if (ReikaItemHelper.matchStacks(held, GearboxTypes.DIAMOND.getPart(GearPart.BEARING))) {
+					if (tile.getGearboxType().consumesLubricant(131072) && !tile.hasDiamondUpgrade) {
+						tile.hasDiamondUpgrade = true;
+						if (!ep.capabilities.isCreativeMode) {
+							int num = held.stackSize;
+							if (num > 1)
+								ep.inventory.setInventorySlotContents(ep.inventory.currentItem, ReikaItemHelper.getSizedItemStack(held, num-1));
+							else
+								ep.inventory.setInventorySlotContents(ep.inventory.currentItem, null);
 						}
 					}
 					return true;

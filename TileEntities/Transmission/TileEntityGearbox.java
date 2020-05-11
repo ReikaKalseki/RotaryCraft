@@ -72,6 +72,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	private int temperature;
 	private StepTimer tempTimer = new StepTimer(20);
 
+	public boolean hasDiamondUpgrade;
+
 	private static final int MAX_DAMAGE = 480;
 
 	public TileEntityGearbox(GearboxTypes type) {
@@ -243,7 +245,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			}
 			else if (!world.isRemote && type.consumesLubricant(omegain)) {
 				if (tickcount >= 80) {
-					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(omegain, 2)/4)));
+					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*type.getLubricantConsumeRate(omegain)*ReikaMathLibrary.logbase(omegain, 2)/4)));
 					tickcount = 0;
 				}
 			}
@@ -459,6 +461,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		NBT.setInteger("damage", damage);
 		NBT.setBoolean("fail", failed);
 		NBT.setInteger("temp", temperature);
+		NBT.setBoolean("upgrade", hasDiamondUpgrade);
 
 		tank.writeToNBT(NBT);
 	}
@@ -471,6 +474,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		damage = NBT.getInteger("damage");
 		failed = NBT.getBoolean("fail");
 		temperature = NBT.getInteger("temp");
+		hasDiamondUpgrade = NBT.getBoolean("upgrade");
 
 		tank.readFromNBT(NBT);
 	}
@@ -679,6 +683,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		//if (this.getGearboxType().isDamageableGear())
 		NBT.setInteger("damage", this.getDamage());
 		NBT.setInteger("lube", this.getLubricant());
+		NBT.setBoolean("bearing", hasDiamondUpgrade);
 		return NBT;
 	}
 
@@ -687,6 +692,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		if (tag != null) {
 			damage = tag.getInteger("damage");
 			this.setLubricant(tag.getInteger("lube"));
+			hasDiamondUpgrade = tag.getBoolean("bearing");
 		}
 	}
 

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -259,7 +259,11 @@ public class ModelGearbox extends RotaryModelBase
 		Shape9.render(te, f5);
 		Shape10.render(te, f5);
 		Shape11.render(te, f5);
+
+		if (li != null && !li.isEmpty() && ((Boolean)li.get(0)))
+			GL11.glColor4f(0.35F, 0.82F, 1F, 1F);
 		Shape28.render(te, f5);
+		GL11.glColor4f(1, 1, 1, 1);
 
 		double d1 = 0;
 		double d2 = 0.9025;

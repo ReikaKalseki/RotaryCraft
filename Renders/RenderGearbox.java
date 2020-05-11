@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Renders;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
@@ -28,6 +29,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -111,19 +113,20 @@ public class RenderGearbox extends RotaryTERenderer
 					break;
 			}
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+			ArrayList li = ReikaJavaLibrary.makeListFrom(tile.hasDiamondUpgrade);
 
 			switch(tile.getRatio()) {
 				case 2:
-					var14.renderAll(tile, null, -tile.phi);
+					var14.renderAll(tile, li, -tile.phi);
 					break;
 				case 4:
-					var15.renderAll(tile, null, -tile.phi);
+					var15.renderAll(tile, li, -tile.phi);
 					break;
 				case 8:
-					var16.renderAll(tile, null, -tile.phi);
+					var16.renderAll(tile, li, -tile.phi);
 					break;
 				case 16:
-					var17.renderAll(tile, null, -tile.phi);
+					var17.renderAll(tile, li, -tile.phi);
 					break;
 			}
 

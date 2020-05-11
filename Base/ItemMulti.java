@@ -157,7 +157,7 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int par4, boolean par5) {
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore)) {
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(is, ItemStacks.tungstenshaftcore)) {
 			if (is.stackTagCompound != null) {
 				int mag = is.stackTagCompound.getInteger("magnet");
 				if (mag > 0) {
@@ -271,13 +271,18 @@ public class ItemMulti extends ItemBasic {
 		else {*/
 		for (int i = 0; i < j; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
-			if (ItemRegistry.GEARCRAFT.matchItem(item) && item.getItemDamage()%16 >= GearPart.list.length) {
-				continue;
+			if (ItemRegistry.GEARCRAFT.matchItem(item)) {
+				if (!GearboxTypes.getMaterialFromCraftingItem(item).isLoadable())
+					continue;
+				if (item.getItemDamage()%16 >= GearPart.list.length) {
+					continue;
+				}
 			}
-			if (Strings.isNullOrEmpty(this.getUnlocalizedName(item)))
+			String unloc = this.getUnlocalizedName(item);
+			if (Strings.isNullOrEmpty(unloc) || unloc.endsWith("."))
 				continue;
 			par3List.add(item);
-			if (ReikaItemHelper.matchStacks(item, ItemStacks.shaftcore)) {
+			if (ReikaItemHelper.matchStacks(item, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(item, ItemStacks.tungstenshaftcore)) {
 				ItemStack mag = item.copy();
 				if (DragonAPICore.isReikasComputer()) {
 					mag.stackTagCompound = new NBTTagCompound();

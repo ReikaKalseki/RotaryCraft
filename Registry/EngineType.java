@@ -206,7 +206,7 @@ public enum EngineType {
 		if (this == SPORT)
 			return is.getItem() == ItemRegistry.ETHANOL.getItemInstance() || this.isAdditive(is);
 		if (this == AC)
-			return ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore);
+			return ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(is, ItemStacks.tungstenshaftcore);
 		return false;
 	}
 

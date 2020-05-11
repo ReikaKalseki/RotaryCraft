@@ -42,7 +42,7 @@ public class TileEntityACEngine extends TileEntityEngine implements Magnetizatio
 		ItemStack is = inv[0];
 		if (is == null)
 			return false;
-		if (!ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore))
+		if (!ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) && !ReikaItemHelper.matchStacks(is, ItemStacks.tungstenshaftcore))
 			return false;
 		if (is.stackTagCompound == null)
 			return false;
@@ -55,8 +55,10 @@ public class TileEntityACEngine extends TileEntityEngine implements Magnetizatio
 		boolean ac = redstone.isAlternating();
 
 		if (!world.isRemote && ac && timer.checkCap("fuel")) {
-			int m = is.stackTagCompound.getInteger("magnet");
-			this.magnetize(is, m-1);
+			if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) || rand.nextBoolean()) {
+				int m = is.stackTagCompound.getInteger("magnet");
+				this.magnetize(is, m-1);
+			}
 		}
 
 		return ac;
