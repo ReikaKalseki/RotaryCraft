@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,6 +24,8 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ExtractorBonus;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -151,6 +153,23 @@ public class NEI_RotaryConfig implements IConfigureNEI {
 		}
 
 		ArrayList<ItemStack> li = new ArrayList();
+		ArrayList<ItemStack> li2 = new ArrayList();
+		for (GearboxTypes gear : GearboxTypes.typeList) {
+			if (gear.isLoadable()) {
+				li.add(gear.getGearboxItem(2));
+				li.add(gear.getGearboxItem(4));
+				li.add(gear.getGearboxItem(8));
+				li.add(gear.getGearboxItem(16));
+
+				for (GearPart p : GearPart.list) {
+					li2.add(gear.getPart(p));
+				}
+			}
+		}
+		API.setItemListEntries(ItemRegistry.GEARBOX.getItemInstance(), li);
+		API.setItemListEntries(ItemRegistry.GEARCRAFT.getItemInstance(), li2);
+
+		li = new ArrayList();
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (m.isAvailableInCreativeInventory() && !m.hasCustomPlacerItem())

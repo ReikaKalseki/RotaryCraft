@@ -435,7 +435,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
 		String ore = lb.containsKey("ore_input") ? lb.getString("ore_input") : null;

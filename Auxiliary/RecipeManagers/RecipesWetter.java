@@ -196,7 +196,7 @@ public class RecipesWetter extends RecipeHandler implements WetterManager {
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);

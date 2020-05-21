@@ -55,6 +55,10 @@ public enum GearboxTypes {
 		return this.needsLubricant() && this != DIAMOND;
 	}
 
+	public boolean acceptsDiamondUpgrade() {
+		return this.consumesLubricant(131072) && this != STONE;
+	}
+
 	public float getLubricantConsumeRate(int omegain) {
 		switch(this) {
 			case STONE:

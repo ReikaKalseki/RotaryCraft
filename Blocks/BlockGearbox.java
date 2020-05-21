@@ -207,7 +207,7 @@ public class BlockGearbox extends BlockModelledMachine {
 					return true;
 				}
 				else if (ReikaItemHelper.matchStacks(held, GearboxTypes.DIAMOND.getPart(GearPart.BEARING))) {
-					if (tile.getGearboxType().consumesLubricant(131072) && !tile.hasDiamondUpgrade) {
+					if (tile.getGearboxType().acceptsDiamondUpgrade() && !tile.hasDiamondUpgrade) {
 						tile.hasDiamondUpgrade = true;
 						if (!ep.capabilities.isCreativeMode) {
 							int num = held.stackSize;

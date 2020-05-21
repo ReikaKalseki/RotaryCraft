@@ -246,7 +246,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
 		LuaBlock fluid = lb.getChild("output_fluid");
 		String s = fluid.getString("type");

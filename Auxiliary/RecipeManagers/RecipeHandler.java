@@ -27,6 +27,7 @@ import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient.IngredientIDHandler;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
@@ -241,25 +242,30 @@ public abstract class RecipeHandler implements IngredientIDHandler {
 		for (LuaBlock lb : crl.getEntries()) {
 			Exception e = null;
 			boolean flag = false;
+			String n = lb.getString("type");
 			try {
-				flag = this.addCustomRecipe(lb, crl);
+				if (n == null)
+					throw new IllegalArgumentException("Custom recipes require a specified name!");
+				if (!ReikaStringParser.isValidVariableName(n))
+					throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
+				flag = this.addCustomRecipe(n, lb, crl);
 			}
 			catch (Exception ex) {
 				e = ex;
 				flag = false;
 			}
 			if (flag) {
-				RotaryCraft.logger.log("Loaded custom recipe '"+lb.getString("type")+"' for "+machine.name()+"");
+				RotaryCraft.logger.log("Loaded custom recipe '"+n+"' for "+machine.name()+"");
 			}
 			else {
-				RotaryCraft.logger.logError("Could not load custom recipe '"+lb.getString("type")+"' for "+machine.name()+"");
+				RotaryCraft.logger.logError("Could not load custom recipe '"+n+"' for "+machine.name()+"");
 				if (e != null)
 					e.printStackTrace();
 			}
 		}
 	}
 
-	protected abstract boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception;
+	protected abstract boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception;
 
 	protected final void verifyOutputItem(ItemStack is) {
 		if (is.getItem() instanceof ItemBlockPlacer || is.getItem() == ItemRegistry.ETHANOL.getItemInstance())

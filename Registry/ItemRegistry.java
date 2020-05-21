@@ -865,6 +865,8 @@ public enum ItemRegistry implements ItemEnum {
 		switch(this) {
 			case SPRING:
 			case STRONGCOIL:
+			case GEARBOX:
+			case GEARCRAFT:
 				return false;
 			default:
 				return true;

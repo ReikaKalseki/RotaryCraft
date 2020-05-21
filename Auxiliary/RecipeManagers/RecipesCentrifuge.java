@@ -496,7 +496,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
 		FluidOut fo = null;
 		ChancedOutputList co = new ChancedOutputList(false);

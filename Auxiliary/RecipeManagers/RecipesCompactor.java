@@ -163,7 +163,7 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);

@@ -305,6 +305,10 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			}
 
 			ItemStack out = ReikaItemHelper.lookupItem(ModList.RAILCRAFT, "ingot", 0);
+			if (out == null) {
+				List<ItemStack> li = OreDictionary.getOres("ingotSteel");
+				out = li.isEmpty() ? ItemStacks.steelingot.copy() : li.get(0);
+			}
 			ItemStack[] outarr = ReikaArrayHelper.getArrayOf(out, items.length);
 			outarr[outarr.length-2] = new ItemStack(Items.iron_ingot);
 
@@ -394,7 +398,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);

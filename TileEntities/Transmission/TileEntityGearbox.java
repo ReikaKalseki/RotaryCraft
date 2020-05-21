@@ -243,7 +243,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 					}
 				}
 			}
-			else if (!world.isRemote && type.consumesLubricant(omegain)) {
+			else if (!world.isRemote && type.consumesLubricant(omegain) && !hasDiamondUpgrade) {
 				if (tickcount >= 80) {
 					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*type.getLubricantConsumeRate(omegain)*ReikaMathLibrary.logbase(omegain, 2)/4)));
 					tickcount = 0;

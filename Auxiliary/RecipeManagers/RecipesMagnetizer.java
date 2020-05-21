@@ -131,7 +131,7 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
 		int speed = lb.getInt("min_speed");
 		int spuT = lb.getInt("speed_per_microtesla");

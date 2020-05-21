@@ -167,7 +167,7 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
 		String fluid = lb.getString("input_fluid");
