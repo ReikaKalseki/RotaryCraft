@@ -313,47 +313,52 @@ public class ItemMulti extends ItemBasic {
 	public String getUnlocalizedName(ItemStack is) {
 		int d = is.getItemDamage();
 		String s = super.getUnlocalizedName();
-		switch (ItemRegistry.getEntryByID(this)) {
-			case SHAFTCRAFT:
-				s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
-				break;
-			case ENGINECRAFT:
-				s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
-				break;
-			case MISCCRAFT:
-				s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
-				break;
-			case BORECRAFT:
-				s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
-				break;
-			case EXTRACTS:
-				s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
-				break;
-			case COMPACTS:
-				s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
-				break;
-			case ENGINE:
-				s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
-				break;
-			case POWDERS:
-				s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
-				break;
-			case SHAFT:
-				s = MaterialRegistry.matList[d].getShaftUnlocName();
-				break;
-			case GEARBOX:
-				//s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
-				break;
-			case MODINTERFACE:
-				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
-				break;
-			case GEARCRAFT:
-				s = super.getUnlocalizedName() + "." + GearboxTypes.getMaterialFromCraftingItem(is)+"."+GearPart.list[d%16];
-				break;
-			default:
-				break;
+		try {
+			switch (ItemRegistry.getEntryByID(this)) {
+				case SHAFTCRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
+					break;
+				case ENGINECRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
+					break;
+				case MISCCRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
+					break;
+				case BORECRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
+					break;
+				case EXTRACTS:
+					s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
+					break;
+				case COMPACTS:
+					s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
+					break;
+				case ENGINE:
+					s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
+					break;
+				case POWDERS:
+					s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
+					break;
+				case SHAFT:
+					s = MaterialRegistry.matList[d].getShaftUnlocName();
+					break;
+				case GEARBOX:
+					//s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
+					break;
+				case MODINTERFACE:
+					s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
+					break;
+				case GEARCRAFT:
+					s = super.getUnlocalizedName() + "." + GearboxTypes.getMaterialFromCraftingItem(is)+"."+GearPart.list[d%16];
+					break;
+				default:
+					break;
+			}
+			return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
 		}
-		return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
+		catch (Exception e) {
+			return "Invalid item: "+e.toString();
+		}
 	}
 
 	/*

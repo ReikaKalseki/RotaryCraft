@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -107,6 +108,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 
 		if (!is.stackTagCompound.hasKey("type")) {
 			par3List.add("Legacy; craft into new version");
+			par3List.add(EnumChatFormatting.RED+"DO NOT PLACE");
 		}
 
 		if (is.stackTagCompound.hasKey("lube") && mat.needsLubricant()) {

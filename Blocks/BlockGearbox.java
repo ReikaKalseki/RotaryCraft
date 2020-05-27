@@ -25,6 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
 import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -125,10 +126,8 @@ public class BlockGearbox extends BlockModelledMachine {
 			return;
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (gbx != null) {
-			int type = gbx.getGearboxType().ordinal();
-			int ratio = gbx.getBlockMetadata()/4;
-			ItemStack todrop = ItemRegistry.GEARBOX.getStackOfMetadata(type+5*ratio); //drop gearbox item
-			todrop.stackTagCompound = gbx.getTagsToWriteToStack();
+			ItemStack todrop = gbx.getGearboxType().getGearboxItem(gbx.getRatio());
+			ReikaNBTHelper.combineNBT(todrop.stackTagCompound, gbx.getTagsToWriteToStack());
 			if (gbx.isUnHarvestable()) {
 				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
@@ -235,8 +234,8 @@ public class BlockGearbox extends BlockModelledMachine {
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
-		ItemStack is = ItemRegistry.GEARBOX.getStackOfMetadata((gbx.getBlockMetadata()/4)*5+gbx.getGearboxType().ordinal());
-		is.stackTagCompound = gbx.getTagsToWriteToStack();
+		ItemStack is = gbx.getGearboxType().getGearboxItem(gbx.getRatio());
+		ReikaNBTHelper.combineNBT(is.stackTagCompound, gbx.getTagsToWriteToStack());
 		ret.add(is);
 		return ret;
 	}

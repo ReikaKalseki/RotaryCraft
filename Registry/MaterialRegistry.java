@@ -133,6 +133,7 @@ public enum MaterialRegistry {
 					return true;
 				case STEEL:
 					return item.canHarvestBlock(Blocks.iron_ore, tool);
+				case TUNGSTEN:
 				case DIAMOND:
 					return item.canHarvestBlock(Blocks.diamond_ore, tool);
 				case BEDROCK:
@@ -147,6 +148,7 @@ public enum MaterialRegistry {
 					return true;
 				case STEEL:
 					return TinkerToolHandler.getInstance().isStoneOrBetter(tool);
+				case TUNGSTEN:
 				case DIAMOND:
 					return TinkerToolHandler.getInstance().isIronOrBetter(tool);
 				case BEDROCK:
@@ -161,6 +163,7 @@ public enum MaterialRegistry {
 					return true;
 				case STEEL:
 					return item.canHarvestBlock(Blocks.iron_ore, tool);
+				case TUNGSTEN:
 				case DIAMOND:
 					return item.canHarvestBlock(Blocks.diamond_ore, tool);
 				case BEDROCK:
@@ -177,6 +180,7 @@ public enum MaterialRegistry {
 				return item.canHarvestBlock(Blocks.stone, tool);
 			case STEEL:
 				return item.canHarvestBlock(Blocks.iron_ore, tool);
+			case TUNGSTEN:
 			case DIAMOND:
 				return item.canHarvestBlock(Blocks.diamond_ore, tool);
 			case BEDROCK:

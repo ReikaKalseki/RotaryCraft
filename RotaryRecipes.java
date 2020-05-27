@@ -601,7 +601,7 @@ public class RotaryRecipes {
 	}
 
 	private static void addMachines() {
-		MachineRegistry.COMPACTOR.addCrafting("SPS", "PGP", "#P#", '#', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'P', ItemStacks.presshead, 'G', ItemStacks.gearunit16);
+		MachineRegistry.COMPACTOR.addCrafting("SPS", "PGP", "#P#", '#', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'P', ItemStacks.presshead, 'G', GearboxTypes.TUNGSTEN.getPart(GearPart.UNIT16));
 
 		MachineRegistry.FAN.addOreRecipe("WWW", "WIW", "#s#", '#', ItemStacks.basepanel, 'W', "plankWood", 'I', ItemStacks.impeller, 's', ItemStacks.shaftitem);
 
@@ -771,7 +771,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.TERRAFORMER.addCrafting("SsS", "ici", "PiP", 'i', ItemStacks.impeller, 'S', ItemStacks.steelingot, 'c', ItemStacks.pcb, 'P', ItemStacks.basepanel, 's', ItemStacks.screen);
 
-		MachineRegistry.EMP.addCrafting("GDG", "GsG", "PnP", 'P', ItemStacks.basepanel, 'n', Items.nether_star, 'G', ItemStacks.goldcoil, 'D', Blocks.diamond_block, 's', ItemStacks.shaftcore);
+		MachineRegistry.EMP.addCrafting("GDG", "GsG", "PnP", 'P', ItemStacks.basepanel, 'n', Items.nether_star, 'G', ItemStacks.goldcoil, 'D', Blocks.diamond_block, 's', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE));
 
 		MachineRegistry.ARROWGUN.addCrafting("SSS", "BDB", "SBS", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', Blocks.dispenser);
 
@@ -791,7 +791,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.AIRGUN.addCrafting("sps", "I S", "sps", 'I', ItemStacks.impeller, 'p', ItemStacks.basepanel, 's', ItemStacks.steelingot, 'S', ItemStacks.sonar);
 
-		MachineRegistry.FUELENGINE.addCrafting("CGC", "fgs", "bIb", 'g', ItemStacks.gearunit8, 'C', ItemStacks.cylinder, 'G', ItemStacks.tungsteningot, 'f', ItemStacks.gearunit, 'b', ItemStacks.basepanel, 'I', ItemStacks.impeller, 's', ItemStacks.shaftcore);
+		MachineRegistry.FUELENGINE.addCrafting("CGC", "fgs", "bIb", 'g', GearboxTypes.TUNGSTEN.getPart(GearPart.UNIT8), 'C', ItemStacks.cylinder, 'G', ItemStacks.tungsteningot, 'f', ItemStacks.gearunit, 'b', ItemStacks.basepanel, 'I', ItemStacks.impeller, 's', ItemStacks.shaftcore);
 
 		MachineRegistry.AGGREGATOR.addCrafting("SPS", "GCG", "SsS", 's', ItemStacks.shaftitem, 'G', Blocks.glass_pane, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor);
 
@@ -886,17 +886,13 @@ public class RotaryRecipes {
 				"SSS", "S S", "SSS", 'S', ItemStacks.silumin});
 
 		GameRegistry.addRecipe(ItemStacks.compoundturb, new Object[]{
-				" tS", "tst", "St ", 'S', ItemStacks.turbine, 's', ItemStacks.shaftcore, 't', ItemStacks.tungsteningot});
+				" tS", "tst", "St ", 'S', ItemStacks.turbine, 's', GearboxTypes.TUNGSTEN.getPart(GearPart.SHAFTCORE), 't', ItemStacks.tungsteningot});
 		GameRegistry.addRecipe(ItemStacks.compoundcompress, new Object[]{
-				" tS", "tst", "St ", 'S', ItemStacks.compressor, 's', ItemStacks.shaftcore, 't', ItemStacks.tungsteningot});
+				" tS", "tst", "St ", 'S', ItemStacks.compressor, 's', GearboxTypes.TUNGSTEN.getPart(GearPart.SHAFTCORE), 't', ItemStacks.tungsteningot});
 
 		for (GearboxTypes gear : GearboxTypes.typeList) {
 			GameRegistry.addRecipe(new ShapedOreRecipe(gear.getPart(GearPart.SHAFTCORE), new Object[]{"  s", " S ", "s  ", 'S', gear.getBaseItem(), 's', gear.getShaftUnitItem()}));
 		}
-		GameRegistry.addRecipe(ItemStacks.shaftcore, new Object[]{
-				"  s", " S ", "s  ", 'S', ItemStacks.steelingot, 's', ItemStacks.shaftitem});
-		GameRegistry.addRecipe(ItemStacks.diamondshaftcore, new Object[]{
-				"  s", " S ", "s  ", 'S', Items.diamond, 's', ItemStacks.diamondshaft});
 
 		GameRegistry.addRecipe(ItemStacks.igniter, new Object[]{
 				"G G", "SRS", "SSS", 'S', ItemStacks.steelingot, 'R', Items.redstone, 'G', Items.gold_ingot});
@@ -1144,7 +1140,7 @@ public class RotaryRecipes {
 		ItemRegistry.UPGRADE.addMetaRecipe(0, "sRs", "gGg", " b ", 's', ItemStacks.silumin, 'b', ItemStacks.basepanel, 'R', ItemStacks.radiator, 'G', ItemStacks.gearunit, 'g', Items.gold_ingot);
 
 		ItemRegistry.UPGRADE.addMetaRecipe(1, "gRg", "RER", "SGS", 'g', Items.gold_ingot, 'G', ItemStacks.impeller, 'R', Items.redstone, 'S', ItemStacks.steelingot, 'E', ItemRegistry.ETHANOL.getStackOf());
-		ItemRegistry.UPGRADE.addMetaRecipe(2, "SCS", "ERE", "SCS", 'C', ItemStacks.redgoldingot, 'R', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'E', ItemStacks.shaftcore);
+		ItemRegistry.UPGRADE.addMetaRecipe(2, "SCS", "ERE", "SCS", 'C', ItemStacks.redgoldingot, 'R', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'E', GearboxTypes.TUNGSTEN.getPart(GearPart.SHAFTCORE));
 		ItemRegistry.UPGRADE.addMetaRecipe(3, "SES", "ERE", "ScS", 'c', ItemStacks.pcb, 'R', ItemStacks.tungsteningot, 'S', ItemStacks.steelingot, 'E', ItemStacks.redgoldingot);
 		ItemRegistry.UPGRADE.addMetaBlastRecipe(1000, 4, 4, "cEc", "ERE", "SES", 'c', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'R', ItemStacks.bedingot, 'S', ItemStacks.steelingot, 'E', ItemStacks.tungsteningot);
 		ItemRegistry.UPGRADE.addMetaBlastRecipe(1800, 8, 5, "SES", "ERE", "SES", 'R', ItemStacks.bedrockgear, 'S', ItemStacks.steelingot, 'E', ItemStacks.springingot);
@@ -1352,7 +1348,7 @@ public class RotaryRecipes {
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(2, "BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftcore, 'B', ItemStacks.brake, 'C', ItemStacks.tenscoil); //Coil
 		NBTTagCompound NBT = new NBTTagCompound();
 		NBT.setBoolean("bedrock", true);
-		MachineRegistry.ADVANCEDGEARS.addNBTMetaCrafting(NBT, 2, "BCS", " M ", 'M', ItemStacks.mount, 'S', ItemStacks.shaftcore, 'B', ItemStacks.brake, 'C', ItemStacks.bedrockcoil); //Coil
+		MachineRegistry.ADVANCEDGEARS.addNBTMetaCrafting(NBT, 2, "BCS", " M ", 'M', ItemStacks.mount, 'S', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE), 'B', ItemStacks.brake, 'C', ItemStacks.bedrockcoil); //Coil
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(3, "SGS", "SGS", "BMB", 'S', ItemStacks.bedrockshaft, 'B', GearboxTypes.TUNGSTEN.getPart(GearPart.BEARING), 'M', ItemStacks.mount, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16)); //256x
 
 		MachineRegistry.FLYWHEEL.addMetaCrafting(0, "W", "M", 'W', ItemStacks.flywheelcore, 'M', ItemStacks.mount);

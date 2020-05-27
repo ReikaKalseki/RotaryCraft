@@ -204,7 +204,12 @@ public enum GearboxTypes {
 	public static GearboxTypes getMaterialFromGearboxItem(ItemStack is) {
 		if (is.stackTagCompound != null && is.stackTagCompound.hasKey("type"))
 			return GearboxTypes.valueOf(is.stackTagCompound.getString("type"));
-		return getFromMaterial(MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length-1]); //legacy
+
+		//legacy
+		int idx = is.getItemDamage()%MaterialRegistry.matList.length-1;
+		if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
+			idx++;
+		return getFromMaterial(MaterialRegistry.matList[idx]);
 	}
 
 	public static GearboxTypes getMaterialFromCraftingItem(ItemStack is) {
