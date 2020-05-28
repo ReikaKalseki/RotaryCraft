@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -209,6 +210,11 @@ public enum GearboxTypes {
 		int idx = is.getItemDamage()%MaterialRegistry.matList.length-1;
 		if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
 			idx++;
+		if (idx < 0) { //completely invalid
+			is.setItemDamage(0);
+			is.func_150996_a(Item.getItemFromBlock(Blocks.stone));
+			return WOOD;
+		}
 		return getFromMaterial(MaterialRegistry.matList[idx]);
 	}
 
