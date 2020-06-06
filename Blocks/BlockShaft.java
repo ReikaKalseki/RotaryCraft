@@ -119,7 +119,7 @@ public class BlockShaft extends BlockModelledMachine {
 		}
 		TileEntityShaft tile = (TileEntityShaft)world.getTileEntity(x, y, z);
 		if (tile != null && tile.getShaftType() != null) {
-			ItemStack fix = tile.getShaftType().getShaftItem();
+			ItemStack fix = tile.getShaftType().getShaftUnitItem();
 			if (ep.getCurrentEquippedItem() != null && ReikaItemHelper.matchStacks(fix, ep.getCurrentEquippedItem())) {
 				tile.repair();
 				if (!ep.capabilities.isCreativeMode) {

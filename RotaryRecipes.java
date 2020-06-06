@@ -1360,10 +1360,10 @@ public class RotaryRecipes {
 			Object m = mat.getMountItem();
 			ItemStack item = ReikaItemHelper.getSizedItemStack(mat.getShaftItem(), 8);
 			if (m == ItemStacks.mount) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(item, "S", "M", 'M', ItemStacks.mount, 'S', mat.getShaftUnitItem()));
+				MachineRegistry.SHAFT.addRecipe(new ShapedOreRecipe(item, "S", "M", 'M', ItemStacks.mount, 'S', mat.getShaftUnitItem()));
 			}
 			else {
-				GameRegistry.addRecipe(new ShapedOreRecipe(item, "BSB", "BBB", 'B', m, 'S', mat.getShaftUnitItem()));
+				MachineRegistry.SHAFT.addRecipe(new ShapedOreRecipe(item, "BSB", "BBB", 'B', m, 'S', mat.getShaftUnitItem()));
 			}
 		}
 

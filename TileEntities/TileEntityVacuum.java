@@ -233,7 +233,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		}
 		for (int j = 0; j < inv.length; j++) {
 			if (inv[j] != null) {
-				if (ReikaItemHelper.matchStacks(is, inv[j])) {
+				if (ReikaItemHelper.areStacksCombinable(is, inv[j], Integer.MAX_VALUE)) {
 					if (ItemStack.areItemStackTagsEqual(is, inv[j])) {
 						if (inv[j].stackSize+size <= this.getInventoryStackLimit()) {
 							target = j;

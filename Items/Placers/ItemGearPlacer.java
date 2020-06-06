@@ -139,8 +139,13 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
-		GearboxTypes type = GearboxTypes.getMaterialFromGearboxItem(is);
-		return type != null ? type.getLocalizedGearboxName(ReikaMathLibrary.intpow2(2, is.getItemDamage()+1)) : "Gearbox";
+		try {
+			GearboxTypes type = GearboxTypes.getMaterialFromGearboxItem(is);
+			return type != null ? type.getLocalizedGearboxName(ReikaMathLibrary.intpow2(2, is.getItemDamage()+1)) : "Gearbox";
+		}
+		catch (Exception e) {
+			return "Invalid item: "+e.toString();
+		}
 	}
 
 	@Override

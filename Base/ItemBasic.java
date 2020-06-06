@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -123,8 +123,13 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
-		ItemRegistry ir = ItemRegistry.getEntry(is);
-		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
+		try {
+			ItemRegistry ir = ItemRegistry.getEntry(is);
+			return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
+		}
+		catch (Exception e) {
+			return "Invalid item: "+e.toString();
+		}
 	}
 
 	@Override
