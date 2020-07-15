@@ -91,11 +91,11 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			}
 
 			if (recipe.tertiary.exists())
-				stacks.add(new PositionedStack(recipe.tertiary.getItemForDisplay(), 21, 5));
+				stacks.add(new PositionedStack(recipe.tertiary.getItemForDisplay(true), 21, 5));
 			if (recipe.primary.exists())
-				stacks.add(new PositionedStack(recipe.primary.getItemForDisplay(), 21, 24));
+				stacks.add(new PositionedStack(recipe.primary.getItemForDisplay(true), 21, 24));
 			if (recipe.secondary.exists())
-				stacks.add(new PositionedStack(recipe.secondary.getItemForDisplay(), 21, 43));
+				stacks.add(new PositionedStack(recipe.secondary.getItemForDisplay(true), 21, 43));
 
 			return stacks;
 		}
@@ -252,21 +252,21 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			BlastRecipe br = ((BlastFurnRecipe)r).recipe;
 			FlexibleIngredient in1 = br.primary;
 			if (in1.exists()) {
-				String sg = String.format("%s: x%d (%.1f%%)", in1.getItemForDisplay().getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
+				String sg = String.format("%s: x%d (%.1f%%)", in1.getItemForDisplay(true).getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
 				f.drawString(sg, 21, 72, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
 			FlexibleIngredient in2 = br.secondary;
 			if (in2.exists()) {
-				String sg = String.format("%s: x%d (%.1f%%)", in2.getItemForDisplay().getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
+				String sg = String.format("%s: x%d (%.1f%%)", in2.getItemForDisplay(true).getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
 			FlexibleIngredient in3 = br.tertiary;
 			if (in3.exists()) {
-				String sg = String.format("%s: x%d (%.1f%%)", in3.getItemForDisplay().getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
+				String sg = String.format("%s: x%d (%.1f%%)", in3.getItemForDisplay(true).getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
 				dy += f.FONT_HEIGHT+2;
 			}

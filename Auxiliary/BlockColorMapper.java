@@ -27,6 +27,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -584,17 +585,21 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 		}
 	}
 
-	private void parseLine(String s) { //[ID:meta]=0xRRGGBB
+	private void parseLine(String s) { //[<lookup>]=0xRRGGBB
 		if (!s.startsWith("//")) {
 			s = s.substring(1);
 			int idx = s.indexOf('=');
 			String key = s.substring(0, idx-1);
+			ItemStack item = ReikaItemHelper.lookupItem(key);
+			if (item == null)
+				throw new IllegalArgumentException("No such item lookup '"+key+"'!");
+			if (item.getItem() == null)
+				throw new IllegalArgumentException("Item lookup '"+key+"' returned a null-item stack!");
+			Block b = Block.getBlockFromItem(item.getItem());
+			if (b == null)
+				throw new IllegalArgumentException("Item lookup '"+key+"' returned non-block item!");
 			String color = s.substring(idx+2, s.length());
-			String[] parts = key.split(":");
-			int id = Integer.parseInt(parts[0]);
-			int meta = Integer.parseInt(parts[1]);
-			Block b = Block.getBlockById(id);
-			this.addOrSetColorMapping(b, meta, Integer.parseInt(color), false);
+			this.addOrSetColorMapping(b, item.getItemDamage(), Integer.parseInt(color), false);
 		}
 	}
 

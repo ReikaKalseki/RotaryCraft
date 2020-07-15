@@ -366,7 +366,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		@SideOnly(Side.CLIENT)
 		public ItemStack mainItemForDisplay() {
-			return main.getItemForDisplay();
+			return main.getItemForDisplay(false);
 		}
 
 		public ItemStack outputItem() {

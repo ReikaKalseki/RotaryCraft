@@ -86,7 +86,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 		if (c != null && leaveLastItem) {
 			for (int i = 1; i <= 9; i++) {
-				if (c.usesSlot(i-1) && inv[i] != null && inv[i].stackSize == 1)
+				if (inv[i] != null && inv[i].stackSize == 1)
 					return null;
 			}
 		}
