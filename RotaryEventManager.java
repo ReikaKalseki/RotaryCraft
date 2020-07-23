@@ -70,6 +70,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
@@ -441,7 +442,7 @@ public class RotaryEventManager {
 			if (e instanceof EntityPlayer) {
 				if (ItemBedrockArmor.isWearingFullSuitOf(e)) {
 					evt.ammount = Math.min(evt.ammount, 5);
-					if (evt.ammount <= 1 && evt.source != DamageSource.drown && evt.source != DamageSource.starve) {
+					if (evt.ammount <= 1 && evt.source != DamageSource.drown && evt.source != DamageSource.starve && !AtmosphereHandler.isAtmoBreathabilityDamage(evt.source)) {
 						evt.ammount = 0;
 						evt.setCanceled(true);
 					}

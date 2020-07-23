@@ -99,6 +99,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			for (int i = 0; i < MaterialRegistry.matList.length; i++) {
 				list.add(MaterialRegistry.matList[i].getShaftItem());
 			}
+			list.add(RotaryAux.getShaftCrossItem());
 		}
 	}
 
@@ -125,6 +126,8 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
+		if (RotaryAux.isShaftCross(is))
+			return StatCollector.translateToLocal("shaft.cross");
 		MaterialRegistry type = MaterialRegistry.getMaterialFromShaftItem(is);
 		return type != null ? StatCollector.translateToLocal(type.getShaftUnlocName())+" "+MachineRegistry.SHAFT.getName() : "Shaft";
 	}

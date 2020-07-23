@@ -56,6 +56,9 @@ public class TabRotaryPower extends SortedCreativeTab {
 						return g1.compareTo(g2)*50+Integer.compare(is1.getItemDamage(), is2.getItemDamage());
 					}
 					case SHAFT: {
+						if (RotaryAux.isShaftCross(is1)) {
+							return RotaryAux.isShaftCross(is2) ? 0 : 1;
+						}
 						MaterialRegistry m1 = MaterialRegistry.getMaterialFromShaftItem(is1);
 						MaterialRegistry m2 = MaterialRegistry.getMaterialFromShaftItem(is2);
 						return m1.compareTo(m2);
