@@ -348,7 +348,8 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 				Block leafID = wood.getLeafID();
 				Block saplingID = wood.getSaplingID();
 
-				this.addOrSetColorMapping(saplingID, wood.getCorrespondingSapling().getItemDamage(), 0x3C9119, true);
+				if (saplingID != null)
+					this.addOrSetColorMapping(saplingID, wood.getCorrespondingSapling().getItemDamage(), 0x3C9119, true);
 
 				List<Integer> logMetas = wood.getLogMetadatas();
 				for (int k = 0; k < logMetas.size(); k++) {

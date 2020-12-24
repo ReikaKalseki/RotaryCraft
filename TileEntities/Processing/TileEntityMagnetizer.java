@@ -85,7 +85,10 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 	}
 
 	private boolean canRunRecipe(MagnetizerRecipe r) {
-		return omega >= r.minSpeed && (r.allowStacking || inv[0].stackSize == 1);
+		int ms = r.minSpeed;
+		if (hasLodestoneUpgrade())
+			ms /= 2;
+		return omega >= ms && (r.allowStacking || inv[0].stackSize == 1);
 	}
 
 	private void magnetize(MagnetizerRecipe r) {
@@ -93,7 +96,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 			return;
 		ItemStack is = inv[0];
 		if (r.action != null) {
-			r.action.step(omega, inv[0]);
+			r.action.step(hasLodestoneUpgrade() ? omega*2 : omega, inv[0]);
 		}
 		else {
 			if (is.stackTagCompound == null) {

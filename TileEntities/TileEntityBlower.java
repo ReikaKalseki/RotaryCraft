@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
+import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
@@ -111,6 +112,8 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 
 		if (source instanceof IInventory) {
 			TileEntity target = this.getAdjacentTileEntity(dir);
+			if (target instanceof WorldRift)
+				target = this.getRelayedTarget(target, dir);
 			if (target != null) {
 				WorldLocation tg = new WorldLocation(target);
 
@@ -120,6 +123,10 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 					dir = te.getFacingDir();
 					target = te.getAdjacentTileEntity(dir);
 					tg = tg.move(dir, 1);
+					if (target instanceof WorldRift) {
+						target = this.getRelayedTarget(target, dir);
+						tg = new WorldLocation(target);
+					}
 
 					if (li.contains(target))
 						return;
@@ -154,6 +161,12 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 				}
 			}
 		}
+	}
+
+	private TileEntity getRelayedTarget(TileEntity te, ForgeDirection dir) {
+		WorldRift wr = (WorldRift)te;
+		TileEntity te2 = wr.getTileEntityFrom(dir);
+		return te2 != null ? te2 : te;
 	}
 
 	private boolean tryPatternInsertion(IInventory source, TileEntity target) {

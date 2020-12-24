@@ -57,6 +57,8 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 
 	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.efficiency).addFilter(Enchantment.aquaAffinity).addFilter(Enchantment.fortune).addFilter(Enchantment.unbreaking).addFilter(Enchantment.power);
 
+	private int firstValidSlot;
+
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
 		if (!this.isInWorld()) {
@@ -92,6 +94,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		}
 
 		if (!world.isRemote) {
+			this.checkFertilizer();
 			int n = this.getUpdatesPerTick();
 			for (int i = 0; i < n && this.hasFertilizer(); i++)
 				this.tickBlock(world, x, y, z);
@@ -149,11 +152,10 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	private void consumeItem() {
 		tank.removeLiquid(Math.max(1, 5-enchantments.getEnchantment(Enchantment.aquaAffinity)/2));
 		if (rand.nextInt(4+enchantments.getEnchantment(Enchantment.unbreaking)) == 0) {
-			for (int i = 0; i < inv.length; i++) {
-				if (inv[i] != null) {
-					ReikaInventoryHelper.decrStack(i, inv);
-					return;
-				}
+			int in = inv[firstValidSlot].stackSize;
+			ReikaInventoryHelper.decrStack(firstValidSlot, inv);
+			if (in == 1) {
+				this.checkFertilizer();
 			}
 		}
 	}
@@ -218,15 +220,21 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	public boolean hasFertilizer() {
+		return firstValidSlot >= 0;
+	}
+
+	private void checkFertilizer() {
+		firstValidSlot = -1;
 		if (tank.isEmpty())
-			return false;
+			return;
 		for (int i = 0; i < inv.length; i++) {
 			if (inv[i] != null) {
-				if (this.isValidFertilizer(inv[i]))
-					return true;
+				if (this.isValidFertilizer(inv[i])) {
+					firstValidSlot = i;
+					return;
+				}
 			}
 		}
-		return false;
 	}
 
 	static {

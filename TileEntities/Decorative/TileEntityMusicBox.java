@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -365,7 +366,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private void readFile(String path, boolean internal) {
 		this.clearMusic();
 		int linecount = -1;
-		try(BufferedReader p = internal ? new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path))) : ReikaFileReader.getReader(path)) {
+		try(BufferedReader p = internal ? new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path))) : ReikaFileReader.getReader(path, Charset.defaultCharset())) {
 			String line = p.readLine();
 			while (line != null) {
 				linecount++;

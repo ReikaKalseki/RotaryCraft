@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -176,8 +176,8 @@ public class EMPSparkRenderer {
 			z2 += location.zCoord;
 
 			LightningBolt bolt = new LightningBolt(x1, y1, z1, x2, y2, z2, 6);
-			bolt.velocity /= 64D;
-			bolt.variance /= 12D;
+			bolt.scaleVelocity(1/64D);
+			bolt.scaleVariance(1/12D);
 
 			return bolt;
 		}

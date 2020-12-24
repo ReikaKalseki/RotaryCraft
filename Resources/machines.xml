@@ -731,7 +731,7 @@
 	</beammirror>
 	<fertilizer>
 		<desc>
-			The fertilizer, when given apatite or bonemeal, can accelerate the growth of nearby crops, saplings, and other plants. To dissolve the fertilizer, this machine requires liquid water.
+			The fertilizer, when given bonemeal or apatite-based fertilizer, can accelerate the growth of nearby crops, saplings, and other plants. To dissolve the fertilizer, this machine requires liquid water.
 		</desc>
 		<note>
 			Power Input: Bottom

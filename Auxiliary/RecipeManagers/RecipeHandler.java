@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import com.google.common.collect.HashBiMap;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
@@ -99,7 +98,7 @@ public abstract class RecipeHandler implements IngredientIDHandler {
 	protected static final String fullIDKeys(Collection<KeyedItemStack> c) {
 		StringBuilder sb = new StringBuilder();
 		for (KeyedItemStack is : c) {
-			sb.append(fullID(is.getItemStack()));
+			sb.append(CustomRecipeList.fullID(is.getItemStack()));
 			sb.append("|");
 		}
 		return sb.toString();
@@ -108,18 +107,14 @@ public abstract class RecipeHandler implements IngredientIDHandler {
 	protected static final String fullID(Collection<ItemStack> c) {
 		StringBuilder sb = new StringBuilder();
 		for (ItemStack is : c) {
-			sb.append(fullID(is));
+			sb.append(CustomRecipeList.fullID(is));
 			sb.append("|");
 		}
 		return sb.toString();
 	}
 
 	protected static final String fullID(ItemStack is) {
-		if (is == null)
-			return "[null]";
-		else if (is.getItem() == null)
-			return "[null-item stack]";
-		return is.stackSize+"x"+Item.itemRegistry.getNameForObject(is.getItem())+"@"+is.getItemDamage()+"{"+is.stackTagCompound+"}["+ReikaItemHelper.getRegistrantMod(is)+"]";
+		return CustomRecipeList.fullID(is);
 	}
 
 	protected final Collection getRecipes(RecipeLevel rl) {
@@ -237,7 +232,6 @@ public abstract class RecipeHandler implements IngredientIDHandler {
 
 	public final void loadCustomRecipeFiles() {
 		CustomRecipeList crl = new CustomRecipeList(RotaryCraft.instance, machine.name().toLowerCase(Locale.ENGLISH));
-		crl.addFieldLookup("rotarycraft_stack", ItemStacks.class);
 		crl.load();
 		for (LuaBlock lb : crl.getEntries()) {
 			Exception e = null;

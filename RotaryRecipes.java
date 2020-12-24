@@ -40,6 +40,7 @@ import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Formula.MathExpression;
+import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -213,6 +214,7 @@ public class RotaryRecipes {
 
 		addProps();
 
+		CustomRecipeList.addFieldLookup("rotarycraft_stack", ItemStacks.class);
 		for (RecipeHandler h : recipeHandlers) {
 			h.addPostLoadRecipes();
 			h.loadCustomRecipeFiles();

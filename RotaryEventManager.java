@@ -168,7 +168,7 @@ public class RotaryEventManager {
 		if (evt.entity instanceof EntitySlime) {
 			int rounds = evt.entity.getEntityData().getInteger(TileEntityMultiCannon.SLIME_NBT);
 			if (rounds > 0) {
-				int drop = (int)(rounds/TileEntityMultiCannon.AMMO_PER_SHOT);
+				int drop = (int)(rounds*TileEntityMultiCannon.AMMO_PER_SHOT);
 				while (drop > 0) {
 					int amt = Math.min(64, drop);
 					ReikaItemHelper.dropItem(evt.entity, ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, amt));
