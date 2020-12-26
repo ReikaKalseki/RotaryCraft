@@ -11,11 +11,13 @@
 <machines>
 	<compressor>
 		<desc>
-			The air compressor converts shaft power into pressurized air, which can be carried out via conductive piping to BuildCraft machines. If given excessive amounts of power, it can and will explode. Violently.
+			The air compressor converts shaft power into pressurized air, which can be carried out via pressurized air pipes. More power means more airflow into the pipe, but given excessive amounts of power, it can and will explode. Violently.
 		</desc>
 		<note>
 			Maximum pressure before detonation: %d kPa
-			Orientation and Output: Like BuildCraft engines
+			
+			Orientation and Output: Like standard RF engines
+			
 			Power Input: Back
 		</note>
 	</compressor>

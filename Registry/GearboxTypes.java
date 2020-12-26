@@ -191,11 +191,15 @@ public enum GearboxTypes {
 		return 0;
 	}
 
-	public ItemStack getGearboxItem(int ratio) {
-		ItemStack is = MachineRegistry.GEARBOX.getCraftedMetadataProduct(ReikaMathLibrary.logbase2(ratio)-1);
+	public ItemStack getGearboxItemByIndex(int index) {
+		ItemStack is = MachineRegistry.GEARBOX.getCraftedMetadataProduct(index);
 		is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setString("type", this.name());
 		return is;
+	}
+
+	public ItemStack getGearboxItem(int ratio) {
+		return this.getGearboxItemByIndex(ReikaMathLibrary.logbase2(ratio)-1);
 	}
 
 	public String getLocalizedGearboxName(int ratio) {

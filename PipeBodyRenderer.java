@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,21 +22,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 
+import Reika.DragonAPI.Base.ISBRH;
 import Reika.DragonAPI.Exception.WTFException;
-import Reika.DragonAPI.Interfaces.ISBRH;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 
-public class PipeBodyRenderer implements ISBRH {
+public class PipeBodyRenderer extends ISBRH {
 
-	public final int renderID;
 	public int renderPass;
-	private static final ForgeDirection[] dirs = ForgeDirection.values();
 
 	public PipeBodyRenderer(int ID) {
-		renderID = ID;
+		super(ID);
 		//MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -146,11 +144,6 @@ public class PipeBodyRenderer implements ISBRH {
 	@Override
 	public boolean shouldRender3DInInventory(int model) {
 		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return renderID;
 	}
 
 	private void renderOverlay(RenderableDuct tile, IBlockAccess world, int x, int y, int z, ForgeDirection dir, IIcon ico) {

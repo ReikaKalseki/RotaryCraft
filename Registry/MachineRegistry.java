@@ -1055,14 +1055,28 @@ public enum MachineRegistry implements TileEnum {
 			case ENGINE:
 				return EngineType.engineList.length;
 			case GEARBOX:
+				return GearboxTypes.typeList.length*4;
 			case SHAFT:
-				return MaterialRegistry.matList.length+1;
+				return MaterialRegistry.matList.length;
 			case ADVANCEDGEARS:
 				return TileEntityAdvancedGear.GearType.list.length;
 			case FLYWHEEL:
 				return 4;
 			default:
 				return 1;
+		}
+	}
+
+	public ItemStack getSubType(int idx) {
+		switch(this) {
+			case ENGINE:
+				return EngineType.engineList[idx].getCraftedProduct();
+			case GEARBOX:
+				return GearboxTypes.typeList[idx/4].getGearboxItemByIndex(idx%4);
+			case SHAFT:
+				return MaterialRegistry.matList[idx].getShaftItem();
+			default:
+				return this.getCraftedMetadataProduct(idx);
 		}
 	}
 

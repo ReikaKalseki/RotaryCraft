@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -21,7 +21,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 
-import Reika.DragonAPI.Interfaces.ISBRH;
+import Reika.DragonAPI.Base.ISBRH;
 import Reika.DragonAPI.Interfaces.Block.ConnectedTextureGlass;
 import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
@@ -29,15 +29,12 @@ import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;
 
 
-public class ConnectedGlassRenderer implements ISBRH {
-
-	public final int renderID;
-	private static final ForgeDirection[] dirs = ForgeDirection.values();
+public class ConnectedGlassRenderer extends ISBRH {
 
 	public static int renderPass = 0;
 
 	public ConnectedGlassRenderer(int ID) {
-		renderID = ID;
+		super(ID);
 	}
 
 	@Override
@@ -410,11 +407,6 @@ public class ConnectedGlassRenderer implements ISBRH {
 	@Override
 	public boolean shouldRender3DInInventory(int model) {
 		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return renderID;
 	}
 
 	private void setFaceBrightness(Tessellator v5, ForgeDirection dir) {

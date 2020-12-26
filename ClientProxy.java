@@ -28,7 +28,6 @@ import Reika.DragonAPI.IO.Shaders.ShaderProgram;
 import Reika.DragonAPI.IO.Shaders.ShaderRegistry;
 import Reika.DragonAPI.IO.Shaders.ShaderRegistry.ShaderDomain;
 import Reika.DragonAPI.Instantiable.IO.SoundLoader;
-import Reika.DragonAPI.Instantiable.Rendering.BlockSheetTexRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.ForcedTextureArmorModel;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.MultiSheetItemRenderer;
@@ -70,9 +69,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ClientProxy extends CommonProxy
-{
-	//public static final int BlockSheetTexRenderID = RenderingRegistry.getNextAvailableRenderId();
+public class ClientProxy extends CommonProxy {
 
 	private static final ItemSpriteSheetRenderer[] items = {
 			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
@@ -86,7 +83,6 @@ public class ClientProxy extends CommonProxy
 	};
 
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
-	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png");
 
 	public static final ItemMachineRenderer machineItems = new ItemMachineRenderer();
 	public static final DecoTankItemRenderer decotank = new DecoTankItemRenderer();

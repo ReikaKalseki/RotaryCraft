@@ -32,6 +32,7 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 
 	@Override
 	public boolean hasAmmo() {
+		ammoType = null;
 		this.checkAmmo();
 		return ammoType != null;
 	}

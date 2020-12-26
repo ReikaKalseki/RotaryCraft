@@ -687,7 +687,7 @@ public final class HandbookAuxData {
 						if (m.hasSubdivisions()) {
 							int meta = m.getNumberSubtypes();
 							int time = (int)(System.currentTimeMillis()/1600)%meta;
-							is = m.getCraftedMetadataProduct(time);
+							is = m.getSubType(time);
 						}
 						int r = (i-di)/12;
 						int c = i%12;
