@@ -179,6 +179,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");
 	public static final CustomStringDamageSource shock = (CustomStringDamageSource)new CustomStringDamageSource("was electrified").setDamageBypassesArmor();
 	public static final CustomStringDamageSource grind = new CustomStringDamageSource("was ground to a pulp");
+	public static final CustomStringDamageSource freezeDamage = new CustomStringDamageSource("froze");
 
 	static final Random rand = new Random();
 

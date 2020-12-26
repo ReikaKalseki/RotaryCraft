@@ -66,6 +66,7 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
@@ -573,6 +574,9 @@ public class PacketHandlerCore implements PacketHandler {
 					break;
 				case DISTRIBCLUTCHPOWER:
 					((TileEntityDistributionClutch)te).setTorqueRequests(data);
+					break;
+				case FRIDGEBREAK:
+					((TileEntityRefrigerator)te).doBreakFX();
 					break;
 			}
 		}

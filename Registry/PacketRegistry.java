@@ -81,6 +81,7 @@ public enum PacketRegistry {
 	SPARKLOC(5),
 	DISTRIBCLUTCH(2),
 	DISTRIBCLUTCHPOWER(4),
+	FRIDGEBREAK(),
 	;
 
 	private static final PacketRegistry[] list = values();

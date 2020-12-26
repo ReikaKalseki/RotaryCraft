@@ -9,17 +9,30 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Production;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import Reika.DragonAPI.Extras.IconPrefabs;
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Instantiable.Effects.EntityBlurFX;
+import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.RefrigeratorAttachment;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -27,9 +40,13 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements MultiOperational {
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements MultiOperational, BreakAction {
 
 	public int time;
 	private StepTimer timer = new StepTimer(20);
@@ -220,6 +237,34 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	@Override
 	protected void onPlacedNextToThis(TileEntity te, ForgeDirection dir) {
 		attachments[dir.ordinal()] = null;
+	}
+
+	@Override
+	public void breakBlock() {
+		float f = tank.getFraction();
+		if (f > 0.1 || true) {
+			ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.fizz", 1.2F, 0.8F);
+			float hearts = f*4;
+			AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(this).expand(5, 5, 5);
+			List<EntityLivingBase> li = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+			for (EntityLivingBase e : li) {
+				e.attackEntityFrom(RotaryCraft.freezeDamage, hearts*2);
+			}
+			ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.FRIDGEBREAK.ordinal(), this, 24);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void doBreakFX() {
+		for (int i = 0; i < 3; i++) {
+			double dx = ReikaRandomHelper.getRandomPlusMinus(0, 1.5);
+			double dz = ReikaRandomHelper.getRandomPlusMinus(0, 1.5);
+			double dy = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			double v = 0.1;
+			EntityBlurFX fx = new EntityBlurFX(worldObj, xCoord+0.5+dx, yCoord+0.5+dy, zCoord+0.5+dz, dx*v, dy*v, dz*v, IconPrefabs.FADE_GENTLE.getIcon());
+			fx.setColor(0xCCE3FF).setScale(3+rand.nextFloat()*2).setRapidExpand().setAlphaFading().setLife(30+rand.nextInt(31)).setColliding();
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		}
 	}
 
 }
