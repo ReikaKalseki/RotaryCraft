@@ -242,7 +242,7 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	@Override
 	public void breakBlock() {
 		float f = tank.getFraction();
-		if (f > 0.1 || true) {
+		if (f > 0.1) {
 			ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.fizz", 1.2F, 0.8F);
 			float hearts = f*4;
 			AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(this).expand(5, 5, 5);
@@ -255,14 +255,14 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void doBreakFX() {
-		for (int i = 0; i < 3; i++) {
-			double dx = ReikaRandomHelper.getRandomPlusMinus(0, 1.5);
-			double dz = ReikaRandomHelper.getRandomPlusMinus(0, 1.5);
-			double dy = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
-			double v = 0.1;
-			EntityBlurFX fx = new EntityBlurFX(worldObj, xCoord+0.5+dx, yCoord+0.5+dy, zCoord+0.5+dz, dx*v, dy*v, dz*v, IconPrefabs.FADE_GENTLE.getIcon());
-			fx.setColor(0xCCE3FF).setScale(3+rand.nextFloat()*2).setRapidExpand().setAlphaFading().setLife(30+rand.nextInt(31)).setColliding();
+	public static void doBreakFX(World world, int x, int y, int z) {
+		for (int i = 0; i < 15; i++) {
+			double dx = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			double dz = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			double dy = ReikaRandomHelper.getRandomPlusMinus(0, 0.25);
+			double v = 0.04;
+			EntityBlurFX fx = new EntityBlurFX(world, x+0.5+dx, y+0.5+dy, z+0.5+dz, dx*v, dy*v, dz*v, IconPrefabs.FADE_GENTLE.getIcon());
+			fx.setColor(0xBFB2FF).setScale(3+rand.nextFloat()*2).setRapidExpand().setAlphaFading().setLife(30+rand.nextInt(31)).setColliding();
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 	}

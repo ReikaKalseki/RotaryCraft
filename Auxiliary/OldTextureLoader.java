@@ -29,6 +29,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class OldTextureLoader {
 
@@ -112,6 +113,7 @@ public class OldTextureLoader {
 		return ico != null ? ico : (IIcon)textureIndices.lookup(-1);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void reloadOldTextures(TextureMap map) {
 		if (map.getTextureType() == 0) {
 			for (int i = 0; i < 256; i++) {

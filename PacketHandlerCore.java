@@ -576,7 +576,7 @@ public class PacketHandlerCore implements PacketHandler {
 					((TileEntityDistributionClutch)te).setTorqueRequests(data);
 					break;
 				case FRIDGEBREAK:
-					((TileEntityRefrigerator)te).doBreakFX();
+					TileEntityRefrigerator.doBreakFX(world, x, y, z);
 					break;
 			}
 		}
