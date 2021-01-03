@@ -303,7 +303,7 @@ public class RotaryEventManager {
 	@SubscribeEvent
 	public void burnLubricantHose(BlockConsumedByFireEvent evt) {
 		if (MachineRegistry.getMachine(evt.world, evt.xCoord, evt.yCoord, evt.zCoord) == MachineRegistry.HOSE) {
-			((TileEntityHose)evt.world.getTileEntity(evt.xCoord, evt.yCoord, evt.zCoord)).burn();
+			((TileEntityHose)evt.getTileEntity()).burn();
 		}
 	}
 

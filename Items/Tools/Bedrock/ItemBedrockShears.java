@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -124,7 +124,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
 			((IShearable)b).onSheared(player.getCurrentEquippedItem(), world, x, y, z, 0);
 			return Result.ALLOW;
 		}
-		else if (b.getMaterial() == Material.plants) {
+		else if (b.getMaterial() == Material.plants || b.getMaterial() == Material.leaves) {
 			return Result.ALLOW;
 		}
 		else {
