@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.Fluid;
 
 import Reika.DragonAPI.Base.ISBRH;
 import Reika.DragonAPI.Interfaces.Block.ConnectedTextureGlass;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank.TankFlags;

@@ -15,9 +15,9 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.tileentity.TileEntity;
 
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public abstract class EnchantmentRenderer {

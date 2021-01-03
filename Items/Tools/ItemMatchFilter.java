@@ -23,7 +23,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import Reika.DragonAPI.Instantiable.ItemFilter;
 import Reika.DragonAPI.Interfaces.Item.CustomMatchingItem;
 import Reika.DragonAPI.Interfaces.Item.SpriteRenderCallback;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;

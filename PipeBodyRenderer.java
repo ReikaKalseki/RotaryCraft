@@ -24,8 +24,8 @@ import net.minecraftforge.fluids.Fluid;
 
 import Reika.DragonAPI.Base.ISBRH;
 import Reika.DragonAPI.Exception.WTFException;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 

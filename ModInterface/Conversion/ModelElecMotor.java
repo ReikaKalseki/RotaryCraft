@@ -23,8 +23,8 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.tileentity.TileEntity;
 
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public class ModelElecMotor extends RotaryModelBase
