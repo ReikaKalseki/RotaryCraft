@@ -32,7 +32,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.DataPacket;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -44,7 +43,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
@@ -116,15 +114,6 @@ public class PacketHandlerCore implements PacketHandler {
 				case FULLSOUND:
 					break;
 				case SOUND:
-					control = inputStream.readInt();
-					SoundRegistry s = SoundRegistry.soundList[control];
-					double sx = inputStream.readDouble();
-					double sy = inputStream.readDouble();
-					double sz = inputStream.readDouble();
-					float v = inputStream.readFloat();
-					float p = inputStream.readFloat();
-					boolean att = inputStream.readBoolean();
-					ReikaSoundHelper.playClientSound(s, sx, sy, sz, v, p, att);
 					return;
 				case STRING:
 					stringdata = packet.readString();

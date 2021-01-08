@@ -11,6 +11,7 @@ package Reika.RotaryCraft;
 
 import net.minecraft.world.World;
 
+import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
@@ -20,6 +21,7 @@ import Reika.RotaryCraft.Registry.MobBait;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.PlantMaterials;
 import Reika.RotaryCraft.Registry.PowerReceivers;
+import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class CommonProxy
 {
@@ -33,6 +35,8 @@ public class CommonProxy
 	public static int pipeRender;
 	public static int cubeRender;
 	public static int connectedRender;
+
+	protected SoundLoader sounds = new SoundLoader(SoundRegistry.class);
 
 	/**
 	 * Client side only register stuff...

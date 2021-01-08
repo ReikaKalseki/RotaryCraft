@@ -27,7 +27,6 @@ import Reika.DragonAPI.Auxiliary.Trackers.SettingInterferenceTracker;
 import Reika.DragonAPI.IO.Shaders.ShaderProgram;
 import Reika.DragonAPI.IO.Shaders.ShaderRegistry;
 import Reika.DragonAPI.IO.Shaders.ShaderRegistry.ShaderDomain;
-import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.DragonAPI.Instantiable.Rendering.ForcedTextureArmorModel;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.MultiSheetItemRenderer;
@@ -114,7 +113,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerSounds() {
-		new SoundLoader(SoundRegistry.soundList).register();
+		sounds.register();
 	}
 
 	public static ItemSpriteSheetRenderer getSpritesheetRenderer(int index) {
