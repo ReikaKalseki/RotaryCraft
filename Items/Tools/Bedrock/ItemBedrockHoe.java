@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -28,11 +28,11 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 
 public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 
-	private int index;
+	private final int texture;
 
 	public ItemBedrockHoe(int tex) {
 		super(ToolMaterial.EMERALD);
-		this.setIndex(tex);
+		texture = tex;
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		this.setNoRepair();
@@ -54,13 +54,9 @@ public class ItemBedrockHoe extends ItemHoe implements IndexedItemSprites {
 		return true;
 	}
 
-	private void setIndex(int tex) {
-		index = tex;
-	}
-
 	@Override
 	public int getItemSpriteIndex(ItemStack is) {
-		return index;
+		return texture;
 	}
 
 	@Override

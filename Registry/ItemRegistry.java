@@ -123,7 +123,7 @@ public enum ItemRegistry implements ItemEnum {
 	ETHANOL(64, 1, false, 			"item.ethanol", 			ItemBasic.class),
 	CANOLA(80, 1, true, 			"item.canola", 				ItemCanolaSeed.class),
 	SPRING(96, 1, true, 			"item.spring", 				ItemCoil.class),
-	ULTRASOUND(128, 1, true, 		"item.ultrasound", 				ItemUltrasound.class),
+	ULTRASOUND(128, 1, true, 		"item.ultrasound", 			ItemUltrasound.class),
 	MOTION(144, 1, true, 			"item.motion", 				ItemMotionTracker.class),
 	VACUUM(160, 1, true, 			"item.vacuum", 				ItemVacuum.class),
 	STUNGUN(192, 1, true, 			"item.stungun", 			ItemStunGun.class),

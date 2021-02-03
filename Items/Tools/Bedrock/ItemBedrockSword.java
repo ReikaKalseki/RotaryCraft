@@ -49,11 +49,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 
-	private int index;
+	private final int texture;
 
 	public ItemBedrockSword(int tex) {
 		super(ToolMaterial.EMERALD);
-		this.setIndex(tex);
+		texture = tex;
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		this.setNoRepair();
@@ -62,13 +62,9 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		field_150934_a = 12;
 	}
 
-	private void setIndex(int tex) {
-		index = tex;
-	}
-
 	@Override
 	public int getItemSpriteIndex(ItemStack is) {
-		return index;
+		return texture;
 	}
 
 	@Override
@@ -82,8 +78,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	}
 
 	@Override
-	public float func_150931_i()
-	{
+	public float func_150931_i() {
 		return 1;
 	}
 

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,11 +27,11 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 
 public abstract class ItemRotaryShears extends ItemShears implements IndexedItemSprites {
 
-	private int index;
+	private final int texture;
 
 	protected ItemRotaryShears(int tex) {
 		super();
-		this.setIndex(tex);
+		texture = tex;
 		maxStackSize = 1;
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
@@ -41,13 +41,9 @@ public abstract class ItemRotaryShears extends ItemShears implements IndexedItem
 		return true;
 	}
 
-	private void setIndex(int tex) {
-		index = tex;
-	}
-
 	@Override
 	public final int getItemSpriteIndex(ItemStack is) {
-		return index;
+		return texture;
 	}
 
 	@Override

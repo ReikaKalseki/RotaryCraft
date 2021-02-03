@@ -22,6 +22,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Interfaces.GPRReactive;
 import Reika.RotaryCraft.Auxiliary.BlockColorMapper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
@@ -33,9 +34,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGPR extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
+	public static final int MAX_WIDTH = 256;
+	public static final int MAX_HEIGHT = 81;
+
 	/** A depth-by-width array of the discovered block IDs, materials, colors
 	 * drawn downwards (first slots are top layer) */
-	public BlockKey[][] blocks = new BlockKey[256][81]; //from 0-16 -> centred on 8 (8 above and below)
+	private BlockKey[][] blocks = new BlockKey[MAX_WIDTH][MAX_HEIGHT]; //from 0-16 -> centred on 8 (8 above and below)
 
 	public boolean xdir;
 
@@ -123,11 +127,16 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 
 	@SideOnly(Side.CLIENT)
 	public int getColor(int x, int y) {
-		return this.getBlockColor(blocks[x][y]);
+		return this.getBlockColor(this.getBlock(x, y));
+	}
+
+	/** X and Y are RELATIVE TO THE ARRAY ORIGIN */
+	public BlockKey getBlock(int x, int y) {
+		return blocks[x][y];
 	}
 
 	@SideOnly(Side.CLIENT)
-	private int getBlockColor(BlockKey bk) {
+	private static int getBlockColor(BlockKey bk) {
 		return bk != null ? BlockColorMapper.instance.getColorForBlock(bk.blockID, bk.metadata) : BlockColorMapper.UNKNOWN_COLOR.getColor();
 	}
 
@@ -140,28 +149,36 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		if (a == 1) {
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
-					BlockKey bk = BlockKey.getAt(world, x+j-bounds[0]-diff, y-i-1, z);
+					int dx = x+j-bounds[0]-diff;
+					int dy = y-i-1;
+					BlockKey bk = BlockKey.getAt(world, dx, dy, z);
 					blocks[i][j] = bk;
-					this.checkAchievements(bk);
+					this.handleBlock(world, dx, dy, z, bk);
 				}
 			}
 		}
 		else {
 			for (int j = bounds[0]; j <= bounds[1]; j++) {
 				for (int i = 0; i < y; i++) {
-					BlockKey bk = BlockKey.getAt(world, x, y-i-1, z+j-bounds[0]-diff);
+					int dy = y-i-1;
+					int dz = z+j-bounds[0]-diff;
+					BlockKey bk = BlockKey.getAt(world, x, dy, dz);
 					blocks[i][j] = bk;
-					this.checkAchievements(bk);
+					this.handleBlock(world, x, dy, dz, bk);
 				}
 			}
 		}
 	}
 
-	private void checkAchievements(BlockKey bk) {
+	private void handleBlock(World world, int x, int y, int z, BlockKey bk) {
 		if (bk.blockID == Blocks.end_portal || bk.blockID == Blocks.end_portal_frame)
 			RotaryAchievements.GPRENDPORTAL.triggerAchievement(this.getPlacer());
 		else if (bk.blockID == Blocks.mob_spawner)
 			RotaryAchievements.GPRSPAWNER.triggerAchievement(this.getPlacer());
+
+		if (bk.blockID instanceof GPRReactive) {
+			((GPRReactive)bk.blockID).onScanned(world, x, y, z, bk.blockID, bk.metadata);
+		}
 	}
 
 	public int[] getBounds() { //Returns [low, hi]

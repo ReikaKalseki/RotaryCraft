@@ -11,12 +11,12 @@
 <engines>
 	<dc>
 		<desc>
-			The direct current (DC) engine is the simplest to make and operate. All it requires to function is a continuous redstone signal of any strength. This ease comes at a cost, though - these engines are the weakest of all, outputting %d Nm of torque at %d rad/s for %.3fkW of power.
+			The direct current (DC) engine is the simplest to make and operate. All it requires to function is a continuous redstone signal of any strength. This ease comes at a cost, though - these engines are the weakest of all, outputting %d $TORQUE_UNIT$ of torque at %d $SPEED_UNIT$ for %.3f$POWER_UNIT$ of power.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Speed: %d $SPEED_UNIT$
+			Power: %.3f$POWER_UNIT$
 			Power Source: Redstone
 			Requires Consumables: No
 			Risks: None
@@ -24,12 +24,12 @@
 	</dc>
 	<wind>
 		<desc>
-			The wind turbine uses wind to generate rotational power. Due to the low density of air, it does not generate much torque (only %d Nm), but its design allows it to rotate at the rather rapid speed of %d rad/s, producing a total of %.3fkW at max efficiency. Note that the efficiency of this engine is only maximized when it is high up and out in the open. Objects and blocks can obstruct the blades of this engine.
+			The wind turbine uses wind to generate rotational power. Due to the low density of air, it does not generate much torque (only %d $TORQUE_UNIT$), but its design allows it to rotate at the rather rapid speed of %d $SPEED_UNIT$, producing a total of %.3f$POWER_UNIT$ at max efficiency. Note that the efficiency of this engine is only maximized when it is high up and out in the open. Objects and blocks can obstruct the blades of this engine.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Speed: %d $SPEED_UNIT$
+			Power: %.3f$POWER_UNIT$
 			Power Source: Wind
 			Requires Consumables: No
 			Risks: Spinning Blades
@@ -38,12 +38,12 @@
 	</wind>
 	<steam>
 		<desc>
-			The steam engine operates continuously if given a source of heat below it and water piped in. Slightly stronger than the previous engines, they provide %d Nm at %d rad/s (%.3fkW).
+			The steam engine operates continuously if given a source of heat below it and water piped in. Slightly stronger than the previous engines, they provide %d $TORQUE_UNIT$ at %d $SPEED_UNIT$ (%.3f$POWER_UNIT$).
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Speed: %d $SPEED_UNIT$
+			Power: %.3f$POWER_UNIT$
 			Power Source: Water and Heat
 			Requires Consumables: Water
 			Risks: Overheating at 150C
@@ -51,12 +51,12 @@
 	</steam>
 	<gas>
 		<desc>
-			The gasoline engine, true to its name, runs on...ethanol. Simply load in ethanol crystals and watch them burn to produce %d Nm of torque at %d rad/s, or %.3fkW of power.
+			The gasoline engine, true to its name, runs on...ethanol. Simply load in ethanol crystals and watch them burn to produce %d $TORQUE_UNIT$ of torque at %d $SPEED_UNIT$, or %.3f$POWER_UNIT$ of power.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Speed: %d $SPEED_UNIT$
+			Power: %.3f$POWER_UNIT$
 			Power Source: Ethanol
 			Requires Consumables: Ethanol
 			Risks: None
@@ -64,14 +64,14 @@
 	</gas>
 	<ac>
 		<desc>
-			The alternating current (AC) engine, like its DC cousin, requires a redstone signal to perform. However, this one needs an alternating signal, best supplied with a redstone clock. Faster cycle times correlate to more consistent power output, with 2-clocks providing a constant supply of %d Nm at %d rad/s (%.3fkW). This engine requires a magnetized shaft core, which it will gradually de-magnetize.
+			The alternating current (AC) engine, like its DC cousin, requires a redstone signal to perform. However, this one needs an alternating signal, best supplied with a redstone clock. Faster cycle times correlate to more consistent power output, with 2-clocks providing a constant supply of %d $TORQUE_UNIT$ at %d $SPEED_UNIT$ (%.3f$POWER_UNIT$). This engine requires a magnetized shaft core, which it will gradually de-magnetize.
 		</desc>
 		<note>
 			<sub>
 				<s1>
-					Torque: %d Nm
-					Speed: %d rad/s
-					Power: %.3fkW
+					Torque: %d $TORQUE_UNIT$
+					Speed: %d $SPEED_UNIT$
+					Power: %.3f$POWER_UNIT$
 					Power Source: Redstone Clock and Magnetized Shaft Core
 					Requires Consumables: Shaft Core Magnetization
 					Risks: None
@@ -84,12 +84,12 @@
 	</ac>
 	<sport>
 		<desc>
-			The performance engine, like the gasoline engine, runs on ethanol, but it also requires water coolant and can only reach its maximum output when given the correct additives to its fuel supply - redstone, gunpowder, or blaze powder, each being more effective than the last. Fully supplied and maintained, these engines will produce %d Nm of torque at %d rad/s, a total of %.3fkW.
+			The performance engine, like the gasoline engine, runs on ethanol, but it also requires water coolant and can only reach its maximum output when given the correct additives to its fuel supply - redstone, gunpowder, or blaze powder, each being more effective than the last. Fully supplied and maintained, these engines will produce %d $TORQUE_UNIT$ of torque at %d $SPEED_UNIT$, a total of %.3f$POWER_UNIT$.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Speed: %d $SPEED_UNIT$
+			Power: %.3f$POWER_UNIT$
 			Power Source: Ethanol And Additives
 			Requires Consumables: Ethanol and Redstone/Gunpowder/Blaze Powder
 			Risks: Overheating at 240C
@@ -97,14 +97,14 @@
 	</sport>
 	<hydro>
 		<desc>
-			The hydrokinetic engine converts the energy of falling liquids into shaft power. Note that this machine can only rotate counterclockwise, and therefore the waterfall must be positioned accordingly. Additionally, adjacent blocks can obstruct the paddles from rotating. Finally, this engine's power output is dependent on how far the water is falling. A 3-block fall will produce minimal power, but a 64+ block fall can produce %d Nm at %d rad/s, the highest torque of any engine, totalling %.3fkW. These engines can also be chained, adding their torques together. This engine must be lubricated to function.
+			The hydrokinetic engine converts the energy of falling liquids into shaft power. Note that this machine can only rotate countercloc$POWER_UNIT$ise, and therefore the waterfall must be positioned accordingly. Additionally, adjacent blocks can obstruct the paddles from rotating. Finally, this engine's power output is dependent on how far the water is falling. A 3-block fall will produce minimal power, but a 64+ block fall can produce %d $TORQUE_UNIT$ at %d $SPEED_UNIT$, the highest torque of any engine, totalling %.3f$POWER_UNIT$. These engines can also be chained, adding their torques together. This engine must be lubricated to function.
 		</desc>
 		<note>
 			<sub>
 				<s1>
-					Max Torque: %d Nm
-					Max Speed: %d rad/s
-					Max Power: %.3fkW
+					Max Torque: %d $TORQUE_UNIT$
+					Max Speed: %d $SPEED_UNIT$
+					Max Power: %.3f$POWER_UNIT$
 					Power Source: Falling Liquids
 					Requires Consumables: Lubricant
 					Risks: Spinning Paddles
@@ -122,12 +122,12 @@
 	</hydro>
 	<micro>
 		<desc>
-			The microturbine is rather unique. When given a constant supply of fuel, it supplies very little torque (%d Nm), but does it at an enormous speed of %d rad/s, for a total output of just over two megawatts (%.3fMW).
+			The microturbine is rather unique. When given a constant supply of fuel, it supplies very little torque (%d $TORQUE_UNIT$), but does it at an enormous speed of %d $SPEED_UNIT$, for a total output of just over two megawatts (%.3f$POWER_UNIT$).
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fMW
+			Torque: %d $TORQUE_UNIT$
+			Speed: %d $SPEED_UNIT$
+			Power: %.3f$POWER_UNIT$
 			Power Source: Jet Fuel
 			Requires Consumables: Jet Fuel
 			Risks: None
@@ -135,12 +135,12 @@
 	</micro>
 	<jet>
 		<desc>
-			The most powerful engine of all, the gas turbine is a monster, outputting power comparable to that of an engine of a commerical jet airliner...and with sound to match. These engines will, when fuelled, provide %d Nm of torque at %d rad/s (%.3fMW). Be warned, unless you want to find out what it feels like to go through a blender, stay AWAY from the front of this one while in operation! Neither you nor your engine will fare well.
+			The most powerful engine of all, the gas turbine is a monster, outputting power comparable to that of an engine of a commerical jet airliner...and with sound to match. These engines will, when fuelled, provide %d $TORQUE_UNIT$ of torque at %d $SPEED_UNIT$ (%.3f$POWER_UNIT$). Be warned, unless you want to find out what it feels like to go through a blender, stay AWAY from the front of this one while in operation! Neither you nor your engine will fare well.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Speed: %d rad/s
-			Power: %.3fMW
+			Torque: %d $TORQUE_UNIT$
+			Speed: %d $SPEED_UNIT$
+			Power: %.3f$POWER_UNIT$
 			Power Source: Jet Fuel
 			Requires Consumables: Jet Fuel
 			Risks: Ingestion; Possible violent failure if damaged
@@ -152,7 +152,7 @@
 		</desc>
 		<note>
 			Torque: Scaleable
-			Speed: %d rad/s
+			Speed: %d $SPEED_UNIT$
 			Power: Scaleable
 			Power Source: Sunlight
 			Requires Consumables: Water

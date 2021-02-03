@@ -566,8 +566,7 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	}
 
 	public void loadFromConfig() {
-		String sg = this.getFullSavePath();
-		File f = new File(sg);
+		File f = this.getFullSavePath();
 		if (f.exists()) {
 			ArrayList<String> li = ReikaFileReader.getFileAsLines(f, false);
 			for (String s : li) {
@@ -608,8 +607,8 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 		return "RotaryCraft_CustomGPRColors.cfg";
 	}
 
-	private final String getFullSavePath() {
-		return RotaryCraft.config.getConfigFolder().getAbsolutePath()+"/"+this.getSaveFileName();
+	private final File getFullSavePath() {
+		return new File(RotaryCraft.config.getConfigFolder(), this.getSaveFileName());
 	}
 
 	public static interface GPRBlockColor {

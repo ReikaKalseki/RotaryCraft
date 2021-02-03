@@ -132,7 +132,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return true;
 		else {
 			ItemStack in = inv[slot];
-			return ReikaItemHelper.areStacksCombinable(is, is, this.getInventoryStackLimit());
+			return ReikaItemHelper.areStacksCombinable(is, in, this.getInventoryStackLimit());
 		}
 	}
 

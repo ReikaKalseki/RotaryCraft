@@ -104,7 +104,7 @@ public class RenderBelt extends RotaryTERenderer
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityBeltAt((TileEntityBeltHub)tile, par2, par4, par6, par8);
-		if (((TileEntityBeltHub)tile).shouldRenderBelt()) {
+		if (((TileEntityBeltHub)tile).hasValidConnection()) {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			//this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);
 			this.drawBelt2((TileEntityBeltHub)tile, par2, par4, par6, par8);

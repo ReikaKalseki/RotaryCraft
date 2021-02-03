@@ -37,12 +37,12 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 
 	protected Random par5Random = new Random();
 
-	private int index;
+	private final int texture;
 
 	public ItemBasic(int tex) {
 		maxStackSize = 64;
 		this.setCreativeTab(this.isAvailableInCreativeMode() ? this.getCreativePage() : null);
-		this.setIndex(tex);
+		texture = tex;
 	}
 
 	public ItemBasic(int ID, int tex, int max) {
@@ -53,7 +53,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 			this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		else
 			this.setCreativeTab(null);
-		this.setIndex(tex);
+		texture = tex;
 	}
 
 	protected CreativeTabs getCreativePage() {
@@ -67,15 +67,11 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	}
 
 	public int getItemSpriteIndex(ItemStack item) {
-		return index;
+		return texture;
 	}
 
 	protected final int getRootIndex() {
-		return index;
-	}
-
-	public void setIndex(int a) {
-		index = a;
+		return texture;
 	}
 
 	@Override

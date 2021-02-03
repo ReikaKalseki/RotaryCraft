@@ -427,38 +427,28 @@ public class RotaryAux {
 	}
 
 	public static String formatTorqueSpeedPowerForBook(String text, double torque, double speed, double power) {
-		if (OldTextureLoader.instance.loadOldTextures()) {
+		boolean old = OldTextureLoader.instance.loadOldTextures();
+		String powerunit = old ? "hp" : "W";
+		String torqueunit = old ? "ft-lb" : "Nm";
+		String speedunit = old ? "rpm" : "rad/s";
+		if (old) {
 			speed *= 9.55;
 			torque *= 0.738;
 			power /= 745.7;
-			char[] arr = text.toCharArray();
-			String[] pieces = new String[arr.length];
-			for (int i = 0; i < arr.length; i++) {
-				pieces[i] = String.valueOf(arr[i]);
-			}
-			boolean primed = false;
-			for (int i = 0; i < arr.length; i++) {
-				char c = arr[i];
-				if (c == '%') {
-					primed = true;
-					if (arr[i+1] == 'd') {
-						pieces[i+1] = ".3f";
-					}
-				}
-			}
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < pieces.length; i++) {
-				String s = pieces[i];
-				sb.append(s);
-			}
-			text = sb.toString();
-			text = text.replace("rad/s", "rpm");
-			text = text.replace("W", "hp");
-			text = text.replace("Nm", "ft-lb");
-			return String.format(text, torque, speed, power);
 		}
+		else {
+			//speedunit = ReikaEngLibrary.getSIPrefix(speed)+speedunit;
+			//torqueunit = ReikaEngLibrary.getSIPrefix(torque)+torqueunit;
+			powerunit = ReikaEngLibrary.getSIPrefix(power)+powerunit;
+			//speed = ReikaMathLibrary.getThousandBase(speed);
+			//torque = ReikaMathLibrary.getThousandBase(torque);
+			power = ReikaMathLibrary.getThousandBase(power);
+		}
+		text = text.replace("$SPEED_UNIT$", speedunit);
+		text = text.replace("$POWER_UNIT$", powerunit);
+		text = text.replace("$TORQUE_UNIT$", torqueunit);
 		String ret = String.format(text, (int)torque, (int)speed, power);
-		return ret.replace(".000", "");
+		return ret;
 	}
 
 	public static String formatValuesForBook(String text, Object[] vals) {

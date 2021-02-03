@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,12 +26,12 @@ public class LuaGetBlockAtPos extends LuaMethod {
 		TileEntityGPR tg = (TileEntityGPR)te;
 		int dh = ((Double)args[0]).intValue();
 		int dv = ((Double)args[1]).intValue();
-		int x = tg.blocks[0].length/2+dh;
+		int x = TileEntityGPR.MAX_HEIGHT/2+dh;
 		int y = dv;
 		int[] lim = tg.getBounds();
-		if (x < lim[0] || x > lim[1] || y < 0 || y > tg.blocks.length) //out of bounds
+		if (x < lim[0] || x > lim[1] || y < 0 || y > TileEntityGPR.MAX_WIDTH) //out of bounds
 			return null;
-		BlockKey bk = tg.blocks[x][y];
+		BlockKey bk = tg.getBlock(x, y);
 		return new Object[]{bk.blockID, bk.metadata};
 	}
 

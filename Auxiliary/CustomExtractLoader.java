@@ -146,17 +146,17 @@ public class CustomExtractLoader {
 		}
 	}
 
-	public final String getSaveFileName() {
+	private final String getSaveFileName() {
 		return "RotaryCraft_CustomExtracts.cfg";
 	}
 
-	public final String getFullSavePath() {
-		return RotaryCraft.config.getConfigFolder().getAbsolutePath()+"/"+this.getSaveFileName();
+	private final File getFullSavePath() {
+		return new File(RotaryCraft.config.getConfigFolder(), this.getSaveFileName());
 	}
 
 	public void loadFile() {
 		RotaryCraft.logger.log("Loading custom extract config.");
-		File f = new File(this.getFullSavePath());
+		File f = this.getFullSavePath();
 		if (!f.exists())
 			if (!this.createOreFile(f))
 				return;

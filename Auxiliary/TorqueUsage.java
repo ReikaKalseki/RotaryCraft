@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import java.util.HashSet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.RotaryCraft.API.Power.PowerAcceptor;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -168,7 +169,8 @@ public class TorqueUsage {
 			else if (tile instanceof TileEntityBeltHub) {
 				TileEntityBeltHub hub = (TileEntityBeltHub)tile;
 				if (!hub.isEmitting) {
-					TileEntity di = hub.worldObj.getTileEntity(hub.getTargetX(), hub.getTargetY(), hub.getTargetZ());
+					Coordinate tgt = hub.getConnection();
+					TileEntity di = tgt != null ? tgt.getTileEntity(hub.worldObj) : null;
 					if (di instanceof TileEntityBeltHub) {
 						TileEntityBeltHub h2 = (TileEntityBeltHub)di;
 						TileEntity write = h2.getWriteTileEntity();

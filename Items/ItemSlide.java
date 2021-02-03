@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -32,7 +32,6 @@ public class ItemSlide extends ItemBasic {
 		super(index);
 		maxStackSize = 1;
 		hasSubtypes = true;
-		this.setIndex(index);
 	}
 
 	@Override

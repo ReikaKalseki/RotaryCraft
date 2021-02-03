@@ -51,6 +51,7 @@ import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartOreHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.HexBlockHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MFRHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
@@ -76,13 +77,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItemSprites {
 
-	private int index;
+	private final int sprite;
 
 	private final ArrayList<Enchantment> forbiddenEnchants = new ArrayList();
 
 	public ItemBedrockPickaxe(int tex) {
 		super(ToolMaterial.EMERALD);
-		this.setIndex(tex);
+		sprite = tex;
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		efficiencyOnProperMaterial = 12F;
@@ -100,8 +101,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) //Adds the metadata blocks to the creative inventory
-	{
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		ItemStack item = new ItemStack(par1, 1, 0);
 		item.addEnchantment(Enchantment.silkTouch, 1);
 		item.addEnchantment(Enchantment.fortune, 5);
@@ -160,6 +160,10 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 				return true;
 			}
 			if (ModList.MAGICCROPS.isLoaded() && MagicCropHandler.getInstance().isEssenceOre(id)) {
+				this.dropDirectBlock(block, world, x, y, z);
+				return true;
+			}
+			if (ModList.HEXCRAFT.isLoaded() && HexBlockHandler.getInstance().isMonolith(id)) {
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
 			}
@@ -310,6 +314,8 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 90F;
 		if (ModOreList.getModOreFromOre(b, meta) == ModOreList.MIMICHITE)
 			return 64F;
+		if (ModList.HEXCRAFT.isLoaded() && HexBlockHandler.getInstance().isMonolith(b))
+			return 64;
 		if (b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitFacade") || b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitBundle"))
 			return 24F;
 
@@ -341,11 +347,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 	}
 
 	public int getItemSpriteIndex(ItemStack item) {
-		return index;
-	}
-
-	public void setIndex(int a) {
-		index = a;
+		return sprite;
 	}
 
 	@Override

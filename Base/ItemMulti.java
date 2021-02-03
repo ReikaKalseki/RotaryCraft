@@ -21,9 +21,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -84,64 +86,38 @@ public class ItemMulti extends ItemBasic {
 		TileEntityBeltHub te = (TileEntityBeltHub)world.getTileEntity(x, y, z);
 		if (is.stackTagCompound == null) {
 			is.stackTagCompound = new NBTTagCompound();
-			is.stackTagCompound.setInteger("ex", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("ey", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("rx", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("ry", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("rz", Integer.MIN_VALUE);
+			new Coordinate(te).writeToNBT("end1", is.stackTagCompound);
+			return true;
 		}
-		if (te.isEmitting) {
-			is.stackTagCompound.setInteger("ex", x);
-			is.stackTagCompound.setInteger("ey", y);
-			is.stackTagCompound.setInteger("ez", z);
+		Coordinate c1 = Coordinate.readFromNBT("end1", is.stackTagCompound);
+		if (c1 == null) {
+			ReikaChatHelper.writeString("No valid other end found");
+			return false;
 		}
-		else {
-			is.stackTagCompound.setInteger("rx", x);
-			is.stackTagCompound.setInteger("ry", y);
-			is.stackTagCompound.setInteger("rz", z);
+		TileEntity te0 = c1.getTileEntity(world);
+		if (!(te0 instanceof TileEntityBeltHub)) {
+			ReikaChatHelper.writeString("Tile at other end is invalid");
+			return false;
 		}
-		int ex = is.stackTagCompound.getInteger("ex");
-		int ey = is.stackTagCompound.getInteger("ey");
-		int ez = is.stackTagCompound.getInteger("ez");
-		int rx = is.stackTagCompound.getInteger("rx");
-		int ry = is.stackTagCompound.getInteger("ry");
-		int rz = is.stackTagCompound.getInteger("rz");
-
-		int dl = Math.abs(ex-rx+ey-ry+ez-rz)-1;
+		int dl = c1.getTaxicabDistanceTo(x, y, z)-1;
 
 		//ReikaJavaLibrary.pConsole(dl);
 		if (is.stackSize >= dl || ep.capabilities.isCreativeMode) {
-			if (rx != Integer.MIN_VALUE && ry != Integer.MIN_VALUE && rz != Integer.MIN_VALUE) {
-				if (ex != Integer.MIN_VALUE && ey != Integer.MIN_VALUE && ez != Integer.MIN_VALUE) {
-					TileEntityBeltHub em = (TileEntityBeltHub)world.getTileEntity(ex, ey, ez);
-					TileEntityBeltHub rec = (TileEntityBeltHub)world.getTileEntity(rx, ry, rz);
-
-					//ReikaJavaLibrary.pConsole(rec+"\n"+em);
-					if (em == null) {
-						ReikaChatHelper.writeString("Belt Hub missing at "+ex+", "+ey+", "+ez);
-						is.stackTagCompound = null;
-						return false;
-					}
-					if (rec == null) {
-						ReikaChatHelper.writeString("Belt Hub missing at "+rx+", "+ry+", "+rz);
-						is.stackTagCompound = null;
-						return false;
-					}
-					rec.resetOther();
-					em.resetOther();
-					em.reset();
-					rec.reset();
-					boolean src = em.setSource(world, rx, ry, rz);
-					boolean tg = rec.setTarget(world, ex, ey, ez);
-					//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
-					if (src && tg) {
-						//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
-						if (!ep.capabilities.isCreativeMode)
-							is.stackSize -= dl;
-					}
-					is.stackTagCompound = null;
-				}
+			is.stackTagCompound = null;
+			TileEntityBeltHub bb = (TileEntityBeltHub)te0;
+			bb.resetOther();
+			te.resetOther();
+			bb.reset();
+			te.reset();
+			//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
+			if (te.tryConnect(world, bb.xCoord, bb.yCoord, bb.zCoord) && bb.tryConnect(world, x, y, z)) {
+				//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
+				if (!ep.capabilities.isCreativeMode)
+					is.stackSize -= dl;
+				return true;
+			}
+			else {
+				ReikaChatHelper.writeString("Connection is invalid");
 			}
 		}
 		return false;
