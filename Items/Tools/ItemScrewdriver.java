@@ -323,10 +323,7 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 			if (m == MachineRegistry.GPR) {
 				TileEntityGPR clicked = (TileEntityGPR)te;
 				if (clicked != null) {
-					if (clicked.xdir)
-						clicked.xdir = false;
-					else
-						clicked.xdir = true;
+					clicked.flipDirection();
 					return true;
 				}
 			}

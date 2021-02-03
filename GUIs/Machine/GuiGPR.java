@@ -86,10 +86,15 @@ public class GuiGPR extends GuiPowerOnlyMachine
 	}
 
 	private void drawRadar(int a, int b) {
-		for (int j = gpr.getBounds()[0]; j <= gpr.getBounds()[1]; j++) {
-			for (int i = 0; i < 96 && gpr.yCoord-i > 0; i++) {
-				int color = 0xff000000 | gpr.getColor(i, j);
-				this.drawRect(a+7+UNIT*j, b+16+UNIT*i-2, a+7+UNIT+UNIT*j, b+16+UNIT*i+UNIT, color);
+		int r = gpr.getRange();
+		for (int x = -r; x <= r; x++) {
+			int[] yy = gpr.getVerticalInterval();
+			for (int dy = yy[0]; dy > yy[1]; dy--) {
+				int dd = gpr.yCoord-dy;
+				int color = 0xff000000 | gpr.getColor(x, dd);
+				int x0 = a+7+UNIT*(x+gpr.MAX_WIDTH/2);
+				int y0 = b+16+UNIT*dd-2;
+				this.drawRect(x0, y0, x0+UNIT, y0+UNIT, color);
 			}
 		}
 

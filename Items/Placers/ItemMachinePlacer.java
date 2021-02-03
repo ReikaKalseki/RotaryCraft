@@ -139,16 +139,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (m == MachineRegistry.GPR) {
 			TileEntityGPR tile = (TileEntityGPR)te;
-			switch (RotaryAux.get2SidedMetadataFromPlayerLook(ep)) {
-				case 0:
-				case 2:
-					tile.xdir = true;
-					break;
-				case 1:
-				case 3:
-					tile.xdir = false;
-					break;
-			}
+			int vside = RotaryAux.get2SidedMetadataFromPlayerLook(ep);
+			tile.setDirection(vside == 0 || vside == 2);
 			world.setBlockMetadataWithNotify(x, y, z, BlockGPR.getBiomeDesign(world, x, y, z), 3);
 			return true;
 		}

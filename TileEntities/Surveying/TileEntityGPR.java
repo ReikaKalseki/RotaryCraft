@@ -34,14 +34,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGPR extends TileEntityPowerReceiver implements GuiController, RangedEffect {
 
-	public static final int MAX_WIDTH = 256;
-	public static final int MAX_HEIGHT = 81;
+	public static final int MAX_HEIGHT = 96;//256;
+	public static final int MAX_WIDTH = 81;
 
 	/** A depth-by-width array of the discovered block IDs, materials, colors
-	 * drawn downwards (first slots are top layer) */
-	private BlockKey[][] blocks = new BlockKey[MAX_WIDTH][MAX_HEIGHT]; //from 0-16 -> centred on 8 (8 above and below)
+	 * drawn downwards (first slots are top layer); all coords relative to tile */
+	private BlockKey[][] blocks = new BlockKey[MAX_HEIGHT][MAX_WIDTH]; //from 0-16 -> centred on 8 (8 above and below)
 
-	public boolean xdir;
+	/** True means the rendered plane runs east-west, and the GUI "looks" northward */
+	private boolean xdir;
 
 	private int offsetX;
 	private int offsetY;
@@ -83,13 +84,13 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	}
 
 	public double getSpongy(World world, int x, int y, int z) {
-		int range = (this.getBounds()[1]-this.getBounds()[0])/2;
 		int numcave = 0;
 		int numsolid = 0;
 		boolean dungeon = false;
 		boolean mineshaft = false;
 		boolean stronghold = false;
 
+		int range = this.getRange();
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
 				for (int k = y; k >= 0; k--) {
@@ -118,21 +119,21 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 			return;
 		RotaryAchievements.GPR.triggerAchievement(this.getPlacer());
 		if (tickcount == 0) {
-			int[] bounds = this.getBounds();
-			this.eval2(world, x+offsetX, y+offsetY, z+offsetZ, meta, bounds);
+			this.eval2(world, x+offsetX, y+offsetY, z+offsetZ, meta);
 			tickcount = 20;
 		}
 		tickcount--;
 	}
 
 	@SideOnly(Side.CLIENT)
+	/** Args: Relative X, relative depth */
 	public int getColor(int x, int y) {
 		return this.getBlockColor(this.getBlock(x, y));
 	}
 
-	/** X and Y are RELATIVE TO THE ARRAY ORIGIN */
+	/** Args: Relative X, relative depth */
 	public BlockKey getBlock(int x, int y) {
-		return blocks[x][y];
+		return blocks[y-1][x+this.getRange()];
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -140,32 +141,17 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		return bk != null ? BlockColorMapper.instance.getColorForBlock(bk.blockID, bk.metadata) : BlockColorMapper.UNKNOWN_COLOR.getColor();
 	}
 
-	private void eval2(World world, int x, int y, int z, int meta, int[] bounds) {
-		int a = 0;
-		if (xdir)
-			a = 1;
-		int b = 1-a;
-		int diff = (bounds[1]-bounds[0])/2;
-		if (a == 1) {
-			for (int j = bounds[0]; j <= bounds[1]; j++) {
-				for (int i = 0; i < y; i++) {
-					int dx = x+j-bounds[0]-diff;
-					int dy = y-i-1;
-					BlockKey bk = BlockKey.getAt(world, dx, dy, z);
-					blocks[i][j] = bk;
-					this.handleBlock(world, dx, dy, z, bk);
-				}
-			}
-		}
-		else {
-			for (int j = bounds[0]; j <= bounds[1]; j++) {
-				for (int i = 0; i < y; i++) {
-					int dy = y-i-1;
-					int dz = z+j-bounds[0]-diff;
-					BlockKey bk = BlockKey.getAt(world, x, dy, dz);
-					blocks[i][j] = bk;
-					this.handleBlock(world, x, dy, dz, bk);
-				}
+	private void eval2(World world, int x, int y, int z, int meta) {
+		ForgeDirection dir = ReikaDirectionHelper.getRightBy90(this.getGuiDirection());
+		int r = this.getRange();
+		int[] yy = this.getVerticalInterval();
+		for (int j = -r; j <= r; j++) {
+			for (int dy = yy[0]; dy >= yy[1]; dy--) {
+				int dx = x+j*Math.abs(dir.offsetX);
+				int dz = z+j*Math.abs(dir.offsetZ);
+				BlockKey bk = BlockKey.getAt(world, dx, dy, dz);
+				blocks[yCoord-dy-1][j+r] = bk;
+				this.handleBlock(world, dx, dy, dz, bk);
 			}
 		}
 	}
@@ -181,6 +167,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		}
 	}
 
+	/*
 	public int[] getBounds() { //Returns [low, hi]
 		int[] val = {40,40};
 
@@ -194,10 +181,26 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		if (val[1] >= 80)
 			val[1] = 80;
 		return val;
+	}*/
+	/*
+	public int[] getHorizontalInterval() {
+		int[] val = {xdir ? xCoord : zCoord, xdir ? xCoord : zCoord};
+
+		int range = this.getRange();
+		if (range <= 0)
+			return val;
+		val[0] -= range;
+		val[1] += range;
+		return val;
 	}
 
+	public int[] getVerticalInterval() {
+		int[] val = {yCoord-1, yCoord-MAX_HEIGHT};
+		return val;
+	}
+	 */
 	public int getRange() {
-		return (int)(2*ReikaMathLibrary.logbase(power-MINPOWER, 2));
+		return Math.min(this.getMaxRange(), 2*ReikaMathLibrary.logbase2(power-MINPOWER));
 	}
 
 	@Override
@@ -217,7 +220,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 
 	@Override
 	public int getMaxRange() {
-		return 40;
+		return MAX_WIDTH/2;
 	}
 
 	@Override
@@ -232,6 +235,8 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		offsetX = NBT.getInteger("xoff");
 		offsetY = NBT.getInteger("yoff");
 		offsetZ = NBT.getInteger("zoff");
+
+		xdir = NBT.getBoolean("xd");
 	}
 
 	@Override
@@ -241,5 +246,17 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 		NBT.setInteger("xoff", offsetX);
 		NBT.setInteger("yoff", offsetY);
 		NBT.setInteger("zoff", offsetZ);
+
+		NBT.setBoolean("xd", xdir);
+	}
+
+	public void setDirection(boolean x) {
+		xdir = x;
+		this.syncAllData(false);
+		this.triggerBlockUpdate();
+	}
+
+	public void flipDirection() {
+		this.setDirection(!xdir);
 	}
 }
