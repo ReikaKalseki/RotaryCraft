@@ -144,13 +144,13 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	private void eval2(World world, int x, int y, int z, int meta) {
 		ForgeDirection dir = ReikaDirectionHelper.getRightBy90(this.getGuiDirection());
 		int r = this.getRange();
-		int[] yy = this.getVerticalInterval();
 		for (int j = -r; j <= r; j++) {
-			for (int dy = yy[0]; dy >= yy[1]; dy--) {
+			for (int dd = 1; dd <= MAX_HEIGHT; dd++) {
+				int dy = yCoord-dd;
 				int dx = x+j*Math.abs(dir.offsetX);
 				int dz = z+j*Math.abs(dir.offsetZ);
 				BlockKey bk = BlockKey.getAt(world, dx, dy, dz);
-				blocks[yCoord-dy-1][j+r] = bk;
+				blocks[dd-1][j+r] = bk;
 				this.handleBlock(world, dx, dy, dz, bk);
 			}
 		}
