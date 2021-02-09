@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -235,15 +235,10 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 	}
 
 	public static boolean isWearingFullSuitOf(EntityLivingBase e) {
-		for (int i = 1; i < 5; i++) {
-			ItemStack is = e.getEquipmentInSlot(i);
-			if (!checkItem(is))
-				return false;
-		}
-		return true;
+		return ReikaEntityHelper.isEntityWearingFullSuitOf(e, (ItemStack is) -> isValidBedrockArmorItem(is));
 	}
 
-	private static boolean checkItem(ItemStack is) {
+	public static boolean isValidBedrockArmorItem(ItemStack is) {
 		if (is == null)
 			return false;
 		if (ModList.CHROMATICRAFT.isLoaded()) {
@@ -263,7 +258,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 		if (ChromaItems.FLOATBOOTS.matchWith(is)) {
 			ItemStack in = ItemFloatstoneBoots.getSpecialItem(is);
 			if (in != null) {
-				return checkItem(in);
+				return isValidBedrockArmorItem(in);
 			}
 		}
 		return false;

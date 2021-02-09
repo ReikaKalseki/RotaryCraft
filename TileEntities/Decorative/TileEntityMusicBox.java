@@ -15,11 +15,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +29,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Instantiable.MusicScore;
+import Reika.DragonAPI.Instantiable.MusicScore.NoteData;
+import Reika.DragonAPI.Instantiable.MusicScore.ScoreTrack;
 import Reika.DragonAPI.Instantiable.IO.MIDIInterface;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
@@ -264,7 +265,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return;
 		}
 		try {
-			MusicScore mus = new MIDIInterface(f).fillToScore(true).scaleSpeed(11);
+			MusicScore mus = new MIDIInterface(f).fillToScore(true).scaleSpeed(11, true);
 			this.dispatchTrack(mus);
 		}
 		catch (Exception e) {
@@ -276,12 +277,15 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private void dispatchTrack(MusicScore mus) {
 		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.ordinal(), this);
 		for (int i = 0; i < mus.countTracks(); i++) {
-			Map<Integer, Collection<MusicScore.Note>> track = mus.getTrack(i);
+			ScoreTrack track = mus.getTrack(i);
+			if (track == null)
+				continue;
 			int lastNoteTime = -1;
 			int lastNoteLength = -1;
-			for (int time : track.keySet()) {
-				Collection<MusicScore.Note> c = track.get(time);
-				for (MusicScore.Note n : c) {
+			for (Entry<Integer, NoteData> e : track.entryView()) {
+				int time = e.getKey();
+				NoteData c = e.getValue();
+				for (MusicScore.Note n : c.notes()) {
 					if (n != null && n.key != null) {
 						if (lastNoteTime >= 0) {
 							int t1 = lastNoteTime+lastNoteLength;

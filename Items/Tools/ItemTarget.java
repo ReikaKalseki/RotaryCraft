@@ -1,22 +1,21 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
@@ -31,10 +30,9 @@ public class ItemTarget extends ItemRotaryTool {
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer ep) {
 		MovingObjectPosition mov = null;//= ReikaPlayerAPI.getLookedAtBlock(512);
 		for (float i = 0; i <= 512; i += 0.5) {
-			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
-			Block id = world.getBlock(xyz[0], xyz[1], xyz[2]);
-			if (id != Blocks.air) {
-				mov = new MovingObjectPosition(xyz[0], xyz[1], xyz[2], 0, ep.getLookVec());
+			DecimalPosition xyz = ReikaVectorHelper.getPlayerLookCoords(ep, i);
+			if (!xyz.isEmpty(world)) {
+				mov = xyz.asMovingPosition(0, ep.getLookVec());
 				break;
 			}
 		}

@@ -19,9 +19,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 
@@ -83,7 +83,7 @@ public class TemperatureHandler {
 		if (base != null) {
 			return base.intValue();
 		}
-		Fluid f = FluidRegistry.lookupFluidForBlock(b);
+		Fluid f = ReikaFluidHelper.lookupFluidForBlock(b);
 		if (f != null) {
 			return f.getTemperature(world, x, y, z);
 		}

@@ -25,6 +25,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -541,7 +542,7 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 			}
 		}
 		if (c == null) {
-			Fluid f = FluidRegistry.lookupFluidForBlock(b);
+			Fluid f = ReikaFluidHelper.lookupFluidForBlock(b);
 			if (f != null) {
 				c = new BasicBlockColor(f.getColor());
 				map.put(b, meta, c);

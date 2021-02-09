@@ -38,7 +38,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.RayTracer;
@@ -47,6 +46,7 @@ import Reika.DragonAPI.Instantiable.Effects.EntityBlockTexFX;
 import Reika.DragonAPI.Instantiable.Effects.EntityLiquidParticleFX;
 import Reika.DragonAPI.Interfaces.Entity.EtherealEntity;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -808,7 +808,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		int dx = x+write.getOpposite().offsetX;
 		int dz = z+write.getOpposite().offsetZ;
 		Block b = world.getBlock(dx, y, dz);
-		Fluid f = FluidRegistry.lookupFluidForBlock(b);
+		Fluid f = ReikaFluidHelper.lookupFluidForBlock(b);
 		if (f != null) {
 
 			if (worldObj.isRemote) {

@@ -139,7 +139,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return ReikaRandomHelper.doWithChance(oreCopy/100D) ? 2 : 1;
 	}
 
-	public void throughPut() {
+	private void throughPut() {
 		for (int i = 1; i < 4; i++) {
 			if (inv[i+3] != null) {
 				if (inv[i] == null) {
@@ -148,7 +148,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				else if (inv[i].stackSize < inv[i].getMaxStackSize()) {
 					if (ReikaItemHelper.matchStacks(inv[i], inv[i+3])) {
-						int amt = Math.min(inv[i+3].stackSize, inv[i+3].getMaxStackSize()-inv[i+3].stackSize);
+						int amt = Math.min(inv[i+3].stackSize, inv[i].getMaxStackSize()-inv[i].stackSize);
 						amt = Math.min(amt, this.getNumberConsecutiveOperations(i));
 						if (amt > 0) {
 							inv[i].stackSize += amt;

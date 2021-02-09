@@ -65,7 +65,7 @@ public class TileEntityForceField extends TileEntityProtectionDome implements En
 
 	public double[] getBoundaryCoord(double x, double y, double z) {
 		double[] xyz = new double[3];
-		Vec3 vec = ReikaVectorHelper.getVec2Pt(x, y, z, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+		Vec3 vec = ReikaVectorHelper.getVec2Pt(xCoord+0.5, yCoord+0.5, zCoord+0.5, x, y, z);
 		xyz[0] = vec.normalize().xCoord;
 		xyz[1] = vec.normalize().yCoord;
 		xyz[2] = vec.normalize().zCoord;

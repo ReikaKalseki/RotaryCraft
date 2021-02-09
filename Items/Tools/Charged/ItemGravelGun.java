@@ -27,12 +27,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.GravelGunDamage;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -60,8 +59,8 @@ public class ItemGravelGun extends ItemChargedTool {
 		}
 		for (float i = 1; i <= 128; i += 0.5) {
 			Vec3 look = ep.getLookVec();
-			double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, i);
-			AxisAlignedBB fov = AxisAlignedBB.getBoundingBox(looks[0]-0.5, looks[1]-0.5, looks[2]-0.5, looks[0]+0.5, looks[1]+0.5, looks[2]+0.5);
+			DecimalPosition looks = ReikaVectorHelper.getPlayerLookCoords(ep, i);
+			AxisAlignedBB fov = looks.getAABB(0.5);
 			List<Entity> li = world.getEntitiesWithinAABB(Entity.class, fov);
 			ArrayList<Entity> infov = new ArrayList();
 			for (Entity e : li) {
@@ -161,32 +160,6 @@ public class ItemGravelGun extends ItemChargedTool {
 		if (!(ent instanceof EntityLivingBase))
 			return ent instanceof EntityEnderCrystal;
 		return ConfigRegistry.GRAVELPLAYER.getState() || !(ent instanceof EntityPlayer);
-	}
-
-	@Deprecated
-	private void fire(ItemStack is, World world, EntityPlayer ep, Entity ent) {
-		Vec3 look = ep.getLookVec();
-		double[] looks = ReikaVectorHelper.getPlayerLookCoords(ep, 2);
-		if (!(ent instanceof EntityPlayer) && ReikaWorldHelper.lineOfSight(world, ep, ent)) {
-			ItemStack fl = new ItemStack(Items.flint, 0, 0);
-			EntityItem ei = new EntityItem(world, looks[0]/look.lengthVector(), looks[1]/look.lengthVector(), looks[2]/look.lengthVector(), fl);
-			ei.delayBeforeCanPickup = 100;
-			ei.motionX = look.xCoord/look.lengthVector();
-			ei.motionY = look.yCoord/look.lengthVector();
-			ei.motionZ = look.zCoord/look.lengthVector();
-			if (!world.isRemote)
-				ei.velocityChanged = true;
-			if (!world.isRemote)
-				world.playSoundAtEntity(ep, "dig.gravel", 1.5F, 2F);
-			world.spawnEntityInWorld(ei);
-			if (is.getItemDamage() > 4096) { //approx the 1-hit kill of a 10-heart mob
-				ReikaParticleHelper.EXPLODE.spawnAt(world, ent.posX, ent.posY, ent.posZ);
-				world.playSoundAtEntity(ent, "random.explode", 1, 1);
-			}
-			ent.attackEntityFrom(new GravelGunDamage(ep), this.getAttackDamage(is.getItemDamage()));
-			ReikaEntityHelper.knockbackEntity(ep, ent, 0.4);
-			//ent.setRevengeTarget(ep);
-		}
 	}
 
 	private int getChargeConsumed(int charge) {

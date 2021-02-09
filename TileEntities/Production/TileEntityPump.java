@@ -72,7 +72,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		Block idbelow = world.getBlock(x, y-1, z);
 		if (idbelow == Blocks.air)
 			return;
-		Fluid f = FluidRegistry.lookupFluidForBlock(idbelow);
+		Fluid f = ReikaFluidHelper.lookupFluidForBlock(idbelow);
 		if (f == null)
 			return;
 		if (blocks.isEmpty()) {
@@ -168,7 +168,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		if (!(liqid instanceof BlockFluidBase || liqid instanceof BlockLiquid))
 			return false;
 		boolean srcmeta = liqid instanceof BlockFluidFinite ? world.getBlockMetadata(x, y, z) == 7 : world.getBlockMetadata(x, y, z) == 0;
-		Fluid f2 = FluidRegistry.lookupFluidForBlock(liqid);
+		Fluid f2 = ReikaFluidHelper.lookupFluidForBlock(liqid);
 		Fluid f = tank.getActualFluid();
 		if (f2 == null)
 			return false;
