@@ -39,6 +39,7 @@ import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -70,7 +71,6 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel.Flywheels;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
@@ -475,7 +475,7 @@ public final class RotaryDescriptions {
 				);
 
 		addData(HandbookRegistry.SHAFTS, MaterialRegistry.getAllLimitLoadsAsInts());
-		addData(HandbookRegistry.FLYWHEELS, Flywheels.WOOD.maxSpeed, Flywheels.STONE.maxSpeed, Flywheels.IRON.maxSpeed, Flywheels.GOLD.maxSpeed);
+		addData(HandbookRegistry.FLYWHEELS, Flywheels.getLimitsForDisplay());
 
 		addData(HandbookRegistry.MODINTERFACE,
 				ReikaMathLibrary.getThousandBase(ReikaRFHelper.getWattsPerRF()),

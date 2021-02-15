@@ -98,10 +98,6 @@ public final class ItemStacks {
 	public static final ItemStack mount 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(3);
 	public static final ItemStack scrap 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(9);
 	public static final ItemStack ironscrap 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(10);
-	public static final ItemStack flywheelcore 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(11);
-	public static final ItemStack flywheelcore2 	= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(12);
-	public static final ItemStack flywheelcore3 	= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(13);
-	public static final ItemStack flywheelcore4 	= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(14);
 	public static final ItemStack wormgear 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(15);
 
 	public static final ItemStack barrel 			= ItemRegistry.MISCCRAFT.getStackOfMetadata(0);

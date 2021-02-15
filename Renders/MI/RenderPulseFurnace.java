@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,6 +27,11 @@ public class RenderPulseFurnace extends RotaryTERenderer
 
 	private ModelPulseFurnace PulseFurnaceModel = new ModelPulseFurnace();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "PulseJet/";
+	}
+
 	public void renderTileEntityPulseFurnaceAt(TileEntityPulseFurnace tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -42,15 +47,15 @@ public class RenderPulseFurnace extends RotaryTERenderer
 		int maxtemp = tile.MAXTEMP;
 
 		if (temp < maxtemp/10)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetex.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/PulseJet/pulsetex.png");
 		else if (temp < maxtemp/5)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot-1.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/PulseJet/pulsetexhot-1.png");
 		else if (temp < maxtemp/2)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot0.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/PulseJet/pulsetexhot0.png");
 		else if (temp < maxtemp/1.2)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot2.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/PulseJet/pulsetexhot2.png");
 		else
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/pulsetexhot3.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/PulseJet/pulsetexhot3.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -62,18 +67,18 @@ public class RenderPulseFurnace extends RotaryTERenderer
 
 		if (tile.isInWorld()) {
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 180;
-				break;
-			case 1:
-				var11 = 0;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 180;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			if (tile.getBlockMetadata() <= 3)

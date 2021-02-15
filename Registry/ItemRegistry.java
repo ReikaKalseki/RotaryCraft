@@ -186,6 +186,7 @@ public enum ItemRegistry implements ItemEnum {
 	ADVGEAR(0, true,				"item.advplacer",			ItemAdvGearPlacer.class),
 	SHAFTCRAFT(0, true,				"item.shaftcraft",			ItemMulti.class),
 	GEARCRAFT(0, 3, true,			"item.gearcraft",			ItemMulti.class),
+	FLYWHEELCRAFT(208, true,		"crafting.flycore",			ItemMulti.class),
 	ENGINECRAFT(1, true,			"item.enginecraft",			ItemMulti.class),
 	MISCCRAFT(2, true,				"item.misccraft",			ItemMulti.class),
 	BORECRAFT(3, true,				"item.borecraft",			ItemMulti.class),
@@ -450,6 +451,8 @@ public enum ItemRegistry implements ItemEnum {
 				return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
 			case GEARCRAFT:
 				return RotaryNames.getGearPartName(dmg);
+			case FLYWHEELCRAFT:
+				return Flywheels.list[dmg].getName()+" "+this.getBasicName();
 			case SHAFT:
 				return this.getBasicName();
 			case ENGINE:
@@ -457,7 +460,7 @@ public enum ItemRegistry implements ItemEnum {
 			case GEARBOX:
 				return this.getBasicName();
 			case FLYWHEEL:
-				return RotaryNames.getFlywheelName(dmg);
+				return Flywheels.list[dmg].getName()+" "+MachineRegistry.FLYWHEEL.getName();
 			case ADVGEAR:
 				return RotaryNames.getAdvGearName(dmg);
 			case MACHINE:
@@ -633,13 +636,14 @@ public enum ItemRegistry implements ItemEnum {
 			case GEARCRAFT:
 				return 16*GearboxTypes.typeList.length;
 			case FLYWHEEL:
-				return RotaryNames.getNumberFlywheelTypes();
+			case FLYWHEELCRAFT:
+				return Flywheels.list.length;
 			case ADVGEAR:
 				return RotaryNames.getNumberAdvGearTypes();
 			case MACHINE:
 				return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(MachineRegistry.class).size();
 			default:
-				throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
+				throw new RegistrationException(RotaryCraft.instance, "Item "+this+" has subtypes but the number was not specified!");
 		}
 	}
 

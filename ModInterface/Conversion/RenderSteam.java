@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,6 +26,11 @@ public class RenderSteam extends RotaryTERenderer
 	private ModelSteamTurbine SteamModel = new ModelSteamTurbine();
 	//private ModelSteamTurbineV SteamModelV = new ModelSteamTurbineV();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Converter/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -41,7 +46,7 @@ public class RenderSteam extends RotaryTERenderer
 		ModelSteamTurbine var14;
 		var14 = SteamModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamturbtex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Converter/steamturbtex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -52,18 +57,18 @@ public class RenderSteam extends RotaryTERenderer
 		int var11 = 0;
 		float var13;
 		switch(var9) {
-		case 2:
-			var11 = 0;
-			break;
-		case 0:
-			var11 = 180;
-			break;
-		case 1:
-			var11 = 90;
-			break;
-		case 3:
-			var11 = 270;
-			break;
+			case 2:
+				var11 = 0;
+				break;
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
 		}
 
 		GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);

@@ -34,7 +34,7 @@ public class RenderDistribClutch extends RotaryTERenderer
 		ModelDistribClutch var14;
 		var14 = DistributionClutchModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/distribclutchtex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/distribclutchtex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

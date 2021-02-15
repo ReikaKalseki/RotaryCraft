@@ -30,6 +30,11 @@ public class RenderShaft extends RotaryTERenderer
 	protected ModelShaftV VShaftModel = new ModelShaftV();
 	private ModelCross crossModel = new ModelCross();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/Shaft/";
+	}
+
 	public void renderTileEntityShaftAt(TileEntityShaft tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -43,7 +48,7 @@ public class RenderShaft extends RotaryTERenderer
 		ModelShaftV var15 = VShaftModel;
 		ModelCross var16 = crossModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Shaft/"+this.getImageFileName(tile));
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -73,7 +78,7 @@ public class RenderShaft extends RotaryTERenderer
 		float var13;
 
 		if (tile.isCross()) {
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/crosstex.png"); // has own tex
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Shaft/crosstex.png"); // has own tex
 			switch(tile.getBlockMetadata()) {
 				case 0:
 					var16.renderAll(tile, null, -tile.crossphi2, tile.crossphi1); //4-way symmetry, really, so no need to change direction
@@ -93,7 +98,7 @@ public class RenderShaft extends RotaryTERenderer
 			}
 		}
 		else if (tile.isVertical()) {
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getImageFileName(tile));
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Shaft/"+this.getImageFileName(tile));
 			var15.renderAll(tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
 		}
 		else {

@@ -33,10 +33,6 @@ public class RotaryNames {
 			"hydraulic.pump", "hydraulic.turbine"
 	};
 
-	private static final String[] flywheelItemNames = {
-			"flywheel.wood", "flywheel.stone", "flywheel.iron", "flywheel.gold"
-	};
-
 	private static final String[] liquidNames = {
 			"fluid.rc lubricant", "fluid.rc jet fuel", "fluid.rc ethanol", "fluid.rc liquid nitrogen", "fluid.molten hsla"
 	};
@@ -55,7 +51,7 @@ public class RotaryNames {
 	public static final String[] shaftPartNames = {
 			"crafting.panel", "crafting.ingot", "", "crafting.mount", "", "",
 			"", "", "", "crafting.scrap", "crafting.ironscrap",
-			"crafting.woodcore", "crafting.stonecore", "crafting.ironcore", "crafting.goldcore", "crafting.worm"
+			"", "", "", "", "crafting.worm"
 	};
 
 	public static final String[] miscPartNames = {
@@ -156,20 +152,12 @@ public class RotaryNames {
 		return getName(hydraulicItemNames, i);
 	}
 
-	public static String getFlywheelName(int i) {
-		return getName(flywheelItemNames, i);
-	}
-
 	public static int getNumberAdvGearTypes() {
 		return advGearItemNames.length;
 	}
 
 	public static int getNumberEngineTypes() {
 		return engineNames.length;
-	}
-
-	public static int getNumberFlywheelTypes() {
-		return flywheelItemNames.length;
 	}
 
 	public static int getNumberHydraulicTypes() {

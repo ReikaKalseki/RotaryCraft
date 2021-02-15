@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -25,6 +25,11 @@ public class RenderFuelEngine extends RotaryTERenderer
 	private ModelFuelEngine FuelModel = new ModelFuelEngine();
 	//private ModelFuelEngineV FuelModelV = new ModelFuelEngineV();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Converter/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -40,25 +45,25 @@ public class RenderFuelEngine extends RotaryTERenderer
 		ModelFuelEngine var14;
 		var14 = FuelModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/fuelenginetex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Converter/fuelenginetex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
 		int var11 = 0;
 		float var13;
 		switch(var9) {
-		case 2:
-			var11 = -90;
-			break;
-		case 0:
-			var11 = 180;
-			break;
-		case 1:
-			var11 = 0;
-			break;
-		case 3:
-			var11 = 90;
-			break;
+			case 2:
+				var11 = -90;
+				break;
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 0;
+				break;
+			case 3:
+				var11 = 90;
+				break;
 		}
 
 		GL11.glRotatef((float)var11+90, 0.0F, 1.0F, 0.0F);

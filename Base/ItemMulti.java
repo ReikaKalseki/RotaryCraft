@@ -33,6 +33,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -229,6 +230,9 @@ public class ItemMulti extends ItemBasic {
 			case GEARCRAFT: //gearunits
 				j = GearboxTypes.typeList.length*16;
 				break;
+			case FLYWHEELCRAFT:
+				j = Flywheels.list.length;
+				break;
 			default:
 				j = 0;
 				break;
@@ -253,6 +257,10 @@ public class ItemMulti extends ItemBasic {
 				if (item.getItemDamage()%16 >= GearPart.list.length) {
 					continue;
 				}
+			}
+			if (ItemRegistry.SHAFTCRAFT.matchItem(item)) {
+				if (RotaryNames.shaftPartNames[item.getItemDamage()].isEmpty())
+					continue;
 			}
 			String unloc = this.getUnlocalizedName(item);
 			if (Strings.isNullOrEmpty(unloc) || unloc.endsWith("."))
@@ -360,6 +368,9 @@ public class ItemMulti extends ItemBasic {
 		//}
 		if (ItemRegistry.GEARCRAFT.matchItem(item)) {
 			return /*GearboxTypes.getMaterialFromCraftingItem(item).metaOffset+*/item.getItemDamage();
+		}
+		if (ItemRegistry.FLYWHEELCRAFT.matchItem(item)) {
+			return /*GearboxTypes.getMaterialFromCraftingItem(item).metaOffset+*/type+item.getItemDamage();
 		}
 		int row = type%16+item.getItemDamage()/16;
 		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)

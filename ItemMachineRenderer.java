@@ -131,11 +131,12 @@ public class ItemMachineRenderer implements IItemRenderer {
 		else if (ItemRegistry.FLYWHEEL.matchItem(item)) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.FLYWHEEL, item.getItemDamage());
 			TileEntityFlywheel fly = (TileEntityFlywheel)te;
+			fly.setMaterialFromItem(item);
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(fly, a, 0.0D, b, 500-1000F*(item.getItemDamage()+1));
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(fly, a, 0.0D, b, 0);
 		}/*
 		else if (item.itemID == RotaryCraft.hydraulicitems.itemID) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.HYDRAULIC);

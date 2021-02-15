@@ -28,6 +28,11 @@ public class RenderHeater extends RotaryTERenderer
 
 	private ModelHeater HeaterModel = new ModelHeater();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Heater/";
+	}
+
 	public void renderTileEntityHeaterAt(TileEntityHeater tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -40,17 +45,17 @@ public class RenderHeater extends RotaryTERenderer
 		ModelHeater var14;
 		var14 = HeaterModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex.png");
 		if (tile.temperature >= 200)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex200C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex200C.png");
 		if (tile.temperature >= 400)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex400C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex400C.png");
 		if (tile.temperature >= 600)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex600C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex600C.png");
 		if (tile.temperature >= 800)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex800C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex800C.png");
 		if (tile.temperature >= 900)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex900C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex900C.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

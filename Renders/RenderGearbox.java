@@ -76,6 +76,11 @@ public class RenderGearbox extends RotaryTERenderer
 		return ret;
 	}
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/Gear/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -94,7 +99,7 @@ public class RenderGearbox extends RotaryTERenderer
 		ModelGearbox16 var17 = GearboxModel16;
 
 		this.setupGL(tile, par2, par4, par6);
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+tile.getGearboxType().getBaseGearboxTexture());
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Gear/"+tile.getGearboxType().getBaseGearboxTexture());
 
 		int var11 = 0;	 //used to rotate the model about metadata
 		if (tile.isInWorld()) {

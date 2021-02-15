@@ -30,6 +30,11 @@ public class RenderClutch extends RotaryTERenderer
 	private ModelClutch ClutchModel = new ModelClutch();
 	private ModelVClutch ClutchModelV = new ModelVClutch();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/Shaft";
+	}
+
 	public void renderTileEntityClutchAt(TileEntityClutch tile, double par2, double par4, double par6, float par8) {
 		int var9;
 
@@ -43,7 +48,7 @@ public class RenderClutch extends RotaryTERenderer
 
 		var14 = ClutchModel;
 		var15 = ClutchModelV;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Shaft/shafttex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 

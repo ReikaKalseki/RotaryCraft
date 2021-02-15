@@ -28,6 +28,11 @@ public class RenderFriction extends RotaryTERenderer
 
 	private ModelFriction FrictionModel = new ModelFriction();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Friction/";
+	}
+
 	public void renderTileEntityFurnaceHeaterAt(TileEntityFurnaceHeater tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -40,7 +45,7 @@ public class RenderFriction extends RotaryTERenderer
 		ModelFriction var14;
 		var14 = FrictionModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Friction/frictiontex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -63,19 +68,19 @@ public class RenderFriction extends RotaryTERenderer
 
 		if (tile.isInWorld()) {
 			if (tile.getTemperature() >= 1600) {
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-5.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Friction/frictiontex-5.png");
 			}
 			else if (tile.getTemperature() >= 1300) {
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-4.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Friction/frictiontex-4.png");
 			}
 			else if (tile.getTemperature() >= 1000) {
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-3.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Friction/frictiontex-3.png");
 			}
 			else if (tile.getTemperature() >= 700) {
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-2.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Friction/frictiontex-2.png");
 			}
 			else if (tile.getTemperature() >= 400) {
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/frictiontex-1.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Friction/frictiontex-1.png");
 			}
 		}
 

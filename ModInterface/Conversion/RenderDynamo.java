@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,6 +26,11 @@ public class RenderDynamo extends RotaryTERenderer
 
 	private ModelDynamo2 StaticModel = new ModelDynamo2();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Converter/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -41,7 +46,7 @@ public class RenderDynamo extends RotaryTERenderer
 		ModelDynamo2 var14;
 		var14 = StaticModel;
 
-		String s = "/Reika/RotaryCraft/Textures/TileEntityTex/dynamotex";
+		String s = "/Reika/RotaryCraft/Textures/TileEntityTex/Converter/dynamotex";
 
 		if (tile.isInWorld() && tile.power > 0)
 			s = s+"2";

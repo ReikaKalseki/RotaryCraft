@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 
 import java.util.Collection;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -36,6 +37,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -53,6 +55,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 
 	private int oppTorque = 0;
 	private int updateticks = 0;
+
+	private Flywheels type = Flywheels.WOOD;
 
 	public int getOppTorque(TileEntityFlywheel reading) {
 		if (reading.getTypeOrdinal().ordinal() < this.getTypeOrdinal().ordinal())
@@ -92,7 +96,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	}
 
 	public Flywheels getTypeOrdinal() {
-		return Flywheels.list[this.getBlockMetadata()/4];
+		return type;
 	}
 
 	private double getStrength() {
@@ -107,8 +111,8 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		this.getType(meta/4);
-		this.getIOSides(world, x, y, z, meta%4);
+		this.loadType();
+		this.getIOSides(world, x, y, z, meta);
 		if (failed) {
 			omega = 0;
 			torque = 0;
@@ -139,7 +143,7 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		SoundRegistry.FLYWHEEL.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, RotaryAux.isMuffled(this) ? 0.3F : 1, pitch);
 	}
 
-	public void getType(int meta) {
+	private void loadType() {
 		maxtorque = this.getTypeOrdinal().maxTorque;
 		decayTime = this.getTypeOrdinal().decayTime;
 	}
@@ -339,24 +343,20 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			return 0; //not its output
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setBoolean("failed", failed);
+
+		NBT.setInteger("typeIdx", type.ordinal());
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		failed = NBT.getBoolean("failed");
+
+		type = Flywheels.list[NBT.getInteger("typeIdx")];
 	}
 
 	@Override
@@ -443,39 +443,9 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 		this.fail(worldObj, xCoord, yCoord, zCoord, ReikaPhysicsHelper.getEnergyFromExplosion(4));
 	}
 
-	public static enum Flywheels {
-		WOOD(16, 2, ReikaEngLibrary.rhowood, ReikaEngLibrary.Twood),		// rho 0.8	-> 1	-> 1
-		STONE(128, 5, ReikaEngLibrary.rhorock, 0.9*ReikaEngLibrary.Tstone),		// rho 3	-> 4	-> 8
-		IRON(512, 15, ReikaEngLibrary.rhoiron, 5*ReikaEngLibrary.Tiron),		// rho 8	-> 8	-> 32
-		GOLD(4096, 40, ReikaEngLibrary.rhogold, ReikaEngLibrary.Tgold);	// rho 19.3	-> 32	-> 256
-		//BEDROCK(Integer.MAX_VALUE, 200, 1.25*ReikaEngLibrary.rhoiron, Double.POSITIVE_INFINITY); want to have, but metadatas prevent
-
-		public final int maxTorque;
-		public final int maxSpeed;
-		public final int decayTime;
-		public final double density;
-		public final double tensileStrength;
-
-		public static final Flywheels[] list = values();
-
-		private Flywheels(int t, int dec, double rho, double str) {
-			maxTorque = t;
-			tensileStrength = str;
-			decayTime = dec;
-			density = rho;
-			maxSpeed = this.getLimitLoad();
-		}
-
-		private int getLimitLoad() {
-			double r = 0.75;
-			double s = 100*tensileStrength;
-			double frac = 2*s/(density*r*r);
-			double base = Math.sqrt(frac);
-			return (int)base;
-		}
-
-		public int getMinTorque() {
-			return maxTorque/MINTORQUERATIO;
-		}
+	public void setMaterialFromItem(ItemStack is) {
+		type = Flywheels.getMaterialFromFlywheelItem(is);
+		if (worldObj != null)
+			this.syncAllData(true);
 	}
 }

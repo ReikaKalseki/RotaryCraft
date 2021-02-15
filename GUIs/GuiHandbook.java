@@ -43,7 +43,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
@@ -51,6 +50,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -684,7 +684,7 @@ public class GuiHandbook extends GuiScreen
 			variable = -1000F*(timeStep+1);
 		}
 		if (h == HandbookRegistry.FLYWHEEL) {
-			int tick = (int)((System.nanoTime()/SECOND)%RotaryNames.getNumberFlywheelTypes());
+			int tick = (int)((System.nanoTime()/SECOND)%Flywheels.list.length);
 			variable = 500-1000F*(tick+1);
 		}
 		if (h == HandbookRegistry.GEARBOX) {

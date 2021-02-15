@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -25,6 +25,11 @@ public class RenderGenerator extends RotaryTERenderer
 
 	private ModelGenerator GeneratorModel = new ModelGenerator();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Converter/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -40,25 +45,25 @@ public class RenderGenerator extends RotaryTERenderer
 		ModelGenerator var14;
 		var14 = GeneratorModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/generatortex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Converter/generatortex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
 		int var11 = 0;
 		float var13;
 		switch(var9) {
-		case 2:
-			var11 = 0;
-			break;
-		case 0:
-			var11 = 180;
-			break;
-		case 1:
-			var11 = 90;
-			break;
-		case 3:
-			var11 = 270;
-			break;
+			case 2:
+				var11 = 0;
+				break;
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
 		}
 
 		GL11.glRotatef(var11+180, 0.0F, 1.0F, 0.0F);

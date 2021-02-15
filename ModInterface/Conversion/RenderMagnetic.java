@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,6 +24,11 @@ public class RenderMagnetic extends RotaryTERenderer
 
 	private ModelMagnetic DynamoModel = new ModelMagnetic();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Converter/";
+	}
+
 	public void renderTileEntityDynamoAt(TileEntityMagnetic tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -36,25 +41,25 @@ public class RenderMagnetic extends RotaryTERenderer
 		ModelMagnetic var14;
 		var14 = DynamoModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/magneticmotortex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Converter/magneticmotortex.png");
 
 		this.setupGL(tile, par2, par4, par6);
 
 		int var11 = 0;
 		float var13;
 		switch(var9) {
-		case 2:
-			var11 = 0;
-			break;
-		case 0:
-			var11 = 180;
-			break;
-		case 1:
-			var11 = 90;
-			break;
-		case 3:
-			var11 = 270;
-			break;
+			case 2:
+				var11 = 0;
+				break;
+			case 0:
+				var11 = 180;
+				break;
+			case 1:
+				var11 = 90;
+				break;
+			case 3:
+				var11 = 270;
+				break;
 		}
 
 		GL11.glRotatef(var11+180, 0.0F, 1.0F, 0.0F);

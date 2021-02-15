@@ -781,7 +781,7 @@ public enum MachineRegistry implements TileEnum {
 		}
 		if (this == FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)tile;
-			return RotaryNames.getFlywheelName(fly.getBlockMetadata()/4);
+			return fly.getTypeOrdinal().getName()+" "+this.getName();
 		}
 		if (this == ADVANCEDGEARS) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)tile;

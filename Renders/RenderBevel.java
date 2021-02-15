@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,6 +31,11 @@ public class RenderBevel extends RotaryTERenderer {
 
 	private final ModelBevel BevelModel = new ModelBevel();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/";
+	}
+
 	public void renderTileEntityBevelAt(TileEntityBevelGear tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -43,7 +48,7 @@ public class RenderBevel extends RotaryTERenderer {
 		ModelBevel var14;
 
 		var14 = BevelModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/beveltex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/beveltex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

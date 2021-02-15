@@ -91,6 +91,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -203,6 +204,16 @@ public class RotaryRecipes {
 	public static void addPostLoadRecipes() {
 		if (RotaryCraft.instance.isLocked())
 			return;
+
+		for (Flywheels f : Flywheels.list) {
+			Object raw = f.getRawMaterial();
+			if (raw instanceof String) {
+				if (OreDictionary.getOres((String)raw).isEmpty())
+					raw = null;
+			}
+			if (raw != null)
+				GameRegistry.addRecipe(new ShapedOreRecipe(f.getCore(), "WWW", "WGW", "WWW", 'W', raw, 'G', ItemStacks.steelgear));
+		}
 
 		Object[] bin = getBlastFurnaceIngredients();
 		addOreRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), bin);
@@ -688,7 +699,7 @@ public class RotaryRecipes {
 
 		MachineRegistry.LIGHTBRIDGE.addCrafting("GgG", "BgS", "BBD", 'B', ItemStacks.basepanel, 'S', ItemStacks.steelingot, 'D', Items.diamond, 'G', Items.gold_ingot, 'g', Blocks.glass);
 
-		MachineRegistry.PILEDRIVER.addCrafting("PGP", "gFg", "PDP", 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit8, 'g', ItemStacks.shaftitem, 'F', ItemStacks.flywheelcore3, 'D', ItemStacks.drill);
+		MachineRegistry.PILEDRIVER.addCrafting("PGP", "gFg", "PDP", 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit8, 'g', ItemStacks.shaftitem, 'F', Flywheels.TUNGSTEN.getCore(), 'D', ItemStacks.drill);
 
 		MachineRegistry.PUMP.addCrafting("SGS", "pIp", "PpP", 'P', ItemStacks.basepanel, 'p', ItemStacks.pipe, 'I', ItemStacks.impeller, 'G', Blocks.glass_pane, 'S', ItemStacks.steelingot);
 
@@ -1038,16 +1049,6 @@ public class RotaryRecipes {
 		//GameRegistry.addRecipe(new ItemStack(ItemStacks.bedrockgear, 8, ItemStacks.bedrockgear.getItemDamage()), params);
 		RecipesBlastFurnace.getRecipes().add3x3Crafting(ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockgear, 8), 1000, 2, 0, params);
 
-
-		GameRegistry.addRecipe(new ShapedOreRecipe(ItemStacks.flywheelcore, new Object[]{
-				"WWW", "WGW", "WWW", 'W', "plankWood", 'G', ItemStacks.steelgear}));
-		GameRegistry.addRecipe(ItemStacks.flywheelcore2, new Object[]{
-				"WWW", "WGW", "WWW", 'W', Blocks.stone, 'G', ItemStacks.steelgear});
-		GameRegistry.addRecipe(ItemStacks.flywheelcore3, new Object[]{
-				"WWW", "WGW", "WWW", 'W', Items.iron_ingot, 'G', ItemStacks.steelgear});
-		GameRegistry.addRecipe(ItemStacks.flywheelcore4, new Object[]{
-				"WWW", "WGW", "WWW", 'W', Items.gold_ingot, 'G', ItemStacks.steelgear});
-
 		GameRegistry.addRecipe(ItemStacks.lim, new Object[]{
 				"WRW", "NNN", 'W', ItemStacks.goldcoil, 'N', ItemStacks.steelingot, 'R', Items.redstone});
 
@@ -1353,10 +1354,8 @@ public class RotaryRecipes {
 		MachineRegistry.ADVANCEDGEARS.addNBTMetaCrafting(NBT, 2, "BCS", " M ", 'M', ItemStacks.mount, 'S', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE), 'B', ItemStacks.brake, 'C', ItemStacks.bedrockcoil); //Coil
 		MachineRegistry.ADVANCEDGEARS.addMetaCrafting(3, "SGS", "SGS", "BMB", 'S', ItemStacks.bedrockshaft, 'B', GearboxTypes.TUNGSTEN.getPart(GearPart.BEARING), 'M', ItemStacks.mount, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16)); //256x
 
-		MachineRegistry.FLYWHEEL.addMetaCrafting(0, "W", "M", 'W', ItemStacks.flywheelcore, 'M', ItemStacks.mount);
-		MachineRegistry.FLYWHEEL.addMetaCrafting(1, "W", "M", 'W', ItemStacks.flywheelcore2, 'M', ItemStacks.mount);
-		MachineRegistry.FLYWHEEL.addMetaCrafting(2, "W", "M", 'W', ItemStacks.flywheelcore3, 'M', ItemStacks.mount);
-		MachineRegistry.FLYWHEEL.addMetaCrafting(3, "W", "M", 'W', ItemStacks.flywheelcore4, 'M', ItemStacks.mount);
+		for (Flywheels f : Flywheels.list)
+			MachineRegistry.FLYWHEEL.addRecipe(f.getFlywheelItem(), "W", "M", 'W', f.getCore(), 'M', ItemStacks.mount);
 
 		for (MaterialRegistry mat : MaterialRegistry.matList) {
 			Object m = mat.getMountItem();

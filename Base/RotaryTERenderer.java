@@ -41,7 +41,11 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 
 	@Override
 	public final String getTextureFolder() {
-		return "/Reika/RotaryCraft/Textures/TileEntityTex/";
+		return "/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getTextureSubfolder();
+	}
+
+	protected String getTextureSubfolder() {
+		return "";
 	}
 
 	@Override

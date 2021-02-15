@@ -66,6 +66,11 @@ public class RenderSEngine extends RotaryTERenderer
 
 	private static final Glow jetGlow = new Glow(255, 150, 20, 192).setScale(0.4);
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Engine/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -90,36 +95,36 @@ public class RenderSEngine extends RotaryTERenderer
 
 		switch(tile.getEngineType()) {
 			case DC:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/dc.png");
 				break;
 			case WIND:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windtex.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/windtex.png");
 				break;
 			case STEAM:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamtex.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/steamtex.png");
 				break;
 			case GAS:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/combtex.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/combtex.png");
 				break;
 			case AC:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/actex.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/actex.png");
 				break;
 			case SPORT:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/perftex.png");
 				break;
 			case HYDRO:
 				TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
-				String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
+				String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/Engine/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
 				this.bindTextureByName(sg);
 				break;
 			case MICRO:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/microtex.png");
 				break;
 			case JET:
 				String s = ((TileEntityJetEngine)tile).canAfterBurn() ? "_b": "";
 				if (tile.isInWorld())
 					;//s = s+"_with_alpha";
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex"+s+".png");
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/jettex"+s+".png");
 				break;
 		}
 
@@ -156,7 +161,7 @@ public class RenderSEngine extends RotaryTERenderer
 			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
 			switch(tile.getEngineType()) {
 				case DC:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/dc.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/dc.png");
 					var14.renderAll(tile, null);
 					break;
 				case WIND:
@@ -167,7 +172,7 @@ public class RenderSEngine extends RotaryTERenderer
 					double d2 = 0.2;
 					GL11.glTranslated(0, d, 0);
 					GL11.glTranslated(d2, 0, 0);
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/windtex.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/windtex.png");
 					var22.renderAll(tile, null);
 					GL11.glTranslated(0, -d, 0);
 					GL11.glTranslated(-d2, 0, 0);
@@ -175,24 +180,24 @@ public class RenderSEngine extends RotaryTERenderer
 					GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
 					break;
 				case STEAM:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/steamtex.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/steamtex.png");
 					var15.renderAll(tile, null);
 					break;
 				case GAS:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/combtex.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/combtex.png");
 					var16.renderAll(tile, null);
 					break;
 				case AC:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/actex.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/actex.png");
 					var17.renderAll(tile, null);
 					break;
 				case SPORT:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/perftex.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/perftex.png");
 					var18.renderAll(tile, null, Float.MIN_NORMAL, 0);
 					break;
 				case HYDRO:
 					TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
-					String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
+					String sg = "/Reika/RotaryCraft/Textures/TileEntityTex/Engine/"+(eng.isBedrock() ? "bedhydrotex.png" : "hydrotex.png");
 					this.bindTextureByName(sg);
 					s = 0.7;
 					d = 0.375;
@@ -203,12 +208,12 @@ public class RenderSEngine extends RotaryTERenderer
 					GL11.glTranslated(0, -d, 0);
 					break;
 				case MICRO:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/microtex.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/microtex.png");
 					GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
 					var19.renderAll(tile, null);
 					break;
 				case JET:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/jettex.png");
 					GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
 					var20.renderAll(tile, null);
 					break;
@@ -270,7 +275,7 @@ public class RenderSEngine extends RotaryTERenderer
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glColor4f(ReikaColorAPI.getRed(c)/255F, ReikaColorAPI.getGreen(c)/255F, ReikaColorAPI.getBlue(c)/255F, 1);
 					BlendMode.ADDITIVEDARK.apply();
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/jettex_glow_mask2.png");
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Engine/jettex_glow_mask2.png");
 
 					GL11.glPushMatrix();
 					GL11.glTranslated(0, 1-s, (1-s)/4);
