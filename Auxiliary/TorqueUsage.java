@@ -21,6 +21,8 @@ import Reika.RotaryCraft.API.Power.PowerAcceptor;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
@@ -35,7 +37,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 public class TorqueUsage {
 
 	private static double requiredTorque;
-	private static HashSet<WorldLocation> pathCache = new HashSet();
+	private static final HashSet<WorldLocation> pathCache = new HashSet();
 
 	public static int getTorque(TileEntityFlywheel te) {
 		requiredTorque = 0;
@@ -191,6 +193,9 @@ public class TorqueUsage {
 				int min = 1;
 				if (pwr.getMachine().isModConversionEngine()) {
 					min = Math.max(1, (int)Math.min(Integer.MAX_VALUE, pwr.power/256D));
+				}
+				else if (pwr.getMachine() == MachineRegistry.FRICTION) {
+					TileEntityFurnaceHeater te = (TileEntityFurnaceHeater)tile;
 				}
 				requiredTorque += Math.max(activeRatio*pwr.MINTORQUE, min);
 			}

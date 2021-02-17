@@ -52,6 +52,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	private int smeltTime = 0;
 	private int soundtick = 0;
 
+	private FrictionRecipe activeRecipe;
+
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		if (torque >= MINTORQUE && power >= MINPOWER && omega > 0 && this.hasHeatableMachine(world)) {
@@ -136,6 +138,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
+		activeRecipe = null;
 		tickcount++;
 		this.getIOSidesDefault(world, x, y, z, meta);
 		this.getPower(false);
@@ -230,6 +233,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			if (special != null && !this.canTileMake(tile, special.getOutput()))
 				special = null;
 			if (smelt != null || special != null) {
+				activeRecipe = special;
 				int factor = this.getSpeedFactorFromTemperature();
 				if (special != null)
 					factor *= this.getAccelerationFactor(special);
@@ -346,6 +350,10 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (temperature == 2000)
 			return 2000;
 		return 1+(int)Math.sqrt((Math.pow(2, ((temperature-500)/100F))));
+	}
+
+	public FrictionRecipe getActiveRecipe() {
+		return activeRecipe;
 	}
 
 	@Override

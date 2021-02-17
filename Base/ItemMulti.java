@@ -254,9 +254,10 @@ public class ItemMulti extends ItemBasic {
 			if (ItemRegistry.GEARCRAFT.matchItem(item)) {
 				if (!GearboxTypes.getMaterialFromCraftingItem(item).isLoadable())
 					continue;
-				if (item.getItemDamage()%16 >= GearPart.list.length) {
+				if (item.getItemDamage()%16 >= GearPart.list.length)
 					continue;
-				}
+				if (ReikaItemHelper.matchStacks(item, GearboxTypes.WOOD.getPart(GearPart.SHAFT))) //stick
+					continue;
 			}
 			if (ItemRegistry.SHAFTCRAFT.matchItem(item)) {
 				if (RotaryNames.shaftPartNames[item.getItemDamage()].isEmpty())
