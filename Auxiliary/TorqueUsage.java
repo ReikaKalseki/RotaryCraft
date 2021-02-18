@@ -157,18 +157,7 @@ public class TorqueUsage {
 		}
 		else if (tile instanceof TileEntityPowerReceiver) { //if the tile is a power Receiver, it stores its minimum torque requirement
 			TileEntityPowerReceiver pwr = (TileEntityPowerReceiver)tile;
-			if (tile instanceof TileEntityExtractor) { //if it's an extractor, it stores the torque requirement of the most demanding WORKING stage
-				TileEntityExtractor ex = (TileEntityExtractor)tile;
-				int rtorque = ex.torque;
-				int mintorque = 0;
-				for(int i = 0; i < 4; i++) {
-					if (ex.machine.getMinTorque(i) <= rtorque) {
-						mintorque = (Math.max(mintorque, ex.machine.getMinTorque(i)));
-					}
-				}
-				requiredTorque += activeRatio*mintorque;
-			}
-			else if (tile instanceof TileEntityBeltHub) {
+			if (tile instanceof TileEntityBeltHub) {
 				TileEntityBeltHub hub = (TileEntityBeltHub)tile;
 				if (!hub.isEmitting) {
 					Coordinate tgt = hub.getConnection();
@@ -190,14 +179,30 @@ public class TorqueUsage {
 				manageBus((TileEntityBusController)tile, reader, activeRatio);
 			}
 			else {
-				int min = 1;
-				if (pwr.getMachine().isModConversionEngine()) {
-					min = Math.max(1, (int)Math.min(Integer.MAX_VALUE, pwr.power/256D));
+				double req = pwr.MINTORQUE;
+				double min = 0;
+				if (tile instanceof TileEntityExtractor) { //if it's an extractor, it stores the torque requirement of the most demanding WORKING stage
+					TileEntityExtractor ex = (TileEntityExtractor)tile;
+					int rtorque = ex.torque;
+					int mintorque = 0;
+					for(int i = 0; i < 4; i++) {
+						if (ex.machine.getMinTorque(i) <= rtorque) {
+							mintorque = (Math.max(mintorque, ex.machine.getMinTorque(i)));
+						}
+					}
+					req = mintorque;
+				}
+				else if (pwr.getMachine().isModConversionEngine()) {
+					min = Math.max(1, Math.min(Integer.MAX_VALUE, pwr.power/256D));
 				}
 				else if (pwr.getMachine() == MachineRegistry.FRICTION) {
 					TileEntityFurnaceHeater te = (TileEntityFurnaceHeater)tile;
+					if (te.hasFurnace())
+						req *= 4;
+					else
+						req = 0.01;
 				}
-				requiredTorque += Math.max(activeRatio*pwr.MINTORQUE, min);
+				requiredTorque += Math.max(activeRatio*req, min);
 			}
 		}
 		else if (tile instanceof PowerAcceptor) {

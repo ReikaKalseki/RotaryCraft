@@ -111,7 +111,7 @@ public class RenderFriction extends RotaryTERenderer
 	}
 
 	private void renderHotSide(TileEntityFurnaceHeater tile, double par2, double par4, double par6) {
-		if (!tile.hasFurnace(tile.worldObj))
+		if (!tile.hasFurnace())
 			return;
 		Tessellator v5 = Tessellator.instance;
 		if (tile.getTemperature() > 1000)

@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -43,16 +44,15 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements TemperatureTE, ConditionalOperation {
-	private int temperature;
-	public int fx;
-	public int fy;
-	public int fz;
 
 	public static final int MAXTEMP = 2000;
-	private int smeltTime = 0;
-	private int soundtick = 0;
 
 	private FrictionRecipe activeRecipe;
+	private Coordinate furnaceLocation;
+
+	private int temperature;
+	private int smeltTime = 0;
+	private int soundtick = 0;
 
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
@@ -77,17 +77,19 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			temperature = Tamb;
 	}
 
-	public boolean hasHeatableMachine(World world) {
-		Block id = world.getBlock(fx, fy, fz);
-		int meta = world.getBlockMetadata(fx, fy, fz);
+	private boolean hasHeatableMachine(World world) {
+		if (furnaceLocation == null)
+			return false;
+		Block id = furnaceLocation.getBlock(world);
 		if (id == Blocks.air)
 			return false;
 		if (id == Blocks.furnace || id == Blocks.lit_furnace)
 			return true;
-		MachineRegistry m = MachineRegistry.getMachine(world, fx, fy, fz);
+		int meta = furnaceLocation.getBlockMetadata(world);
+		MachineRegistry m = MachineRegistry.getMachine(world, furnaceLocation.xCoord, furnaceLocation.yCoord, furnaceLocation.zCoord);
 		if (m != null && m.canBeFrictionHeated())
 			return true;
-		TileEntity te = this.getTileEntity(fx, fy, fz);
+		TileEntity te = furnaceLocation.getTileEntity(world);
 		if (ModList.THAUMICTINKER.isLoaded()) {
 			TileEntity relay = TransvectorHandler.getRelayedTile(te);
 			while (relay != te && relay != null) {
@@ -96,9 +98,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			}
 			te = relay;
 			if (te != null) {
-				fx = te.xCoord;
-				fy = te.yCoord;
-				fz = te.zCoord;
+				furnaceLocation = new Coordinate(te);
 			}
 		}
 		if (ModList.TINKERER.isLoaded()) {
@@ -150,11 +150,11 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		if (!this.isActive())
 			return;
 
-		if (this.hasFurnace(world)) {
+		if (this.hasFurnace()) {
 			this.hijackFurnace(world, x, y, z, meta);
 		}
 		else {
-			TileEntity te = this.getTileEntity(fx, fy, fz);
+			TileEntity te = furnaceLocation.getTileEntity(world);
 			/*
 			if (ModList.THAUMICTINKER.isLoaded()) {
 				TileEntity relay = TransvectorHandler.getRelayedTile(te);
@@ -198,7 +198,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			}
 
 			if (te.getTemperature() > te.getMaxTemperature()) {
-				te.onOverheat(world, fx, fy, fz);
+				te.onOverheat(world, furnaceLocation.xCoord, furnaceLocation.yCoord, furnaceLocation.zCoord);
 			}
 
 			soundtick++;
@@ -219,13 +219,16 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {
-		TileEntity te = this.getTileEntity(fx, fy, fz);
+		TileEntity te = furnaceLocation.getTileEntity(world);
 		TileEntityFurnace tile = (TileEntityFurnace)te;
 		int burn = Math.max(this.getBurnTimeFromTemperature(), tile.furnaceBurnTime);
 		this.setFurnaceBlock(world, burn > 0);
 		tile.currentItemBurnTime = burn;
 		tile.furnaceBurnTime = burn;
 		ItemStack in = tile.getStackInSlot(0);
+		int fx = furnaceLocation.xCoord;
+		int fy = furnaceLocation.yCoord;
+		int fz = furnaceLocation.zCoord;
 		if (in != null) {
 			ItemStack out = tile.getStackInSlot(2);
 			ItemStack smelt = FurnaceRecipes.smelting().getSmeltingResult(in);
@@ -296,46 +299,29 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	}
 
 	private void setFurnaceBlock(World world, boolean isOn) {
-		Block b = world.getBlock(fx, fy, fz);
-		;
+		Block b = furnaceLocation.getBlock(world);
 		BlockFurnace furn = (BlockFurnace)b;
 		//furn.updateFurnaceBlockState(isOn, world, fx, fy, fz);
 	}
 
 	private void getFurnaceCoordinates(World world, int x, int y, int z, int meta) {
-		fy = y;
-		fx = x;
-		fz = z;
-		switch(meta) {
-			case 0:
-				fx = x-1;
-				break;
-			case 1:
-				fx = x+1;
-				break;
-			case 2:
-				fz = z-1;
-				break;
-			case 3:
-				fz = z+1;
-				break;
-		}
+		furnaceLocation = new Coordinate(this).offset(this.getReadDirection().getOpposite(), 1);
 	}
 
 	private void meltFurnace(World world) {
-		Block id = world.getBlock(fx, fy, fz);
+		Block id = furnaceLocation.getBlock(world);
 		if (id != Blocks.furnace && id != Blocks.lit_furnace)
 			return;
-		world.createExplosion(null, fx+0.5, fy+0.5, fz+0.5, 1F, false);
+		world.createExplosion(null, furnaceLocation.xCoord+0.5, furnaceLocation.yCoord+0.5, furnaceLocation.zCoord+0.5, 1F, false);
 		//world.setBlock(fx, fy, fz, Blocks.flowing_lava.blockID);
-		world.setBlockToAir(fx, fy, fz);
+		furnaceLocation.setBlock(world, Blocks.air);
 		//ItemStack cobb = new ItemStack(Blocks.cobblestone);
 		//for (int i = 0; i < 8; i++)
 		//	ReikaItemHelper.dropItem(world, fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), cobb);
 	}
 
-	public boolean hasFurnace(World world) {
-		return this.getTileEntity(fx, fy, fz) instanceof TileEntityFurnace;
+	public boolean hasFurnace() {
+		return furnaceLocation != null && furnaceLocation.getTileEntity(worldObj) instanceof TileEntityFurnace;
 	}
 
 	private int getBurnTimeFromTemperature() {
@@ -372,9 +358,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		super.writeSyncTag(NBT);
 		NBT.setInteger("temp", temperature);
 
-		NBT.setInteger("furnx", fx);
-		NBT.setInteger("furny", fy);
-		NBT.setInteger("furnz", fz);
+		if (furnaceLocation != null)
+			furnaceLocation.writeToNBT("furnLoc", NBT);
 	}
 
 	@Override
@@ -383,9 +368,8 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 		super.readSyncTag(NBT);
 		temperature = NBT.getInteger("temp");
 
-		fx = NBT.getInteger("furnx");
-		fy = NBT.getInteger("furny");
-		fz = NBT.getInteger("furnz");
+		if (NBT.hasKey("furnLoc"))
+			furnaceLocation = Coordinate.readFromNBT("furnLoc", NBT);
 	}
 
 	@Override
@@ -443,7 +427,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			MachineRegistry m = MachineRegistry.getMachine(furn.worldObj, dx, furn.yCoord, dz);
 			if (m == MachineRegistry.FRICTION) {
 				TileEntityFurnaceHeater te = (TileEntityFurnaceHeater)furn.worldObj.getTileEntity(dx, furn.yCoord, dz);
-				if (te.fx == furn.xCoord && te.fz == furn.zCoord) {
+				if (te.furnaceLocation.equals(furn)) {
 					if (te.isActive())
 						return true;
 				}

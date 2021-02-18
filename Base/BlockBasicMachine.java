@@ -195,8 +195,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		}
 		if (m == MachineRegistry.FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)world.getTileEntity(x, y, z);
-			meta = fly.getBlockMetadata();
-			return new ItemStack(ItemRegistry.FLYWHEEL.getItemInstance(), 1, meta/4);
+			return fly.getTypeOrdinal().getFlywheelItem();
 		}
 		if (m == MachineRegistry.ADVANCEDGEARS) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);

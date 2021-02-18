@@ -46,12 +46,10 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 	public static final int MINTORQUERATIO = 4;
 
 	private int decayTime;
-
 	private int maxtorque;
+
 	public boolean failed = false;
 	private int soundtick = 0;
-
-	private int lasttorque;
 
 	private int oppTorque = 0;
 	private int updateticks = 0;
@@ -234,9 +232,10 @@ public class TileEntityFlywheel extends TileEntityTransmissionMachine implements
 			//return;
 			//why was this here?!
 		}
-		double r = 0.75;  //this calculates the flywheel datas. You already assumed r=0.75 in previous formulas, so I used that. I set h=0.4 from the model in-game
-		double h = 0.4;
-		double iner = (h*r*r*Math.PI)*this.getDensity()*r*r/2; //standard inertial moment formula for a cylinder with its rotor on the central axis
+		double r = 0.75;  //this calculates the flywheel datas. You already assumed r=0.75 in previous formulas, so I used that. I set t=0.4 from the model in-game
+		double t = 0.25; //thickness is closer to 0.25m for the actual main disk
+		double mass = (t*r*r*Math.PI)*this.getDensity();
+		double iner = mass*r*r/2; //standard inertial moment formula for a cylinder with its rotor on the central axis
 		updateticks = 0;
 		if (torquein >= this.getMinTorque()) {
 			oppTorque = TorqueUsage.getTorque(this);
