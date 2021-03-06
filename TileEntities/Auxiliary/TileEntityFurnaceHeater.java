@@ -427,7 +427,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 			MachineRegistry m = MachineRegistry.getMachine(furn.worldObj, dx, furn.yCoord, dz);
 			if (m == MachineRegistry.FRICTION) {
 				TileEntityFurnaceHeater te = (TileEntityFurnaceHeater)furn.worldObj.getTileEntity(dx, furn.yCoord, dz);
-				if (te.furnaceLocation.equals(furn)) {
+				if (te.furnaceLocation != null && te.furnaceLocation.equals(furn)) {
 					if (te.isActive())
 						return true;
 				}
