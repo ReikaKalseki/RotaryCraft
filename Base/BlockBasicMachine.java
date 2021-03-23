@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -296,6 +297,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			if (gbx.getGearboxType().needsLubricant()) {
 				String s = gbx.isLiving() ? String.format("Mana: %d%%", gbx.getLubricant()*100/gbx.getMaxLubricant()) : String.format("Lubricant: %d mB", gbx.getLubricant());
 				currenttip.add(s);
+
+				if (gbx.getBearingTier() != gbx.getGearboxType()) {
+					double f = gbx.getBearingLubricantFactor();
+					s = String.format("Lubricant Rate: %s%.2fx", (f > 1 ? EnumChatFormatting.RED : EnumChatFormatting.GREEN).toString(), f);
+					currenttip.add(s);
+				}
 			}
 		}
 		if (te instanceof TileEntityAdvancedGear) {

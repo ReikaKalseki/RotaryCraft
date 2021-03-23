@@ -76,6 +76,9 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	private static final int MAX_DAMAGE = 480;
 
+	public static final double BEARINGREDUCTION = 0.25;
+	public static final double BEARINGINCREASE = 1.0;
+
 	public TileEntityGearbox(GearboxTypes type) {
 		if (type == null)
 			type = GearboxTypes.WOOD;
@@ -103,6 +106,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	public void setMaterialFromItem(ItemStack is) {
 		type = GearboxTypes.getMaterialFromGearboxItem(is);
+		bearingTier = type;
 		this.syncAllData(true);
 	}
 
@@ -112,7 +116,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	private int getBearingTierOffset() {
-		return bearingTier.material.ordinal()-type.material.ordinal();
+		return this.getBearingTier().material.ordinal()-type.material.ordinal();
 	}
 
 	public int getMaxLubricant() {
@@ -242,7 +246,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	private void getLubeAndApplyDamage(World world, int x, int y, int z, int metadata) {
 		int oldlube = 0;
-		if (type.needsLubricant() && omega > 0 && bearingTier.material.ordinal() < MaterialRegistry.BEDROCK.ordinal()) {
+		if (type.needsLubricant() && omega > 0 && this.getBearingTier().material.ordinal() < MaterialRegistry.BEDROCK.ordinal()) {
 			if (tank.isEmpty()) {
 				if (!world.isRemote && damage < MAX_DAMAGE && rand.nextInt(40) == 0 && this.getTicksExisted() >= 100) {
 					damage++;
@@ -257,7 +261,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 					}
 				}
 			}
-			else if (!world.isRemote && type.consumesLubricant() && bearingTier.material.ordinal() < MaterialRegistry.DIAMOND.ordinal()) {
+			else if (!world.isRemote && type.consumesLubricant() && this.getBearingTier().material.ordinal() < MaterialRegistry.DIAMOND.ordinal()) {
 				if (tickcount >= 80) {
 					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*this.getLubricantConsumptionFactor())));
 					tickcount = 0;
@@ -268,15 +272,19 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	private double getLubricantConsumptionFactor() {
 		double base = type.getLubricantConsumeRate(omegain)*ReikaMathLibrary.logbase(omegain, 2)/4;
-		if (type != bearingTier) {
-			int offset = this.getBearingTierOffset();
-			//double pow = Math.pow(0.667, offset);
-			//base *= pow;
-
-			double add = offset > 0 ? -0.25*offset : offset;
-			base *= Math.max(0.1, 1+add);
+		if (type != this.getBearingTier()) {
+			base *= this.getBearingLubricantFactor();
 		}
 		return base;
+	}
+
+	public double getBearingLubricantFactor() {
+		int offset = this.getBearingTierOffset();
+		//double pow = Math.pow(0.667, offset);
+		//base *= pow;
+
+		double add = offset > 0 ? -BEARINGREDUCTION*offset : -offset*BEARINGINCREASE;
+		return Math.max(0.1, 1+add);
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -494,14 +502,14 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		reduction = NBT.getBoolean("reduction");
 		damage = NBT.getInteger("damage");
 		failed = NBT.getBoolean("fail");
 		temperature = NBT.getInteger("temp");
-		bearingTier = GearboxTypes.valueOf(NBT.getString("bearing"));
+		if (NBT.hasKey("bearing"))
+			bearingTier = GearboxTypes.valueOf(NBT.getString("bearing"));
 
 		tank.readFromNBT(NBT);
 	}
@@ -719,7 +727,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		if (tag != null) {
 			damage = tag.getInteger("damage");
 			this.setLubricant(tag.getInteger("lube"));
-			bearingTier = GearboxTypes.valueOf(tag.getString("bearing"));
+			if (tag.hasKey("bearing"))
+				bearingTier = GearboxTypes.valueOf(tag.getString("bearing"));
 		}
 	}
 

@@ -38,6 +38,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurna
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 
 public enum HandbookRegistry implements HandbookEntry {
 
@@ -76,6 +77,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	//---------------------MISC--------------------//
 	INFODESC("Important Notes", "Important Notes"),
 	LUBE("Lubricant"),
+	BEARINGS("Gearbox Bearings"),
 	CANOLA("Canola", ItemRegistry.CANOLA),
 	METER("Angular Transducer", ItemRegistry.METER),
 	SCREW("Screwdriver", ItemRegistry.SCREWDRIVER),
@@ -723,6 +725,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return true;
 		if (this == LUBE)
 			return true;
+		if (this == BEARINGS)
+			return true;
 		if (this == CANOLA)
 			return true;
 		if (this == ALUMINUM)
@@ -768,6 +772,8 @@ public enum HandbookRegistry implements HandbookEntry {
 		if (this == ENCHANTING)
 			return false;
 		if (this == LUBE)
+			return false;
+		if (this == BEARINGS)
 			return false;
 		if (this == STEELINGOT)
 			return false;
@@ -1002,6 +1008,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return MachineRegistry.EMP.getCraftedProduct();
 		if (this == LUBE)
 			return ItemStacks.lubebucket;
+		if (this == BEARINGS)
+			return GearboxTypes.TUNGSTEN.getPart(GearPart.BEARING);
 		if (this == MODINTERFACE)
 			return MachineRegistry.COMPRESSOR.getCraftedProduct();
 		if (this == ENCHANTING)

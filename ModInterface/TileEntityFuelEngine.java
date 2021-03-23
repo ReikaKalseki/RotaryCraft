@@ -477,7 +477,7 @@ TemperatureTE {
 
 	@Override
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p) && side == ForgeDirection.DOWN;
+		return this.canConnectToPipe(p) && this.getFlowForSide(side) == Flow.INPUT;
 	}
 
 	@Override

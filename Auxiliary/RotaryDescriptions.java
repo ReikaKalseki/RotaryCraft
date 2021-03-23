@@ -71,6 +71,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
@@ -497,6 +498,8 @@ public final class RotaryDescriptions {
 				sb.append(", ");
 		}
 		addData(HandbookRegistry.ENCHANTING, sb.toString());
+
+		addData(HandbookRegistry.BEARINGS, (int)(TileEntityGearbox.BEARINGREDUCTION*100)+"%", (int)(TileEntityGearbox.BEARINGINCREASE*100)+"%");
 
 		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER*10, TileEntityBorer.OBSIDIANTORQUE);
 		addData(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER);

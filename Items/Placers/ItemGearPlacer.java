@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Placers;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -31,6 +33,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 import cpw.mods.fml.relauncher.Side;
@@ -115,6 +118,13 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 			int amt = is.stackTagCompound.getInteger("lube");
 			String s = is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/mat.getMaxLubricant()) : "Lubricant: "+amt+" mB";
 			par3List.add(s);
+		}
+
+		if (is.stackTagCompound.hasKey("bearing")) {
+			MaterialRegistry matl = GearboxTypes.valueOf(is.stackTagCompound.getString("bearing")).material;
+			String name = StatCollector.translateToLocal("material."+matl.name().toLowerCase(Locale.ENGLISH));
+			EnumChatFormatting ec = matl.ordinal() < mat.material.ordinal() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN;
+			par3List.add("Bearing type: "+ec+name);
 		}
 	}
 
