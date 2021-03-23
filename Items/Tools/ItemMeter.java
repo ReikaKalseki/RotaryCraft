@@ -28,6 +28,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.ThermalTile;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaDateHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Interfaces.PressureTile;
 import Reika.RotaryCraft.API.Interfaces.Transducerable;
@@ -65,7 +66,9 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 
 public class ItemMeter extends ItemRotaryTool
@@ -205,7 +208,82 @@ public class ItemMeter extends ItemRotaryTool
 			this.sendMessage(ep, String.format("%s receiving %s", name, RotaryAux.formatPowerIO(sp)));
 		}
 
-		if (tile instanceof TileEntityTransmissionMachine) {
+		if (m == MachineRegistry.DISTRIBCLUTCH) {
+			TileEntityDistributionClutch te = (TileEntityDistributionClutch)tile;
+			ForgeDirection read = te.getInputForgeDirection();
+			if (read != null) {
+				String sname = ReikaStringParser.capFirstChar(read.name());
+				long pwr = te.getInputTorque()*te.omega;
+				double base = ReikaMathLibrary.getThousandBase(pwr);
+				String pre = ReikaEngLibrary.getSIPrefix(pwr);
+				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+			}
+			for (int i = 0; i < 4; i++) {
+				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i+2];
+				if (te.isOutputtingToSide(dir)) {
+					String sname = ReikaStringParser.capFirstChar(dir.name());
+					long out = te.getTorqueToSide(dir)*te.omega;
+					double base = ReikaMathLibrary.getThousandBase(out);
+					String pre = ReikaEngLibrary.getSIPrefix(out);
+
+					if (dir == read.getOpposite()) {
+						this.sendMessage(ep, String.format("Output to side %s: %.3f%sW (leftover)", sname, base, pre));
+					}
+					else {
+						int req = te.getTorqueRequest(dir);
+						double base2 = ReikaMathLibrary.getThousandBase(req);
+						String pre2 = ReikaEngLibrary.getSIPrefix(req);
+						this.sendMessage(ep, String.format("Output to side %s: %.3f%sW (requested %.3f%sNm)", sname, base, pre, base2, pre2));
+					}
+				}
+			}
+		}
+		else if (m == MachineRegistry.SPLITTER) {
+			TileEntitySplitter te = (TileEntitySplitter)tile;
+			if (te.isSplitting()) {
+				String sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
+				long pwr = te.torque*te.omega;
+				double base = ReikaMathLibrary.getThousandBase(pwr);
+				String pre = ReikaEngLibrary.getSIPrefix(pwr);
+				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+
+				sname = ReikaStringParser.capFirstChar(te.getWriteDirection().name());
+				long out = te.torqueOut1*te.omega;
+				base = ReikaMathLibrary.getThousandBase(out);
+				pre = ReikaEngLibrary.getSIPrefix(out);
+				this.sendMessage(ep, String.format("Output to side %s: %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+
+				sname = ReikaStringParser.capFirstChar(te.getWriteDirection2().name());
+				out = te.torqueOut2*te.omega;
+				base = ReikaMathLibrary.getThousandBase(out);
+				pre = ReikaEngLibrary.getSIPrefix(out);
+				this.sendMessage(ep, String.format("Output to side %s: %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+			}
+			else {
+				String sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
+				long pwr = te.getInputTorque1()*te.getInputSpeed1();
+				double base = ReikaMathLibrary.getThousandBase(pwr);
+				String pre = ReikaEngLibrary.getSIPrefix(pwr);
+				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sNm @ %d rad/s", sname, base, pre, te.omega));
+
+				pwr = te.getInputTorque2()*te.getInputSpeed2();
+				sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
+				base = ReikaMathLibrary.getThousandBase(pwr);
+				pre = ReikaEngLibrary.getSIPrefix(pwr);
+				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+
+				sname = ReikaStringParser.capFirstChar(te.getWriteDirection().name());
+				long out = te.torque*te.omega;
+				base = ReikaMathLibrary.getThousandBase(out);
+				pre = ReikaEngLibrary.getSIPrefix(out);
+				this.sendMessage(ep, String.format("Output to side %s: %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+			}
+
+			if (te.isBedrock()) {
+				//this.sendMessage(ep, String.format("%s is upgraded.", te.getName()));
+			}
+		}
+		else if (tile instanceof TileEntityTransmissionMachine) {
 			TileEntityTransmissionMachine te = (TileEntityTransmissionMachine)tile;
 			this.sendMessage(ep, String.format("%s transmitting %s", name, RotaryAux.formatPowerIO(te)));
 		}

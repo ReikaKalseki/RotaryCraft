@@ -26,6 +26,7 @@ import Reika.DragonAPI.Instantiable.TemporaryInventory;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
@@ -51,7 +52,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 
 	@Override
 	protected void animateWithTick(World world, int x, int y, int z) {
-		phi += omega;
+		phi += ReikaMathLibrary.logbase2(omega);
 	}
 
 	@Override

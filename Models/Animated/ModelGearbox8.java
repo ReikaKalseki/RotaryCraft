@@ -252,13 +252,13 @@ public class ModelGearbox8 extends RotaryModelBase
 		this.setRotation(Shape27, 0.7853982F, 0F, 0F);
 		Shape28 = new LODModelPart(this, 100, 19);
 		Shape28.addBox(0F, 0F, 0F, 2, 7, 3);
-		Shape28.setRotationPoint(0F, 16F, -5F);
+		Shape28.setRotationPoint(-2F, 16F, -5F);
 		Shape28.setTextureSize(128, 32);
 		Shape28.mirror = true;
 		this.setRotation(Shape28, 0F, 0F, 0F);
 		Shape29 = new LODModelPart(this, 100, 19);
 		Shape29.addBox(0F, 0F, 0F, 2, 10, 3);
-		Shape29.setRotationPoint(0F, 13F, 2.4F);
+		Shape29.setRotationPoint(1F, 13F, 2.4F);
 		Shape29.setTextureSize(128, 32);
 		Shape29.mirror = true;
 		this.setRotation(Shape29, 0F, 0F, 0F);

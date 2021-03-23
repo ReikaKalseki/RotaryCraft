@@ -205,9 +205,12 @@ public class BlockGearbox extends BlockModelledMachine {
 					}
 					return true;
 				}
-				else if (ReikaItemHelper.matchStacks(held, GearboxTypes.DIAMOND.getPart(GearPart.BEARING))) {
-					if (tile.getGearboxType().acceptsDiamondUpgrade() && !tile.hasDiamondUpgrade) {
-						tile.hasDiamondUpgrade = true;
+				else if (GearPart.BEARING.isItemOfType(held)) {
+					GearboxTypes material = GearboxTypes.getMaterialFromCraftingItem(held);
+					if (tile.getGearboxType().acceptsBearingUpgrade(material) && tile.getBearingTier() != material) {
+						if (tile.getBearingTier() != tile.getGearboxType())
+							ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, tile.getBearingTier().getPart(GearPart.BEARING));
+						tile.setBearingTier(material);
 						if (!ep.capabilities.isCreativeMode) {
 							int num = held.stackSize;
 							if (num > 1)

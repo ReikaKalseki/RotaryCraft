@@ -51,6 +51,9 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	private int pow2;
 
+	public int torqueOut1;
+	public int torqueOut2;
+
 	public int getRatioFromMode() {
 		return splitmode;
 	}
@@ -589,6 +592,9 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		}
 		this.writeToPowerReceiver(write, omega, t1);
 		this.writeToPowerReceiver(write2, omega, t2);
+
+		torqueOut1 = t1;
+		torqueOut2 = t2;
 	}
 
 	@Override
@@ -802,6 +808,22 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	public void setBedrock() {
 		bedrock = true;
+	}
+
+	public int getInputTorque1() {
+		return torquein;
+	}
+
+	public int getInputTorque2() {
+		return torquein2;
+	}
+
+	public int getInputSpeed1() {
+		return omegain;
+	}
+
+	public int getInputSpeed2() {
+		return omegain2;
 	}
 
 	@Override

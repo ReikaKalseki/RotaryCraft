@@ -118,7 +118,7 @@ public class RenderGearbox extends RotaryTERenderer
 					break;
 			}
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
-			ArrayList li = ReikaJavaLibrary.makeListFrom(tile.hasDiamondUpgrade);
+			ArrayList li = ReikaJavaLibrary.makeListFrom(tile.getBearingTier());
 
 			switch(tile.getRatio()) {
 				case 2:

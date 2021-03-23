@@ -52,12 +52,12 @@ public enum GearboxTypes {
 		return this != WOOD && this.isDamageableGear();
 	}
 
-	public boolean consumesLubricant(int omega) {
+	public boolean consumesLubricant() {
 		return this.needsLubricant() && this != DIAMOND;
 	}
 
 	public boolean acceptsDiamondUpgrade() {
-		return this.consumesLubricant(131072) && this != STONE;
+		return this.consumesLubricant() && this != STONE;
 	}
 
 	public float getLubricantConsumeRate(int omegain) {
@@ -189,6 +189,29 @@ public enum GearboxTypes {
 				return 0;//3000;
 		}
 		return 0;
+	}
+
+	public boolean acceptsBearingUpgrade(GearboxTypes mat) {
+		switch(this) {
+			case BEDROCK:
+			case LIVINGWOOD:
+			case LIVINGROCK:
+				return false;
+			case WOOD:
+				return false;//mat == GearboxTypes.STONE;
+			default:
+				return mat != WOOD && mat.material.ordinal() <= material.ordinal()+2 && !mat.isSpecialType();
+		}
+	}
+
+	private boolean isSpecialType() {
+		switch(this) {
+			case LIVINGWOOD:
+			case LIVINGROCK:
+				return true;
+			default:
+				return false;
+		}
 	}
 
 	public ItemStack getGearboxItemByIndex(int index) {
@@ -336,6 +359,14 @@ public enum GearboxTypes {
 					return GearPart.UNIT16;
 			}
 			throw new IllegalArgumentException("Invalid gear ratio!");
+		}
+
+		public boolean isItemOfType(ItemStack is) {
+			for (GearboxTypes type : GearboxTypes.typeList) {
+				if (ReikaItemHelper.matchStacks(type.getPart(this), is))
+					return true;
+			}
+			return false;
 		}
 	}
 

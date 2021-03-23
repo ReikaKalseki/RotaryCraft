@@ -58,7 +58,7 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 	}
 
 	public boolean isOutputtingToSide(ForgeDirection dir) {
-		return enabledSides[dir.ordinal()-2] && (requestedTorques[dir.ordinal()-2] > 0 || outputTorques[dir.ordinal()-2] > 0);
+		return dir != read && enabledSides[dir.ordinal()-2] && (requestedTorques[dir.ordinal()-2] > 0 || outputTorques[dir.ordinal()-2] > 0);
 	}
 
 	@Override
@@ -294,6 +294,10 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 			requestedTorques[i] = vals[i];
 		}
 		this.syncAllData(false);
+	}
+
+	public int getInputTorque() {
+		return torquein;
 	}
 
 	@Override
