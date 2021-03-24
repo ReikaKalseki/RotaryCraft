@@ -111,7 +111,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		in1 = new FlexibleIngredient(ItemStacks.coke, 75F, 1);
 		in2 = new FlexibleIngredient(Items.redstone, 40F, 1);
 		in3 = FlexibleIngredient.EMPTY;
-		BlastRecipe spring = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, ItemStacks.springingot, 0, 0, 1150);
+		BlastRecipe spring = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, ItemStacks.springingot, 0, 0, 1000);
 		this.addRecipe(spring, RecipeLevel.CORE);
 
 		in1 = new FlexibleIngredient(ItemStacks.silicondust, 20F, 1);
@@ -123,7 +123,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		in1 = new FlexibleIngredient(ItemStacks.tungstenflakes, 5F, 1);
 		in2 = FlexibleIngredient.EMPTY;
 		in3 = new FlexibleIngredient(Blocks.obsidian, 20F, 1);
-		BlastRecipe springtung = new BlastRecipe(in1, in2, in3, ItemStacks.springingot, ItemStacks.springtungsten, 0, 0, 1200);
+		BlastRecipe springtung = new BlastRecipe(in1, in2, in3, ItemStacks.springingot, ItemStacks.springtungsten, 0, 0, 1100);
 		this.addRecipe(springtung, RecipeLevel.CORE);
 	}
 

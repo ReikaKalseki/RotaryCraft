@@ -1,0 +1,42 @@
+﻿<?xml version="1.0"?>
+<categories>
+	<misc>
+		Algumas informações importantes sobre a operação de algumas máquinas e algumas ferramentas essenciais.
+	</misc>
+	<engine>
+		Talvez as mais importantes de todas as máquinas, os motores são utilizados para fornecer energia. Cada um tem o seu próprio torque e velocidade característico. Todos eles são geralmente de alta velocidade e baixo torque. Cada motor também tem suas próprias exigências, em termos de abastecimento de energia. Alguns motores têm suas próprias peculiaridades especiais, o que é importante saber.
+	</engine>
+	<trans>
+		As possibilidades seriam muito limitadas se a energia produzida pelos motores tivesse que ser consumida diretamente na fonte. Felizmente, é simples e fácil transportar esse poder com eixos, quase sem perdas, a qualquer distância que você queira. Uma coisa importante a notar é que eles são direcionais - transmitem energia em apenas uma direção. Máquinas mostram um bloco verde no(s) seu(s) lado(s) de entrada e um vermelho no seu(s) lado(s) de saída.
+	</trans>
+	<procmachine>
+		Estas máquinas são usadas para processar materiais, como também para criação de novos materiais, aumentar o rendimento, ou para a conversão de itens entre mods.
+	</procmachine>
+	<utilmachine>
+		Estas são máquinas que não seríam facilmente categorizadas em outros grupos.
+	</utilmachine>
+	<prodmachine>
+		Estas são máquinas usadas para produzir recursos básicos, seja a partir da mineração ou de matérias-primas.
+	</prodmachine>
+	<survmachine>
+		Estas máquinas são usadas para avaliar seu entorno e lhe fazer mais consciente dos potenciais perigos ou de itens de valor.
+	</survmachine>
+	<wepmachine>
+		Máquinas de ataque e defeza são usadas para atacar oponentes - tanto mobs quanto players - e proteger a si mesmos de seus ataques.
+	</wepmachine>
+	<farmmachine>
+		Estas máquinas são projetadas tanto para substituir, quanto para melhorar as farms tradicionais.
+	</farmmachine>
+	<cosmachine>
+		Máquinas cosméticas oferecem pouco ou nenhum bônus utilitário, mas fornecem uma melhoria visual ou acústica.
+	</cosmachine>
+	<accmachine>
+		Não muito úteis por si só, estas máquinas são projetadas para trabalhar com outras para melhorar suas funcionalidades.
+	</accmachine>
+	<tool>
+		Estas são as ferramentas alimentadas por bobinas carregadas. A sua bobina se esgota ligeiramente com cada utilização. Para recarregá-las, basta "craftá-los" com uma nova bobina, e você obterá uma nova bobina, que pode ser usada novamente.
+	</tool>
+	<resource>
+		Estes são os itens do tipo "recurso". São usados para vários fins.
+	</resource>
+</categories>

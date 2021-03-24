@@ -1,0 +1,86 @@
+﻿<?xml version="1.0"?>
+<trans>
+	<shaft>
+		O dispositivo mais básico do conjunto de transmissão é o eixo. Nada extravagante, apenas carrega o poder de um lugar para outro, sem alterações no torque e nem na velocidade. Preste atenção, porém, na direção para evitar dores de cabeça. Diferentes tipos de materiais têm diferentes pontos fortes e, portanto, diferentes limites para o torque máximo e velocidade.
+	</shaft>
+	<gearbox>
+		Engrenagens são usadas para alterar a relação de torque e velocidade, enquanto se mantém a constante de alimentação. Eles vêm em 4 proporções - 2:1, 4:1, 8:1 e 16:1. Isso afeta o torque e velocidade. Engrenagens de redução aumentam o torque e diminuem a velocidade; as de aceleração fazem o oposto. Elas usam lubrificante para trabalhar em seu potencial máximo; a maioria das caixas de engrenagens não lubrificadas se desgastam e reduzem o torque transmitido. Como eixos, caixas de engrenagens podem falhar sob cargas excessivas. Caixas de engrenagens são reparadas com itens de engrenagem.
+	</gearbox>
+	<bevel>
+		Curvas de eixos mudam a direção de transmissão de energia sem alterar o torque ou a velocidade. Ao contrário de seus primos, elas não precisam de lubrificante e operam de forma contínua sem perdas.
+	</bevel>
+	<splitter>
+		<sub>
+			<s0>
+				A junção de eixos faz exatamente o que parece. No modo 'unir', recebe as saídas de dois motores e as combina, somando os torques na velocidade de entrada. Note que tentando combinar entradas de diferentes velocidades apenas resulta em uma chuva de faíscas, e combinar muito poder sobrecarrega a junção. No modo 'dividir', ela recebe uma entrada e envia metade do torque em cada sentido, com a velocidade de entrada. Para trocar os modos, shift-clique com o botão direito com uma chave de fenda.
+			</s0>
+			<s1>
+				Junções de eixo podem mesclar, no máximo, quatro vezes a média da potência de entrada. Excedendo a carga os leva a quebrar. Junções atualizadas com engrenagens de rocha matriz x2 não estão sujeitas a este limite.
+			</s1>
+		</sub>
+	</splitter>
+	<clutch>
+		A embreagem é basicamente um eixo com liga e desliga - quando alimentado por redstone, ela transmite seu torque e velocidade de entrada inalterados. Sem redstone e ela produz nada.
+	</clutch>
+	<dyna>
+		O dinamômetro é como um eixo qualquer, porém ele mostra o torque de entrada, velocidade e potência que estão passando por ele.
+	</dyna>
+	<flywheel>
+		Rodas armazenam energia cinética de rotação. Elas levam algum tempo para girar até a velocidade de entrada, mas quando o fazem, continuam girando por algum tempo, proporcionando uma potência mais estável a uma máquina de eixo ligado a uma entrada variável. Materiais mais pesados são melhores e mais eficientes, porém usam mais torque para começar a se mover e mais potência. Girar um deles muito rapidamente resulta em uma falha violenta e destrutiva. Sua desaceleração é baseada na exigência de torque em questão. Desconectados, eles giram sempre.
+	</flywheel>
+	<worm>
+		A engrenagem helicoidal é uma maneira rápida de aumentar torque no eixo sem usar um grande número de engrenagens intermediárias, criando algo equivalente a proporção de uma de 16:1. No entanto, engrenagens helicoidais são ineficientes e perdem seu poder, levando a uma velocidade de saída muito mais lenta. Esta taxa de perda sobe com a velocidade de entrada.
+	</worm>
+	<cvt>
+		A unidade TCV (transmissão continuamente variável) é basicamente uma caixa de engrenagens dinâmica. Ao invés de usar rodas dentadas, ele usa uma série de correias para alterar a relação de transmissão. Isto lhes dá a vantagem de ser eficiente e altamente flexível, permitindo que você selecione a relação de transmissão desejada. Note que proporções mais elevadas exigem mais correias, com cada duplicação da potência de 2x a proporção máxima (limitada a 32: 1). Esta máquina também requer lubrificante, mas não o consome.
+	</cvt>
+	<coil>
+		<sub>
+			<s0>
+				A bobina industrial armazena energia em uma grande mola que pode ser desenrolada com redstone. Visto que seu torque e velocidade de saída podem ser escolhidos quase à vontade, ela é usada para armazenar energia para mais tarde ou como um tipo de capacitor, para armazenar a energia acumulada por um longo tempo e, em seguida, liberá-lo em uma explosão poderosa. Observe que cada tipo de bobina tem uma capacidade máxima e que ultrapassá-la resulta em uma liberação extremamente violenta de toda a energia armazenada.
+			</s0>
+			<s1>
+				Esta máquina não pode, simultaneamente, carregar e liberar o poder; qualquer entrada de energia durante o descarregamento é desperdiçada. Com maiores cargas de bobina, o torque e potência necessária aumenta.
+				
+				Limites de armazenamento de energia:
+				Aço: %d J (%s)
+				Rocha matriz: %d J (%s)
+			</s1>
+			<s2>
+				Requisitos de entrada:
+				Torque: %s
+				Potência: %s
+			</s2>
+			<s3>
+				Limites de saída:
+				
+				Capacidades:
+				Aço: %d rad/s x %d Nm
+				Rocha matriz: %d rad/s x %d Nm
+				
+				Funções: %s
+			</s3>
+			<s4>
+				Emite um sinal de redstone de comparação proporcional ao seu estado de preenchimento
+			</s4>
+		</sub>
+	</coil>
+	<higear>
+		A engrenagem de alta proporção permite criar o efeito de várias caixas de engrenagens encadeadas em um espaço mais compacto. Criando uma enorme proporção de 256:1, que requer uma grande quantidade de lubrificante para ser capaz de girar, e tem que ser feita de rocha matriz para suportar as altas tensões. Assim como uma caixa de engrenagem normal, ela pode ser invertida entre o torque e velocidade por shift-clique direito com a chave de fenda.
+	</higear>
+	<multi>
+		A embreagem multi-direcional permite redirecionar energia de acordo com um sinal redstone. Basta escolher um lado de saída para cada potência de sinal de 0 a 15.
+	</multi>
+	<belt>
+		O cubo de correia é usado para transportar energia barata através de uma grande distância. Basta colocar dois cubos (um no modo entrada e o outro no modo saída) numa linha reta e no mesmo nível. Para conectar correias, clique com o botão direito com uma, ou com um stack de correias, em seguida, clique com o botão direito no outro com o mesmo stack. Para cada metro percorrido, você precisa de uma correia adicional (ou seja, o máximo é 64 blocos). A correia só pode transmitir no máximo %d Nm de torque a %d rad/s antes de perdas tornarem-se aparentes, e menos quando molhadas.
+	</belt>
+	<buscontroller>
+		O controle de barramento de potência de eixo é o cérebro de uma unidade de barramento. Esta estrutura multiblock pode distribuir a energia de forma inteligente, dependendo do número de saídas selecionadas. Isso facilita muito o uso de um motor para várias máquinas. Cada saída selecionada recebe uma fração igual ao torque e à velocidade de entrada. O barramento requer lubrificante para funcionar.
+	</buscontroller>
+	<bus>
+		As unidades de barramento distribuem a energia dependendo de suas opções selecionadas. Cada lado tem um slot de item correspondente; coloque uma unidade de eixo ou engrenagem ali para controlar a velocidade e torque emitidos. Artigos inválidos ou em falta fazem o lado ser ignorado.  Use os botões adjacentes para controlar as opções de torque(τ) ou velocidade(ω).
+	</bus>
+	<chain>
+		O cubo de corrente é uma versão mais avançada do cubo de correia. Pode demorar o dobro do torque, de até 65536 rad/s antes de falhar. Também é impermeável à chuva.
+	</chain>
+</trans>

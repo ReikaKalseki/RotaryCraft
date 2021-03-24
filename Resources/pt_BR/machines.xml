@@ -1,0 +1,1275 @@
+﻿<?xml version="1.0"?>
+<machines>
+	<bedrockbreaker>
+		<desc>
+			A Broca de Rocha Matriz vai, quando suficientemente alimentada, gradualmente moer os blocos de Rocha Matriz na frente dela e passar para o próximo bloco. Quando cada bloco é consumido, ela expele um pouco de pó da rocha, que pode ser usado para fazer o nível mais elevado de ferramentas ou veios e engrenagens - rocha matriz. A velocidade operacional deste equipamento sobe à medida que a velocidade de entrada o faz. Esta máquina não vai quebrar a camada 0.
+		</desc>
+		<note>
+			Potência necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</bedrockbreaker>
+	<fermenter>
+		<desc>
+			O fermentador é como se produz o etanol para os motores que o usam. Para fazer fermento, coloque açúcar no slot superior e terra no inferior. Para fazer musgo, coloque o fermento no slot superior e alguma planta no inferior. Coloque isso em um forno e você terá cristais de etanol. A velocidade operacional deste equipamento aumenta à medida que a velocidade de entrada o faz. Esta máquina é sensível à temperatura e temperaturas muito baixas ou altas irão retardá-lo ou até mesmo matar o fermento.
+		</desc>
+		<note>				
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por trás
+		</note>
+	</fermenter>
+	<grinder>
+		<desc>
+			O triturador faz exatamente o que seu nome sugere - tritura coisas. Pedra em pedregulho, pedregulho em cascalho, cascalho em areia, e coisas do tipo. Também desempenha um papel crítico na lubrificação das caixas de engrenagens - mói as sementes de canola num óleo utilizável como lubrificante. A velocidade operacional deste equipamento sobe à medida que a velocidade de entrada o faz.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</grinder>
+	<floodlight>
+		<desc>
+			O projetor cria um feixe de luz que ilumina tudo em seu caminho até ser bloqueada por um bloco opaco, sólido. Perfeito para iluminar grandes espaços onde as fontes de luz pontuais, como tochas, simplesmente não conseguem.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por trás
+		</note>
+	</floodlight>
+	<heatray>
+		<desc>
+			Uma das mais poderosas e caras das máquinas, o raio de calor cria um feixe mortal ardente e destruição por tanto tempo quanto o seu alcance permitir. Além de ser difícil fornecer energia suficiente para ligar essa coisa, que dirá desbloquear alguns dos seus recursos mais poderosos, que, quando totalmente ligado, é capaz de queimar um bioma há quilómetros de distância, se você deixar. Energia extra para esta máquina aumenta o alcance e a força de sua capacidade de fundir rocha, explodir TNTs...
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Proporção = 8+(Potência-%d)W/%d m
+			Entrada de Energia: Por trás
+		</note>
+	</heatray>
+	<borer>
+		<desc>
+			O Tunelador é muito interessante. Vai cavar túneis na direção que ele aponta durante o tempo que você quiser. Com a GUI, você pode controlar a forma do túnel e controlar os drops de itens. Materiais mais duros exigem mais potência e torque para cavar - %dW por pontos de dureza dos blocos na frente dele, e até %d Nm de torque por bloco para cortar os materiais mais duros. A broca garante que o teto do túnel não entre em colapso através da substituição de areia e cascalho. Há rumores de que certos labirintos subterrâneos encontrados em uma floresta mística são facilmente conquistados com esta máquina.
+		</desc>
+		<note>
+			Potência Necessária: Varia
+			Torque Necessário: Varia
+			Entrada de Energia: Por trás
+		</note>
+	</borer>
+	<piledriver>
+		<desc>
+			Minerador Vertical escava um poço profundo e estreito com um eixo. Este eixo passa por todos os líquidos em seu caminho e passa por tudo, menos rocha matriz. Impactos múltiplos são obrigatórios para quebrar alguns materiais mais duros, e a vibração desaloja coisas como pinturas, arranca mudas e desorienta jogadores. Cuidado: Estar no caminho do eixo de mineração vai acabar exatamente como você imagina. Requisitos de energia deste equipamento vão até a mais profunda escavação - %dW por metro de profundidade.
+		</desc>
+		<note>
+			Potência Necessária: %dW por metro
+			Torque Necessário: %dNm
+			Entrada de Energia: Por trás ou pela frente
+		</note>
+	</piledriver>
+	<aerosolizer>
+		<desc>
+			O aerosolizador de poção tem nove tanques internos que podem armazenar até 64 garrafas de poção cada um. Seus efeitos são dispersos através de todo o local em que a máquina está e são aplicados a todas as entidades. Encher mais que um slot com o mesmo tipo de poção resulta em efeitos melhorados.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Qualquer lado, menos por cima
+		</note>
+	</aerosolizer>
+	<lightbridge>
+		<desc>
+			Esta máquina, quando a sua enorme necessidade de energia é satisfeita, emite um feixe de luz sólida, tangível, que pode ser pisado e apoiará qualquer massa que se lhe colocar em cima. Nada pode destruir esse feixe, mas ele é bloqueado por qualquer bloco que não for ar. Note que é necessário haver luz brilhante acima dela - ou uma vista do céu -, a fim de ser capaz de fazer o feixe.
+		</desc>
+		<note>
+			Potência Necessária: %dW para um alcance completo, ou %dW por metro
+			Entrada de Energia: Por trás
+		</note>
+	</lightbridge>
+	<extractor>
+		<desc>
+			O extrator é usado para obter mais material a partir de um minério. Ele tritura, depois mistura com água, o que forma uma pasta; em seguida, obtem-se uma solução líquida para, então ser queimado, obtendo-se flocos do minério. Estes flocos podem ser fundidos em um forno para se obter uma unidade do minério. Cada etapa do extrator tem a possibilidade de duplicar a saída em 50%%.	Os requisitos da máquina são complexos e variam de estágio para estágio, mas um abastecimento de água e %d Nm de torque, a %d rad/s, executa todas as quatro etapas.
+		</desc>
+		<note>
+			Potência para o estágio 1: %dW
+			Potência para o estágio 2: %dW
+			Potência para o estágio 3: %dW
+			Potência para o estágio 4: %dW
+			Torque para o estágio 1: %dNm
+			Torque para o estágio 4: %dNm
+			Velocidade para o estágio 2: %drad/s
+			Velocidade para o estágio 3: %drad/s
+			Entrada de Energia: Por baixo
+			Notas: estágios 2 e 3 exigem um abastecimento de água; pode ser atualizado com uma broca de rocha matriz
+		</note>
+	</extractor>
+	<pulsejet>
+		<desc>
+			A fornalha de pulso a jato é poderosa. Se, por um lado, ela não funde receitas ordinárias, por outro, ela derrete obsidiana em vidro que é imune a TNT; derrete armadura e ferramentas de volta em lingotes e faz o aço de maneira mais eficiente do que um forno normal. Ela fica muito quente e incendeia materiais inflamáveis nas proximidades - mantê-la refrigerada com água é uma necessidade. Embora não exista uma exigência mínima de energia, ela requer altas velocidades de eixo. Essa fornalha consome combustível de jato para operar, e consome muito.
+		</desc>
+		<note>
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo
+			Temperatura máxima: %d°C
+		</note>
+	</pulsejet>
+	<pump>
+		<desc>
+			A bomba, quando fornecido poder, aspira líquidos da área circundante e os transporta em tubos para o uso em uma máquina que precise. A água é muitas vezes utilizada como fluido de resfriamento, enquanto que lava é mais frequentemente bombeada para um reservatório para o acesso conveniente ou como combustível de alguns motores.
+		</desc>
+		<note>
+			Potência Necessária: %d W
+			Torque Necessário: %d Nm
+			Entrada de Energia: Pela frente ou por trás
+		</note>
+	</pump>
+	<reservoir>
+		<desc>
+			O reservatório é simplesmente um tanque para armazenar qualquer tipo de líquido, com uma capacidade máxima de %d metros cúbicos (baldes). Pode-se usar um balde para adicionar ou remover líquido e se ele estiver cheio de água, garrafas de vidro podem ser preenchidas a partir dele. Além disso, ele pode ser ligado horizontalmente para formar grandes tanques e pode ser coberto com paineis de vidro.
+		</desc>
+		<note>
+			Capacidade: %d m^3 por bloco
+		</note>
+	</reservoir>
+	<fan>
+		<desc>
+			O ventilador emite um fluxo de ar que empurra as entidades em torno. Com maior poder de entrada, até as entidades mais pesadas podem ser movidas, e as outras entidades são empurradas mais rápido. Um mínimo de %dW de poder é necessário e níveis de potência superiores a %dW não terão nenhum efeito aumentado devido a limitações do fluxo de ar. O ventilador, à velocidades mais elevadas, também pode ser usado para arrancar plantas para colhê-las e para apagar - ou espalhar - incêndios.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área de Efeito = 8+(Potência-POTÊNCIA MIN)/%d m
+			Entrada de Energia: Por trás
+			Velocidade para colheita: %d rad/s
+			Velocidade para Extinguir Incêndio: %d rad/s
+			Pode ser atualizado com um difusor para aumentar a área de efeito, mas isso reduz a eficiência em 50 %%
+		</note>
+	</fan>
+	<compactor>
+		<desc>
+			O compactador é capaz de comprimir o carvão até se tornar antracite, em seguida, prismane, depois lonsdaleite e, por fim, diamante. Cada etapa exige quatro dos itens de entrada por unidade de saída. Todos os passos requerem enormes pressões de %dkPa e temperaturas superiores a %d°C para funcionar. O compactador aquece-se ou se esfria gradualmente dependendo de seus arredores, e a pressão é conseguida através da aplicação de torques elevados.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Pressão necessária: %dkPa
+			Temperatura exigida: %d°C
+			Pressão máxima: %dkPa
+			Temperatura máxima: %d°C
+			Entrada de Energia: Por trás
+		</note>
+	</compactor>
+	<autobreeder>
+		<desc>
+			O Alimentador atrai animais e, quando eles chegam perto, os alimenta até que eles se sintam prontos para procriar. Com esta máquina, você pode rapidamente acumular grandes rebanhos. Cada animal tem seu próprio alimento desejado; sem esse item, a máquina não atrairá ou alimentará o animal. Lobos, por exemplo, gostam particularmente de carne de porco crua. O alimento é consumido quando o animal entra no modo de reprodução.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 8+(Potência-%d)/%d m
+			Entrada de Energia: Por baixo
+		</note>
+	</autobreeder>
+	<baitbox>
+		<desc>
+			A caixa de isca atrai ou repele multidões de todos os tipos, desde que contenha os itens apropriados para fazer tal coisa. Por exemplo, Endermen é atraído por blocos de grama e pela oportunidade de levá-los, mas são repelidos pelos rostos na areia das almas olhando para ele. Esses itens não são consumidos.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 8+(Potência-%d)/%d m
+			Entrada de Energia: Qualquer lado
+		</note>
+	</baitbox>
+	<firework>
+		<desc>
+			A máquina de fogos de artifício, quando dado os ingredientes apropriados, faz fogos de artifício aleatórios a partir das possíveis combinações dos ingredientes, e os lança automaticamente. Quando dadas estrelas de fogo de artifício pré-fabricadas, ela as usará preferencialmente. Com entrada de energia em excesso, a máquina é capaz de conservar os ingredientes e, assim, obter muito mais do que um fogo de artifício a partir da mesma quantidade de ingredientes.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Qualquer lado
+		</note>
+	</firework>
+	<fractionator>
+		<desc>
+			O fraccionador destila vários itens e os refina em combustível de jato para uso em alguns dos motores e máquinas. O combustível de jato requer areia betuminosa, pó de rocha do nether, carvão, pó de blaze, etanol e creme de magma. Além disso, uma lágrima de ghast é utilizada como solvente, mas não é consumida tal como os outros itens. Dutos conectam-se somente na parte superior da máquina.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo
+			
+			Mais pressão proporciona melhores ganhos
+		</note>
+	</fractionator>
+	<gpr>
+		<desc>
+			O Radar de penetração no solo é capaz de ler as densidades e outras propriedades dos blocos abaixo dele e, a partir disso, determinar quais são os blocos que se encontram abaixo dele. Isto permite desenhar um mapa em corte transversal das cavernas subterrâneas, estruturas e outros materiais. Entradas de energia maiores lhe darão um maior campo de visão, chegando a 82 blocos de largura.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Campo de Visão = 1+2*log_2(Potência-%d) m
+			Entrada de Energia: Qualquer lado
+		</note>
+	</gpr>	
+	<heater>
+		<desc>
+			Cansado de explodir seus compactadores e outras máquinas por superaquecê-las? Seus problemas acabaram! O aquecedor se aquece a uma temperatura que você especificar e, quando colocado abaixo de uma máquina, vai aquecê-la a uma temperatura próxima à especificada. O aquecedor consume qualquer combustível que o forno padrão consome, com os combustíveis mais fortes proporcionando mais calor. Até 800°C de um balde de lava, por exemplo.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Temperatura máxima atingível: %d°C
+			Entrada de Energia: Por baixo
+		</note>
+	</heater>
+	<obsidian>
+		<desc>
+			A fábrica de obsidiana mistura água encanada e lava para produzir obsidiana. Seja cuidadoso; se a máquina for deixada cheia de lava por muito tempo, começa a superaquecer e acabará derretendo.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Temperatura máxima: %d°C
+			Capacidade líquida: %d mB
+			Entrada de Energia: Por baixo
+		</note>
+	</obsidian>
+	<playerdetector>
+		<desc>
+			O detector de players faz exatamente o que seu nome diz - quando um jogador vem dentro de sua faixa configurável, ele emite um sinal de redstone. O alcance máximo é determinado pela potência de entrada e o delay do detector - o atraso entre um jogador entrar no raio de alcançe e a saída do sinal - depende da velocidade de entrada.
+		</desc>
+		<note>
+			Área = (Potência)/%d m
+			Entrada de Energia: Por baixo
+			Tempo de reação: %d-(Velocidade/%d)
+		</note>
+	</playerdetector>
+	<spawnercontroller>
+		<desc>
+			O controlador de spawner hackeia um spawner de monstro, permitindo que você desligue-o completamente, ou ajuste a taxa de spawn como você quiser. A taxa mínima de spawn permitida é determinada pela entrada de velocidade.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Delay mínimo: %d-40*log_2(Velocidade)
+			Entrada de Energia: Pelo Spawner
+		</note>
+	</spawnercontroller>
+	<sprinkler>
+		<desc>
+			O regador, quando alimentado com água, a pulveriza para fora nos blocos abaixo, regando culturas e acelerando o seu crescimento, hidratando campos agrícolas e extinguindo incêndios. Maiores pressões de água - criadas por entradas de energia maiores para as bombas resulta em um aumento do alcance.
+		</desc>
+		<note>
+			Área: pressão da água/80
+		</note>
+	</sprinkler>
+	<vacuum>
+		<desc>
+			O aspirador de itens suga itens e orbs XP para ele. Ele os absorve em seu armazenamento interno quando chegam perto. Para extrair o XP armazenado, shift-clique direito com mouse segurando uma chave de fenda. O aspirador também pode sugar itens de inventários horizontalmente adjacentes a ele (exceto de outros aspiradores).
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 8+(Potência*4)/%d m
+			Entrada de Energia: Qualquer lado
+		</note>
+	</vacuum>
+	<woodcutter>
+		<desc>
+			O lenhador corta o tronco de uma árvore, fazendo com que o resto dela entre em colapso e, possivelmente replanta a árvore se ela dropar mudas. Se for encantado com infinidade, ele sempre replantará a árvore.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</woodcutter>
+	<ecu>
+		<desc>
+			A unidade de controle de motor pode desacelerar motores movidos a combustível. Quando desacelerados, eles ainda geram sua saída habitual de torque, mas a uma fracção da velocidade. A vantagem disto é que eles consomem menos combustível; velocidades mais baixas têm uma maior eficiência do que os mais rápidos, embora nos motores turbo isso não seja um grande benefício. Os modos são alterados clicando com o botão direito na UCM com uma chave de fenda. A UCM também pode aceitar uma entrada de redstone, o que desliga o motor completamente.
+		</desc>
+		<note>
+			Modos disponíveis:
+			%s
+		</note>
+	</ecu>
+	<mobradar>
+		<desc>
+			O radar de mobs detecta mobs em um grande raio em torno de si e só é obstruído por blocos no caminho. Ele exibe as suas posições sobre o plano cartesiano, representado com o ícone apropriado. Se você tem um detector de movimento em seu inventário, o radar também abre uma HUD de tipos para o alertar para posições dos mobs perto de você.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 8+(Potência-%d)/%d m
+			Entrada de Energia: Por baixo
+		</note>
+	</mobradar>
+	<winder>
+		<desc>
+			O enrolador de bobina é usado para enrolar bobinas, que armazenam energia mecânica para uso posterior. Ele também pode usar bobinas anteriormente enroladas como fonte de energia, permitindo-lhe transportar energia em forma item.
+		</desc>
+		<note>
+			Energia máxima alcançável é proporcional ao torque de entrada
+		</note>
+	</winder>
+	<tntcannon>
+		<desc>
+			O canhão de TNT lança TNT parada ou com uma determinada velocidade (especificada na GUI, através do ângulo de lançamento, velocidade de laçamento e a direção), ou em um alvo especificado por coordenadas. Ele exige um fornecimento contínuo de TNT para continuar a operação. Ele exige torques mais elevados para disparar em ângulos mais íngremes, mais velocidade para disparar projéteis mais rápidos e mais poder para atingir alvos mais distantes.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia:  Qualquer lado horizontal ou Por Baixo
+		</note>
+	</tntcannon>
+	<sonicweapon>
+		<desc>
+			A arma sônica é uma arma de defesa que foi projetada para proteger contra mobs hostis e jogadores. Em volumes mais altos e superiores (possibilitadas por torques mais altos), ela pode causar mais e mais efeitos debilitantes sobre aqueles em seu raio de alcance. Desde confusão à cegueira; de afogamento à morte, etc. Esta máquina segue a lei do inverso do quadrado e, portanto, a intensidade do som e da gravidade dos seus efeitos diminuem em conformidade. 
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 8+(Potência-%d)/%d m
+			Cegueira em: %d W/m^2
+			Confusão em: %d W/m^2
+			Afogamento em: %d W/m^2
+			Letalidade em: %d W/m^2
+			Entrada de Energia: Qualquer lado
+		</note>
+	</sonicweapon>
+	<blastfurnace>
+		<desc>
+			O forno de calor é a principal forma para fazer aço. Basta fornecer carvão ou carvão de coca à esquerda, pólvora na parte inferior esquerda, areia no canto superior esquerdo e preencher um ou todos os nove slots do meio com lingotes de ferro. Aqueça a máquina a %d°C para iniciar o processo. O carvão não é o que a aquece, mas uma fonte de calor externa é o que é necessário para isso. Esta máquina também é usada para fazer lingotes de rocha matriz. Para isso, coloque 4 pozinhos de rocha matriz na esquerda, um lingote de aço na grade de slots do meio e aqueça a máquina até %d°C.
+		</desc>
+		<note>
+			Requisitos de aço: carvão ou carvão de coca no slot esquerdo, pólvora no canto inferior esquerdo, areia no canto superior esquerdo e ferro nos slots do meio
+
+			Bônus: A chance aumenta à medida que o número de slots preenchidos aumenta, max 50 por cento
+			Tamanho máximo de bônus: aumenta conforme o número de slots preenchidos aumenta, max 100 por cento
+
+			XP por lingotes de aço: %.2f
+		</note>
+	</blastfurnace>
+	<forcefield>
+		<desc>
+			O campo de força emite uma esfera sólida de energia que repele todos os mobs hostis e projéteis. Note que só é sólida em uma direção - ameaças podem sair, mas não podem voltar a entrar. No entanto, caso faça um grande campo magnético, flechas serão desviadas mesmo se forem lançadas a partir do interior da esfera. Esta máquina deve ter uma visão clara sobre ela equivalente ao raio selecionado.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 2+(Potência-%d)/%d m
+			Entrada de Energia: Qualquer lado
+		</note>
+	</forcefield>
+	<musicbox>
+		<desc>
+			A caixa de música é essencialmente um bloco de notas com circuito integrado. Basta programá-lo com a música - seja usando uma das faixas de demonstração ou adicionando sua própria - e dar-lhe energia para executar a música. Um pulso redstone executará a música uma vez; para repetir a música, use a potência do eixo de um motor.
+		</desc>
+		<note>
+			Ativação: Redstone para tocar uma vez, potência do eixo para a música repetir
+			Potência para o loop: %d
+			Modo de entrada de dados: Sequencial
+			Entrada de Energia: Qualquer lado
+		</note>
+	</musicbox>
+	<mobharvester>
+		<desc>
+			O Matador de mobs é projetado para matar mobs como se fosse um jogador, de modo a facilitar que aquilo que só cai quando um jogador mata um mob (como varas incandescentes) possa ser coletado automaticamente. A máquina causa dano nos mobs diretamente acima dela, com o hit dependendo da entrada de energia.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Dano causado: log_2((2+potência/%d)^6)
+			Entrada de Energia: Qualquer lado horizontal ou por baixo
+		</note>
+	</mobharvester>
+	<projector>
+		<desc>
+			O projetor pojeta (lol...) a imagem de um slide em uma parede. Note que a parede deve ser de 7 blocos de largura e 5 blocos de altura, no mínimo, e deve ser opaca, e sem obstruções.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por trás
+		</note>
+	</projector>
+	<railgun>
+		<desc>
+			A torreta é uma arma de defesa muito poderosa. Ele usa campos magnéticos fortes para acelerar uma munição metálica pesada em direção ao alvo, causando grandes quantidades de dano. Note que projéteis mais pesados causam muito mais danos e podem destruir grandes áreas de terreno. A torreta mira automaticamente no alvo mais próximo; para a máxima eficiência, monte-a onde ela tenha uma visão clara da área circundante. Você também pode inverter a torreta deixando-a de cabeça para baixo.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: 512*SQRT(massa) Nm
+			Entrada de Energia: Por baixo ou por cima, dependendo da orientação
+		</note>
+	</railgun>
+	<weathercontroller>
+		<desc>
+			O controlador climático é utilizado para controlar o clima. Ele tem um sensor de luz embutido para determinar o tempo atual e, se configurado para fazê-lo, dispara os produtos químicos adequados ao ar para alterar o clima. Note que ele tem um tempo de espera e deve ter uma visão clara do céu.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por baixo
+			Sol: Serragem
+			Chuva: Iodeto de prata
+			Tempestade: Redstone + iodeto de prata
+			Super Tempestade: Pó de pedra luminosa + Redstone + Iodeto de prata
+		</note>
+	</weathercontroller>
+	<refresher>
+		<desc>
+			O mantenedor de itens impede que itens próximos sumam. Note que os itens que forem mantidos por um longo tempo sumirão imediatamente, se a máquina for destruída ou perder poder.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 4+(Potência-%d)/%d m
+			Entrada de Energia: Qualquer lado
+		</note>
+	</refresher>
+	<cavescanner>
+		<desc>
+			O scanner de caverna é muito parecido com um scanner a laser 3D. Ele envia pulsos para o solo e detecta a interface entre o ar e outros blocos que formam o mundo. Isso permite mapear cavernas da superfície. Seu campo de visão é de 16 blocos por padrão e pode ser girado clicando com o botão direito no bloco. Botão direito do mouse o empurra na direção que você está olhando e shift-clique-direito o empurra na direção oposta a que você está olhando. Cavernas são codificadas por cores com base na profundidade.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Mova a região selecionada clicando com o botão direito no bloco
+			Entrada de Energia: Qualquer lado
+		</note>
+	</cavescanner>
+	<scalechest>
+		<desc>
+			O baú redimensionável permite armazenar suas coisas em um espaço pequeno. O tamanho do seu inventário aumenta com a quantidade de energia que ele recebe, até um máximo de %d stacks. Se a entrada de energia cai ou é perdida enquanto existem itens nos slots agora removidos, eles vão permanecer ocultos e inacessíveis até que a energia suficiente seja restaurada.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Tamanho do inventário: 9+(Potência-%d)/%d slots
+			Tamanho máximo: %d
+			Entrada de Energia: Por trás
+		</note>
+	</scalechest>
+	<spiller>
+		<desc>
+			O espelidor de líquidos é projetado para preencher uma depressão com o líquido que for canalizado para ele. Cada balde bombeado equivale a um bloco de líquido colocado. Ele irá preencher as camadas mais baixas em primeiro lugar.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Qualquer lado
+			
+			Requer líquido canalizado para operar
+		</note>
+	</spiller>
+	<smokedetector>
+		<desc>
+			O detector de fumaça soa um alarme quando detecta um bloco incêndiado nas proximidades e também emite um sinal sonoro, ocasionalmente, quando a bobina de ligar o mesmo estiver acabando.
+		</desc>
+		<note>
+			Requer uma bobina carregada como fonte de energia
+		</note>
+	</smokedetector>
+	<igniter>
+		<desc>
+			O incendiador permite incendiar materiais inflamáveis em um raio grande e, por isso, é muito eficaz em áreas de florestas ou de grama alta. Devido à sua capacidade para inflamar criaturas, ele também pode servir como uma poderosa, e bastante perigosa, forma de defesa.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = Temperatura/50 m
+			Combustíveis aceitáveis: Carvão, Pó de Blaze, Madeira, Lava, Termita
+			Entrada de Energia: Qualquer lado
+		</note>
+	</igniter>
+	<freezegun>
+		<desc>
+			A torreta congelante é uma arma de defesa não-letal. Mira automaticamente em ameaças e as congela em um bloco de gelo, imobilizando-as completamente sem causar-lhes danos. Gelo é munição mais eficaz do que bolas de neve. Assim como a torreta, esta máquina pode ser orientada de cabeça para baixo e é mais eficaz com uma visão clara dos arredores. Note que mobs congelados ainda podem atacar se alguém se aproximar.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por baixo ou por cima, dependendo da orientação
+		</note>
+	</freezegun>
+	<magnetizer>
+		<desc>
+			O magnetizador gira um eixo rápidamente, para criar um campo magnético no interior dele. Este é um dos componentes críticos de um motor eléctrico CA. E ele também exige uma corrente redstone alternada, e de alta velocidade.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Potência Necessária: %dW
+					Velocidade Necessária: %d rad/s
+					Entrada de Energia: Por trás
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</magnetizer>
+	<containment>
+		<desc>
+			O campo de contenção é o oposto do campo de força, já que ele mantém as coisas dentro. Note que mobs hostis que lançam projéteis, como esqueletos e Withers, ainda podem atingir alvos fora do campo mesmo sem deixá-lo. Esta máquina deve ter uma visão clara sobre ela equivalente ao raio selecionado.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Área = 2+(Potência-%d)/%d m
+			Entrada de Energia: Qualquer lado
+			Requer %dW para conter um Wither e %dW para conter um EnderDragon
+		</note>
+	</containment>
+	<screen>
+		<desc>
+			O monitor de CFTV é como as câmeras de CFTV são vistas. Basta adicionar 3 corantes como sendo o código de cor - combinando com uma das câmeras de vigilância existentes no mundo - e clicar com o botão direito do mouse para usar a câmera.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por baixo
+		</note>
+	</screen>
+	<cctv>
+		<desc>
+			A câmera de CFTV permite ver áreas que de outra forma não teriam acesso seguro para visualisar. Basta fornecer-lhe uma bobina carregada e três corantes como um código de cores, e você pode ver o mundo através de sua lente com o auxílio de um monitor de CFTV. Para sair do modo de câmera, a tecla padrão é "\". A câmera pode ser reorientada com uma chave de fenda (shift-clique para inclinação).
+		</desc>
+		<note>
+			Requer uma bobina carregada como fonte de energia
+		</note>
+	</cctv>
+	<purifier>
+		<desc>
+			O purificador de aço é utilizado para transformar aço comum em aço HSLA puro, para utilização em máquinas. Assim como o forno de calor, ele exige pólvora, areia e temperaturas superiores a %d°C.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Temperatura exigida: %d°C
+			Entrada de Energia: Qualquer lado
+		</note>
+	</purifier>
+	<lasergun>
+		<desc>
+			A arma a laser é outra arma defensiva ou ofensiva que também é poderosa. Assim como a torreta, ela atinge o jogador ou mob mais próximo, dentro da lista de permissões, e o seu feixe varre a área, iniciando incêndios, fundindo rochas e, geralmente, causando estragos.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por baixo ou por cima, dependendo da orientação
+		</note>
+	</lasergun>
+	<itemcannon>
+		<desc>
+			O canhão de itens pode disparar itens em todo o mapa sem prejudicá-los, o que permite o transporte de itens a longa distância quase instantaneamente. Observe que você deve digitar as coordenadas de outro canhão de itens para recebê-los.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</itemcannon>
+	<friction>
+		<desc>
+			O friccionador é uma ferramenta para aquecer um forno padrão sem combustível. Torques e velocidades mais elevadas significam temperaturas mais elevadas, mas cuidado: passe muito tempo a altas temperaturas e você pode derreter o forno completamente. Também digno de nota é que as altas temperaturas podem acelerar a operação do forno. Um forno quente é também a única maneira de fundir flocos de tungstênio em lingotes de tungstênio. Note que, enquanto a temperatura é, em última análise, uma questão de potência de entrada, combinando com o torque e velocidade irá melhorar a eficiência.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</friction>
+	<landmine>
+		<desc>
+			A mina terrestre é uma armadilha que pode ser colocada até um metro abaixo da terra. Ela exige uma bobina e, como a sua carga esgota, aumenta o risco de detonação espontânea. Efeitos extras podem ser adicionados ao colocar na TNT: pó de blaze, olhos de aranha ou de vidro nos locais corretos e mais pólvora nos slots da esquerda aumentam a força explosiva.
+		</desc>
+		<note>
+			Requer uma bobina carregada como fonte de energia
+		</note>
+	</landmine>
+	<bucketfiller>
+		<desc>
+			O enchedor de balde recebe líquidos pelas laterais e baldes vazios por cima para enchê-los automaticamente. Ele também pode ser usado no sentido inverso; baldes cheios podem fornecer líquido.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Qualquer lado
+		</note>
+	</bucketfiller>
+	<blockcannon>
+		<desc>
+			O canhão de blocos dispara blocos como projéteis, permitindo que você faça uma grande confusão com seu alvo. Para usar líquidos, colocque baldes cheios.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: Aumenta com a massa do bloco
+			Entrada de Energia: Qualquer lado or Por baixo
+		</note>
+	</blockcannon>
+	<spycam>
+		<desc>
+			A câmera aérea permite que você veja uma grande área como se fosse a foto do alto e, portanto, permite conhecer as posições de mobs e blocos expostos. Assim como a câmera de CFTV, ela usa uma bobina e uma combinação de 3 cores como "código de canal".
+		</desc>
+		<note>
+			Requer uma bobina carregada como uma fonte de energia
+		</note>
+	</spycam>
+	<mirror>
+		<desc>
+			Espelhos são cruciais para a usina de energia solar funcionar. Mais espelhos significam mais poder. Note que eles exigem uma visão clara do céu, e trabalham com eficiência reduzida se o sol não estiver bem visível. Além disso, os espelhos podem quebrar se objetos pesados como jogadores ou blocos de terra caírem sobre eles.
+		</desc>
+		<note>
+			Requer uma visão clara do céu
+		</note>
+	</mirror>
+	<selfdestruct>
+		<desc>
+			A máquina de autodestruição detecta quando a sua fonte de alimentação é danificada e libera todo tipo de destruição usando como desculpa o fato de que a base em que ela estava foi danificada ou destruída.
+		</desc>
+		<note>
+			Detona em perda de potência
+			Entrada de Energia: Qualquer lado
+		</note>
+	</selfdestruct>
+	<coolingfin>
+		<desc>
+			Barras de refrigeração puxam o calor para longe das máquinas, ajudando a mantê-las frescas, sem a necessidade de sistemas de tubulação de água avançados.
+		</desc>
+		<note>
+			Vai causar dano ao contato, se conectadas a uma máquina quente
+		</note>
+	</coolingfin>
+	<worktable>
+		<desc>
+			A mesa de trabalho é a grade de artesanato em que todas as máquinas devem ser trabalhadas, com exceção do Forno do calor e da própria mesa de trabalho. Basta usá-la como uma Crafting Table comum. Para fabricar produtos, dê um sinal de redstone ou clique no item no lado direito. A mesa também é usada para recarregar ferramentas movidas a mola. Basta colocar uma nova mola mais a ferramenta no slot esquerdo e pegar o produto na direita. Ao contrário de uma crafting table, a mesa de trabalho armazena seu conteúdo.
+		</desc>
+		<note>
+			Necessário para criar qualquer máquinas
+		</note>
+	</worktable>
+	<compressor>
+		<desc>
+			O compressor de ar converte a energia do eixo para pressurizar o ar, que pode ser levado através de tubos condutores do BuildCraft. Se lhe for dada quantidades excessivas de energia, ele pode e vai explodir. Violentamente...
+		</desc>
+		<note>
+			Pressão máxima antes da detonação: %d kPa
+			Orientação e saída: Como nos motores BuildCraft
+			Entrada de Energia: Por trás
+		</note>
+	</compressor>
+	<pneuengine>
+		<desc>
+			O motor pneumático utiliza uma turbina para converter ar pressurizado a partir de tubos PneumaticCraft em potência de eixo. Use sua interface gráfica para escolher a velocidade de saída. Potências mais elevadas exigem mais pressão de ar e fluxo de ar.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Tubulação de entrada de ar: Por trás
+
+					Superaquece a: %d°C
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</pneuengine>
+	<liquidconverter>
+		<desc>
+			O equilibrador de pressão é utilizado para ligar de forma segura tubos pressurizados, tubos comuns e dutos de combustível com conduítes de líquido padrão.
+		</desc>
+		<note>
+			Suporta: Água, Lava, Lubrificante e Combustível de Jato
+		</note>
+	</liquidconverter>
+	<display>
+		<desc>
+			O projetor de tela é usado para exibir texto em uma tela holográfica, como mensagens de boas-vindas de servidores, por exemplo. Ela exige uma bobina carregada para funcionar. Para adicionar texto, escreva-o em um livro, assine-o e, somente então, clique com o botão direito na máquina com o livro, que não vai ser consumido.
+		</desc>
+		<note>
+			A máquina pode exibir códigos de formato.
+		</note>
+	</display>
+	<lamp>
+		<desc>
+			A lâmpada brilhante ilumina uma grande área em torno de si, desde que contenha uma bobina carregada.
+		</desc>
+		<note>
+			Faixa máxima: %d m
+		</note>
+	</lamp>
+	<terraformer>
+		<desc>
+			O terraformador é usado para converter um bioma noutro. Note que só pode converter entre biomas semelhantes - assim mudanças radicais podem exigir várias etapas - e cada etapa pode consumir uma grande quantidade de líquido e itens. Dê a esta máquina um diamante e ela pode até mesmo imitar a geração mundial do bioma alvo.
+		</desc>
+		<note>
+			Selecione tiles para converter com o Seletor de Tiles
+			Somente tiles que são do mesmo tipo que os tiles do bioma em que a máquina está podem ser convertidos
+			Entrada de Energia: Qualquer lado horizontal
+			Requer uma entrada redstone para ativar
+		</note>
+	</terraformer>
+	<fuelenhancer>
+		<desc>
+			A refinaria pega petróleo comum, como os usados por motores a combustão, e o refina, purifica-o e refina-o ainda mais, para produzir combustível de jato. Note que o processo de purificação causa uma diminuição de quatro vezes no volume de combustível. E a máquina precisa de creme de magma, pó de blaze, pó de rocha do nether e areia betuminosa.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo
+		</note>
+	</fuelenhancer>
+	<emp>
+		<desc>
+			A máquina de pulso eletromagnético, quando acionada, desativa permanentemente todas as máquinas nas proximidades vulneráveis. Coisas como eixos são imunes, devido à falta de quaisquer peças electrônicas ou redstone, nem qualquer inteligência, mas nada será destruído. Há rumores de que explosão desta máquina é tão poderosa que pode até mesmo perturbar o equilíbrio dos "nós" mágicos invisíveis que dizem existir no mundo.
+		</desc>
+		<note>
+			Blcos puramente mecânicos, como eixos, são imunes
+			Energia de ativação: %dJ
+			Entrada de Energia: Por baixo
+		</note>
+	</emp>
+	<linebuilder>
+		<desc>
+			O colocador de blocos empurra uma linha de blocos maior do que o pistão mais poderoso. Simplesmente encha-o com blocos de construção e ele vai construir até que atinja um obstáculo, como rocha matriz, um baú, um spawner, ou outra máquina, ou até que o seu comprimento atinja 512 metros. 
+		</desc>
+		<note>
+			Entrada de Energia: Por trás
+		</note>
+	</linebuilder>
+	<arrowgun>
+		<desc>
+			A arma de flechas representa uma evolução do ejetor. Quando ligada, ela detecta quando algum ser está em sua frente e dispara sobre ele. Velocidades de entrada mais rápidas equivalem a maiores taxas de tiro, enquanto torques elevados fazem a flecha voar mais rápido e mais longe, causando mais dano.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por trás
+			Velocidade de Lançamento: 20*log_2(torque) m/s
+			Taxa de Tiros: 0.8-log_2(velocidade)/20 segundos por tiro, até 5 tiros por segundo
+			Alcance: 10+2*log_2(torque) m
+		</note>
+	</arrowgun>
+	<boiler>
+		<desc>
+			A caldeira de fricção utiliza potência de eixo para aquecer a água bombeada para ela. A água pode ser puxada por cima da caldeira em forma de vapor. Esta máquina tem um período de aquecimento, antes disso ela não faz vapor. Note que esta máquina pode sobreaquecer-se e, violentamente, falhar.
+		</desc>
+		<note>
+			Entrada de Energia: Por baixo
+		</note>
+	</boiler>
+	<steamturbine>
+		<desc>
+			A turbina a vapor recebe vapor de qualquer tubo ou tanque por trás dela e gera potência de eixo. Use a GUI para selecionar o uso de energia (e consumo de vapor).
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Entrada de vapor: Por trás
+
+					Superaquece a: %d°C
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</steamturbine>
+	<beammirror>
+		<desc>
+			O refletor reflete os raios do sol em um feixe horizontal, permitindo-lhe usar a luz natural para iluminar túneis longos, sem consumir energia. Ele também funciona como um sistema anti-mortos-vivos, pelo fato de a luz refletida ser capaz de iluminar zumbis e esqueletos, e incendiá-los.
+		</desc>
+		<note>
+			Só funciona durante o dia
+
+			O Alcance cai à medida que o sol se põe
+		</note>
+	</beammirror>
+	<fertilizer>
+		<desc>
+			O fertilizador, quando preenchido com apatita ou farinha de ossos, acelera o crescimento de culturas próximas, mudas e outras plantas. Para dissolver o fertilizante, esta máquina requer água em estado líquido.
+		</desc>
+		<note>
+			Entrada de Energia: Por baixo
+			Alcance: 2*log_2(torque)
+			Potência Necessária: %dW
+		</note>
+	</fertilizer>
+	<lavamaker>
+		<desc>
+			O derretedor de rochas usa aquecimento por fricção para derreter rocha em lava, que pode ser retirada com tubos. Rocha do nether fornece mais lava por bloco, enquanto pedregulhos fornecem o mínimo.
+		</desc>
+		<note>
+			Entrada de Energia: Por baixo
+		</note>
+	</lavamaker>
+	<generator>
+		<desc>
+			O gerador elétrico recebe potência de eixo e produz energia elétrica do IC2 a uma taxa de %.0f W/EU. A potência de saída total, bem como a quantidade EUs por tick aumenta de acordo com a energia entrando.
+		</desc>
+		<note>
+			Entrada de Energia: Por trás
+			Se "Hard EU" estiver ligado nas configs, requer líquido refrigerante do IC2 ou nitrogênio líquido
+		</note>
+	</generator>
+	<electricmotor>
+		<desc>
+			O motor elétrico usa a energia elétrica do IC2 para produzir potência de eixo. Use sua interface gráfica para escolher a velocidade de saída. Potências mais elevadas exigem mais energia elétrica e uma tensão de alimentação maior.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Conexão do fio: Por trás
+
+					Superaquece a: %d°C
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</electricmotor>
+	<hose>
+		<desc>
+			Estes dutos levam o óleo lubrificante de canola do moedor para as caixas de engrenagem. A transmissão é feita automaticamente e eles se conectam a qualquer triturador ou caixa de engrenagem automaticamente.
+		</desc>
+		<note>
+		</note>
+	</hose>
+	<pipe>
+		<desc>
+			Tubos transportam líquidos de bombas para máquinas ou reservatórios. Um tubo pode conter uma quantidade quase ilimitada internamente, mas só pode armazenar um líquido de cada vez, e deve ser esvaziado antes de trocar conteúdos. Devido a preocupações com corrosão, os tubos não podem transportar combustível de jato ou fluidos à base de flúor.
+		</desc>
+		<note>
+		</note>
+	</pipe>
+	<fuelline>
+		<desc>
+			Dutos de combustível transportam etanol ou combustível de jato para os motores e fornos que necessitam deles. Uma vez conectado a uma fonte, eles começam automaticamente a preencher-se e, se conectado a um alvo, esvaziam-se automaticamente. Eles têm uma capacidade muito alta, por isso, recomenda-se precaução ao quebrá-los, para evitar a perda de grandes quantidades de combustível armazenado.
+		</desc>
+		<note>
+		</note>
+	</fuelline>
+	<valve>
+		<desc>
+			O tubo válvula, como outros tipos de tubos, extrai líquidos de reservatórios se colocado abaixo deles. No entanto, o tubo válvula permanece inerte até que seja dado um sinal de redstone.
+		</desc>
+		<note>
+		</note>
+	</valve>
+	<bypass>
+		<desc>
+			Os tubos de escape não se conectam uns com os outros ou com máquinas, permitindo uma tubulação mais compacta.
+		</desc>
+		<note>
+		</note>
+	</bypass>
+	<separation>
+		<desc>
+			O tubo roteador pode ser usado para encaminhar os líquidos de acordo com um sinal de Redstone. Leva líquidos pelos lados e extrai líquidos por cima ou por baixo, dependendo de onde está recebendo energia. Ele transmite líquidos para cima quando energizado.
+		</desc>
+		<note>
+		</note>
+	</separation>
+	<bedpipe>
+		<desc>
+			O tubo de rocha matriz é idêntico ao tubo de aço, exceto que é capaz de resistir a pressões muito mais elevadas e temperaturas.
+		</desc>
+		<note>
+
+		</note>
+	</bedpipe>
+	<aggregator>
+		<desc>
+			O agregador de orvalho centrifuga vapor de água do ar, o coleta e, se possível, o envia por tubulações proximas ou para recipientes de líquidos. Esta máquina funciona até mesmo no Nether, embora tenha sua velocidade diminuída. Deve ser resfriada abaixo da temperatura ambiente para funcionar. Mais torque significa mais água por ciclo, enquanto mais velocidade significa ciclos mais rápidos.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo
+		</note>
+	</aggregator>
+	<fuelengine>
+		<desc>
+			O motor a combustão usa combustível BuildCraft para produzir potência de eixo. Ele funciona de forma semelhante a motores de combustão desse mod, em termos de produção de energia. Ele requer tanto lubrificante quanto resfriamento com água. E ele desacelera com o superaquecimento.
+		</desc>
+		<note>
+			Torque Produzido: %d Nm
+			Velocidade de rotação: %d rad/s
+			Energia produzida: %dW
+		</note>
+	</fuelengine>
+	<airgun>
+		<desc>
+			A arma de ar comprimido é basicamente uma atualização da arma de repulsão. Ela usa a potência de entrada para gerar pressão de ar e, quando algum mob se aproxima, ela o faz voar para trás em alta velocidade.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</airgun>
+	<sonicborer>
+		<desc>
+			A broca sônica usa ondas de choque para cavar túneis. Isso permite que ela seja posicionada em qualquer direção e trabalhe mais rapidamente do que a broca padrão. A única desvantagem é que ela dropa os blocos nas suas posições originais, em vez de transportá-los para a máquina, o que facilitaria a recolha. Se você fornecer muita energia, esta máquina sofre uma falha violenta.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</sonicborer>
+	<sorting>
+		<desc>
+			A máquina de triagem organiza itens dropados em um de seus três lados de saída (vermelho, verde ou azul). Para grandes stacks, ela transfere um item por tick (e, portanto, um stack completo leva 3 segundos para se organizar completamente).
+		</desc>
+		<note>
+			Potência Necessária: %dW
+		</note>
+	</sorting>
+	<fillingstation>
+		<desc>
+			A estação de preenchimento é usada para encher os tanques de itens movidos a combustíveis, como mochilas a jato.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por trás
+		</note>
+	</fillingstation>
+	<vandegraff>
+		<desc>
+			O gerador van de graaff usa uma correia para gerar uma carga estática em sua esfera de metal. Se um objeto condutor - como um mob - vem perto o suficiente, a carga pode ser liberada para o objeto. Quanto maior a carga, maior será a distância que o mob será aremessado. Note que alguns mobs podem não reagir como previsto com a descarga. Cargas excessivas podem atrair raios.
+		</desc>
+		<note>
+			Água dissipa a carga estática
+		</note>
+	</vandegraff>
+	<defoliator>
+		<desc>
+			O desfolhador é usado para rapidamente limpar grandes áreas de flora. Note que a vida animal nas imediações também são susceptíveis a morrer.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por baixo
+		</note>
+	</defoliator>
+	<bigfurnace>
+		<desc>
+			A fundição a lava pode fundir até 18 itens de uma vez. No entanto, para fazer isso, seus tanques devem estar cheios de lava e devem estar a, pelo menos, 400 graus. Também requer potência de eixo.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Por baixo
+		</note>
+	</bigfurnace>
+	<distiller>
+		<desc>
+			A destilaria é utilizada para converter um tipo de fluido em outro. Basta bombear o fluido por cima através na máquina.
+		</desc>
+		<note>
+			A potência e torque necessários variam por conversão de fluido
+			Entrada de Energia: Por baixo
+			
+			Conversões válidas:
+			%s
+		</note>
+	</distiller>
+	<suction>
+		<desc>
+			O tubo de sucção puxa o fluido dos tanques e máquinas de outros mods. Ele não foi projetado para se conectar a outros sistemas de tubulação, ou em máquinas RotaryCraft.
+		</desc>
+		<note>
+		</note>
+	</suction>
+	<dynamo>
+		<desc>
+			O dínamo rotacional converte a energia RotaryCraft em fluxo de redstone do Thermal Expansion. Devido às limitações impostas pelos campos magnéticos internos, ele pode ter um máximo de %d Nm de torque (%d Nm, se atualizado) e um máximo de %d rad/s. Qualquer excesso, embora não perigoso, será desperdiçado.
+		</desc>
+		<note>
+			Orientação e de saída: Como os dínamos do Thermal Expansion
+			Entrada de Energia: Por trás
+		</note>
+	</dynamo>
+	<magnetic>
+		<desc>
+			As funções do motor magnetostático são muito parecidas com as do motor pneumático. Aceita RF fornecido a ele e a sua velocidade de saída pode ser selecionada, para escolher a saída de energia total. Como todos os outros motores de conversão, exige refrigeração.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Entrada de conduítes: Por trás
+
+					Superaquece a: %d°C
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</magnetic>
+	<crystallizer>
+		<desc>
+			O cristalizador de fluidos congela fluidos. Note que, portanto, ele deve estar mais frio do que o ponto de congelamento do fluido.
+		</desc>
+		<note>
+			Entrada de Energia: Por trás
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+		</note>
+	</crystallizer>
+	<particle>
+		<desc>
+			O display de partículas pode emitir um fluxo de qualquer tipo de partícula que você escolher a partir de sua GUI. Ele exige uma bobina carregada para funcionar.
+		</desc>
+		<note>
+		</note>
+	</particle>
+	<lawnsprinkler>
+		<desc>
+			O regador de solo é uma variação do regador que pode ser montado no chão e que pode apagar incêndios, hidratar a terra, aumentar a taxa de crescimento das culturas, etc. Devido ao grande volume de água que consome, é mais eficaz do que a sua variação de teto. Note que as pressões elevadas da água podem ser perigosas.
+		</desc>
+		<note>
+		</note>
+	</lawnsprinkler>
+	<grindstone>
+		<desc>
+			O Afiador é usado para afiar e reparar ferramentas sem gastar material adicional. Visto que ele reduz a quantidade de material na ferramenta, não é possível repará-la completamente. A ferramenta vai gradualmente degradar-se até que já não seja mais possível repará-la.
+		</desc>
+		<note>
+			Entrada de Energia: Por trás
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Requer água
+		</note>
+	</grindstone>
+	<blower>
+		<desc>
+			O tubo pneumático de itens usa um motor para transferir itens entre inventários. Se uma bomba de item tem um inventário por trás, ela verifica na frente dela se há um inventário de recepção válido. Se for outra bomba, segue na direção em que estiver apontando, e assim por diante. O tubo pode transferir um item por tick, por kW de potência de entrada; por conseguinte, para transferir stacks inteiros, 65kW de alimentação basta. Mais potência irá transferir vários stacks, já que não há limite máximo para a taxa de transferência.
+		</desc>
+		<note>
+			Entrada de Energia: Qualquer lado
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+		</note>
+	</blower>
+	<refrigerator>
+		<desc>
+			A unidade de refrigeração é usada para resfriar o ar a tal ponto que algumas coisas saem congeladas ou condensadas dela. É assim que nitrogênio líquido e gelo seco são produzidos. Note que gelo é necessário para ajudar no resfriamento do ar.
+		</desc>
+		<note>
+			Entrada de Energia: Por trás
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+		</note>
+	</refrigerator>
+	<composter>
+		<desc>
+			A composteira permite que alimentos descartados, matérial vegetal e outros compostos orgânicos sejam discriminados em algo que, embora desagradável para você, é altamente valorizado por plantas, por ser muito propício para o seu crescimento. Este processo requer fermento para facilitá-lo.
+		</desc>
+		<note>
+			Temperatura exigida: Entre %d°C e %d°C
+		</note>
+	</composter>
+	<gastank>
+		<desc>
+			A câmara de compressão de fluido pode armazenar até um milhão de baldes de qualquer fluido. Torques mais elevados permitem elevadas pressões alcançáveis; se o torque não for grande o suficiente, você não será capaz de bombear mais fluido. Ambos, gases e líquidos, podem ser armazenados, mas líquidos tomam muitas, muitas vezes mais torque para comprimir.
+		</desc>
+		<note>
+			Entrada de Energia: Por baixo
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Capacidade de Armazenamento: f*10^(0.5*log_2(torque))/40 mB, f = 1 para líquidos e 8 para gases
+		</note>
+	</gastank>
+	<crafter>
+		<desc>
+			O fabricador automático permite automatizar a fabricação de qualquer coisa da crafting table do vanilla. Ele tem três modos: No modo autônomo, fabrica continuamente, se tiver ingredientes para fazê-lo; no modo de solicitação, fabrica apenas um item selecionado e fica no modo de espera. Pode-se usar um inventário acima dele ou até mesmo uma rede do Applied Energistics para o fornecimento de ingredientes. Ele armazena 18 padrões e, portanto, cria até 18 receitas em paralelo. O seu terceiro modo, manter, garante que uma certa quantidade de um certo produto permaneça no sistema ME.
+		</desc>
+		<note>
+			Entrada de Energia: Qualquer lado
+			Potência Necessária: %dW
+			O modo manter usa um CPU de fabricação do AE
+		</note>
+	</crafter>
+	<antiair>
+		<desc>
+			A versão mais barata e mais especializada de torreta, a arma Anti-Aérea, atira sucata em mobs como uma forma de defesa da base. Tira apenas um coração de dano por impacto, mas pode disparar mais de 3 vezes por segundo, e a munição é muito mais barata do que a da torreta.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por baixo ou por cima, dependendo da orientação
+		</note>
+	</antiair>
+	<pipepump>
+		<desc>
+			O tubo bombeador ajuda a bombear fluidos através de tubos, reduzindo o montante que fica preso em tubos e aumentando da taxa de fluxo global. Velocidades de entrada mais rápidas significam bombeamento mais rápido do líquido. Note que o bombeamento de muito líquido em um tubo pode provocar o seu rompimento.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Qualquer lado
+		</note>
+	</pipepump>
+	<centrifuge>
+		<desc>
+			A centrífuga usa grandes forças centrípetas para separar itens em componentes de diferentes densidades, ou para separar fluidos a partir de alguns itens. Se você usa apicultura, também pode extrair própolis e outros produtos dos favos.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo
+		</note>
+	</centrifuge>
+	<drying>
+		<desc>
+			A cama de secagem é onde alguns líquidos podem evaporar ou coagular para deixar outros itens para trás.
+		</desc>
+		<note>
+
+		</note>
+	</drying>
+	<wetter>
+		<desc>
+			A máquina de liquefação mistura um fluido em um item, obtendo-se, assim, um produto diferente.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo
+		</note>
+	</wetter>
+	<chunkloader>
+		<desc>
+			Esse carregador de chunks usa velocidades extremamente elevadas - geradas com velocidades de entrada extremas - para induzir efeitos relativísticos e distorcer o espaço-tempo ao seu redor, mantendo chunks carregadas.
+		</desc>
+		<note>
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo
+			Área em Chunks: %d+((Potência-%d)/%d)
+		</note>
+	</chunkloader>
+	<drops>
+		<desc>
+			O dropalizador converte blocos em seus respectivos drops, para que não seja necessário colocá-los no chão e depois quebrá-los. Ele também pode processar caixas de sucata do IC2 nas suas saídas randomizadas.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Torque Necessário: %d Nm
+			Entrada de Energia: Por trás
+		</note>
+	</drops>
+	<filler>
+		<desc>
+			Preenchedor com blocos preenche uma área abaixo de si com qualquer bloco que lhe for dado, assim como o espelidor de líquidos. Materiais mais densos precisam de mais potência para se mover.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Entrada de Energia: Qualquer lado
+			
+			Consegue puxar itens de um Talismã Buraco Negro do Botania
+		</note>
+	</filler>
+	<hydrator>
+		<desc>
+			Esta máquina espalha água que for bombeada a ela no solo ao redor, hidratando plantações - sem precisar de um bloco de água - e acelerando o crescimento das plantas. Ela também desacelera ou reverte o apodrecimento de humus, e também pode acelerar a conversão de terra de pântano para turfa.
+		</desc>
+		<note>
+			
+		</note>
+	</hydrator>
+	<gatling>
+		<desc>
+			Uma metralhadora que lança projéteis arredondados - nesse caso, esferas de rolamento - em alvos, rapidamente, destruíndo-os. Devido ao seu design, ela continua atirando - e consumindo munição - enquanto tiver um alvo; que, combinado com uma mira quase perfeita, significa que passar com isso próximo a alvos amigáveis ou materiais frágeis não é aconselhável.
+		</desc>
+		<note>
+			Potência Necessária: %dW
+			Velocidade Necessária: %d rad/s
+			Entrada de Energia: Por baixo ou por cima, dependendo da orientação
+			
+			Substancialmente menos efetiva contra slimes
+		</note>
+	</gatling>
+	<spillway>
+		<desc>
+			O vertedouro puxa líquido de corpos de água que estejam no mesmo bloco de altura que ele; se estiver conectado a uma correntesa, ele provê um suprimento infinito de água fresca. Conectado a uma poça de água parada, ele rapidamente a drena. Permitindo secar grandes áreas facilmente.
+		</desc>
+		<note>
+			
+		</note>
+	</spillway>
+	<itemfilter>
+		<desc>
+			O filtro de itens pode, após ter um item como filtro, comparar todos os outros itens que passarem por ele, baseado nos parâmetros que foram escolhidos para serem usados e suas opções. Apenas itens que se encaixem nesses parâmetros podem ser inseridos, e então serem extraídos para irem ao destino alvo.
+		</desc>
+		<note>
+			Pode ser conectado diretamento a um sistema ME, do qual ele tentará extrair
+		</note>
+	</itemfilter>
+	<flameturret>
+		<desc>
+			Desde que você não se importe com qualquer estrutura ou planta ao redor do alvo - ou qualquer coisa dentro de seu alcançe - a torreta lança-chamas provê uma eficiente maneira de limpar grandes aglomerados de mobs. Se tiver combustível, ela incendeia o líquido e o lança numa grande área, que inclui o alvo e tudo ao redor.
+		</desc>
+		<note>
+			Funciona com etanol e combustível de jato; este último queima mais quente e causa mais dano
+		</note>
+	</flameturret>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+</machines>

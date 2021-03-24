@@ -1,0 +1,102 @@
+﻿<?xml version="1.0"?>
+<resource>
+	<steelingot>
+		O lingote de aço, feito por fundição de um lingote de ferro em uma fornalha de pulso a jato ou um forno de calor, é a base para todas as máquinas, já que apenas o aço tem tração suficiente, resistência ao desgaste e sabe lidar melhor com as cargas aplicadas pelas máquinas.
+	</steelingot>
+	<othershaft>
+		Eixos também podem ser trabalhados a partir de madeira, pedra, diamante, ou rocha. Use uma haste como parte do eixo em um eixo de madeira. Variações de rocha matriz são construídas no forno de calor, como ferramentas de rocha. Materiais mais fortes permitem mais torque a ser transmitido em velocidades mais altas. A sobrecarga de um eixo fará com que ele falhe violentamente.
+	</othershaft>
+	<othergearunit>
+		Hastes também podem ser feitas dos tipos alternativos. Engrenagens mais fortes se desgastam mais lentamente e engrenagens de rocha matriz não se desgastam. Basta criá-las utilizando os mesmos materiais de base como um eixo, mas substituindo uma unidade de engrenagem para a haste/eixo.
+	</othergearunit>
+	<othergear>
+		Engrenagens podem ser criadas a partir de outros materiais que não o aço. Madeira, pedra, diamante e rocha matriz também podem ser usadas. Diferentes materiais consomem lubrificante e recebem danos em taxas diferentes. Engrenagens de rocha matriz não necessitam lubrificante. Variações de rocha matriz são criadas no forno de calor, assim como ferramentas de rocha matriz.
+	</othergear>
+	<netherdust>
+		Pó de rocha do Nether é feito a partir da moagem de blocos de rocha do nether no triturador, enquanto que areia betuminosa é feita pela moagem de areia das almas. Ambos são componentes necessários no combustível de jato devido ao seu teor de hidrocarbonetos.
+	</netherdust>
+	<sawdust>
+		Fez 20 stacks de escadas de madeira? Sem problemas! Vários itens de madeira podem ser colocados no triturador e moídos em serragem, o que pode ser usado para refazer madeira, ou para fazer papel. Corante pode ser adicionado para obter tipos alternativos de madeiras.
+	</sawdust>
+	<beddust>
+		Pó de rocha matriz é produzido quando uma broca de rocha matriz mói um bloco de rocha matriz. Esta é uma parte essencial de algumas máquinas, já que a rocha matriz é o único material suficientemente rígido para suportar enormes pressões e temperaturas. Além disso, ele pode ser usado para criar ferramentas e armaduras de rocha matriz, o melhor nível de eixos e caixas de engrenagens.
+	</beddust>
+	<extracts>
+		Pó, pasta e solução de minérios são produtos intermediários do extrator. Pasta e solução exigem elevadas velocidades de entrada do eixo e uma fonte de água constante, enquanto que pó requer torque de entrada alto. Nenhum desses itens tem qualquer outro uso.
+	</extracts>
+	<flakes>
+		Flocos de minério são o quarto estágio de saída do extrator. Eles podem ser fundido em um forno comum para fazer lingotes ou gemas do material do minério de origem. A criação deste produto requer alto torque. Ocasionalmente, o produto fundido terá que ser trabalhado em artigos utilizáveis a partir do minério alvo, como apatita, força, Monazit/forcicium e quartzo certus.
+	</flakes>
+	<compacts>
+		Antracite, Prismane e Lonsdaleite são fases intermédias do processo de compressão de carvão. Antracite e Lonsdaleite também podem ser trabalhadas em blocos decorativos.
+	</compacts>
+	<decoblocks>
+		Blocos decorativos são feitos a partir de 9 unidades dos respectivos materiais, tais como aço, antracite, ou Lonsdaleite.
+	</decoblocks>
+	<glass>
+		Vidro anti-explosão é feito por fundir obsidiana em uma fornalha de pulso a jato. Ele é, ao mesmo tempo, transparente como o vidro e resiste a praticamente qualquer explosão. Tal como o vidro comum, os blocos também podem ser trabalhados em painéis de vidro anti-explosão.
+	</glass>
+	<spawners>
+		Se você achar em uma caverna, ou em uma mineshaft, ou em uma fortaleza (usando um tunelador ou um minerador vertical), um spawner, em vez de ele ser destruído, vai ser dropado como um item utilizável, e irá manter o seu tipo de mob. Este é um trunfo inestimável para as explorações, especialmente quando combinado com o controlador de spawners.
+	</spawners>
+	<yeast>
+		Fermento é feito no fermentador pela adição de açúcar, água e terra. Ele cresce melhor em temperaturas entre 20 e 40 graus, sendo melhor aos 25 graus. Fora deste intervalo, ele cresce lentamente ou nem cresce. Tenha cuidado - com temperaturas acima de 60°C, o fermento morre. Musgo de etanol é feito a partir da adição de fermento, com alguma planta e água. Ele é criado mais rapidamente em torno de 35°C.
+	</yeast>
+	<ethanol>
+		Cristais de etanol podem ser feitos ao colocar o musgo de etanol em um forno. Estes cristais podem então ser usados como combustível em motores de etanol e de performance.
+	</ethanol>
+	<bedingot>
+		Um lingote de rocha matriz é usado na elaboração de ferramentas, armaduras e algumas máquinas de rocha matriz.
+	</bedingot>
+	<alloying>
+		Alguns itens e máquinas precisam de ligas metálicas especiais, que geralmente são feitas no forno de calor, adicionando os ingredientes necessários para tal e atingindo a temperatura necessária.
+	</alloying>
+	<silveringot>
+		Lingotes de prata são usados para fazer compostos de prata. A prata é um bônus ocasional do extrator, quando processa ouro.
+	</silveringot>
+	<salt>
+		Sal é feito a partir de água do mar e é uma fonte de iodo.
+	</salt>
+	<ammonium>
+		Nitrato de amônia é um ingrediente útil em explosivos, como as cápsulas para a torreta.
+	</ammonium>
+	<silveriodide>
+		Iodeto de prata é feito a partir de prata e iodo (que é feito a partir do sal), e é utilizado pelo controlador climático para induzir chuva.
+	</silveriodide>
+	<aluminum>
+		O pó de alumínio pode ser usado com lingotes de ferro para iniciar uma reação termita no incendiário, proporcionando mais calor do que qualquer outro combustível. É um bônus ocasional do extrator ao processar redstone. Ele também pode ser fundido em lingotes de alumínio.
+	</aluminum>
+	<railgunammo>
+		A munição de torreta é feita a partir de um núcleo ferromagnético rodeado com materiais pesados. Materiais mais densos significam um impacto mais prejudicial. Cada camada é trabalhada a partir da adição de massa ao anterior.
+	</railgunammo>
+	<slides>
+		Slides de projetor são inseridos no projetor para exibir imagens. Eles podem ser trabalhados com corantes para criar outro.
+	</slides>
+	<explosives>
+		Granadas explosivas são uma munição alternativa para a torreta. Elas são mais baratas de se fazer, mas causam menos danos às entidades atingidas por elas, e são mais destrutivas para o terreno ao seu redor.
+	</explosives>
+	<tungsten>
+		Tungstênio é um subproduto de minério de ferro no extrator, e é usado para coisas relacionadas a altas temperaturas, alta resistência, ou de alta pressão. Ele só pode ser fundido em um forno do vanilla, acima %d°C.
+	</tungsten>
+	<coke>
+		Carvão de coca é uma fonte de carbono mais eficiente na produção de aço. Devido a isso, ele também pode ser usado como um combustível de forno, com uma eficiência maior do que o carvão mineral.
+	</coke>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+	<name>
+		
+	</name>
+</resource>
