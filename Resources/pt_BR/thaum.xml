@@ -1,8 +1,22 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <researches>
 	<bedreveal>
 		<page1>
 			Você já fez óculos que permitem ver as auras e nós que permeiam o mundo, mas há um problema. Não só esses óculos fornecem pouca proteção, mas eles são frágeis e podem ser facilmente destruídos quando você se machuca. Sabendo que você também tem acesso a um capacete inquebrável feito de rocha matriz, o material mais duro conhecido, você teve a ideia de combinar os dois. A base é resistente e não pode ser reformulada, exceto em um forno de calor, uma máquina que não suporta qualquer tipo de interação mágica. Assim, você é obrigado a infundir os poderes mágicos dos taumômetros dentro do capacete através de outro meio. Talvez unindo-os com mercúrio e salis mundus...
 		</page1>
 	</bedreveal>
+	<voidrail>
+		<page1>
+			Armas pesadas só são úteis na medida em que a entidade que você deseja matar é vulnerável aos danos que você inflige. E, para o meu azar, aquela distorção negra maligna não é nada além de imune aos danos mundanos. Entretanto, a insanidade assustadora que ela infligiu em mim veio com uma bênção escondida; agora eu percebi como criar uma liga profana de mal e metal, e provavelmente como transformá-la no monstro. Como diz o ditado "Usar fogo contra fogo", apenas aqui o fogo é insanidade e raiva cristalizada, o outro fogo é uma dobra da própria realidade e a analogia está... se despedaçando quase tão rápido quanto minha mente na presença daquela coisa.
+		</page1>
+	</voidrail>
 </researches>
