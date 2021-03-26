@@ -123,7 +123,8 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8),
 	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F),
 	IC2BLAZECOMPRESS("Increase Blaze Powder To Rod Cost In IC2 Compressor (Exploit Fix)", true),
-	FREEWATER("Free Water Production Factor", 1F);
+	FREEWATER("Free Water Production Factor", 1F),
+	SNEAKWINGS("Jetpack wings enable with sneak vs disable", false);
 
 	private String label;
 	private boolean defaultState;

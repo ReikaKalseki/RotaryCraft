@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Tools;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -144,7 +145,8 @@ public class ItemMeter extends ItemRotaryTool
 		}
 
 		if (tile instanceof PowerSourceTracker) {
-			this.sendMessage(ep, String.format("Power is being received from: %s", ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null)));
+			this.sendMessage(ep, "Power is being received from:");
+			this.sendMessages(ep, ((PowerSourceTracker)tile).getPowerSources((PowerSourceTracker)tile, null).getMessages());
 		}
 
 		if (tile instanceof TileEntityEngine) {
@@ -431,5 +433,11 @@ public class ItemMeter extends ItemRotaryTool
 	private void sendMessage(EntityPlayer ep, String s) {
 		//ReikaChatHelper.writeString(s);
 		ReikaChatHelper.sendChatToPlayer(ep, s);
+	}
+
+	private void sendMessages(EntityPlayer ep, Collection<String> s) {
+		for (String sg : s) {
+			this.sendMessage(ep, sg);
+		}
 	}
 }

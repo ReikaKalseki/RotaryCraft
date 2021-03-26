@@ -1,14 +1,15 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import net.minecraft.init.Blocks;
@@ -173,6 +174,19 @@ public class PowerSourceList implements PowerTracker {
 			//	sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	public ArrayList<String> getMessages() {
+		ArrayList<String> li = new ArrayList();
+		if (engines.isEmpty()) {
+			li.add("[None]");
+		}
+		else {
+			for (PowerWrapper gen : engines) {
+				li.add("  "+gen.generator.toString());
+			}
+		}
+		return li;
 	}
 
 	public boolean contains(PowerGenerator te) {

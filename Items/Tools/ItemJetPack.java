@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -245,7 +245,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 
 		if (ep.motionY < 0 && winged && floatmode && !ep.isPlayerSleeping()) {
 			if (!ModList.CHROMATICRAFT.isLoaded() || !RitualAPI.isPlayerUndergoingRitual(ep)) {
-				boolean sneak = ep.isSneaking();
+				boolean sneak = ep.isSneaking() != ConfigRegistry.SNEAKWINGS.getState();
 				double ang = Math.cos(Math.toRadians(ep.rotationPitch));
 				double d = ep.motionY <= -2 ? 0.0625 : ep.motionY <= -1 ? 0.125 : ep.motionY <= -0.5 ? 0.25 : 0.5; //gives curve
 				if (sneak)

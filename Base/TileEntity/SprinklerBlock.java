@@ -65,7 +65,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getLiq(world, x, y, z, meta);
 
-		if (this.canPerformEffects() && !AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false)) {
+		if (this.canPerformEffects() && !AtmosphereHandler.isNoAtmo(world, x, y+1, z, blockType, false)) {
 			this.performEffects(world, x, y, z);
 			soundTimer.update();
 			if (soundTimer.checkCap()) {

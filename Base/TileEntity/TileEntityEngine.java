@@ -158,7 +158,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		}
 		if (this.isDrowned(world, x, y, z))
 			return false;
-		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, true))
+		if (AtmosphereHandler.isNoAtmo(world, x-this.getWriteDirection().offsetX, y, z-this.getWriteDirection().offsetZ, blockType, true))
 			return false;
 		return true;
 	}

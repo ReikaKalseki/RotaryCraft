@@ -68,10 +68,12 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		if (f == null || amt <= 0)
 			return 101300;
 		//p = rho*R*T approximation
+		long ret;
 		if (f.isGaseous())
-			return 101300+(128*(int)(amt/1000D*f.getTemperature()*Math.abs(f.getDensity())/1000D));
+			ret = 101300+(128*(int)(amt/1000D*f.getTemperature()*Math.abs(f.getDensity())/1000D));
 		else
-			return 101300+amt*24;
+			ret = 101300+amt*24;
+		return (int)Math.min(Integer.MAX_VALUE, ret);
 	}
 
 	public int getMaxPressure() {

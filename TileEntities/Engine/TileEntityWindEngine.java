@@ -100,7 +100,7 @@ public class TileEntityWindEngine extends TileEntityEngine {
 		}
 		 */
 
-		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+		if (AtmosphereHandler.isNoAtmo(world, x-this.getWriteDirection().offsetX, y, z-this.getWriteDirection().offsetZ, blockType, false))
 			return 0;
 
 		if (clearance == null)

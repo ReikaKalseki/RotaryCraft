@@ -57,7 +57,7 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Basic
 		if (temperature >= this.getMaxTemperature())
 			return;
 
-		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+		if (AtmosphereHandler.isNoAtmo(world, x, y+1, z, blockType, false))
 			return;
 
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);

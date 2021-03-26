@@ -238,7 +238,7 @@ public abstract class RecipeHandler implements IngredientIDHandler {
 			boolean flag = false;
 			String n = lb.getString("type");
 			try {
-				if (n == null)
+				if (LuaBlock.isErrorCode(n))
 					throw new IllegalArgumentException("Custom recipes require a specified name!");
 				if (!ReikaStringParser.isValidVariableName(n))
 					throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");

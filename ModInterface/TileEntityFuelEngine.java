@@ -71,7 +71,7 @@ TemperatureTE {
 	private boolean canEmitPower(World world, int x, int y, int z) {
 		if (tank.isEmpty())
 			return false;
-		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, true))
+		if (AtmosphereHandler.isNoAtmo(world, x, y+1, z, blockType, true))
 			return false;
 		if (lubetank.isEmpty())
 			return false;

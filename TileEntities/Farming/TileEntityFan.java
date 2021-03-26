@@ -79,7 +79,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		power = (long)omega*(long)torque;
-		if (AtmosphereHandler.isNoAtmo(world, x, y, z, blockType, false))
+		if (AtmosphereHandler.isNoAtmo(world, x-this.getReadDirection().offsetX, y, z-this.getReadDirection().offsetZ, blockType, false))
 			return;
 		this.makeBeam(world, x, y, z, meta);
 		sound.update();

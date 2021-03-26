@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -495,7 +495,7 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 			return 0xffffff;
 		int clr = fs.tag != null && fs.tag.hasKey("renderColor") ? fs.tag.getInteger("renderColor") : 0xffffff;
 		if (this.isInWorld() && fs.getFluid().canBePlacedInWorld()) {
-			clr = fs.getFluid().getBlock().colorMultiplier(worldObj, xCoord*2, yCoord*2, zCoord*2);
+			clr = fs.getFluid().getBlock().colorMultiplier(worldObj, xCoord, yCoord, zCoord);
 		}
 		return clr;
 	}

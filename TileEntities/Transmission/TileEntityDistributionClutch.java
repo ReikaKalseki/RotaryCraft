@@ -324,6 +324,9 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 
 	public void stepMode() {
 		control = control.next();
+		while (!control.isValid()) {
+			control = control.next();
+		}
 		enabledSides = new boolean[4];
 		this.triggerBlockUpdate();
 	}
@@ -338,6 +341,17 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 
 		public ControlMode next() {
 			return this.ordinal() == list.length-1 ? list[0] : list[this.ordinal()+1];
+		}
+
+		public boolean isValid() {
+			switch(this) {
+				case BUNDLEDREDSTONE:
+					return ModList.PROJRED.isLoaded();
+				case COMPUTER:
+					return ModList.COMPUTERCRAFT.isLoaded() || ModList.OPENCOMPUTERS.isLoaded();
+				default:
+					return true;
+			}
 		}
 	}
 
