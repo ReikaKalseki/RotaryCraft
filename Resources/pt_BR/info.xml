@@ -1,4 +1,13 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <info>
 	<terms>
 		"W" ou "kW" ou "MW" são Watts, Kilowatts e Megawatts: uma unidade de energia (energia por unidade de tempo).
@@ -21,6 +30,7 @@
 		Ferro: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
 		Aço: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
 		Ouro: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
+		Tungstênio: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Diamante: %.0f kg/m^3; FT: %.1f %spa; TD: %.1f %sPa
 	</material>
 	<shafts>
@@ -29,6 +39,7 @@
 		Madeira: %dNm a %d rad/s
 		Stone: %dNm a %d rad/s
 		Aço: %dNm a %d rad/s
+		Tungstênio: %dNm at %d rad/s
 		Diamond: %dNm a %d rad/s
 		Rocha Matriz: Infinito
 	</shafts>
