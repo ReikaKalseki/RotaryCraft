@@ -1,4 +1,13 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <trans>
 	<shaft>
 		O dispositivo mais básico do conjunto de transmissão é o eixo. Nada extravagante, apenas carrega o poder de um lugar para outro, sem alterações no torque e nem na velocidade. Preste atenção, porém, na direção para evitar dores de cabeça. Diferentes tipos de materiais têm diferentes pontos fortes e, portanto, diferentes limites para o torque máximo e velocidade.
@@ -40,14 +49,14 @@
 				A bobina industrial armazena energia em uma grande mola que pode ser desenrolada com redstone. Visto que seu torque e velocidade de saída podem ser escolhidos quase à vontade, ela é usada para armazenar energia para mais tarde ou como um tipo de capacitor, para armazenar a energia acumulada por um longo tempo e, em seguida, liberá-lo em uma explosão poderosa. Observe que cada tipo de bobina tem uma capacidade máxima e que ultrapassá-la resulta em uma liberação extremamente violenta de toda a energia armazenada.
 			</s0>
 			<s1>
-				Esta máquina não pode, simultaneamente, carregar e liberar o poder; qualquer entrada de energia durante o descarregamento é desperdiçada. Com maiores cargas de bobina, o torque e potência necessária aumenta.
-				
 				Limites de armazenamento de energia:
+				
 				Aço: %d J (%s)
 				Rocha matriz: %d J (%s)
 			</s1>
 			<s2>
 				Requisitos de entrada:
+				
 				Torque: %s
 				Potência: %s
 			</s2>
@@ -61,7 +70,7 @@
 				Funções: %s
 			</s3>
 			<s4>
-				Emite um sinal de redstone de comparação proporcional ao seu estado de preenchimento
+				Emite um sinal de redstone de comparador que é proporcional ao seu estado de preenchimento
 			</s4>
 		</sub>
 	</coil>
@@ -83,4 +92,7 @@
 	<chain>
 		O cubo de corrente é uma versão mais avançada do cubo de correia. Pode demorar o dobro do torque, de até 65536 rad/s antes de falhar. Também é impermeável à chuva.
 	</chain>
+	<distribclutch>
+			A embreagem de distribuição pode receber energia de entrada e distribuir uma quantidade específica de torque em qualquer direção perpendicular, com o restante sendo enviado para o lado oposto. Isso, combinado com os lados alternáveis ​​independentemente, permite a criação de um sistema de distribuição de energia altamente dinâmico, onde quantidades selecionadas de energia podem ser "canalizadas" para uma dada saída sem deixar as máquinas famintas no fim da linha de junções de eixo. Ele pode ser controlado em um dos quatro modos: com a GUI, redstone, cabos de redstone, ou computadores.
+	</distribclutch>
 </trans>
