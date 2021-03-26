@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
@@ -134,7 +135,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 		EntityFallingBlock e = new EntityFallingBlock(world, x+0.5, y+1+0.5, z+0.5, b.toFire.blockID, b.toFire.metadata);
 		if (b.toFire.blockID == Blocks.mob_spawner) {
 			TileEntityMobSpawner spw = new TileEntityMobSpawner();
-			ReikaSpawnerHelper.setSpawnerFromItemNBT(b.referenceItem, spw);
+			ReikaSpawnerHelper.setSpawnerFromItemNBT(b.referenceItem, spw, true);
 			NBTTagCompound nbt = new NBTTagCompound();
 			spw.writeToNBT(nbt);
 			e.field_145810_d = nbt;

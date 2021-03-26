@@ -10,10 +10,10 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Auxiliary.Interfaces.LocationTarget;
-import dan200.computercraft.api.lua.LuaException;
 
 public class LuaSetCannonCoord extends LuaMethod {
 
@@ -22,7 +22,7 @@ public class LuaSetCannonCoord extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		LocationTarget can = (LocationTarget) te;
 		int x = ((Double)args[0]).intValue();
 		int y = ((Double)args[1]).intValue();

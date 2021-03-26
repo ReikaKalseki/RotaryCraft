@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -40,6 +41,8 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 			return true;
 		if (f.equals(FluidRegistry.getFluid("rc lifbe fuel")))
 			return true;
+		if (f.equals(FluidRegistry.getFluid("rc lifbe fuel preheat")))
+			return true;
 		return false;
 	}
 
@@ -49,7 +52,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 	}
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry m) {
+	public boolean canConnectToPipe(MachineRegistry m, ForgeDirection dir) {
 		return m == MachineRegistry.FUELLINE || m == MachineRegistry.VALVE || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 

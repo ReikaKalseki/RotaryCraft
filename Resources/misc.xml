@@ -12,6 +12,9 @@
 	<lube>
 		Most inline gearboxes need to be lubricated to maintain their ability to transmit power. Operated without lubricant, they will gradually wear down and transmit less and less torque, and thus less power. To keep them lubricated, simply run a line of lubricant hose from a grinder to the gearbox, put some seeds in the grinder, and watch the hose transmit the oil (or just use buckets to carry it). Most gearboxes do consume the lubricant, and more of it at higher speeds, so keep an eye on the meter in the GUI. Other machines may also require lubricant to function.
 	</lube>
+	<bearings>
+		Most lubricant-consuming gearboxes can be modified to use bearings other than the type with which they were crafted. This will change lubricant consumption, and in the case of diamond and bedrock bearings, can even completely eliminate the consumption of and need for it respectively. Otherwise, each tier of upgrade reduces lubricant consumption by %s, and each tier of downgrade increases it by %s. Note that wood bearings are unsuitable for any non-wood gearbox, and gearboxes can only accept a bearing up to two levels above their own level.
+	</bearings>
 	<canola>
 		Find some canola seeds in tall grass, plant them on farmland, and watch them grow. When covered in little yellow flowers, the plants are ready to be harvested and will drop seeds. They share the same requirements as wheat in terms of light level, water supply, and so on. Canola plants require lots of water, so do not be surprised if they die on dry farmland. Canola seeds can also be compacted into a dense clump for easier storage.
 	</canola>

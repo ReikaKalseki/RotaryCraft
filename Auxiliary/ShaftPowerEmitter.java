@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 

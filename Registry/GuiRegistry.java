@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,7 +20,8 @@ public enum GuiRegistry {
 	SAFEPLAYERS(),
 	SPYCAM(),
 	SLIDE(),
-	PATTERN();
+	PATTERN(),
+	FILTER();
 
 	private static final GuiRegistry[] guiList = GuiRegistry.values();
 
@@ -32,6 +33,8 @@ public enum GuiRegistry {
 		if (this == WORLDEDIT)
 			return true;
 		if (this == PATTERN)
+			return true;
+		if (this == FILTER)
 			return true;
 		return false;
 	}

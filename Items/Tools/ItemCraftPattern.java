@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,9 @@
 package Reika.RotaryCraft.Items.Tools;
 
 import java.util.List;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,12 +27,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Interfaces.Item.SpriteRenderCallback;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
@@ -37,6 +37,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCallback {
@@ -90,6 +91,10 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 				if (recipe.hasKey(s)) {
 					NBTTagCompound tag = recipe.getCompoundTag(s);
 					ItemStack in = ItemStack.loadItemStackFromNBT(tag);
+					if (in == null && tag != null && !tag.hasNoTags()) { //item no longer exists, clear the pattern
+						is.stackTagCompound = null;
+						return null;
+					}
 					items[i] = in;
 				}
 			}
@@ -113,10 +118,14 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 	}
 
 	public static void setRecipe(ItemStack is, InventoryCrafting ic, World world) {
+		if (world.isRemote)
+			;//return;
+		RecipeMode mode = getMode(is);
 		resetNBT(is);
+		setMode(is, mode);
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
-		ItemStack out = getMode(is).getRecipe(ic, world);
+		ItemStack out = mode.getRecipe(ic, world);
 		boolean valid = out != null;
 		NBTTagCompound recipe = new NBTTagCompound();
 		for (int i = 0; i < 9; i++) {
@@ -161,12 +170,16 @@ public class ItemCraftPattern extends ItemRotaryTool implements SpriteRenderCall
 	}
 
 	public static void setMode(ItemStack is, RecipeMode md) {
+		if (!ItemRegistry.CRAFTPATTERN.matchItem(is))
+			return;
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		is.stackTagCompound.setInteger("mode", md.ordinal());
 	}
 
 	public static void changeStackLimit(ItemStack is, int change) {
+		if (!ItemRegistry.CRAFTPATTERN.matchItem(is))
+			return;
 		if (is.stackTagCompound == null)
 			is.stackTagCompound = new NBTTagCompound();
 		int limit = getStackInputLimit(is);

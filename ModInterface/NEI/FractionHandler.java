@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,20 +13,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -56,10 +57,10 @@ public class FractionHandler extends TemplateRecipeHandler {
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			int i = 0;
 			for (KeyedItemStack is : in) {
-				stacks.add(new PositionedStack(is.getItemStack(), 21+(i%2)*18, 7+i/2*18));
+				stacks.add(new PositionedStack(is.getItemStack(), 29+(i%2)*18, 7+i/2*18));
 				i++;
 			}
-			stacks.add(new PositionedStack(new ItemStack(Items.ghast_tear), 93, 25));
+			stacks.add(new PositionedStack(new ItemStack(Items.ghast_tear), 101, 25));
 			return stacks;
 		}
 	}
@@ -71,7 +72,7 @@ public class FractionHandler extends TemplateRecipeHandler {
 
 	@Override
 	public String getGuiTexture() {
-		return "/Reika/RotaryCraft/Textures/GUI/fractiongui.png";
+		return "/Reika/RotaryCraft/Textures/GUI/fractiongui2.png";
 	}
 
 	@Override
@@ -113,9 +114,9 @@ public class FractionHandler extends TemplateRecipeHandler {
 	}
 
 	@Override
-	public void drawExtras(int recipe)
-	{
-		ReikaGuiAPI.instance.drawTexturedModalRect(134, 7, 177, 45, 6, 50);
+	public void drawExtras(int recipe) {
+		ReikaGuiAPI.instance.drawTexturedModalRect(142, 7, 177, 45, 6, 50);
+		ReikaGuiAPI.instance.drawTexturedModalRect(19, 7, 185, 45, 8, 52);
 	}
 
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,6 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.ContainerBasicStorage;
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Base.OneSlotContainer;
@@ -31,6 +32,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Containers.ContainerCraftingPattern;
 import Reika.RotaryCraft.Containers.ContainerHandCraft;
+import Reika.RotaryCraft.Containers.ContainerMatchFilter;
 import Reika.RotaryCraft.Containers.ContainerWorldEdit;
 import Reika.RotaryCraft.Containers.Machine.ContainerBlower;
 import Reika.RotaryCraft.Containers.Machine.ContainerGearbox;
@@ -41,7 +43,6 @@ import Reika.RotaryCraft.Containers.Machine.ContainerScreen;
 import Reika.RotaryCraft.Containers.Machine.ContainerSorter;
 import Reika.RotaryCraft.Containers.Machine.ContainerSteam;
 import Reika.RotaryCraft.Containers.Machine.ContainerWetter;
-import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerAerosolizer;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerAutoCrafter;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerBigFurnace;
@@ -77,10 +78,12 @@ import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerRockMelter;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerScaleChest;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerTerraformer;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerVacuum;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerWorktable;
 import Reika.RotaryCraft.GUIs.GuiCraftingPattern;
 import Reika.RotaryCraft.GUIs.GuiHandCraft;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
 import Reika.RotaryCraft.GUIs.GuiHandbookPage;
+import Reika.RotaryCraft.GUIs.GuiMatchFilter;
 import Reika.RotaryCraft.GUIs.GuiSafePlayerList;
 import Reika.RotaryCraft.GUIs.GuiSlide;
 import Reika.RotaryCraft.GUIs.GuiWorldEdit;
@@ -88,6 +91,7 @@ import Reika.RotaryCraft.GUIs.Machine.GuiBevel;
 import Reika.RotaryCraft.GUIs.Machine.GuiBlower;
 import Reika.RotaryCraft.GUIs.Machine.GuiBorer;
 import Reika.RotaryCraft.GUIs.Machine.GuiCoil;
+import Reika.RotaryCraft.GUIs.Machine.GuiDistributionClutch;
 import Reika.RotaryCraft.GUIs.Machine.GuiGPR;
 import Reika.RotaryCraft.GUIs.Machine.GuiGearbox;
 import Reika.RotaryCraft.GUIs.Machine.GuiJet;
@@ -199,6 +203,7 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntitySpyCam;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
@@ -211,6 +216,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityAerosolizer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityDefoliator;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
+
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
@@ -231,6 +237,8 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerWorldEdit(player, world);
 		if (gr == GuiRegistry.PATTERN)
 			return new ContainerCraftingPattern(player, world);
+		if (gr == GuiRegistry.FILTER)
+			return new ContainerMatchFilter(player, world);
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (!(tile instanceof RotaryCraftTileEntity))
 			return null;
@@ -323,7 +331,7 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerItemCannon(player, (TileEntityItemCannon)te);
 		}
 		if (te instanceof TileEntityWorktable) {
-			return new ContainerWorktable(player, (TileEntityWorktable)te, world);
+			return new ContainerWorktable(player, (TileEntityWorktable)te, world, true);
 		}
 		if (te instanceof TileEntityLandmine) {
 			return new ContainerLandmine(player, (TileEntityLandmine)te);
@@ -437,6 +445,8 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiSlide(player.getCurrentEquippedItem());
 		if (gr == GuiRegistry.PATTERN)
 			return new GuiCraftingPattern(player, world);
+		if (gr == GuiRegistry.FILTER)
+			return new GuiMatchFilter(player, world);
 		if (te instanceof TileEntityPulseFurnace) {
 			return new GuiPulseFurnace(player, (TileEntityPulseFurnace) te);
 		}
@@ -637,6 +647,9 @@ public class GuiHandler implements IGuiHandler {
 		}
 		if (te instanceof TileEntityBundledBus) {
 			return new GuiBundledBus(player, (TileEntityBundledBus) te);
+		}
+		if (te instanceof TileEntityDistributionClutch) {
+			return new GuiDistributionClutch(player, (TileEntityDistributionClutch) te);
 		}
 
 		if (te instanceof OneSlotMachine) {

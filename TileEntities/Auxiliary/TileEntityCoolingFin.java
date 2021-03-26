@@ -1,26 +1,30 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Auxiliary;
 
-import ic2.api.reactor.IReactor;
-import ic2.api.reactor.IReactorChamber;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import buildcraft.api.power.IEngine;
+import ic2.api.reactor.IReactor;
+import ic2.api.reactor.IReactorChamber;
 
 public class TileEntityCoolingFin extends RotaryCraftTileEntity implements TemperatureTE {
 
@@ -114,8 +118,13 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 			ticks -= 8;
 		this.getTargetSide(world, x, y, z, meta);
 		TileEntity te = world.getTileEntity(targetx, targety, targetz);
-		if (!world.isRemote && ModList.IC2.isLoaded() && (te instanceof IReactor || te instanceof IReactorChamber)) {
-			this.coolIC2Reactor(world, x, y, z, te);
+		if (!world.isRemote) {
+			if (ModList.IC2.isLoaded() && (te instanceof IReactor || te instanceof IReactorChamber)) {
+				this.coolIC2Reactor(world, x, y, z, te);
+			}
+			if (ModList.BCENERGY.isLoaded() && te instanceof IEngine) {
+				//this.coolBCEngine(world, x, y, z, te);
+			}
 		}
 		if (tickcount < setting.tickRate)
 			return;
@@ -132,7 +141,44 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 			}
 		}
 	}
-
+	/* does not work
+	@ModDependent(ModList.BCENERGY)
+	private void coolBCEngine(World world, int x, int y, int z, TileEntity te) {
+		TileEngineBase eng = (TileEngineBase)te;
+		if (eng instanceof TileEngineStone) {
+			float f = 0;
+			int temp = (int)eng.heat;
+			int dT = temp-temperature;
+			if (dT > 0) {
+				float dfT = dT/(eng.MAX_HEAT-temperature);
+				switch(eng.getEnergyStage()) {
+					case BLUE: //<25%
+						f = 1/128F;
+						break;
+					case GREEN: //25-50%
+						f = 1/32F;
+						break;
+					case YELLOW: //50-75%
+						f = 0.25F;
+						break;
+					case RED: //75-99%
+						f = 0.75F;
+						break;
+					case OVERHEAT: //>=100%
+						f = 0;
+						break;
+				}
+				if (f > 0) {
+					float rem = eng.heat*f*dfT*5;
+					eng.heat -= rem;
+					int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+					temperature = (int)(Tamb*0.2+0.8*eng.heat);
+				}
+			}
+		}
+	}
+	 */
+	@ModDependent(ModList.IC2)
 	private void coolIC2Reactor(World world, int x, int y, int z, Object te) {
 		if (this.getTicksExisted()%20 != 0)
 			return;
@@ -242,6 +288,11 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	@Override
 	public boolean allowExternalHeating() {
 		return false;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return true;
 	}
 
 	@Override

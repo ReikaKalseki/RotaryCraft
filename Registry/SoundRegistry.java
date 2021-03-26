@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,18 +10,22 @@
 package Reika.RotaryCraft.Registry;
 
 import java.net.URL;
+import java.util.HashMap;
 
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.Registry.SoundEnum;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public enum SoundRegistry implements SoundEnum {
 
@@ -73,8 +77,6 @@ public enum SoundRegistry implements SoundEnum {
 	GATLING("gatling"),
 	FLAMETURRET("flameturret");
 
-	public static final SoundRegistry[] soundList = SoundRegistry.values();
-
 	public static final String PREFIX = "Reika/RotaryCraft/";
 	public static final String SOUND_FOLDER = "Sounds/";
 	private static final String SOUND_PREFIX = "Reika.RotaryCraft.Sounds.";
@@ -87,6 +89,8 @@ public enum SoundRegistry implements SoundEnum {
 	private final String name;
 
 	private boolean isVolumed = false;
+
+	private static final HashMap<String, SoundRegistry> soundNames = new HashMap();
 
 	private SoundRegistry(String n) {
 		if (n.startsWith("#")) {
@@ -133,13 +137,13 @@ public enum SoundRegistry implements SoundEnum {
 			return;
 		//Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), x, y, z, vol, pitch);
 		//PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);
-		ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch);
+		ReikaSoundHelper.playSound(this, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch);
 	}
 
 	public void playSound(World world, double x, double y, double z, float vol, float pitch, boolean attenuate) {
 		if (world.isRemote)
 			return;
-		ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, attenuate);
+		ReikaSoundHelper.playSound(this, world, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, attenuate);
 	}
 
 	public void playSoundAtBlock(World world, int x, int y, int z, float vol, float pitch) {
@@ -166,7 +170,7 @@ public enum SoundRegistry implements SoundEnum {
 		if (world.isRemote)
 			return;
 		//ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, te.worldObj, x, y, z, vol/* *this.getModulatedVolume()*/, pitch, false);
-		ReikaPacketHelper.sendSoundPacket(RotaryCraft.packetChannel, this, world, x, y, z, vol, pitch, false, broadcast);
+		ReikaPacketHelper.sendSoundPacket(this, world, x, y, z, vol, pitch, false, broadcast);
 	}
 
 	public String getName() {
@@ -192,16 +196,12 @@ public enum SoundRegistry implements SoundEnum {
 		return SoundRegistry.getSoundByName(pitch.toUpperCase()+voice.name());
 	}
 
-	public static SoundRegistry getSoundByName(String name) {
-		for (int i = 0; i < soundList.length; i++) {
-			if (soundList[i].name().equals(name))
-				return soundList[i];
-		}
-		RotaryCraft.logger.logError("\""+name+"\" does not correspond to a registered sound!");
-		return null;
+	public static SoundRegistry getSoundByName(String s) {
+		return soundNames.get(s);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
 	}
@@ -223,5 +223,11 @@ public enum SoundRegistry implements SoundEnum {
 	@Override
 	public boolean preload() {
 		return this == JETSTART;
+	}
+
+	static {
+		for (SoundRegistry s : values()) {
+			soundNames.put(s.name(), s);
+		}
 	}
 }

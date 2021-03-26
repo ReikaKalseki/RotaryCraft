@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
+
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ContainerIOMachine;
@@ -38,6 +39,7 @@ public class ContainerPulseFurnace extends ContainerIOMachine {
 	{
 		super.addCraftingToCrafters(par1ICrafting);
 		par1ICrafting.sendProgressBarUpdate(this, 0, pulseFurnace.pulseFurnaceCookTime);
+		par1ICrafting.sendProgressBarUpdate(this, 2, pulseFurnace.smelttick);
 	}
 
 	/**
@@ -68,12 +70,12 @@ public class ContainerPulseFurnace extends ContainerIOMachine {
 	public void updateProgressBar(int par1, int par2)
 	{
 		switch(par1) {
-		case 0: pulseFurnace.pulseFurnaceCookTime = par2; break;
-		case 1: pulseFurnace.temperature = par2; break;
-		case 2: pulseFurnace.smelttick = par2; break;
-		//case 3: pulseFurnace.setFuel(par2); break;
-		case 4: pulseFurnace.omega = par2; break;
-		//case 5: pulseFurnace.setWater(par2); break;
+			case 0: pulseFurnace.pulseFurnaceCookTime = par2; break;
+			case 1: pulseFurnace.temperature = par2; break;
+			case 2: pulseFurnace.smelttick = par2; break;
+			//case 3: pulseFurnace.setFuel(par2); break;
+			case 4: pulseFurnace.omega = par2; break;
+			//case 5: pulseFurnace.setWater(par2); break;
 		}
 	}
 }

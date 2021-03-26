@@ -10,10 +10,12 @@
 package Reika.RotaryCraft.ModInterface.NEI;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiVacuum;
+
 import codechicken.lib.vec.Rectangle4i;
 import codechicken.nei.api.INEIGuiAdapter;
 

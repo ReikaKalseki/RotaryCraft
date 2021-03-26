@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,11 +23,12 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.ChromatiCraft.API.Interfaces.EnchantableItem;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -35,6 +36,8 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
+import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class ItemPump extends ItemChargedTool implements EnchantableItem {
 
@@ -63,7 +66,7 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 				Block id = world.getBlock(x, y, z);
 				if (id != Blocks.air) {
 					if (ReikaWorldHelper.isLiquidSourceBlock(world, x, y, z)) {
-						Fluid f = FluidRegistry.lookupFluidForBlock(id);
+						Fluid f = ReikaFluidHelper.lookupFluidForBlock(id);
 						if (f != null && !world.isRemote) {
 							this.drainLiquid(world, x, y, z, is, f);
 						}
@@ -111,7 +114,7 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 						int dz = z+k;
 						if (ReikaWorldHelper.isLiquidSourceBlock(world, dx, dy, dz)) {
 							Block id = world.getBlock(dx, dy, dz);
-							Fluid f3 = FluidRegistry.lookupFluidForBlock(id);
+							Fluid f3 = ReikaFluidHelper.lookupFluidForBlock(id);
 							if (f3 == f) {
 								int amt = is.stackTagCompound.getInteger("lvl");
 								this.drainAndFill(world, dx, dy, dz, is, f3, amt+1000);
@@ -133,8 +136,8 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 	}
 
 	@Override
-	public boolean isEnchantValid(Enchantment e, ItemStack is) {
-		return e == Enchantment.aquaAffinity;
+	public Result getEnchantValidity(Enchantment e, ItemStack is) {
+		return e == Enchantment.aquaAffinity ? Result.ALLOW : Result.DENY;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,10 +12,10 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -130,39 +130,31 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		input4.mouseClicked(i, j, k);
 	}
 
-	public void sendPacket(int a) {
+	public void sendPacket() {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(32); // 8 ints
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			int b = 0;
 			if (tile instanceof TileEntityLaunchCannon)
-				b = a+PacketRegistry.CANNON.getMinValue();
+				b = PacketRegistry.CANNONFIRINGVALS.ordinal();
 			if (tile instanceof TileEntityItemCannon)
-				b = a+PacketRegistry.ITEMCANNON.getMinValue();
+				b = PacketRegistry.ITEMCANNON.ordinal();
 			//ReikaJavaLibrary.pConsole("Sending packet number "+b+" Type "+PacketRegistry.getEnum(b));
 			outputStream.writeInt(b);
 			if (targetMode) {
 				outputStream.writeInt(1);
-				if (a == 0)
-					outputStream.writeInt(target[0]);
-				if (a == 1)
-					outputStream.writeInt(target[1]);
-				if (a == 2)
-					outputStream.writeInt(target[2]);
-				if (a == 3)
-					outputStream.writeInt(fuse);
+				outputStream.writeInt(target[0]);
+				outputStream.writeInt(target[1]);
+				outputStream.writeInt(target[2]);
+				outputStream.writeInt(fuse);
 			}
 			else {
 				outputStream.writeInt(0);
-				if (a == 0)
-					outputStream.writeInt((int)phid);
-				if (a == 1)
-					outputStream.writeInt((int)thetad);
-				if (a == 2)
-					outputStream.writeInt(velocity);
-				if (a == 3)
-					outputStream.writeInt(fuse);
+				outputStream.writeInt((int)phid);
+				outputStream.writeInt((int)thetad);
+				outputStream.writeInt(velocity);
+				outputStream.writeInt(fuse);
 			}
 			outputStream.writeInt(tile.xCoord);
 			outputStream.writeInt(tile.yCoord);
@@ -202,7 +194,6 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			else
 				phid = 0;
 			input.deleteFromCursor(-1);
-			this.sendPacket(0);
 			valid1 = false;
 		}
 		if (!input2.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input2.getText())) {
@@ -211,7 +202,6 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			else
 				thetad = 0;
 			input2.deleteFromCursor(-1);
-			this.sendPacket(1);
 			valid2 = false;
 		}
 		if (!input3.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input3.getText())) {
@@ -220,15 +210,14 @@ public class GuiCannon extends GuiPowerOnlyMachine
 			else
 				velocity = 0;
 			input3.deleteFromCursor(-1);
-			this.sendPacket(2);
 			valid3 = false;
 		}
 		if (!input4.getText().isEmpty() && !ReikaJavaLibrary.isValidInteger(input4.getText())) {
 			fuse = 0;
 			input4.deleteFromCursor(-1);
-			this.sendPacket(3);
 			valid4 = false;
 		}
+		this.sendPacket();
 		if (!valid1 && !valid2 && !valid3 && !valid4)
 			return;
 		if (input.getText().contentEquals("-"))
@@ -244,49 +233,40 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		if (valid1) {
 			if (targetMode) {
 				target[0] = ReikaJavaLibrary.safeIntParse(input.getText());
-				this.sendPacket(0);
 			}
 			else {
 				phid = ReikaJavaLibrary.safeIntParse(input.getText());
 				while (phid > 360) {
 					phid -= 360;
 				}
-				if (phid >= 0)
-					this.sendPacket(0);
 			}
 		}
 		if (valid2) {
 			if (targetMode) {
 				target[1] = ReikaJavaLibrary.safeIntParse(input2.getText());
-				this.sendPacket(1);
 			}
 			else {
 				thetad = ReikaJavaLibrary.safeIntParse(input2.getText());
 				if (thetad > 90) {
 					thetad = 90;
 				}
-				if (thetad >= 0)
-					this.sendPacket(1);
 			}
 		}
 		if (valid3) {
 			if (targetMode) {
 				target[2] = ReikaJavaLibrary.safeIntParse(input3.getText());
-				this.sendPacket(2);
 			}
 			else {
 				velocity = ReikaJavaLibrary.safeIntParse(input3.getText());
 				if (velocity < 0) {
 					velocity = 0;
 				}
-				if (velocity >= 0)
-					this.sendPacket(2);
 			}
 		}
 		if (valid4) {
 			fuse = ReikaJavaLibrary.safeIntParse(input4.getText());
-			this.sendPacket(3);
 		}
+		this.sendPacket();
 		if (targetMode)
 			return;
 		theta = ReikaPhysicsHelper.degToRad(thetad);

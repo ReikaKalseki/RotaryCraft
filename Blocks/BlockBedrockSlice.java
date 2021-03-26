@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,7 +27,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockBounds;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
@@ -70,7 +72,8 @@ public class BlockBedrockSlice extends BlockBasic
 		else
 			return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
 		 */
-		return ((TileEntityBedrockSlice)world.getTileEntity(x, y, z)).getBounds().asAABB(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
+		return te instanceof TileEntityBedrockSlice ? ((TileEntityBedrockSlice)te).getBounds().asAABB(x, y, z) : ReikaAABBHelper.getBlockAABB(x, y, z);
 	}
 
 	/**

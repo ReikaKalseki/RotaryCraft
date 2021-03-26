@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -43,9 +43,11 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Auxiliary.Trackers.ModLockController.ModReVerifyEvent;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
 import Reika.DragonAPI.Instantiable.Event.EnderLookAggroEvent;
@@ -53,22 +55,24 @@ import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FarmlandTrampleEvent;
 import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
+import Reika.DragonAPI.Instantiable.Event.MTReloadEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
-import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
+import Reika.DragonAPI.Instantiable.Event.TileEntityMoveEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.EntityRenderingLoopEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.PlayerInteractEventClient;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.DeepInteract.FrameBlacklist.FrameUsageEvent;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.EMPSparkRenderer;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
@@ -83,16 +87,19 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
+import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
+
 import WayofTime.alchemicalWizardry.api.event.TeleposeEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -104,6 +111,36 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void updateStreamHydros(SetBlockEvent.Pre evt) {
+		if (!evt.isWorldgen && evt.newBlock != evt.currentBlock) {
+			if (InterfaceCache.STREAM.instanceOf(evt.newBlock) || InterfaceCache.STREAM.instanceOf(evt.currentBlock)) {
+				for (int i = -1; i <= 1; i++) {
+					for (int k = -1; k <= 1; k++) {
+						for (Object o : evt.world.getChunkFromChunkCoords(evt.chunkLocation.chunkXPos+i, evt.chunkLocation.chunkZPos+k).chunkTileEntityMap.values()) {
+							TileEntity te = (TileEntity)o;
+							if (!te.isInvalid() && te instanceof TileEntityHydroEngine) {
+								((TileEntityHydroEngine)te).invalidateStream();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void reverify(ModReVerifyEvent evt) {
+		RotaryCraft.proxy.registerRenderers();
+	}
+
+	@SubscribeEvent
+	public void handleMTReload(MTReloadEvent evt) {
+		if (evt.phase == Phase.END)
+			RotaryCraft.instance.reinitRecipes();
 	}
 
 	@SubscribeEvent
@@ -131,7 +168,7 @@ public class RotaryEventManager {
 		if (evt.entity instanceof EntitySlime) {
 			int rounds = evt.entity.getEntityData().getInteger(TileEntityMultiCannon.SLIME_NBT);
 			if (rounds > 0) {
-				int drop = (int)(rounds/TileEntityMultiCannon.AMMO_PER_SHOT);
+				int drop = (int)(rounds*TileEntityMultiCannon.AMMO_PER_SHOT);
 				while (drop > 0) {
 					int amt = Math.min(64, drop);
 					ReikaItemHelper.dropItem(evt.entity, ReikaItemHelper.getSizedItemStack(ItemStacks.ballbearing, amt));
@@ -191,6 +228,20 @@ public class RotaryEventManager {
 		}
 	}
 
+	public void openConduitGUIWithScrewdriver(PlayerInteractEvent evt) {
+		if (!evt.entityPlayer.worldObj.isRemote && evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && ItemRegistry.SCREWDRIVER.matchItem(evt.entityPlayer.getCurrentEquippedItem())) {
+			Block b = evt.world.getBlock(evt.x, evt.y, evt.z);
+			if (b.getClass().getName().equals("crazypants.enderio.conduit.BlockConduitBundle")) {
+				try {
+					conduitGui.invoke(null, evt.world, evt.x, evt.y, evt.z, evt.entityPlayer);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	/*
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -208,12 +259,6 @@ public class RotaryEventManager {
 			TileEntityEMP.resetCoordinate(evt.world, evt.xCoord, evt.yCoord, evt.zCoord);
 	}
 
-	@SubscribeEvent
-	public void applyEMPEffects(TileUpdateEvent evt) {
-		if (TileEntityEMP.isShutdown(evt.getWorld(), evt.getTileX(), evt.getTileY(), evt.getTileZ())) {
-			evt.setCanceled(true);
-		}
-	}
 	/*
 	@SubscribeEvent
 	public void cleanUpDecoTankCrafting(PlayerEvent.ItemCraftedEvent evt) {
@@ -258,7 +303,7 @@ public class RotaryEventManager {
 	@SubscribeEvent
 	public void burnLubricantHose(BlockConsumedByFireEvent evt) {
 		if (MachineRegistry.getMachine(evt.world, evt.xCoord, evt.yCoord, evt.zCoord) == MachineRegistry.HOSE) {
-			((TileEntityHose)evt.world.getTileEntity(evt.xCoord, evt.yCoord, evt.zCoord)).burn();
+			((TileEntityHose)evt.getTileEntity()).burn();
 		}
 	}
 
@@ -284,7 +329,7 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent
-	public void cancelFramez(FrameUsageEvent evt) {
+	public void cancelFramez(TileEntityMoveEvent evt) {
 		if (!this.isMovable(evt.tile)) {
 			evt.setCanceled(true);
 		}
@@ -397,7 +442,7 @@ public class RotaryEventManager {
 			if (e instanceof EntityPlayer) {
 				if (ItemBedrockArmor.isWearingFullSuitOf(e)) {
 					evt.ammount = Math.min(evt.ammount, 5);
-					if (evt.ammount <= 1 && evt.source != DamageSource.drown && evt.source != DamageSource.starve) {
+					if (evt.ammount <= 1 && evt.source != DamageSource.drown && evt.source != DamageSource.starve && !AtmosphereHandler.isAtmoBreathabilityDamage(evt.source)) {
 						evt.ammount = 0;
 						evt.setCanceled(true);
 					}
@@ -426,18 +471,11 @@ public class RotaryEventManager {
 			ArrayList<EntityItem> li = ev.drops;
 			li.clear();
 			e.captureDrops = true;
-			try {
-				ReikaObfuscationHelper.getMethod("dropFewItems").invoke(e, true, looting);
-				ReikaObfuscationHelper.getMethod("dropEquipment").invoke(e, true, dmg.hasInfinity() ? 100 : looting*4);
-				int rem = RotaryCraft.rand.nextInt(200) - looting*4;
-				if (rem <= 5 || dmg.hasInfinity())
-					ReikaObfuscationHelper.getMethod("dropRareDrop").invoke(e, 1);
-			}
-			catch (Exception ex) {
-				RotaryCraft.logger.debug("Could not process harvester drops event!");
-				if (RotaryCraft.logger.shouldDebug())
-					ex.printStackTrace();
-			}
+			ReikaObfuscationHelper.invoke("dropFewItems", e, true, looting);
+			ReikaObfuscationHelper.invoke("dropEquipment", e, true, dmg.hasInfinity() ? 100 : looting*4);
+			int rem = RotaryCraft.rand.nextInt(200) - looting*4;
+			if (rem <= 5 || dmg.hasInfinity())
+				ReikaObfuscationHelper.invoke("dropRareDrop", e, 1);
 			e.captureDrops = false;
 		}
 	}
@@ -495,7 +533,7 @@ public class RotaryEventManager {
 				if (i != 0 || k != 0) {
 					if (world.getBlock(x+i, y-1, z+k) != Blocks.brick_block)
 						return false;
-					if (!ReikaWorldHelper.matchWithItemStack(world, x+i, y-2, z+k, ReikaItemHelper.stoneDoubleSlab))
+					if (!ReikaWorldHelper.matchWithItemStack(world, x+i, y-2, z+k, ReikaItemHelper.stoneDoubleSlab.asItemStack()))
 						return false;
 				}
 			}

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import vazkii.botania.api.mana.IManaReceiver;
+
 import Reika.ChromatiCraft.API.Interfaces.Repairable;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.ModList;
@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
@@ -47,11 +48,14 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import vazkii.botania.api.mana.IManaReceiver;
 
 @Strippable(value={"vazkii.botania.api.mana.IManaReceiver", "Reika.ChromatiCraft.API.Interfaces.Repairable"})
 public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTMachine, IManaReceiver, Repairable {
@@ -60,7 +64,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	private int damage = 0;
 
-	private MaterialRegistry type;
+	private GearboxTypes type;
 
 	private final HybridTank tank = new HybridTank("gear", 24000);
 	private boolean failed;
@@ -68,48 +72,55 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	private int temperature;
 	private StepTimer tempTimer = new StepTimer(20);
 
+	private GearboxTypes bearingTier;
+
 	private static final int MAX_DAMAGE = 480;
 
-	private boolean isLiving;
+	public static final double BEARINGREDUCTION = 0.25;
+	public static final double BEARINGINCREASE = 1.0;
 
-	public TileEntityGearbox(MaterialRegistry type) {
+	public TileEntityGearbox(GearboxTypes type) {
 		if (type == null)
-			type = MaterialRegistry.WOOD;
+			type = GearboxTypes.WOOD;
 		this.type = type;
+		bearingTier = type;
 	}
 
 	public TileEntityGearbox() {
-		this(MaterialRegistry.WOOD);
+		this(GearboxTypes.WOOD);
 	}
 
-	public MaterialRegistry getGearboxType() {
-		return type != null ? type : MaterialRegistry.WOOD;
+	public GearboxTypes getGearboxType() {
+		return type != null ? type : GearboxTypes.WOOD;
+	}
+
+	public GearboxTypes getBearingTier() {
+		return bearingTier != null ? bearingTier : type;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setType(MaterialRegistry type) {
+	public void setData(GearboxTypes type, int ratio) {
 		this.type = type;
+		this.ratio = ratio;
 	}
 
-	public static int getMaxLubricant(MaterialRegistry mat) {
-		switch(mat) {
-			case BEDROCK:
-				return 0;
-			case DIAMOND:
-				return 1000;
-			case STEEL:
-				return 24000;
-			case STONE:
-				return 8000;
-			case WOOD:
-				return 0;//3000;
-			default:
-				return 0;
-		}
+	public void setMaterialFromItem(ItemStack is) {
+		type = GearboxTypes.getMaterialFromGearboxItem(is);
+		bearingTier = type;
+		this.syncAllData(true);
+	}
+
+	public void setBearingTier(GearboxTypes tier) {
+		bearingTier = tier;
+		this.syncAllData(true);
+	}
+
+	private int getBearingTierOffset() {
+		return this.getBearingTier().material.ordinal()-type.material.ordinal();
 	}
 
 	public int getMaxLubricant() {
-		return this.getMaxLubricant(type);
+		return type.getMaxLubricant();
 	}
 
 	public int getDamage() {
@@ -235,28 +246,45 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	private void getLubeAndApplyDamage(World world, int x, int y, int z, int metadata) {
 		int oldlube = 0;
-		if (type.needsLubricant() && omega > 0) {
+		if (type.needsLubricant() && omega > 0 && this.getBearingTier().material.ordinal() < MaterialRegistry.BEDROCK.ordinal()) {
 			if (tank.isEmpty()) {
 				if (!world.isRemote && damage < MAX_DAMAGE && rand.nextInt(40) == 0 && this.getTicksExisted() >= 100) {
 					damage++;
 					RotaryAchievements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
 				}
 				if (rand.nextDouble()*rand.nextDouble() > this.getDamagedPowerFactor()) {
-					if (type.isFlammable() && !world.isRemote)
+					if (type.material.isFlammable() && !world.isRemote)
 						ReikaWorldHelper.ignite(world, x, y, z);
 					world.spawnParticle("crit", xCoord+rand.nextFloat(), yCoord+rand.nextFloat(), zCoord+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
 					if (rand.nextInt(5) == 0) {
-						world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 1F, 1F);
+						world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.material.getDamageNoise(), 1F, 1F);
 					}
 				}
 			}
-			else if (!world.isRemote && type.consumesLubricant()) {
+			else if (!world.isRemote && type.consumesLubricant() && this.getBearingTier().material.ordinal() < MaterialRegistry.DIAMOND.ordinal()) {
 				if (tickcount >= 80) {
-					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*ReikaMathLibrary.logbase(omegain, 2)/4)));
+					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*this.getLubricantConsumptionFactor())));
 					tickcount = 0;
 				}
 			}
 		}
+	}
+
+	private double getLubricantConsumptionFactor() {
+		double base = type.getLubricantConsumeRate(omegain)*ReikaMathLibrary.logbase(omegain, 2)/4;
+		if (type != this.getBearingTier()) {
+			base *= this.getBearingLubricantFactor();
+		}
+		return base;
+	}
+
+	public double getBearingLubricantFactor() {
+		int offset = this.getBearingTierOffset();
+		//double pow = Math.pow(0.667, offset);
+		//base *= pow;
+
+		double add = offset > 0 ? -BEARINGREDUCTION*offset : -offset*BEARINGINCREASE;
+		return Math.max(0.1, 1+add);
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
@@ -326,8 +354,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			else if (te instanceof SimpleProvider) {
 				this.copyStandardPower(te);
 			}
-			else if (m == MachineRegistry.POWERBUS) {
-				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			else if (te instanceof ComplexIO) {
+				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
@@ -374,7 +402,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				else {
 					torque = RotaryConfig.torquelimit;
 					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-					world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.material.getDamageNoise(), 0.1F, 1F);
 				}
 			}
 			else {
@@ -383,7 +411,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 				else {
 					omega = RotaryConfig.omegalimit;
 					world.spawnParticle("crit", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), -0.5+rand.nextFloat(), rand.nextFloat(), -0.5+rand.nextFloat());
-					world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.getDamageNoise(), 0.1F, 1F);
+					world.playSoundEffect(x+0.5, y+0.5, z+0.5, type.material.getDamageNoise(), 0.1F, 1F);
 				}
 				torque = torquein / ratio;
 			}
@@ -392,7 +420,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		if (torque <= 0)
 			omega = 0;
 
-		if (!type.isInfiniteStrength())
+		if (!type.material.isInfiniteStrength())
 			this.testFailure();
 	}
 
@@ -402,13 +430,19 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		ItemStack item = null;
 		switch(type) {
 			case WOOD:
+			case LIVINGWOOD:
 				item = ItemStacks.sawdust.copy();
 				break;
 			case STONE:
+			case LIVINGROCK:
 				item = new ItemStack(Blocks.gravel, 1, 0);
 				break;
 			case STEEL:
 				item = ItemStacks.scrap.copy();
+				break;
+			case TUNGSTEN:
+				item = ItemStacks.scrap.copy();
+				//item = ItemStacks.tungstenflakes.copy();
 				break;
 			case DIAMOND:
 				item = new ItemStack(Items.diamond, 1, 0);
@@ -439,10 +473,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public void testFailure() {
-		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(Math.max(omega, omegain), 1-(0.11D*type.ordinal())), type.getTensileStrength())) {
+		if (ReikaEngLibrary.mat_rotfailure(type.material.getDensity(), 0.0625, type.getOmegaForRotFailure(omega, omegain), type.material.getTensileStrength())) {
 			this.fail(worldObj, xCoord, yCoord, zCoord);
 		}
-		else if (ReikaEngLibrary.mat_twistfailure(Math.max(torque, torquein), 0.0625, type.getShearStrength()/16D)) {
+		else if (ReikaEngLibrary.mat_twistfailure(Math.max(torque, torquein), 0.0625, type.material.getShearStrength()/16D)) {
 			this.fail(worldObj, xCoord, yCoord, zCoord);
 		}
 	}
@@ -462,35 +496,44 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		NBT.setInteger("damage", damage);
 		NBT.setBoolean("fail", failed);
 		NBT.setInteger("temp", temperature);
-
-		NBT.setBoolean("living", this.isLiving());
+		NBT.setString("bearing", bearingTier.name());
 
 		tank.writeToNBT(NBT);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		reduction = NBT.getBoolean("reduction");
 		damage = NBT.getInteger("damage");
 		failed = NBT.getBoolean("fail");
 		temperature = NBT.getInteger("temp");
-
-		isLiving = NBT.getBoolean("living");
+		if (NBT.hasKey("bearing"))
+			bearingTier = GearboxTypes.valueOf(NBT.getString("bearing"));
 
 		tank.readFromNBT(NBT);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound NBT) {
-		NBT.setInteger("type", type.ordinal());
+		NBT.setString("geartype", type.name());
 		super.writeToNBT(NBT);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
-		type = MaterialRegistry.setType(NBT.getInteger("type"));
+		GearboxTypes gear = GearboxTypes.WOOD;
+		if (NBT.hasKey("geartype")) {
+			gear = GearboxTypes.valueOf(NBT.getString("geartype"));
+		}
+		else if (NBT.hasKey("type")) {
+			int idx = NBT.getInteger("type");
+			if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
+				idx++;
+			MaterialRegistry mat = MaterialRegistry.matList[idx];
+			gear = GearboxTypes.getFromMaterial(mat);
+		}
+		type = gear;
 		super.readFromNBT(NBT);
 	}
 
@@ -601,28 +644,16 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-		if (type == MaterialRegistry.WOOD) {
-			if (!this.isLiving() || omega >= 2048 || Tamb >= 100) {
-				if (omega > 0) {
-					temperature++;
-					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.getDamageNoise(), 0.5F, 1);
-				}
-			}
-		}
-		else if (type == MaterialRegistry.STONE) {
-			if (!this.isLiving()) {
-				if (omega >= 8192) {
-					temperature++;
-					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.getDamageNoise(), 0.67F, 1);
-				}
-			}
+		if (omega > 0 && type.generatesHeat(omega, Tamb)) {
+			temperature++;
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.material.getDamageNoise(), 0.67F, 1);
 		}
 		else {
 			temperature = Tamb;
 		}
 		if (temperature > 90 && rand.nextBoolean() && type.takesTemperatureDamage()) {
 			damage++;
-			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.getDamageNoise(), 1, 1);
+			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.material.getDamageNoise(), 1, 1);
 		}
 		if (omega == 0 && temperature > Tamb) {
 			temperature--;
@@ -649,7 +680,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		if (type.isFlammable() && !world.isRemote)
+		if (type.material.isFlammable() && !world.isRemote)
 			ReikaWorldHelper.ignite(world, x, y, z);
 	}
 
@@ -660,6 +691,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public boolean canBeCooledWithFins() {
 		return true;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return false;
 	}
 
 	@Override
@@ -679,9 +715,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	@Override
 	public NBTTagCompound getTagsToWriteToStack() {
 		NBTTagCompound NBT = new NBTTagCompound();
+		//if (this.getGearboxType().isDamageableGear())
 		NBT.setInteger("damage", this.getDamage());
 		NBT.setInteger("lube", this.getLubricant());
-		NBT.setBoolean("living", this.isLiving());
+		NBT.setString("bearing", bearingTier.name());
 		return NBT;
 	}
 
@@ -690,8 +727,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		if (tag != null) {
 			damage = tag.getInteger("damage");
 			this.setLubricant(tag.getInteger("lube"));
-
-			isLiving = tag.getBoolean("living");
+			if (tag.hasKey("bearing"))
+				bearingTier = GearboxTypes.valueOf(tag.getString("bearing"));
 		}
 	}
 
@@ -706,7 +743,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public boolean isLiving() {
-		return isLiving && ModList.BOTANIA.isLoaded();
+		return ModList.BOTANIA.isLoaded() && (type == GearboxTypes.LIVINGROCK || type == GearboxTypes.LIVINGWOOD);
 	}
 
 	@Override
@@ -716,7 +753,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean isFull() {
-		return this.getLubricant() >= this.getMaxLubricant();
+		return this.getLubricant()+150 >= this.getMaxLubricant(); //+150 to not have bursts sent and waste 95%
 	}
 
 	@Override
@@ -726,7 +763,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean canRecieveManaFromBursts() {
-		return this.isLiving() && this.getGearboxType() == MaterialRegistry.STONE && !this.isFull();
+		return this.getGearboxType() == GearboxTypes.LIVINGROCK && !this.isFull();
 	}
 
 	@Override
@@ -737,11 +774,5 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			int amt = Math.max(1, Math.min(damage/8, (int)(Math.sqrt(tier)/20D)));
 			this.repair(amt);
 		}
-	}
-
-	@Override
-	public int getItemMetadata() {
-		int ratio = (int)ReikaMathLibrary.logbase(this.ratio, 2)-1;
-		return 5*ratio+type.ordinal();
 	}
 }

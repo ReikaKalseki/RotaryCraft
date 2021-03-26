@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # @author Reika Kalseki
 # 
-# Copyright 2013-2016
+# Copyright 2013-2021
 # 
 # All rights reserved.
 # Distribution of the software in any form is only allowed with
@@ -9,9 +9,20 @@
 #-------------------------------------------------------------------------------
 @author Reika
 
+
 This code is the property of and owned and copyrighted by Reika.
 This code is provided under a modified visible-source license that is as follows:
 
+
+API Code:
+==============================
+API code is identifiable as being in an "API" package in the respective repository or mod, and is intended to allow some level of inter-mod interactions without creating hard dependencies on the mod proper. This code is exempt from the below restrictions for "Mod Code", as it by nature will require some level of copying and redistribution.
+
+The only restrictions imposed on API code are that it remain clearly marked with its original authorship and source, that it be used for the purpose described previously, and that it not be modified from the original without first contacting Reika.
+
+
+Mod Code:
+==============================
 Any and all users are permitted to use the source for educational purposes, or to create derivative works
 for private use only. GitHub forks and direct downloads are considered derivative works.
 
@@ -31,5 +42,7 @@ for this code will be treated as intentional theft.
 Due to the Mojang and Minecraft Mod Terms of Service and Licensing Restrictions, compiled versions of this code
 must be provided for free. However, with the exception of pre-approved derivative works, only the original authoror modpacks 
 may distribute compiled binary versions of this code.
+
+==============================
 
 Failure to comply with these restrictions is a violation of copyright law and will be dealt with accordingly.

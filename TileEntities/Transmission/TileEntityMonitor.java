@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,9 +12,11 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
@@ -56,8 +58,8 @@ public class TileEntityMonitor extends TileEntity1DTransmitter {
 					omegain = devicein.omega;
 				}
 			}
-			if (m == MachineRegistry.POWERBUS) {
-				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			if (te instanceof ComplexIO) {
+				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);

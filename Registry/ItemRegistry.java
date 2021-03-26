@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Extras.ItemSpawner;
@@ -45,10 +46,12 @@ import Reika.RotaryCraft.Items.ItemCanolaSeed;
 import Reika.RotaryCraft.Items.ItemCoil;
 import Reika.RotaryCraft.Items.ItemDisk;
 import Reika.RotaryCraft.Items.ItemEthanolMinecart;
+import Reika.RotaryCraft.Items.ItemExplosiveShell;
 import Reika.RotaryCraft.Items.ItemHandBook;
 import Reika.RotaryCraft.Items.ItemModOre;
 import Reika.RotaryCraft.Items.ItemRailGunAmmo;
 import Reika.RotaryCraft.Items.ItemSlide;
+import Reika.RotaryCraft.Items.ItemVoidMetalRailgunAmmo;
 import Reika.RotaryCraft.Items.Placers.ItemAdvGearPlacer;
 import Reika.RotaryCraft.Items.Placers.ItemEnginePlacer;
 import Reika.RotaryCraft.Items.Placers.ItemFlywheelPlacer;
@@ -65,6 +68,7 @@ import Reika.RotaryCraft.Items.Tools.ItemHandheldCrafting;
 import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
 import Reika.RotaryCraft.Items.Tools.ItemIntegratedGearbox;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
+import Reika.RotaryCraft.Items.Tools.ItemMatchFilter;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
 import Reika.RotaryCraft.Items.Tools.ItemTarget;
@@ -73,6 +77,8 @@ import Reika.RotaryCraft.Items.Tools.ItemWorldEdit;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedReveal;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockAxe;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockChisel;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockDrillHead;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockGrafter;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockHoe;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockPickaxe;
@@ -103,6 +109,7 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShovel;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSickle;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum ItemRegistry implements ItemEnum {
@@ -128,13 +135,13 @@ public enum ItemRegistry implements ItemEnum {
 	NVG(97, 1, true, 				"item.nvg", 				ItemNightVisionGoggles.class),
 	//NVH(48, 1, true, 				"item.nvh", 				ItemNightVisionHelmet.class),
 	HANDCRAFT(33, 1, false, 		"item.handcraft", 			ItemHandheldCrafting.class),
-	RAILGUN(113, 1, true, 			"item.railgun", 			ItemRailGunAmmo.class),
+	RAILGUN(129, 1, true, 			"item.railgun", 			ItemRailGunAmmo.class),
 	BUCKET(104, 106, 1, true, 		"item.rcbucket", 			ItemFuelLubeBucket.class),
 	TARGET(98, 1, false, 			"item.target", 				ItemTarget.class),
 	IOGOGGLES(1, 1, false,			"item.iogoggles", 			ItemIOGoggles.class),
 	SLIDE(2, 1, true, 				"item.slide", 				ItemSlide.class),
 	KEY(4, 1, false,				"item.key",					ItemCannonKey.class),
-	SHELL(5, 1, false,				"item.shell",				ItemBasic.class),
+	SHELL(5, 1, false,				"item.shell",				ItemExplosiveShell.class),
 	MINECART(6, 1, false,			"item.ethacart",			ItemEthanolMinecart.class),
 	BEDHELM(7, 1, false,			"item.bedhelm",				ItemBedrockArmor.class),
 	BEDCHEST(9, 1, false,			"item.bedchest",			ItemBedrockArmor.class),
@@ -178,13 +185,14 @@ public enum ItemRegistry implements ItemEnum {
 	FLYWHEEL(0, true,				"item.flyplacer",			ItemFlywheelPlacer.class),
 	ADVGEAR(0, true,				"item.advplacer",			ItemAdvGearPlacer.class),
 	SHAFTCRAFT(0, true,				"item.shaftcraft",			ItemMulti.class),
+	GEARCRAFT(0, 3, true,			"item.gearcraft",			ItemMulti.class),
+	FLYWHEELCRAFT(208, true,		"crafting.flycore",			ItemMulti.class),
 	ENGINECRAFT(1, true,			"item.enginecraft",			ItemMulti.class),
 	MISCCRAFT(2, true,				"item.misccraft",			ItemMulti.class),
 	BORECRAFT(3, true,				"item.borecraft",			ItemMulti.class),
 	EXTRACTS(4, true,				"item.extracts",			ItemMulti.class),
 	COMPACTS(6, true,				"item.compacts",			ItemMulti.class),
 	POWDERS(8, true,				"item.powder",				ItemMulti.class),
-	GEARUNITS(23, true,				"item.gearunits",			ItemMulti.class),
 	MODINTERFACE(16, 2, true,		"item.modinterface",		ItemMulti.class),
 	MODEXTRACTS(-1, true,			"item.modextracts",			ItemModOre.class),
 	MODINGOTS(-1, true,				"item.modingots",			ItemModOre.class),
@@ -195,7 +203,12 @@ public enum ItemRegistry implements ItemEnum {
 	RANGEFINDER(42, 1, true,		"item.rangefinder",			ItemRangeFinder.class),
 	GEARUPGRADE(65, 1, true,		"item.gearupgrade",			ItemIntegratedGearbox.class),
 	HELDPISTON(43, 1, true,			"item.springpiston",		ItemHandheldPiston.class),
-	;//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
+	VOIDRAIL(133, 1, false,			"item.voidrailgun",			ItemVoidMetalRailgunAmmo.class),
+	//BEDKNIFE(41, 1, false,			"item.bedknife",			ItemBedrockKnife.class, ModList.APPENG);
+	MATCHFILTER(50,	1, false,		"item.matchfilter",			ItemMatchFilter.class),
+	BEDDRILL(134, 1, false,			"item.beddrill",			ItemBedrockDrillHead.class,	ModList.IMMERSIVEENG),
+	BEDCHISEL(45, 1, false,			"item.bedchisel",			ItemBedrockChisel.class, ModList.CHISEL),
+	;
 
 	private final int index;
 	private final int imageSheet;
@@ -415,7 +428,7 @@ public enum ItemRegistry implements ItemEnum {
 			case RAILGUN:
 				return this.getBasicName()+" ("+String.format("%d", (int)ReikaMathLibrary.intpow(2, dmg))+" kg)";
 			case UPGRADE:
-				return ItemEngineUpgrade.Upgrades.values()[dmg].getName();
+				return ItemEngineUpgrade.Upgrades.list[dmg].getName();
 			case MODEXTRACTS:
 				return RotaryNames.getModExtractName(dmg);
 			case MODINGOTS:
@@ -436,16 +449,18 @@ public enum ItemRegistry implements ItemEnum {
 				return StatCollector.translateToLocal(RotaryNames.powderNames[dmg]);
 			case MODINTERFACE:
 				return StatCollector.translateToLocal(RotaryNames.interfaceNames[dmg]);
-			case GEARUNITS:
-				return StatCollector.translateToLocal(RotaryNames.gearUnitNames[dmg]);
+			case GEARCRAFT:
+				return RotaryNames.getGearPartName(dmg);
+			case FLYWHEELCRAFT:
+				return Flywheels.list[dmg].getName()+" "+this.getBasicName();
 			case SHAFT:
-				return RotaryNames.getShaftName(dmg);
+				return this.getBasicName();
 			case ENGINE:
 				return RotaryNames.getEngineName(dmg);
 			case GEARBOX:
-				return RotaryNames.getGearboxName(dmg);
+				return this.getBasicName();
 			case FLYWHEEL:
-				return RotaryNames.getFlywheelName(dmg);
+				return Flywheels.list[dmg].getName()+" "+MachineRegistry.FLYWHEEL.getName();
 			case ADVGEAR:
 				return RotaryNames.getAdvGearName(dmg);
 			case MACHINE:
@@ -585,7 +600,7 @@ public enum ItemRegistry implements ItemEnum {
 			case BUCKET:
 				return 5;
 			case UPGRADE:
-				return ItemEngineUpgrade.Upgrades.values().length;
+				return ItemEngineUpgrade.Upgrades.list.length;
 			case MODEXTRACTS:
 				return 4*ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class).size();
 			case MODINGOTS:
@@ -610,24 +625,25 @@ public enum ItemRegistry implements ItemEnum {
 				return RotaryNames.powderNames.length;
 			case MODINTERFACE:
 				return RotaryNames.interfaceNames.length;
-			case GEARUNITS:
-				return RotaryNames.gearUnitNames.length;
 			case GEARUPGRADE:
 				return 5;
 			case SHAFT:
-				return RotaryNames.getNumberShaftTypes();
+				return MaterialRegistry.matList.length;
 			case ENGINE:
 				return RotaryNames.getNumberEngineTypes();
 			case GEARBOX:
-				return RotaryNames.getNumberGearTypes();
+				return 1;
+			case GEARCRAFT:
+				return 16*GearboxTypes.typeList.length;
 			case FLYWHEEL:
-				return RotaryNames.getNumberFlywheelTypes();
+			case FLYWHEELCRAFT:
+				return Flywheels.list.length;
 			case ADVGEAR:
 				return RotaryNames.getNumberAdvGearTypes();
 			case MACHINE:
 				return ReikaJavaLibrary.getEnumEntriesWithoutInitializing(MachineRegistry.class).size();
 			default:
-				throw new RegistrationException(RotaryCraft.instance, "Item "+name+" has subtypes but the number was not specified!");
+				throw new RegistrationException(RotaryCraft.instance, "Item "+this+" has subtypes but the number was not specified!");
 		}
 	}
 
@@ -789,6 +805,7 @@ public enum ItemRegistry implements ItemEnum {
 				break;
 			case BEDPICK:
 				is.addEnchantment(Enchantment.silkTouch, 1);
+				is.addEnchantment(Enchantment.fortune, 5);
 				break;
 			case BEDJUMP:
 				ReikaEnchantmentHelper.applyEnchantments(is, ((ItemBedrockArmor)BEDBOOTS.getItemInstance()).getDefaultEnchantments());
@@ -852,6 +869,8 @@ public enum ItemRegistry implements ItemEnum {
 		switch(this) {
 			case SPRING:
 			case STRONGCOIL:
+			case GEARBOX:
+			case GEARCRAFT:
 				return false;
 			default:
 				return true;

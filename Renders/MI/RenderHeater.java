@@ -1,21 +1,22 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.RotaryCraft.Auxiliary.HeatRippleRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -26,6 +27,11 @@ public class RenderHeater extends RotaryTERenderer
 {
 
 	private ModelHeater HeaterModel = new ModelHeater();
+
+	@Override
+	protected String getTextureSubfolder() {
+		return "Heater/";
+	}
 
 	public void renderTileEntityHeaterAt(TileEntityHeater tile, double par2, double par4, double par6, float par8)
 	{
@@ -39,17 +45,17 @@ public class RenderHeater extends RotaryTERenderer
 		ModelHeater var14;
 		var14 = HeaterModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex.png");
 		if (tile.temperature >= 200)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex200C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex200C.png");
 		if (tile.temperature >= 400)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex400C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex400C.png");
 		if (tile.temperature >= 600)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex600C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex600C.png");
 		if (tile.temperature >= 800)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex800C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex800C.png");
 		if (tile.temperature >= 900)
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/heatertex900C.png");
+			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Heater/heatertex900C.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -60,6 +66,14 @@ public class RenderHeater extends RotaryTERenderer
 		int var11 = 0;	 //used to rotate the model about metadata
 
 		var14.renderAll(tile, null);
+
+		if (tile.isInWorld()) {
+			float f = tile.temperature/(float)tile.MAXTEMP;
+			GL11.glTranslated(0, 0.675, 0);
+			HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.xCoord+0.5, tile.yCoord+0.75, tile.zCoord+0.5, f, 0.5F, 2F, 0);
+			GL11.glTranslated(0, -0.4, 0);
+			HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.xCoord+0.5, tile.yCoord+1.75, tile.zCoord+0.5, f, 0.25F, 2.5F, 0);
+		}
 
 		if (tile.isInWorld())
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);

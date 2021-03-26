@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,8 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import vazkii.botania.api.item.IBlockProvider;
+
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
@@ -30,6 +31,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAreaFiller;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import vazkii.botania.api.item.IBlockProvider;
 
 
 public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISidedInventory, OneSlotMachine {
@@ -41,9 +44,10 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 		if (ModList.BOTANIA.isLoaded() && inv[0].getItem() instanceof IBlockProvider) {
 			BlockKey bk = this.getBlockFromBotania((IBlockProvider)inv[0].getItem(), inv[0]);
 			((IBlockProvider)inv[0].getItem()).provideBlock(this.getPlacer(), null, inv[0], bk.blockID, bk.metadata, true);
-			return;
 		}
-		ReikaInventoryHelper.decrStack(0, inv);
+		else {
+			ReikaInventoryHelper.decrStack(0, inv);
+		}
 	}
 
 	@Override
@@ -72,6 +76,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 		return bk.blockID != Blocks.air ? bk : null;
 	}
 
+	@ModDependent(ModList.BOTANIA)
 	private BlockKey getBlockFromBotania(IBlockProvider item, ItemStack is) {
 		if (is.stackTagCompound == null)
 			return null;
@@ -132,8 +137,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 		blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 
-		if (this.getBlockType() != Blocks.air)
-		{
+		if (this.getBlockType() != Blocks.air) {
 			worldObj.func_147453_f(xCoord, yCoord, zCoord, this.getBlockType());
 		}
 		//this.onInventoryChanged();
@@ -173,8 +177,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound NBT)
-	{
+	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -193,8 +196,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound NBT)
-	{
+	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
 		NBTTagList nbttaglist = NBT.getTagList("Items", NBTTypes.COMPOUND.ID);

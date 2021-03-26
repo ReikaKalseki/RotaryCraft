@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -28,6 +29,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,12 +37,12 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 
 	protected Random par5Random = new Random();
 
-	private int index;
+	private final int texture;
 
 	public ItemBasic(int tex) {
 		maxStackSize = 64;
 		this.setCreativeTab(this.isAvailableInCreativeMode() ? this.getCreativePage() : null);
-		this.setIndex(tex);
+		texture = tex;
 	}
 
 	public ItemBasic(int ID, int tex, int max) {
@@ -51,7 +53,7 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 			this.setCreativeTab(RotaryCraft.tabRotaryItems);
 		else
 			this.setCreativeTab(null);
-		this.setIndex(tex);
+		texture = tex;
 	}
 
 	protected CreativeTabs getCreativePage() {
@@ -65,15 +67,11 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 	}
 
 	public int getItemSpriteIndex(ItemStack item) {
-		return index;
+		return texture;
 	}
 
 	protected final int getRootIndex() {
-		return index;
-	}
-
-	public void setIndex(int a) {
-		index = a;
+		return texture;
 	}
 
 	@Override
@@ -121,8 +119,13 @@ public class ItemBasic extends Item implements IndexedItemSprites {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
-		ItemRegistry ir = ItemRegistry.getEntry(is);
-		return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
+		try {
+			ItemRegistry ir = ItemRegistry.getEntry(is);
+			return ir.hasMultiValuedName() ? ir.getMultiValuedName(is.getItemDamage()) : ir.getBasicName();
+		}
+		catch (Exception e) {
+			return "Invalid item: "+e.toString();
+		}
 	}
 
 	@Override

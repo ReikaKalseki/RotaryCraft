@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Items.Tools.Bedrock;
 
 import java.util.List;
+
+import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,6 +30,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -41,18 +44,16 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-import com.google.common.collect.Multimap;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 
-	private int index;
+	private final int texture;
 
 	public ItemBedrockSword(int tex) {
 		super(ToolMaterial.EMERALD);
-		this.setIndex(tex);
+		texture = tex;
 		maxStackSize = 1;
 		this.setMaxDamage(0);
 		this.setNoRepair();
@@ -61,13 +62,9 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 		field_150934_a = 12;
 	}
 
-	private void setIndex(int tex) {
-		index = tex;
-	}
-
 	@Override
 	public int getItemSpriteIndex(ItemStack is) {
-		return index;
+		return texture;
 	}
 
 	@Override
@@ -81,8 +78,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	}
 
 	@Override
-	public float func_150931_i()
-	{
+	public float func_150931_i() {
 		return 1;
 	}
 
@@ -128,8 +124,7 @@ public class ItemBedrockSword extends ItemSword implements IndexedItemSprites {
 	}
 
 	@Override
-	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
-	{
+	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
 		return false;
 	}
 

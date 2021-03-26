@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Items.Placers;
 
 import java.util.List;
+
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,16 +23,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
-import org.lwjgl.input.Keyboard;
-
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel.Flywheels;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -38,6 +39,7 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 
 	public ItemFlywheelPlacer() {
 		super();
+		this.setCreativeTab(RotaryCraft.tabPower);
 	}
 
 	@Override
@@ -75,13 +77,14 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 		}
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 		TileEntityFlywheel fly = (TileEntityFlywheel)world.getTileEntity(x, y, z);
-		fly.setBlockMetadata(4*is.getItemDamage()+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+		fly.setBlockMetadata(RotaryAux.get4SidedMetadataFromPlayerLook(ep));
 		int meta = fly.getBlockMetadata();
 		if (meta%2 == 0)
 			fly.setBlockMetadata(meta+1);
 		else
 			fly.setBlockMetadata(meta-1);
 		fly.setPlacer(ep);
+		fly.setMaterialFromItem(is);
 		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
 			fly.isFlipped = true;
 		}
@@ -92,8 +95,8 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.FLYWHEEL.isAvailableInCreativeInventory()) {
-			for (int i = 0; i < RotaryNames.getNumberFlywheelTypes(); i++) {
-				ItemStack item = new ItemStack(id, 1, i);
+			for (int i = 0; i < Flywheels.list.length; i++) {
+				ItemStack item = Flywheels.list[i].getFlywheelItem();
 				list.add(item);
 			}
 		}
@@ -105,9 +108,12 @@ public class ItemFlywheelPlacer extends ItemBlockPlacer {
 		int i = is.getItemDamage();
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			Flywheels f = Flywheels.list[i];
-			li.add(String.format("Max Speed: %d rad/s", f.maxSpeed));
-			li.add(String.format("Required Torque: %d Nm", f.maxTorque/TileEntityFlywheel.MINTORQUERATIO));
-			li.add(String.format("Max Torque: %d Nm", f.maxTorque));
+			if (f.maxSpeed < Integer.MAX_VALUE)
+				li.add(String.format("Max Speed: %d rad/s", f.maxSpeed));
+			li.add(String.format("Required Torque: %d Nm", f.getMinTorque()));
+			if (f.maxTorque < Integer.MAX_VALUE)
+				li.add(String.format("Max Torque: %d Nm", f.maxTorque));
+			li.add(String.format("Decay Rate: 1/%d", f.decayTime));
 		}
 		else {
 			StringBuilder sb = new StringBuilder();

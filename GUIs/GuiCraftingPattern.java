@@ -1,13 +1,15 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,19 +19,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Containers.ContainerCraftingPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -68,7 +69,7 @@ public class GuiCraftingPattern extends GuiContainer {
 				RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
 				ItemCraftPattern.setMode(this.getItem(), next);
 				((ContainerCraftingPattern)player.openContainer).clearRecipe();
-				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue(), PacketTarget.server, next.ordinal());
+				ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.ordinal(), PacketTarget.server, next.ordinal());
 			}
 		}
 		else if (b.id == 1 || b.id == 2) {
@@ -78,7 +79,7 @@ public class GuiCraftingPattern extends GuiContainer {
 			if (amt > 1 && ItemCraftPattern.getStackInputLimit(this.getItem()) == 1)
 				amt--;
 			ItemCraftPattern.changeStackLimit(this.getItem(), amt);
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1, PacketTarget.server, amt);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNLIMIT.ordinal(), PacketTarget.server, amt);
 		}
 		this.initGui();
 	}

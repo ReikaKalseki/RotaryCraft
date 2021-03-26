@@ -9,14 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
-import io.netty.buffer.ByteBuf;
-
 import java.awt.Color;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
 
 public class EntityDischarge extends Entity implements IEntityAdditionalSpawnData {
 

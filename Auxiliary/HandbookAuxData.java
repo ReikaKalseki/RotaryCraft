@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NavigableSet;
+
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.TreeMultimap;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
@@ -26,8 +30,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker.PackModification;
@@ -36,14 +38,14 @@ import Reika.DragonAPI.Instantiable.Alert;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.Maps.ArrayMap;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBiomeHelper;
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.DragonAPI.ModRegistry.ModOreList;
@@ -68,8 +70,6 @@ import Reika.RotaryCraft.Registry.MobBait;
 import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer.BiomeTransform;
-
-import com.google.common.collect.TreeMultimap;
 
 public final class HandbookAuxData {
 	/** One GuiHandbook.SECOND in nanoGuiHandbook.SECONDs. */
@@ -224,7 +224,7 @@ public final class HandbookAuxData {
 
 	public static void drawPage(FontRenderer f, RenderItem ri, int screen, int page, int subpage, int dx, int dy) {
 		HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
-		if (h.isMachine() || h.isTrans() || h.isEngine()) {
+		if (h.isMachine() || h.isTrans() || h.isEngine() || h.getParent() == HandbookRegistry.CONVERTERDESC) {
 			List<ItemStack> out = h.getCrafting();
 			if (out == null || out.size() <= 0)
 				return;
@@ -406,7 +406,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.oakWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.oakWood.asItemStack(), dx+166, dy+28);
 					break;
 				case 2:
 					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.BLACK.getStackOf(), dx+72+36, dy+10);
@@ -414,7 +414,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.spruceWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.spruceWood.asItemStack(), dx+166, dy+28);
 					break;
 				case 3:
 					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.WHITE.getStackOf(), dx+72+36, dy+10);
@@ -422,7 +422,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.birchWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.birchWood.asItemStack(), dx+166, dy+28);
 					break;
 				case 4:
 					api.drawItemStackWithTooltip(ri, f, ReikaDyeHelper.RED.getStackOf(), dx+72+36, dy+10);
@@ -430,7 +430,7 @@ public final class HandbookAuxData {
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72, dy+28);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+10);
 					api.drawItemStackWithTooltip(ri, f, ItemStacks.sawdust, dx+72+18, dy+28);
-					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.jungleWood, dx+166, dy+28);
+					api.drawItemStackWithTooltip(ri, f, ReikaItemHelper.jungleWood.asItemStack(), dx+166, dy+28);
 					break;
 			}
 		}
@@ -584,7 +584,7 @@ public final class HandbookAuxData {
 				BiomeTransform data = transforms.get(k);
 				BiomeGenBase from = data.change.start;
 				BiomeGenBase from_ = from;
-				from = ReikaBiomeHelper.getParentBiomeType(from);
+				from = ReikaBiomeHelper.getParentBiomeType(from, false);
 				BiomeGenBase to = data.change.finish;
 				api.drawTexturedModalRect(posX+16, posY+22, 32*(from.biomeID%8), 32*(from.biomeID/8), 32, 32);
 				api.drawTexturedModalRect(posX+80, posY+22, 32*(to.biomeID%8), 32*(to.biomeID/8), 32, 32);
@@ -687,7 +687,7 @@ public final class HandbookAuxData {
 						if (m.hasSubdivisions()) {
 							int meta = m.getNumberSubtypes();
 							int time = (int)(System.currentTimeMillis()/1600)%meta;
-							is = m.getCraftedMetadataProduct(time);
+							is = m.getSubType(time);
 						}
 						int r = (i-di)/12;
 						int c = i%12;

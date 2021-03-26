@@ -1,14 +1,16 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+
 import Reika.DragonAPI.Instantiable.Data.Maps.PluralMap;
 import Reika.DragonAPI.Instantiable.Event.Client.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
@@ -36,6 +39,7 @@ import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -67,7 +71,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
-import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel.Flywheels;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
@@ -75,6 +79,7 @@ import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityHeatRay;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntitySonicWeapon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityLamp;
 import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -101,6 +106,7 @@ public final class RotaryDescriptions {
 	private static final XMLInterface parents = loadData("categories");
 	private static final XMLInterface machines = loadData("machines");
 	private static final XMLInterface trans = loadData("trans");
+	private static final XMLInterface converter = loadData("converter");
 	private static final XMLInterface engines = loadData("engines");
 	private static final XMLInterface tools = loadData("tools");
 	private static final XMLInterface resources = loadData("resource");
@@ -131,10 +137,16 @@ public final class RotaryDescriptions {
 		return "Resources/";
 	}
 
+	@SideOnly(Side.CLIENT)
 	private static boolean hasLocalizedFor(Language language) {
 		String lang = language.getLanguageCode();
-		Object o = RotaryCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml");
-		return o != null;
+		try (InputStream o = RotaryCraft.class.getResourceAsStream("Resources/"+lang+"/categories.xml")) {
+			return o != null;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static int getCategoryCount() {
@@ -203,66 +215,31 @@ public final class RotaryDescriptions {
 	}
 
 	public static void loadData() {
-		List<HandbookRegistry> parenttabs = HandbookRegistry.getCategoryTabs();
+		List<HandbookRegistry> parenttabs = HandbookRegistry.getCategoryTabs(false);
 
-		HandbookRegistry[] enginetabs = HandbookRegistry.getEngineTabs();
+		List<HandbookRegistry> enginetabs = HandbookRegistry.getEngineTabs();
+		List<HandbookRegistry> transtabs = HandbookRegistry.getTransTabs();
+		List<HandbookRegistry> convertertabs = HandbookRegistry.getConverterTabs();
 		List<HandbookRegistry> machinetabs = HandbookRegistry.getMachineTabs();
-		HandbookRegistry[] transtabs = HandbookRegistry.getTransTabs();
-		HandbookRegistry[] tooltabs = HandbookRegistry.getToolTabs();
-		HandbookRegistry[] resourcetabs = HandbookRegistry.getResourceTabs();
-		HandbookRegistry[] misctabs = HandbookRegistry.getMiscTabs();
-		HandbookRegistry[] infotabs = HandbookRegistry.getInfoTabs();
+		List<HandbookRegistry> tooltabs = HandbookRegistry.getToolTabs();
+		List<HandbookRegistry> resourcetabs = HandbookRegistry.getResourceTabs();
+		List<HandbookRegistry> misctabs = HandbookRegistry.getMiscTabs();
+		List<HandbookRegistry> infotabs = HandbookRegistry.getInfoTabs();
 
-		for (int i = 0; i < parenttabs.size(); i++) {
-			HandbookRegistry h = parenttabs.get(i);
+		for (HandbookRegistry h : parenttabs) {
 			String desc = parents.getValueAtNode("categories:"+h.name().toLowerCase(Locale.ENGLISH).substring(0, h.name().length()-4));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < machinetabs.size(); i++) {
-			HandbookRegistry h = machinetabs.get(i);
-			MachineRegistry m = h.getMachine();
-			String desc = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
-			String aux = machines.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
-			Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
-			desc = String.format(desc, machineData.get(m));
-			aux = String.format(aux, machineNotes.get(m, 0));
-
-			if (XMLInterface.NULL_VALUE.equals(desc))
-				desc = "There is no handbook data for this machine yet.";
-
-			//ReikaJavaLibrary.pConsole(m.name().toLowerCase()+":"+desc);
-
-			if (m.isDummiedOut()) {
-				desc += "\nThis machine is currently unavailable.";
-				if (m.getModDependency() != null && !m.getModDependency().isLoaded())
-					desc += "\nThis machine depends on another mod.";
-				aux += "\nNote: Dummied Out";
-			}
-			if (m.hasPrerequisite()) {
-				aux += "\nDependencies: "+m.getPrerequisite();
-			}
-			if (m.isIncomplete()) {
-				desc += "\nThis machine is incomplete. Use at your own risk.";
-			}
-
-			addEntry(h, desc);
-			notes.put(aux, h, 0);
-
-			if (sub != null) {
-				int k = 0;
-				for (String s : sub) {
-					String val = machines.getValueAtNode(s);
-					val = String.format(val, machineNotes.get(m, k));
-					notes.put(val, h, k);
-					k++;
-					lengths.put(h, k);
-				}
-			}
+		for (HandbookRegistry h : machinetabs) {
+			loadMachineTab(h, machines);
 		}
 
-		for (int i = 0; i < transtabs.length; i++) {
-			HandbookRegistry h = transtabs[i];
+		for (HandbookRegistry h : convertertabs) {
+			loadMachineTab(h, converter);
+		}
+
+		for (HandbookRegistry h : transtabs) {
 			MachineRegistry m = h.getMachine();
 			String desc = trans.getValueAtNode("trans:"+h.name().toLowerCase(Locale.ENGLISH));
 			Collection<String> sub = trans.getNodesWithin("trans:"+h.name().toLowerCase(Locale.ENGLISH)+SUBNOTE_SUFFIX);
@@ -297,8 +274,7 @@ public final class RotaryDescriptions {
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < tooltabs.length; i++) {
-			HandbookRegistry h = tooltabs[i];
+		for (HandbookRegistry h : tooltabs) {
 			String desc = tools.getValueAtNode("tools:"+h.name().toLowerCase(Locale.ENGLISH));
 			Collection<String> sub = tools.getNodesWithin("tools:"+h.name().toLowerCase(Locale.ENGLISH)+SUBNOTE_SUFFIX);
 
@@ -322,41 +298,37 @@ public final class RotaryDescriptions {
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < resourcetabs.length; i++) {
-			HandbookRegistry h = resourcetabs[i];
+		for (HandbookRegistry h : resourcetabs) {
 			String desc = resources.getValueAtNode("resource:"+h.name().toLowerCase(Locale.ENGLISH));
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < misctabs.length; i++) {
-			HandbookRegistry h = misctabs[i];
+		for (HandbookRegistry h : misctabs) {
 			String desc = miscs.getValueAtNode("misc:"+h.name().toLowerCase(Locale.ENGLISH));
 			//ReikaJavaLibrary.pConsole(desc);
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < infotabs.length; i++) {
-			HandbookRegistry h = infotabs[i];
+		for (HandbookRegistry h : infotabs) {
 			String desc = infos.getValueAtNode("info:"+h.name().toLowerCase(Locale.ENGLISH));
 			desc = String.format(desc, miscData.get(h));
 			addEntry(h, desc);
 		}
 
-		for (int i = 0; i < enginetabs.length; i++) {
-			HandbookRegistry h = enginetabs[i];
+		for (HandbookRegistry h : enginetabs) {
 			String desc;
 			String aux;
 			Collection<String> sub = null;
-			if (i < EngineType.engineList.length) {
-				EngineType e = EngineType.engineList[i];
+			EngineType e = h.getEngine();
+			if (e != null) {
 				desc = engines.getValueAtNode("engines:"+e.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
 				aux = engines.getValueAtNode("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
 				sub = engines.getNodesWithin("engines:"+e.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
 
-				desc = String.format(desc, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
-				aux = String.format(aux, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
+				desc = RotaryAux.formatTorqueSpeedPowerForBook(desc, e.getTorque(), e.getSpeed(), e.getPower());
+				aux = RotaryAux.formatTorqueSpeedPowerForBook(aux, e.getTorque(), e.getSpeed(), e.getPower());
 			}
 			else {
 				desc = engines.getValueAtNode("engines:"+"solar".toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
@@ -373,14 +345,54 @@ public final class RotaryDescriptions {
 				int k = 0;
 				for (String s : sub) {
 					String val = engines.getValueAtNode(s);
-					if (k == 0 && i < EngineType.engineList.length) {
-						EngineType e = EngineType.engineList[i];
-						val = String.format(val, e.getTorque(), e.getSpeed(), e.getPowerForDisplay());
+					if (k == 0 && e != null) {
+						val = RotaryAux.formatTorqueSpeedPowerForBook(val, e.getTorque(), e.getSpeed(), e.getPower());
 					}
 					notes.put(val, h, k);
 					k++;
 					lengths.put(h, k);
 				}
+			}
+		}
+	}
+
+	private static void loadMachineTab(HandbookRegistry h, XMLInterface xml) {
+		MachineRegistry m = h.getMachine();
+		String desc = xml.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
+		String aux = xml.getValueAtNode("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
+		Collection<String> sub = machines.getNodesWithin("machines:"+m.name().toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX+SUBNOTE_SUFFIX);
+		desc = RotaryAux.formatValuesForBook(desc, machineData.get(m));
+		aux = RotaryAux.formatValuesForBook(aux, machineNotes.get(m, 0));
+
+		if (XMLInterface.NULL_VALUE.equals(desc))
+			desc = "There is no handbook data for this machine yet.";
+
+		//ReikaJavaLibrary.pConsole(m.name().toLowerCase()+":"+desc);
+
+		if (m.isDummiedOut()) {
+			desc += "\nThis machine is currently unavailable.";
+			if (m.getModDependency() != null && !m.getModDependency().isLoaded())
+				desc += "\nThis machine depends on another mod.";
+			aux += "\nNote: Dummied Out";
+		}
+		if (m.hasPrerequisite()) {
+			aux += "\nDependencies: "+m.getPrerequisite();
+		}
+		if (m.isIncomplete()) {
+			desc += "\nThis machine is incomplete. Use at your own risk.";
+		}
+
+		addEntry(h, desc);
+		notes.put(aux, h, 0);
+
+		if (sub != null) {
+			int k = 0;
+			for (String s : sub) {
+				String val = xml.getValueAtNode(s);
+				val = RotaryAux.formatValuesForBook(val, machineNotes.get(m, k));
+				notes.put(val, h, k);
+				k++;
+				lengths.put(h, k);
 			}
 		}
 	}
@@ -411,6 +423,7 @@ public final class RotaryDescriptions {
 	public static class ReloadListener {
 
 		@SubscribeEvent
+		@SideOnly(Side.CLIENT)
 		public void reload(ResourceReloadEvent evt) {
 			RotaryDescriptions.reload();
 		}
@@ -449,6 +462,12 @@ public final class RotaryDescriptions {
 				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Sgold),
 				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Sgold),
 
+				RotaryAux.tungstenDensity,
+				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Ttungsten),
+				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Ttungsten),
+				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Stungsten),
+				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Stungsten),
+
 				ReikaEngLibrary.rhodiamond,
 				ReikaMathLibrary.getThousandBase(ReikaEngLibrary.Tdiamond),
 				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Tdiamond),
@@ -456,8 +475,8 @@ public final class RotaryDescriptions {
 				ReikaEngLibrary.getSIPrefix(ReikaEngLibrary.Sdiamond)
 				);
 
-		addData(HandbookRegistry.SHAFTS, MaterialRegistry.getAllLimitLoads());
-		addData(HandbookRegistry.FLYWHEELS, Flywheels.WOOD.maxSpeed, Flywheels.STONE.maxSpeed, Flywheels.IRON.maxSpeed, Flywheels.GOLD.maxSpeed);
+		addData(HandbookRegistry.SHAFTS, MaterialRegistry.getAllLimitLoadsAsInts());
+		addData(HandbookRegistry.FLYWHEELS, Flywheels.getLimitsForDisplay());
 
 		addData(HandbookRegistry.MODINTERFACE,
 				ReikaMathLibrary.getThousandBase(ReikaRFHelper.getWattsPerRF()),
@@ -479,6 +498,8 @@ public final class RotaryDescriptions {
 				sb.append(", ");
 		}
 		addData(HandbookRegistry.ENCHANTING, sb.toString());
+
+		addData(HandbookRegistry.BEARINGS, (int)(TileEntityGearbox.BEARINGREDUCTION*100)+"%", (int)(TileEntityGearbox.BEARINGINCREASE*100)+"%");
 
 		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER*10, TileEntityBorer.OBSIDIANTORQUE);
 		addData(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER);
@@ -527,7 +548,7 @@ public final class RotaryDescriptions {
 		addNotes(MachineRegistry.SONICWEAPON, PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), TileEntitySonicWeapon.FALLOFF, TileEntitySonicWeapon.EYEDAMAGE/fudge, TileEntitySonicWeapon.BRAINDAMAGE/fudge, TileEntitySonicWeapon.LUNGDAMAGE/fudge, TileEntitySonicWeapon.LETHALVOLUME/fudge);
 		addNotes(MachineRegistry.FORCEFIELD, PowerReceivers.FORCEFIELD.getMinPower(), PowerReceivers.FORCEFIELD.getMinPower(), TileEntityForceField.FALLOFF);
 		addNotes(MachineRegistry.MUSICBOX, TileEntityMusicBox.LOOPPOWER);
-		addNotes(MachineRegistry.MOBHARVESTER, PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower());
+		addNotes(MachineRegistry.MOBHARVESTER, PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower()*2);
 		addNotes(MachineRegistry.PROJECTOR, PowerReceivers.PROJECTOR.getMinPower());
 		addNotes(MachineRegistry.RAILGUN, PowerReceivers.RAILGUN.getMinPower());
 		addNotes(MachineRegistry.WEATHERCONTROLLER, PowerReceivers.WEATHERCONTROLLER.getMinPower());

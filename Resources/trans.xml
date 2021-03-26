@@ -35,7 +35,7 @@
 		The dynamometer will display its input torque, speed, and power while outputting them to the other side.
 	</dyna>
 	<flywheel>
-		Flywheels store rotational kinetic energy. They take some time to spin up to the input speed, but when they do, they keep spinning for some time, providing a more steady power output to a machine than a shaft hooked up to a varying input. Heavier materials make better, more efficient - and more powerful - flywheels, but take more torque to start moving. Spinning one of these too rapidly will result in a violent and destructive failure. Flywheel deceleration is based on the torque requirement of what they are running. Unconnected, they spin forever.
+		Flywheels store rotational kinetic energy. They take some time to spin up to the input speed, but when they do, they keep spinning for some time, providing a more steady power output to a machine than a shaft hooked up to a varying input, as well as sustaining power longer than a raw engine supply would. Heavier materials make better, more efficient - and more powerful - flywheels, but take more torque to start moving. Spinning one of these too rapidly will result in a violent and destructive failure. Flywheel deceleration is based on the torque requirement of what they are running; Unconnected, they spin forever.
 	</flywheel>
 	<worm>
 		The worm gear is a fast way to increase shaft torque without using a large number of intermediate gears, creating an equivalent %d:1 ratio with comparatively low material or space requirements. However, worm gears are inefficient and will lose some of their power, leading to a much slower output speed. This loss rate goes up as the input speed does.
@@ -92,4 +92,7 @@
 	<chain>
 		The chain drive is a more advanced version of the belt hub. It can take twice as much torque, at up to 65536 rad/s before it fails. It is also impervious to rain.
 	</chain>
+	<distribclutch>
+			The distribution clutch can take input power and distribute a specified quantity of the torque to either perpendicular direction, with the remainder being sent to the opposite side. This, combined with independently toggleable sides allows for the creation of a highly dynamic power distribution system, where selected amounts of power can be "tapped off" to a given output without starving machines "downstream" of the junction. It can be controlled in one of four modes: with GUI, redstone, bundled redstone, or computers.
+	</distribclutch>
 </trans>

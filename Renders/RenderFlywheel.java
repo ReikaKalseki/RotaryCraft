@@ -1,18 +1,20 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
+import java.util.Locale;
 
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -20,6 +22,7 @@ import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Models.Animated.ModelFlywheel;
+import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 
 public class RenderFlywheel extends RotaryTERenderer
@@ -27,11 +30,15 @@ public class RenderFlywheel extends RotaryTERenderer
 
 	private ModelFlywheel FlywheelModel = new ModelFlywheel();
 
-	private int controlInt = 0;
+	private static String getFlywheelTextureName(Flywheels f) {
+		return f.name().toLowerCase(Locale.ENGLISH)+".png";
+	}
 
-	/**
-	 * Renders the TileEntity for the position.
-	 */
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/Flywheel/";
+	}
+
 	public void renderTileEntityFlywheelAt(TileEntityFlywheel tile, double par2, double par4, double par6, float par8)
 	{
 		int var9;
@@ -43,39 +50,7 @@ public class RenderFlywheel extends RotaryTERenderer
 
 		ModelFlywheel var14;
 		var14 = FlywheelModel;
-		if (tile.isInWorld())
-		{
-			switch(tile.getBlockMetadata()/4) {
-			case 0:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex.png");
-				break;
-			case 1:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex2.png");
-				break;
-			case 2:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex3.png");
-				break;
-			case 3:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex4.png");
-				break;
-			}
-		}
-		else {
-			switch(controlInt) {
-			case 0:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex.png");
-				break;
-			case 1:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex2.png");
-				break;
-			case 2:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex3.png");
-				break;
-			case 3:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/flywheeltex4.png");
-				break;
-			}
-		}
+		this.bindTextureByName(this.getTextureFolder()+this.getFlywheelTextureName(tile.getTypeOrdinal()));
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -85,18 +60,18 @@ public class RenderFlywheel extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()%4) {
-			case 0:
-				var11 = 180;
-				break;
-			case 1:
-				var11 = 0;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 180;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
@@ -114,13 +89,7 @@ public class RenderFlywheel extends RotaryTERenderer
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
-	{
-		if (par8 < -100) {
-			controlInt = (int)-par8/1000;
-			par8 = 0;
-		}
-		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.controlInt));
+	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8) {
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityFlywheelAt((TileEntityFlywheel)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
@@ -130,31 +99,6 @@ public class RenderFlywheel extends RotaryTERenderer
 	@Override
 	public String getImageFileName(RenderFetcher te) {
 		TileEntityFlywheel tile = (TileEntityFlywheel)te;
-		if (tile.isInWorld())
-		{
-			switch(tile.getBlockMetadata()/4) {
-			case 0:
-				return "flywheeltex.png";
-			case 1:
-				return "flywheeltex2.png";
-			case 2:
-				return "flywheeltex3.png";
-			case 3:
-				return "flywheeltex4.png";
-			}
-		}
-		else {
-			switch(controlInt) {
-			case 0:
-				return "flywheeltex.png";
-			case 1:
-				return "flywheeltex2.png";
-			case 2:
-				return "flywheeltex3.png";
-			case 3:
-				return "flywheeltex4.png";
-			}
-		}
-		return "flywheeltex.png";
+		return this.getFlywheelTextureName(tile.getTypeOrdinal());
 	}
 }

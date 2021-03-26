@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,10 +16,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.API.Power.PowerTracker;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -48,6 +50,9 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	private int overloadTick = 0;
 
 	private int pow2;
+
+	public int torqueOut1;
+	public int torqueOut2;
 
 	public int getRatioFromMode() {
 		return splitmode;
@@ -194,6 +199,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		//ReikaWorldHelper.legacySetBlockWithNotify(this.worldObj, this.readx, this.yCoord, this.readz, 20);
 	}
 
+	@Override
 	protected void readFromCross(TileEntityShaft cross) {
 		if (cross.isWritingTo(this)) {
 			omega = cross.readomega[0];
@@ -275,8 +281,8 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						else
 							torquein = omegain = 0;
 					}
-					if (m == MachineRegistry.POWERBUS) {
-						TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+					if (te instanceof ComplexIO) {
+						ComplexIO pwr = (ComplexIO)te;
 						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 						omegain = pwr.getSpeedToSide(dir);
 						torquein = pwr.getTorqueToSide(dir);
@@ -336,7 +342,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						else
 							torquein2 = omegain2 = 0;
 					}
-					if (m2 == MachineRegistry.POWERBUS) {
+					if (te2 instanceof ComplexIO) {
 						TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
 						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 						omegain2 = pwr.getSpeedToSide(dir);
@@ -473,7 +479,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 						torque = omega = 0;
 				}
 
-				if (m == MachineRegistry.POWERBUS) {
+				if (te instanceof ComplexIO) {
 					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
 					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 					omega = pwr.getSpeedToSide(dir);
@@ -586,6 +592,9 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 		}
 		this.writeToPowerReceiver(write, omega, t1);
 		this.writeToPowerReceiver(write2, omega, t2);
+
+		torqueOut1 = t1;
+		torqueOut2 = t2;
 	}
 
 	@Override
@@ -799,6 +808,22 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 
 	public void setBedrock() {
 		bedrock = true;
+	}
+
+	public int getInputTorque1() {
+		return torquein;
+	}
+
+	public int getInputTorque2() {
+		return torquein2;
+	}
+
+	public int getInputSpeed1() {
+		return omegain;
+	}
+
+	public int getInputSpeed2() {
+		return omegain2;
 	}
 
 	@Override

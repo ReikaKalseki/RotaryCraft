@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Containers.Machine.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ContainerIOMachine;
@@ -29,15 +30,14 @@ public class ContainerFractionator extends ContainerIOMachine
 		int posY = Fraction.yCoord;
 		int posZ = Fraction.zCoord;
 
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 0, 26, 18));
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 1, 26, 36));
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 2, 26, 54));
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 3, 44, 18));
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 4, 44, 36));
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 5, 44, 54));
+		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 0, 17, 16));
+		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 1, 17, 35));
+		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 2, 17, 54));
+		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 3, 53, 16));
+		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 4, 53, 35));
+		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 5, 53, 54));
 
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 6, 98, 36));
-		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 7, 119, 52));
+		this.addSlotToContainer(new Slot(par2TileEntityFractionator, 6, 103, 54));
 
 		this.addPlayerInventory(player);
 	}
@@ -56,9 +56,11 @@ public class ContainerFractionator extends ContainerIOMachine
 
 			//icrafting.sendProgressBarUpdate(this, 1, Fraction.getFuelLevel());
 			icrafting.sendProgressBarUpdate(this, 2, Fraction.mixTime);
+			icrafting.sendProgressBarUpdate(this, 3, Fraction.getPressure());
 		}
 
-		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Fraction, "tank");
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Fraction, "input");
+		ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Fraction, "output");
 	}
 
 	@Override
@@ -66,7 +68,12 @@ public class ContainerFractionator extends ContainerIOMachine
 	{
 		switch(par1) {
 			//case 1: Fraction.setFuelLevel(par2); break;
-			case 2: Fraction.mixTime = par2; break;
+			case 2: Fraction.mixTime = par2;
+			break;
+			case 3:
+				Fraction.addPressure(-Fraction.getPressure());
+				Fraction.addPressure(par2);
+				break;
 		}
 	}
 }

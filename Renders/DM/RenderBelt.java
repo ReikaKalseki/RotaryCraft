@@ -1,13 +1,16 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
@@ -15,9 +18,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -31,6 +31,11 @@ public class RenderBelt extends RotaryTERenderer
 {
 
 	private ModelBelt BeltModel = new ModelBelt();
+
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/";
+	}
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -47,7 +52,7 @@ public class RenderBelt extends RotaryTERenderer
 		ModelBelt var14;
 
 		var14 = BeltModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/belttex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/belttex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -60,24 +65,24 @@ public class RenderBelt extends RotaryTERenderer
 		if (tile.isInWorld()) {
 			int meta = tile.getBlockMetadata()%6;
 			switch(meta) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
-			case 4:
-				var11 = 270;
-				break;
-			case 5:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
+				case 4:
+					var11 = 270;
+					break;
+				case 5:
+					var11 = 90;
+					break;
 			}
 
 			if (meta <= 3)
@@ -104,7 +109,7 @@ public class RenderBelt extends RotaryTERenderer
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityBeltAt((TileEntityBeltHub)tile, par2, par4, par6, par8);
-		if (((TileEntityBeltHub)tile).shouldRenderBelt()) {
+		if (((TileEntityBeltHub)tile).hasValidConnection()) {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			//this.drawBelt((TileEntityBeltHub)tile, par2, par4, par6, par8);
 			this.drawBelt2((TileEntityBeltHub)tile, par2, par4, par6, par8);
@@ -135,51 +140,51 @@ public class RenderBelt extends RotaryTERenderer
 		double dz = -0.5;
 
 		switch(dir) {
-		case WEST:
-			if (vertical) {
-				rx = 90;
-			}
-			ry = 180;
-			break;
-		case EAST:
-			if (vertical) {
-				rx = 90;
-			}
-			break;
-		case NORTH:
-			if (vertical) {
-				rz = 90;
-				rx = -90;
-			}
-			else
-				ry = 90;
-			break;
-		case SOUTH:
-			if (vertical) {
-				rz = 90;
-				rx = 90;
-			}
-			else
-				ry = -90;
-			break;
-		case UP:
-			if (meta == 0 || meta == 1) {
-				ry = 90;
-				rz = 90;
-			}
-			else
-				rz = 90;
-			break;
-		case DOWN:
-			if (meta == 0 || meta == 1) {
-				ry = 90;
-				rz = -90;
-			}
-			else
-				rz = -90;
-			break;
-		default:
-			break;
+			case WEST:
+				if (vertical) {
+					rx = 90;
+				}
+				ry = 180;
+				break;
+			case EAST:
+				if (vertical) {
+					rx = 90;
+				}
+				break;
+			case NORTH:
+				if (vertical) {
+					rz = 90;
+					rx = -90;
+				}
+				else
+					ry = 90;
+				break;
+			case SOUTH:
+				if (vertical) {
+					rz = 90;
+					rx = 90;
+				}
+				else
+					ry = -90;
+				break;
+			case UP:
+				if (meta == 0 || meta == 1) {
+					ry = 90;
+					rz = 90;
+				}
+				else
+					rz = 90;
+				break;
+			case DOWN:
+				if (meta == 0 || meta == 1) {
+					ry = 90;
+					rz = -90;
+				}
+				else
+					rz = -90;
+				break;
+			default:
+				break;
 		}
 
 		GL11.glTranslated(0.5, 0.5, 0.5);
@@ -258,153 +263,153 @@ public class RenderBelt extends RotaryTERenderer
 		v5.addVertexWithUV(0.125, 0.375, 0.625, u, dv);
 
 		switch(dir) {
-		case EAST:
-			if (meta == 2 || meta == 3) {
-				v5.addVertexWithUV(0.375, 0.875, 0.375, u, v);
-				v5.addVertexWithUV(0.625+dist, 0.875, 0.375, du, v);
-				v5.addVertexWithUV(0.625+dist, 0.875, 0.625, du, dv);
-				v5.addVertexWithUV(0.375, 0.875, 0.625, u, dv);
+			case EAST:
+				if (meta == 2 || meta == 3) {
+					v5.addVertexWithUV(0.375, 0.875, 0.375, u, v);
+					v5.addVertexWithUV(0.625+dist, 0.875, 0.375, du, v);
+					v5.addVertexWithUV(0.625+dist, 0.875, 0.625, du, dv);
+					v5.addVertexWithUV(0.375, 0.875, 0.625, u, dv);
 
-				v5.addVertexWithUV(0.375, 0.125, 0.375, u, v);
-				v5.addVertexWithUV(0.625+dist, 0.125, 0.375, du, v);
-				v5.addVertexWithUV(0.625+dist, 0.125, 0.625, du, dv);
-				v5.addVertexWithUV(0.375, 0.125, 0.625, u, dv);
-			}
+					v5.addVertexWithUV(0.375, 0.125, 0.375, u, v);
+					v5.addVertexWithUV(0.625+dist, 0.125, 0.375, du, v);
+					v5.addVertexWithUV(0.625+dist, 0.125, 0.625, du, dv);
+					v5.addVertexWithUV(0.375, 0.125, 0.625, u, dv);
+				}
 
-			if (vertical) {
-				v5.addVertexWithUV(0.375, 0.375, 0.875, u, v);
-				v5.addVertexWithUV(0.625+dist, 0.375, 0.875, du, v);
-				v5.addVertexWithUV(0.625+dist, 0.625, 0.875, du, dv);
-				v5.addVertexWithUV(0.375, 0.625, 0.875, u, dv);
+				if (vertical) {
+					v5.addVertexWithUV(0.375, 0.375, 0.875, u, v);
+					v5.addVertexWithUV(0.625+dist, 0.375, 0.875, du, v);
+					v5.addVertexWithUV(0.625+dist, 0.625, 0.875, du, dv);
+					v5.addVertexWithUV(0.375, 0.625, 0.875, u, dv);
 
-				v5.addVertexWithUV(0.375, 0.375, 0.125, u, v);
-				v5.addVertexWithUV(0.625+dist, 0.375, 0.125, du, v);
-				v5.addVertexWithUV(0.625+dist, 0.625, 0.125, du, dv);
-				v5.addVertexWithUV(0.375, 0.625, 0.125, u, dv);
-			}
-			break;
-		case WEST:
-			if (meta == 2 || meta == 3) {
-				v5.addVertexWithUV(0.375-dist, 0.875, 0.375, u, v);
-				v5.addVertexWithUV(0.625, 0.875, 0.375, du, v);
-				v5.addVertexWithUV(0.625, 0.875, 0.625, du, dv);
-				v5.addVertexWithUV(0.375-dist, 0.875, 0.625, u, dv);
+					v5.addVertexWithUV(0.375, 0.375, 0.125, u, v);
+					v5.addVertexWithUV(0.625+dist, 0.375, 0.125, du, v);
+					v5.addVertexWithUV(0.625+dist, 0.625, 0.125, du, dv);
+					v5.addVertexWithUV(0.375, 0.625, 0.125, u, dv);
+				}
+				break;
+			case WEST:
+				if (meta == 2 || meta == 3) {
+					v5.addVertexWithUV(0.375-dist, 0.875, 0.375, u, v);
+					v5.addVertexWithUV(0.625, 0.875, 0.375, du, v);
+					v5.addVertexWithUV(0.625, 0.875, 0.625, du, dv);
+					v5.addVertexWithUV(0.375-dist, 0.875, 0.625, u, dv);
 
-				v5.addVertexWithUV(0.375-dist, 0.125, 0.375, u, v);
-				v5.addVertexWithUV(0.625, 0.125, 0.375, du, v);
-				v5.addVertexWithUV(0.625, 0.125, 0.625, du, dv);
-				v5.addVertexWithUV(0.375-dist, 0.125, 0.625, u, dv);
-			}
-			if (vertical) {
-				v5.addVertexWithUV(0.375-dist, 0.375, 0.875, u, v);
-				v5.addVertexWithUV(0.625, 0.375, 0.875, du, v);
-				v5.addVertexWithUV(0.625, 0.625, 0.875, du, dv);
-				v5.addVertexWithUV(0.375-dist, 0.625, 0.875, u, dv);
+					v5.addVertexWithUV(0.375-dist, 0.125, 0.375, u, v);
+					v5.addVertexWithUV(0.625, 0.125, 0.375, du, v);
+					v5.addVertexWithUV(0.625, 0.125, 0.625, du, dv);
+					v5.addVertexWithUV(0.375-dist, 0.125, 0.625, u, dv);
+				}
+				if (vertical) {
+					v5.addVertexWithUV(0.375-dist, 0.375, 0.875, u, v);
+					v5.addVertexWithUV(0.625, 0.375, 0.875, du, v);
+					v5.addVertexWithUV(0.625, 0.625, 0.875, du, dv);
+					v5.addVertexWithUV(0.375-dist, 0.625, 0.875, u, dv);
 
-				v5.addVertexWithUV(0.375-dist, 0.375, 0.125, u, v);
-				v5.addVertexWithUV(0.625, 0.375, 0.125, du, v);
-				v5.addVertexWithUV(0.625, 0.625, 0.125, du, dv);
-				v5.addVertexWithUV(0.375-dist, 0.625, 0.125, u, dv);
-			}
-			break;
-		case NORTH:
-			if (meta == 0 || meta == 1) {
-				v5.addVertexWithUV(0.375, 0.875, 0.375-dist, u, v);
-				v5.addVertexWithUV(0.625, 0.875, 0.375-dist, du, v);
-				v5.addVertexWithUV(0.625, 0.875, 0.625, du, dv);
-				v5.addVertexWithUV(0.375, 0.875, 0.625, u, dv);
+					v5.addVertexWithUV(0.375-dist, 0.375, 0.125, u, v);
+					v5.addVertexWithUV(0.625, 0.375, 0.125, du, v);
+					v5.addVertexWithUV(0.625, 0.625, 0.125, du, dv);
+					v5.addVertexWithUV(0.375-dist, 0.625, 0.125, u, dv);
+				}
+				break;
+			case NORTH:
+				if (meta == 0 || meta == 1) {
+					v5.addVertexWithUV(0.375, 0.875, 0.375-dist, u, v);
+					v5.addVertexWithUV(0.625, 0.875, 0.375-dist, du, v);
+					v5.addVertexWithUV(0.625, 0.875, 0.625, du, dv);
+					v5.addVertexWithUV(0.375, 0.875, 0.625, u, dv);
 
-				v5.addVertexWithUV(0.375, 0.125, 0.375-dist, u, v);
-				v5.addVertexWithUV(0.625, 0.125, 0.375-dist, du, v);
-				v5.addVertexWithUV(0.625, 0.125, 0.625, du, dv);
-				v5.addVertexWithUV(0.375, 0.125, 0.625, u, dv);
-			}
-			if (vertical) {
-				v5.addVertexWithUV(0.875, 0.375, 0.375, u, v);
-				v5.addVertexWithUV(0.875, 0.375, 0.625-dist, du, v);
-				v5.addVertexWithUV(0.875, 0.625, 0.625-dist, du, dv);
-				v5.addVertexWithUV(0.875, 0.625, 0.375, u, dv);
+					v5.addVertexWithUV(0.375, 0.125, 0.375-dist, u, v);
+					v5.addVertexWithUV(0.625, 0.125, 0.375-dist, du, v);
+					v5.addVertexWithUV(0.625, 0.125, 0.625, du, dv);
+					v5.addVertexWithUV(0.375, 0.125, 0.625, u, dv);
+				}
+				if (vertical) {
+					v5.addVertexWithUV(0.875, 0.375, 0.375, u, v);
+					v5.addVertexWithUV(0.875, 0.375, 0.625-dist, du, v);
+					v5.addVertexWithUV(0.875, 0.625, 0.625-dist, du, dv);
+					v5.addVertexWithUV(0.875, 0.625, 0.375, u, dv);
 
-				v5.addVertexWithUV(0.125, 0.375, 0.375, u, v);
-				v5.addVertexWithUV(0.125, 0.375, 0.625-dist, du, v);
-				v5.addVertexWithUV(0.125, 0.625, 0.625-dist, du, dv);
-				v5.addVertexWithUV(0.125, 0.625, 0.375, u, dv);
-			}
-			break;
-		case SOUTH:
-			if (meta == 0 || meta == 1) {
-				v5.addVertexWithUV(0.375, 0.875, 0.375+dist, u, v);
-				v5.addVertexWithUV(0.625, 0.875, 0.375+dist, du, v);
-				v5.addVertexWithUV(0.625, 0.875, 0.625, du, dv);
-				v5.addVertexWithUV(0.375, 0.875, 0.625, u, dv);
+					v5.addVertexWithUV(0.125, 0.375, 0.375, u, v);
+					v5.addVertexWithUV(0.125, 0.375, 0.625-dist, du, v);
+					v5.addVertexWithUV(0.125, 0.625, 0.625-dist, du, dv);
+					v5.addVertexWithUV(0.125, 0.625, 0.375, u, dv);
+				}
+				break;
+			case SOUTH:
+				if (meta == 0 || meta == 1) {
+					v5.addVertexWithUV(0.375, 0.875, 0.375+dist, u, v);
+					v5.addVertexWithUV(0.625, 0.875, 0.375+dist, du, v);
+					v5.addVertexWithUV(0.625, 0.875, 0.625, du, dv);
+					v5.addVertexWithUV(0.375, 0.875, 0.625, u, dv);
 
-				v5.addVertexWithUV(0.375, 0.125, 0.375+dist, u, v);
-				v5.addVertexWithUV(0.625, 0.125, 0.375+dist, du, v);
-				v5.addVertexWithUV(0.625, 0.125, 0.625, du, dv);
-				v5.addVertexWithUV(0.375, 0.125, 0.625, u, dv);
-			}
-			if (vertical) {
-				v5.addVertexWithUV(0.875, 0.375, 0.375+dist, u, v);
-				v5.addVertexWithUV(0.875, 0.375, 0.625, du, v);
-				v5.addVertexWithUV(0.875, 0.625, 0.625, du, dv);
-				v5.addVertexWithUV(0.875, 0.625, 0.375+dist, u, dv);
+					v5.addVertexWithUV(0.375, 0.125, 0.375+dist, u, v);
+					v5.addVertexWithUV(0.625, 0.125, 0.375+dist, du, v);
+					v5.addVertexWithUV(0.625, 0.125, 0.625, du, dv);
+					v5.addVertexWithUV(0.375, 0.125, 0.625, u, dv);
+				}
+				if (vertical) {
+					v5.addVertexWithUV(0.875, 0.375, 0.375+dist, u, v);
+					v5.addVertexWithUV(0.875, 0.375, 0.625, du, v);
+					v5.addVertexWithUV(0.875, 0.625, 0.625, du, dv);
+					v5.addVertexWithUV(0.875, 0.625, 0.375+dist, u, dv);
 
-				v5.addVertexWithUV(0.125, 0.375, 0.375+dist, u, v);
-				v5.addVertexWithUV(0.125, 0.375, 0.625, du, v);
-				v5.addVertexWithUV(0.125, 0.625, 0.625, du, dv);
-				v5.addVertexWithUV(0.125, 0.625, 0.375+dist, u, dv);
-			}
-			break;
-		case UP:
-			if (meta == 0 || meta == 1) {
-				v5.addVertexWithUV(0.375, 0.375, 0.125, u, v);
-				v5.addVertexWithUV(0.375, 0.625+dist, 0.125, du, v);
-				v5.addVertexWithUV(0.625, 0.625+dist, 0.125, du, dv);
-				v5.addVertexWithUV(0.625, 0.375, 0.125, u, dv);
+					v5.addVertexWithUV(0.125, 0.375, 0.375+dist, u, v);
+					v5.addVertexWithUV(0.125, 0.375, 0.625, du, v);
+					v5.addVertexWithUV(0.125, 0.625, 0.625, du, dv);
+					v5.addVertexWithUV(0.125, 0.625, 0.375+dist, u, dv);
+				}
+				break;
+			case UP:
+				if (meta == 0 || meta == 1) {
+					v5.addVertexWithUV(0.375, 0.375, 0.125, u, v);
+					v5.addVertexWithUV(0.375, 0.625+dist, 0.125, du, v);
+					v5.addVertexWithUV(0.625, 0.625+dist, 0.125, du, dv);
+					v5.addVertexWithUV(0.625, 0.375, 0.125, u, dv);
 
-				v5.addVertexWithUV(0.375, 0.375, 0.875, u, v);
-				v5.addVertexWithUV(0.375, 0.625+dist, 0.875, du, v);
-				v5.addVertexWithUV(0.625, 0.625+dist, 0.875, du, dv);
-				v5.addVertexWithUV(0.625, 0.375, 0.875, u, dv);
-			}
-			if (meta == 2 || meta == 3) {
-				v5.addVertexWithUV(0.125, 0.375, 0.375, u, v);
-				v5.addVertexWithUV(0.125, 0.625+dist, 0.375, du, v);
-				v5.addVertexWithUV(0.125, 0.625+dist, 0.625, du, dv);
-				v5.addVertexWithUV(0.125, 0.375, 0.625, u, dv);
+					v5.addVertexWithUV(0.375, 0.375, 0.875, u, v);
+					v5.addVertexWithUV(0.375, 0.625+dist, 0.875, du, v);
+					v5.addVertexWithUV(0.625, 0.625+dist, 0.875, du, dv);
+					v5.addVertexWithUV(0.625, 0.375, 0.875, u, dv);
+				}
+				if (meta == 2 || meta == 3) {
+					v5.addVertexWithUV(0.125, 0.375, 0.375, u, v);
+					v5.addVertexWithUV(0.125, 0.625+dist, 0.375, du, v);
+					v5.addVertexWithUV(0.125, 0.625+dist, 0.625, du, dv);
+					v5.addVertexWithUV(0.125, 0.375, 0.625, u, dv);
 
-				v5.addVertexWithUV(0.875, 0.375, 0.375, u, v);
-				v5.addVertexWithUV(0.875, 0.625+dist, 0.375, du, v);
-				v5.addVertexWithUV(0.875, 0.625+dist, 0.625, du, dv);
-				v5.addVertexWithUV(0.875, 0.375, 0.625, u, dv);
-			}
-			break;
-		case DOWN:
-			if (meta == 0 || meta == 1) {
-				v5.addVertexWithUV(0.375, 0.375-dist, 0.125, u, v);
-				v5.addVertexWithUV(0.375, 0.625, 0.125, du, v);
-				v5.addVertexWithUV(0.625, 0.625, 0.125, du, dv);
-				v5.addVertexWithUV(0.625, 0.375-dist, 0.125, u, dv);
+					v5.addVertexWithUV(0.875, 0.375, 0.375, u, v);
+					v5.addVertexWithUV(0.875, 0.625+dist, 0.375, du, v);
+					v5.addVertexWithUV(0.875, 0.625+dist, 0.625, du, dv);
+					v5.addVertexWithUV(0.875, 0.375, 0.625, u, dv);
+				}
+				break;
+			case DOWN:
+				if (meta == 0 || meta == 1) {
+					v5.addVertexWithUV(0.375, 0.375-dist, 0.125, u, v);
+					v5.addVertexWithUV(0.375, 0.625, 0.125, du, v);
+					v5.addVertexWithUV(0.625, 0.625, 0.125, du, dv);
+					v5.addVertexWithUV(0.625, 0.375-dist, 0.125, u, dv);
 
-				v5.addVertexWithUV(0.375, 0.375-dist, 0.875, u, v);
-				v5.addVertexWithUV(0.375, 0.625, 0.875, du, v);
-				v5.addVertexWithUV(0.625, 0.625, 0.875, du, dv);
-				v5.addVertexWithUV(0.625, 0.375-dist, 0.875, u, dv);
-			}
-			if (meta == 2 || meta == 3) {
-				v5.addVertexWithUV(0.125, 0.375-dist, 0.375, u, v);
-				v5.addVertexWithUV(0.125, 0.625, 0.375, du, v);
-				v5.addVertexWithUV(0.125, 0.625, 0.625, du, dv);
-				v5.addVertexWithUV(0.125, 0.375-dist, 0.625, u, dv);
+					v5.addVertexWithUV(0.375, 0.375-dist, 0.875, u, v);
+					v5.addVertexWithUV(0.375, 0.625, 0.875, du, v);
+					v5.addVertexWithUV(0.625, 0.625, 0.875, du, dv);
+					v5.addVertexWithUV(0.625, 0.375-dist, 0.875, u, dv);
+				}
+				if (meta == 2 || meta == 3) {
+					v5.addVertexWithUV(0.125, 0.375-dist, 0.375, u, v);
+					v5.addVertexWithUV(0.125, 0.625, 0.375, du, v);
+					v5.addVertexWithUV(0.125, 0.625, 0.625, du, dv);
+					v5.addVertexWithUV(0.125, 0.375-dist, 0.625, u, dv);
 
-				v5.addVertexWithUV(0.875, 0.375-dist, 0.375, u, v);
-				v5.addVertexWithUV(0.875, 0.625, 0.375, du, v);
-				v5.addVertexWithUV(0.875, 0.625, 0.625, du, dv);
-				v5.addVertexWithUV(0.875, 0.375-dist, 0.625, u, dv);
-			}
-			break;
-		default:
-			break;
+					v5.addVertexWithUV(0.875, 0.375-dist, 0.375, u, v);
+					v5.addVertexWithUV(0.875, 0.625, 0.375, du, v);
+					v5.addVertexWithUV(0.875, 0.625, 0.625, du, dv);
+					v5.addVertexWithUV(0.875, 0.375-dist, 0.625, u, dv);
+				}
+				break;
+			default:
+				break;
 		}
 
 		v5.draw();
@@ -569,153 +574,153 @@ public class RenderBelt extends RotaryTERenderer
 		}
 
 		switch(dir) {
-		case EAST:
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.375, 0.875, 0.375);
-				v5.addVertex(0.625+dist, 0.875, 0.375);
-				v5.addVertex(0.625+dist, 0.875, 0.625);
-				v5.addVertex(0.375, 0.875, 0.625);
+			case EAST:
+				if (meta == 2 || meta == 3) {
+					v5.addVertex(0.375, 0.875, 0.375);
+					v5.addVertex(0.625+dist, 0.875, 0.375);
+					v5.addVertex(0.625+dist, 0.875, 0.625);
+					v5.addVertex(0.375, 0.875, 0.625);
 
-				v5.addVertex(0.375, 0.125, 0.375);
-				v5.addVertex(0.625+dist, 0.125, 0.375);
-				v5.addVertex(0.625+dist, 0.125, 0.625);
-				v5.addVertex(0.375, 0.125, 0.625);
-			}
+					v5.addVertex(0.375, 0.125, 0.375);
+					v5.addVertex(0.625+dist, 0.125, 0.375);
+					v5.addVertex(0.625+dist, 0.125, 0.625);
+					v5.addVertex(0.375, 0.125, 0.625);
+				}
 
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.375, 0.375, 0.875);
-				v5.addVertex(0.625+dist, 0.375, 0.875);
-				v5.addVertex(0.625+dist, 0.625, 0.875);
-				v5.addVertex(0.375, 0.625, 0.875);
+				if (meta == 4 || meta == 5) {
+					v5.addVertex(0.375, 0.375, 0.875);
+					v5.addVertex(0.625+dist, 0.375, 0.875);
+					v5.addVertex(0.625+dist, 0.625, 0.875);
+					v5.addVertex(0.375, 0.625, 0.875);
 
-				v5.addVertex(0.375, 0.375, 0.125);
-				v5.addVertex(0.625+dist, 0.375, 0.125);
-				v5.addVertex(0.625+dist, 0.625, 0.125);
-				v5.addVertex(0.375, 0.625, 0.125);
-			}
-			break;
-		case WEST:
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.375-dist, 0.875, 0.375);
-				v5.addVertex(0.625, 0.875, 0.375);
-				v5.addVertex(0.625, 0.875, 0.625);
-				v5.addVertex(0.375-dist, 0.875, 0.625);
+					v5.addVertex(0.375, 0.375, 0.125);
+					v5.addVertex(0.625+dist, 0.375, 0.125);
+					v5.addVertex(0.625+dist, 0.625, 0.125);
+					v5.addVertex(0.375, 0.625, 0.125);
+				}
+				break;
+			case WEST:
+				if (meta == 2 || meta == 3) {
+					v5.addVertex(0.375-dist, 0.875, 0.375);
+					v5.addVertex(0.625, 0.875, 0.375);
+					v5.addVertex(0.625, 0.875, 0.625);
+					v5.addVertex(0.375-dist, 0.875, 0.625);
 
-				v5.addVertex(0.375-dist, 0.125, 0.375);
-				v5.addVertex(0.625, 0.125, 0.375);
-				v5.addVertex(0.625, 0.125, 0.625);
-				v5.addVertex(0.375-dist, 0.125, 0.625);
-			}
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.375-dist, 0.375, 0.875);
-				v5.addVertex(0.625, 0.375, 0.875);
-				v5.addVertex(0.625, 0.625, 0.875);
-				v5.addVertex(0.375-dist, 0.625, 0.875);
+					v5.addVertex(0.375-dist, 0.125, 0.375);
+					v5.addVertex(0.625, 0.125, 0.375);
+					v5.addVertex(0.625, 0.125, 0.625);
+					v5.addVertex(0.375-dist, 0.125, 0.625);
+				}
+				if (meta == 4 || meta == 5) {
+					v5.addVertex(0.375-dist, 0.375, 0.875);
+					v5.addVertex(0.625, 0.375, 0.875);
+					v5.addVertex(0.625, 0.625, 0.875);
+					v5.addVertex(0.375-dist, 0.625, 0.875);
 
-				v5.addVertex(0.375-dist, 0.375, 0.125);
-				v5.addVertex(0.625, 0.375, 0.125);
-				v5.addVertex(0.625, 0.625, 0.125);
-				v5.addVertex(0.375-dist, 0.625, 0.125);
-			}
-			break;
-		case NORTH:
-			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.875, 0.375-dist);
-				v5.addVertex(0.625, 0.875, 0.375-dist);
-				v5.addVertex(0.625, 0.875, 0.625);
-				v5.addVertex(0.375, 0.875, 0.625);
+					v5.addVertex(0.375-dist, 0.375, 0.125);
+					v5.addVertex(0.625, 0.375, 0.125);
+					v5.addVertex(0.625, 0.625, 0.125);
+					v5.addVertex(0.375-dist, 0.625, 0.125);
+				}
+				break;
+			case NORTH:
+				if (meta == 0 || meta == 1) {
+					v5.addVertex(0.375, 0.875, 0.375-dist);
+					v5.addVertex(0.625, 0.875, 0.375-dist);
+					v5.addVertex(0.625, 0.875, 0.625);
+					v5.addVertex(0.375, 0.875, 0.625);
 
-				v5.addVertex(0.375, 0.125, 0.375-dist);
-				v5.addVertex(0.625, 0.125, 0.375-dist);
-				v5.addVertex(0.625, 0.125, 0.625);
-				v5.addVertex(0.375, 0.125, 0.625);
-			}
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.875, 0.375, 0.375);
-				v5.addVertex(0.875, 0.375, 0.625-dist);
-				v5.addVertex(0.875, 0.625, 0.625-dist);
-				v5.addVertex(0.875, 0.625, 0.375);
+					v5.addVertex(0.375, 0.125, 0.375-dist);
+					v5.addVertex(0.625, 0.125, 0.375-dist);
+					v5.addVertex(0.625, 0.125, 0.625);
+					v5.addVertex(0.375, 0.125, 0.625);
+				}
+				if (meta == 4 || meta == 5) {
+					v5.addVertex(0.875, 0.375, 0.375);
+					v5.addVertex(0.875, 0.375, 0.625-dist);
+					v5.addVertex(0.875, 0.625, 0.625-dist);
+					v5.addVertex(0.875, 0.625, 0.375);
 
-				v5.addVertex(0.125, 0.375, 0.375);
-				v5.addVertex(0.125, 0.375, 0.625-dist);
-				v5.addVertex(0.125, 0.625, 0.625-dist);
-				v5.addVertex(0.125, 0.625, 0.375);
-			}
-			break;
-		case SOUTH:
-			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.875, 0.375+dist);
-				v5.addVertex(0.625, 0.875, 0.375+dist);
-				v5.addVertex(0.625, 0.875, 0.625);
-				v5.addVertex(0.375, 0.875, 0.625);
+					v5.addVertex(0.125, 0.375, 0.375);
+					v5.addVertex(0.125, 0.375, 0.625-dist);
+					v5.addVertex(0.125, 0.625, 0.625-dist);
+					v5.addVertex(0.125, 0.625, 0.375);
+				}
+				break;
+			case SOUTH:
+				if (meta == 0 || meta == 1) {
+					v5.addVertex(0.375, 0.875, 0.375+dist);
+					v5.addVertex(0.625, 0.875, 0.375+dist);
+					v5.addVertex(0.625, 0.875, 0.625);
+					v5.addVertex(0.375, 0.875, 0.625);
 
-				v5.addVertex(0.375, 0.125, 0.375+dist);
-				v5.addVertex(0.625, 0.125, 0.375+dist);
-				v5.addVertex(0.625, 0.125, 0.625);
-				v5.addVertex(0.375, 0.125, 0.625);
-			}
-			if (meta == 4 || meta == 5) {
-				v5.addVertex(0.875, 0.375, 0.375+dist);
-				v5.addVertex(0.875, 0.375, 0.625);
-				v5.addVertex(0.875, 0.625, 0.625);
-				v5.addVertex(0.875, 0.625, 0.375+dist);
+					v5.addVertex(0.375, 0.125, 0.375+dist);
+					v5.addVertex(0.625, 0.125, 0.375+dist);
+					v5.addVertex(0.625, 0.125, 0.625);
+					v5.addVertex(0.375, 0.125, 0.625);
+				}
+				if (meta == 4 || meta == 5) {
+					v5.addVertex(0.875, 0.375, 0.375+dist);
+					v5.addVertex(0.875, 0.375, 0.625);
+					v5.addVertex(0.875, 0.625, 0.625);
+					v5.addVertex(0.875, 0.625, 0.375+dist);
 
-				v5.addVertex(0.125, 0.375, 0.375+dist);
-				v5.addVertex(0.125, 0.375, 0.625);
-				v5.addVertex(0.125, 0.625, 0.625);
-				v5.addVertex(0.125, 0.625, 0.375+dist);
-			}
-			break;
-		case UP:
-			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.375, 0.125);
-				v5.addVertex(0.375, 0.625+dist, 0.125);
-				v5.addVertex(0.625, 0.625+dist, 0.125);
-				v5.addVertex(0.625, 0.375, 0.125);
+					v5.addVertex(0.125, 0.375, 0.375+dist);
+					v5.addVertex(0.125, 0.375, 0.625);
+					v5.addVertex(0.125, 0.625, 0.625);
+					v5.addVertex(0.125, 0.625, 0.375+dist);
+				}
+				break;
+			case UP:
+				if (meta == 0 || meta == 1) {
+					v5.addVertex(0.375, 0.375, 0.125);
+					v5.addVertex(0.375, 0.625+dist, 0.125);
+					v5.addVertex(0.625, 0.625+dist, 0.125);
+					v5.addVertex(0.625, 0.375, 0.125);
 
-				v5.addVertex(0.375, 0.375, 0.875);
-				v5.addVertex(0.375, 0.625+dist, 0.875);
-				v5.addVertex(0.625, 0.625+dist, 0.875);
-				v5.addVertex(0.625, 0.375, 0.875);
-			}
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.125, 0.375, 0.375);
-				v5.addVertex(0.125, 0.625+dist, 0.375);
-				v5.addVertex(0.125, 0.625+dist, 0.625);
-				v5.addVertex(0.125, 0.375, 0.625);
+					v5.addVertex(0.375, 0.375, 0.875);
+					v5.addVertex(0.375, 0.625+dist, 0.875);
+					v5.addVertex(0.625, 0.625+dist, 0.875);
+					v5.addVertex(0.625, 0.375, 0.875);
+				}
+				if (meta == 2 || meta == 3) {
+					v5.addVertex(0.125, 0.375, 0.375);
+					v5.addVertex(0.125, 0.625+dist, 0.375);
+					v5.addVertex(0.125, 0.625+dist, 0.625);
+					v5.addVertex(0.125, 0.375, 0.625);
 
-				v5.addVertex(0.875, 0.375, 0.375);
-				v5.addVertex(0.875, 0.625+dist, 0.375);
-				v5.addVertex(0.875, 0.625+dist, 0.625);
-				v5.addVertex(0.875, 0.375, 0.625);
-			}
-			break;
-		case DOWN:
-			if (meta == 0 || meta == 1) {
-				v5.addVertex(0.375, 0.375-dist, 0.125);
-				v5.addVertex(0.375, 0.625, 0.125);
-				v5.addVertex(0.625, 0.625, 0.125);
-				v5.addVertex(0.625, 0.375-dist, 0.125);
+					v5.addVertex(0.875, 0.375, 0.375);
+					v5.addVertex(0.875, 0.625+dist, 0.375);
+					v5.addVertex(0.875, 0.625+dist, 0.625);
+					v5.addVertex(0.875, 0.375, 0.625);
+				}
+				break;
+			case DOWN:
+				if (meta == 0 || meta == 1) {
+					v5.addVertex(0.375, 0.375-dist, 0.125);
+					v5.addVertex(0.375, 0.625, 0.125);
+					v5.addVertex(0.625, 0.625, 0.125);
+					v5.addVertex(0.625, 0.375-dist, 0.125);
 
-				v5.addVertex(0.375, 0.375-dist, 0.875);
-				v5.addVertex(0.375, 0.625, 0.875);
-				v5.addVertex(0.625, 0.625, 0.875);
-				v5.addVertex(0.625, 0.375-dist, 0.875);
-			}
-			if (meta == 2 || meta == 3) {
-				v5.addVertex(0.125, 0.375-dist, 0.375);
-				v5.addVertex(0.125, 0.625, 0.375);
-				v5.addVertex(0.125, 0.625, 0.625);
-				v5.addVertex(0.125, 0.375-dist, 0.625);
+					v5.addVertex(0.375, 0.375-dist, 0.875);
+					v5.addVertex(0.375, 0.625, 0.875);
+					v5.addVertex(0.625, 0.625, 0.875);
+					v5.addVertex(0.625, 0.375-dist, 0.875);
+				}
+				if (meta == 2 || meta == 3) {
+					v5.addVertex(0.125, 0.375-dist, 0.375);
+					v5.addVertex(0.125, 0.625, 0.375);
+					v5.addVertex(0.125, 0.625, 0.625);
+					v5.addVertex(0.125, 0.375-dist, 0.625);
 
-				v5.addVertex(0.875, 0.375-dist, 0.375);
-				v5.addVertex(0.875, 0.625, 0.375);
-				v5.addVertex(0.875, 0.625, 0.625);
-				v5.addVertex(0.875, 0.375-dist, 0.625);
-			}
-			break;
-		default:
-			break;
+					v5.addVertex(0.875, 0.375-dist, 0.375);
+					v5.addVertex(0.875, 0.625, 0.375);
+					v5.addVertex(0.875, 0.625, 0.625);
+					v5.addVertex(0.875, 0.375-dist, 0.625);
+				}
+				break;
+			default:
+				break;
 		}
 
 		v5.draw();

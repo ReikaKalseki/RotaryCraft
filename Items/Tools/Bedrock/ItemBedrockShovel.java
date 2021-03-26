@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -25,6 +25,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
@@ -37,6 +38,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -56,6 +58,7 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		// this.efficiencyOnProperMaterial = par3ToolMaterial.getEfficiencyOnProperMaterial();
 		damageVsEntity = 4;
 		this.setNoRepair();
+		this.setHarvestLevel("shovel", Integer.MAX_VALUE);
 		this.setCreativeTab(RotaryCraft.instance.isLocked() ? null : RotaryCraft.tabRotaryTools);
 	}
 
@@ -178,6 +181,12 @@ public class ItemBedrockShovel extends ItemSpade implements IndexedItemSprites {
 		addDrop(Blocks.soul_sand, 0, Items.blaze_powder, 4);
 		addDrop(Blocks.soul_sand, 0, Items.nether_wart, 5);
 		addDrop(Blocks.soul_sand, 0, Items.quartz, 2);
+
+		if (ModList.MAGICBEES.isLoaded()) {
+			ItemStack is = ReikaItemHelper.lookupItem("MagicBees:miscResources:3");
+			if (is != null)
+				addDrop(Blocks.soul_sand, 0, is, 1);
+		}
 	}
 
 	private static void addDrop(Block b, int meta, Block i, float chance) {

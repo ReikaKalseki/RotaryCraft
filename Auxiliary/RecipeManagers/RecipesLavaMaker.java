@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
@@ -34,8 +35,10 @@ import Reika.GeoStrata.Registry.GeoBlocks;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.RockMelterManager;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager {
@@ -60,7 +63,8 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		this.addRecipe("stone", FluidRegistry.LAVA, 1000, 1000, 5200000, RecipeLevel.PROTECTED);
 		this.addRecipe("cobblestone", FluidRegistry.LAVA, 500, 1000, 2820000, RecipeLevel.PROTECTED);
 
-		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000, RecipeLevel.PERIPHERAL);
+		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.cleansludge, "rc ethanol", 1000, 180, 36000, RecipeLevel.CORE);
 	}
 
 	private static class MeltingRecipe implements MachineRecipe {
@@ -202,6 +206,8 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		this.addRecipe("blockEnder", "ender", 1000, 400, 240000, RecipeLevel.MODINTERACT);
 		this.addRecipe("dustCoal", "coal", 100, 300, 60000, RecipeLevel.MODINTERACT);
 
+		this.addRecipe(ItemStacks.dryice, "rc co2", 200, 0, 6000, RecipeLevel.PERIPHERAL);
+
 		if (ModList.THERMALFOUNDATION.isLoaded()) {
 			ItemStack pyro = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustPyrotheum", 1);
 			this.addRecipe(pyro, "pyrotheum", 250, 1800, 9000000, RecipeLevel.MODINTERACT);
@@ -240,7 +246,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
 		LuaBlock fluid = lb.getChild("output_fluid");
 		String s = fluid.getString("type");

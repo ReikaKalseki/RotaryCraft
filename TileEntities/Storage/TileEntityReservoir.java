@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
@@ -52,6 +53,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -493,7 +495,7 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 			return 0xffffff;
 		int clr = fs.tag != null && fs.tag.hasKey("renderColor") ? fs.tag.getInteger("renderColor") : 0xffffff;
 		if (this.isInWorld() && fs.getFluid().canBePlacedInWorld()) {
-			clr = fs.getFluid().getBlock().colorMultiplier(worldObj, xCoord*2, yCoord*2, zCoord*2);
+			clr = fs.getFluid().getBlock().colorMultiplier(worldObj, xCoord, yCoord, zCoord);
 		}
 		return clr;
 	}

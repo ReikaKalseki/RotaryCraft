@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.GUIs.Machine;
 
 import net.minecraft.entity.player.EntityPlayer;
+
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.Machine.ContainerGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -60,12 +62,8 @@ public class GuiGearbox extends GuiNonPoweredMachine
 		else
 			fontRendererObj.drawString(" Speed", 115, 36, 0x000000);
 
-		if (gbx.power < 1000)
-			fontRendererObj.drawString(String.format("%3d  W", gbx.power), 122, 48, 0x000000);
-		if (gbx.power < 1000000 && gbx.power >= 1000)
-			fontRendererObj.drawString(String.format("%.1f kW", gbx.power/1000D), 112, 48, 0x000000);
-		if (gbx.power >= 1000000)
-			fontRendererObj.drawString(String.format("%.1f MW", gbx.power/1000000D), 112, 48, 0x000000);
+		String pw = RotaryAux.formatPower(gbx.power);
+		fontRendererObj.drawString(pw, 150-fontRendererObj.getStringWidth(pw), 48, 0x000000);
 
 		if (!gbx.isLiving() && api.isMouseInBox(j+23, j+32, k+20, k+76)) {
 			int mx = api.getMouseRealX();

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,6 +31,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
 import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
@@ -45,6 +46,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IArmorApiarist;
@@ -233,15 +235,10 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 	}
 
 	public static boolean isWearingFullSuitOf(EntityLivingBase e) {
-		for (int i = 1; i < 5; i++) {
-			ItemStack is = e.getEquipmentInSlot(i);
-			if (!checkItem(is))
-				return false;
-		}
-		return true;
+		return ReikaEntityHelper.isEntityWearingFullSuitOf(e, (ItemStack is) -> isValidBedrockArmorItem(is));
 	}
 
-	private static boolean checkItem(ItemStack is) {
+	public static boolean isValidBedrockArmorItem(ItemStack is) {
 		if (is == null)
 			return false;
 		if (ModList.CHROMATICRAFT.isLoaded()) {
@@ -261,7 +258,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 		if (ChromaItems.FLOATBOOTS.matchWith(is)) {
 			ItemStack in = ItemFloatstoneBoots.getSpecialItem(is);
 			if (in != null) {
-				return checkItem(in);
+				return isValidBedrockArmorItem(in);
 			}
 		}
 		return false;

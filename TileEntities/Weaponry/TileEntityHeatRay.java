@@ -1,14 +1,15 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Weaponry;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -20,9 +21,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Interfaces.Block.SemiTransparent;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.API.Event.HeatRayNetherDetonationEvent;
 import Reika.RotaryCraft.API.Interfaces.Laserable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityBeamMachine;
@@ -35,6 +42,99 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	/** Rate of conversion - one power++ = 1/falloff ++ blocks range */
 	public static final int FALLOFF = 256;
 
+	private static final HashMap<BlockKey, LaserEffect> blockEffects = new HashMap();
+	private static final LaserEffect deletionEffect = new DeletionLaserEffect();
+	private static final LaserEffect meltEffectLava = new MeltLaserEffect(FluidRegistry.LAVA);
+	private static final LaserEffect meltEffectWater = new MeltLaserEffect(FluidRegistry.WATER);
+	private static final LaserEffect igniteEffect = new IgnitionLaserEffect();
+	private static final LaserEffect glassifyEffect = new BlockChangeLaserEffect(Blocks.glass);
+	private static final LaserEffect sandifyEffect = new BlockChangeLaserEffect(Blocks.sand);
+
+	static {
+		addBlockEffect(Blocks.tallgrass, deletionEffect);
+		addBlockEffect(Blocks.red_mushroom, deletionEffect);
+		addBlockEffect(Blocks.brown_mushroom, deletionEffect);
+		addBlockEffect(Blocks.red_flower, deletionEffect);
+		addBlockEffect(Blocks.yellow_flower, deletionEffect);
+		addBlockEffect(Blocks.wheat, deletionEffect);
+		addBlockEffect(Blocks.pumpkin_stem, deletionEffect);
+		addBlockEffect(Blocks.melon_stem, deletionEffect);
+		addBlockEffect(Blocks.potatoes, deletionEffect);
+		addBlockEffect(Blocks.carrots, deletionEffect);
+		addBlockEffect(Blocks.deadbush, deletionEffect);
+		addBlockEffect(Blocks.vine, deletionEffect);
+		addBlockEffect(Blocks.waterlily, deletionEffect);
+		addBlockEffect(Blocks.web, deletionEffect);
+		addBlockEffect(Blocks.snow_layer, deletionEffect);
+
+		addBlockEffect(Blocks.water, deletionEffect);
+		addBlockEffect(Blocks.flowing_water, deletionEffect);
+
+		addBlockEffect(Blocks.leaves, igniteEffect);
+		addBlockEffect(Blocks.leaves2, igniteEffect);
+		addBlockEffect(Blocks.log, igniteEffect);
+		addBlockEffect(Blocks.log2, igniteEffect);
+
+		addBlockEffect(Blocks.cobblestone, meltEffectLava);
+		addBlockEffect(Blocks.stone, meltEffectLava);
+		addBlockEffect(Blocks.sandstone, meltEffectLava);
+		addBlockEffect(Blocks.stonebrick, meltEffectLava);
+
+		addBlockEffect(Blocks.ice, meltEffectWater);
+		addBlockEffect(Blocks.snow, meltEffectWater);
+
+		addBlockEffect(Blocks.gravel, new BlockChangeLaserEffect(Blocks.cobblestone));
+		addBlockEffect(Blocks.mossy_cobblestone, new BlockChangeLaserEffect(Blocks.cobblestone));
+
+		addBlockEffect(Blocks.grass, new BlockChangeLaserEffect(Blocks.dirt));
+		addBlockEffect(Blocks.mycelium, new BlockChangeLaserEffect(Blocks.dirt));
+
+		addBlockEffect(Blocks.dirt, sandifyEffect);
+		addBlockEffect(Blocks.farmland, sandifyEffect);
+
+		addBlockEffect(Blocks.sand, glassifyEffect);
+
+		addBlockEffect(Blocks.tnt, new LaserEffect() {
+			@Override
+			public boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te) {
+				world.setBlockToAir(x, y, z);
+				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+0.5D, y+0.5D, z+0.5D, null);
+				if (!world.isRemote)
+					world.spawnEntityInWorld(var6);
+				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
+				world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
+				return false;
+			}
+
+			@Override
+			public int getDelayTick(Block b, int meta, long surplus, int dist) {
+				return 0;
+			}
+		});
+
+		addBlockEffect(Blocks.netherrack, new LaserEffect() {
+			@Override
+			public boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te) {
+				if (!world.isRemote) {
+					world.newExplosion(null, x+0.5, y+0.5, z+0.5, 5F, true, true);
+					MinecraftForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, x, y, z));
+					if (world.provider.dimensionId == -1 && range >= 500)
+						RotaryAchievements.NETHERHEATRAY.triggerAchievement(te.getPlacer());
+				}
+				return true;
+			}
+
+			@Override
+			public int getDelayTick(Block b, int meta, long surplus, int dist) {
+				return 6;
+			}
+		});
+	}
+
+	private static void addBlockEffect(Block b, LaserEffect e) {
+		blockEffects.put(new BlockKey(b), e);
+	}
+
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
@@ -43,184 +143,11 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		//if ((world.getTotalWorldTime()&2) == 2) //halves load
-		this.scorch(world, x, y, z, meta);
+		this.makeBeam(world, x, y, z, meta);
 	}
 
-	/* THIS CODE IS FOR WORLD RIFT SUPPORT
-
-	 	private int scorchTo(World world, int x, int y, int z, int step) {
-		boolean blocked = false;
-		int ret = step;
-		int maxdist = this.getRange();
-		if (step >= maxdist || blocked)
-			return ret;
-		//for (step = 1; step < maxdist && (step < this.getMaxRange() || this.getMaxRange() == -1) && !blocked; step++) {
-		int dx = x+facing.offsetX;
-		int dy = y+facing.offsetY;
-		int dz = z+facing.offsetZ;
-		Block id = world.getBlock(dx, dy, dz);
-		int meta2 = world.getBlockMetadata(dx, dy, dz);
-		TileEntity te = this.getTileEntity(dx, dy, dz);
-		if (te instanceof SpaceRift) {
-			SpaceRift sr = (SpaceRift)te;
-			WorldLocation loc = sr.getLinkTarget();
-			if (loc != null) {
-				ret = this.scorchTo(world, loc.xCoord+facing.offsetX, loc.yCoord+facing.offsetY, loc.zCoord+facing.offsetZ, step);
-			}
-		}
-		else {
-			if (id != Blocks.air && id.isFlammable(world, dx, dy, dz, ForgeDirection.UP))
-				this.ignite(world, dx, dy, dz, step);
-			if (this.makeBeam(world, dx, dy, dz, step, id, meta2)) {
-				blocked = true;
-				tickcount = 0;
-			}
-			if (id instanceof SemiTransparent) {
-				SemiTransparent st = (SemiTransparent)id;
-				if (st.isOpaque(meta2))
-					blocked = true;
-			}
-			else if (id.isOpaqueCube())
-				blocked = true; //break loop
-			world.markBlockForUpdate(dx, dy, dz);
-			ret = this.scorchTo(world, dx, dy, dz, step+1);
-		}
-		//}
-		return ret;
-	}
-
-	private void scorch(World world, int x, int y, int z, int metadata) {
-		if (power >= MINPOWER) { //2MW+ (real military laser)
-			//original code was here
-			int step = this.scorchTo(world, x, y, z, 1);
-			AxisAlignedBB zone = this.getBurnZone(metadata, step);
-			List inzone = worldObj.getEntitiesWithinAABB(Entity.class, zone);
-			for (int i = 0; i < inzone.size(); i++) {
-				if (inzone.get(i) instanceof Entity) {
-					Entity caught = (Entity)inzone.get(i);
-					if (!(caught instanceof EntityItem)) //Do not burn drops
-						caught.setFire(this.getBurnTime());	// 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
-					if (caught instanceof EntityTNTPrimed)
-						world.spawnParticle("lava", caught.posX+rand.nextFloat(), caught.posY+rand.nextFloat(), caught.posZ+rand.nextFloat(), 0, 0, 0);
-					if (caught instanceof Laserable) {
-						((Laserable)caught).whenInBeam(world, MathHelper.floor_double(caught.posX), MathHelper.floor_double(caught.posY), MathHelper.floor_double(caught.posZ), power, step);
-					}
-				}
-			}
-		}
-	}
-
-	private boolean makeBeam(World world, int x, int y, int z, int step, Block id, int metadata) {
-		boolean value = false;
-		if (id == Blocks.air)
-			return false;
-		if (id.hasTileEntity(metadata)) {
-			TileEntity te = world.getTileEntity(x, y, z);
-			if (te instanceof Laserable) {
-				((Laserable)te).whenInBeam(world, x, y, z, power, step);
-				if (((Laserable)te).blockBeam(world, x, y, z, power))
-					return true;
-			}
-		}
-		if (ConfigRegistry.ATTACKBLOCKS.getState()) {
-			if (id == Blocks.stone || id == Blocks.cobblestone || id == Blocks.stonebrick || id == Blocks.sandstone) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x, y, z, Blocks.flowing_lava);
-				world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
-			}
-			if (id == Blocks.sand) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x, y, z, Blocks.glass);
-			}
-			if (id == Blocks.gravel) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x, y, z, Blocks.cobblestone);
-			}/*
-    	if (id == Blocks.netherrack) {
-    		if (world.getBlock(x, 1+y, z) == 0) {
-    			world.setBlock(x, 1+y, z, Blocks.fire);
-    		}
-    	}*//*
-			if (id == Blocks.netherrack && tickcount >= 6) {
-				world.newExplosion(null, x+0.5, y+0.5, z+0.5, 3F, true, true);
-				if (world.provider.dimensionId == -1 && step >= 500)
-					RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
-				//step = maxdist;
-				value = true;
-			}
-			if (id == Blocks.dirt || id == Blocks.farmland) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x, y, z, Blocks.sand);
-			}
-			if (id == Blocks.grass || id == Blocks.mycelium) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x, y, z, Blocks.dirt);
-			}
-			if (id == Blocks.ice || id == Blocks.snow) {
-				int chance = (int)((power-MINPOWER)/(1024 * step / 4));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x, y, z, Blocks.flowing_water);
-			}
-			if (id == Blocks.tallgrass || id == Blocks.web || id == Blocks.yellow_flower || id == Blocks.snow ||
-					id == Blocks.red_flower || id == Blocks.red_mushroom || id == Blocks.brown_mushroom ||
-					id == Blocks.deadbush || id == Blocks.wheat || id == Blocks.carrots || id == Blocks.potatoes || id == Blocks.vine ||
-					id == Blocks.melon_stem || id == Blocks.pumpkin_stem || id == Blocks.waterlily) {
-				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x, y, z);
-						if (id == Blocks.snow)
-							world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
-					}
-			}
-			if (id == Blocks.flowing_water || id == Blocks.water) {
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
-				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x, y, z);
-						world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
-					}
-			}
-			if (id == Blocks.tnt) {
-				world.setBlockToAir(x, y, z);
-				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+0.5D, y+0.5D, z+0.5D, null);
-				world.spawnEntityInWorld(var6);
-				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-				world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
-			}
-			if (id instanceof Laserable) {
-				((Laserable)id).whenInBeam(world, x, y, z, power, step);
-				if (((Laserable)id).blockBeam(world, x, y, z, power))
-					return true;
-			}
-
-		}
-		return value;
-	}
-
-    	 */
-
-	private void scorch(World world, int x, int y, int z, int metadata) {
+	@Override
+	protected void makeBeam(World world, int x, int y, int z, int metadata) {
 		boolean blocked = false;
 		int step;
 		if (power >= MINPOWER) { //2MW+ (real military laser)
@@ -232,11 +159,10 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 				Block id = world.getBlock(dx, dy, dz);
 				int meta2 = world.getBlockMetadata(dx, dy, dz);
 				if (id != Blocks.air && id.isFlammable(world, dx, dy, dz, ForgeDirection.UP))
-					this.ignite(world, dx, dy, dz, metadata, step);
+					ReikaWorldHelper.ignite(world, dx, dy, dz);
 				//ReikaJavaLibrary.pConsole(Blocks.blocksList[id]);
-				if (this.makeBeam(world, x, y, z, step, id, meta2, maxdist)) {
+				if (this.affectBlock(world, dx, dy, dz, step, id, meta2, maxdist)) {
 					blocked = true;
-					tickcount = 0;
 				}
 				if (id != world.getBlock(dx, dy, dz) || meta2 != world.getBlockMetadata(dx, dy, dz))
 					world.markBlockForUpdate(dx, dy, dz);
@@ -338,132 +264,42 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 		return AxisAlignedBB.getBoundingBox(minx, miny, minz, maxx, maxy, maxz);//.expand(0.25D, 0.25D, 0.25D);
 	}
 
-	private void ignite(World world, int x, int y, int z, int metadata, int step) {
-		if (world.getBlock(x+1, y, z) == Blocks.air)
-			world.setBlock(x+1, y, z, Blocks.fire);
-		if (world.getBlock(x-1, y, z) == Blocks.air)
-			world.setBlock(x-1, y, z, Blocks.fire);
-		if (world.getBlock(x, y+1, z) == Blocks.air)
-			world.setBlock(x, y+1, z, Blocks.fire);
-		if (world.getBlock(x, y-1, z) == Blocks.air)
-			world.setBlock(x, y-1, z, Blocks.fire);
-		if (world.getBlock(x, y, z+1) == Blocks.air)
-			world.setBlock(x, y, z+1, Blocks.fire);
-		if (world.getBlock(x, y, z-1) == Blocks.air)
-			world.setBlock(x, y, z-1, Blocks.fire);
-	}
-
-	private boolean makeBeam(World world, int x, int y, int z, int step, Block id, int metadata, int maxdist) {
-		boolean value = false;
+	private boolean affectBlock(World world, int dx, int dy, int dz, int step, Block id, int metadata, int maxdist) {
 		if (id == Blocks.air)
 			return false;
 		if (id.hasTileEntity(metadata)) {
-			TileEntity te = world.getTileEntity(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
+			TileEntity te = world.getTileEntity(dx, dy, dz);
 			if (te instanceof Laserable) {
-				((Laserable)te).whenInBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power, step);
-				if (((Laserable)te).blockBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power))
+				((Laserable)te).whenInBeam(world, dx, dy, dz, power, step);
+				if (((Laserable)te).blockBeam(world, dx, dy, dz, power))
 					return true;
 			}
 		}
-		if (ConfigRegistry.ATTACKBLOCKS.getState()) {
-			if (id == Blocks.stone || id == Blocks.cobblestone || id == Blocks.stonebrick || id == Blocks.sandstone) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_lava);
-				world.spawnParticle("lava", x+step*facing.offsetX+rand.nextFloat(), y+step*facing.offsetY+rand.nextFloat(), z+step*facing.offsetZ+rand.nextFloat(), 0, 0, 0);
-			}
-			if (id == Blocks.sand) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.glass);
-			}
-			if (id == Blocks.gravel) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.cobblestone);
-			}/*
-    	if (id == Blocks.netherrack) {
-    		if (world.getBlock(x+step*facing.offsetX, 1+y+step*facing.offsetY, z+step*facing.offsetZ) == 0) {
-    			world.setBlock(x+step*facing.offsetX, 1+y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.fire);
-    		}
-    	}*/
-			if (id == Blocks.netherrack && tickcount >= 6) {
-				world.newExplosion(null, x+step*facing.offsetX+0.5, y+step*facing.offsetY+0.5, z+step*facing.offsetZ+0.5, 3F, true, true);
-				if (world.provider.dimensionId == -1 && step >= 500)
-					RotaryAchievements.NETHERHEATRAY.triggerAchievement(this.getPlacer());
-				step = maxdist;
-				value = true;
-			}
-			if (id == Blocks.dirt || id == Blocks.farmland) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 1));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.sand);
-			}
-			if (id == Blocks.grass || id == Blocks.mycelium) {
-				int chance = (int)((power-MINPOWER)/(1024 * step * 2));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.dirt);
-			}
-			if (id == Blocks.ice || id == Blocks.snow) {
-				int chance = (int)((power-MINPOWER)/(1024 * step / 4));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0)
-						world.setBlock(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, Blocks.flowing_water);
-			}
-			if (id == Blocks.tallgrass || id == Blocks.web || id == Blocks.yellow_flower || id == Blocks.snow ||
-					id == Blocks.red_flower || id == Blocks.red_mushroom || id == Blocks.brown_mushroom ||
-					id == Blocks.deadbush || id == Blocks.wheat || id == Blocks.carrots || id == Blocks.potatoes || id == Blocks.vine ||
-					id == Blocks.melon_stem || id == Blocks.pumpkin_stem || id == Blocks.waterlily) {
-				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
-						if (id == Blocks.snow)
-							world.playSoundEffect(x+step*facing.offsetX + 0.5D, y+step*facing.offsetY + 0.5D, z+step*facing.offsetZ + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
-					}
-			}
-			if (id == Blocks.flowing_water || id == Blocks.water) {
-				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", id));
-				int chance = (int)((power-MINPOWER)/(1024 * step / 8));
-				chance = ReikaMathLibrary.extrema(chance, 1, "max");
-				if (rand.nextInt(chance) != 0)
-					if (rand.nextInt(step) == 0) {
-						world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
-						world.playSoundEffect(x+step*facing.offsetX + 0.5D, y+step*facing.offsetY + 0.5D, z+step*facing.offsetZ + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
-					}
-			}
-			if (id == Blocks.tnt) {
-				world.setBlockToAir(x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ);
-				EntityTNTPrimed var6 = new EntityTNTPrimed(world, x+step*facing.offsetX+0.5D, y+step*facing.offsetY+0.5D, z+step*facing.offsetZ+0.5D, null);
-				if (!world.isRemote)
-					world.spawnEntityInWorld(var6);
-				world.playSoundAtEntity(var6, "random.fuse", 1.0F, 1.0F);
-				world.spawnParticle("lava", x+step*facing.offsetX+rand.nextFloat(), y+step*facing.offsetY+rand.nextFloat(), z+step*facing.offsetZ+rand.nextFloat(), 0, 0, 0);
-			}
-			if (id instanceof Laserable) {
-				((Laserable)id).whenInBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power, step);
-				if (((Laserable)id).blockBeam(world, x+step*facing.offsetX, y+step*facing.offsetY, z+step*facing.offsetZ, power))
-					return true;
-			}
-
+		if (id instanceof Laserable) {
+			((Laserable)id).whenInBeam(world, dx, dy, dz, power, step);
+			return ((Laserable)id).blockBeam(world, dx, dy, dz, power);
 		}
-		return value;
+		else if (ConfigRegistry.ATTACKBLOCKS.getState()) {
+			LaserEffect e = blockEffects.get(new BlockKey(id, metadata));
+			if (e != null) {
+				long surp = power/MINPOWER;//ReikaMathLibrary.logbase2(this.power-)
+				int n = e.getDelayTick(id, metadata, surp, step);
+				if (tickcount >= n) {
+					tickcount = 0;
+					return e.doEffect(world, dx, dy, dz, power, step, tickcount, this);
+				}
+				else {
+					return true;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
 	}
-
-	@Override
-	protected void makeBeam(World world, int x, int y, int z, int meta) {}
 
 	@Override
 	public boolean hasModelTransparency() {
@@ -488,5 +324,105 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	@Override
 	public int getRedstoneOverride() {
 		return 0;
+	}
+
+	private static class BlockChangeLaserEffect implements LaserEffect {
+
+		private final BlockKey replacement;
+
+		private BlockChangeLaserEffect(Block bk) {
+			this(new BlockKey(bk, 0));
+		}
+
+		private BlockChangeLaserEffect(BlockKey bk) {
+			replacement = bk;
+		}
+
+		@Override
+		public boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te) {
+			replacement.place(world, x, y, z);
+			return true;
+		}
+
+		@Override
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
+			return (int)Math.min(Integer.MAX_VALUE, (4 * dist)/surplus);
+		}
+
+	}
+
+	private static class IgnitionLaserEffect implements LaserEffect {
+
+		@Override
+		public boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te) {
+			ReikaWorldHelper.ignite(world, x, y, z);
+			return false;
+		}
+
+		@Override
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
+			return 0;
+		}
+
+	}
+
+	private static class MeltLaserEffect implements LaserEffect {
+
+		private final Fluid fluid;
+
+		private MeltLaserEffect(Fluid f) {
+			fluid = f;
+		}
+
+		@Override
+		public boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te) {
+			world.setBlock(x, y, z, this.getBlock(), 0, 3);
+			world.getBlock(x, y, z).onNeighborBlockChange(world, x, y, z, Blocks.air);
+			if (fluid == FluidRegistry.LAVA)
+				world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
+			world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+			return false;
+		}
+
+		private Block getBlock() {
+			if (fluid == FluidRegistry.WATER)
+				return Blocks.flowing_water;
+			if (fluid == FluidRegistry.LAVA)
+				return Blocks.flowing_lava;
+			return fluid.getBlock();
+		}
+
+		@Override
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
+			int d = 2;
+			if (fluid == FluidRegistry.WATER)
+				d = 8;
+			return (int)Math.min(Integer.MAX_VALUE, (4 * dist / (d*surplus)));
+		}
+
+	}
+
+	private static class DeletionLaserEffect implements LaserEffect {
+
+		@Override
+		public boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te) {
+			world.setBlockToAir(x, y, z);
+			world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.fizz", 0.5F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F);
+			return false;
+		}
+
+		@Override
+		public int getDelayTick(Block b, int meta, long surplus, int dist) {
+			return (int)Math.min(Integer.MAX_VALUE, (4 * dist / (8 * surplus)));
+		}
+
+	}
+
+	private static interface LaserEffect {
+
+		public int getDelayTick(Block b, int meta, long surplus, int dist);
+
+		boolean doEffect(World world, int x, int y, int z, long power, int range, int tickcount, TileEntityHeatRay te);
+
 	}
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,15 +22,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Auxiliary.PacketTypes;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.PacketHandler;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.DataPacket;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper.PacketObj;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -42,7 +43,6 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
 import Reika.RotaryCraft.Registry.PacketRegistry;
-import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityBlower;
 import Reika.RotaryCraft.TileEntities.TileEntityItemCannon;
 import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
@@ -64,10 +64,12 @@ import Reika.RotaryCraft.TileEntities.Farming.TileEntitySprinkler;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBorer;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
@@ -112,15 +114,6 @@ public class PacketHandlerCore implements PacketHandler {
 				case FULLSOUND:
 					break;
 				case SOUND:
-					control = inputStream.readInt();
-					SoundRegistry s = SoundRegistry.soundList[control];
-					double sx = inputStream.readDouble();
-					double sy = inputStream.readDouble();
-					double sz = inputStream.readDouble();
-					float v = inputStream.readFloat();
-					float p = inputStream.readFloat();
-					boolean att = inputStream.readBoolean();
-					ReikaSoundHelper.playClientSound(s, sx, sy, sz, v, p, att);
 					return;
 				case STRING:
 					stringdata = packet.readString();
@@ -130,7 +123,7 @@ public class PacketHandlerCore implements PacketHandler {
 				case DATA:
 					control = inputStream.readInt();
 					pack = PacketRegistry.getEnum(control);
-					len = pack.getNumberDataInts();
+					len = pack.numInts;
 					data = new int[len];
 					readinglong = pack.isLongPacket();
 					if (!readinglong) {
@@ -146,7 +139,7 @@ public class PacketHandlerCore implements PacketHandler {
 					dx = inputStream.readDouble();
 					dy = inputStream.readDouble();
 					dz = inputStream.readDouble();
-					len = pack.getNumberDataInts();
+					len = pack.numInts;
 					if (len > 0) {
 						data = new int[len];
 						for (int i = 0; i < len; i++)
@@ -180,7 +173,7 @@ public class PacketHandlerCore implements PacketHandler {
 				case RAW:
 					control = inputStream.readInt();
 					pack = PacketRegistry.getEnum(control);
-					len = pack.getNumberDataInts();
+					len = pack.numInts;
 					data = new int[len];
 					readinglong = pack.isLongPacket();
 					if (!readinglong) {
@@ -202,13 +195,19 @@ public class PacketHandlerCore implements PacketHandler {
 					control = inputStream.readInt();
 					pack = PacketRegistry.getEnum(control);
 					NBT = ((DataPacket)packet).asNBT();
+					Coordinate c = pack.getCoordinate(NBT);
+					if (c != null) {
+						x = c.xCoord;
+						y = c.yCoord;
+						z = c.zCoord;
+					}
 					break;
 				case STRINGINT:
 				case STRINGINTLOC:
 					stringdata = packet.readString();
 					control = inputStream.readInt();
 					pack = PacketRegistry.getEnum(control);
-					data = new int[pack.getNumberDataInts()];
+					data = new int[pack.numInts];
 					for (int i = 0; i < data.length; i++)
 						data[i] = inputStream.readInt();
 					break;
@@ -231,70 +230,72 @@ public class PacketHandlerCore implements PacketHandler {
 			return;
 		}
 		TileEntity te = world.getTileEntity(x, y, z);
+		/* This breaks all non-block packets
+		if (te == null) {
+
+			return;
+		}*/
 		try {
 			switch (pack) {
-				case BORER: {
+				case BORERTOGGLEALL: {
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", control, data));
 					TileEntityBorer borer = (TileEntityBorer)te;
-					if (borer != null) {
-						if (control == PacketRegistry.BORER.getMinValue()+2) {
-							for (int i = 0; i < 5; i++) {
-								for (int j = 0; j < 7; j++) {
-									borer.cutShape[j][i] = !borer.cutShape[j][i];
-									borer.syncAllData(true);
-								}
-							}
+					for (int i = 0; i < 5; i++) {
+						for (int j = 0; j < 7; j++) {
+							borer.cutShape[j][i] = !borer.cutShape[j][i];
+							borer.syncAllData(true);
 						}
-						if (control == PacketRegistry.BORER.getMinValue()+3) {
-							borer.reset();
-						}
-						if (control == PacketRegistry.BORER.getMinValue()+1) {
-							//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", data));
-							if (borer.drops) {
-								borer.drops = false;
-							}
-							else {
-								borer.drops = true;
-							}
-						}
-						if (control == PacketRegistry.BORER.getMinValue()) {
-							if (data[0] > 0 && data[0] < 100) {
-								int roworld = data[0]/7;
-								int cols = data[0]-roworld*7;
-								borer.cutShape[cols][roworld] = false;
-								//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, roworld, cols));
-							}
-							if (data[0] < 0 && data[0] > -100) {
-								int roworld = -data[0]/7;
-								int cols = -data[0]-roworld*7;
-								borer.cutShape[cols][roworld] = true;
-								//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, roworld, cols));
-							}
-							if (data[0] == 100) {
-								borer.cutShape[0][0] = false;
-								//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, 0, 0));
-							}
-							if (data[0] == -100) {
-								borer.cutShape[0][0] = true;
-								//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, 0, 0));
-							}
-						}
-
 					}
+					break;
 				}
-				break;
-				case BEVEL: {
+				case BORERRESET: {
+					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d   %d", control, data));
+					TileEntityBorer borer = (TileEntityBorer)te;
+					borer.reset();
+					break;
+				}
+				case BORERDROPS: {
+					TileEntityBorer borer = (TileEntityBorer)te;
+					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", data));
+					if (borer.drops) {
+						borer.drops = false;
+					}
+					else {
+						borer.drops = true;
+					}
+					break;
+				}
+				case BORER: {
+					TileEntityBorer borer = (TileEntityBorer)te;
+					if (data[0] > 0 && data[0] < 100) {
+						int roworld = data[0]/7;
+						int cols = data[0]-roworld*7;
+						borer.cutShape[cols][roworld] = false;
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, roworld, cols));
+					}
+					if (data[0] < 0 && data[0] > -100) {
+						int roworld = -data[0]/7;
+						int cols = -data[0]-roworld*7;
+						borer.cutShape[cols][roworld] = true;
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, roworld, cols));
+					}
+					if (data[0] == 100) {
+						borer.cutShape[0][0] = false;
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, 0, 0));
+					}
+					if (data[0] == -100) {
+						borer.cutShape[0][0] = true;
+						//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", data, 0, 0));
+					}
+					break;
+				}
+				case BEVEL:
 					((TileEntityBevelGear)te).direction = data[0];
-				}
-				break;
-				case SPLITTER: {
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-					if (control == PacketRegistry.SPLITTER.getMinValue()) {
-						((TileEntitySplitter)te).setMode(data[0]);
-					}
-				}
-				break;
-				case SPAWNER: {
+					break;
+				case SPLITTERMODE:
+					((TileEntitySplitter)te).setMode(data[0]);
+					break;
+				case SPAWNERTIMER: {
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					TileEntitySpawnerController spawner = (TileEntitySpawnerController)te;
 					if (data[0] == -1) {
@@ -302,67 +303,57 @@ public class PacketHandlerCore implements PacketHandler {
 					}
 					else {
 						spawner.disable = false;
-						spawner.setDelay = data[0];
+						spawner.setDelay(data[0]);
 					}
+					break;
 				}
-				break;
-				case DETECTOR: {
+				case DETECTOR:
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					((TileEntityPlayerDetector)te).selectedrange = data[0];
-				}
-				break;
-				case HEATER: {
+					break;
+				case HEATER:
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					((TileEntityHeater)te).setTemperature = data[0];
-				}
-				break;
-				case CVT: {
+					break;
+				case CVTMODE: {
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
-					if (control == PacketRegistry.CVT.getMinValue()) {
-						adv.isRedstoneControlled = !adv.isRedstoneControlled;
-					}
-					else if (control == PacketRegistry.CVT.getMinValue()+1) {
-						if (adv.isRedstoneControlled)
-							adv.incrementCVTState(true);
-						else
-							adv.setRatio(data[0]);
-					}
-					else if (control == PacketRegistry.CVT.getMinValue()+2) {
-						adv.incrementCVTState(false);
-					}
+					adv.stepMode();
+					break;
 				}
-				break;
-				case CANNON: {
+				case CVTRATIO: {
+					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
+					adv.setRatio(data[0]);
+					break;
+				}
+				case CVTTARGET: {
+					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
+					adv.setTargetTorque(data[0]);
+					break;
+				}
+				case CVTREDSTONESTATE: {
+					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
+					adv.incrementCVTState(data[0] > 0);
+					break;
+				}
+				case CANNONFIRINGVALS: {
 					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
 					TileEntityLaunchCannon cannon = (TileEntityLaunchCannon)te;
 					if (data[0] == 0) {
-						if (control == PacketRegistry.CANNON.getMinValue()) {
-							cannon.phi = data[1];
-						}
-						if (control == PacketRegistry.CANNON.getMinValue()+1) {
-							if (data[1] > cannon.getMaxTheta())
-								cannon.theta = cannon.getMaxTheta();
-							else
-								cannon.theta = data[1];
-						}
-						if (control == PacketRegistry.CANNON.getMinValue()+2) {
-							if (data[1] > cannon.getMaxLaunchVelocity())
-								cannon.velocity = cannon.getMaxLaunchVelocity();
-							else
-								cannon.velocity = data[1];
-						}
+						cannon.phi = data[1];
+						if (data[2] > cannon.getMaxTheta())
+							cannon.theta = cannon.getMaxTheta();
+						else
+							cannon.theta = data[2];
+						if (data[3] > cannon.getMaxLaunchVelocity())
+							cannon.velocity = cannon.getMaxLaunchVelocity();
+						else
+							cannon.velocity = data[3];
 					}
 					else {
-						if (control == PacketRegistry.CANNON.getMinValue()) {
-							cannon.target[0] = data[1];
-						}
-						if (control == PacketRegistry.CANNON.getMinValue()+1) {
-							cannon.target[1] = data[1];
-						}
-						if (control == PacketRegistry.CANNON.getMinValue()+2) {
-							cannon.target[2] = data[1];
-						}
+						cannon.target[0] = data[1];
+						cannon.target[1] = data[2];
+						cannon.target[2] = data[3];
 						double ddx = cannon.target[0]-cannon.xCoord;
 						double ddz = cannon.target[2]-cannon.zCoord;
 						double dd = ReikaMathLibrary.py3d(ddx, 0, ddz);
@@ -372,75 +363,66 @@ public class PacketHandlerCore implements PacketHandler {
 							cannon.target[2] = cannon.zCoord;
 						}
 					}
-					if (control == PacketRegistry.CANNON.getMinValue()+3 && cannon instanceof TileEntityTNTCannon) {
-						((TileEntityTNTCannon) cannon).selectedFuse = data[1];
+					if (cannon instanceof TileEntityTNTCannon) {
+						((TileEntityTNTCannon) cannon).selectedFuse = data[4];
 					}
+					break;
 				}
-				break;
-				case SONIC: {
-					TileEntitySonicWeapon sonic = (TileEntitySonicWeapon)te;
-					if (control == PacketRegistry.SONIC.getMinValue()) {
-						sonic.setpitch = longdata;
-					}
-					if (control == PacketRegistry.SONIC.getMinValue()+1) {
-						sonic.setvolume = longdata;
-					}
-				}
-				break;
-				case FORCE: {
+				case SONICPITCH:
+					((TileEntitySonicWeapon)te).setpitch = longdata;
+					break;
+				case SONICVOLUME:
+					((TileEntitySonicWeapon)te).setvolume = longdata;
+					break;
+				case FORCE:
 					((TileEntityForceField)te).setRange = data[0];
-				}
-				break;
+					break;
 				case CHEST: {
 					TileEntityScaleableChest chest = (TileEntityScaleableChest)te;
 					chest.page = data[0];
 					ep.openGui(RotaryCraft.instance, 24000+data[0], chest.worldObj, chest.xCoord, chest.yCoord, chest.zCoord);
 					break;
 				}
-				case COIL:
-					TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
-					if (control == PacketRegistry.COIL.getMinValue()) {
-						adv.setReleaseOmega(data[0]);
-					}
-					if (control == PacketRegistry.COIL.getMinValue()+1) {
-						adv.setReleaseTorque(data[0]);
-					}
+				case COILSPEED:
+					((TileEntityAdvancedGear)te).setReleaseOmega(data[0]);
 					break;
-				case MUSIC:
+				case COILTORQUE:
+					((TileEntityAdvancedGear)te).setReleaseTorque(data[0]);
+					break;
+				case MUSICNOTE: {
 					TileEntityMusicBox music = (TileEntityMusicBox)te;
-					if (control == PacketRegistry.MUSIC.getMinValue()) {
-						Note n = new Note(NoteLength.values()[data[2]], data[0], Instrument.values()[data[3]]);
-						for (int i = 0; i < 3; i++)
-							;//n.play(world, x, y, z);
-						music.addNote(data[1], n);
-					}
-					if (control == PacketRegistry.MUSIC.getMinValue()+1) {
-						music.save();
-					}
-					if (control == PacketRegistry.MUSIC.getMinValue()+2) {
-						music.read();
-					}
-					if (control == PacketRegistry.MUSIC.getMinValue()+3) {
-						music.loadDemo();
-					}
-					if (control == PacketRegistry.MUSIC.getMinValue()+4) {
-						Note n = new Note(NoteLength.values()[data[1]], 0, Instrument.GUITAR);
-						music.addRest(data[0], n);
-					}
-					if (control == PacketRegistry.MUSIC.getMinValue()+5) {
-						music.backspace(data[0]);
-					}
-					if (control == PacketRegistry.MUSIC.getMinValue()+6) {
-						music.clearChannel(data[0]);
-					}
-					if (control == PacketRegistry.MUSIC.getMinValue()+7) {
-						music.clearMusic();
-					}
+					Note n = new Note(NoteLength.values()[data[2]], data[0], Instrument.values()[data[3]]);
+					for (int i = 0; i < 3; i++)
+						;//n.play(world, x, y, z);
+					music.addNote(data[1], n);
 					break;
-				case VACUUM:
+				}
+				case MUSICSAVE:
+					((TileEntityMusicBox)te).save();
+					break;
+				case MUSICREAD:
+					((TileEntityMusicBox)te).read();
+					break;
+				case MUSICDEMO:
+					((TileEntityMusicBox)te).loadDemo();
+					break;
+				case MUSICREST:
+					Note n = new Note(NoteLength.values()[data[1]], 0, Instrument.GUITAR);
+					((TileEntityMusicBox)te).addRest(data[0], n);
+					break;
+				case MUSICBKSP:
+					((TileEntityMusicBox)te).backspace(data[0]);
+					break;
+				case MUSICCLEARCH:
+					((TileEntityMusicBox)te).clearChannel(data[0]);
+					break;
+				case MUSICCLEAR:
+					((TileEntityMusicBox)te).clearMusic();
+					break;
+				case VACUUMXP:
 					((TileEntityVacuum)te).spawnXP();
 					break;
-				case WINDER:
+				case WINDERTOGGLE:
 					TileEntityWinder winder = (TileEntityWinder)te;
 					if (winder.winding) {
 						winder.winding = false;
@@ -456,14 +438,9 @@ public class PacketHandlerCore implements PacketHandler {
 				case CONTAINMENT:
 					((TileEntityContainment)te).setRange = data[0];
 					break;
-				case ITEMCANNON: {
-					//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-					TileEntityItemCannon icannon = (TileEntityItemCannon)te;
-					if (control == PacketRegistry.ITEMCANNON.getMinValue()) {
-						icannon.selectNewTarget(data[0], data[1], data[2], data[3]);
-					}
+				case ITEMCANNON:
+					((TileEntityItemCannon)te).selectNewTarget(data[0], data[1], data[2], data[3]);
 					break;
-				}
 				case MIRROR:
 					((TileEntityMirror)te).breakMirror(world, x, y, z);
 					break;
@@ -476,55 +453,21 @@ public class PacketHandlerCore implements PacketHandler {
 				case MUSICPARTICLE:
 					world.spawnParticle("note", x+0.2+rand.nextDouble()*0.6, y+1.2, z+0.2+rand.nextDouble()*0.6, rand.nextDouble(), 0.0D, 0.0D); //activeNote/24D
 					break;
-				case REDGEAR:
+				case MULTISIDE:
 					((TileEntityMultiClutch)te).setSideOfState(data[0], data[1]);
 					break;
 				case TERRAFORMER:
 					((TileEntityTerraformer)te).setTarget(BiomeGenBase.biomeList[data[0]]);
 					break;
-				case PNEUMATIC:
+				case CONVERTERPOWER:
 					EnergyToPowerBase eng = (EnergyToPowerBase)te;
-					if (control == PacketRegistry.PNEUMATIC.getMinValue())
+					if (data[0] <= 0)
 						eng.decrementOmega();
-					if (control == PacketRegistry.PNEUMATIC.getMinValue()+1)
+					else
 						eng.incrementOmega();
-					if (control == PacketRegistry.PNEUMATIC.getMinValue()+2)
-						eng.incrementRedstoneState();
 					break;
-				case JETPACK:/*
-				if (control == PacketRegistry.JETPACK.getMinValue()) {
-					boolean move = floatdata > 100;
-					if (move) {
-						floatdata -= 100;
-						float retruster = 0.3F;
-						float forwardpower = floatdata * retruster * 2.0F;
-						if (forwardpower > 0.0F) {
-							ep.moveFlying(0.0F, forwardpower, 2F);
-						}
-					}
-					ep.motionY += floatdata*4.25;
-					if (ep.motionY > 0.6)
-						ep.motionY = 0.6;
-				}
-				else {
-					ep.motionY = 0;
-					float f = control == PacketRegistry.JETPACK.getMinValue()+2 ? 0.025F : 0;
-					ep.moveFlying(0.0F, f, 1F);
-				}
-				double vx = ep.motionX;
-				double vz = ep.motionZ;
-				if (DragonAPICore.isOnActualServer()) {
-					ep.velocityChanged = true;
-				}
-				//PacketDispatcher.sendPacketToAllInDimension(new Packet28EntityVelocity(ep), world.provider.dimensionId);
-				//ReikaJavaLibrary.pConsole(ep.motionY);
-				ep.fallDistance = 0.0F;
-				ep.distanceWalkedModified = 0.0F;
-				if (!ep.capabilities.isCreativeMode) {
-					ItemStack jet = ep.getCurrentArmor(2);
-					ItemJetPack i = (ItemJetPack)jet.getItem();
-					i.use(jet, 4);
-				}*/
+				case CONVERTERREDSTONE:
+					((EnergyToPowerBase)te).incrementRedstoneState();
 					break;
 				case FERTILIZER:
 					if (world.isRemote) {
@@ -550,20 +493,17 @@ public class PacketHandlerCore implements PacketHandler {
 				case PARTICLES:
 					((TileEntityParticleEmitter)te).particleType = ReikaParticleHelper.particleList[data[0]];
 					break;
-				case BLOWER:
-					TileEntityBlower blower = (TileEntityBlower)te;
-					if (control == PacketRegistry.BLOWER.getMinValue()) {
-						blower.isWhitelist = !blower.isWhitelist;
-					}
-					if (control == PacketRegistry.BLOWER.getMinValue()+1) {
-						blower.checkMeta = !blower.checkMeta;
-					}
-					if (control == PacketRegistry.BLOWER.getMinValue()+2) {
-						blower.checkNBT = !blower.checkNBT;
-					}
-					if (control == PacketRegistry.BLOWER.getMinValue()+3) {
-						blower.useOreDict = !blower.useOreDict;
-					}
+				case BLOWERWHITELIST:
+					((TileEntityBlower)te).isWhitelist = !((TileEntityBlower)te).isWhitelist;
+					break;
+				case BLOWERMETA:
+					((TileEntityBlower)te).checkMeta = !((TileEntityBlower)te).checkMeta;
+					break;
+				case BLOWERNBT:
+					((TileEntityBlower)te).checkNBT = !((TileEntityBlower)te).checkNBT;
+					break;
+				case BLOWEROREDICT:
+					((TileEntityBlower)te).useOreDict = !((TileEntityBlower)te).useOreDict;
 					break;
 				case DEFOLIATOR:
 					((TileEntityDefoliator)te).onBlockBreak(world, data[0], data[1], data[2]);
@@ -573,13 +513,14 @@ public class PacketHandlerCore implements PacketHandler {
 					int direction = data[0];
 					gpr.shift(gpr.getGuiDirection(), direction);
 					break;
-				case CRAFTER:
-					if (control == PacketRegistry.CRAFTER.getMinValue())
-						((TileEntityAutoCrafter)te).triggerCraftingCycle(data[0]);
-					else if (control == PacketRegistry.CRAFTER.getMinValue()+1)
-						((TileEntityAutoCrafter)te).setThreshold(data[0], data[1]);
-					else if (control == PacketRegistry.CRAFTER.getMinValue()+2)
-						((TileEntityAutoCrafter)te).incrementMode();
+				case CRAFTERCRAFT:
+					((TileEntityAutoCrafter)te).triggerCraftingCycle(data[0]);
+					break;
+				case CRAFTERTHRESH:
+					((TileEntityAutoCrafter)te).setThreshold(data[0], data[1]);
+					break;
+				case CRAFTERMODE:
+					((TileEntityAutoCrafter)te).incrementMode();
 					break;
 				case POWERSYNC:
 					TileEntityIOMachine io = (TileEntityIOMachine)te;
@@ -591,17 +532,12 @@ public class PacketHandlerCore implements PacketHandler {
 					((TileEntityJetEngine)te).setBurnerActive(data[0] > 0);
 					break;
 				case CRAFTPATTERNMODE:
-					if (control == PacketRegistry.CRAFTPATTERNMODE.getMinValue())
-						ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
-					else if (control == PacketRegistry.CRAFTPATTERNMODE.getMinValue()+1) {
-						ItemCraftPattern.changeStackLimit(ep.getCurrentEquippedItem(), data[0]);
-					}
+					ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
+					break;
+				case CRAFTPATTERNLIMIT:
+					ItemCraftPattern.changeStackLimit(ep.getCurrentEquippedItem(), data[0]);
 					break;
 				case FILTERSETTING:
-					x = NBT.getInteger("posX");
-					y = NBT.getInteger("posY");
-					z = NBT.getInteger("posZ");
-					te = world.getTileEntity(x, y, z);
 					MatchData dat = MatchData.createFromNBT(NBT);
 					((TileEntityItemFilter)te).setData(dat);
 					break;
@@ -622,12 +558,21 @@ public class PacketHandlerCore implements PacketHandler {
 						EMPSparkRenderer.instance.removeSparkingLocation(new WorldLocation(data[0], data[1], data[2], data[3]));
 					}
 					break;
+				case DISTRIBCLUTCH:
+					((TileEntityDistributionClutch)te).setSideEnabled(ForgeDirection.VALID_DIRECTIONS[data[0]+2], data[1] > 0);
+					break;
+				case DISTRIBCLUTCHPOWER:
+					((TileEntityDistributionClutch)te).setTorqueRequests(data);
+					break;
+				case FRIDGEBREAK:
+					TileEntityRefrigerator.doBreakFX(world, x, y, z);
+					break;
 			}
 		}
 		catch (NullPointerException e) {
-			RotaryCraft.logger.logError("Machine/item was deleted before its packet "+pack+" could be received!");
+			RotaryCraft.logger.logError("Machine/item was deleted before its packet "+pack+" could be received, or was not present at all!");
 			if (DragonOptions.CHATERRORS.getState())
-				ReikaChatHelper.writeString("Machine/item was deleted before its packet "+pack+" could be received!");
+				ReikaChatHelper.writeString("Machine/item was deleted before its packet "+pack+" could be received, or was not present at all!");
 			e.printStackTrace();
 		}
 		catch (Exception e) {
@@ -635,14 +580,13 @@ public class PacketHandlerCore implements PacketHandler {
 		}
 	}
 
-
 	public static void sendPowerSyncPacket(TileEntityIOMachine iotile, EntityPlayerMP ep) {
 		int[] data = ReikaJavaLibrary.splitLong(iotile.power);
 		if (ep != null) {
-			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, ep, iotile.torque, iotile.omega, data[0], data[1]);
+			ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.ordinal(), iotile, ep, iotile.torque, iotile.omega, data[0], data[1]);
 		}
 		else {
-			ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.getMinValue(), iotile, 64, iotile.torque, iotile.omega, data[0], data[1]);
+			ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.ordinal(), iotile, 64, iotile.torque, iotile.omega, data[0], data[1]);
 		}
 	}
 }

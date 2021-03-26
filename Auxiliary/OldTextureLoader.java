@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,7 +10,6 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -19,14 +18,18 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.IntHashMap;
+
 import Reika.DragonAPI.DragonOptions;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Auxiliary.Trackers.SpecialDayTracker;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Blocks.BlockFlywheel;
 import Reika.RotaryCraft.Blocks.BlockGearbox;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class OldTextureLoader {
 
@@ -72,8 +75,7 @@ public class OldTextureLoader {
 			return false;
 		long time = System.currentTimeMillis();
 		if (time-cachedLoadTime > 60000) {
-			Calendar c = Calendar.getInstance();
-			boolean flag = c.get(Calendar.MONTH) == Calendar.APRIL && c.get(Calendar.DAY_OF_MONTH) <= 2;
+			boolean flag = SpecialDayTracker.instance.loadAprilTextures();
 			if (flag != cachedLoadState && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 				ReikaRenderHelper.rerenderAllChunks();
 			}
@@ -111,6 +113,7 @@ public class OldTextureLoader {
 		return ico != null ? ico : (IIcon)textureIndices.lookup(-1);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void reloadOldTextures(TextureMap map) {
 		if (map.getTextureType() == 0) {
 			for (int i = 0; i < 256; i++) {
@@ -131,6 +134,53 @@ public class OldTextureLoader {
 		return magnetoNames.get((int)((System.currentTimeMillis()/4000)%magnetoNames.size()))+" Engine";
 	}
 
+	/*
+	public String parseAndConvertUnits(String s) {
+		String[] words = s.split(" ");
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < words.length; i++) {
+			String sg = words[i];
+			if (sg.contains("W")) {
+				if (sg.equals("W")) {
+
+				}
+				else {
+
+				}
+			}
+			if (sg.contains("Nm")) {
+				if (sg.equals("Nm")) {
+					words[i] = "ft-lb";
+				}
+				else {
+
+				}
+			}
+			if (sg.contains("rad/s")) {
+				if (sg.equals("rad/s")) {
+					words[i] = "rpm";
+				}
+				else {
+
+				}
+			}
+			if (sg.contains("C")) {
+				if (sg.equals("C")) {
+
+				}
+				else {
+
+				}
+			}
+		}
+		for (int i = 0; i < words.length; i++) {
+			sb.append(words[i]);
+			if (i < words.length-1)
+				sb.append(" ");
+		}
+		return sb.toString();
+	}
+	 */
 	private static class IconSide {
 
 		public final int fallback;

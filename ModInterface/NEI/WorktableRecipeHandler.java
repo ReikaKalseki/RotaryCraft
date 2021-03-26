@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,18 +12,19 @@ package Reika.RotaryCraft.ModInterface.NEI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiWorktable;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -48,6 +49,10 @@ public class WorktableRecipeHandler extends TemplateRecipeHandler {
 		{
 			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
 			ItemStack[] in = recipe.getDisplayArray();
+			if (in == null) {
+				RotaryCraft.logger.logError("Recipe "+recipe+" has null display array?!");
+				return stacks;
+			}
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					ItemStack is = in[i*3+j];

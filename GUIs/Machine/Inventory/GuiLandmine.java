@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerLandmine;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;

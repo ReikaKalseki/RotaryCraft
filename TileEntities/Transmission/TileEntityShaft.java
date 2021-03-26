@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,12 +20,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.RotaryCraft.API.Event.ShaftFailureEvent;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -39,6 +41,9 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public int[] readtorque = new int[2];
@@ -50,6 +55,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	private MaterialRegistry type;
 	private boolean failed = false;
+
+	private boolean isCrossForRender;
 
 	public TileEntityShaft(MaterialRegistry type) {
 		if (type == null)
@@ -63,6 +70,17 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	public MaterialRegistry getShaftType() {
 		return type;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void setData(MaterialRegistry mat, boolean cross) {
+		type = mat;
+		isCrossForRender = cross;
+	}
+
+	public void setMaterialFromItem(ItemStack is) {
+		type = MaterialRegistry.getMaterialFromShaftItem(is);
+		this.syncAllData(true);
 	}
 
 	public void fail(World world, int x, int y, int z, boolean speed) {
@@ -79,6 +97,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 					item = new ItemStack(Blocks.gravel, 1, 0);
 					break;
 				case STEEL:
+					item = ItemStacks.scrap.copy();
+					break;
+				case TUNGSTEN:
 					item = ItemStacks.scrap.copy();
 					break;
 				case DIAMOND:
@@ -111,6 +132,9 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 				case STEEL:
 					item = ItemStacks.shaftitem.copy();
 					break;
+				case TUNGSTEN:
+					item = ItemStacks.shaftitem.copy();
+					break;
 				case DIAMOND:
 					item = new ItemStack(Items.diamond, 1, 0);
 					break;
@@ -139,7 +163,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 	}
 
 	public void testFailure() {
-		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(omega, 1-(0.11D*type.ordinal())), type.getTensileStrength())) {
+		if (ReikaEngLibrary.mat_rotfailure(type.getDensity(), 0.0625, ReikaMathLibrary.doubpow(omega, type.getSpeedForceExponent()), type.getTensileStrength())) {
 			this.fail(worldObj, xCoord, yCoord, zCoord, true);
 		}
 		else if (ReikaEngLibrary.mat_twistfailure(torque, 0.0625, type.getShearStrength()/16D)) {
@@ -281,8 +305,12 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		//ReikaJavaLibrary.pConsole(Arrays.toString(readtorque)+":"+Arrays.toString(readomega), Side.SERVER);
 	}
 
+	public boolean isVertical() {
+		return this.getBlockMetadata() >= 4;
+	}
+
 	public boolean isCross() {
-		return this.getBlockMetadata() >= 6;
+		return isCrossForRender || this.getBlockMetadata() >= 6;
 	}
 
 	public void getIOSides(World world, int x, int y, int z, int meta) {
@@ -507,8 +535,8 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(te);
 			}
-			if (m == MachineRegistry.POWERBUS) {
-				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			if (te instanceof ComplexIO) {
+				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
@@ -601,13 +629,23 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 	@Override
 	public void writeToNBT(NBTTagCompound NBT) {
-		NBT.setInteger("type", type.ordinal());
+		NBT.setString("shafttype", type.name());
 		super.writeToNBT(NBT);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
-		type = MaterialRegistry.setType(NBT.getInteger("type"));
+		MaterialRegistry mat = MaterialRegistry.WOOD;
+		if (NBT.hasKey("shafttype")) {
+			mat = MaterialRegistry.valueOf(NBT.getString("shafttype"));
+		}
+		else if (NBT.hasKey("type")) {
+			int idx = NBT.getInteger("type");
+			if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
+				idx++;
+			mat = MaterialRegistry.matList[idx];
+		}
+		type = mat;
 		super.readFromNBT(NBT);
 	}
 
@@ -669,10 +707,5 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 		else {
 			super.getAllOutputs(c, dir);
 		}
-	}
-
-	@Override
-	public int getItemMetadata() {
-		return type.ordinal();
 	}
 }

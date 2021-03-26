@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,7 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -38,6 +38,11 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	@Override
 	protected void consumeFuel() {
 		water.removeLiquid(this.getConsumedFuel());
+	}
+
+	@Override
+	protected void offlineCooldown(World world, int x, int y, int z, int Tamb) {
+
 	}
 
 	@Override
@@ -120,19 +125,24 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 		if (Tamb < 0 && fire)
 			Tamb += 30;
 		if (temperature < Tamb)
-			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			temperature += Math.max((Tamb-temperature)/40, 1);
 		if (!fire && !lava && temperature > Tamb)
 			temperature--;
 		if (temperature > Tamb) {
 			temperature -= (temperature-Tamb)/96;
 		}
-		if (temperature > MAXTEMP)
+		if (temperature > this.getMaxTemperature())
 			this.overheat(world, x, y, z);
 	}
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		temperature = MAXTEMP;
+		if (water.isEmpty()) {
+			world.setBlock(x, y, z, Blocks.flowing_lava);
+			world.playSound(x+0.5, y+0.5, z+0.5, "random.fizz", 2, 1, true);
+			return;
+		}
+		temperature = this.getMaxTemperature();
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 17, false, 1F, false, true, 2F);
 		RotaryAchievements.OVERPRESSURE.triggerAchievement(this.getPlacer());
 		world.setBlockToAir(x, y, z);

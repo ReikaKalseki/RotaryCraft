@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.ChromatiCraft.Block.Dye.BlockDyeLeaf;
 import Reika.DragonAPI.ModList;
@@ -35,6 +36,7 @@ import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.Base.ItemRotaryShears;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -122,7 +124,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
 			((IShearable)b).onSheared(player.getCurrentEquippedItem(), world, x, y, z, 0);
 			return Result.ALLOW;
 		}
-		else if (b.getMaterial() == Material.plants) {
+		else if (b.getMaterial() == Material.plants || b.getMaterial() == Material.leaves) {
 			return Result.ALLOW;
 		}
 		else {

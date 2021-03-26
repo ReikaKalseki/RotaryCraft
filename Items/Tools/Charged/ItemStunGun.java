@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,8 +22,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
+
+import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
@@ -46,16 +50,23 @@ public class ItemStunGun extends ItemChargedTool {
 		}
 		this.warnCharge(is);
 		//if (!world.isRemote) {
-		double[] part = ReikaVectorHelper.getPlayerLookCoords(ep, 1);
-		for (int i = 0; i < 12; i++)
-			world.spawnParticle("magicCrit", part[0]-0.3+0.6*par5Random.nextFloat(), part[1]-0.3+0.6*par5Random.nextFloat(), part[2]-0.3+0.6*par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+		DecimalPosition part = ReikaVectorHelper.getPlayerLookCoords(ep, 1);
+		for (int i = 0; i < 12; i++) {
+			double px = ReikaRandomHelper.getRandomPlusMinus(part.xCoord, 0.3);
+			double py = ReikaRandomHelper.getRandomPlusMinus(part.yCoord, 0.3);
+			double pz = ReikaRandomHelper.getRandomPlusMinus(part.zCoord, 0.3);
+			double vx = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			double vy = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			double vz = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			ReikaParticleHelper.ENCHANTMENT.spawnAt(world, px, py, pz, vx, vy, vz);
+		}
 		//}
 		Vec3 norm = ep.getLookVec();
 		SoundRegistry.KNOCKBACK.playSound(world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
 		for (float i = 1; i <= 5; i += 0.5) {
-			double[] look = ReikaVectorHelper.getPlayerLookCoords(ep, i);
+			DecimalPosition look = ReikaVectorHelper.getPlayerLookCoords(ep, i);
 			//ReikaChatHelper.writeString(String.format("%.3f", look.xCoord)+" "+String.format("%.3f", look.yCoord)+" "+String.format("%.3f", look.zCoord));
-			AxisAlignedBB fov = AxisAlignedBB.getBoundingBox(look[0]-0.5, look[1]-0.5, look[2]-0.5, look[0]+0.5, look[1]+0.5, look[2]+0.5);
+			AxisAlignedBB fov = look.getAABB(0.5);
 			List infov = world.getEntitiesWithinAABB(EntityLivingBase.class, fov);
 			for (int k = 0; k < infov.size(); k++) {
 				EntityLivingBase ent = (EntityLivingBase)infov.get(k);
@@ -102,9 +113,16 @@ public class ItemStunGun extends ItemChargedTool {
 				ep.setCurrentItemOrArmor(0, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-2));
 			}
 		}
-		double[] part = ReikaVectorHelper.getPlayerLookCoords(ep, 1);
-		for (int i = 0; i < 12; i++)
-			world.spawnParticle("magicCrit", part[0]-0.3+0.6*par5Random.nextFloat(), part[1]-0.3+0.6*par5Random.nextFloat(), part[2]-0.3+0.6*par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
+		DecimalPosition part = ReikaVectorHelper.getPlayerLookCoords(ep, 1);
+		for (int i = 0; i < 12; i++) {
+			double px = ReikaRandomHelper.getRandomPlusMinus(part.xCoord, 0.3);
+			double py = ReikaRandomHelper.getRandomPlusMinus(part.yCoord, 0.3);
+			double pz = ReikaRandomHelper.getRandomPlusMinus(part.zCoord, 0.3);
+			double vx = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			double vy = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			double vz = ReikaRandomHelper.getRandomPlusMinus(0, 0.5);
+			ReikaParticleHelper.ENCHANTMENT.spawnAt(world, px, py, pz, vx, vy, vz);
+		}
 		//}
 		Vec3 norm = ep.getLookVec();
 		SoundRegistry.KNOCKBACK.playSound(world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);

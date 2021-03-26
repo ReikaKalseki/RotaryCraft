@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 
 public class GravelGunDamage extends CustomStringDamageSource {

@@ -1,0 +1,200 @@
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
+<machines>
+	<compressor>
+		<desc>
+			The air compressor converts shaft power into pressurized air, which can be carried out via pressurized air pipes. More power means more airflow into the pipe, but given excessive amounts of power, it can and will explode. Violently.
+		</desc>
+		<note>
+			Maximum pressure before detonation: %d kPa
+			
+			Orientation and Output: Like standard RF engines
+			
+			Power Input: Back
+		</note>
+	</compressor>
+	<pneuengine>
+		<desc>
+			The pneumatic engine uses a turbine to convert pressurized air from PneumaticCraft pipes into shaft power. Use its GUI to choose the speed output. Higher power outputs will require more air pressure and airflow.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Air Pipe Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</pneuengine>
+	<boiler>
+		<desc>
+			The friction boiler uses shaft power to heat water pumped into it. When boiled, the water can be drawn out the top of the boiler as steam. This machine has a warm-up period before which it will not make steam. Note that this machine can overheat and violently fail.
+		</desc>
+		<note>
+			Power Input: Bottom
+		</note>
+	</boiler>
+	<steamturbine>
+		<desc>
+			The steam turbine takes in steam from any pipe or tank behind it and generates shaft power. Use the GUI to select the power usage (and steam consumption).
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Steam Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</steamturbine>
+	<generator>
+		<desc>
+			The electric generator takes in shaft power and produces IC2 electrical power at a rate of %.0f W/EU. The total power output as well as EU packet size scales with the amount of power going in.
+		</desc>
+		<note>
+			Power Input: Back
+			If "Hard EU" config is on, requires IC2 coolant or liquid nitrogen
+		</note>
+	</generator>
+	<electricmotor>
+		<desc>
+			The electric motor uses IC2 electrical power to produce shaft power. Use its GUI to choose the speed output. Higher power outputs will require more electrical power and a higher supply voltage.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Wire Connection: Back
+
+					Overheats at: %dC, and if "Hard EU" is enabled, will explode if overloaded with EU voltage
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</electricmotor>
+	<fuelengine>
+		<desc>
+			The fuel-powered engine runs off of BuildCraft fuel to produce shaft power. It performs similarly to that mod's combustion engines in terms of power output. It requires both lubricant and water cooling, and it will decelerate as it overheats.
+		</desc>
+		<note>
+			Torque Produced: %d Nm
+			Rotational Speed: %d rad/s
+			Power Produced: %dW
+		</note>
+	</fuelengine>
+	<dynamo>
+		<desc>
+			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Due to the limitations imposed by the internal magnetic fields, it can take a maximum of %d Nm of torque (%d Nm if upgraded) at a maximum of %d rad/s. Any excess, while not dangerous, will be wasted.
+		</desc>
+		<note>
+			Orientation and Output: Like ThermalExpansion Dynamos
+			Power Input: Back
+		</note>
+	</dynamo>
+	<magnetic>
+		<desc>
+			The magnetostatic engine functions much like the pneumatic engine. It accepts RF provided to it, and its output speed can be selected to choose the total power output. Like all other conversion engines, it requires coolant.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Conduit Input: Back
+
+					Overheats at: %dC
+
+					Tiered from 0 to 5; each tier increases power output but decreases efficiency
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</magnetic>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+</machines>

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,14 +23,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class BlockFlywheel extends BlockModelledMachine {
 
@@ -81,7 +87,7 @@ public class BlockFlywheel extends BlockModelledMachine {
 			}
 			else {
 				int metadata = fly.getBlockMetadata();
-				ItemStack todrop = ItemRegistry.FLYWHEEL.getStackOfMetadata(metadata/4); //drop flywheel
+				ItemStack todrop = fly.getTypeOrdinal().getFlywheelItem();
 				if (fly.isUnHarvestable()) {
 					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}
@@ -136,10 +142,21 @@ public class BlockFlywheel extends BlockModelledMachine {
 	}
 
 	@Override
-	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
-	{
+	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(ItemRegistry.FLYWHEEL.getStackOfMetadata(metadata/4));
+		TileEntityFlywheel fly = (TileEntityFlywheel)world.getTileEntity(x, y, z);
+		if (fly != null) {
+			ret.add(fly.getTypeOrdinal().getFlywheelItem());
+		}
+		else {
+			ret.add(ItemRegistry.FLYWHEEL.getStackOfMetadata(metadata/4));
+		}
 		return ret;
+	}
+
+	@Override
+	@ModDependent(ModList.WAILA)
+	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+		return ((TileEntityFlywheel)accessor.getTileEntity()).getTypeOrdinal().getFlywheelItem();
 	}
 }

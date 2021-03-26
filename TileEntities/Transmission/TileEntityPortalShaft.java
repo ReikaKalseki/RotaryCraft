@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.APIPacketHandler.PacketIDs;
 import Reika.DragonAPI.DragonAPIInit;
 import Reika.DragonAPI.ModList;
@@ -33,6 +34,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SimpleProvider;
 import Reika.RotaryCraft.Base.TileEntity.TileEntity1DTransmitter;
@@ -306,8 +308,8 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 					omegain = devicein.omega;
 				}
 			}
-			if (m == MachineRegistry.POWERBUS) {
-				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			if (te instanceof ComplexIO) {
+				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
@@ -350,7 +352,14 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 
 		type = PortalType.values()[NBT.getInteger("portal")];
 
-		material = MaterialRegistry.setType(NBT.getInteger("mat"));
+		MaterialRegistry mat = MaterialRegistry.WOOD;
+		if (NBT.hasKey("shafttype")) {
+			mat = MaterialRegistry.valueOf(NBT.getString("shafttype"));
+		}
+		else if (NBT.hasKey("type")) {
+			mat = MaterialRegistry.matList[NBT.getInteger("type")];
+		}
+		material = mat;
 	}
 
 	@Override
@@ -360,7 +369,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 		if (type != null)
 			NBT.setInteger("portal", type.ordinal());
 		if (material != null)
-			NBT.setInteger("mat", material.ordinal());
+			NBT.setString("mat", material.name());
 	}
 
 	@Override

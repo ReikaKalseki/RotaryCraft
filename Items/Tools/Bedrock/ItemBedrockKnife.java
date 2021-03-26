@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Items.Tools.Bedrock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.Base.ItemRotaryTool;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 

@@ -1,24 +1,24 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -30,6 +30,11 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 public class RenderBevel extends RotaryTERenderer {
 
 	private final ModelBevel BevelModel = new ModelBevel();
+
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/";
+	}
 
 	public void renderTileEntityBevelAt(TileEntityBevelGear tile, double par2, double par4, double par6, float par8)
 	{
@@ -43,7 +48,7 @@ public class RenderBevel extends RotaryTERenderer {
 		ModelBevel var14;
 
 		var14 = BevelModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/beveltex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/beveltex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

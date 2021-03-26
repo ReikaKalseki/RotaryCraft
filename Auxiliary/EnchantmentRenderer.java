@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,13 +11,13 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.util.ArrayList;
 
-import net.minecraft.tileentity.TileEntity;
-
 import org.lwjgl.opengl.GL11;
 
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Base.RotaryModelBase;
 
 public abstract class EnchantmentRenderer {
@@ -51,7 +51,7 @@ public abstract class EnchantmentRenderer {
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 		if (!tile.hasWorldObj()) {
-			GL11.glTranslated(-1, 0, 0);
+			//GL11.glTranslated(-1, 0, 0);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 		}
 

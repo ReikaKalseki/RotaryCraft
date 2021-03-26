@@ -10,9 +10,9 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
-import dan200.computercraft.api.lua.LuaException;
 
 public class LuaSetECU extends LuaMethod {
 
@@ -21,7 +21,7 @@ public class LuaSetECU extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityEngineController ecu = (TileEntityEngineController) te;
 		int index = ((Double)args[0]).intValue();
 		ecu.setSetting(index);

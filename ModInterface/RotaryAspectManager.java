@@ -9,13 +9,14 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
+import thaumcraft.api.aspects.Aspect;
 
 
 public class RotaryAspectManager {

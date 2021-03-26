@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -232,7 +233,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		}
 		for (int j = 0; j < inv.length; j++) {
 			if (inv[j] != null) {
-				if (ReikaItemHelper.matchStacks(is, inv[j])) {
+				if (ReikaItemHelper.areStacksCombinable(is, inv[j], Integer.MAX_VALUE)) {
 					if (ItemStack.areItemStackTagsEqual(is, inv[j])) {
 						if (inv[j].stackSize+size <= this.getInventoryStackLimit()) {
 							target = j;
@@ -260,7 +261,7 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	}
 
 	public int getRange() {
-		return ReikaMathLibrary.extrema(8+(int)(power/FALLOFF), this.getMaxRange(), "min");
+		return Math.min(8+(int)(power/FALLOFF), this.getMaxRange());
 	}
 
 	public int getSizeInventory()

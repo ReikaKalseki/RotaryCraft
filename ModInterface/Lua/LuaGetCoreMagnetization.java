@@ -10,18 +10,18 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MagnetizationCore;
-import dan200.computercraft.api.lua.LuaException;
 
-public class LuaCoreMagnetization extends LuaMethod {
+public class LuaGetCoreMagnetization extends LuaMethod {
 
-	public LuaCoreMagnetization() {
+	public LuaGetCoreMagnetization() {
 		super("getMagnetization", MagnetizationCore.class);
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		int core = ((MagnetizationCore)te).getCoreMagnetization();
 		return new Object[]{core};
 	}

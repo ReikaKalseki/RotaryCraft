@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,20 +22,23 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 
 public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
 
-	public static final int CAPACITY= 8000;
+	public static final int CAPACITY = 8000;
 
 	private final HybridTank tank = new HybridTank("spillway", CAPACITY);
 
@@ -68,7 +71,7 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 		Block b = world.getBlock(dx, dy, dz);
 		int metadata = world.getBlockMetadata(dx, dy, dz);
 		Block b2 = world.getBlock(dx, dy+1, dz);
-		Fluid f = FluidRegistry.lookupFluidForBlock(b);
+		Fluid f = ReikaFluidHelper.lookupFluidForBlock(b);
 		if ((InterfaceCache.STREAM.instanceOf(b) && metadata == 0) || InterfaceCache.STREAM.instanceOf(b2)) {
 			liquidPool = null;
 			this.handleStream(world, x, y, z, dx, dy+1, dz);
@@ -76,7 +79,7 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 		else if (f == FluidRegistry.WATER) {
 			if (ReikaWorldHelper.isLiquidAColumn(world, dx, dy+1, dz)) {
 				liquidPool = null;
-				tank.addLiquid(50, FluidRegistry.WATER);
+				tank.addLiquid((int)(50*ConfigRegistry.getFreeWaterProduction()), FluidRegistry.WATER);
 				this.setActive();
 			}
 			else
@@ -89,7 +92,7 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 			activeTick--;
 
 		Block ab = world.getBlock(x, y+1, z);
-		if (FluidRegistry.lookupFluidForBlock(ab) == FluidRegistry.WATER)
+		if (ReikaFluidHelper.lookupFluidForBlock(ab) == FluidRegistry.WATER)
 			world.setBlock(x, y+1, z, Blocks.air);
 	}
 

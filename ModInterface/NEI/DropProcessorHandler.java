@@ -15,21 +15,22 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.ModInteract.PositionedStackWithTooltip;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDropProcessor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDropProcessor.DropProcessing;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;

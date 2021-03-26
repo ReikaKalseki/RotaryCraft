@@ -49,14 +49,14 @@
 				A bobina industrial armazena energia em uma grande mola que pode ser desenrolada com redstone. Visto que seu torque e velocidade de saída podem ser escolhidos quase à vontade, ela é usada para armazenar energia para mais tarde ou como um tipo de capacitor, para armazenar a energia acumulada por um longo tempo e, em seguida, liberá-lo em uma explosão poderosa. Observe que cada tipo de bobina tem uma capacidade máxima e que ultrapassá-la resulta em uma liberação extremamente violenta de toda a energia armazenada.
 			</s0>
 			<s1>
-				Limites de armazenamento de energia:
+				Esta máquina não pode, simultaneamente, carregar e liberar o poder; qualquer entrada de energia durante o descarregamento é desperdiçada. Com maiores cargas de bobina, o torque e potência necessária aumenta.
 				
+				Limites de armazenamento de energia:
 				Aço: %d J (%s)
 				Rocha matriz: %d J (%s)
 			</s1>
 			<s2>
 				Requisitos de entrada:
-				
 				Torque: %s
 				Potência: %s
 			</s2>

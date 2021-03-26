@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,7 +12,6 @@ package Reika.RotaryCraft.TileEntities.Farming;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
@@ -30,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray.BlockTypePrioritizer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
@@ -39,7 +39,8 @@ import Reika.DragonAPI.Interfaces.Registry.TreeType;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -50,6 +51,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
@@ -64,7 +66,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction,
 ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
-	private HashMap<Enchantment, Integer> enchantments = new HashMap();
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.infinity).addFilter(Enchantment.fortune).addFilter(Enchantment.efficiency);
 
 	public int editx;
 	public int edity;
@@ -205,20 +207,20 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 					Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 					Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 					if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
-						ItemStack plant = this.getPlantedSapling();
+						BlockKey plant = this.getPlantedSapling();
 						if (plant != null) {
-							if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
+							if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
 								ReikaInventoryHelper.decrStack(0, inv);
-							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
+							plant.place(world, c.xCoord, c.yCoord, c.zCoord);
 						}
 					}
 					else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
-						ItemStack plant = this.getPlantedSapling();
+						BlockKey plant = this.getPlantedSapling();
 						if (plant != null) {
-							if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
+							if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
 								ReikaInventoryHelper.decrStack(0, inv);
 							world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
-							ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
+							plant.place(world, c.xCoord, c.yCoord, c.zCoord);
 						}
 					}
 				}
@@ -239,20 +241,20 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 						Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 						Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
-							ItemStack plant = this.getPlantedSapling();
+							BlockKey plant = this.getPlantedSapling();
 							if (plant != null) {
-								if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
+								if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
 									ReikaInventoryHelper.decrStack(0, inv);
-								ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
+								plant.place(world, c.xCoord, c.yCoord, c.zCoord);
 							}
 						}
 						else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.air)) {
-							ItemStack plant = this.getPlantedSapling();
+							BlockKey plant = this.getPlantedSapling();
 							if (plant != null) {
-								if (inv[0] != null && !this.hasEnchantment(Enchantment.infinity))
+								if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
 									ReikaInventoryHelper.decrStack(0, inv);
 								world.setBlock(c.xCoord, c.yCoord-1, c.zCoord, Blocks.dirt);
-								ReikaWorldHelper.setBlock(world, c.xCoord, c.yCoord, c.zCoord, plant);
+								plant.place(world, c.xCoord, c.yCoord, c.zCoord);
 							}
 						}
 					}
@@ -279,7 +281,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	private Collection<ItemStack> getDrops(World world, int x, int y, int z, Block b, int meta) {
 		float f = this.getYield(b, meta);
 		if (ReikaRandomHelper.doWithChance(f)) {
-			int fortune = this.getEnchantment(Enchantment.fortune);
+			int fortune = enchantments.getEnchantment(Enchantment.fortune);
 			ArrayList<ItemStack> ret = b.getDrops(world, x, y, z, meta, fortune);
 			MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(x, y, z, world, b, meta, fortune, 1, ret, this.getPlacer(), false));
 			if (tree.getTreeType() == ModWoodList.SLIME) {
@@ -324,9 +326,9 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	}
 
 	private void checkAndMatchInventory() {
-		ItemStack sapling = null;
+		BlockKey sapling = null;
 		if (tree.isDyeTree()) {
-			sapling = new ItemStack(TreeGetter.getSaplingID(), 1, tree.getDyeTreeMeta());
+			sapling = new BlockKey(TreeGetter.getSaplingID(), tree.getDyeTreeMeta());
 		}
 		else if (tree.getTreeType() != null) {
 			sapling = tree.getSapling();
@@ -341,7 +343,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		if (drop == Blocks.air)
 			return;
 		int dropmeta = world.getBlockMetadata(x, y, z);
-		ItemStack sapling = tree.getSapling();
+		BlockKey sapling = tree.getSapling();
 		Block logID = tree.getTreeType().getLogID();
 
 		Collection<ItemStack> drops = this.getDrops(world, x, y, z, drop, dropmeta);
@@ -356,27 +358,46 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		for (ItemStack todrop : drops) {
 			if (ReikaItemHelper.matchStacks(todrop, sapling)) {
 				if (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize()) {
-					if (!this.chestCheck(todrop))
+					this.chestCheck(todrop);
+					if (todrop.stackSize > 0)
 						ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
 				}
 				else
 					ReikaInventoryHelper.addOrSetStack(todrop, inv, 0);
 			}
 			else {
-				if (!this.chestCheck(todrop))
+				this.chestCheck(todrop);
+				if (todrop.stackSize > 0)
 					ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
 			}
 		}
 	}
 
-	private boolean chestCheck(ItemStack is) {
+	private void chestCheck(ItemStack is) {
 		TileEntity te = worldObj.getTileEntity(xCoord, yCoord-1, zCoord);
 		if (te instanceof IInventory) {
 			IInventory ii = (IInventory)te;
-			if (ReikaInventoryHelper.addToIInv(is, ii))
-				return true;
+
+			//build in auto collation
+			int max = Math.min(ii.getInventoryStackLimit(), is.getMaxStackSize());
+			for (int i = 0; i < ii.getSizeInventory(); i++) {
+				ItemStack in = ii.getStackInSlot(i);
+				if (in != null && ReikaItemHelper.areStacksCombinable(is, in, max)) {
+					int fit = max-in.stackSize;
+					int add = Math.min(fit, is.stackSize);
+					if (add > 0) {
+						is.stackSize -= add;
+						in.stackSize += add;
+					}
+					if (is.stackSize <= 0)
+						return;
+				}
+			}
+
+			if (ReikaInventoryHelper.addToIInv(is, ii)) {
+				is.stackSize = 0;
+			}
 		}
-		return false;
 	}
 
 	private void dumpInventory() {
@@ -387,13 +408,13 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		this.chestCheck(is);
 	}
 
-	public ItemStack getPlantedSapling() {
+	public BlockKey getPlantedSapling() {
 		if (!this.shouldPlantSapling())
 			return null;
 		if (treeCopy.isDyeTree())
-			return new ItemStack(TreeGetter.getSaplingID(), 1, treeCopy.getDyeTreeMeta());
+			return new BlockKey(TreeGetter.getSaplingID(), treeCopy.getDyeTreeMeta());
 		else if (treeCopy.isRainbowTree())
-			return new ItemStack(TreeGetter.getRainbowSaplingID());
+			return new BlockKey(TreeGetter.getRainbowSaplingID());
 		else if (treeCopy.getTreeType() != null)
 			return treeCopy.getSapling();
 		else
@@ -401,7 +422,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	}
 
 	private boolean shouldPlantSapling() {
-		if (this.hasEnchantment(Enchantment.infinity))
+		if (enchantments.hasEnchantment(Enchantment.infinity))
 			return true;
 		if (treeCopy.isDyeTree()) {
 			return inv[0] != null && inv[0].stackSize > 0 && Block.getBlockFromItem(inv[0].getItem()) == TreeGetter.getSaplingID();
@@ -512,61 +533,6 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	}
 
 	@Override
-	public boolean applyEnchants(ItemStack is) {
-		boolean accepted = false;
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.fortune, is)) {
-			enchantments.put(Enchantment.fortune, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is));
-			accepted = true;
-		}
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
-			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
-			accepted = true;
-		}
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.efficiency, is))	 {
-			enchantments.put(Enchantment.efficiency, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency, is));
-			accepted = true;
-		}
-		return accepted;
-	}
-
-	public ArrayList<Enchantment> getValidEnchantments() {
-		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
-		li.add(Enchantment.fortune);
-		li.add(Enchantment.infinity);
-		li.add(Enchantment.efficiency);
-		return li;
-	}
-
-	@Override
-	public HashMap<Enchantment, Integer> getEnchantments() {
-		return enchantments;
-	}
-
-	@Override
-	public boolean hasEnchantment(Enchantment e) {
-		return this.getEnchantments().containsKey(e);
-	}
-
-	@Override
-	public boolean hasEnchantments() {
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public int getEnchantment(Enchantment e) {
-		if (!this.hasEnchantment(e))
-			return 0;
-		else
-			return this.getEnchantments().get(e);
-	}
-
-	@Override
 	public int getSizeInventory() {
 		return 1;
 	}
@@ -600,26 +566,14 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				if (lvl > 0)
-					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
-			}
-		}
+		NBT.setTag("enchants", enchantments.writeToNBT());
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		enchantments = new HashMap<Enchantment,Integer>();
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
-				enchantments.put(Enchantment.enchantmentsList[i], lvl);
-			}
-		}
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
 	}
 
 	@Override
@@ -633,7 +587,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	public int getOperationTime() {
 		if (ConfigRegistry.INSTACUT.getState()) {
 			int base = DurationRegistry.WOODCUTTER.getOperationTime(omega);
-			float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(this.getEnchantment(Enchantment.efficiency));
+			float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(enchantments.getEnchantment(Enchantment.efficiency));
 			return (int)(base/ench);
 		}
 		return 0;
@@ -666,6 +620,11 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	@Override
 	public DamageSource getDamageType() {
 		return RotaryCraft.grind;
+	}
+
+	@Override
+	public MachineEnchantmentHandler getEnchantmentHandler() {
+		return enchantments;
 	}
 
 	private static class LeafPrioritizer extends BlockTypePrioritizer {

@@ -1,0 +1,14 @@
+{
+	type = "test1"
+	input = "minecraft:gold_ingot"
+	min_speed = 8192
+	speed_per_microtesla = 256
+	time_factor = 6
+}
+{
+	type = "test2"
+	input = "minecraft:emerald"
+	min_speed = 65536
+	speed_per_microtesla = 2
+	time_factor = 20
+}

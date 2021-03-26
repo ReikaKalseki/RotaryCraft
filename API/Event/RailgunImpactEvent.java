@@ -10,7 +10,9 @@
 package Reika.RotaryCraft.API.Event;
 
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+
 import cpw.mods.fml.common.eventhandler.Event;
 
 public class RailgunImpactEvent extends Event {

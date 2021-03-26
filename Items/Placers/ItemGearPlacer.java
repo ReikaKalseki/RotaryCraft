@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Items.Placers;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,16 +21,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
-import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -37,6 +43,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 
 	public ItemGearPlacer() {
 		super();
+		this.setCreativeTab(RotaryCraft.tabPower);
 	}
 
 	@Override
@@ -73,7 +80,8 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 			if (gbx != null) {
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
 				//gbx.type = MaterialRegistry.setType(is.getItemDamage()%5);
-				gbx.setBlockMetadata(is.getItemDamage()/5*4+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+				gbx.setBlockMetadata(is.getItemDamage()*4+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+				gbx.setMaterialFromItem(is);
 				gbx.setPlacer(ep);
 			}
 		}
@@ -95,16 +103,28 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	public void addInformation(ItemStack is, EntityPlayer ep, List par3List, boolean par4) {
 		if (is.stackTagCompound == null)
 			return;
-		MaterialRegistry mat = MaterialRegistry.matList[is.getItemDamage()%MaterialRegistry.matList.length];
+		GearboxTypes mat = GearboxTypes.getMaterialFromGearboxItem(is);
 		if (is.stackTagCompound.hasKey("damage") && mat.isDamageableGear()) {
 			int dmg = TileEntityGearbox.getDamagePercent(is.stackTagCompound.getInteger("damage"));
 			par3List.add("Damage: "+dmg+"%");
 		}
 
+		if (!is.stackTagCompound.hasKey("type")) {
+			par3List.add("Legacy; craft into new version");
+			par3List.add(EnumChatFormatting.RED+"DO NOT PLACE");
+		}
+
 		if (is.stackTagCompound.hasKey("lube") && mat.needsLubricant()) {
 			int amt = is.stackTagCompound.getInteger("lube");
-			String s = is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/TileEntityGearbox.getMaxLubricant(mat)) : "Lubricant: "+amt+" mB";
+			String s = is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/mat.getMaxLubricant()) : "Lubricant: "+amt+" mB";
 			par3List.add(s);
+		}
+
+		if (is.stackTagCompound.hasKey("bearing")) {
+			MaterialRegistry matl = GearboxTypes.valueOf(is.stackTagCompound.getString("bearing")).material;
+			String name = StatCollector.translateToLocal("material."+matl.name().toLowerCase(Locale.ENGLISH));
+			EnumChatFormatting ec = matl.ordinal() < mat.material.ordinal() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN;
+			par3List.add("Bearing type: "+ec+name);
 		}
 	}
 
@@ -112,20 +132,30 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.GEARBOX.isAvailableInCreativeInventory()) {
-			for (int i = 0; i < RotaryNames.getNumberGearTypes(); i++) {
-				ItemStack item = new ItemStack(id, 1, i);
-				if (item.stackTagCompound == null)
-					item.setTagCompound(new NBTTagCompound());
-				item.stackTagCompound.setInteger("damage", 0);
-				item.stackTagCompound.setInteger("lube", 0);
-				list.add(item);
+			for (GearboxTypes gear : GearboxTypes.typeList) {
+				if (!gear.isLoadable())
+					continue;
+				for (int r = 2; r <= 16; r *= 2) {
+					ItemStack item = gear.getGearboxItem(r);
+					if (item.stackTagCompound == null)
+						item.stackTagCompound = new NBTTagCompound();
+					item.stackTagCompound.setInteger("damage", 0);
+					item.stackTagCompound.setInteger("lube", 0);
+					list.add(item);
+				}
 			}
 		}
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
-		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
+		try {
+			GearboxTypes type = GearboxTypes.getMaterialFromGearboxItem(is);
+			return type != null ? type.getLocalizedGearboxName(ReikaMathLibrary.intpow2(2, is.getItemDamage()+1)) : "Gearbox";
+		}
+		catch (Exception e) {
+			return "Invalid item: "+e.toString();
+		}
 	}
 
 	@Override

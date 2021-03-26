@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,8 @@ package Reika.RotaryCraft.ModInterface.NEI;
 
 import java.awt.Rectangle;
 import java.util.Collection;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -21,14 +23,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesDryingBed;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesDryingBed.DryingRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiDryer;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -36,33 +38,24 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 
 	public class DryingBedRecipe extends CachedRecipe {
 
-		private Fluid input;
+		private final DryingRecipe input;
 
-		private DryingBedRecipe(Fluid in) {
+		private DryingBedRecipe(DryingRecipe in) {
 			input = in;
 		}
 
 		@Override
 		public PositionedStack getResult() {
 			if (input != null) {
-				ItemStack is = this.getOutput();
-				return new PositionedStack(is, 120, 25);
+				return new PositionedStack(input.getOutput(), 120, 25);
 			}
 			return null;
-		}
-
-		private ItemStack getOutput() {
-			return RecipesDryingBed.getRecipes().getDryingResult(new FluidStack(input, 16000));
 		}
 
 		@Override
 		public PositionedStack getIngredient()
 		{
 			return null;//new PositionedStack(this.getEntry(), 120, 5);
-		}
-
-		public FluidStack getEntry() {
-			return new FluidStack(input, RecipesDryingBed.getRecipes().getRecipeConsumption(this.getOutput()));
 		}
 	}
 
@@ -102,8 +95,8 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId != null && outputId.equals("rcdrying")) {
-			Collection<Fluid> li = RecipesDryingBed.getRecipes().getAllRecipes();
-			for (Fluid f : li)
+			Collection<DryingRecipe> li = RecipesDryingBed.getRecipes().getAllRecipes();
+			for (DryingRecipe f : li)
 				arecipes.add(new DryingBedRecipe(f));
 		}
 		super.loadCraftingRecipes(outputId, results);
@@ -119,7 +112,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		Fluid f = RecipesDryingBed.getRecipes().getRecipe(result);
+		DryingRecipe f = RecipesDryingBed.getRecipes().getRecipe(result);
 		if (f != null) {
 			arecipes.add(new DryingBedRecipe(f));
 		}
@@ -131,7 +124,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 		if (fs != null) {
 			ItemStack is = RecipesDryingBed.getRecipes().getDryingResult(fs);
 			if (is != null) {
-				arecipes.add(new DryingBedRecipe(fs.getFluid()));
+				arecipes.add(new DryingBedRecipe(RecipesDryingBed.getRecipes().getRecipe(is)));
 			}
 		}
 	}
@@ -150,7 +143,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 
 	private void drawFluids(int recipe) {
 		DryingBedRecipe r = (DryingBedRecipe)arecipes.get(recipe);
-		FluidStack fs = r.getEntry();
+		FluidStack fs = r.input.getFluid();
 		if (fs != null) {
 			Fluid f = fs.getFluid();
 			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);

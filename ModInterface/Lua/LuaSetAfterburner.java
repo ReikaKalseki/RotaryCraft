@@ -10,9 +10,9 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
-import dan200.computercraft.api.lua.LuaException;
 
 
 public class LuaSetAfterburner extends LuaMethod {
@@ -22,12 +22,12 @@ public class LuaSetAfterburner extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		if (((TileEntityJetEngine)te).canAfterBurn()) {
 			((TileEntityJetEngine)te).setBurnerActive((Boolean)args[1]);
 		}
 		else {
-			throw new LuaException("This engine ("+te+") does not have an afterburner!");
+			throw new LuaMethodException("This engine ("+te+") does not have an afterburner!");
 		}
 		return null;
 	}

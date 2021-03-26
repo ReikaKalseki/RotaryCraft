@@ -11,8 +11,10 @@ package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public enum BlastGate {

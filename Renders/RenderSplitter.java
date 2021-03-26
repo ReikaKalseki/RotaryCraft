@@ -1,18 +1,18 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -28,6 +28,11 @@ public class RenderSplitter extends RotaryTERenderer
 
 	private ModelSplitter SplitterModel = new ModelSplitter();
 	private ModelSplitter2 SplitterModel2 = new ModelSplitter2();
+
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/";
+	}
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -45,7 +50,7 @@ public class RenderSplitter extends RotaryTERenderer
 		ModelSplitter2 var15 = SplitterModel2;
 
 		String s = tile.isBedrock() ? "bedsplittertex" : "splittertex";
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/"+s+".png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/"+s+".png");
 
 		this.setupGL(tile, par2, par4, par6);
 
@@ -57,55 +62,55 @@ public class RenderSplitter extends RotaryTERenderer
 			meta = tile.getBlockMetadata();
 
 			switch(meta) {
-			case 0:
-				var11 = -90;
-				break;
-			case 1:
-				var11 = 0;
-				break;
-			case 2:
-				var11 = 90;
-				break;
-			case 3:
-				var11 = 180;
-				break;
-			case 4:
-				var11 = -90;
-				break;
-			case 5:
-				var11 = 0;
-				break;
-			case 6:
-				var11 = 90;
-				break;
-			case 7:
-				var11 = 180;
-				break;
+				case 0:
+					var11 = -90;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 90;
+					break;
+				case 3:
+					var11 = 180;
+					break;
+				case 4:
+					var11 = -90;
+					break;
+				case 5:
+					var11 = 0;
+					break;
+				case 6:
+					var11 = 90;
+					break;
+				case 7:
+					var11 = 180;
+					break;
 
-			case 8:
-				var11 = 270;
-				break;
-			case 9:
-				var11 = 0;
-				break;
-			case 10:
-				var11 = 90;
-				break;
-			case 11:
-				var11 = 180;
-				break;
-			case 12:
-				var11 = -90;
-				break;
-			case 13:
-				var11 = 0;
-				break;
-			case 14:
-				var11 = 90;
-				break;
-			case 15: //good
-				var11 = 180;
-				break;
+				case 8:
+					var11 = 270;
+					break;
+				case 9:
+					var11 = 0;
+					break;
+				case 10:
+					var11 = 90;
+					break;
+				case 11:
+					var11 = 180;
+					break;
+				case 12:
+					var11 = -90;
+					break;
+				case 13:
+					var11 = 0;
+					break;
+				case 14:
+					var11 = 90;
+					break;
+				case 15: //good
+					var11 = 180;
+					break;
 			}
 
 			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);

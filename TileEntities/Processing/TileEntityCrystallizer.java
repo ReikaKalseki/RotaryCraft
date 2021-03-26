@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -32,6 +33,7 @@ import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ConditionalOperation {
@@ -268,6 +270,11 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	@Override
 	public boolean canBeCooledWithFins() {
 		return true;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return false;
 	}
 
 	@Override

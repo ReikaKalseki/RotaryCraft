@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -21,21 +20,28 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+
+import Reika.DragonAPI.Instantiable.Recipe.CraftingInputMatrix;
+import Reika.DragonAPI.Interfaces.CraftingContainer;
+import Reika.DragonAPI.Interfaces.TileEntity.CraftingTile;
 import Reika.DragonAPI.Interfaces.TileEntity.TriggerableAction;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Event.WorktableCraftEvent;
 import Reika.RotaryCraft.API.Interfaces.ChargeableTool;
+import Reika.RotaryCraft.Auxiliary.Interfaces.AlternatingRedstoneUser;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes.WorktableRecipe;
 import Reika.RotaryCraft.Base.ItemChargedArmor;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedRCTileEntity;
-import Reika.RotaryCraft.Containers.Machine.ContainerWorktable;
+import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerWorktable;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern.RecipeMode;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
@@ -45,15 +51,25 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityWorktable extends InventoriedRCTileEntity implements TriggerableAction {
+public class TileEntityWorktable extends InventoriedRCTileEntity implements CraftingTile<WorktableRecipe>, TriggerableAction, AlternatingRedstoneUser {
 
-	public boolean craftable = false;
-	private ItemStack toCraft;
-	//private boolean hasProgram;
+	private final CraftingInputMatrix matrix = new CraftingInputMatrix(this);
+
+	private boolean hasUpgrade;
+	private WorktableRecipe toCraft;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote) {
+			matrix.update();
+			if (matrix.isEmpty())
+				return;
+			if (hasUpgrade && this.getTicksExisted()%6 == 0 && !this.hasRedstoneSignal()) {
+				this.onPositiveRedstoneEdge();
+				if (this.getTicksExisted()%6 == 0) {
+					ReikaSoundHelper.playSoundAtBlock(world, x, y, z, "random.click", 0.5F, 0.675F);
+				}
+			}
 			if (this.isReadyToCraft()) {
 				if (this.getTicksExisted()%4 == 0) {
 					this.chargeTools();
@@ -188,15 +204,19 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		}
 	}
 
+	public CraftingContainer constructContainer() {
+		return new ContainerWorktable(this.getPlacer(), this, worldObj, false);
+	}
+
+	@Override
+	public int getOutputSlot() {
+		return 13;
+	}
+
 	private boolean craft() {
-		EntityPlayer ep = this.getPlacer();
-		ContainerWorktable cw = new ContainerWorktable(ep, this, worldObj);
-		InventoryCrafting cm = new InventoryCrafting(cw, 3, 3);
-		for (int i = 0; i < 9; i++)
-			cm.setInventorySlotContents(i, this.getStackInSlot(i));
-		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(cm, worldObj);
+		WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(matrix, worldObj);
 		if (wr != null) {
-			return this.handleCrafting(wr, ep);
+			return this.handleCrafting(wr, this.getPlacer(), false);
 		}
 		return false;
 	}
@@ -209,7 +229,9 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		return true;
 	}
 
-	public boolean handleCrafting(WorktableRecipe wr, EntityPlayer ep) {
+	public boolean handleCrafting(WorktableRecipe wr, EntityPlayer ep, boolean craftAll) {
+		int maxCrafts = craftAll ? this.getSmallestInputStack() : 1;
+		int crafts = 0;
 		if (wr.isRecycling()) {
 			ArrayList<ItemStack> li = wr.getRecycling().getSplitOutput();
 			int i = 9;
@@ -218,24 +240,46 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 				i++;
 			}
 			RotaryAchievements.RECYCLE.triggerAchievement(ep);
+			crafts = 1;
 		}
 		else {
-			ItemStack is = wr.getOutput();
-			if (inv[13] != null && inv[13].stackSize+is.stackSize > is.getMaxStackSize())
-				return false;
-			is.onCrafting(worldObj, ep, is.stackSize);
-			ReikaInventoryHelper.addOrSetStack(is, inv, 13);
-			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, is));
+			for (int i = 0; i < maxCrafts; i++) {
+				ItemStack is = wr.getOutput();
+				if (inv[13] != null && inv[13].stackSize+is.stackSize > Math.min(this.getInventoryStackLimit(), is.getMaxStackSize()))
+					break;
+				is.onCrafting(worldObj, ep, is.stackSize);
+				ReikaInventoryHelper.addOrSetStack(is, inv, 13);
+				crafts++;
+			}
+			ItemStack out = wr.getOutput().copy();
+			out.stackSize *= crafts;
+			MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, out));
 		}
+		if (crafts > 0) {
+			for (int i = 0; i < 9; ++i) {
+				ItemStack item = this.getStackInSlot(i);
+				if (item != null) {
+					//noUpdate = true;
+					ReikaInventoryHelper.decrStack(i, this, crafts);
+				}
+			}
+			SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	private int getSmallestInputStack() {
+		int smallest = Integer.MAX_VALUE;
 		for (int i = 0; i < 9; ++i) {
 			ItemStack item = this.getStackInSlot(i);
-			if (item != null) {
-				//noUpdate = true;
-				ReikaInventoryHelper.decrStack(i, inv);
+			if (item != null && item.stackSize < smallest) {
+				smallest = item.stackSize;
 			}
 		}
-		SoundRegistry.CRAFT.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, 0.3F, 1.5F);
-		return true;
+		return smallest < Integer.MAX_VALUE ? smallest : -1;
 	}
 
 	private void makeBedjump() {
@@ -264,18 +308,20 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 						return false;
 					else {
 						List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
-						boolean flag = true;
-						for (int k = 0; k < 9; k++) {
-							if (in[k] != null && !in[k].isEmpty()) {
-								if (inv[k+9] != null) {
-									if (!ReikaItemHelper.collectionContainsItemStack(in[k], inv[k+9]))
-										flag = false;
-									if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
-										flag = false;
+						if (in != null) {
+							boolean flag = true;
+							for (int k = 0; k < 9; k++) {
+								if (in[k] != null && !in[k].isEmpty()) {
+									if (inv[k+9] != null) {
+										if (!ReikaItemHelper.collectionContainsItemStack(in[k], inv[k+9]))
+											flag = false;
+										if (inv[k+9].stackSize >= Math.min(this.getInventoryStackLimit(), inv[k+9].getMaxStackSize()))
+											flag = false;
+									}
 								}
 							}
+							can = flag;
 						}
-						can = flag;
 					}
 				}
 			}
@@ -315,6 +361,8 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		ItemStack is = inv[4];
 		IRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
 		List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
+		if (in == null)
+			return;
 
 		for (int i = 0; i < ir.getRecipeOutput().stackSize; i++)
 			ReikaInventoryHelper.decrStack(4, inv);
@@ -407,6 +455,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		//ReikaJavaLibrary.pConsole(plateslot, Side.SERVER);
 		int jetslot = ReikaInventoryHelper.locateInInventory(ItemRegistry.JETPACK.getItemInstance(), inv);
 		if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
+			ItemStack jet = inv[jetslot];
 			ItemStack plate = inv[plateslot];
 			NBTTagCompound tag = plate.stackTagCompound != null ? (NBTTagCompound)plate.stackTagCompound.copy() : null;
 			inv[jetslot] = null;
@@ -416,6 +465,11 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 				is.stackTagCompound = new NBTTagCompound();
 			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag);
 			inv[9] = is;
+			for (PackUpgrades u : PackUpgrades.values()) {
+				if (u.existsOn(jet)) {
+					u.enable(is, true);
+				}
+			}
 		}
 	}
 
@@ -461,31 +515,18 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 		return i >= 9 && i != 18;
 	}
 
-	public ItemStack getToCraft() {
-		if (toCraft == null)
-			return null;
-		return toCraft.copy();
-	}
-
-	public void setToCraft(ItemStack is) {
-		if (is != null)
-			toCraft = is.copy();
-		else
-			toCraft = null;
-	}
-
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
-		//NBT.setBoolean("prog", hasProgram);
+
+		NBT.setBoolean("redstoneUpgrade", hasUpgrade);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
-		//hasProgram = NBT.getBoolean("prog");
+
+		hasUpgrade = NBT.getBoolean("redstoneUpgrade");
 	}
 
 	@Override
@@ -517,5 +558,42 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Trig
 	@Override
 	public boolean trigger() {
 		return this.craft();
+	}
+
+	@Override
+	public void upgrade(ItemStack is) {
+		this.addRedstoneUpgrade();
+	}
+
+	@Override
+	public boolean canUpgradeWith(ItemStack item) {
+		return !this.hasRedstoneUpgrade() && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.REDSTONE.ordinal();
+	}
+
+	@Override
+	public void addRedstoneUpgrade() {
+		hasUpgrade = true;
+	}
+
+	@Override
+	public boolean hasRedstoneUpgrade() {
+		return hasUpgrade;
+	}
+
+	@Override
+	public void breakBlock() {
+		if (this.hasRedstoneUpgrade()) {
+			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.REDSTONE.ordinal()));
+		}
+	}
+
+	@Override
+	public WorktableRecipe getToCraft() {
+		return toCraft;
+	}
+
+	@Override
+	public void setToCraft(WorktableRecipe wr) {
+		toCraft = wr;
 	}
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
 import Reika.DragonAPI.Base.OneSlotMachine;
 import Reika.DragonAPI.Instantiable.InertItem;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -38,8 +39,9 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 		this.getPowerBelow();
 		this.updateItem();
 
-		if (extractionCooldown > 0)
-			extractionCooldown--;
+
+
+		boolean ticked = false;
 
 		if (power >= MINPOWER && omega >= MINSPEED) {
 			ItemStack is = inv[0];
@@ -48,6 +50,7 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 				if (fs != null) {
 					WettingRecipe wr = RecipesWetter.getRecipes().getRecipe(is, fs);
 					if (wr != null) {
+						ticked = true;
 						if (tick >= this.getDuration(wr)) {
 							tank.removeLiquid(wr.getFluid().amount);
 							inv[0] = wr.getOutput();
@@ -59,19 +62,16 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 							extractionCooldown = 10;
 						}
 					}
-					else {
-						tick = 0;
-					}
 				}
-				else {
-					tick = 0;
-				}
-			}
-			else {
-				tick = 0;
 			}
 		}
+
+		if (ticked) {
+			extractionCooldown = 10;
+		}
 		else {
+			if (extractionCooldown > 0)
+				extractionCooldown--;
 			tick = 0;
 		}
 	}

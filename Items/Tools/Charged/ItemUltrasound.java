@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,10 +13,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
@@ -44,10 +47,10 @@ public class ItemUltrasound extends ItemChargedTool {
 		boolean liq = false;
 		boolean caveready = false;
 		for (float i = 0; i <= 5; i += 0.2) {
-			int[] xyz = ReikaVectorHelper.getPlayerLookBlockCoords(ep, i);
-			Block id = world.getBlock(xyz[0], xyz[1], xyz[2]);
-			int meta = world.getBlockMetadata(xyz[0], xyz[1], xyz[2]);
-			Fluid f = FluidRegistry.lookupFluidForBlock(id);
+			DecimalPosition xyz = ReikaVectorHelper.getPlayerLookCoords(ep, i);
+			Block id = xyz.getBlock(world);
+			int meta = xyz.getBlockMetadata(world);
+			Fluid f = ReikaFluidHelper.lookupFluidForBlock(id);
 			if (ReikaBlockHelper.isOre(id, meta) && !ores) {
 				ores = true;
 				ReikaChatHelper.write("Ore Detected!");
@@ -56,7 +59,7 @@ public class ItemUltrasound extends ItemChargedTool {
 				silver = true;
 				ReikaChatHelper.write("Silverfish Detected!");
 			}
-			if (id != Blocks.air && !ReikaWorldHelper.softBlocks(world, xyz[0], xyz[1], xyz[2]))
+			if (id != Blocks.air && !ReikaWorldHelper.softBlocks(world, MathHelper.floor_double(xyz.xCoord), MathHelper.floor_double(xyz.yCoord), MathHelper.floor_double(xyz.zCoord)))
 				caveready = true;
 			if (f != null && !liq) {
 				liq = true;

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,8 +18,10 @@ import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.TargetEntity;
 import Reika.RotaryCraft.Auxiliary.TurretDamage;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
@@ -96,6 +98,7 @@ public class TileEntityLaserGun extends TileEntityAimedCannon {
 				if (e instanceof EntityLivingBase) {
 					e.attackEntityFrom(new TurretDamage(this).setFireDamage(), 4);
 					e.setFire(7);
+					((EntityLivingBase)e).removePotionEffect(RotaryCraft.freeze.id);
 				}
 			}
 			int x = xCoord+(int)dx;

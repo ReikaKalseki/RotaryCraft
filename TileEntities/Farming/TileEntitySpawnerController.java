@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,6 +23,8 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -40,13 +42,20 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 
 	private SpawnerControl control = null;
 
-	public int setDelay = BASEDELAY;
+	private int setDelay = BASEDELAY;
+	private StepTimer timer = new StepTimer(0);
 
 	public int getOperationTime() {
 		int time = BASEDELAY-40*(int)ReikaMathLibrary.logbase(omega, 2);
 		if (time < 0)
 			time = 0; //0 tick minimum
 		return time;
+	}
+
+	public void setDelay(int delay) {
+		setDelay = delay;
+		timer.setCap(setDelay);
+		timer.setTick(Math.min(setDelay-1, timer.getTick()));
 	}
 
 	public int getDelay() {
@@ -61,7 +70,8 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		super.updateTileEntity();
 		if (!this.isValidLocation(world, x, y, z)) {
 			disable = false;
-			setDelay = 0;
+			this.setDelay(0);
+			timer.setTick(0);
 			omega = torque = 0;
 			power = 0;
 			this.setPointingOffset(0, -1, 0);
@@ -69,7 +79,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 			return;
 		}
 		this.getOffsetPower4Sided(0, -1, 0, true); //The spawner itself is the power input
-		if (power >= MINPOWER)
+		if (power >= MINPOWER && setDelay > 0)
 			this.applyToSpawner(world, x, y, z);
 	}
 
@@ -91,10 +101,14 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		if (disable || world.isBlockIndirectlyGettingPowered(x, y-1, z)) {
 			this.shutdownSpawner(world, x, y, z);
 		}
-		else if (this.canSpawn(world, x, y, z))
-			control.setDelay(Math.min(control.getDelay(), this.getDelay()));
-		else
+		else if (this.canSpawn(world, x, y, z)) {
+			timer.update();
+			control.setDelay(setDelay-timer.getTick());
+			timer.checkCap();
+		}
+		else {
 			;//hijackdelay = 255; //"do not affect"
+		}
 		if (control.getDelay() <= 0)
 			control.spawnCycle(this);
 	}
@@ -134,7 +148,7 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 	protected void readSyncTag(NBTTagCompound NBT)
 	{
 		super.readSyncTag(NBT);
-		setDelay = NBT.getInteger("setdelay");
+		this.setDelay(NBT.getInteger("setdelay"));
 		disable = NBT.getBoolean("disable");
 	}
 

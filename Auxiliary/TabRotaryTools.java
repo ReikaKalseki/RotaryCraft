@@ -10,8 +10,10 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Instantiable.GUI.RegistryEnumCreativeTab;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

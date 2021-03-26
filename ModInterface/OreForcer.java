@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.ModHandlerBase;
 import Reika.DragonAPI.Exception.ModReflectionException;
@@ -41,6 +42,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class OreForcer {
@@ -235,8 +237,13 @@ public final class OreForcer {
 
 	private void intercraftEssence() {
 		ItemStack ore = EssenceType.ESSENCE.getEssence();
-		GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
-		RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
+		if (ore != null) {
+			GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.ESSENCE));
+			RotaryCraft.logger.log("RotaryCraft essence items can now be crafted into Magic Crops essence!");
+		}
+		else {
+			RotaryCraft.logger.logError("Could not find essence item, cannot add intercraft recipe!");
+		}
 	}
 
 	private void convertUranium() {

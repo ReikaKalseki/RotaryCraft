@@ -1,0 +1,7 @@
+{
+	type = "test1"
+	input = "rotarycraft_stack:silicon"
+	output = "minecraft:grass"
+	temperature = 1640
+	duration = 80
+}

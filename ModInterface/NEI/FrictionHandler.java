@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,10 +16,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.item.ItemStack;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater.FrictionRecipe;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -92,9 +94,10 @@ public class FrictionHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		FrictionRecipe rec = RecipesFrictionHeater.getRecipes().getRecipeByOutput(result);
+		Collection<FrictionRecipe> rec = RecipesFrictionHeater.getRecipes().getRecipesByOutput(result);
 		if (rec != null) {
-			arecipes.add(new FrictionHeaterRecipe(rec.getInput()));
+			for (FrictionRecipe f : rec)
+				arecipes.add(new FrictionHeaterRecipe(f.getInput()));
 		}
 	}
 

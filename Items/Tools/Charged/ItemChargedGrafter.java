@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,14 +10,15 @@
 package Reika.RotaryCraft.Items.Tools.Charged;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.Base.ItemChargedTool;
+
 import forestry.api.arboriculture.IToolGrafter;
 
 @Strippable(value = {"forestry.api.arboriculture.IToolGrafter"})
@@ -31,7 +32,7 @@ public class ItemChargedGrafter extends ItemChargedTool implements IToolGrafter 
 	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, int x, int y, int z) {
 		return this.getChanceFromCharge(stack.getItemDamage());
 	}
-
+	/*
 	@Override
 	public boolean onBlockDestroyed(ItemStack is, World world, Block blockID, int x, int y, int z, EntityLivingBase e)
 	{
@@ -62,13 +63,22 @@ public class ItemChargedGrafter extends ItemChargedTool implements IToolGrafter 
 		}
 		return false;
 	}
-
+	 */
 	private float getChanceFromCharge(int charge) {
 		if (charge < 8)
 			return charge;
 		if (charge > 4096)
 			return 100;
 		return (int)(10*ReikaMathLibrary.logbase(charge, 2))-20;
+	}
+
+	@Override
+	public float getDigSpeed(ItemStack is, Block b, int meta) {
+		if (b == null)
+			return 0;
+		if (ForestryHandler.BlockEntry.LEAF.getBlock() == b)
+			return 30;
+		return super.getDigSpeed(is, b, meta);
 	}
 
 	@Override

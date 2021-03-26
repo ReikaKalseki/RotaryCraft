@@ -1,19 +1,19 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.Conversion;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -24,6 +24,11 @@ public class RenderCompressor extends RotaryTERenderer
 {
 
 	private ModelCompressor CompressorModel = new ModelCompressor();
+
+	@Override
+	protected String getTextureSubfolder() {
+		return "Converter/";
+	}
 
 	/**
 	 * Renders the TileEntity for the position.
@@ -40,7 +45,7 @@ public class RenderCompressor extends RotaryTERenderer
 		ModelCompressor var14;
 
 		var14 = CompressorModel;
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/airtex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Converter/airtex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -54,24 +59,24 @@ public class RenderCompressor extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 0;
-				break;
-			case 3:
-				var11 = 90;
-				break;
-			case 4:
-				var11 = 180;
-				break;
-			case 5:
-				var11 = 270;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 0;
+					break;
+				case 3:
+					var11 = 90;
+					break;
+				case 4:
+					var11 = 180;
+					break;
+				case 5:
+					var11 = 270;
+					break;
 			}
 
 			if (tile.getBlockMetadata() < 2) {

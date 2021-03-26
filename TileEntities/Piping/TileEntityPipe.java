@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -96,7 +97,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 	}
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry m) {
+	public boolean canConnectToPipe(MachineRegistry m, ForgeDirection dir) {
 		return m == MachineRegistry.BEDPIPE || m.isStandardPipe() || m == MachineRegistry.VALVE || m == MachineRegistry.SPILLER || m == MachineRegistry.SEPARATION || m == MachineRegistry.BYPASS || m == MachineRegistry.SUCTION;
 	}
 
@@ -160,6 +161,10 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		if (f.equals(FluidRegistry.getFluid("chlorine")))
 			return false;
 		if (f.equals(FluidRegistry.getFluid("rc oxygen")))
+			return false;
+		if (f.equals(FluidRegistry.getFluid("rc lifbe fuel")))
+			return false;
+		if (f.equals(FluidRegistry.getFluid("rc lifbe fuel preheat")))
 			return false;
 		return true;
 	}
@@ -251,15 +256,6 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE, P
 		liquidLevel += amt;
 	}
 	 */
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
-	}
-
-	@Override
-	public boolean allowExternalHeating() {
-		return false;
-	}
 
 	public final void setTemperature(int temp) {
 		temperature = temp;

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,13 +17,16 @@ import net.minecraft.client.renderer.entity.RenderTNTPrimed;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.DonatorController.Donator;
 import Reika.DragonAPI.Auxiliary.Trackers.PatreonController;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerSpecificRenderer;
-import Reika.DragonAPI.Instantiable.IO.SoundLoader;
-import Reika.DragonAPI.Instantiable.Rendering.BlockSheetTexRenderer;
+import Reika.DragonAPI.Auxiliary.Trackers.SettingInterferenceTracker;
+import Reika.DragonAPI.IO.Shaders.ShaderProgram;
+import Reika.DragonAPI.IO.Shaders.ShaderRegistry;
+import Reika.DragonAPI.IO.Shaders.ShaderRegistry.ShaderDomain;
 import Reika.DragonAPI.Instantiable.Rendering.ForcedTextureArmorModel;
 import Reika.DragonAPI.Instantiable.Rendering.ItemSpriteSheetRenderer;
 import Reika.DragonAPI.Instantiable.Rendering.MultiSheetItemRenderer;
@@ -57,6 +60,7 @@ import Reika.RotaryCraft.Registry.HandbookRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -64,22 +68,20 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ClientProxy extends CommonProxy
-{
-	//public static final int BlockSheetTexRenderID = RenderingRegistry.getNextAvailableRenderId();
+public class ClientProxy extends CommonProxy {
 
 	private static final ItemSpriteSheetRenderer[] items = {
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items2.png"),
-		new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items3.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items2.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items3.png"),
+			new ItemSpriteSheetRenderer(RotaryCraft.instance, RotaryCraft.class, "Textures/Items/items4.png"),
 	};
 
 	private static final MultiSheetItemRenderer[] multisheets = {
-		new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class),
+			new MultiSheetItemRenderer(RotaryCraft.instance, RotaryCraft.class),
 	};
 
 	//public static final ItemSpriteSheetRenderer terrain = new ItemSpriteSheetRenderer(RotaryCraft.class, "Textures/GUI/mobradargui.png", RotaryAux.terrainpng);
-	public static final BlockSheetTexRenderer block = new BlockSheetTexRenderer(RotaryCraft.class, "Textures/Terrain/textures.png");
 
 	public static final ItemMachineRenderer machineItems = new ItemMachineRenderer();
 	public static final DecoTankItemRenderer decotank = new DecoTankItemRenderer();
@@ -88,6 +90,9 @@ public class ClientProxy extends CommonProxy
 	public static PipeBodyRenderer pipe;
 	public static CubicalMachineRenderer cube;
 	public static ConnectedGlassRenderer connected;
+
+	private static ShaderProgram heatRipple;
+	//private static ShaderProgram heatGlow;
 
 	//public static final ForcedTextureArmorModel bed1 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_1.png");
 	//public static final ForcedTextureArmorModel bed2 = new ForcedTextureArmorModel(RotaryCraft.class, "/Reika/RotaryCraft/Textures/Misc/bedrock_2.png");
@@ -102,9 +107,13 @@ public class ClientProxy extends CommonProxy
 	private static final HashMap<ItemRegistry, ForcedTextureArmorModel> armorTextures = new HashMap();
 	private static final HashMap<ItemRegistry, String> armorAssets = new HashMap();
 
+	public static ShaderProgram getHeatRippleShader() {
+		return heatRipple;
+	}
+
 	@Override
 	public void registerSounds() {
-		new SoundLoader(SoundRegistry.soundList).register();
+		sounds.register();
 	}
 
 	public static ItemSpriteSheetRenderer getSpritesheetRenderer(int index) {
@@ -113,17 +122,32 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void registerRenderers() {
-		pipeRender = RenderingRegistry.getNextAvailableRenderId();
-		pipe = new PipeBodyRenderer(pipeRender);
-		RenderingRegistry.registerBlockHandler(pipeRender, pipe);
+		if (heatRipple == null)
+			heatRipple = ShaderRegistry.createShader(RotaryCraft.instance, "heatripple", RotaryCraft.class, "Shaders/", ShaderDomain.GLOBALNOGUI).setEnabled(false);
+		//heatGlow = ShaderRegistry.createShader(RotaryCraft.instance, "heatglow", RotaryCraft.class, "Shaders/", ShaderDomain.TESR).setEnabled(false);
 
-		cubeRender = RenderingRegistry.getNextAvailableRenderId();
-		cube = new CubicalMachineRenderer(cubeRender);
-		RenderingRegistry.registerBlockHandler(cubeRender, cube);
+		if (RotaryCraft.instance.isLocked()) {
+			pipeRender = cubeRender = connectedRender = 0;
+		}
+		else {
+			if (pipeRender == 0) {
+				pipeRender = RenderingRegistry.getNextAvailableRenderId();
+				pipe = new PipeBodyRenderer(pipeRender);
+				RenderingRegistry.registerBlockHandler(pipeRender, pipe);
+			}
 
-		connectedRender = RenderingRegistry.getNextAvailableRenderId();
-		connected = new ConnectedGlassRenderer(connectedRender);
-		RenderingRegistry.registerBlockHandler(connectedRender, connected);
+			if (cubeRender == 0) {
+				cubeRender = RenderingRegistry.getNextAvailableRenderId();
+				cube = new CubicalMachineRenderer(cubeRender);
+				RenderingRegistry.registerBlockHandler(cubeRender, cube);
+			}
+
+			if (connectedRender == 0) {
+				connectedRender = RenderingRegistry.getNextAvailableRenderId();
+				connected = new ConnectedGlassRenderer(connectedRender);
+				RenderingRegistry.registerBlockHandler(connectedRender, connected);
+			}
+		}
 
 		if (DragonOptions.NORENDERS.getState()) {
 			RotaryCraft.logger.log("Disabling all machine renders for FPS and lag profiling.");
@@ -219,7 +243,7 @@ public class ClientProxy extends CommonProxy
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (ir.isPlacer()) {
-				MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), machineItems);
+				MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), RotaryCraft.instance.isLocked() ? null : machineItems);
 			}
 		}
 
@@ -237,11 +261,16 @@ public class ClientProxy extends CommonProxy
 			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getItemInstance()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (!ir.isPlacer()) {
-				if (ir.isMultiSheet()) {
-					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), multisheets[-ir.getTextureSheet()]);
+				if (RotaryCraft.instance.isLocked()) {
+					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), null);
 				}
 				else {
-					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), items[ir.getTextureSheet()]);
+					if (ir.isMultiSheet()) {
+						MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), multisheets[-ir.getTextureSheet()]);
+					}
+					else {
+						MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), items[ir.getTextureSheet()]);
+					}
 				}
 			}
 		}
@@ -252,6 +281,7 @@ public class ClientProxy extends CommonProxy
 		super.initClasses();
 		ReikaJavaLibrary.initClass(HandbookRegistry.class);
 		ReikaJavaLibrary.initClass(SoundRegistry.class);
+		SettingInterferenceTracker.instance.registerSettingHandler(SettingInterferenceTracker.muteInterference);
 	}
 
 	// Override any other methods that need to be handled differently client side.

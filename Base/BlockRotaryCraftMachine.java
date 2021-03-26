@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Base;
 
 import java.util.Random;
 
-import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -26,6 +26,8 @@ import Reika.DragonAPI.Base.BlockTEBase;
 import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
 import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
+import mcp.mobius.waila.api.IWailaDataProvider;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public abstract class BlockRotaryCraftMachine extends BlockTEBase implements MachineRegistryBlock, IWailaDataProvider {

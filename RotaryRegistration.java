@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
@@ -35,6 +36,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryEntities;
 import Reika.RotaryCraft.TileEntities.TileEntityDecoTank;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -69,6 +71,7 @@ public class RotaryRegistration {
 	public static void loadOreDictionary() {
 		if (!ModList.GREGTECH.isLoaded()) {//GT unificator causes an exploit, and no mods even use this anyways
 			OreDictionary.registerOre("ingotHSLA", ItemStacks.steelingot); //though he has an entry, he does not add an alternative manufacture
+			OreDictionary.registerOre("RotaryCraft:ingotTungstenAlloy", ItemStacks.tungsteningot); //though he has an entry, he does not add an alternative manufacture
 
 			OreDictionary.registerOre("dustNetherrack", ItemStacks.netherrackdust);
 			OreDictionary.registerOre("dustSoulSand", ItemStacks.tar);

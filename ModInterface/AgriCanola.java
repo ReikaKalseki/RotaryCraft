@@ -14,6 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.InfinityRaider.AgriCraft.api.API;
+import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
+import com.InfinityRaider.AgriCraft.api.v2.APIv2;
+import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
+import com.InfinityRaider.AgriCraft.api.v2.ICrop;
+import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -29,13 +37,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Blocks.BlockCanola;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-
-import com.InfinityRaider.AgriCraft.api.API;
-import com.InfinityRaider.AgriCraft.api.v1.IGrowthRequirement;
-import com.InfinityRaider.AgriCraft.api.v2.APIv2;
-import com.InfinityRaider.AgriCraft.api.v2.IAdditionalCropData;
-import com.InfinityRaider.AgriCraft.api.v2.ICrop;
-import com.InfinityRaider.AgriCraft.api.v2.ICropPlant;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

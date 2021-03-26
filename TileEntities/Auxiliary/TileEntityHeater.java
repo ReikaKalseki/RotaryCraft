@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,9 +22,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.ThermalMachine;
@@ -104,9 +104,9 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temperature > Tamb)
-			temperature -= ReikaMathLibrary.extrema((temperature-Tamb)/200, 1, "max");
+			temperature -= Math.max((temperature-Tamb)/200, 1);
 		if (temperature < Tamb)
-			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			temperature += Math.max((Tamb-temperature)/40, 1);
 	}
 
 	private void addHeat() {
@@ -263,6 +263,11 @@ public class TileEntityHeater extends InventoriedPowerReceiver implements Temper
 	@Override
 	public boolean canBeCooledWithFins() {
 		return false;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return true;
 	}
 
 	public void setTemperature(int temp) {

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -24,6 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
 import Reika.ChromatiCraft.Auxiliary.Interfaces.NBTTile;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
@@ -173,6 +175,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBusController;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityChainDrive;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMonitor;
@@ -213,6 +216,7 @@ import Reika.RotaryCraft.TileEntities.World.TileEntityPileDriver;
 import Reika.RotaryCraft.TileEntities.World.TileEntitySonicBorer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityTerraformer;
 import Reika.RotaryCraft.TileEntities.World.TileEntityWeatherController;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -357,7 +361,8 @@ public enum MachineRegistry implements TileEnum {
 	GATLING(			"machine.gatling",			BlockMIMachine.class,		TileEntityMultiCannon.class,		28, "RenderMultiCannon"),
 	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway"),
 	FLAMETURRET(		"machine.flameturret",		BlockMMachine.class,		TileEntityFlameTurret.class,		22, "RenderFlameTurret"),
-	BUNDLEDBUS(			"machine.bundledbus",		BlockDMachine.class,		TileEntityBundledBus.class,			5, ModList.APPENG, ModList.PROJRED);
+	BUNDLEDBUS(			"machine.bundledbus",		BlockDMachine.class,		TileEntityBundledBus.class,			5, ModList.APPENG, ModList.PROJRED),
+	DISTRIBCLUTCH(		"machine.distribclutch",	BlockTrans.class,			TileEntityDistributionClutch.class,	5,	"RenderDistribClutch");
 
 	private final String name;
 	private final Class te;
@@ -679,6 +684,8 @@ public enum MachineRegistry implements TileEnum {
 			return 0.375F;
 		if (this == FRICTION)
 			return 0.9375F;
+		if (this == DISTRIBCLUTCH)
+			return 0.75F;
 		return 1;
 	}
 
@@ -761,7 +768,8 @@ public enum MachineRegistry implements TileEnum {
 			throw new RuntimeException("Machine "+this.getName()+" has no multi name and yet was called for it!");
 		if (this == GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)tile;
-			return gbx.getGearboxType() != null ? RotaryNames.getGearboxName(gbx.getBlockMetadata()/4*5+gbx.getGearboxType().ordinal()) : this.getName();
+			GearboxTypes type = gbx.getGearboxType();
+			return type != null ? type.getLocalizedGearboxName(gbx.getRatio()) : this.getName();
 		}
 		if (this == ENGINE) {
 			TileEntityEngine eng = (TileEntityEngine)tile;
@@ -769,11 +777,11 @@ public enum MachineRegistry implements TileEnum {
 		}
 		if (this == SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)tile;
-			return sha.getShaftType() != null ? RotaryNames.getShaftName(sha.getShaftType().ordinal()) : this.getName();
+			return sha.getShaftType() != null ? sha.getShaftType().getShaftUnlocName() : this.getName();
 		}
 		if (this == FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)tile;
-			return RotaryNames.getFlywheelName(fly.getBlockMetadata()/4);
+			return fly.getTypeOrdinal().getName()+" "+this.getName();
 		}
 		if (this == ADVANCEDGEARS) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)tile;
@@ -865,6 +873,7 @@ public enum MachineRegistry implements TileEnum {
 			case REFRIGERATOR:
 			case DROPS:
 			case SPILLWAY:
+			case DISTRIBCLUTCH:
 				return true;
 			default:
 				return false;
@@ -980,13 +989,24 @@ public enum MachineRegistry implements TileEnum {
 	}
 
 	public ItemStack getCraftedProduct(TileEntity te) {
-		ItemStack is = this.getCraftedMetadataProduct(((RotaryCraftTileEntity)te).getItemMetadata());
+		ItemStack is = this.getCraftedMetadataProduct(this.getCraftedMetadata(te));
 		if (te instanceof NBTTile) {
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			((NBTTile)te).getTagsToWriteToStack(is.stackTagCompound);
 		}
 		return is;
+	}
+
+	private int getCraftedMetadata(TileEntity te) {
+		switch(this) {
+			case ADVANCEDGEARS:
+				return ((TileEntityAdvancedGear)te).getGearType().ordinal();
+			case FLYWHEEL:
+				return ((TileEntityFlywheel)te).getTypeOrdinal().ordinal();
+			default:
+				return 0;
+		}
 	}
 
 	public boolean isEnchantable() {
@@ -1035,14 +1055,28 @@ public enum MachineRegistry implements TileEnum {
 			case ENGINE:
 				return EngineType.engineList.length;
 			case GEARBOX:
+				return GearboxTypes.typeList.length*4;
 			case SHAFT:
-				return MaterialRegistry.matList.length+1;
+				return MaterialRegistry.matList.length;
 			case ADVANCEDGEARS:
 				return TileEntityAdvancedGear.GearType.list.length;
 			case FLYWHEEL:
 				return 4;
 			default:
 				return 1;
+		}
+	}
+
+	public ItemStack getSubType(int idx) {
+		switch(this) {
+			case ENGINE:
+				return EngineType.engineList[idx].getCraftedProduct();
+			case GEARBOX:
+				return GearboxTypes.typeList[idx/4].getGearboxItemByIndex(idx%4);
+			case SHAFT:
+				return MaterialRegistry.matList[idx].getShaftItem();
+			default:
+				return this.getCraftedMetadataProduct(idx);
 		}
 	}
 
@@ -1378,7 +1412,7 @@ public enum MachineRegistry implements TileEnum {
 			if (m.isEnchantable()) {
 				Object[] o = new Object[2];
 				o[0] = m;
-				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender(0))).getValidEnchantments();
+				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender(0))).getEnchantmentHandler().getValidEnchantments();
 				li.add(o);
 			}
 		}
@@ -1636,5 +1670,11 @@ public enum MachineRegistry implements TileEnum {
 
 	public boolean isOpaque() {
 		return this.isSolidBottom();
+	}
+
+	public boolean isCreativeTabValid(CreativeTabs tab) {
+		if (this == BELT || this == CHAIN || this == POWERBUS || this == BUSCONTROLLER || TileEntityTransmissionMachine.class.isAssignableFrom(te))
+			return tab == RotaryCraft.tabPower;
+		return tab == RotaryCraft.tabRotary;
 	}
 }

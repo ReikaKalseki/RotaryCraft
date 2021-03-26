@@ -1,0 +1,38 @@
+{
+	type = "test1"
+	primary_input = {
+		items = {
+			"minecraft:gold_ingot"
+			"minecraft:emerald"
+		}
+		consumption_chance = 30
+		number_to_use = 2
+	}
+	secondary_input = {
+		items = {
+			"rotarycraft_stack:basepanel"
+		}
+		consumption_chance = 0.1
+		number_to_use = 1
+	}
+	tertiary_input = {
+		items = {
+			"minecraft:diamond"
+		}
+		consumption_chance = 100
+		number_to_use = 1
+	}
+	main_item = {
+		"minecraft:redstone"
+	}
+	required_main_item = 2
+	match_number_exactly = false
+	has_bonus = true
+	xp = 0.3
+	temperature = 1800
+	alloying = false
+	output = "minecraft:potato"
+	output_nbt = {
+		
+	}
+}

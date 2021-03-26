@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,19 +12,16 @@ package Reika.RotaryCraft.Base;
 import java.util.List;
 import java.util.Random;
 
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -32,17 +29,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Interfaces.Block.SidedTextureIndex;
-import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
+import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidIO;
@@ -61,6 +58,9 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearTy
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implements SidedTextureIndex {
 
@@ -182,36 +182,21 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		}
 		if (m == MachineRegistry.GEARBOX) {
 			TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
-			meta = gbx.getBlockMetadata();
 			if (gbx.getGearboxType() == null)
 				return null;
-			int dmg = gbx.getGearboxType().ordinal();
-			switch(gbx.getRatio()) {
-				case 4:
-					dmg += 5;
-					break;
-				case 8:
-					dmg += 10;
-					break;
-				case 16:
-					dmg += 15;
-					break;
-			}
-			return new ItemStack(ItemRegistry.GEARBOX.getItemInstance(), 1, dmg);
+			return gbx.getGearboxType().getGearboxItem(gbx.getRatio());
 		}
 		if (m == MachineRegistry.SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
-			meta = sha.getBlockMetadata();
-			if (meta >= 6)
-				return new ItemStack(ItemRegistry.SHAFT.getItemInstance(), 1, RotaryNames.getNumberShaftTypes()-1);
+			if (sha.isCross())
+				return RotaryAux.getShaftCrossItem();
 			if (sha.getShaftType() == null)
 				return null;
-			return new ItemStack(ItemRegistry.SHAFT.getItemInstance(), 1, sha.getShaftType().ordinal());
+			return sha.getShaftType().getShaftItem();
 		}
 		if (m == MachineRegistry.FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)world.getTileEntity(x, y, z);
-			meta = fly.getBlockMetadata();
-			return new ItemStack(ItemRegistry.FLYWHEEL.getItemInstance(), 1, meta/4);
+			return fly.getTypeOrdinal().getFlywheelItem();
 		}
 		if (m == MachineRegistry.ADVANCEDGEARS) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);
@@ -236,27 +221,13 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face)
-	{
+	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		return 0;
 	}
 
 	@Override
-	public boolean canHarvestBlock(EntityPlayer player, int meta)
-	{
+	public boolean canHarvestBlock(EntityPlayer player, int meta) {
 		return ForgeHooks.canHarvestBlock(this, player, meta);
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
-	{
-		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof IInventory)
-			ReikaItemHelper.dropInventory(world, x, y, z);
-		if (te instanceof BreakAction) {
-			((BreakAction)te).breakBlock();
-		}
-		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
 	public final String getTextureFile(){
@@ -289,17 +260,17 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);
 		if (te instanceof TemperatureTE && !(te instanceof TileEntityEngine))
-			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
+			currenttip.add(Variables.TEMPERATURE+": "+RotaryAux.formatTemperature(((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)
-			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
+			currenttip.add(Variables.PRESSURE+": "+RotaryAux.formatPressure(((PressureTE) te).getPressure()));
 		if (te instanceof PoweredLiquidIO) {
 			PoweredLiquidIO liq = (PoweredLiquidIO)te;
 			Fluid in = liq.getFluidInInput();
 			Fluid out = liq.getFluidInOutput();
 			int amtin = liq.getInputLevel();
 			int amtout = liq.getOutputLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getCapacity(), in.getLocalizedName()) : "Empty";
-			String output = in != null ? String.format("%d/%d mB of %s", amtout, liq.getCapacity(), out.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtin, liq.getInputCapacity()), in.getLocalizedName()) : "Empty";
+			String output = out != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtout, liq.getOutputCapacity()), out.getLocalizedName()) : "Empty";
 			currenttip.add("Input Tank: "+input);
 			currenttip.add("Output Tank: "+output);
 		}
@@ -307,30 +278,37 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			PoweredLiquidReceiver liq = (PoweredLiquidReceiver)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		if (te instanceof PoweredLiquidProducer) {
 			PoweredLiquidProducer liq = (PoweredLiquidProducer)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		if (te instanceof TileEntityGearbox) {
 			TileEntityGearbox gbx = (TileEntityGearbox)te;
+			currenttip.add(gbx.reduction ? "Torque Mode" : "Speed Mode");
 			if (gbx.getGearboxType().isDamageableGear()) {
 				currenttip.add(String.format("Damage: %d%s", gbx.getDamagePercent(), "%"));
 			}
 			if (gbx.getGearboxType().needsLubricant()) {
 				String s = gbx.isLiving() ? String.format("Mana: %d%%", gbx.getLubricant()*100/gbx.getMaxLubricant()) : String.format("Lubricant: %d mB", gbx.getLubricant());
 				currenttip.add(s);
+
+				if (gbx.getBearingTier() != gbx.getGearboxType()) {
+					double f = gbx.getBearingLubricantFactor();
+					s = String.format("Lubricant Rate: %s%.2fx", (f > 1 ? EnumChatFormatting.RED : EnumChatFormatting.GREEN).toString(), f);
+					currenttip.add(s);
+				}
 			}
 		}
 		if (te instanceof TileEntityAdvancedGear) {
 			TileEntityAdvancedGear adv = (TileEntityAdvancedGear)te;
 			if (adv.getGearType().consumesLubricant()) {
-				currenttip.add(String.format("Lubricant: %d mB", adv.getLubricant()));
+				currenttip.add(String.format("Lubricant: %s", RotaryAux.formatLiquidAmount(adv.getLubricant())));
 			}
 			if (adv.getGearType() == GearType.HIGH) {
 				currenttip.add(adv.torquemode ? "Torque Mode" : "Speed Mode");
@@ -339,17 +317,17 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		if (te instanceof TileEntityEngine) {
 			TileEntityEngine eng = (TileEntityEngine)te;
 			if (eng.getEngineType().requiresLubricant()) {
-				currenttip.add(String.format("Lubricant: %d mB", eng.getLube()));
+				currenttip.add(String.format("Lubricant: %s", RotaryAux.formatLiquidAmount(eng.getLube())));
 			}
 			if (eng.getEngineType().burnsFuel()) {
-				currenttip.add(String.format("Fuel: %d mB", eng.getFuelLevel()));
+				currenttip.add(String.format("Fuel: %s", RotaryAux.formatLiquidAmount(eng.getFuelLevel())));
 			}
 			if (eng instanceof TileEntityPerformanceEngine) {
-				currenttip.add(String.format("Additives: %d mB", ((TileEntityPerformanceEngine)eng).additives));
-				currenttip.add(String.format("Water: %d mB", ((TileEntityPerformanceEngine)eng).getWater()));
+				currenttip.add(String.format("Additives: %s", RotaryAux.formatLiquidAmount(((TileEntityPerformanceEngine)eng).additives)));
+				currenttip.add(String.format("Water: %s", RotaryAux.formatLiquidAmount(((TileEntityPerformanceEngine)eng).getWater())));
 			}
 			if (eng.hasTemperature()) {
-				currenttip.add(String.format("Temperature: %dC", eng.getTemperature()));
+				currenttip.add(Variables.TEMPERATURE+": "+RotaryAux.formatTemperature(eng.getTemperature()));
 			}
 		}
 		return currenttip;

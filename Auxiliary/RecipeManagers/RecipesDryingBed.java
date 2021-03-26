@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
@@ -79,6 +80,14 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 			return ReikaJavaLibrary.makeListFrom(ReikaFluidHelper.getFluidStackAsItem(input));
 		}
 
+		public ItemStack getOutput() {
+			return output.copy();
+		}
+
+		public FluidStack getFluid() {
+			return input.copy();
+		}
+
 	}
 
 	public void addAPIRecipe(Fluid f, int amount, ItemStack out) {
@@ -97,59 +106,47 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 			this.addRecipe(f, amount, out, rl);
 	}
 
-	public ItemStack getDryingResult(FluidStack liquid)
-	{
+	public ItemStack getDryingResult(FluidStack liquid) {
 		Fluid f = liquid.getFluid();
-		if (recipeList.containsKey(liquid)) {
-			int req = recipeList.get(liquid).input.amount;
-			if (req > liquid.amount)
-				return null;
-			return recipeList.get(liquid).output.copy();
-		}
-		else
+		DryingRecipe cr = recipeList.getForValue(liquid);
+		if (cr == null)
 			return null;
+		int req = cr.input.amount;
+		if (req > liquid.amount)
+			return null;
+		return cr.output.copy();
 	}
 
-	public Fluid getRecipe(ItemStack result) {
-		for (FluidStack f : recipeList.keySet()) {
-			DryingRecipe cr = recipeList.get(f);
+	public DryingRecipe getRecipe(ItemStack result) {
+		for (DryingRecipe cr : recipeList.values()) {
+			/*
 			if (cr == null) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
+				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(dr)+", despite being in the keyset of the map, returned null on get()!");
 				sb.append("\nMap data: "+recipeList.toString());
 				sb.append("\nReport this to Reika!");
 				throw new IllegalStateException(sb.toString());
 			}
+			 */
 			if (ReikaItemHelper.matchStacks(result, cr.output))
-				return f.getFluid();
+				return cr;
 		}
 		return null;
 	}
 
 	public int getRecipeConsumption(ItemStack result) {
-		for (FluidStack f : recipeList.keySet()) {
-			DryingRecipe cr = recipeList.get(f);
-			if (cr == null) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
-				sb.append("\nMap data: "+recipeList.toString());
-				sb.append("\nReport this to Reika!");
-				throw new IllegalStateException(sb.toString());
-			}
-			if (ReikaItemHelper.matchStacks(result, cr.output))
-				return cr.input.amount;
-		}
-		return 0;
+		DryingRecipe cr = this.getRecipe(result);
+		return cr != null ? cr.input.amount : 0;
 	}
 
 	public boolean isValidFluid(Fluid f) {
 		return recipeList.containsKey(f);
 	}
 
-	public Collection<Fluid> getAllRecipes() {
-		HashSet<Fluid> c = new HashSet();
+	public Collection<DryingRecipe> getAllRecipes() {
+		HashSet<DryingRecipe> c = new HashSet();
 		for (DryingRecipe cr : recipeList.values()) {
-			c.add(cr.input.getFluid());
+			c.add(cr);
 		}
 		return c;
 	}
@@ -170,7 +167,7 @@ public class RecipesDryingBed extends RecipeHandler implements DryingBedManager 
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
 		String fluid = lb.getString("input_fluid");

@@ -17,6 +17,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -49,6 +50,8 @@ public class RotaryRenderList {
 	}
 
 	public static RotaryTERenderer instantiateRenderer(MachineRegistry m) {
+		if (RotaryCraft.instance.isLocked())
+			return null;
 		try {
 			RotaryTERenderer r = (RotaryTERenderer)Class.forName(m.getRenderer()).newInstance();
 			if (addRender(m, r))

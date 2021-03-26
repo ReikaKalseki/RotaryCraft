@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,17 +19,20 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;
+
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RCAchievementPage;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public enum RotaryAchievements {
 
 	RCUSEBOOK(		1, 1,	ItemRegistry.HANDBOOK,											null,			false),
+	DUMBEXTRACTOR(	1, -1,	EngineType.DC.getCraftedProduct(),								null,			false),
 	MAKESTEEL(		0, 0,	ItemStacks.steelingot, 											null,			false),
 	FAILSTEEL(		1, 2,	ItemStacks.steelblock, 											MAKESTEEL,		false),
 	WORKTABLE(		-2, 1,	MachineRegistry.WORKTABLE,										MAKESTEEL,		false),
@@ -56,7 +59,7 @@ public enum RotaryAchievements {
 	SPRINKLER(		-6, -2,	MachineRegistry.SPRINKLER, 										PUMP,			false), //turn on
 	FLOODLIGHT(		-1, -1,	MachineRegistry.FLOODLIGHT, 									MAKESTEEL,		false), //turn on at Light 15
 	DAMAGEGEARS(	-4, -2,	ItemStacks.gearunit, 											STEELSHAFT,		false),
-	DIAMONDGEARS(	-4, -4,	MaterialRegistry.DIAMOND.getGearboxItem(8), 					DAMAGEGEARS,	false), //make
+	DIAMONDGEARS(	-4, -4,	GearboxTypes.DIAMOND.getGearboxItem(8), 						DAMAGEGEARS,	false), //make
 	MRADS32(		2, -6,	ItemRegistry.METER,												JETFUEL,		true), //transmit power at 32Mrad/s
 	GIGAWATT(		6, 0,	Blocks.redstone_block, 											JETENGINE,		true), //transmit 1GW of power in one shaft w/o breaking
 	RAILDRAGON(		2, 8,	Blocks.dragon_egg, 												MAKERAILGUN,	true), //kill dragon with railgun
@@ -113,6 +116,8 @@ public enum RotaryAchievements {
 
 	public void triggerAchievement(EntityPlayer ep) {
 		if (!ConfigRegistry.ACHIEVEMENTS.getState())
+			return;
+		if (RotaryCraft.instance.isLocked())
 			return;
 		if (ep == null) {
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {

@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Entities;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.world.World;
+
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
 
 public class EntityCustomTNT extends EntityTNTPrimed implements IEntityAdditionalSpawnData {
 

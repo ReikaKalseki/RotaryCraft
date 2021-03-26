@@ -1,21 +1,21 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.StatCollector;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -86,12 +86,12 @@ public class GuiHeater extends GuiMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			temperature = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.ordinal(), heater, temperature);
 			return;
 		}
 		temperature = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (temperature >= 0)
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.getMinValue(), heater, temperature);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.ordinal(), heater, temperature);
 		heater.setTemperature = temperature;
 
 	}

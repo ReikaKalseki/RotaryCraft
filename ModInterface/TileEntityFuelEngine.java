@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,8 +11,6 @@ package Reika.RotaryCraft.ModInterface;
 
 import java.util.Collection;
 
-import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -22,13 +20,14 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -43,6 +42,7 @@ import Reika.RotaryCraft.Registry.EngineType.EngineClass;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 import cpw.mods.fml.relauncher.Side;
@@ -71,11 +71,8 @@ TemperatureTE {
 	private boolean canEmitPower(World world, int x, int y, int z) {
 		if (tank.isEmpty())
 			return false;
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			if (!ig.hasBreathableAtmosphere() || !ig.isGasPresent(IAtmosphericGas.OXYGEN))
-				return false;
-		}
+		if (AtmosphereHandler.isNoAtmo(world, x, y+1, z, blockType, true))
+			return false;
 		if (lubetank.isEmpty())
 			return false;
 		if (this.hasECU()) {
@@ -426,6 +423,11 @@ TemperatureTE {
 	}
 
 	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
+	@Override
 	public boolean allowExternalHeating() {
 		return false;
 	}
@@ -475,7 +477,7 @@ TemperatureTE {
 
 	@Override
 	public final boolean canConnectToPipeOnSide(MachineRegistry p, ForgeDirection side) {
-		return this.canConnectToPipe(p) && side == ForgeDirection.DOWN;
+		return this.canConnectToPipe(p) && this.getFlowForSide(side) == Flow.INPUT;
 	}
 
 	@Override

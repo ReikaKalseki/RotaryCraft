@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,14 +29,23 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Instantiable.EntityPathSpline;
 import Reika.DragonAPI.Instantiable.AI.AITaskAvoidMachine;
 import Reika.DragonAPI.Instantiable.AI.AITaskSeekMachine;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.AbstractSearch.PassablePropagation;
+import Reika.DragonAPI.Instantiable.Data.BlockStruct.AbstractSearch.PropagationCondition;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.MobAttractor;
 import Reika.DragonAPI.Interfaces.TileEntity.MobRepellent;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.Bees.ReikaBeeHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -44,13 +53,32 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MobBait;
 
+import forestry.api.lepidopterology.IEntityButterfly;
+
 public class TileEntityBaitBox extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation, MobAttractor, MobRepellent {
 
 	public static final int FALLOFF = 4096; //4 kW per extra meter
 
+	private EntityPathSpline pathfinder;
+
+	private static final PropagationCondition butterflyPathRule = new PropagationCondition() {
+
+		@Override
+		public boolean isValidLocation(World world, int x, int y, int z, Coordinate from) {
+			return PassablePropagation.instance.isValidLocation(world, x, y, z, from) || world.getBlock(x, y, z).isLeaves(world, x, y, z);
+		}
+
+	};
+
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return true;
+	}
+
+	@Override
+	protected void onFirstTick(World world, int x, int y, int z) {
+		if (ModList.FORESTRY.isLoaded() && !world.isRemote)
+			pathfinder = new EntityPathSpline(this);
 	}
 
 	@Override
@@ -71,7 +99,16 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 				else if (this.canAttract(ent)) {
 					this.applyEffect(world, x, y, z, ent, true);
 				}
+				if (ModList.FORESTRY.isLoaded() && pathfinder != null && ent instanceof IEntityButterfly) {
+					pathfinder.addEntity(ent, butterflyPathRule);
+				}
 			}
+		}
+		if (ModList.FORESTRY.isLoaded() && ReikaInventoryHelper.checkForItem(ForestryHandler.ItemEntry.POLLEN.getItem(), inv)) {
+			if (pathfinder != null)
+				pathfinder.removeDeadEntities(world);
+			ReikaBeeHelper.attractButterflies(world, x+0.5, y+1.5, z+0.5, range, pathfinder);
+			ReikaBeeHelper.collectButterflies(world, ReikaAABBHelper.getBlockAABB(this).expand(4, 2, 4), null);
 		}
 		if (rand.nextInt(20) == 0)
 			this.doEggIncubation(world, x, y, z);
@@ -82,7 +119,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 		int slot = ReikaInventoryHelper.locateIDInInventory(Items.egg, this);
 		if (slot >= 0) {
 			if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.fire) != null) {
-				if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) != null) {
+				if (ReikaWorldHelper.checkForAdjMaterial(world, x, y, z, Material.lava) == null) {
 					EntityChicken ec = new EntityChicken(world);
 					ec.setLocationAndAngles(x+rand.nextDouble(), y+rand.nextDouble()+0.5, z+rand.nextDouble(), rand.nextFloat()*90, rand.nextFloat()*360);
 					if (!world.isRemote)

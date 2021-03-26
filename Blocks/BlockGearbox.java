@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,6 +22,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher;
+import Reika.DragonAPI.Auxiliary.Trackers.KeyWatcher.Key;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -29,6 +33,8 @@ import Reika.RotaryCraft.Base.BlockModelledMachine;
 import Reika.RotaryCraft.Items.Tools.ItemDebug;
 import Reika.RotaryCraft.Items.Tools.ItemMeter;
 import Reika.RotaryCraft.Items.Tools.ItemScrewdriver;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
@@ -42,9 +48,8 @@ public class BlockGearbox extends BlockModelledMachine {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int meta)
-	{
-		return new TileEntityGearbox(MaterialRegistry.setType(meta));
+	public TileEntity createTileEntity(World world, int meta) {
+		return new TileEntityGearbox();
 	}
 
 	@Override
@@ -52,7 +57,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox tg = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (tg == null)
 			return 0;
-		if (tg.getGearboxType().isFlammable())
+		if (tg.getGearboxType().material.isFlammable())
 			return 60;
 		return 0;
 	}
@@ -63,16 +68,19 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (gbx == null)
 			return 0;
-		MaterialRegistry type = gbx.getGearboxType();
+		MaterialRegistry type = gbx.getGearboxType().material;
 		switch(type) {
 			case WOOD:
 				return 5F;
 			case STONE:
 				return 10F;
 			case STEEL:
-			case DIAMOND:
-			case BEDROCK:
 				return 15F;
+			case TUNGSTEN:
+			case DIAMOND:
+				return 30F;
+			case BEDROCK:
+				return 90F;
 		}
 		return 0;
 	}
@@ -108,7 +116,7 @@ public class BlockGearbox extends BlockModelledMachine {
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (gbx == null)
 			return false;
-		MaterialRegistry type = gbx.getGearboxType();
+		MaterialRegistry type = gbx.getGearboxType().material;
 		return type.isHarvestablePickaxe(player.inventory.getCurrentItem());
 	}
 
@@ -118,10 +126,8 @@ public class BlockGearbox extends BlockModelledMachine {
 			return;
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		if (gbx != null) {
-			int type = gbx.getGearboxType().ordinal();
-			int ratio = gbx.getBlockMetadata()/4;
-			ItemStack todrop = ItemRegistry.GEARBOX.getStackOfMetadata(type+5*ratio); //drop gearbox item
-			todrop.stackTagCompound = gbx.getTagsToWriteToStack();
+			ItemStack todrop = gbx.getGearboxType().getGearboxItem(gbx.getRatio());
+			ReikaNBTHelper.combineNBT(todrop.stackTagCompound, gbx.getTagsToWriteToStack());
 			if (gbx.isUnHarvestable()) {
 				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
@@ -164,7 +170,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return false;
 		TileEntityGearbox tile = (TileEntityGearbox)world.getTileEntity(x, y, z);
 		//if (ep.isSneaking()) {
-		if (ep.getCurrentEquippedItem() != null && ep.getCurrentEquippedItem().getItem() == Items.bucket) {
+		if (ep.getCurrentEquippedItem() != null && KeyWatcher.instance.isKeyDown(ep, Key.LCTRL) && ep.getCurrentEquippedItem().getItem() == Items.bucket) {
 			tile.clearLubricant();
 			return true;
 		}
@@ -174,7 +180,7 @@ public class BlockGearbox extends BlockModelledMachine {
 			return false;
 		}
 		if (tile != null) {
-			ItemStack fix = tile.getGearboxType().getGearItem();
+			ItemStack fix = tile.getGearboxType().getPart(GearPart.GEAR);
 			ItemStack held = ep.getCurrentEquippedItem();
 			if (held != null) {
 				if ((ReikaItemHelper.matchStacks(fix, held))) {
@@ -199,6 +205,22 @@ public class BlockGearbox extends BlockModelledMachine {
 					}
 					return true;
 				}
+				else if (GearPart.BEARING.isItemOfType(held)) {
+					GearboxTypes material = GearboxTypes.getMaterialFromCraftingItem(held);
+					if (tile.getGearboxType().acceptsBearingUpgrade(material) && tile.getBearingTier() != material) {
+						if (tile.getBearingTier() != tile.getGearboxType())
+							ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, tile.getBearingTier().getPart(GearPart.BEARING));
+						tile.setBearingTier(material);
+						if (!ep.capabilities.isCreativeMode) {
+							int num = held.stackSize;
+							if (num > 1)
+								ep.inventory.setInventorySlotContents(ep.inventory.currentItem, ReikaItemHelper.getSizedItemStack(held, num-1));
+							else
+								ep.inventory.setInventorySlotContents(ep.inventory.currentItem, null);
+						}
+					}
+					return true;
+				}
 			}
 		}
 
@@ -215,8 +237,8 @@ public class BlockGearbox extends BlockModelledMachine {
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		TileEntityGearbox gbx = (TileEntityGearbox)world.getTileEntity(x, y, z);
-		ItemStack is = ItemRegistry.GEARBOX.getStackOfMetadata((gbx.getBlockMetadata()/4)*5+gbx.getGearboxType().ordinal());
-		is.stackTagCompound = gbx.getTagsToWriteToStack();
+		ItemStack is = gbx.getGearboxType().getGearboxItem(gbx.getRatio());
+		ReikaNBTHelper.combineNBT(is.stackTagCompound, gbx.getTagsToWriteToStack());
 		ret.add(is);
 		return ret;
 	}

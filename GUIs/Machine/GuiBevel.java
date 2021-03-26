@@ -1,19 +1,19 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
@@ -27,10 +27,10 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBevelGear;
 public class GuiBevel extends GuiNonPoweredMachine
 {
 	/** Side colors:
-	 * 
+	 *
 	 * Cyan y-1; blue y+1; yellow -z; black +z; orange -x; magenta +x;<br>
 	 * 0 y-1; 1 y+1; 2 -z; 3 +z; 4 -x; 5 +x;
-	 * 
+	 *
 	 */
 	private int posn;
 	private ForgeDirection in;
@@ -115,7 +115,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 		this.getDirectionFromIO();
 		this.initGui();
 		bevel.direction = posn;
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.getMinValue(), bevel, posn);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.ordinal(), bevel, posn);
 	}
 
 	@Override

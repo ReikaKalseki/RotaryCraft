@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,12 +13,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,8 +26,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Instantiable.MusicScore;
+import Reika.DragonAPI.Instantiable.MusicScore.NoteData;
+import Reika.DragonAPI.Instantiable.MusicScore.ScoreTrack;
 import Reika.DragonAPI.Instantiable.IO.MIDIInterface;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
@@ -45,6 +48,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -61,9 +65,9 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private int[] playIndex = new int[16];
 
 	private static final int[] channelColors = {
-		0x3636FF, 0xD336FF, 0xFFACAC, 0xFF3636, 0xFFAC36, 0xD3D336,
-		0x65BC8F, 0x36D336, 0x36FFFF, 0x58ABF9, 0x8484FF, 0xFF36FF,
-		0x8436FF, 0xB49C8A, 0x8FA9B5, 0x94B581
+			0x3636FF, 0xD336FF, 0xFFACAC, 0xFF3636, 0xFFAC36, 0xD3D336,
+			0x65BC8F, 0x36D336, 0x36FFFF, 0x58ABF9, 0x8484FF, 0xFF36FF,
+			0x8436FF, 0xB49C8A, 0x8FA9B5, 0x94B581
 	};
 
 	public TileEntityMusicBox() {
@@ -195,7 +199,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		if (!n.isRest()) {
 			for (int i = 0; i < 3; i++)
 				n.play(worldObj, xCoord, yCoord, zCoord);
-			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
+			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
 		}
 		playDelay[channel] = n.length.tickLength;
 		playIndex[channel]++;
@@ -261,7 +265,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 			return;
 		}
 		try {
-			MusicScore mus = new MIDIInterface(f).fillToScore(true).scaleSpeed(11);
+			MusicScore mus = new MIDIInterface(f).fillToScore(true).scaleSpeed(11, true);
 			this.dispatchTrack(mus);
 		}
 		catch (Exception e) {
@@ -271,14 +275,17 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	}
 
 	private void dispatchTrack(MusicScore mus) {
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue()+7, this);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.ordinal(), this);
 		for (int i = 0; i < mus.countTracks(); i++) {
-			Map<Integer, Collection<MusicScore.Note>> track = mus.getTrack(i);
+			ScoreTrack track = mus.getTrack(i);
+			if (track == null)
+				continue;
 			int lastNoteTime = -1;
 			int lastNoteLength = -1;
-			for (int time : track.keySet()) {
-				Collection<MusicScore.Note> c = track.get(time);
-				for (MusicScore.Note n : c) {
+			for (Entry<Integer, NoteData> e : track.entryView()) {
+				int time = e.getKey();
+				NoteData c = e.getValue();
+				for (MusicScore.Note n : c.notes()) {
 					if (n != null && n.key != null) {
 						if (lastNoteTime >= 0) {
 							int t1 = lastNoteTime+lastNoteLength;
@@ -363,12 +370,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private void readFile(String path, boolean internal) {
 		this.clearMusic();
 		int linecount = -1;
-		try {
-			BufferedReader p;
-			if (internal)
-				p = new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path)));
-			else
-				p = ReikaFileReader.getReader(path);
+		try(BufferedReader p = internal ? new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path))) : ReikaFileReader.getReader(path, Charset.defaultCharset())) {
 			String line = p.readLine();
 			while (line != null) {
 				linecount++;
@@ -382,7 +384,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				}
 				line = p.readLine();
 			}
-			p.close();
 		}
 		catch (Exception e) {
 			if (linecount >= 0)
@@ -731,7 +732,7 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 
 	@SideOnly(Side.CLIENT)
 	public void sendNote(int pitch, int channel, NoteLength len, Instrument voice) {
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSIC.getMinValue(), this, pitch, channel, len.ordinal(), voice.ordinal());
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICNOTE.ordinal(), this, pitch, channel, len.ordinal(), voice.ordinal());
 	}
 
 }

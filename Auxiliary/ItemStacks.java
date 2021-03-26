@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,13 +17,17 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 
 public final class ItemStacks {
 
@@ -59,6 +63,7 @@ public final class ItemStacks {
 	public static final ItemStack springingot		= ItemRegistry.COMPACTS.getStackOfMetadata(9);
 	public static final ItemStack silicon			= ItemRegistry.COMPACTS.getStackOfMetadata(10);
 	public static final ItemStack silumin			= ItemRegistry.COMPACTS.getStackOfMetadata(11);
+	public static final ItemStack springtungsten	= ItemRegistry.COMPACTS.getStackOfMetadata(12);
 
 	public static final ItemStack basepanel 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(0);
 	public static final ItemStack steelingot 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(1);
@@ -68,39 +73,32 @@ public final class ItemStacks {
 	public static final ItemStack fuelline 			= MachineRegistry.FUELLINE.getCraftedProduct();
 	public static final ItemStack bedpipe 			= MachineRegistry.BEDPIPE.getCraftedProduct();
 
-	public static final ItemStack shaftcross 		= ItemRegistry.SHAFT.getStackOfMetadata(RotaryNames.getNumberShaftTypes()-1);
+	public static final ItemStack gearunit	 		= GearboxTypes.STEEL.getPart(GearPart.UNIT2);
+	public static final ItemStack gearunit4	 		= GearboxTypes.STEEL.getPart(GearPart.UNIT4);
+	public static final ItemStack gearunit8	 		= GearboxTypes.STEEL.getPart(GearPart.UNIT8);
+	public static final ItemStack gearunit16 		= GearboxTypes.STEEL.getPart(GearPart.UNIT16);
+	public static final ItemStack shaftitem 		= MaterialRegistry.STEEL.getShaftUnitItem();
+	public static final ItemStack tungstenshaft 	= MaterialRegistry.TUNGSTEN.getShaftUnitItem();
+	public static final ItemStack diamondshaft 		= MaterialRegistry.DIAMOND.getShaftUnitItem();
+	public static final ItemStack bedrockshaft 		= MaterialRegistry.BEDROCK.getShaftUnitItem();
+	public static final ItemStack stonerod	 		= MaterialRegistry.STONE.getShaftUnitItem();
 
-	public static final ItemStack shaftitem 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(2);
+	public static final ItemStack woodgear	 		= GearboxTypes.WOOD.getPart(GearPart.GEAR);
+	public static final ItemStack stonegear	 		= GearboxTypes.STONE.getPart(GearPart.GEAR);
+	public static final ItemStack steelgear 		= GearboxTypes.STEEL.getPart(GearPart.GEAR);
+	public static final ItemStack tungstengear 		= GearboxTypes.TUNGSTEN.getPart(GearPart.GEAR);
+	public static final ItemStack diamondgear	 	= GearboxTypes.DIAMOND.getPart(GearPart.GEAR);
+	public static final ItemStack bedrockgear	 	= GearboxTypes.BEDROCK.getPart(GearPart.GEAR);
+
+	public static final ItemStack bearing 			= GearboxTypes.STEEL.getPart(GearPart.BEARING);
+	public static final ItemStack shaftcore 		= GearboxTypes.STEEL.getPart(GearPart.SHAFTCORE);
+	public static final ItemStack tungstenshaftcore	= GearboxTypes.TUNGSTEN.getPart(GearPart.SHAFTCORE);
+	public static final ItemStack diamondshaftcore 	= GearboxTypes.DIAMOND.getPart(GearPart.SHAFTCORE);
+
 	public static final ItemStack mount 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(3);
-	public static final ItemStack steelgear 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(4);
-	public static final ItemStack gearunit 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(5);
-	public static final ItemStack gearunit4 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(6);
-	public static final ItemStack gearunit8 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(7);
-	public static final ItemStack gearunit16 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(8);
 	public static final ItemStack scrap 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(9);
 	public static final ItemStack ironscrap 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(10);
-	public static final ItemStack flywheelcore 		= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(11);
-	public static final ItemStack flywheelcore2 	= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(12);
-	public static final ItemStack flywheelcore3 	= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(13);
-	public static final ItemStack flywheelcore4 	= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(14);
 	public static final ItemStack wormgear 			= ItemRegistry.SHAFTCRAFT.getStackOfMetadata(15);
-
-	public static final ItemStack wood2x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(0);
-	public static final ItemStack stone2x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(4);
-	public static final ItemStack diamond2x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(8);
-	public static final ItemStack bedrock2x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(12);
-	public static final ItemStack wood4x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(1);
-	public static final ItemStack stone4x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(5);
-	public static final ItemStack diamond4x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(9);
-	public static final ItemStack bedrock4x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(13);
-	public static final ItemStack wood8x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(2);
-	public static final ItemStack stone8x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(6);
-	public static final ItemStack diamond8x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(10);
-	public static final ItemStack bedrock8x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(14);
-	public static final ItemStack wood16x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(3);
-	public static final ItemStack stone16x 			= ItemRegistry.GEARUNITS.getStackOfMetadata(7);
-	public static final ItemStack diamond16x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(11);
-	public static final ItemStack bedrock16x 		= ItemRegistry.GEARUNITS.getStackOfMetadata(15);
 
 	public static final ItemStack barrel 			= ItemRegistry.MISCCRAFT.getStackOfMetadata(0);
 	public static final ItemStack lens 				= ItemRegistry.MISCCRAFT.getStackOfMetadata(1);
@@ -129,17 +127,10 @@ public final class ItemStacks {
 	public static final ItemStack condenser 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(7);
 	public static final ItemStack goldcoil 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(8);
 	public static final ItemStack waterplate 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(13);
-	public static final ItemStack shaftcore 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(14);
 	public static final ItemStack igniter 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(15);
-	public static final ItemStack diamondshaftcore 	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(16);
 	public static final ItemStack compoundcompress	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(17);
 	public static final ItemStack aluminumcylinder	= ItemRegistry.ENGINECRAFT.getStackOfMetadata(18);
 	public static final ItemStack highcombustor		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(19);
-
-	public static final ItemStack woodgear 			= ItemRegistry.ENGINECRAFT.getStackOfMetadata(9);
-	public static final ItemStack stonegear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(10);
-	public static final ItemStack diamondgear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(11);
-	public static final ItemStack bedrockgear 		= ItemRegistry.ENGINECRAFT.getStackOfMetadata(12);
 
 	public static final ItemStack drill 			= ItemRegistry.BORECRAFT.getStackOfMetadata(0);
 	public static final ItemStack presshead 		= ItemRegistry.BORECRAFT.getStackOfMetadata(1);
@@ -149,15 +140,10 @@ public final class ItemStacks {
 	public static final ItemStack screen 			= ItemRegistry.BORECRAFT.getStackOfMetadata(5);
 	public static final ItemStack mixer 			= ItemRegistry.BORECRAFT.getStackOfMetadata(6);
 	public static final ItemStack saw 				= ItemRegistry.BORECRAFT.getStackOfMetadata(7);
-	public static final ItemStack bearing 			= ItemRegistry.BORECRAFT.getStackOfMetadata(8);
 	public static final ItemStack belt 				= ItemRegistry.BORECRAFT.getStackOfMetadata(9);
 	public static final ItemStack ballbearing 		= ItemRegistry.BORECRAFT.getStackOfMetadata(10);
 	public static final ItemStack brake 			= ItemRegistry.BORECRAFT.getStackOfMetadata(11);
 	public static final ItemStack tenscoil 			= ItemRegistry.BORECRAFT.getStackOfMetadata(12);
-
-	public static final ItemStack stonerod 			= ItemRegistry.BORECRAFT.getStackOfMetadata(13);
-	public static final ItemStack diamondshaft 		= ItemRegistry.BORECRAFT.getStackOfMetadata(14);
-	public static final ItemStack bedrockshaft 		= ItemRegistry.BORECRAFT.getStackOfMetadata(15);
 
 	public static final ItemStack coaloredust 		= ItemRegistry.EXTRACTS.getStackOfMetadata(0);
 	public static final ItemStack ironoredust 		= ItemRegistry.EXTRACTS.getStackOfMetadata(1);
@@ -215,18 +201,6 @@ public final class ItemStacks {
 	public static final ItemStack shaftCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(4);
 	public static final ItemStack propCast 			= ItemRegistry.MODINTERFACE.getStackOfMetadata(5);
 	public static final ItemStack drillCast 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(6);
-	public static final ItemStack livingwoodgear 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(7);
-	public static final ItemStack livingrockgear	= ItemRegistry.MODINTERFACE.getStackOfMetadata(8);
-	public static final ItemStack livingwood2x 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(9);
-	public static final ItemStack livingrock2x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(10);
-	public static final ItemStack livingwood4x 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(11);
-	public static final ItemStack livingrock4x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(12);
-	public static final ItemStack livingwood8x 		= ItemRegistry.MODINTERFACE.getStackOfMetadata(13);
-	public static final ItemStack livingrock8x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(14);
-	public static final ItemStack livingwood16x 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(15);
-	public static final ItemStack livingrock16x		= ItemRegistry.MODINTERFACE.getStackOfMetadata(16);
-	public static final ItemStack livingwoodrod 	= ItemRegistry.MODINTERFACE.getStackOfMetadata(17);
-	public static final ItemStack livingrockrod		= ItemRegistry.MODINTERFACE.getStackOfMetadata(18);
 
 	public static final ItemStack canolaSeeds		= ItemRegistry.CANOLA.getStackOfMetadata(0);
 	public static final ItemStack denseCanolaSeeds	= ItemRegistry.CANOLA.getStackOfMetadata(1);
@@ -272,6 +246,29 @@ public final class ItemStacks {
 
 	public static ItemStack getFlake(ReikaOreHelper ore) {
 		return ItemRegistry.EXTRACTS.getStackOfMetadata(ReikaOreHelper.oreList.length*3+ore.ordinal());
+	}
+
+	/** Does NOT include multiplication yields! */
+	public static ItemStack getSmeltedProduct(ReikaOreHelper ore) {
+		switch (ore) {
+			case COAL:
+				return new ItemStack(Items.coal);
+			case IRON:
+				return new ItemStack(Items.iron_ingot);
+			case GOLD:
+				return new ItemStack(Items.gold_ingot);
+			case REDSTONE:
+				return new ItemStack(Items.redstone);
+			case LAPIS:
+				return ReikaItemHelper.lapisDye.copy();
+			case DIAMOND:
+				return new ItemStack(Items.diamond);
+			case EMERALD:
+				return new ItemStack(Items.emerald);
+			case QUARTZ:
+				return new ItemStack(Items.quartz);
+		}
+		return null;
 	}
 
 	/** In nuggets. *//*

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,26 +11,27 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerAutoCrafter;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityAutoCrafter.CraftingMode;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -87,9 +88,9 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	protected void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
 		if (button.id >= 0 && button.id < crafter.SIZE)
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue(), crafter, button.id, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTERCRAFT.ordinal(), crafter, button.id, 0);
 		else if (button.id == -1) {
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue()+2, crafter, button.id, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTERMODE.ordinal(), crafter, button.id, 0);
 		}
 		else if (button.id >= 40 && button.id < 40+crafter.SIZE) {
 			selectedSlot = button.id-40;
@@ -149,7 +150,7 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine
 	}
 
 	private void dispatch(int slot, int thresh) {
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTER.getMinValue()+1, crafter, selectedSlot, thresh);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTERTHRESH.ordinal(), crafter, selectedSlot, thresh);
 	}
 
 	@Override

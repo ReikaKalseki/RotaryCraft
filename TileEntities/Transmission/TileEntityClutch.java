@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,14 +11,15 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 
 import java.util.Collection;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerEmitter;
@@ -32,10 +33,8 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	public boolean needsRedstone = true;
 
 	@Override
-	public void updateEntity(World world, int x, int y, int z, int meta)
-	{
+	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
-		Block b = world.getBlock(x, y, z);
 
 		this.getIOSides(world, x, y, z, meta, true);
 		this.transferPower(world, x, y, z, meta);
@@ -69,8 +68,8 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 				if (te instanceof SimpleProvider) {
 					this.copyStandardPower(te);
 				}
-				if (m == MachineRegistry.POWERBUS) {
-					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+				if (te instanceof ComplexIO) {
+					ComplexIO pwr = (ComplexIO)te;
 					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 					omegain = pwr.getSpeedToSide(dir);
 					torquein = pwr.getTorqueToSide(dir);

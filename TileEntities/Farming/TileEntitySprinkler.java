@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,12 +26,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
-import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
-import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap.HashSetFactory;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Interfaces.Registry.CropType;
@@ -51,6 +50,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -111,7 +111,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 	}
 
 	private void sendParticle(int dx, int dy, int dz, boolean drip) {
-		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.SPRINKLER.getMinValue(), this, 48, dx, dy, dz, drip ? 1 : 0);
+		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.SPRINKLER.ordinal(), this, 48, dx, dy, dz, drip ? 1 : 0);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -301,7 +301,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		private FieldColumn getOrFindLevel(World world, int dx, int dz, int y) {
 			Coordinate c = new Coordinate(dx, 0, dz);
 			FieldColumn f = levels.get(c);
-			if (f == null || f.age >= 10) {
+			if (f == null || f.age >= 20) {
 				if (f == null) {
 					f = new FieldColumn(dx, dz, y);
 					levels.put(c, f);
@@ -367,7 +367,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 		//private boolean doDripParticles;
 		//private int calculatedY;
 
-		private MultiMap<Integer, ColumnAction> effectMap = new MultiMap(new HashSetFactory()).setNullEmpty();
+		private ColumnAction[][] effectMap = new ColumnAction[256][];
 
 		private FieldColumn(int dx, int dz, int y) {
 			xCoord = dx;
@@ -382,8 +382,10 @@ public class TileEntitySprinkler extends SprinklerBlock {
 			tag.setInteger("y", sprinklerY);
 
 			NBTTagList li = new NBTTagList();
-			for (int y : effectMap.keySet()) {
-				Collection<ColumnAction> cc = effectMap.get(y);
+			for (int y = 0; y < 256; y++) {
+				ColumnAction[] cc = effectMap[y];
+				if (cc == null)
+					continue;
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setInteger("y", y);
 				NBTTagList li2 = new NBTTagList();
@@ -403,7 +405,6 @@ public class TileEntitySprinkler extends SprinklerBlock {
 			int z = tag.getInteger("z");
 
 			FieldColumn ret = new FieldColumn(x, z, y);
-
 			NBTTagList li = tag.getTagList("map", NBTTypes.COMPOUND.ID);
 			for (Object o : li.tagList) {
 				NBTTagCompound nbt = (NBTTagCompound)o;
@@ -414,7 +415,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 					NBTTagCompound nbt2 = (NBTTagCompound)o2;
 					cc.add(ColumnAction.readFromNBT(nbt2));
 				}
-				ret.effectMap.put(dy, cc);
+				ret.effectMap[dy] = cc.toArray(new ColumnAction[cc.size()]);
 			}
 
 			return ret;
@@ -425,17 +426,17 @@ public class TileEntitySprinkler extends SprinklerBlock {
 			int dy = sprinklerY;
 			boolean flag = false;
 			//doDripParticles = false;
-			effectMap.clear();
+			effectMap = new ColumnAction[256][];
 			while (dy > 0 && sprinklerY-dy < 12 && !flag) {
 				Block b = world.getBlock(xCoord, dy, zCoord);
 				if (!b.isAir(world, xCoord, dy, zCoord)) {
 					boolean stopMoving = false;
 					if (b == Blocks.fire) {
-						effectMap.addValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.FIREEXTINGUISH, false, false, false));
+						this.addEffectValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.FIREEXTINGUISH, false, false, false));
 						stopMoving = true;
 					}
 					else if (b == Blocks.farmland) {
-						effectMap.addValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.HYDRATEFARMLAND, false, false, true));
+						this.addEffectValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.HYDRATEFARMLAND, false, false, true));
 						stopMoving = true;
 					}
 					if (!stopMoving) {
@@ -444,13 +445,13 @@ public class TileEntitySprinkler extends SprinklerBlock {
 						if (crop == null)
 							crop = ModCropList.getModCrop(b, meta);
 						if (crop != null) {
-							effectMap.addValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.CROPTICK, false, false, true));
+							this.addEffectValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.CROPTICK, false, false, true));
 							//stopMoving = true; continue downwards to hydrate farmland
 						}
 						else {
 							ReikaPlantHelper p = ReikaPlantHelper.getPlant(b);
 							if (p != null && p.grows()) {
-								effectMap.addValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.CROPTICK, false, p == ReikaPlantHelper.SUGARCANE, true));
+								this.addEffectValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.CROPTICK, false, p == ReikaPlantHelper.SUGARCANE, true));
 								stopMoving = p == ReikaPlantHelper.CACTUS || p == ReikaPlantHelper.SUGARCANE;
 							}
 							else if (p == null) {
@@ -474,7 +475,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 										stopMoving = true;
 									}
 									else if (b2.isAir(world, xCoord, dy-1, zCoord)) { //space for an apple; only stop moving down if this
-										effectMap.addValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.APPLETICK, true, false, true));
+										this.addEffectValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.APPLETICK, true, false, true));
 										if (ModularLogger.instance.isEnabled(LOGGER_ID))
 											ModularLogger.instance.log(LOGGER_ID, "Ticked apple leaf @ "+xCoord+", "+dy+", "+zCoord);
 										stopMoving = true;
@@ -482,7 +483,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 									//doDripParticles = b2 != b && !isOpaque(b2);
 								}
 								else if (b.getMaterial() == Material.plants && n.endsWith("apple")) {
-									effectMap.addValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.APPLETICK, false, true, false));
+									this.addEffectValue(dy, new ColumnAction(b, xCoord, dy, zCoord, Effects.APPLETICK, false, true, false));
 									stopMoving = true;
 									if (ModularLogger.instance.isEnabled(LOGGER_ID))
 										ModularLogger.instance.log(LOGGER_ID, "Ticked apple block @ "+xCoord+", "+dy+", "+zCoord);
@@ -500,11 +501,24 @@ public class TileEntitySprinkler extends SprinklerBlock {
 			//ReikaJavaLibrary.pConsole(dy+" : "+world.getBlock(xCoord, dy, zCoord));
 		}
 
+		private void addEffectValue(int dy, ColumnAction ca) {
+			ColumnAction[] set = effectMap[dy];
+			int len = set == null ? 0 : set.length;
+			ColumnAction[] ret = new ColumnAction[len+1];
+			if (set != null)
+				System.arraycopy(set, 0, ret, 0, len);
+			ret[ret.length-1] = ca;
+			effectMap[dy] = ret;
+		}
+
 		private boolean tick(World world, float chanceFactor) {
-			boolean flag = age >= 10;
-			for (int y : effectMap.keySet()) {
+			boolean flag = age >= 20;
+			for (int y = 0; y < effectMap.length; y++) {
+				ColumnAction[] map = effectMap[y];
+				if (map == null)
+					continue;
 				Block b = world.getBlock(xCoord, y, zCoord);
-				for (ColumnAction ca : effectMap.get(y)) {
+				for (ColumnAction ca : map) {
 					if (ca.block == b) {
 						if (ca.effect.doChance(rand, chanceFactor)) {
 							ca.effect.doEffect(world, xCoord, y, zCoord, b);
@@ -520,17 +534,22 @@ public class TileEntitySprinkler extends SprinklerBlock {
 
 		@SideOnly(Side.CLIENT)
 		private void doParticles(World world) {
-			for (ColumnAction ca : effectMap.allValues(false)) {
-				if (ca.doDripParticles && rand.nextInt(8) == 0) {
-					ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord, ca.zCoord+rand.nextDouble());
-				}
-				if (ca.doDripParticlesUp && rand.nextInt(8) == 0) {
-					ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord+0.9375, ca.zCoord+rand.nextDouble());
-				}
-				if (ca.doSplashParticles) {
-					int d = Math.max(1, 5-ConfigRegistry.SPRINKLER.getValue());
-					if (rand.nextInt(d) == 0)
-						ReikaParticleHelper.RAIN.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord+1, ca.zCoord+rand.nextDouble());
+			for (int y = 0; y < effectMap.length; y++) {
+				ColumnAction[] map = effectMap[y];
+				if (map == null)
+					continue;
+				for (ColumnAction ca : map) {
+					if (ca.doDripParticles && rand.nextInt(8) == 0) {
+						ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord, ca.zCoord+rand.nextDouble());
+					}
+					if (ca.doDripParticlesUp && rand.nextInt(8) == 0) {
+						ReikaParticleHelper.DRIPWATER.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord+0.9375, ca.zCoord+rand.nextDouble());
+					}
+					if (ca.doSplashParticles) {
+						int d = Math.max(1, 5-ConfigRegistry.SPRINKLER.getValue());
+						if (rand.nextInt(d) == 0)
+							ReikaParticleHelper.RAIN.spawnAt(world, ca.xCoord+rand.nextDouble(), ca.yCoord+1, ca.zCoord+rand.nextDouble());
+					}
 				}
 			}
 		}

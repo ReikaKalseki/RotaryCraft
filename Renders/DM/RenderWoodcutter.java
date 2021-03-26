@@ -1,21 +1,21 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.DM;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -87,7 +87,7 @@ public class RenderWoodcutter extends RotaryTERenderer
 			this.renderTileEntityWoodcutterAt((TileEntityWoodcutter)tile, par2, par4, par6, par8);
 		if (MinecraftForgeClient.getRenderPass() != 0 && tile.hasWorldObj()) {
 			IORenderer.renderIO(tile, par2, par4, par6);
-			if (((TileEntityWoodcutter)tile).hasEnchantments())
+			if (((TileEntityWoodcutter)tile).getEnchantmentHandler().hasEnchantments())
 				EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
 		}
 		else if (!tile.hasWorldObj()) {
@@ -107,7 +107,7 @@ public class RenderWoodcutter extends RotaryTERenderer
 					break;
 			}
 			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
-			if (((TileEntityWoodcutter)tile).hasEnchantments())
+			if (((TileEntityWoodcutter)tile).getEnchantmentHandler().hasEnchantments())
 				EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
 		}
 	}

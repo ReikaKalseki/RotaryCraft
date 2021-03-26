@@ -1,0 +1,19 @@
+{
+	type = "test1"
+	input = "minecraft:leaves"
+	output = "rotarycraft_stack:sludge*22"
+}
+{
+	type = "test2"
+	input = "minecraft:dirt"
+	output = "minecraft:stone:1*4"
+}
+{
+	type = "test3"
+	input = "rotarycraft_stack:tungstenflakes"
+	output = "minecraft:potato"
+	output_nbt = {
+		testkey1 = 11
+		testkey2 = "lol"
+	}
+}

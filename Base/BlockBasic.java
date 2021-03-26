@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.Block.SidedTextureIndex;
 import Reika.RotaryCraft.RotaryCraft;

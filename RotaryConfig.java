@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,12 +11,15 @@ package Reika.RotaryCraft;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.Configuration.ConfigList;
 import Reika.DragonAPI.Interfaces.Registry.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.BlastGate;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
@@ -26,6 +29,8 @@ public class RotaryConfig extends ControlledConfig {
 	private final DataElement<Integer>[] achievementIDs = new DataElement[entries.size()]; //
 
 	private DataElement<String[]> blastGate;
+	private DataElement<String> bedrockGate;
+	private DataElement<String> gravelGate;
 
 	/** Non-config-file control data used by the machines */
 
@@ -46,6 +51,8 @@ public class RotaryConfig extends ControlledConfig {
 		}
 
 		blastGate = this.registerAdditionalOption("Other Options", "Alternate Blast Furnace Materials", new String[0]);
+		bedrockGate = this.registerAdditionalOption("Other Options", "Bedrock Armor Gating Material", "");
+		gravelGate = this.registerAdditionalOption("Other Options", "Gravel Gun Gating Material", "");
 	}
 
 	@Override
@@ -55,6 +62,44 @@ public class RotaryConfig extends ControlledConfig {
 
 	public int getAchievementID(int idx) {
 		return achievementIDs[idx].getData();
+	}
+
+	public ItemStack getBedrockArmorGatingMaterial(boolean check, ItemStack obj) {
+		String item = bedrockGate.getData();
+		if (!check || item == null || item.length() == 0)
+			return obj;
+		return this.getGatedMaterial(item, obj);
+	}
+
+	public ItemStack getGravelGunGatingMaterial(boolean check, ItemStack obj) {
+		String item = gravelGate.getData();
+		if (!check || item == null || item.length() == 0)
+			return obj;
+		return this.getGatedMaterial(item, obj);
+	}
+
+	private ItemStack getGatedMaterial(String item, ItemStack obj) {
+		BlastGate g = null;
+		try {
+			g = BlastGate.valueOf(item.toUpperCase());
+		}
+		catch (IllegalArgumentException e) {
+
+		}
+		if (g == null) {
+			RotaryCraft.logger.logError("Gating material '"+item+"' is invalid.");
+			return obj;
+		}
+		else {
+			ItemStack ret = ReikaItemHelper.parseItem(g.getItem(), false);
+			if (ret == null) {
+				RotaryCraft.logger.logError("Selected gating material "+g+" could not be found; either the item does not exist or its mods have not yet loaded.");
+			}
+			else {
+
+			}
+		}
+		return obj;
 	}
 
 	public Object[] getBlastFurnaceGatingMaterials(boolean check, Object obj1, Object obj2, Object obj3, Object obj4) {

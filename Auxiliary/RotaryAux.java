@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,10 +18,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
@@ -30,12 +35,16 @@ import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource;
 import Reika.RotaryCraft.API.Interfaces.EnvironmentalHeatSource.SourceType;
+import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.GuiRegistry;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -46,7 +55,9 @@ public class RotaryAux {
 	public static final Color[] sideColors = {Color.CYAN, Color.BLUE, Color.YELLOW, Color.BLACK, new Color(255, 120, 0), Color.MAGENTA};
 	public static final String[] sideColorNames = {"CYAN", "BLUE", "YELLOW", "BLACK", "ORANGE", "MAGENTA"};
 
-	public static final boolean getPowerOnClient = ConfigRegistry.POWERCLIENT.getState();
+	public static final boolean getPowerOnClient = ConfigRegistry.POWERCLIENT.getState() || ReikaObfuscationHelper.isDeObfEnvironment();
+
+	public static final double tungstenDensity = ReikaEngLibrary.rhoiron*0.8+0.2*ReikaEngLibrary.rhotungsten;
 
 	private static Set<Class<? extends TileEntity>> shaftPowerBlacklist = new OneWaySet<Class<? extends TileEntity>>();
 
@@ -229,10 +240,10 @@ public class RotaryAux {
 	}
 
 	public static boolean isMuffled(TileEntity te) {
-		World world = te.worldObj;
-		int x = te.xCoord;
-		int y = te.yCoord;
-		int z = te.zCoord;
+		return isMuffled(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+	}
+
+	public static boolean isMuffled(World world, int x, int y, int z) {
 		if (ReikaWorldHelper.getMaterial(world, x, y+1, z) == Material.cloth && ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.cloth) {
 			return true;
 		}
@@ -315,5 +326,187 @@ public class RotaryAux {
 			}
 		}
 		return false;
+	}
+
+	public static String formatTemperature(double temp) {
+		String unit = "C";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "F";
+			temp = temp*1.8+32;
+		}
+		return String.format("%.0f%s", temp, unit);
+	}
+
+	public static String formatPressure(double press) {
+		String unit = "Pa";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			//unit = "bar";
+			//press /= 10130;
+			unit = "psi";
+			press *= 0.000145;
+		}
+		double val = ReikaMathLibrary.getThousandBase(press);
+		String sg = ReikaEngLibrary.getSIPrefix(press);
+		return String.format("%.3f%s%s", val, sg, unit);
+	}
+
+	public static String formatTorque(double t) {
+		String unit = "Nm";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "ft-lb";
+			t *= 0.738;
+		}
+		double val = ReikaMathLibrary.getThousandBase(t);
+		String sg = ReikaEngLibrary.getSIPrefix(t);
+		return String.format("%.0f %s%s", val, sg, unit);
+	}
+
+	public static String formatSpeed(double s) {
+		String unit = "rad/s";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "rpm";
+			s *= 9.55;
+		}
+		double val = ReikaMathLibrary.getThousandBase(s);
+		String sg = ReikaEngLibrary.getSIPrefix(s);
+		return String.format("%.0f %s%s", val, sg, unit);
+	}
+
+	public static String formatPower(double p) {
+		String unit = "W";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "hp";
+			p /= 745.7;
+		}
+		double val = ReikaMathLibrary.getThousandBase(p);
+		String sg = ReikaEngLibrary.getSIPrefix(p);
+		return String.format("%.3f%s%s", val, sg, unit);
+	}
+
+	public static String formatEnergy(double e) {
+		String unit = "J";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "ft-lb";
+			e /= 1.356;
+		}
+		double val = ReikaMathLibrary.getThousandBase(e);
+		String sg = ReikaEngLibrary.getSIPrefix(e);
+		return String.format("%.3f%s%s", val, sg, unit);
+	}
+
+	public static String formatPowerIO(TileEntityIOMachine te) {
+		String unit1 = "W";
+		String unit2 = "rad/s";
+		double p = te.power;
+		double s = te.omega;
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit1 = "hp";
+			p /= 745.7;
+			unit2 = "rpm";
+			s *= 9.55;
+		}
+		double valp = ReikaMathLibrary.getThousandBase(p);
+		String sgp = ReikaEngLibrary.getSIPrefix(p);
+		return String.format("%.3f%s%s @ %.0f %s", valp, sgp, unit1, s, unit2);
+	}
+
+	public static String formatPowerIO(ShaftMachine te) {
+		String unit1 = "W";
+		String unit2 = "rad/s";
+		double p = te.getPower();
+		double s = te.getOmega();
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit1 = "hp";
+			p /= 745.7;
+			unit2 = "rpm";
+			s *= 9.55;
+		}
+		double valp = ReikaMathLibrary.getThousandBase(p);
+		String sgp = ReikaEngLibrary.getSIPrefix(p);
+		return String.format("%.3f%s%s @ %.0f %s", valp, sgp, unit1, s, unit2);
+	}
+
+	public static String formatTorqueSpeedPowerForBook(String text, double torque, double speed, double power) {
+		boolean old = OldTextureLoader.instance.loadOldTextures();
+		String powerunit = old ? "hp" : "W";
+		String torqueunit = old ? "ft-lb" : "Nm";
+		String speedunit = old ? "rpm" : "rad/s";
+		if (old) {
+			speed *= 9.55;
+			torque *= 0.738;
+			power /= 745.7;
+		}
+		else {
+			//speedunit = ReikaEngLibrary.getSIPrefix(speed)+speedunit;
+			//torqueunit = ReikaEngLibrary.getSIPrefix(torque)+torqueunit;
+			powerunit = ReikaEngLibrary.getSIPrefix(power)+powerunit;
+			//speed = ReikaMathLibrary.getThousandBase(speed);
+			//torque = ReikaMathLibrary.getThousandBase(torque);
+			power = ReikaMathLibrary.getThousandBase(power);
+		}
+		text = text.replace("$SPEED_UNIT$", speedunit);
+		text = text.replace("$POWER_UNIT$", powerunit);
+		text = text.replace("$TORQUE_UNIT$", torqueunit);
+		String ret = String.format(text, (int)torque, (int)speed, power);
+		return ret;
+	}
+
+	public static String formatValuesForBook(String text, Object[] vals) {
+		if (OldTextureLoader.instance.loadOldTextures()) {
+
+		}
+		return String.format(text, vals);
+	}
+
+	public static String formatDistance(double dist) {
+		String unit = "m";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			unit = "ft";
+			dist *= 3.28;
+		}
+		double val = ReikaMathLibrary.getThousandBase(dist);
+		String sg = ReikaEngLibrary.getSIPrefix(dist);
+		return String.format("%.3f%s%s", val, sg, unit);
+	}
+
+	public static String formatLiquidAmount(double amt) {
+		String unit = "mB";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			amt *= 0.264;
+			unit = "gal";
+		}
+		return String.format("%.0f%s", amt, unit);
+	}
+
+	public static String formatLiquidAmountWithSI(double amt) {
+		String unit = "B";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			amt *= 0.264;
+			unit = "gal";
+		}
+		double val = ReikaMathLibrary.getThousandBase(amt);
+		String sg = ReikaEngLibrary.getSIPrefix(amt);
+		return String.format("%.3f%s%s", val, sg, unit);
+	}
+
+	public static String formatLiquidFillFraction(double amt, double capacity) {
+		String unit = "mB";
+		if (OldTextureLoader.instance.loadOldTextures()) {
+			amt *= 0.264;
+			capacity *= 0.264;
+			unit = "gal";
+		}
+		return String.format("%.0f/%.0f %s", amt, capacity, unit);
+	}
+
+	public static ItemStack getShaftCrossItem() {
+		ItemStack is = ItemRegistry.SHAFT.getStackOf();
+		is.stackTagCompound = new NBTTagCompound();
+		is.stackTagCompound.setBoolean("cross", true);
+		return is;
+	}
+
+	public static boolean isShaftCross(ItemStack is) {
+		return ItemRegistry.SHAFT.matchItem(is) && is.stackTagCompound != null && is.stackTagCompound.getBoolean("cross");
 	}
 }

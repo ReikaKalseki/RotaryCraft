@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -33,7 +34,7 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	public static final int HEIGHT = 2;
 	public static final int WIDTH = 9;
 
-	public static final int MAXTEMP = 1000;
+	public static final int MAXTEMP = 1200;
 
 	public static final int SMELT_TEMP = 400;
 
@@ -129,9 +130,13 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 
-		if (!tank.isEmpty() && tank.getActualFluid().equals(FluidRegistry.LAVA)) {
+		if (!tank.isEmpty()) {
 			tank.removeLiquid(15);
-			Tamb += 600;
+			Fluid f = tank.getActualFluid();
+			if (f.equals(FluidRegistry.LAVA))
+				Tamb += 600;
+			else if (f.equals(FluidRegistry.getFluid("pyrotheum")))
+				Tamb += 1000;
 		}
 
 		if (temperature > Tamb)
@@ -208,7 +213,14 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 
 	@Override
 	public Fluid getInputFluid() {
-		return FluidRegistry.LAVA;
+		return null;
+	}
+
+	@Override
+	public boolean isValidFluid(Fluid f) {
+		if (f == null)
+			return false;
+		return f == FluidRegistry.LAVA || f == FluidRegistry.getFluid("pyrotheum");
 	}
 
 	@Override
@@ -257,7 +269,8 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 
 	@Override
 	public int getOperationTime() {
-		return temperature >= 600 ? 150 : 200;
+		int base = temperature >= 600 ? 150 : 200;
+		return temperature >= 1000 ? base/2 : base;
 	}
 
 	@Override
@@ -274,6 +287,11 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 
 	@Override
 	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
 		return false;
 	}
 

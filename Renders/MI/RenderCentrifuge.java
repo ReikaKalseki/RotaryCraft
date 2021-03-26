@@ -1,19 +1,19 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -48,7 +48,10 @@ public class RenderCentrifuge extends RotaryTERenderer
 		int var11 = 0;
 
 		float var13;
-
+		if (tile.isFlipped) {
+			GL11.glRotated(180, 1, 0, 0);
+			GL11.glTranslated(0, -2, 0);
+		}
 
 		var14.renderAll(tile, null, tile.phi);
 		if (tile.isInWorld())

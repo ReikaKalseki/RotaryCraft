@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,11 +31,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.ReikaPotionHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.API.Interfaces.CustomPotion;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
@@ -82,7 +82,7 @@ public class TileEntityAerosolizer extends InventoriedPowerReceiver implements R
 			return;
 		this.testIdle();
 		for (int i = 0; i < 9; i++) {
-			if (tickcount2 >= 20/ReikaMathLibrary.extrema(this.getMultiplier(i), 1, "max")) {
+			if (tickcount2 >= 20/Math.max(this.getMultiplier(i), 1)) {
 				//this.potionDamage[i] = this.getPotion(i);
 				AxisAlignedBB room = this.getRoom(world, x, y, z, meta);
 				if (potionLevel[i] > 0)

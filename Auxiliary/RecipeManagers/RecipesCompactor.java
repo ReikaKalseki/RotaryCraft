@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,11 +15,14 @@ import java.util.Collections;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CompactorManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -143,7 +146,15 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 
 	@Override
 	public void addPostLoadRecipes() {
-
+		if (ModList.IC2.isLoaded()) {
+			ItemStack plantball = IC2Handler.IC2Stacks.PLANTBALL.getItem();
+			if (plantball != null) {
+				Object[] items = new Object[] {Items.wheat, Items.carrot, Blocks.leaves, Blocks.leaves2, Blocks.tallgrass, Blocks.red_flower, Blocks.yellow_flower};
+				for (Object in : items) {
+					this.addRecipe(ReikaItemHelper.parseItem(in, true), ReikaItemHelper.getSizedItemStack(plantball, 1), 500, 0, RecipeLevel.MODINTERACT); //4:1 is 2x better than handcraft
+				}
+			}
+		}
 	}
 
 	@Override
@@ -152,7 +163,7 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);

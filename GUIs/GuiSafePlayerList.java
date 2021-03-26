@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,16 +11,16 @@ package Reika.RotaryCraft.GUIs;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Instantiable.GUI.SubviewableList;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
 import Reika.RotaryCraft.Registry.PacketRegistry;
@@ -34,10 +34,9 @@ public class GuiSafePlayerList extends GuiScreen {
 
 	private String activePlayer;
 
-	private int listOffset = 0;
-
 	private TileEntityAimedCannon te;
-	private List<String> playerList;
+	private final List<String> rawData;
+	private SubviewableList<String> playerList;
 
 	private EntityPlayer ep;
 
@@ -49,7 +48,8 @@ public class GuiSafePlayerList extends GuiScreen {
 	public GuiSafePlayerList(EntityPlayer e, TileEntityAimedCannon tile) {
 		ep = e;
 		te = tile;
-		playerList = te.getCopyOfSafePlayerList();
+		rawData = te.getCopyOfSafePlayerList();
+		playerList = new SubviewableList(rawData, colsize);
 	}
 
 	@Override
@@ -63,9 +63,9 @@ public class GuiSafePlayerList extends GuiScreen {
 		int width = 180;
 
 		int dx = 10;//xSize/2-width/2;//(i/colsize)*width;
-		for (int i = listOffset; i < ReikaMathLibrary.extrema(playerList.size(), listOffset+colsize, "absmin"); i++) {
-			int dy = 12+((i-listOffset)%colsize)*22;
-			buttonList.add(new GuiButton(i, j+dx, k+dy, width, 20, playerList.get(i)));
+		for (int i = 0; i < playerList.clampedSize(); i++) {
+			int dy = 12+i*22;
+			buttonList.add(new GuiButton(i, j+dx, k+dy, width, 20, playerList.getEntryAtRelativeIndex(i)));
 		}
 
 		buttonList.add(new GuiButton(1000000, j+dx+width+6, 11+k, 20, 20, "^"));
@@ -87,25 +87,22 @@ public class GuiSafePlayerList extends GuiScreen {
 		buttontimer = 20;
 		if (button.id >= 1000000) {
 			if (button.id == 1000000) {
-				if (listOffset > 0)
-					listOffset --;
+				playerList.stepOffset(-1);
 			}
 			else {
-				if (listOffset < playerList.size()-colsize)
-					listOffset++;
+				playerList.stepOffset(1);
 			}
 			this.initGui();
 			return;
 		}
-		activePlayer = playerList.get(button.id);
-		ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SAFEPLAYER.getMinValue(), activePlayer, te);
-		playerList.remove(button.id);
+		activePlayer = playerList.getEntryAtRelativeIndex(button.id);
+		ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SAFEPLAYER.ordinal(), activePlayer, te);
+		rawData.remove(button.id);
 		this.initGui();
 	}
 
 	@Override
-	public void drawScreen(int x, int y, float f)
-	{
+	public void drawScreen(int x, int y, float f) {
 		if (System.nanoTime()-buttontime > 100000000) {
 			buttontime = System.nanoTime();
 			buttontimer = 0;

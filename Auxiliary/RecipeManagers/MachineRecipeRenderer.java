@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,8 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -19,14 +21,13 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -103,11 +104,11 @@ public class MachineRecipeRenderer {
 		}
 
 		if (r.primary.exists())
-			gui.drawItemStackWithTooltip(itemRender, font, r.primary.getItemForDisplay(), x+j-36, y+k+18);
+			gui.drawItemStackWithTooltip(itemRender, font, r.primary.getItemForDisplay(true), x+j-36, y+k+18);
 		if (r.secondary.exists())
-			gui.drawItemStackWithTooltip(itemRender, font, r.secondary.getItemForDisplay(), x+j-36, y+k+37);
+			gui.drawItemStackWithTooltip(itemRender, font, r.secondary.getItemForDisplay(true), x+j-36, y+k+37);
 		if (r.tertiary.exists())
-			gui.drawItemStackWithTooltip(itemRender, font, r.tertiary.getItemForDisplay(), x+j-36, y+k-1);
+			gui.drawItemStackWithTooltip(itemRender, font, r.tertiary.getItemForDisplay(true), x+j-36, y+k-1);
 
 		ItemStack out = ReikaItemHelper.getSizedItemStack(r.outputItem(), r.getNumberProduced(num));
 		gui.drawItemStackWithTooltip(itemRender, font, out, x2+j, y2+k);

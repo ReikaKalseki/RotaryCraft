@@ -1,20 +1,20 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -44,7 +44,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 		spawnercontroller = spw;
 		ySize = 75;
 		ep = p5ep;
-		timer = spawnercontroller.setDelay;
+		timer = spawnercontroller.getDelay();
 		disabled = spawnercontroller.disable;
 		hasPower = (spawnercontroller.power >= spawnercontroller.machine.getMinPower());
 	}
@@ -90,7 +90,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			dat = -1;
 		else
 			dat = timer;
-		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, dat);
+		ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNERTIMER.ordinal(), spawnercontroller, dat);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 					dat = -1;
 				else
 					dat = timer;
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, dat);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNERTIMER.ordinal(), spawnercontroller, dat);
 				return;
 			}
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
@@ -122,7 +122,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 			else
 				dat = timer;
 			if (timer >= 0)
-				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNER.getMinValue(), spawnercontroller, dat);
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNERTIMER.ordinal(), spawnercontroller, dat);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine
 				color = 0xcccccc;
 			fontRendererObj.drawString("Spawn Delay:", xSize/2-64, 51, color);
 			if (!input.isFocused() && !disabled) {
-				fontRendererObj.drawString(String.format("%d", spawnercontroller.setDelay), xSize/2+5, 51, 0xffffffff);
+				fontRendererObj.drawString(String.format("%d", spawnercontroller.getDelay()), xSize/2+5, 51, 0xffffffff);
 			}
 		}
 	}

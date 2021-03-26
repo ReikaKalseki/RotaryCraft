@@ -17,10 +17,10 @@ package Reika.RotaryCraft.Models.Engine;
 
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.tileentity.TileEntity;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;

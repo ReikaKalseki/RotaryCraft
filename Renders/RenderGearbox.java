@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,9 @@
 package Reika.RotaryCraft.Renders;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -21,14 +24,13 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -46,7 +48,6 @@ public class RenderGearbox extends RotaryTERenderer
 	private ModelGearbox4 GearboxModel4 = new ModelGearbox4();
 	private ModelGearbox8 GearboxModel8 = new ModelGearbox8();
 	private ModelGearbox16 GearboxModel16 = new ModelGearbox16();
-	private int itemMetadata = 0;
 
 	private static Field manaIcon;
 
@@ -75,6 +76,11 @@ public class RenderGearbox extends RotaryTERenderer
 		return ret;
 	}
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/Gear/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -92,36 +98,11 @@ public class RenderGearbox extends RotaryTERenderer
 		ModelGearbox8 var16 = GearboxModel8;
 		ModelGearbox16 var17 = GearboxModel16;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-
 		this.setupGL(tile, par2, par4, par6);
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Gear/"+tile.getGearboxType().getBaseGearboxTexture());
 
 		int var11 = 0;	 //used to rotate the model about metadata
 		if (tile.isInWorld()) {
-			switch(tile.getGearboxType()) {
-				case WOOD:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw.png");
-					break;
-				case STONE:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs.png");
-					break;
-				case STEEL:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-					break;
-				case DIAMOND:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexd.png");
-					break;
-				case BEDROCK:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexb.png");
-					break;
-			}
-
 			switch(tile.getBlockMetadata()&3) {
 				case 0:
 					var11 = 0;
@@ -137,116 +118,48 @@ public class RenderGearbox extends RotaryTERenderer
 					break;
 			}
 			GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+			ArrayList li = ReikaJavaLibrary.makeListFrom(tile.getBearingTier());
+
+			switch(tile.getRatio()) {
+				case 2:
+					var14.renderAll(tile, li, -tile.phi);
+					break;
+				case 4:
+					var15.renderAll(tile, li, -tile.phi);
+					break;
+				case 8:
+					var16.renderAll(tile, li, -tile.phi);
+					break;
+				case 16:
+					var17.renderAll(tile, li, -tile.phi);
+					break;
+			}
 
 		}
 		else {
 			//ReikaChatHelper.write(this.itemMetadata);
 			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-			switch(itemMetadata) {
-				case 1:
-				case 6:
-				case 11:
-				case 16:
-				case 21:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexw.png");
-					break;
+			switch(tile.getRatio()) {
 				case 2:
-				case 7:
-				case 12:
-				case 17:
-				case 22:
-					if (tile.isLiving())
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs_living.png");
-					else
-						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexs.png");
-					break;
-				case 3:
-				case 8:
-				case 13:
-				case 18:
-				case 23:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartex.png");
-					break;
-				case 4:
-				case 9:
-				case 14:
-				case 19:
-				case 24:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexd.png");
-					break;
-				case 5:
-				case 10:
-				case 15:
-				case 20:
-				case 25:
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/geartexb.png");
-					break;
-			}
-			switch(itemMetadata) {
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-				case 5:
 					var14.renderAll(tile, null);
 					break;
-				case 6:
-				case 7:
-				case 8:
-				case 9:
-				case 10:
+				case 4:
 					var15.renderAll(tile, null);
 					break;
-				case 11:
-				case 12:
-				case 13:
-				case 14:
-				case 15:
+				case 8:
 					var16.renderAll(tile, null);
 					break;
 				case 16:
-				case 17:
-				case 18:
-				case 19:
-				case 20:
 					var17.renderAll(tile, null);
 					break;
 			}
-
-			this.closeGL(tile);
-			return;
-		}
-
-		switch(tile.getRatio()) {
-			case 2:
-				var14.renderAll(tile, null, -tile.phi);
-				break;
-			case 4:
-				var15.renderAll(tile, null, -tile.phi);
-				break;
-			case 8:
-				var16.renderAll(tile, null, -tile.phi);
-				break;
-			case 16:
-				var17.renderAll(tile, null, -tile.phi);
-				break;
 		}
 
 		this.closeGL(tile);
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8)
-	{
-		if (par8 <= -999F) {
-			itemMetadata = (int)-par8/1000;
-			par8 = 0F;
-			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
-		}
+	public void renderTileEntityAt(TileEntity tile, double par2, double par4, double par6, float par8) {
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityGearboxAt((TileEntityGearbox)tile, par2, par4, par6, par8);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
@@ -347,70 +260,7 @@ public class RenderGearbox extends RotaryTERenderer
 			return null;
 		String name;
 		TileEntityGearbox tile = (TileEntityGearbox)te;
-		if (tile.isInWorld()) {
-			switch(tile.getGearboxType()) {
-				case WOOD:
-					name = "geartexw.png";
-					break;
-				case STONE:
-					name = "geartexs.png";
-					break;
-				case STEEL:
-					name = "geartex.png";
-					break;
-				case DIAMOND:
-					name = "geartexd.png";
-					break;
-				case BEDROCK:
-					name = "geartexb.png";
-					break;
-				default:
-					name = null;
-			}
+		return tile.getGearboxType().getBaseGearboxTexture();
 
-		}
-		else {
-			name = "geartex.png";
-			switch(itemMetadata) {
-				case 1:
-				case 6:
-				case 11:
-				case 16:
-				case 21:
-					name = "geartexw.png";
-					break;
-				case 2:
-				case 7:
-				case 12:
-				case 17:
-				case 22:
-					name = "geartexs.png";
-					break;
-				case 3:
-				case 8:
-				case 13:
-				case 18:
-				case 23:
-					name = "geartex.png";
-					break;
-				case 4:
-				case 9:
-				case 14:
-				case 19:
-				case 24:
-					name = "geartexd.png";
-					break;
-				case 5:
-				case 10:
-				case 15:
-				case 20:
-				case 25:
-					name = "geartexb.png";
-					break;
-				default:
-					name = null;
-			}
-		}
-		return name;
 	}
 }

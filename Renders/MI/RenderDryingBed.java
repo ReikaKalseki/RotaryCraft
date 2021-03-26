@@ -1,13 +1,16 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -22,16 +25,13 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.Item.AnimatedSpritesheet;
 import Reika.DragonAPI.Interfaces.Item.IndexedItemSprites;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Models.ModelDryingBed;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityDryingBed;
@@ -114,7 +114,7 @@ public class RenderDryingBed extends RotaryTERenderer {
 					AnimatedSpritesheet a = (AnimatedSpritesheet)item;
 					if (a.useAnimatedRender(is)) {
 						col = a.getColumn(is);
-						int offset = (int)((System.currentTimeMillis()/32/a.getFrameSpeed())%a.getFrameCount());
+						int offset = (int)((System.currentTimeMillis()/32/a.getFrameSpeed())%a.getFrameCount(is));
 						row = a.getBaseRow(is)+offset;
 					}
 				}

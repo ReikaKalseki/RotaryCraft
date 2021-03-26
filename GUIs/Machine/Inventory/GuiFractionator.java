@@ -1,34 +1,33 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.entity.player.EntityPlayer;
+
+import Reika.DragonAPI.Instantiable.Rendering.SubdividedProgressBar;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiMachine;
 import Reika.RotaryCraft.Containers.Machine.Inventory.ContainerFractionator;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityFractionator;
 
-public class GuiFractionator extends GuiMachine
-{
+public class GuiFractionator extends GuiMachine {
+
 	private TileEntityFractionator fct;
 	//private World worldObj = ModLoader.getMinecraftInstance().theWorld;
 
-	int x;
-	int y;
+	private final SubdividedProgressBar bar = new SubdividedProgressBar().addSection(18).addSection(37).addSection(38, 0.4F).addSection(8).addSection(9, 0.1F);
 
-	public GuiFractionator(EntityPlayer p5ep, TileEntityFractionator tilef)
-	{
+	public GuiFractionator(EntityPlayer p5ep, TileEntityFractionator tilef) {
 		super(new ContainerFractionator(p5ep, tilef), tilef);
 		fct = tilef;
 		xSize = 176;
@@ -37,17 +36,26 @@ public class GuiFractionator extends GuiMachine
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int a, int b)
-	{
+	protected void drawGuiContainerForegroundLayer(int a, int b) {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
 		super.drawGuiContainerForegroundLayer(a, b);
 
-		if (api.isMouseInBox(j+138, j+145, k+17, k+68)) {
+		if (api.isMouseInBox(j+150, j+159, k+15, k+70)) {
 			int mx = api.getMouseRealX();
 			int my = api.getMouseRealY();
-			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", fct.getLevel(), fct.CAPACITY), mx-j, my-k);
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", fct.getOutputLevel(), fct.getOutputCapacity()), mx-j, my-k);
+		}
+		if (api.isMouseInBox(j+123, j+132, k+15, k+70)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRendererObj, String.format("%d/%d", fct.getInputLevel(), fct.getInputCapacity()), mx-j, my-k);
+		}
+		if (api.isMouseInBox(j+133, j+136, k+15, k+70)) {
+			int mx = api.getMouseRealX();
+			int my = api.getMouseRealY();
+			api.drawTooltipAt(fontRendererObj, String.format("%dkPa", fct.getPressure()), mx-j, my-k);
 		}
 	}
 
@@ -55,17 +63,32 @@ public class GuiFractionator extends GuiMachine
 	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
-	{
+	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
 		super.drawGuiContainerBackgroundLayer(par1, par2, par3);
 
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		int i2 = fct.getFuelScaled(50);
-		int i3 = Math.min(30, fct.getMixScaled(30));
-		this.drawTexturedModalRect(j+64, k+25, 177, 1, i3, 38);
-		this.drawTexturedModalRect(j+139, k+68-i2, 177, 95-i2, 6, i2);
+		int i2 = fct.getFuelScaled(54);
+		this.drawTexturedModalRect(j+151, k+70-i2, 179, 55-i2, 8, i2);
+
+		int i1 = fct.getEthanolScaled(54);
+		this.drawTexturedModalRect(j+124, k+70-i1, 189, 55-i1, 8, i1);
+
+		int i0 = fct.getPressureScaled(54);
+		this.drawTexturedModalRect(j+134, k+70-i0, 224, 55-i0, 2, i0);
+
+		bar.setTick(fct.mixTime, fct.getOperationTime());
+		int v1 = bar.getScaled(0);
+		int v2 = bar.getScaled(1);
+		int v3 = bar.getScaled(2);
+		int v4 = bar.getScaled(3);
+		int v5 = bar.getScaled(4);
+		this.drawTexturedModalRect(j+34, k+17, 178, 59, v1, 47);
+		this.drawTexturedModalRect(j+70, k+17, 197, 59, v2, 47);
+		this.drawTexturedModalRect(j+107, k+53-v3, 212, 39-v3, 8, v3);
+		this.drawTexturedModalRect(j+115, k+17, 235, 59, v4, 34);
+		this.drawTexturedModalRect(j+139, k+18, 200, 1, v5, 52);
 	}
 
 	@Override
@@ -98,6 +121,6 @@ public class GuiFractionator extends GuiMachine
 
 	@Override
 	protected String getGuiTexture() {
-		return "fractiongui";
+		return "fractiongui3b";
 	}
 }

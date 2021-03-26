@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -25,10 +25,12 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
+
 import Reika.ChromatiCraft.Magic.ElementTagCompound;
 import Reika.ChromatiCraft.Magic.ItemElementCalculator;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -36,6 +38,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.RecyclingRecipe;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -125,6 +128,9 @@ public class WorktableRecipes extends RecipeHandler {
 			}
 			else if (items[i+1] instanceof ItemStack) {
 				input = (ItemStack)items[i+1];
+			}
+			else if (items[i+1] instanceof BlockKey) {
+				input = ((BlockKey)items[i+1]).asItemStack();
 			}
 			else if (items[i+1] == null || ((items[i+1] instanceof ItemStack && ((ItemStack)items[i+1]).getItem() == null))) {
 				throw new IllegalArgumentException("Null item in recipe! Possible mod conflict?");
@@ -231,11 +237,20 @@ public class WorktableRecipes extends RecipeHandler {
 	}
 
 	public IRecipe getInputRecipe(ItemStack is) {
+		is = is.copy();
+		if (is.stackTagCompound != null) {
+			is.stackTagCompound.removeTag("lubricant");
+			is.stackTagCompound.removeTag("lube");
+			is.stackTagCompound.removeTag("energy");
+			if (!is.stackTagCompound.getBoolean("living"))
+				is.stackTagCompound.removeTag("living");
+		}
 		for (WorktableRecipe wr : recipes) {
 			IRecipe ir = wr.recipe;
 			ItemStack is2 = ir.getRecipeOutput();
 			if (ReikaItemHelper.matchStacks(is, is2) && is.stackSize >= is2.stackSize) {
-				return ir;
+				if (is.stackTagCompound == null || ItemStack.areItemStackTagsEqual(is, is2))
+					return ir;
 			}
 		}
 		return null;
@@ -298,6 +313,16 @@ public class WorktableRecipes extends RecipeHandler {
 			return this.isRecycling() ? (RecyclingRecipe)recipe : null;
 		}
 
+		@Override
+		public int hashCode() {
+			return this.getUniqueID().hashCode();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			return o instanceof WorktableRecipe && ((WorktableRecipe)o).getUniqueID().equals(this.getUniqueID());
+		}
+
 	}
 
 	private static class RecipeSorter implements Comparator<WorktableRecipe> {
@@ -324,7 +349,7 @@ public class WorktableRecipes extends RecipeHandler {
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
 		IRecipe ir = crl.parseCraftingRecipe(lb, out);

@@ -1,46 +1,47 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface;
 
-import mrtjp.projectred.api.IBundledTile;
-import mrtjp.projectred.api.ProjectRedAPI;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
+import Reika.DragonAPI.Instantiable.Data.Collections.InventoryCache;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
+import Reika.DragonAPI.Instantiable.ModInteract.MEWorkTracker;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
-import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.ChangeCallback;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import appeng.api.AEApi;
 import appeng.api.networking.IGridBlock;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.security.IActionHost;
-import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AECableType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import mrtjp.projectred.api.IBundledTile;
+import mrtjp.projectred.api.ProjectRedAPI;
 
-@Strippable(value={"mrtjp.projectred.api.IBundledTile", "appeng.api.networking.IActionHost"})
-public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBundledTile, IActionHost, ChangeCallback {
+@Strippable(value={"mrtjp.projectred.api.IBundledTile", "appeng.api.networking.security.IActionHost"})
+public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBundledTile, IActionHost {
 
 	@ModDependent(ModList.APPENG)
 	private MESystemReader network;
@@ -48,7 +49,7 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 	private Object aeGridNode;
 	private int AEPowerCost = 1;
 
-	private final ItemCollection output = new ItemCollection();
+	private final InventoryCache output = new InventoryCache();
 
 	private StepTimer checkTimer = new StepTimer(10);
 	private StepTimer cacheTimer = new StepTimer(40);
@@ -57,7 +58,7 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 
 	private ItemStack[] filter = new ItemStack[NSLOTS];
 
-	private boolean hasWork = true;
+	private MEWorkTracker hasWork = new MEWorkTracker();
 
 	public TileEntityBundledBus() {
 		if (ModList.APPENG.isLoaded()) {
@@ -114,7 +115,8 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 			//ReikaJavaLibrary.pConsole(hasWork);
 			if (network != null && power >= MINPOWER) {
 				checkTimer.update();
-				if (hasWork) {
+				hasWork.tick();
+				if (hasWork.hasWork()) {
 					if (checkTimer.checkCap()) {
 						checkTimer.setCap(Math.min(40, checkTimer.getCap()+2));
 						output.clear();
@@ -128,7 +130,7 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 							if (f1 != null && input[i] > 0) {
 								int fit = f1.getMaxStackSize()-output.addItemsToUnderlyingInventories(ReikaItemHelper.getSizedItemStack(f1, f1.getMaxStackSize()), true);
 								if (fit > 0) {
-									hasWork = false;
+									hasWork.reset();
 									this.transferItem(ReikaItemHelper.getSizedItemStack(f1, Math.min(fit, f1.getMaxStackSize())), (IInventory)te);
 								}
 							}
@@ -171,11 +173,11 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 			for (int i = 0; i < filter.length; i++) {
 				ItemStack pattern = filter[i];
 				if (pattern != null) {
-					network.addCallback(pattern, this);
+					network.addCallback(pattern, hasWork);
 				}
 			}
 		}
-		hasWork = true;
+		hasWork.markDirty();
 	}
 
 	private void transferItem(ItemStack is, IInventory ii) {
@@ -266,11 +268,6 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 	@ModDependent(ModList.APPENG)
 	public IGridNode getActionableNode() {
 		return (IGridNode)aeGridNode;
-	}
-
-	@Override
-	public void onItemChange(IAEItemStack iae) {
-		hasWork = true;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,10 +20,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
@@ -38,6 +40,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceManager {
@@ -165,8 +168,10 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		this.addSmelting(ItemRegistry.STEELSICKLE.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
 		this.addSmelting(ItemRegistry.STEELSWORD.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
-		this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
+		if (!ModList.RAILCRAFT.isLoaded()) { //exploit fix; he changes recipes
+			this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
+			this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
+		}
 	}
 
 	private ItemStack getSizedSteel(int size) {
@@ -287,10 +292,12 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 					"armor.steel.legs",
 					"armor.steel.boots",
 					"tool.steel.shears",
+					"tool.crowbar",
+					"tool.crowbar.reinforced"
 			};
 
 			int[] n = {
-					3, 3, 2, 2, 1, 5, 8, 7, 4, 2
+					3, 3, 2, 2, 1, 5, 8, 7, 4, 2, 3, 3
 			};
 
 			for (int i = 0; i < items.length; i++) {
@@ -298,9 +305,17 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			}
 
 			ItemStack out = ReikaItemHelper.lookupItem(ModList.RAILCRAFT, "ingot", 0);
+			if (out == null) {
+				List<ItemStack> li = OreDictionary.getOres("ingotSteel");
+				out = li.isEmpty() ? ItemStacks.steelingot.copy() : li.get(0);
+			}
+			ItemStack[] outarr = ReikaArrayHelper.getArrayOf(out, items.length);
+			outarr[outarr.length-2] = new ItemStack(Items.iron_ingot);
+
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
-					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+					ItemStack outb = outarr[i];
+					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(outb, n[i]), RecipeLevel.MODINTERACT);
 				}
 			}
 		}
@@ -383,7 +398,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);

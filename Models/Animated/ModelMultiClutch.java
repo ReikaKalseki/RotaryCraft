@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,9 +17,9 @@ package Reika.RotaryCraft.Models.Animated;
 
 import java.util.ArrayList;
 
-import net.minecraft.tileentity.TileEntity;
-
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.tileentity.TileEntity;
 
 import Reika.DragonAPI.Instantiable.Rendering.LODModelPart;
 import Reika.RotaryCraft.Base.RotaryModelBase;
@@ -330,8 +330,7 @@ public class ModelMultiClutch extends RotaryModelBase
 	}
 
 	@Override
-	public void renderAll(TileEntity te, ArrayList li, float phi, float theta)
-	{
+	public void renderAll(TileEntity te, ArrayList li, float phi, float theta) {
 		Shape1.render(te, f5);
 		Shape1a.render(te, f5);
 		Shape1b.render(te, f5);

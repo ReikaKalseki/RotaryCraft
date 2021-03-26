@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,8 @@
 package Reika.RotaryCraft;
 
 import java.util.Map;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -20,17 +22,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.Auxiliary.ReikaSpriteSheets;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.NBTMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
@@ -106,12 +108,12 @@ public class ItemMachineRenderer implements IItemRenderer {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
-			gbx.setType(MaterialRegistry.matList[item.getItemDamage()%5]);
+			gbx.setData(GearboxTypes.getMaterialFromGearboxItem(item), ReikaMathLibrary.intpow2(2, item.getItemDamage()+1));
 			int amt = item.stackTagCompound != null ? item.stackTagCompound.getInteger("lube") : 0;
 			gbx.setLubricant(amt);
 			if (item.stackTagCompound != null)
 				gbx.setDataFromItemStackTag(item.stackTagCompound);
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(gbx, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(gbx, a, 0.0D, b, 0);
 		}
 		else if (ItemRegistry.ADVGEAR.matchItem(item)) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.ADVANCEDGEARS, item.getItemDamage());
@@ -129,11 +131,12 @@ public class ItemMachineRenderer implements IItemRenderer {
 		else if (ItemRegistry.FLYWHEEL.matchItem(item)) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.FLYWHEEL, item.getItemDamage());
 			TileEntityFlywheel fly = (TileEntityFlywheel)te;
+			fly.setMaterialFromItem(item);
 			if (type == type.ENTITY) {
 				a = -0.5F; b = -0.5F;
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 			}
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(fly, a, 0.0D, b, 500-1000F*(item.getItemDamage()+1));
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(fly, a, 0.0D, b, 0);
 		}/*
 		else if (item.itemID == RotaryCraft.hydraulicitems.itemID) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.HYDRAULIC);
@@ -147,14 +150,12 @@ public class ItemMachineRenderer implements IItemRenderer {
 		else if (ItemRegistry.SHAFT.matchItem(item)) {
 			TileEntity te = this.getRenderingInstance(MachineRegistry.SHAFT, item.getItemDamage());
 			TileEntityShaft sha = (TileEntityShaft)te;
+			sha.setData(MaterialRegistry.getMaterialFromShaftItem(item), RotaryAux.isShaftCross(item));
 			if (type == type.ENTITY) {
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
 				a = -0.5F; b = -0.5F;
 			}
-			if (item.getItemDamage() == ItemStacks.shaftcross.getItemDamage())
-				TileEntityRendererDispatcher.instance.renderTileEntityAt(sha, a, 0.0D, b, -10000F);
-			else
-				TileEntityRendererDispatcher.instance.renderTileEntityAt(sha, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(sha, a, 0.0D, b, 0);
 		}
 		else if (ItemRegistry.MACHINE.matchItem(item)) {
 			GL11.glEnable(GL11.GL_BLEND);
@@ -178,8 +179,8 @@ public class ItemMachineRenderer implements IItemRenderer {
 				TileEntity te = this.getRenderingInstance(machine, 0);
 				if (machine.isEnchantable()) {
 					EnchantableMachine em = (EnchantableMachine)te;
-					em.getEnchantments().clear();
-					em.applyEnchants(item);
+					em.getEnchantmentHandler().clear();
+					em.getEnchantmentHandler().applyEnchants(item);
 				}
 				if (machine.hasNBTVariants()) {
 					((NBTMachine)te).setDataFromItemStackTag(item.stackTagCompound);

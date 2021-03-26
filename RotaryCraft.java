@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
 import Reika.DragonAPI.DragonAPICore;
@@ -45,6 +46,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.DonatorController;
 import Reika.DragonAPI.Auxiliary.Trackers.FurnaceFuelRegistry;
 import Reika.DragonAPI.Auxiliary.Trackers.IDCollisionTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.IntegrityChecker;
+import Reika.DragonAPI.Auxiliary.Trackers.ModLockController;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerFirstTimeTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.PlayerHandler;
@@ -54,6 +56,7 @@ import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
+import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.SimpleCropHandler;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaDispenserHelper;
@@ -93,6 +96,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryIntegrationManager;
 import Reika.RotaryCraft.Auxiliary.TabModOre;
 import Reika.RotaryCraft.Auxiliary.TabRotaryCraft;
 import Reika.RotaryCraft.Auxiliary.TabRotaryItems;
+import Reika.RotaryCraft.Auxiliary.TabRotaryPower;
 import Reika.RotaryCraft.Auxiliary.TabRotaryTools;
 import Reika.RotaryCraft.Auxiliary.TabSpawner;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
@@ -114,6 +118,7 @@ import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+
 import appeng.api.config.PowerUnits;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -141,16 +146,17 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final String packetChannel = "RotaryCraftData";
 
 	public static final CreativeTabs tabRotary = new TabRotaryCraft();
+	public static final CreativeTabs tabPower = new TabRotaryPower();
 	public static final CreativeTabs tabRotaryItems = new TabRotaryItems();
 	public static final CreativeTabs tabRotaryTools = new TabRotaryTools();
 	public static final CreativeTabs tabModOres = new TabModOre();
 	public static final CreativeTabs tabSpawner = new TabSpawner();
 
 	private static final int[] dmgs = {
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(0),
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(1),
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(2),
-		ArmorMaterial.DIAMOND.getDamageReductionAmount(3)
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(0),
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(1),
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(2),
+			ArmorMaterial.DIAMOND.getDamageReductionAmount(3)
 	};
 
 	public static final ArmorMaterial NVHM = EnumHelper.addArmorMaterial("NVHelmet", ArmorMaterial.DIAMOND.getDurability(0), dmgs, ArmorMaterial.GOLD.getEnchantability());
@@ -173,10 +179,9 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");
 	public static final CustomStringDamageSource shock = (CustomStringDamageSource)new CustomStringDamageSource("was electrified").setDamageBypassesArmor();
 	public static final CustomStringDamageSource grind = new CustomStringDamageSource("was ground to a pulp");
+	public static final CustomStringDamageSource freezeDamage = new CustomStringDamageSource("froze");
 
 	static final Random rand = new Random();
-
-	private boolean isLocked = false;
 
 	public static final Block[] blocks = new Block[BlockRegistry.blockList.length];
 	public static final Item[] items = new Item[ItemRegistry.itemList.length];
@@ -209,7 +214,7 @@ public class RotaryCraft extends DragonAPIMod {
 	}
 
 	public final boolean isLocked() {
-		return isLocked;
+		return !ModLockController.instance.verify(this);
 	}
 
 	private final boolean checkForLock() {
@@ -258,22 +263,7 @@ public class RotaryCraft extends DragonAPIMod {
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 		proxy.registerSounds();
-
-		isLocked = this.checkForLock();
-		if (this.isLocked()) {
-			ReikaJavaLibrary.pConsole("");
-			ReikaJavaLibrary.pConsole("\t========================================= ROTARYCRAFT ===============================================");
-			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of RotaryCraft.");
-			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
-			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
-			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
-			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
-			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
-			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the RotaryCraft content, and then reload the game. All functionality");
-			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
-			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
-			ReikaJavaLibrary.pConsole("");
-		}
+		ModLockController.instance.registerMod(this);
 
 		logger = new ModLogger(instance, ConfigRegistry.ALARM.getState());
 		if (DragonOptions.FILELOG.getState())
@@ -283,13 +273,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 		MinecraftForge.EVENT_BUS.register(RotaryEventManager.instance);
 		FMLCommonHandler.instance().bus().register(RotaryEventManager.instance);
-
-		if (!this.isLocked()) {
-			if (ConfigRegistry.ACHIEVEMENTS.getState()) {
-				achievements = new Achievement[RotaryAchievements.list.length];
-				RotaryAchievements.registerAchievements();
-			}
-		}
 
 		int id = ExtraConfigIDs.FREEZEID.getValue();
 		IDCollisionTracker.instance.addPotionID(instance, id, FreezePotion.class);
@@ -316,6 +299,9 @@ public class RotaryCraft extends DragonAPIMod {
 		ConfigMatcher.instance.addConfigList(this, ConfigRegistry.optionList);
 		ConfigMatcher.instance.addConfigList(this, ExtraConfigIDs.idList);
 
+		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTGLASS.getBlockInstance());
+		RayTracer.addVisuallyTransparentBlock(BlockRegistry.BLASTPANE.getBlockInstance());
+
 		this.basicSetup(evt);
 		this.finishTiming();
 	}
@@ -324,6 +310,31 @@ public class RotaryCraft extends DragonAPIMod {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		this.startTiming(LoadPhase.LOAD);
+
+		if (this.checkForLock()) {
+			ModLockController.instance.unverify(this);
+		}
+		if (this.isLocked()) {
+			ReikaJavaLibrary.pConsole("");
+			ReikaJavaLibrary.pConsole("\t========================================= ROTARYCRAFT ===============================================");
+			ReikaJavaLibrary.pConsole("\tNOTICE: It has been detected that third-party plugins are being used to disable parts of RotaryCraft.");
+			ReikaJavaLibrary.pConsole("\tBecause this is frequently done to sell access to mod content, which is against the Terms of Use");
+			ReikaJavaLibrary.pConsole("\tof both Mojang and the mod, the mod has been functionally disabled. No damage will occur to worlds,");
+			ReikaJavaLibrary.pConsole("\tand all machines (including contents) and items already placed or in inventories will remain so,");
+			ReikaJavaLibrary.pConsole("\tbut its machines will not function, recipes will not load, and no renders or textures will be present.");
+			ReikaJavaLibrary.pConsole("\tAll other mods in your installation will remain fully functional.");
+			ReikaJavaLibrary.pConsole("\tTo regain functionality, unban the RotaryCraft content, and then reload the game. All functionality");
+			ReikaJavaLibrary.pConsole("\twill be restored. You may contact Reika for further information on his forum thread.");
+			ReikaJavaLibrary.pConsole("\t=====================================================================================================");
+			ReikaJavaLibrary.pConsole("");
+		}
+
+		if (!this.isLocked()) {
+			if (ConfigRegistry.ACHIEVEMENTS.getState()) {
+				achievements = new Achievement[RotaryAchievements.list.length];
+				RotaryAchievements.registerAchievements();
+			}
+		}
 
 		if (this.isLocked())
 			PlayerHandler.instance.registerTracker(LockNotification.instance);
@@ -343,8 +354,9 @@ public class RotaryCraft extends DragonAPIMod {
 
 		ReikaDispenserHelper.addDispenserAction(ItemStacks.compost, ReikaDispenserHelper.bonemealEffect);
 
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			RotaryDescriptions.loadData();
+		}
 		//DemoMusic.addTracks();
 
 		RotaryRegistration.loadOreDictionary();
@@ -429,10 +441,12 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.FLYWHEEL.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.GEARBOX.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MACHINE.getItemInstance(), true);
+		/*
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.SHAFTCRAFT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.BORECRAFT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.ENGINECRAFT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MISCCRAFT.getItemInstance(), true);
+		 */
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			ItemRegistry ir = ItemRegistry.itemList[i];
 			if (!ir.isDummiedOut()) {
@@ -452,7 +466,6 @@ public class RotaryCraft extends DragonAPIMod {
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.tungsteningot, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedrockdust, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedingot, false);
-		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.bedingotblock, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemStacks.silumin, false);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.UPGRADE.getItemInstance(), true);
 
@@ -563,6 +576,8 @@ public class RotaryCraft extends DragonAPIMod {
 					e.printStackTrace();
 					logger.logError("Could not add Forestry integration. Check your versions; if you are up-to-date with both mods, notify Reika.");
 				}
+
+				//MobBait.addBait("BUTTERFLY", ReikaBeeHelper.getButterflyClass(), -1, ForestryHandler.ItemEntry.POLLEN.getItem(), Items.gunpowder);
 			}
 
 			if (ModList.TINKERER.isLoaded() && (Pulses.TOOLS.isLoaded() || Pulses.WEAPONS.isLoaded())) {
@@ -592,7 +607,7 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.durability = 600;
 				mat.damageBoost = 3;
 				mat.harvestLevel = 2;
-				mat.miningSpeed = 1800;
+				mat.miningSpeed = 1200;
 				mat.handleModifier = 1.2F;
 				mat.chatColor = EnumChatFormatting.LIGHT_PURPLE.toString();
 				mat.renderColor = 0xCACBF2;
@@ -609,18 +624,21 @@ public class RotaryCraft extends DragonAPIMod {
 				mat.registerSmelteryCasting(ItemStacks.steelingot, hslaFluid, 750, ItemStacks.steelblock);
 			}
 
-			if (ModList.CHROMATICRAFT.isLoaded()) {
-				for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-					MachineRegistry m = MachineRegistry.machineList.get(i);
-					if (!m.allowsAcceleration()) {
+			for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+				MachineRegistry m = MachineRegistry.machineList.get(i);
+				if (!m.allowsAcceleration()) {
+					if (ModList.CHROMATICRAFT.isLoaded()) {
 						AcceleratorBlacklist.addBlacklist(m.getTEClass(), m.getName(), BlacklistReason.EXPLOIT);
-						TimeTorchHelper.blacklistTileEntity(m.getTEClass());
 					}
+					TimeTorchHelper.blacklistTileEntity(m.getTEClass());
 				}
-				for (int i = 0; i < EngineType.engineList.length; i++) {
-					EngineType type = EngineType.engineList[i];
+			}
+			for (int i = 0; i < EngineType.engineList.length; i++) {
+				EngineType type = EngineType.engineList[i];
+				if (ModList.CHROMATICRAFT.isLoaded()) {
 					AcceleratorBlacklist.addBlacklist(type.engineClass, type.name(), BlacklistReason.EXPLOIT);
 				}
+				TimeTorchHelper.blacklistTileEntity(type.engineClass);
 			}
 
 			if (ModList.THAUMCRAFT.isLoaded()) {
@@ -644,6 +662,10 @@ public class RotaryCraft extends DragonAPIMod {
 
 	@EventHandler
 	public void overrideRecipes(FMLServerStartedEvent evt) {
+		this.reinitRecipes();
+	}
+
+	public void reinitRecipes() {
 		if (!this.isLocked()) {
 			if (!ReikaRecipeHelper.isCraftable(MachineRegistry.BLASTFURNACE.getCraftedProduct())) {
 				GameRegistry.addRecipe(new ShapedOreRecipe(MachineRegistry.BLASTFURNACE.getCraftedProduct(), RotaryRecipes.getBlastFurnaceIngredients()));

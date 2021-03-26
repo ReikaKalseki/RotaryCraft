@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,6 +20,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
@@ -40,6 +41,7 @@ import Reika.RotaryCraft.API.RecipeInterface.GrinderManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesGrinder extends RecipeHandler implements GrinderManager {
@@ -75,8 +77,8 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.stone_stairs, new ItemStack(Blocks.gravel, 2, 0), RecipeLevel.PERIPHERAL);
 		this.addRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.cobblestone, 2, 0), RecipeLevel.PERIPHERAL);
 
-		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
-		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE); //create a tar
+		this.addRecipe(Blocks.netherrack, ItemStacks.netherrackdust, RecipeLevel.CORE);
+		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE);
 
 		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 3), RecipeLevel.PERIPHERAL);
 		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), RecipeLevel.CORE);
@@ -84,10 +86,11 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), RecipeLevel.PROTECTED);//, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));
 		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15), RecipeLevel.PROTECTED);
 		this.addRecipe(Items.blaze_rod, new ItemStack(Items.blaze_powder, 6, 0), RecipeLevel.PROTECTED);
+		this.addRecipe(Blocks.ice, new ItemStack(Items.snowball, 4, 0), RecipeLevel.PROTECTED);
 
 		for (int i = 0; i < ReikaTreeHelper.treeList.length; i++) {
 			ReikaTreeHelper tree = ReikaTreeHelper.treeList[i];
-			this.addRecipe(tree.getLog(), this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
+			this.addRecipe(tree.getLog().asItemStack(), this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
 			this.addRecipe(new ItemStack(Blocks.planks, 1, tree.ordinal()), this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
 		}
 		this.addRecipe(Blocks.noteblock, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
@@ -310,8 +313,8 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addDualOreDictRecipe("rodBlitz", "dustBlitz", 6, RecipeLevel.MODINTERACT);
 		this.addDualOreDictRecipe("rodBasalz", "dustBasalz", 6, RecipeLevel.MODINTERACT);
 
-		this.addOreDictRecipe("netherrack", ItemStacks.netherrackdust, RecipeLevel.CORE); //create a netherrack powder
-		this.addOreDictRecipe("soulsand", ItemStacks.tar, RecipeLevel.CORE); //create a tar
+		this.addOreDictRecipe("netherrack", ItemStacks.netherrackdust, RecipeLevel.CORE);
+		this.addOreDictRecipe("soulsand", ItemStacks.tar, RecipeLevel.CORE);
 
 		if (ModList.BOTANIA.isLoaded()) {
 			Item petal = GameRegistry.findItem(ModList.BOTANIA.modLabel, "petal");
@@ -336,6 +339,13 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		ItemStack endDust = ReikaItemHelper.lookupItem("exnihilo:exnihilo.gravel_ender");
 		if (endDust != null) {
 			this.addRecipe(Blocks.end_stone, endDust, RecipeLevel.MODINTERACT);
+		}
+
+		if (ModList.HARVESTCRAFT.isLoaded()) {
+			ItemStack corn = ReikaItemHelper.lookupItem("harvestcraft:cornItem");
+			ItemStack fla = ReikaItemHelper.lookupItem("harvestcraft:cornflakesItem");
+			if (corn != null && fla != null)
+				this.addRecipe(corn, ReikaItemHelper.getSizedItemStack(fla, 3), RecipeLevel.MODINTERACT);
 		}
 
 		this.addOreDictRecipe("cropCinderpearl", new ItemStack(Items.blaze_powder, 3, 0), RecipeLevel.MODINTERACT);
@@ -385,7 +395,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 				n *= 3;
 			for (ItemStack is : li) {
 				if (recipes.containsKey(is)) {
-					OreType mod = (OreType)ExtractorModOres.getOreFromExtract(recipes.get(is).output);
+					OreType mod = ExtractorModOres.getOreFromExtract(recipes.get(is).output);
 					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for grinder registration as "+ore+" as it is already registered to "+mod);
 				}
 				else {
@@ -425,10 +435,21 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
-		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
+		String ore = lb.containsKey("ore_input") ? lb.getString("ore_input") : null;
+		if (ore != null && !ore.isEmpty() && !ore.startsWith("[NULL")) {
+			Collection<ItemStack> c = OreDictionary.getOres(ore);
+			if (c.isEmpty()) {
+				throw new IllegalArgumentException("Ore tag '"+ore+"' does not map to any existing OreDict tag!");
+			}
+			for (ItemStack in : c) {
+				this.addCustomRecipe(in, out);
+			}
+			return true;
+		}
+		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		this.addCustomRecipe(in, out);
 		return true;
 	}

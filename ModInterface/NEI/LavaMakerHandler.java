@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,8 @@ package Reika.RotaryCraft.ModInterface.NEI;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -23,14 +25,13 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesLavaMaker;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiRockMelter;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -110,6 +111,13 @@ public class LavaMakerHandler extends TemplateRecipeHandler {
 			Collection<ItemStack> li = RecipesLavaMaker.getRecipes().getAllRecipes();
 			for (ItemStack is : li)
 				arecipes.add(new LavaMakerRecipe(is));
+		}
+		else if (outputId != null && outputId.equals("liquid")) {
+			FluidStack fs = (FluidStack)results[0];
+			ArrayList<ItemStack> li = RecipesLavaMaker.getRecipes().getSourceItems(fs.getFluid());
+			if (li != null && !li.isEmpty()) {
+				arecipes.add(new LavaMakerRecipe(li));
+			}
 		}
 		super.loadCraftingRecipes(outputId, results);
 	}

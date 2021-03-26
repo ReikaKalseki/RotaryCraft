@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,8 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
+import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
@@ -34,8 +36,8 @@ public class ItemFireballLauncher extends ItemChargedTool {
 	}
 
 	public void fire(ItemStack is, World world, EntityPlayer ep, float charge) {
-		double[] look = ReikaVectorHelper.getPlayerLookCoords(ep, 2);
-		EntityLargeFireball ef = new EntityLargeFireball(world, ep, look[0], look[1]+1, look[2]);
+		DecimalPosition look = ReikaVectorHelper.getPlayerLookCoords(ep, 2);
+		EntityLargeFireball ef = new EntityLargeFireball(world, ep, look.xCoord, look.yCoord+1, look.zCoord);
 		Vec3 lookv = ep.getLookVec();
 		ef.motionX = lookv.xCoord/5;
 		ef.motionY = lookv.yCoord/5;

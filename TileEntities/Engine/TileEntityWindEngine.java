@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,20 +11,22 @@ package Reika.RotaryCraft.TileEntities.Engine;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
+import Reika.DragonAPI.ModInteract.DeepInteract.PlanetDimensionHandler;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -98,15 +100,15 @@ public class TileEntityWindEngine extends TileEntityEngine {
 		}
 		 */
 
+		if (AtmosphereHandler.isNoAtmo(world, x-this.getWriteDirection().offsetX, y, z-this.getWriteDirection().offsetZ, blockType, false))
+			return 0;
+
 		if (clearance == null)
 			clearance = new WindClearanceCheck(this, 32, 3);
 		clearance.tick(world);
 
 		float f = 1F-clearance.getPenalty();
-		if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
-			IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-			f *= ig.getWindLevel();
-		}
+		f *= PlanetDimensionHandler.getWindFactor(world);
 		return Math.min(1, f);
 	}
 

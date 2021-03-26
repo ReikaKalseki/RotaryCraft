@@ -31,6 +31,7 @@
 		Iron: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Steel: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Gold: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Tungsten: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Diamond: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 	</material>
 	<shafts>
@@ -39,15 +40,13 @@
 		Wood: %dNm at %d rad/s
 		Stone: %dNm at %d rad/s
 		Steel: %dNm at %d rad/s
+		Tungsten: %dNm at %d rad/s
 		Diamond: %dNm at %d rad/s
 		Bedrock: Infinity
 	</shafts>
 	<flywheels>
 		These are the failure speeds for the flywheels. Exceeding these will result in violent failure.
-		Wood: %d rad/s
-		Stone: %d rad/s
-		Iron: %d rad/s
-		Gold: %d rad/s
+		%s
 	</flywheels>
 	<transfer>
 		Shaft power behaves completely differently than electrical, pneumatic, or other traditional kinds of power. For example, shaft power is true power, not energy, and as such does not "build up" in machines or shafts with no output; it must be used immediately upon its creation. Furthermore, the "load" on a shaft has no effect on its power consumption - a disconnected shaft still draws any and all power given to it, but simply wastes it. This is unlike a wire, where disconnecting outputs would redirect that power into the remaining outputs.

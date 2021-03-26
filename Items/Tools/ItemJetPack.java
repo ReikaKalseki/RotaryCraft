@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -30,6 +30,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.ChromatiCraft.API.RitualAPI;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
@@ -52,6 +53,7 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IArmorApiarist;
@@ -164,7 +166,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		boolean isFlying = KeyWatcher.instance.isKeyDown(ep, Key.JUMP);
 		boolean hoverMode = isFlying && ep.isSneaking();
 		boolean jetbonus = !ConfigRegistry.JETFUELPACK.getState() && this.isJetFueled(is);
-		boolean horiz = KeyWatcher.instance.isKeyDown(ep, Key.FOWARD) || KeyWatcher.instance.isKeyDown(ep, Key.BACK);
+		boolean horiz = KeyWatcher.instance.isKeyDown(ep, Key.FORWARD) || KeyWatcher.instance.isKeyDown(ep, Key.BACK);
 		horiz = horiz || KeyWatcher.instance.isKeyDown(ep, Key.LEFT) || KeyWatcher.instance.isKeyDown(ep, Key.RIGHT);
 		float maxSpeed = jetbonus ? 3 : 1.25F;
 		double hspeed = ReikaMathLibrary.py3d(ep.motionX, 0, ep.motionZ);
@@ -203,7 +205,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 					ep.motionY = Math.min(ep.motionY+deltav, maxSpeed);
 				}
 
-				if (KeyWatcher.instance.isKeyDown(ep, Key.FOWARD)) {
+				if (KeyWatcher.instance.isKeyDown(ep, Key.FORWARD)) {
 					ep.moveFlying(0, thrust, thrust);
 					if (ep.worldObj.getTotalWorldTime()%2 == 0 && !ep.capabilities.isCreativeMode)
 						this.use(is, this.getFuelUsageMultiplier());
@@ -243,7 +245,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 
 		if (ep.motionY < 0 && winged && floatmode && !ep.isPlayerSleeping()) {
 			if (!ModList.CHROMATICRAFT.isLoaded() || !RitualAPI.isPlayerUndergoingRitual(ep)) {
-				boolean sneak = ep.isSneaking();
+				boolean sneak = ep.isSneaking() != ConfigRegistry.SNEAKWINGS.getState();
 				double ang = Math.cos(Math.toRadians(ep.rotationPitch));
 				double d = ep.motionY <= -2 ? 0.0625 : ep.motionY <= -1 ? 0.125 : ep.motionY <= -0.5 ? 0.25 : 0.5; //gives curve
 				if (sneak)

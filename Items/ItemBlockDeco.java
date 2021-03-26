@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Items;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+
 import Reika.RotaryCraft.Registry.BlockRegistry;
 
 public class ItemBlockDeco extends ItemBlock {

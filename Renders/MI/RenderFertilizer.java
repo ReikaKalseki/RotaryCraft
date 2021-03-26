@@ -1,21 +1,22 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.MI;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -59,8 +60,15 @@ public class RenderFertilizer extends RotaryTERenderer
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityFertilizerAt((TileEntityFertilizer)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
+			if (((TileEntityFertilizer)tile).getEnchantmentHandler().hasEnchantments())
+				EnchantmentRenderer.renderGlint(tile, FertilizerModel, null, par2, par4, par6);
+		}
+		else if (!tile.hasWorldObj()) {
+			if (((TileEntityFertilizer)tile).getEnchantmentHandler().hasEnchantments())
+				EnchantmentRenderer.renderGlint(tile, FertilizerModel, null, par2, par4, par6);
+		}
 	}
 
 	@Override

@@ -1,0 +1,16 @@
+{
+	type = "test1"
+	input = "rotarycraft_stack:silicon"
+	input_fluid = "water"
+	input_amount = 710
+	output = "minecraft:wool:3"
+	duration = 80
+}
+{
+	type = "test2"
+	input = "rotarycraft_stack:silicon"
+	input_fluid = "lava"
+	input_amount = 410
+	output = "minecraft:wool:5"
+	duration = 120
+}

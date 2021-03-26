@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,15 +18,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.SolarPlant;
@@ -34,6 +35,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.SolarPlantBlock;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -105,7 +107,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 					double m = ReikaEntityHelper.getEntityMass(e);
 					//ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
 					if (e.motionY < -0.1 && m-e.motionY*20 > 80) {
-						ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.getMinValue(), this, new PacketTarget.RadiusTarget(this, 32));
+						ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
 						e.attackEntityFrom(DamageSource.cactus, 1);
 						this.breakMirror(world, x, y, z);
 						break;
@@ -134,9 +136,9 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 		if (!worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
 			return false;
 		 */
-		if (worldObj.getPrecipitationHeight(xCoord, zCoord) > yCoord+1)
-			return false;
-		return true;
+		//if (worldObj.getPrecipitationHeight(xCoord, zCoord) > yCoord+1)
+		//	return false;
+		return plant != null && /*plant.canSeeTheSky(worldObj, xCoord, yCoord, zCoord)*/ plant.canSeeTheSky(this);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -313,7 +315,8 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 
 	@Override
 	public void breakBlock() {
-		plant.invalidate(worldObj);
+		if (plant != null)
+			plant.invalidate(worldObj);
 	}
 
 }

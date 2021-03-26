@@ -1,23 +1,23 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders.M;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
@@ -25,6 +25,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Models.ModelHarvester;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntityMobHarvester;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -80,12 +81,12 @@ public class RenderHarvester extends RotaryTERenderer
 			ReikaAABBHelper.renderAABB(((TileEntityMobHarvester)tile).getBox(), par2, par4, par6, tile.xCoord, tile.yCoord, tile.zCoord, ((TileEntityIOMachine)tile).iotick, 255, 127, 0, true);
 		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			this.renderLaser((TileEntityMobHarvester)tile, par2, par4, par6);
-			if (((TileEntityMobHarvester)tile).hasEnchantments())
+			if (((TileEntityMobHarvester)tile).getEnchantmentHandler().hasEnchantments())
 				//EnchantmentRenderer.renderShine(0, 0, 0, par2, par4, par6);
 				EnchantmentRenderer.renderGlint(tile, HarvesterModel, null, par2, par4, par6);
 		}
 		else if (!tile.hasWorldObj()) {
-			if (((TileEntityMobHarvester)tile).hasEnchantments())
+			if (((TileEntityMobHarvester)tile).getEnchantmentHandler().hasEnchantments())
 				EnchantmentRenderer.renderGlint(tile, HarvesterModel, null, par2, par4, par6);
 		}
 	}

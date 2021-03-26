@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,15 +11,15 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 
 import java.util.Collection;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.Connectable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -35,8 +35,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider, TransmissionReceiver,
-Connectable, BreakAction {
+public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerGenerator, SimpleProvider, TransmissionReceiver, Connectable<Coordinate> {
 
 	public boolean isEmitting;
 	private int wetTimer = 0;
@@ -44,8 +43,7 @@ Connectable, BreakAction {
 	private boolean isSlippingTorque;
 	private boolean isSlippingOmega;
 
-	private int[] source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
-	private int[] target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
+	private Coordinate otherEnd = null;
 
 	private StepTimer sound = new StepTimer(26);
 
@@ -110,28 +108,20 @@ Connectable, BreakAction {
 	}
 
 	public final void reset() {
-		source = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
-		target = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
+		otherEnd = null;
 	}
 
 	public final void resetOther() {
-		if (!isEmitting) {
-			MachineRegistry m = MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]);
-			if (m == this.getMachine()) {
-				TileEntityBeltHub te = (TileEntityBeltHub)worldObj.getTileEntity(target[0], target[1], target[2]);
-				te.reset();
-			}
-		}
-		else {
-			MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
-			if (m == this.getMachine()) {
-				TileEntityBeltHub te = (TileEntityBeltHub)worldObj.getTileEntity(source[0], source[1], source[2]);
-				te.reset();
-			}
+		if (otherEnd == null)
+			return;
+		MachineRegistry m = MachineRegistry.getMachine(worldObj, otherEnd.xCoord, otherEnd.yCoord, otherEnd.zCoord);
+		if (m == this.getMachine()) {
+			TileEntityBeltHub te = (TileEntityBeltHub)otherEnd.getTileEntity(worldObj);
+			te.reset();
 		}
 	}
 
-	public final boolean canConnect(int x, int y, int z) {
+	private final boolean canConnect(World world, int x, int y, int z) {
 		int dx = x-xCoord;
 		int dy = y-yCoord;
 		int dz = z-zCoord;
@@ -161,57 +151,41 @@ Connectable, BreakAction {
 		if (!this.isValidDirection(dir))
 			return false;
 
-		for (int i = 1; i < Math.abs(dx+dy+dz); i++) {
-			int xi = xCoord+dir.offsetX*i;
-			int yi = yCoord+dir.offsetY*i;
-			int zi = zCoord+dir.offsetZ*i;
-			Block id = worldObj.getBlock(xi, yi, zi);
-			//ReikaJavaLibrary.pConsole(xi+", "+yi+", "+zi+" -> "+id, Side.SERVER);
-			if (!ReikaWorldHelper.softBlocks(worldObj, xi, yi, zi)) {
+		TileEntity te = world.getTileEntity(x, y, z);
+		if (te instanceof TileEntityBeltHub) {
+			TileEntityBeltHub tb = (TileEntityBeltHub)te;
+			if (tb.isEmitting == isEmitting)
 				return false;
+			if (!this.areInSamePlane(tb))
+				return false;
+			for (int i = 1; i < Math.abs(dx+dy+dz); i++) {
+				int xi = xCoord+dir.offsetX*i;
+				int yi = yCoord+dir.offsetY*i;
+				int zi = zCoord+dir.offsetZ*i;
+				if (!ReikaWorldHelper.softBlocks(worldObj, xi, yi, zi)) {
+					return false;
+				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
-	public final boolean shouldRenderBelt() {
-		if (isEmitting) {
-			MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
-			return m == this.getMachine() && this.canConnect(source[0], source[1], source[2]);
-		}
-		else {
-			if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
-				//return MachineRegistry.getMachine(worldObj, target[0], target[1], target[2]) == MachineRegistry.BELT;
-				return this.canConnect(target[0], target[1], target[2]);
+	public final boolean hasValidConnection() {
+		if (otherEnd == null)
 			return false;
-		}
+		MachineRegistry m = MachineRegistry.getMachine(worldObj, otherEnd.xCoord, otherEnd.yCoord, otherEnd.zCoord);
+		return m == this.getMachine() && this.canConnect(worldObj, otherEnd.xCoord, otherEnd.yCoord, otherEnd.zCoord);
 	}
 
-	public final boolean setTarget(World world, int x, int y, int z) {
-		if (!this.canConnect(x, y, z))
+	public final boolean tryConnect(World world, int x, int y, int z) {
+		if (otherEnd != null)
 			return false;
-		if (target[0] != Integer.MIN_VALUE && target[1] != Integer.MIN_VALUE && target[2] != Integer.MIN_VALUE)
+		if (x == xCoord && y == yCoord && z == zCoord)
 			return false;
-		if (!this.areInSamePlane((TileEntityBeltHub)worldObj.getTileEntity(x, y, z)))
+		if (!this.canConnect(world, x, y, z))
 			return false;
-		target[0] = x;
-		target[1] = y;
-		target[2] = z;
-		//ReikaJavaLibrary.pConsole(this, Side.SERVER);
-		return true;
-	}
-
-	public final boolean setSource(World world, int x, int y, int z) {
-		if (!this.canConnect(x, y, z))
-			return false;
-		if (source[0] != Integer.MIN_VALUE && source[1] != Integer.MIN_VALUE && source[2] != Integer.MIN_VALUE)
-			return false;
-		if (!this.areInSamePlane((TileEntityBeltHub)worldObj.getTileEntity(x, y, z)))
-			return false;
-		source[0] = x;
-		source[1] = y;
-		source[2] = z;
-		//ReikaJavaLibrary.pConsole(this, Side.SERVER);
+		otherEnd = new Coordinate(x, y, z);
 		return true;
 	}
 
@@ -238,10 +212,8 @@ Connectable, BreakAction {
 	}
 
 	private void copyPower() {
-		MachineRegistry m = MachineRegistry.getMachine(worldObj, source[0], source[1], source[2]);
-		//ReikaJavaLibrary.pConsole(Arrays.toString(source));
-		if (m == this.getMachine() && this.canConnect(source[0], source[1], source[2])) {
-			TileEntityBeltHub tile = (TileEntityBeltHub)worldObj.getTileEntity(source[0], source[1], source[2]);
+		if (this.hasValidConnection()) {
+			TileEntityBeltHub tile = (TileEntityBeltHub)otherEnd.getTileEntity(worldObj);
 			omega = this.getOmega(tile.omega);
 			torque = this.getTorque(tile.torque);
 			power = (long)omega*(long)torque;
@@ -256,20 +228,15 @@ Connectable, BreakAction {
 	}
 
 	public final ForgeDirection getBeltDirection() {
+		if (otherEnd == null)
+			return ForgeDirection.UNKNOWN;
 		int dx = 0;
 		int dy = 0;
 		int dz = 0;
 
-		if (isEmitting) {
-			dx = xCoord-source[0];
-			dy = yCoord-source[1];
-			dz = zCoord-source[2];
-		}
-		else {
-			dx = xCoord-target[0];
-			dy = yCoord-target[1];
-			dz = zCoord-target[2];
-		}
+		dx = xCoord-otherEnd.xCoord;
+		dy = yCoord-otherEnd.yCoord;
+		dz = zCoord-otherEnd.zCoord;
 
 		ForgeDirection dir = ForgeDirection.UNKNOWN;
 		if (dx < 0)
@@ -288,18 +255,7 @@ Connectable, BreakAction {
 	}
 
 	public final int getDistanceToTarget() {
-		if (isEmitting) {
-			int dx = xCoord-source[0];
-			int dy = yCoord-source[1];
-			int dz = zCoord-source[2];
-			return Math.abs(dx+dy+dz);
-		}
-		else {
-			int dx = xCoord-target[0];
-			int dy = yCoord-target[1];
-			int dz = zCoord-target[2];
-			return Math.abs(dx+dy+dz);
-		}
+		return otherEnd.getTaxicabDistanceTo(xCoord, yCoord, zCoord);
 	}
 
 	public final boolean isValidDirection(ForgeDirection dir) {
@@ -325,7 +281,7 @@ Connectable, BreakAction {
 	@Override
 	public final PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
 		if (isEmitting) {
-			TileEntityBeltHub tile = (TileEntityBeltHub)worldObj.getTileEntity(source[0], source[1], source[2]);
+			TileEntityBeltHub tile = (TileEntityBeltHub)otherEnd.getTileEntity(worldObj);
 			return tile != null ? tile.getPowerSources(io, caller) : new PowerSourceList();
 		}
 		else {
@@ -376,27 +332,24 @@ Connectable, BreakAction {
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 
 		NBT.setBoolean("emit", isEmitting);
 
-		NBT.setIntArray("tg", target);
-		NBT.setIntArray("src", source);
+		if (otherEnd != null)
+			otherEnd.writeToNBT("endpoint", NBT);
 
 		NBT.setInteger("wet", wetTimer);
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 
 		isEmitting = NBT.getBoolean("emit");
 
-		source = NBT.getIntArray("src");
-		target = NBT.getIntArray("tg");
+		otherEnd = Coordinate.readFromNBT("endpoint", NBT);
 
 		wetTimer = NBT.getInteger("wet");
 	}
@@ -418,16 +371,8 @@ Connectable, BreakAction {
 		//return ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(a, a, a);
 	}
 
-	public final int getTargetX() {
-		return target[0];
-	}
-
-	public final int getTargetY() {
-		return target[1];
-	}
-
-	public final int getTargetZ() {
-		return target[2];
+	public final Coordinate getConnection() {
+		return otherEnd;
 	}
 
 	@Override
@@ -463,7 +408,7 @@ Connectable, BreakAction {
 		if (!worldObj.isRemote) {
 			int num = this.getDistanceToTarget()-1;
 			num = Math.min(num, ItemStacks.belt.getMaxStackSize());
-			if (!this.shouldRenderBelt())
+			if (!this.hasValidConnection())
 				num = 0;
 			for (int i = 0; i < num; i++) {
 				ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, this.getBeltItem());
@@ -474,11 +419,13 @@ Connectable, BreakAction {
 
 	@Override
 	public final void getOutputs(Collection<TileEntity> c, ForgeDirection dir) {
-		TileEntity te = worldObj.getTileEntity(target[0], target[1], target[2]);
-		if (te instanceof TileEntityBeltHub) {
-			TileEntityBeltHub belt = (TileEntityBeltHub)te;
-			c.add(belt.getAdjacentTileEntity(belt.write));
-			c.add(belt.getAdjacentTileEntity(belt.write2));
+		if (otherEnd != null) {
+			TileEntity te = otherEnd.getTileEntity(worldObj);
+			if (te instanceof TileEntityBeltHub) {
+				TileEntityBeltHub belt = (TileEntityBeltHub)te;
+				c.add(belt.getAdjacentTileEntity(belt.write));
+				c.add(belt.getAdjacentTileEntity(belt.write2));
+			}
 		}
 	}
 

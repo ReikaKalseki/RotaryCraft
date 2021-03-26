@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,17 +11,19 @@ package Reika.RotaryCraft.Base;
 
 import java.awt.Color;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import Reika.DragonAPI.Auxiliary.Trackers.SpecialDayTracker;
+import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Base.TileEntityRenderBase;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -30,6 +32,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityGenerator;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -38,12 +41,21 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 
 	@Override
 	public final String getTextureFolder() {
-		return "/Reika/RotaryCraft/Textures/TileEntityTex/";
+		return "/Reika/RotaryCraft/Textures/TileEntityTex/"+this.getTextureSubfolder();
+	}
+
+	protected String getTextureSubfolder() {
+		return "";
 	}
 
 	@Override
 	protected Class getModClass() {
 		return RotaryCraft.class;
+	}
+
+	@Override
+	protected boolean loadXmasTextures() {
+		return SpecialDayTracker.instance.loadXmasTextures();
 	}
 
 	protected void renderFaceColors(TileEntityIOMachine te, double p2, double p4, double p6) {
@@ -146,24 +158,24 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 		for (int i = 0; i < 6; i++) {
 			int a = 0; int b = 0; int c = 0;
 			switch(i) {
-			case 0:
-				b = -3;
-				break;
-			case 1:
-				b = 3;
-				break;
-			case 2:
-				c = -3;
-				break;
-			case 3:
-				c = 3;
-				break;
-			case 4:
-				a = -3;
-				break;
-			case 5:
-				a = 3;
-				break;
+				case 0:
+					b = -3;
+					break;
+				case 1:
+					b = 3;
+					break;
+				case 2:
+					c = -3;
+					break;
+				case 3:
+					c = 3;
+					break;
+				case 4:
+					a = -3;
+					break;
+				case 5:
+					a = 3;
+					break;
 			}
 			v5.startDrawing(GL11.GL_LINES);
 			v5.setColorRGBA(colors[i].getRed(), colors[i].getGreen(), colors[i].getBlue(), alpha);
@@ -208,6 +220,11 @@ public abstract class RotaryTERenderer extends TileEntityRenderBase implements T
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+
+	@Override
+	protected final DragonAPIMod getOwnerMod() {
+		return RotaryCraft.instance;
 	}
 
 	@Override

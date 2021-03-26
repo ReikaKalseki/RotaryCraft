@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -21,6 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
+
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -46,14 +47,12 @@ public class BlockGPR extends BlockBasicMachine {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int meta)
-	{
+	public TileEntity createTileEntity(World world, int meta) {
 		return new TileEntityGPR();
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack is)		//Directional code
-	{
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack is) {		//Directional code{
 		//if (MathHelper.abs(par5EntityLiving.rotationPitch) < 45) {
 		int i = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4F) / 360F + 0.5D);
 		while (i > 3)
@@ -65,16 +64,7 @@ public class BlockGPR extends BlockBasicMachine {
 		TileEntityGPR tile = (TileEntityGPR)world.getTileEntity(x, y, z);
 		if (tile == null)
 			return;
-		switch (i) {
-			case 0:
-			case 2:
-				tile.xdir = true;
-				break;
-			case 1:
-			case 3:
-				tile.xdir = false;
-				break;
-		}
+		tile.setDirection(i == 0 || i == 2);
 	}
 
 	public static int getBiomeDesign(World world, int x, int y, int z) {

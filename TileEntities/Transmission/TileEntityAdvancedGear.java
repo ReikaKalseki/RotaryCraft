@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -25,9 +25,9 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
@@ -45,6 +45,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
 import Reika.RotaryCraft.API.Interfaces.CVTController;
 import Reika.RotaryCraft.API.Interfaces.CVTController.CVTControllable;
+import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -69,26 +70,19 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	private int releaseOmega = 0;
 	/** Stored energy, in joules */
 	private long energy;
+	private boolean isBedrockCoil = false;
+	private boolean isCreative;
 
 	public static final int WORMRATIO = 64;
 
-	private CVTController controller;
-
-	private ItemStack[] belts = new ItemStack[31];
-
+	public boolean torquemode = true;
 	private final HybridTank lubricant = new HybridTank("advgear", 20000);
 
 	private final CVTState[] cvtState = new CVTState[2];
-
-	public boolean isRedstoneControlled;
-
-	private boolean isBedrockCoil = false;
-
-	private boolean isCreative;
-
-	private StepTimer redstoneTimer = new StepTimer(40);
-
-	public boolean torquemode = true;
+	private CVTMode cvtMode = CVTMode.MANUAL;
+	private CVTController controller;
+	private ItemStack[] belts = new ItemStack[31];
+	private int targetTorque = 1;
 
 	private boolean enabled = true;
 
@@ -115,6 +109,15 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 	public static String getOutputFunction() {
 		return "CEIL2_pseudo(SQRT(energy)/4)";
+	}
+
+	public void stepMode() {
+		cvtMode = cvtMode.next();
+		this.syncAllData(false);
+	}
+
+	public int getTargetTorque() {
+		return targetTorque;
 	}
 
 	public void setController(CVTController c) {
@@ -366,13 +369,15 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	private int getCVTRatio() {
-		if (isRedstoneControlled) {
-			int ratio = this.getCVTState(this.hasRedstoneSignal()).gearRatio;
-			return (int)Math.signum(ratio)*Math.min(Math.abs(ratio), this.getMaxRatio());
+		switch(cvtMode) {
+			case AUTO:
+			case MANUAL:
+				return ratio;
+			case REDSTONE:
+				int ratio = this.getCVTState(this.hasRedstoneSignal()).gearRatio;
+				return (int)Math.signum(ratio)*Math.min(Math.abs(ratio), this.getMaxRatio());
 		}
-		else {
-			return ratio;
-		}
+		return 1;
 	}
 
 	private double getPowerLossFraction(int speed) {
@@ -412,12 +417,6 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		//ReikaJavaLibrary.pConsole(torque+" @ "+omega);
 
 		this.basicPowerReceiver();
-
-		if (this.getGearType().storesEnergy()) {
-			redstoneTimer.update();
-			if (redstoneTimer.checkCap())
-				ReikaWorldHelper.causeAdjacentUpdates(world, x, y, z);
-		}
 	}
 
 	public boolean isBedrockCoil() {
@@ -543,6 +542,10 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		}
 	}
 
+	public void setTargetTorque(int target) {
+		targetTorque = target;
+	}
+
 	public int getMaxRatio() {
 		if (belts[0] == null)
 			return 1;
@@ -635,8 +638,8 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 				}
 			}
 
-			if (m == MachineRegistry.POWERBUS) {
-				TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+			if (te instanceof ComplexIO) {
+				ComplexIO pwr = (ComplexIO)te;
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
@@ -683,6 +686,9 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 					}
 					break;
 				case CVT:
+					if (cvtMode == CVTMode.AUTO) {
+						ratio = this.updateAutoRatio();
+					}
 					int ratio = this.getCVTRatio();
 					if (this.hasLubricant()) {
 						boolean speed = true;
@@ -747,20 +753,49 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		}
 	}
 
+	public int getTorqueIn() {
+		return torquein;
+	}
+
+	private int updateAutoRatio() {
+		if (torquein >= targetTorque && torquein < targetTorque*2) { //already meeting, and cannot do any more
+			return 1;
+		}
+		else if (torquein > targetTorque) { //can get extra speed
+			int val = 1;
+			int has = torquein;
+			while (has >= targetTorque && val <= this.getMaxRatio()) {
+				val++;
+				has = torquein/val;
+			}
+			return val-1;
+		}
+		else {
+			int val = 1;
+			int has = torquein;
+			while (has < targetTorque && val < this.getMaxRatio()) {
+				val++;
+				has = torquein*val;
+			}
+			return -val;
+		}
+	}
+
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 		NBT.setInteger("ratio", ratio);
 		NBT.setLong("e", energy);
 		NBT.setInteger("relo", releaseOmega);
 		NBT.setInteger("relt", releaseTorque);
-		NBT.setBoolean("redstone", isRedstoneControlled);
+		NBT.setInteger("mode", cvtMode.ordinal());
 		NBT.setInteger("cvton", this.getCVTState(true).ordinal());
 		NBT.setInteger("cvtoff", this.getCVTState(false).ordinal());
 		NBT.setBoolean("bedrock", isBedrockCoil);
 		NBT.setBoolean("creative", isCreative);
 		NBT.setBoolean("trq", torquemode);
+		NBT.setInteger("target", targetTorque);
+		NBT.setInteger("torquein", torquein);
 
 		NBT.setBoolean("t_enable", enabled);
 
@@ -768,19 +803,22 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 		ratio = NBT.getInteger("ratio");
 		energy = NBT.getLong("e");
 		releaseOmega = NBT.getInteger("relo");
 		releaseTorque = NBT.getInteger("relt");
-		isRedstoneControlled = NBT.getBoolean("redstone");
+		cvtMode = CVTMode.list[NBT.getInteger("mode")];
+		if (NBT.getBoolean("redstone")) //porting pre-placed redstone ones
+			cvtMode = CVTMode.REDSTONE;
 		cvtState[0] = CVTState.list[NBT.getInteger("cvtoff")];
 		cvtState[1] = CVTState.list[NBT.getInteger("cvton")];
 		isBedrockCoil = NBT.getBoolean("bedrock");
 		isCreative = NBT.getBoolean("creative");
 		torquemode = NBT.getBoolean("trq");
+		targetTorque = NBT.getInteger("target");
+		torquein = NBT.getInteger("torquein");
 
 		if (NBT.hasKey("t_enable"))
 			enabled = NBT.getBoolean("t_enable");
@@ -978,6 +1016,10 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		return this.getCVTState(on).toString();
 	}
 
+	public CVTMode getMode() {
+		return cvtMode;
+	}
+
 	private static enum CVTState {
 		S1(1),
 		S2(2),
@@ -994,7 +1036,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 		public final int gearRatio;
 
-		public static final CVTState[] list = values();
+		private static final CVTState[] list = values();
 
 		private CVTState(int ratio) {
 			gearRatio = ratio;
@@ -1016,6 +1058,21 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		@Override
 		public String toString() {
 			return Math.abs(gearRatio)+"x "+(gearRatio > 0 ? "Speed" : "Torque");
+		}
+	}
+
+	public static enum CVTMode {
+		MANUAL(),
+		REDSTONE(),
+		AUTO();
+
+		private static final CVTMode[] list = values();
+
+		public CVTMode next() {
+			if (this.ordinal() == list.length-1)
+				return list[0];
+			else
+				return list[this.ordinal()+1];
 		}
 	}
 
@@ -1106,10 +1163,5 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	public void setEnabled(boolean enable) {
 		enabled = enable;
 		this.syncAllData(false);
-	}
-
-	@Override
-	public int getItemMetadata() {
-		return this.getGearType().ordinal();
 	}
 }

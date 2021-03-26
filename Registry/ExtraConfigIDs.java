@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Registry;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
+
 import Reika.DragonAPI.Interfaces.Registry.IDRegistry;
 import Reika.RotaryCraft.RotaryCraft;
 

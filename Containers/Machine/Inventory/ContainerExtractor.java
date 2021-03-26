@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Containers.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
+
 import Reika.DragonAPI.Instantiable.GUI.Slot.SlotXItems;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor1;
 import Reika.RotaryCraft.Auxiliary.SlotExtractor2;

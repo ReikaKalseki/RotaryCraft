@@ -1,18 +1,18 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Mouse;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -75,12 +75,12 @@ public class GuiPlayerDetector extends GuiNonPoweredMachine
 		if (!(input.getText().matches("^[0-9 ]+$"))) {
 			range = 0;
 			input.deleteFromCursor(-1);
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, range);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.ordinal(), playerdetector, range);
 			return;
 		}
 		range = ReikaJavaLibrary.safeIntParse(input.getText());
 		if (range >= 0)
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.getMinValue(), playerdetector, range);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.ordinal(), playerdetector, range);
 	}
 
 	@Override

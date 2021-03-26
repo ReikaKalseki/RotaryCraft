@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
@@ -41,6 +42,7 @@ import Reika.RotaryCraft.Registry.ExtractorBonus;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -137,7 +139,7 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		return ReikaRandomHelper.doWithChance(oreCopy/100D) ? 2 : 1;
 	}
 
-	public void throughPut() {
+	private void throughPut() {
 		for (int i = 1; i < 4; i++) {
 			if (inv[i+3] != null) {
 				if (inv[i] == null) {
@@ -146,8 +148,12 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 				}
 				else if (inv[i].stackSize < inv[i].getMaxStackSize()) {
 					if (ReikaItemHelper.matchStacks(inv[i], inv[i+3])) {
-						inv[i].stackSize++;
-						ReikaInventoryHelper.decrStack(i+3, inv);
+						int amt = Math.min(inv[i+3].stackSize, inv[i].getMaxStackSize()-inv[i].stackSize);
+						amt = Math.min(amt, this.getNumberConsecutiveOperations(i));
+						if (amt > 0) {
+							inv[i].stackSize += amt;
+							ReikaInventoryHelper.decrStack(i+3, inv, amt);
+						}
 					}
 				}
 			}
@@ -214,9 +220,9 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 		if (DragonAPICore.debugtest)
 			tank.addLiquid(1000, FluidRegistry.WATER);
 		this.testIdle();
-		this.throughPut();
 		if (world.isRemote)
 			return;
+		this.throughPut();
 		if (!bedrock) {
 			if (ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
 				if (drillTime <= 0 && inv[9] != null && ReikaItemHelper.matchStacks(inv[9], ItemStacks.drill)) {
@@ -462,9 +468,12 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.canProcess(0) && !this.canProcess(1) && !this.canProcess(2) && !this.canProcess(3))
-			return 15;
-		return 0;
+		int bits = 0b1111;
+		for (int i = 0; i < 4; i++) {
+			if (this.canProcess(i))
+				bits &= ~(1 << i);
+		}
+		return bits;
 	}
 
 	@Override

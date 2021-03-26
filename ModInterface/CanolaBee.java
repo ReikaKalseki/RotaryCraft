@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.ModInterface;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
@@ -35,13 +36,14 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
@@ -71,13 +73,15 @@ public class CanolaBee extends BeeSpecies {
 
 	private final class AlleleCanola extends BasicGene implements IAlleleFlowers {
 
+		private final FlowerProviderCanola flowers = new FlowerProviderCanola();
+
 		public AlleleCanola() {
 			super("flower.canola", "Canola", EnumBeeChromosome.FLOWER_PROVIDER);
 		}
 
 		@Override
 		public IFlowerProvider getProvider() {
-			return new FlowerProviderCanola();
+			return flowers;
 		}
 	}
 
@@ -200,7 +204,7 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public IAllele getFlowerAllele() {
+	public IAlleleFlowers getFlowerAllele() {
 		return canola;
 	}
 
@@ -255,7 +259,7 @@ public class CanolaBee extends BeeSpecies {
 	}
 
 	@Override
-	public IAllele getEffectAllele() {
+	public IAlleleBeeEffect getEffectAllele() {
 		return Effect.NONE.getAllele();
 	}
 

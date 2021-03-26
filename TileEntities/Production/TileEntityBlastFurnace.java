@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -60,6 +61,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	public static final int UPPER_ADDITIVE = 14;
 	public static final int PATTERN_SLOT = 15;
 
+	public static final int OUTPUT_CENTER = 10;
+	public static final int OUTPUT_UPPER = 12;
+	public static final int OUTPUT_LOWER = 13;
+
 	private float xp;
 
 	private BlastFurnacePattern pattern;
@@ -78,6 +83,14 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		ItemStack[] center = new ItemStack[9];
 		System.arraycopy(inv, 1, center, 0, 9);
 		BlastCrafting c = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
+
+		if (c != null && leaveLastItem) {
+			for (int i = 1; i <= 9; i++) {
+				if (inv[i] != null && inv[i].stackSize == 1)
+					return null;
+			}
+		}
+
 		return c;
 	}
 
@@ -89,6 +102,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		if (rec == null)
 			return null;
 
+		if (rec.requiresEmptyOutput()) {
+			if (inv[10] != null || inv[13] != null || inv[12] != null)
+				return null;
+		}
+
 		ItemStack out = rec.outputItem();
 		int num = this.getProducedFor(rec);
 		out = ReikaItemHelper.getSizedItemStack(out, num);
@@ -97,7 +115,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 
 		if (leaveLastItem) {
 			for (int i = 1; i <= 9; i++) {
-				if (inv[i] != null && inv[i].stackSize == 1)
+				if (rec.usesSlot(i-1) && inv[i] != null && inv[i].stackSize == 1)
 					return null;
 			}
 		}
@@ -114,7 +132,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 			return true;
 		else {
 			ItemStack in = inv[slot];
-			return ReikaItemHelper.areStacksCombinable(is, is, this.getInventoryStackLimit());
+			return ReikaItemHelper.areStacksCombinable(is, in, this.getInventoryStackLimit());
 		}
 	}
 
@@ -182,10 +200,10 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 		int made = num;
 		ItemStack out = rec.outputItem();
 
-		if (rec.hasBonus) {
+		if (rec.bonusYield > 0) {
 			double chance = DifficultyEffects.BONUSSTEEL.getDouble()*(ReikaMathLibrary.intpow(1.005, num*num)-1);
 			if (ReikaRandomHelper.doWithChance(chance)) {
-				num *= 1+rand.nextFloat();
+				num *= 1+rand.nextFloat()*rec.bonusYield;
 			}
 		}
 
@@ -496,6 +514,11 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	@Override
 	public boolean canBeCooledWithFins() {
 		return false;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return true;
 	}
 
 	public void setTemperature(int temp) {

@@ -1,25 +1,25 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.Conversion;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -29,6 +29,11 @@ public class RenderBoiler extends RotaryTERenderer
 
 	private ModelBoiler BoilerModel = new ModelBoiler();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Converter/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -37,7 +42,7 @@ public class RenderBoiler extends RotaryTERenderer
 		ModelBoiler var14;
 		var14 = BoilerModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/boilertex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Converter/boilertex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

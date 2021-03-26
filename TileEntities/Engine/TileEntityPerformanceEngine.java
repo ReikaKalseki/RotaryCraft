@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,8 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -89,25 +89,39 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	}
 
 	@Override
+	protected void offlineCooldown(World world, int x, int y, int z, int Tamb) {
+		if (temperature > Tamb+300)
+			temperature -= (temperature-Tamb)/100;
+		else if (temperature > Tamb+100)
+			temperature -= (temperature-Tamb)/50;
+		else if (temperature > Tamb+40)
+			temperature -= (temperature-Tamb)/10;
+		else if (temperature > Tamb+4)
+			temperature -= (temperature-Tamb)/2;
+		else
+			temperature = Tamb;
+	}
+
+	@Override
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
 		super.updateTemperature(world, x, y, z, meta);
 
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 		if (temperature < Tamb)
-			temperature += ReikaMathLibrary.extrema((Tamb-temperature)/40, 1, "max");
+			temperature += Math.max((Tamb-temperature)/40, 1);
 		if (omega > 0 && torque > 0) { //If engine is on
 			temperature += 1;
 			if (water.getLevel() > 0 && temperature > Tamb) {
 				water.removeLiquid(20);
 				temperature--;
 			}
-			if (temperature > MAXTEMP/2) {
+			if (temperature > this.getMaxTemperature()/2) {
 				if (rand.nextInt(10) == 0) {
 					world.spawnParticle("smoke", x+0.5, y+0.5, z+0.5, 0, 0, 0);
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.fizz", 1F, 1F);
 				}
 			}
-			if (temperature > MAXTEMP/1.25) {
+			if (temperature > this.getMaxTemperature()/1.25) {
 				if (rand.nextInt(3) == 0) {
 					world.playSoundEffect(x+0.5, y+0.5, z+0.5, "random.fizz", 1F, 1F);
 				}
@@ -120,14 +134,14 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 				world.spawnParticle("smoke", x+1, y+1.0625, z+1, 0, 0, 0);
 			}
 		}
-		if (temperature > MAXTEMP) {
+		if (temperature > this.getMaxTemperature()) {
 			this.overheat(world, x, y, z);
 		}
 	}
 
 	@Override
 	public void overheat(World world, int x, int y, int z) {
-		temperature = MAXTEMP;
+		temperature = this.getMaxTemperature();
 		ReikaWorldHelper.overheat(world, x, y, z, ItemStacks.scrap.copy(), 0, 27, true, 1.5F, true, ConfigRegistry.BLOCKDAMAGE.getState(), 6F);
 		world.setBlockToAir(x, y, z);
 	}
@@ -172,6 +186,16 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	@Override
 	protected void affectSurroundings(World world, int x, int y, int z, int meta) {
 
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return false;
+	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
 	}
 
 }

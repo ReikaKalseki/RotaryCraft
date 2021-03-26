@@ -14,7 +14,9 @@ import java.lang.reflect.Method;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /** Use this to add custom recipes for the worktable. Note that the worktable does support the Ore Dictionary and all custom recipe types,

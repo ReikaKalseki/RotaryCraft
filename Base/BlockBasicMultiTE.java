@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,12 +10,10 @@
 package Reika.RotaryCraft.Base;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -27,7 +25,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,13 +44,13 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Interfaces.Block.FluidBlockSurrogate;
 import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
-import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
@@ -63,8 +60,6 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
@@ -74,6 +69,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
+import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
@@ -90,8 +86,11 @@ import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockPiping;
+import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -129,6 +128,10 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityLandmine;
+import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
+
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implements FluidBlockSurrogate {
@@ -222,7 +225,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			return false;
 		}
 		if (is != null && is.getItem() == Items.enchanted_book && m.isEnchantable()) {
-			if (((EnchantableMachine)te).applyEnchants(is)) {
+			if (((EnchantableMachine)te).getEnchantmentHandler().applyEnchants(is)) {
 				if (!ep.capabilities.isCreativeMode)
 					ep.setCurrentItemOrArmor(0, null);
 				((TileEntityBase)te).syncAllData(true);
@@ -244,7 +247,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			}
 		}
 		if (m == MachineRegistry.SPLITTER) {
-			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.bedrock2x)) {
+			if (is != null && ReikaItemHelper.matchStacks(is, GearboxTypes.BEDROCK.getPart(GearPart.UNIT2))) {
 				TileEntitySplitter tile = (TileEntitySplitter)te;
 				if (!tile.isBedrock()) {
 					tile.setBedrock();
@@ -253,6 +256,18 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					((TileEntityBase)te).syncAllData(true);
 					return true;
 				}
+			}
+		}
+		if (m == MachineRegistry.FLOODLIGHT) {
+			if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.lens)) {
+				TileEntityFloodlight tile = (TileEntityFloodlight)te;
+				if (!tile.fresnel) {
+					tile.fresnel = true;
+					if (!ep.capabilities.isCreativeMode)
+						is.stackSize--;
+				}
+				((TileEntityBase)te).syncAllData(true);
+				return true;
 			}
 		}
 		if (m == MachineRegistry.BORER) {
@@ -659,7 +674,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		TileEntity tile = world.getTileEntity(target.blockX, target.blockY, target.blockZ);
 		ItemStack core = m.getCraftedProduct();
 		if (m.isEnchantable()) {
-			HashMap<Enchantment, Integer> ench = ((EnchantableMachine)tile).getEnchantments();
+			Map<Enchantment, Integer> ench = ((EnchantableMachine)tile).getEnchantmentHandler().getEnchantments();
 			ReikaEnchantmentHelper.applyEnchantments(core, ench);
 		}
 		if (m.hasNBTVariants()) {
@@ -707,7 +722,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				is = MachineRegistry.SHAFT.getCraftedMetadataProduct(((TileEntityPortalShaft)te).material.ordinal());
 			List li;
 			if (m.isEnchantable()) {
-				HashMap<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantments();
+				Map<Enchantment,Integer> map = ((EnchantableMachine)te).getEnchantmentHandler().getEnchantments();
 				ReikaEnchantmentHelper.applyEnchantments(is, map);
 			}
 			if (m.hasNBTVariants()) {
@@ -733,13 +748,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 	@Override
 	public final void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
 		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof IInventory && !(te instanceof TileEntityScaleableChest))
-			ReikaItemHelper.dropInventory(world, x, y, z);
 		if (te instanceof TileEntityDropProcessor)
 			((TileEntityDropProcessor)te).dropCache();
-		if (te instanceof BreakAction) {
-			((BreakAction)te).breakBlock();
-		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
@@ -755,7 +765,21 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == null)
 			return;
 		RotaryCraftTileEntity tile = (RotaryCraftTileEntity)world.getTileEntity(x, y, z);
+		if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tr = (TileEntityReservoir)tile;
+			if (e instanceof EntityLivingBase) {
+				tr.applyFluidEffectsToEntity((EntityLivingBase)e);
+			}
+		}
+		if (m == MachineRegistry.CENTRIFUGE) {
+			TileEntityCentrifuge tr = (TileEntityCentrifuge)tile;
+			if (tr.omega > 0 && world.isRemote) {
+				e.addVelocity(ReikaRandomHelper.getRandomPlusMinus(0, 1), 0.1, ReikaRandomHelper.getRandomPlusMinus(0, 1));
+			}
+		}
 		if (!(e instanceof EntityItem || e instanceof EntityXPOrb)) {
+			if (e instanceof EntityLivingBase && ItemBedrockArmor.isWearingFullSuitOf((EntityLivingBase)e))
+				return;
 			if (tile instanceof DamagingContact) {
 				DamagingContact dg = (DamagingContact)tile;
 				int dmg = dg.getContactDamage();
@@ -768,18 +792,6 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					e.attackEntityFrom(DamageSource.lava, dmg);
 					e.setFire(6);
 				}
-			}
-		}
-		if (m == MachineRegistry.RESERVOIR) {
-			TileEntityReservoir tr = (TileEntityReservoir)tile;
-			if (e instanceof EntityLivingBase) {
-				tr.applyFluidEffectsToEntity((EntityLivingBase)e);
-			}
-		}
-		if (m == MachineRegistry.CENTRIFUGE) {
-			TileEntityCentrifuge tr = (TileEntityCentrifuge)tile;
-			if (tr.omega > 0 && world.isRemote) {
-				e.addVelocity(ReikaRandomHelper.getRandomPlusMinus(0, 1), 0.1, ReikaRandomHelper.getRandomPlusMinus(0, 1));
 			}
 		}
 	}
@@ -825,6 +837,10 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		else if (m == MachineRegistry.SMOKEDETECTOR) {
 			TileEntitySmokeDetector tp = (TileEntitySmokeDetector)iba.getTileEntity(x, y, z);
 			return tp.isAlarming() ? 15 : 0;
+		}
+		else if (m == MachineRegistry.RESERVOIR) {
+			TileEntityReservoir tp = (TileEntityReservoir)iba.getTileEntity(x, y, z);
+			return tp.getFluid() == FluidRegistry.getFluid("redstone") ? (int)Math.round(tp.getLevel()*15F/tp.CAPACITY) : 0;
 		}
 		else {
 			return 0;
@@ -975,9 +991,9 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		RotaryCraftTileEntity te = (RotaryCraftTileEntity)acc.getTileEntity();
 		te.syncAllData(false);
 		if (te instanceof TemperatureTE)
-			currenttip.add(String.format("Temperature: %dC", ((TemperatureTE) te).getTemperature()));
+			currenttip.add(Variables.TEMPERATURE+": "+RotaryAux.formatTemperature(((TemperatureTE) te).getTemperature()));
 		if (te instanceof PressureTE)
-			currenttip.add(String.format("Pressure: %dkPa", ((PressureTE) te).getPressure()));
+			currenttip.add(Variables.PRESSURE+": "+RotaryAux.formatPressure(((PressureTE) te).getPressure()));
 		if (te instanceof TileEntitySplitter) {
 			TileEntitySplitter spl = (TileEntitySplitter)te;
 			if (spl.isSplitting()) {
@@ -1000,8 +1016,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			Fluid out = liq.getFluidInOutput();
 			int amtin = liq.getInputLevel();
 			int amtout = liq.getOutputLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amtin, liq.getCapacity(), in.getLocalizedName()) : "Empty";
-			String output = out != null ? String.format("%d/%d mB of %s", amtout, liq.getCapacity(), out.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtin, liq.getInputCapacity()), in.getLocalizedName()) : "Empty";
+			String output = out != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amtout, liq.getOutputCapacity()), out.getLocalizedName()) : "Empty";
 			currenttip.add("Input Tank: "+input);
 			currenttip.add("Output Tank: "+output);
 		}
@@ -1009,14 +1025,14 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			PoweredLiquidReceiver liq = (PoweredLiquidReceiver)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		else if (te instanceof PoweredLiquidProducer) {
 			PoweredLiquidProducer liq = (PoweredLiquidProducer)te;
 			Fluid in = liq.getContainedFluid();
 			int amt = liq.getLevel();
-			String input = in != null ? String.format("%d/%d mB of %s", amt, liq.getCapacity(), in.getLocalizedName()) : "Empty";
+			String input = in != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(amt, liq.getCapacity()), in.getLocalizedName()) : "Empty";
 			currenttip.add("Tank: "+input);
 		}
 		else if (te instanceof IFluidHandler) {
@@ -1025,7 +1041,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				for (int i = 0; i < tanks.length; i++) {
 					FluidTankInfo info = tanks[i];
 					FluidStack fs = info.fluid;
-					String input = fs != null ? String.format("%d/%d mB of %s", fs.amount, info.capacity, fs.getFluid().getLocalizedName(fs)) : "Empty";
+					String input = fs != null ? String.format("%s of %s", RotaryAux.formatLiquidFillFraction(fs.amount, info.capacity), fs.getFluid().getLocalizedName(fs)) : "Empty";
 					currenttip.add("Tank "+i+": "+input);
 				}
 			}
@@ -1052,9 +1068,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				currenttip.add(String.format("%s", f.getLocalizedName()));
 				if (tp instanceof TileEntityPipe) {
 					int p = ((TileEntityPipe)tp).getPressure();
-					double val = ReikaMathLibrary.getThousandBase(p);
-					String sg = ReikaEngLibrary.getSIPrefix(p);
-					currenttip.add(String.format("Pressure: %.3f%sPa", val, sg));
+					currenttip.add(Variables.PRESSURE+": "+RotaryAux.formatPressure(p));
 				}
 			}
 		}
@@ -1066,7 +1080,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				currenttip.add("Pump impeller is broken");
 		}
 		if (te instanceof TileEntityAggregator) {
-			currenttip.add(String.format("Producing %d mB per tick", ((TileEntityAggregator)te).getProductionPerTick(acc.getWorld().getBiomeGenForCoords(te.xCoord, te.zCoord))));
+			currenttip.add(String.format("Producing %s per tick", RotaryAux.formatLiquidAmount(((TileEntityAggregator)te).getProductionPerTick(acc.getWorld().getBiomeGenForCoords(te.xCoord, te.zCoord)))));
 		}
 		if (te instanceof TileEntityFractionator) {
 			currenttip.add(String.format("Efficiency Factor: %.2f%s", ((TileEntityFractionator)te).getYieldRatio()*100D, "%"));
@@ -1074,22 +1088,22 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (te instanceof TileEntityBusController) {
 			ShaftPowerBus bus = ((TileEntityBusController)te).getBus();
 			if (bus != null) {
-				currenttip.add("Power Bus Receiving "+bus.getInputTorque()+" Nm @ "+bus.getSpeed()+" rad/s");
-				currenttip.add(bus.getInputPower()+"W is being split to "+bus.getTotalOutputSides()+" devices");
-				currenttip.add("(Power per side is "+bus.getInputPower()/bus.getTotalOutputSides()+"W)");
+				currenttip.add("Power Bus Receiving "+RotaryAux.formatTorque(bus.getInputTorque())+" @ "+RotaryAux.formatSpeed(bus.getSpeed()));
+				currenttip.add(RotaryAux.formatPower(bus.getInputPower())+" is being split to "+bus.getTotalOutputSides()+" devices");
+				currenttip.add("(Power per side is "+RotaryAux.formatPower(bus.getInputPower()/bus.getTotalOutputSides())+")");
 			}
 		}
 		if (te instanceof TileEntitySolar) {
 			TileEntitySolar sol = (TileEntitySolar)te;
-			currenttip.add("Consuming "+sol.getConsumedWater()+" mB/t of fluid.");
+			currenttip.add("Consuming "+RotaryAux.formatLiquidAmount(sol.getCurrentConsumption())+"/t of fluid.");
 		}
 		if (te.getMachine().isEnchantable()) {
-			if (((EnchantableMachine)te).hasEnchantments()) {
+			if (((EnchantableMachine)te).getEnchantmentHandler().hasEnchantments()) {
 				currenttip.add("Enchantments: ");
-				ArrayList<Enchantment> li = ((EnchantableMachine)te).getValidEnchantments();
+				ArrayList<Enchantment> li = ((EnchantableMachine)te).getEnchantmentHandler().getValidEnchantments();
 				for (int i = 0; i < li.size(); i++) {
 					Enchantment e = li.get(i);
-					int level = ((EnchantableMachine)te).getEnchantment(e);
+					int level = ((EnchantableMachine)te).getEnchantmentHandler().getEnchantment(e);
 					if (level > 0)
 						currenttip.add("  "+EnumChatFormatting.LIGHT_PURPLE.toString()+e.getTranslatedName(level));
 				}
@@ -1103,15 +1117,15 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			int lvl = tpf.getAccelerant();
 			if (lvl > 0) {
 				Fluid f = tpf.getAccelerantType();
-				currenttip.add(String.format("Accelerant: %dmB of %s", lvl, f.getLocalizedName()));
+				currenttip.add(String.format("Accelerant: %s of %s", RotaryAux.formatLiquidAmount(lvl), f.getLocalizedName()));
 			}
 			else
 				currenttip.add("Accelerant: Empty");
 		}
-		if (te instanceof TileEntityPulseFurnace) {
+		if (te instanceof TileEntityFluidCompressor) {
 			TileEntityFluidCompressor tfc = (TileEntityFluidCompressor)te;
 			if (!tfc.isEmpty())
-				currenttip.add(String.format("Capacity: %.3fB", tfc.getCapacity()));
+				currenttip.add(String.format("Capacity: %s", RotaryAux.formatLiquidAmountWithSI(tfc.getCapacity())));
 		}
 		return currenttip;
 	}

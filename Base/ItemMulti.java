@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,8 @@ package Reika.RotaryCraft.Base;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.common.base.Strings;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,8 +21,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -28,10 +33,15 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.Flywheels;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityACEngine;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -77,64 +87,38 @@ public class ItemMulti extends ItemBasic {
 		TileEntityBeltHub te = (TileEntityBeltHub)world.getTileEntity(x, y, z);
 		if (is.stackTagCompound == null) {
 			is.stackTagCompound = new NBTTagCompound();
-			is.stackTagCompound.setInteger("ex", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("ey", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("ez", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("rx", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("ry", Integer.MIN_VALUE);
-			is.stackTagCompound.setInteger("rz", Integer.MIN_VALUE);
+			new Coordinate(te).writeToNBT("end1", is.stackTagCompound);
+			return true;
 		}
-		if (te.isEmitting) {
-			is.stackTagCompound.setInteger("ex", x);
-			is.stackTagCompound.setInteger("ey", y);
-			is.stackTagCompound.setInteger("ez", z);
+		Coordinate c1 = Coordinate.readFromNBT("end1", is.stackTagCompound);
+		if (c1 == null) {
+			ReikaChatHelper.writeString("No valid other end found");
+			return false;
 		}
-		else {
-			is.stackTagCompound.setInteger("rx", x);
-			is.stackTagCompound.setInteger("ry", y);
-			is.stackTagCompound.setInteger("rz", z);
+		TileEntity te0 = c1.getTileEntity(world);
+		if (!(te0 instanceof TileEntityBeltHub)) {
+			ReikaChatHelper.writeString("Tile at other end is invalid");
+			return false;
 		}
-		int ex = is.stackTagCompound.getInteger("ex");
-		int ey = is.stackTagCompound.getInteger("ey");
-		int ez = is.stackTagCompound.getInteger("ez");
-		int rx = is.stackTagCompound.getInteger("rx");
-		int ry = is.stackTagCompound.getInteger("ry");
-		int rz = is.stackTagCompound.getInteger("rz");
-
-		int dl = Math.abs(ex-rx+ey-ry+ez-rz)-1;
+		int dl = c1.getTaxicabDistanceTo(x, y, z)-1;
 
 		//ReikaJavaLibrary.pConsole(dl);
 		if (is.stackSize >= dl || ep.capabilities.isCreativeMode) {
-			if (rx != Integer.MIN_VALUE && ry != Integer.MIN_VALUE && rz != Integer.MIN_VALUE) {
-				if (ex != Integer.MIN_VALUE && ey != Integer.MIN_VALUE && ez != Integer.MIN_VALUE) {
-					TileEntityBeltHub em = (TileEntityBeltHub)world.getTileEntity(ex, ey, ez);
-					TileEntityBeltHub rec = (TileEntityBeltHub)world.getTileEntity(rx, ry, rz);
-
-					//ReikaJavaLibrary.pConsole(rec+"\n"+em);
-					if (em == null) {
-						ReikaChatHelper.writeString("Belt Hub missing at "+ex+", "+ey+", "+ez);
-						is.stackTagCompound = null;
-						return false;
-					}
-					if (rec == null) {
-						ReikaChatHelper.writeString("Belt Hub missing at "+rx+", "+ry+", "+rz);
-						is.stackTagCompound = null;
-						return false;
-					}
-					rec.resetOther();
-					em.resetOther();
-					em.reset();
-					rec.reset();
-					boolean src = em.setSource(world, rx, ry, rz);
-					boolean tg = rec.setTarget(world, ex, ey, ez);
-					//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
-					if (src && tg) {
-						//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
-						if (!ep.capabilities.isCreativeMode)
-							is.stackSize -= dl;
-					}
-					is.stackTagCompound = null;
-				}
+			is.stackTagCompound = null;
+			TileEntityBeltHub bb = (TileEntityBeltHub)te0;
+			bb.resetOther();
+			te.resetOther();
+			bb.reset();
+			te.reset();
+			//ReikaJavaLibrary.pConsole(src+":"+tg, Side.SERVER);
+			if (te.tryConnect(world, bb.xCoord, bb.yCoord, bb.zCoord) && bb.tryConnect(world, x, y, z)) {
+				//ReikaJavaLibrary.pConsole("connected", Side.SERVER);
+				if (!ep.capabilities.isCreativeMode)
+					is.stackSize -= dl;
+				return true;
+			}
+			else {
+				ReikaChatHelper.writeString("Connection is invalid");
 			}
 		}
 		return false;
@@ -150,7 +134,7 @@ public class ItemMulti extends ItemBasic {
 
 	@Override
 	public void onUpdate(ItemStack is, World world, Entity e, int par4, boolean par5) {
-		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore)) {
+		if (ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(is, ItemStacks.tungstenshaftcore)) {
 			if (is.stackTagCompound != null) {
 				int mag = is.stackTagCompound.getInteger("magnet");
 				if (mag > 0) {
@@ -209,61 +193,81 @@ public class ItemMulti extends ItemBasic {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) { //Adds the metadata blocks to the creative inventory
 		int j;
-		switch (type) {
-			case 0: //shaftcraft
+		switch (ItemRegistry.getEntryByID(this)) {
+			case SHAFTCRAFT: //shaftcraft
 				j = RotaryNames.shaftPartNames.length;
 				break;
-			case 1: //enginecraft
+			case ENGINECRAFT: //enginecraft
 				j = RotaryNames.enginePartNames.length;
 				break;
-			case 2: //heatcraft
+			case MISCCRAFT: //heatcraft
 				j = RotaryNames.miscPartNames.length;
 				break;
-			case 3: //misccraft 2
+			case BORECRAFT: //misccraft 2
 				j = RotaryNames.borerPartNames.length;
 				break;
-			case 4: //extracts
+			case EXTRACTS: //extracts
 				j = RotaryNames.extractNames.length;
 				break;
-			case 6: //compacts
+			case COMPACTS: //compacts
 				j = RotaryNames.compactNames.length;
 				break;
-			case 7: //engines
+			case ENGINE: //engines
 				j = EngineType.engineList.length;
 				break;
-			case 8: //powders
+			case POWDERS: //powders
 				j = RotaryNames.powderNames.length;
 				break;
-			case 14: //mod interface
+			case MODINTERFACE: //mod interface
 				j = RotaryNames.interfaceNames.length;
 				break;
-			case 11: //shafts
-				j = RotaryNames.getNumberShaftTypes();
+			case SHAFT: //shafts
+				j = MaterialRegistry.matList.length;
 				break;
-			case 12: //gearboxes
-				j = RotaryNames.getNumberGearTypes();
+			case GEARBOX: //gearboxes
+				j = 0;//j = RotaryNames.getNumberGearTypes();
 				break;
-			case 23: //gearunits
-				j = RotaryNames.gearUnitNames.length;
+			case GEARCRAFT: //gearunits
+				j = GearboxTypes.typeList.length*16;
+				break;
+			case FLYWHEELCRAFT:
+				j = Flywheels.list.length;
 				break;
 			default:
 				j = 0;
 				break;
+		}/*
+		if (ItemRegistry.GEARBOX.getItemInstance() == par1) {
+			for (GearboxTypes gear : GearboxTypes.typeList) {
+				for (int r = 2; r <= 16; r *= 2) {
+					ItemStack item = gear.getGearboxItem(r);
+					if (item.stackTagCompound == null)
+						item.stackTagCompound = new NBTTagCompound();
+					item.stackTagCompound.setInteger("damage", 0);
+					par3List.add(item);
+				}
+			}
 		}
+		else {*/
 		for (int i = 0; i < j; i++) {
 			ItemStack item = new ItemStack(par1, 1, i);
-			if (ItemRegistry.GEARBOX.matchItem(item)) {
-				if (item.stackTagCompound == null)
-					item.stackTagCompound = new NBTTagCompound();
-				item.stackTagCompound.setInteger("damage", 0);
+			if (ItemRegistry.GEARCRAFT.matchItem(item)) {
+				if (!GearboxTypes.getMaterialFromCraftingItem(item).isLoadable())
+					continue;
+				if (item.getItemDamage()%16 >= GearPart.list.length)
+					continue;
+				if (ReikaItemHelper.matchStacks(item, GearboxTypes.WOOD.getPart(GearPart.SHAFT))) //stick
+					continue;
 			}
-			if (ItemRegistry.COMPACTS.matchItem(item)) {
-				par3List.add(item);
+			if (ItemRegistry.SHAFTCRAFT.matchItem(item)) {
+				if (RotaryNames.shaftPartNames[item.getItemDamage()].isEmpty())
+					continue;
 			}
-			else {
-				par3List.add(item);
-			}
-			if (ReikaItemHelper.matchStacks(item, ItemStacks.shaftcore)) {
+			String unloc = this.getUnlocalizedName(item);
+			if (Strings.isNullOrEmpty(unloc) || unloc.endsWith("."))
+				continue;
+			par3List.add(item);
+			if (ReikaItemHelper.matchStacks(item, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(item, ItemStacks.tungstenshaftcore)) {
 				ItemStack mag = item.copy();
 				if (DragonAPICore.isReikasComputer()) {
 					mag.stackTagCompound = new NBTTagCompound();
@@ -281,6 +285,7 @@ public class ItemMulti extends ItemBasic {
 				mag.stackTagCompound.setInteger("magnet", Integer.MAX_VALUE/4);
 				par3List.add(mag);
 			}
+			//}
 		}
 	}
 
@@ -293,48 +298,52 @@ public class ItemMulti extends ItemBasic {
 	public String getUnlocalizedName(ItemStack is) {
 		int d = is.getItemDamage();
 		String s = super.getUnlocalizedName();
-		switch(type) {
-			case 0:
-				s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
-				break;
-			case 1:
-				s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
-				break;
-			case 2:
-				s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
-				break;
-			case 3:
-				s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
-				break;
-			case 4:
-				s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
-				break;
-			case 6:
-				s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
-				break;
-			case 7:
-				s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
-				break;
-			case 8:
-				s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
-				break;
-			case 10:
-				s = super.getUnlocalizedName() + "." + RotaryNames.pipeNames[d];
-				break;
-			case 11:
-				s = super.getUnlocalizedName() + "." + RotaryNames.getShaftName(d);
-				break;
-			case 12:
-				s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
-				break;
-			case 16:
-				s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
-				break;
-			case 23:
-				s = super.getUnlocalizedName() + "." + RotaryNames.gearUnitNames[d];
-				break;
+		try {
+			switch (ItemRegistry.getEntryByID(this)) {
+				case SHAFTCRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.shaftPartNames[d];
+					break;
+				case ENGINECRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.enginePartNames[d];
+					break;
+				case MISCCRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.miscPartNames[d];
+					break;
+				case BORECRAFT:
+					s = super.getUnlocalizedName() + "." + RotaryNames.borerPartNames[d];
+					break;
+				case EXTRACTS:
+					s = super.getUnlocalizedName() + "." + RotaryNames.extractNames[d];
+					break;
+				case COMPACTS:
+					s = super.getUnlocalizedName() + "." + RotaryNames.compactNames[d];
+					break;
+				case ENGINE:
+					s = super.getUnlocalizedName() + "." + RotaryNames.getEngineName(d);
+					break;
+				case POWDERS:
+					s = super.getUnlocalizedName() + "." + RotaryNames.powderNames[d];
+					break;
+				case SHAFT:
+					s = MaterialRegistry.matList[d].getShaftUnlocName();
+					break;
+				case GEARBOX:
+					//s = super.getUnlocalizedName() + "." + RotaryNames.getGearboxName(d);
+					break;
+				case MODINTERFACE:
+					s = super.getUnlocalizedName() + "." + RotaryNames.interfaceNames[d];
+					break;
+				case GEARCRAFT:
+					s = super.getUnlocalizedName() + "." + GearboxTypes.getMaterialFromCraftingItem(is)+"."+GearPart.list[d%16];
+					break;
+				default:
+					break;
+			}
+			return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
 		}
-		return ReikaStringParser.stripSpaces(s.toLowerCase(Locale.ENGLISH));
+		catch (Exception e) {
+			return "Invalid item: "+e.toString();
+		}
 	}
 
 	/*
@@ -358,6 +367,12 @@ public class ItemMulti extends ItemBasic {
 		//if (ReikaItemHelper.matchStacks(item, ItemStacks.bedrockdust) && this.offsetDustName(item)) {
 		//	return ((ItemMulti)ItemStacks.salt.getItem()).getItemSpriteIndex(ItemStacks.salt);
 		//}
+		if (ItemRegistry.GEARCRAFT.matchItem(item)) {
+			return /*GearboxTypes.getMaterialFromCraftingItem(item).metaOffset+*/item.getItemDamage();
+		}
+		if (ItemRegistry.FLYWHEELCRAFT.matchItem(item)) {
+			return /*GearboxTypes.getMaterialFromCraftingItem(item).metaOffset+*/type+item.getItemDamage();
+		}
 		int row = type%16+item.getItemDamage()/16;
 		if (ItemRegistry.EXTRACTS.matchItem(item) && item.getItemDamage() > 31)
 			return 16*9+item.getItemDamage()-32;

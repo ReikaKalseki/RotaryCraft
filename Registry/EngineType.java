@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -79,7 +80,7 @@ public enum EngineType {
 	public long getPower() {
 		return (long)torque*(long)omega;
 	}
-
+	/*
 	public double getPowerKW() {
 		return this.getPower()/1000D;
 	}
@@ -99,7 +100,7 @@ public enum EngineType {
 			return this.getPowerKW();
 		return this.getPowerMW();
 	}
-
+	 */
 	public boolean isJetFueled() {
 		return this == JET || this == MICRO;
 	}
@@ -205,7 +206,7 @@ public enum EngineType {
 		if (this == SPORT)
 			return is.getItem() == ItemRegistry.ETHANOL.getItemInstance() || this.isAdditive(is);
 		if (this == AC)
-			return ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore);
+			return ReikaItemHelper.matchStacks(is, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(is, ItemStacks.tungstenshaftcore);
 		return false;
 	}
 

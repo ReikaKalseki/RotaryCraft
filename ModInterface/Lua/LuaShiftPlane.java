@@ -10,9 +10,9 @@
 package Reika.RotaryCraft.ModInterface.Lua;
 
 import net.minecraft.tileentity.TileEntity;
+
 import Reika.DragonAPI.ModInteract.Lua.LuaMethod;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
-import dan200.computercraft.api.lua.LuaException;
 
 public class LuaShiftPlane extends LuaMethod {
 
@@ -21,7 +21,7 @@ public class LuaShiftPlane extends LuaMethod {
 	}
 
 	@Override
-	public Object[] invoke(TileEntity te, Object[] args) throws LuaException, InterruptedException {
+	protected Object[] invoke(TileEntity te, Object[] args) throws LuaMethodException, InterruptedException {
 		TileEntityGPR tg = (TileEntityGPR)te;
 		int dir = (int)Math.signum((Double)args[0]);
 		tg.shiftInt(dir);

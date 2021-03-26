@@ -1,15 +1,18 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Processing;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -23,19 +26,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Instantiable.Data.Collections.ItemCollection;
+import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Data.Collections.InventoryCache;
 import Reika.DragonAPI.Instantiable.Data.Maps.CountMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
+import Reika.DragonAPI.Instantiable.ModInteract.MEWorkTracker;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.AEPatternHandling;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
-import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader.ChangeCallback;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Items.Tools.ItemCraftPattern;
@@ -44,25 +51,23 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import appeng.api.AEApi;
-import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.IGridBlock;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.networking.security.IActionHost;
-import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AECableType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
-@Strippable(value={"appeng.api.networking.IActionHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
-public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/, ChangeCallback {
+@Strippable(value={"appeng.api.networking.security.IActionHost"/*, "appeng.api.networking.crafting.ICraftingRequester"*/})
+public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements IActionHost/*, ICraftingRequester*/ {
 
 	private static final String LOGGER_ID = "autocrafter_workflag";
 
 	public static final int SIZE = 18;
 
-	private final ItemCollection ingredients = new ItemCollection();
+	private final InventoryCache ingredients = new InventoryCache();
 	public int[] crafting = new int[SIZE];
 
 	@ModDependent(ModList.APPENG)
@@ -85,7 +90,9 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	private static final int OUTPUT_OFFSET = SIZE;
 	private static final int CONTAINER_OFFSET = SIZE*2;
 
-	private boolean hasWork = true;
+	private static final HashMap<KeyedItemStack, CraftingLoopCache> loopCache = new HashMap();
+
+	private MEWorkTracker hasWork = new MEWorkTracker();
 
 	static {
 		ModularLogger.instance.addLogger(RotaryCraft.instance, LOGGER_ID);
@@ -260,11 +267,12 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (power >= MINPOWER) {
 			tick++;
 			if (!world.isRemote) {
-				if (hasWork) {
+				hasWork.tick();
+				if (hasWork.hasWork()) {
 					//ReikaJavaLibrary.pConsole("Executing tick");
 					mode.tick(this);
 					if (ModList.APPENG.isLoaded() && network != null && !network.isEmpty)
-						hasWork = false;
+						hasWork.reset();
 				}
 				this.injectItems();
 			}
@@ -351,12 +359,14 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 				ItemStack pattern = inv[i];
 				if (this.isItemValidForSlot(i, pattern)) {
 					ItemStack[] in = this.getIngredients(pattern);
-					for (int k = 0; k < in.length; k++) {
-						if (in[k] != null)
-							network.addCallback(in[k], this);
+					if (in != null) {
+						for (int k = 0; k < in.length; k++) {
+							if (in[k] != null)
+								network.addCallback(in[k], hasWork);
+						}
 					}
 					ItemStack out = this.getSlotRecipeOutput(i);
-					network.addCallback(out, this);
+					network.addCallback(out, hasWork);
 				}
 			}
 		}
@@ -432,20 +442,10 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null) {
 			return ItemCraftPattern.getItems(is);
 		}
-		else if (ModList.APPENG.isLoaded() && is.getItem() instanceof ICraftingPatternItem) {
-			ICraftingPatternDetails icpd = ((ICraftingPatternItem)is.getItem()).getPatternForItem(is, worldObj);
-			if (icpd.isCraftable()) {
-				ItemStack[] ret = new ItemStack[9];
-				IAEItemStack[] in = icpd.getInputs();
-				for (int i = 0; i < ret.length && i < in.length; i++) {
-					if (in[i] != null)
-						ret[i] = in[i].getItemStack();
-				}
-				return ret;
-			}
-			else {
+		else if (ModList.APPENG.isLoaded() && InterfaceCache.AEPATTERN.instanceOf(is.getItem())) {
+			if (!AEPatternHandling.isCraftingRecipe(is, worldObj))
 				return null;
-			}
+			return AEPatternHandling.getPatternInput(is, worldObj);
 		}
 		else {
 			return null;
@@ -456,9 +456,11 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		if (is.getItem() == ItemRegistry.CRAFTPATTERN.getItemInstance() && is.stackTagCompound != null && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING) {
 			return ItemCraftPattern.getRecipeOutput(is);
 		}
-		else if (ModList.APPENG.isLoaded() && is.getItem() instanceof ICraftingPatternItem) {
-			ICraftingPatternDetails icpd = ((ICraftingPatternItem)is.getItem()).getPatternForItem(is, worldObj);
-			return icpd.isCraftable() ? icpd.getCondensedOutputs()[0].getItemStack() : null;
+		else if (ModList.APPENG.isLoaded() && InterfaceCache.AEPATTERN.instanceOf(is.getItem())) {
+			if (!AEPatternHandling.isCraftingRecipe(is, worldObj))
+				return null;
+			ArrayList<ItemStack> li = AEPatternHandling.getPatternOutputs(is, worldObj);
+			return li == null || li.isEmpty() ? null : li.get(0);
 		}
 		else {
 			return null;
@@ -524,8 +526,31 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		return true;
 	}
 
-	private boolean isLoopable(ItemStack out, ItemHashMap<Integer> req) { //recipe contains output, or recipes for inputs contain output
+	private boolean isLoopable(ItemStack out, ItemHashMap<Integer> req) {
+		KeyedItemStack kout = this.key(out);
+		CraftingLoopCache cache = loopCache.get(kout);
+		if (cache == null) {
+			cache = new CraftingLoopCache(out);
+			loopCache.put(kout, cache);
+		}
 		Collection<ItemStack> c = req.keySet();
+		HashSet<KeyedItemStack> set = new HashSet();
+		for (ItemStack is : c) {
+			set.add(this.key(is));
+		}
+		Boolean seek = cache.loopingSets.get(set);
+		if (seek == null) {
+			seek = this.calculateLoopability(out, c);
+			cache.loopingSets.put(new HashSet(set), seek); //clone set to avoid it being modified
+		}
+		return seek.booleanValue();
+	}
+
+	private KeyedItemStack key(ItemStack is) {
+		return new KeyedItemStack(is).setIgnoreMetadata(false).setIgnoreNBT(true).setSized(false).setSimpleHash(true);
+	}
+
+	private boolean calculateLoopability(ItemStack out, Collection<ItemStack> c) { //recipe contains output, or recipes for inputs contain output
 		if (ReikaItemHelper.collectionContainsItemStack(c, out))
 			return true;
 		for (ItemStack is : c) {
@@ -769,10 +794,14 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 		return (IGridNode)aeGridNode;
 	}
 
-	@Override
-	public void onItemChange(IAEItemStack iae) {
-		hasWork = true;
-		//ModularLogger.instance.log(LOGGER_ID, "Activating "+this+" due to change in "+iae.getItemStack());
-		//ReikaJavaLibrary.pConsole("Activating "+this+" due to change in "+(iae != null ? iae.getItemStack() : "Network"));
+	private static class CraftingLoopCache {
+
+		private final ItemStack output;
+		private final HashMap<HashSet<KeyedItemStack>, Boolean> loopingSets = new HashMap();
+
+		private CraftingLoopCache(ItemStack is) {
+			output = is;
+		}
+
 	}
 }

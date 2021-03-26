@@ -1,19 +1,19 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -27,6 +27,11 @@ public class RenderMultiClutch extends RotaryTERenderer
 
 	private ModelMultiClutch MultiClutchModel = new ModelMultiClutch();
 
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/";
+	}
+
 	/**
 	 * Renders the TileEntity for the position.
 	 */
@@ -35,7 +40,7 @@ public class RenderMultiClutch extends RotaryTERenderer
 		ModelMultiClutch var14;
 		var14 = MultiClutchModel;
 
-		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/multiclutchtex.png");
+		this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/multiclutchtex.png");
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

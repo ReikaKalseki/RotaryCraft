@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Piping;
 
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
+
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 

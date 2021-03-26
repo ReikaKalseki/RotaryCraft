@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
@@ -38,6 +39,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
+import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -70,7 +72,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		Block idbelow = world.getBlock(x, y-1, z);
 		if (idbelow == Blocks.air)
 			return;
-		Fluid f = FluidRegistry.lookupFluidForBlock(idbelow);
+		Fluid f = ReikaFluidHelper.lookupFluidForBlock(idbelow);
 		if (f == null)
 			return;
 		if (blocks.isEmpty()) {
@@ -148,7 +150,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		}
 		if (f.equals(FluidRegistry.WATER))
 			RotaryAchievements.PUMP.triggerAchievement(this.getPlacer());
-		duplicationAmount = mult;
+		duplicationAmount = (int)(mult*ConfigRegistry.getFreeWaterProduction());
 		tank.addLiquid(fs.amount*mult, f);
 		world.markBlockForUpdate(loc.xCoord, loc.yCoord, loc.zCoord);
 	}
@@ -166,7 +168,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 		if (!(liqid instanceof BlockFluidBase || liqid instanceof BlockLiquid))
 			return false;
 		boolean srcmeta = liqid instanceof BlockFluidFinite ? world.getBlockMetadata(x, y, z) == 7 : world.getBlockMetadata(x, y, z) == 0;
-		Fluid f2 = FluidRegistry.lookupFluidForBlock(liqid);
+		Fluid f2 = ReikaFluidHelper.lookupFluidForBlock(liqid);
 		Fluid f = tank.getActualFluid();
 		if (f2 == null)
 			return false;

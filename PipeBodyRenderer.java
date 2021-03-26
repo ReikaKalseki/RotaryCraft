@@ -1,42 +1,44 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
+import Reika.DragonAPI.Base.ISBRH;
 import Reika.DragonAPI.Exception.WTFException;
-import Reika.DragonAPI.Interfaces.ISBRH;
-import Reika.DragonAPI.Libraries.IO.ReikaLiquidRenderer;
+import Reika.DragonAPI.Instantiable.Event.Client.LiquidBlockIconEvent;
+import Reika.DragonAPI.Instantiable.Event.Client.WaterColorEvent;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 
-public class PipeBodyRenderer implements ISBRH {
+public class PipeBodyRenderer extends ISBRH {
 
-	public final int renderID;
 	public int renderPass;
-	private static final ForgeDirection[] dirs = ForgeDirection.values();
 
 	public PipeBodyRenderer(int ID) {
-		renderID = ID;
+		super(ID);
 		//MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -84,7 +86,7 @@ public class PipeBodyRenderer implements ISBRH {
 					break;
 				case 1:
 					if (tile.isFluidPipe()) {
-						this.renderLiquid(tile, x, y, z, dirs[i]);
+						this.renderLiquid(world, tile, x, y, z, dirs[i]);
 					}
 					break;
 				default:
@@ -148,11 +150,6 @@ public class PipeBodyRenderer implements ISBRH {
 		return true;
 	}
 
-	@Override
-	public int getRenderId() {
-		return renderID;
-	}
-
 	private void renderOverlay(RenderableDuct tile, IBlockAccess world, int x, int y, int z, ForgeDirection dir, IIcon ico) {
 		if (tile.isConnectionValidForSide(dir))
 			return;
@@ -207,7 +204,7 @@ public class PipeBodyRenderer implements ISBRH {
 		v5.startDrawingQuads();
 	}
 
-	private void renderLiquid(RenderableDuct tile, int x, int y, int z, ForgeDirection dir) {
+	private void renderLiquid(IBlockAccess world, RenderableDuct tile, int x, int y, int z, ForgeDirection dir) {
 		Fluid f = tile.getFluidType();
 		if (f == null)
 			return;
@@ -223,12 +220,7 @@ public class PipeBodyRenderer implements ISBRH {
 		double in2 = 0.5-size+0.01;
 		double dd2 = in-in2;
 
-		IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
-		float u = ico.getMinU();
-		float v = ico.getMinV();
-		float u2 = ico.getMaxU();
-		float v2 = ico.getMaxV();
-		double du = dd2*(u2-u)/4D;
+		IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);;
 
 		GL11.glColor4f(1, 1, 1, 1);
 		//GL11.glEnable(GL11.GL_BLEND);
@@ -239,9 +231,19 @@ public class PipeBodyRenderer implements ISBRH {
 		int mix = tile.getPipeBlockType().getMixedBrightnessForBlock(Minecraft.getMinecraft().theWorld, x, y, z);
 		ReikaLiquidRenderer.bindFluidTexture(f);
 		v5.setColorOpaque(255, 255, 255);
+		if (f == FluidRegistry.WATER) {
+			//v5.setColorOpaque_I(world.getBiomeGenForCoords(x, z).getWaterColorMultiplier());
+			//v5.setColorOpaque_I(WaterColorEvent.fire(world, x, y, z));
+			ico = LiquidBlockIconEvent.fire(Blocks.water, world, x, y, z, 1);
+		}
+		float u = ico.getMinU();
+		float v = ico.getMinV();
+		float u2 = ico.getMaxU();
+		float v2 = ico.getMaxV();
+		double du = dd2*(u2-u)/4D;
 		int clr = 0xffffffff;
 		if (f.canBePlacedInWorld()) {
-			clr = f.getBlock().colorMultiplier(Minecraft.getMinecraft().theWorld, x*2, y*2, z*2);
+			clr = f.getBlock().colorMultiplier(Minecraft.getMinecraft().theWorld, x, y, z);
 			v5.setColorOpaque_I(clr);
 		}
 

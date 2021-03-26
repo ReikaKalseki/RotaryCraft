@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -38,21 +38,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import thaumcraft.common.entities.monster.EntityWisp;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Effects.EntityBlockTexFX;
 import Reika.DragonAPI.Instantiable.Effects.EntityLiquidParticleFX;
+import Reika.DragonAPI.Interfaces.Entity.EtherealEntity;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
@@ -74,9 +75,11 @@ import Reika.RotaryCraft.Registry.PacketRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.VoidMonster.Entity.EntityVoidMonster;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thaumcraft.common.entities.monster.EntityWisp;
 
 public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine, UpgradeableMachine {
 
@@ -102,6 +105,9 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	private static final RayTracer tracer;
 
+	public static final int BASE_CONSUMPTION = 10;
+	public static final int AFTERBURNER_CONSUMPTION = 25;
+
 	static {
 		tracer = new RayTracer(0, 0, 0, 0, 0, 0);
 	}
@@ -118,7 +124,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	@Override
 	protected int getConsumedFuel() {
-		return this.isAfterburning() ? 25 : 10;
+		return this.isAfterburning() ? AFTERBURNER_CONSUMPTION : BASE_CONSUMPTION;
 	}
 
 	@Override
@@ -210,8 +216,15 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	}
 
 	private void heatJet(World world, int x, int y, int z, int meta) {
-		int temp = this.isAfterburning() ? 1750 : 1200;
-		int T = temp*omega/type.getSpeed();
+		if (this.isOn() && this.getTicksExisted()%10 == 0) {
+			int max = this.getMaxExhaustTemperature()*omega/type.getSpeed();
+			if (max > temperature)
+				temperature = Math.min(temperature+Math.max(1, (max-temperature)/16), max);
+			else if (!this.isAfterburning()) {
+				temperature = Math.max(temperature-Math.max(1, (temperature-max)/32), max);
+			}
+		}
+		int T = temperature;
 		int r = this.isAfterburning() ? 6 : 4;
 		for (int i = 1; i < r; i++) {
 			int dx = x+write.offsetX*i;
@@ -239,6 +252,15 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		for (EntityLivingBase e : li) {
 			e.attackEntityFrom(DamageSource.onFire, this.isAfterburning() ? 4 : 1);
 		}
+	}
+
+	public int getMaxExhaustTemperature() {
+		return this.isAfterburning() ? 1750 : 1200;
+	}
+
+	@Override
+	public int getMaxTemperature() {
+		return this.isAfterburning() ? 2000 : 1500;
 	}
 
 	/** Like BC obsidian pipe - suck in entities in a "funnel" in front of the engine, and deal damage (50 hearts).
@@ -446,13 +468,15 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		FOD++;
 		if (DifficultyEffects.JETINGESTFAIL.testChance()) {
 			isJetFailing = true;
-			temperature = 800;
+			temperature = Math.max(temperature, 800);
 		}
 		//SoundRegistry.JETDAMAGE.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	private boolean canDamageEngine(Entity caught) {
 		if (caught.noClip)
+			return false;
+		if (caught instanceof EtherealEntity)
 			return false;
 		if (caught instanceof EntityChicken)
 			return false;
@@ -541,7 +565,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	public void repairJet() {
 		FOD = 0;
 		isJetFailing = false;
-		temperature = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
+		temperature = Math.max(ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord), temperature/2);
 	}
 
 	public void repairJetPartial() {
@@ -573,15 +597,15 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		world.playSoundEffect(x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 1F, 1F);
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			if (fuel.getLevel() < FUELCAP/12 && rand.nextInt(10) == 0) {
-				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this, 64);
+				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.ordinal(), this, 64);
 				this.backFire(world, x, y, z);
 			}
 			if (fuel.getLevel() < FUELCAP/4 && rand.nextInt(20) == 0) {
-				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this, 64);
+				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.ordinal(), this, 64);
 				this.backFire(world, x, y, z);
 			}
 			else if (rand.nextInt(40) == 0) {
-				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.getMinValue(), this, 64);
+				ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.ENGINEBACKFIRE.ordinal(), this, 64);
 				this.backFire(world, x, y, z);
 			}
 		}
@@ -743,7 +767,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	@Override
 	public boolean hasTemperature() {
-		return isJetFailing || this.isAfterburning();
+		return true;
 	}
 
 	@Override
@@ -784,7 +808,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		int dx = x+write.getOpposite().offsetX;
 		int dz = z+write.getOpposite().offsetZ;
 		Block b = world.getBlock(dx, y, dz);
-		Fluid f = FluidRegistry.lookupFluidForBlock(b);
+		Fluid f = ReikaFluidHelper.lookupFluidForBlock(b);
 		if (f != null) {
 
 			if (worldObj.isRemote) {
@@ -829,9 +853,10 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	private void doAfterburning(World world, int x, int y, int z) {
 		if (this.isAfterburning()) {
 			this.afterBurnParticles(world, x, y, z);
-			if (this.getTicksExisted()%40 == 0) {
+			if (this.getTicksExisted()%200 == 0) {
 				temperature += 1;
-				if (temperature > 1000) {
+				if (temperature > this.getMaxTemperature()) {
+					temperature = this.getMaxTemperature();
 					this.fail(world, x, y, z);
 				}
 				else if (temperature >= 600) {
@@ -989,9 +1014,10 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 
 	public void setBurnerActive(boolean burn) {
 		burnerActive = burn;
+		/*
 		if (!burn && !isJetFailing) {
 			temperature = ReikaWorldHelper.getAmbientTemperatureAt(worldObj, xCoord, yCoord, zCoord);
-		}
+		}*/
 	}
 
 	@Override
@@ -1000,6 +1026,16 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		if (canAfterBurn) {
 			ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.AFTERBURNER.ordinal()));
 		}
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return true;
+	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
 	}
 
 }

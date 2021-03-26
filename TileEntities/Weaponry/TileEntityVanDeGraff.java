@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,12 +24,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Event.VDGAttackEvent;
 import Reika.RotaryCraft.API.Interfaces.Shockable;
@@ -69,7 +71,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 					if (te instanceof Shockable) {
 						sideMap.addEntry(dir, 1000);
 					}
-					else if (mat == Material.iron || mat == Material.anvil) {
+					else if (mat == Material.iron || mat == Material.anvil || InterfaceCache.BCPIPE.instanceOf(te)) {
 						sideMap.addEntry(dir, 50);
 					}
 					else if (mat == Material.water) {

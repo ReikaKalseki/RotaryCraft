@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,8 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -28,8 +30,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-
-import org.lwjgl.input.Keyboard;
 
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.HybridTank;
@@ -301,7 +301,7 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 	protected final void updateSpeed() {
 		int maxspeed = this.isEmitting() ? this.getMaxSpeed() : 0;
 		float mult = 1;
-		boolean accel = omega <= maxspeed && this.hasEnoughEnergy();
+		boolean accel = omega <= maxspeed && this.hasEnoughEnergy() && !this.isShutdown();
 		if (accel) {
 			if (omega < maxspeed)
 				mult = 1.5F;
@@ -675,7 +675,12 @@ IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedG
 	}
 
 	@Override
-	public boolean allowExternalHeating() {
+	public final boolean allowExternalHeating() {
+		return false;
+	}
+
+	@Override
+	public final boolean allowHeatExtraction() {
 		return false;
 	}
 

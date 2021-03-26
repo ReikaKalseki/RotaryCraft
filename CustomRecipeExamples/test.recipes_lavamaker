@@ -1,0 +1,10 @@
+{
+	type = "test1"
+	input = "minecraft:dirt"
+	output_fluid = {
+		type = "rc jet fuel"
+		amount = 30
+	}
+	temperature = 1337
+	energy = 8003002
+}

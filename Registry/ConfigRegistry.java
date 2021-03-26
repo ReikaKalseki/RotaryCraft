@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Registry;
 
 import net.minecraft.util.MathHelper;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
@@ -118,7 +119,12 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false),
 	GATEBLAST("Enable Blast Furnace recipe gating", false),
 	GATEWORK("Enable Worktable recipe gating", false),
-	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4);
+	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4),
+	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8),
+	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F),
+	IC2BLAZECOMPRESS("Increase Blaze Powder To Rod Cost In IC2 Compressor (Exploit Fix)", true),
+	FREEWATER("Free Water Production Factor", 1F),
+	SNEAKWINGS("Jetpack wings enable with sneak vs disable", false);
 
 	private String label;
 	private boolean defaultState;
@@ -276,6 +282,11 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	}
 
 	@Override
+	public boolean isAccessible() {
+		return true;
+	}
+
+	@Override
 	public boolean saveIfUnspecified() {
 		switch (this) {
 			case STRONGRECIPEMOD:
@@ -296,6 +307,14 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 
 	public static boolean enableBeeYeast() {
 		return BEEYEAST.getValue() >= 1;
+	}
+
+	public static float getSmelteryFlakeYield() {
+		return MathHelper.clamp_float(TINKERFLAKES.getFloat(), 0.25F, 2F);
+	}
+
+	public static float getFreeWaterProduction() {
+		return MathHelper.clamp_float(FREEWATER.getFloat(), 0.1F, 2F);
 	}
 
 	@Override

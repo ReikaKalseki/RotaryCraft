@@ -1,18 +1,18 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -48,7 +48,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		boolean keyC = Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH);
 
 		if (keyL && !pressL) {
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 1);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.ordinal(), gpr, 1);
 			gpr.shift(gpr.getGuiDirection(), 1);
 			pressL = true;
 		}
@@ -57,7 +57,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		}
 
 		if (keyR && !pressR) {
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, -1);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.ordinal(), gpr, -1);
 			gpr.shift(gpr.getGuiDirection(), -1);
 			pressR = true;
 		}
@@ -66,7 +66,7 @@ public class GuiGPR extends GuiPowerOnlyMachine
 		}
 
 		if (keyC && !pressC) {
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.getMinValue(), gpr, 0);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.ordinal(), gpr, 0);
 			gpr.shift(gpr.getGuiDirection(), 0);
 			pressC = true;
 		}
@@ -86,10 +86,13 @@ public class GuiGPR extends GuiPowerOnlyMachine
 	}
 
 	private void drawRadar(int a, int b) {
-		for (int j = gpr.getBounds()[0]; j <= gpr.getBounds()[1]; j++) {
-			for (int i = 0; i < 96 && gpr.yCoord-i > 0; i++) {
-				int color = 0xff000000 | gpr.getColor(i, j);
-				this.drawRect(a+7+UNIT*j, b+16+UNIT*i-2, a+7+UNIT+UNIT*j, b+16+UNIT*i+UNIT, color);
+		int r = gpr.getRange();
+		for (int x = -r; x <= r; x++) {
+			for (int dd = 1; dd <= gpr.MAX_HEIGHT; dd++) {
+				int color = 0xff000000 | gpr.getColor(x, dd);
+				int x0 = a+7+UNIT*(x+gpr.MAX_WIDTH/2);
+				int y0 = b+16+UNIT*dd-2;
+				this.drawRect(x0, y0, x0+UNIT, y0+UNIT, color);
 			}
 		}
 

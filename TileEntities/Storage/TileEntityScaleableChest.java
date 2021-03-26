@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Interfaces.TileEntity.MultiPageInventory;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.RotaryCraft.RotaryCraft;
@@ -51,6 +52,10 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 	public int numUsingPlayers;
 
 	public int page;
+
+	public boolean dropsInventoryOnBroken() {
+		return false;
+	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -221,18 +226,18 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 
 	public void getIOSides(World world, int x, int y, int z, int metadata) {
 		switch(metadata) {
-		case 0:
-			read = ForgeDirection.EAST;
-			break;
-		case 1:
-			read = ForgeDirection.WEST;
-			break;
-		case 3:
-			read = ForgeDirection.SOUTH;
-			break;
-		case 2:
-			read = ForgeDirection.NORTH;
-			break;
+			case 0:
+				read = ForgeDirection.EAST;
+				break;
+			case 1:
+				read = ForgeDirection.WEST;
+				break;
+			case 3:
+				read = ForgeDirection.SOUTH;
+				break;
+			case 2:
+				read = ForgeDirection.NORTH;
+				break;
 		}
 	}
 

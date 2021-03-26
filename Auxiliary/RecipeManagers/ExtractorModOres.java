@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
@@ -231,5 +232,19 @@ public class ExtractorModOres {
 		FLAKES();
 
 		private static final ExtractorStage[] list = values();
+
+		public String getDisplayName(OreType ore) {
+			switch(this) {
+				case DUST:
+					return "Powdered "+ore.getDisplayName();
+				case SLURRY:
+					return ore.getDisplayName()+" Slurry";
+				case SOLUTION:
+					return ore.getDisplayName()+" Solution";
+				case FLAKES:
+					return ore.getDisplayName()+" Flakes";
+			}
+			return "Invalid";
+		}
 	}
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,9 +18,12 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.apache.commons.codec.Charsets;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.IO.ReikaFileReader;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
@@ -127,24 +130,37 @@ public class CustomExtractLoader {
 		public String name() {
 			return displayName;
 		}
+
+		public int getDisplayColor() {
+			return color1;
+		}
+
+		@Override
+		public int getDropCount() {
+			return 1;
+		}
+
+		@Override
+		public String getDisplayName() {
+			return displayName;
+		}
 	}
 
-	public final String getSaveFileName() {
+	private final String getSaveFileName() {
 		return "RotaryCraft_CustomExtracts.cfg";
 	}
 
-	public final String getFullSavePath() {
-		return RotaryCraft.config.getConfigFolder().getAbsolutePath()+"/"+this.getSaveFileName();
+	private final File getFullSavePath() {
+		return new File(RotaryCraft.config.getConfigFolder(), this.getSaveFileName());
 	}
 
 	public void loadFile() {
 		RotaryCraft.logger.log("Loading custom extract config.");
-		File f = new File(this.getFullSavePath());
+		File f = this.getFullSavePath();
 		if (!f.exists())
 			if (!this.createOreFile(f))
 				return;
-		try {
-			BufferedReader p = ReikaFileReader.getReader(f);
+		try(BufferedReader p = ReikaFileReader.getReader(f, Charsets.UTF_8)) {
 			String line = "";
 			while (line != null) {
 				line = p.readLine();
@@ -166,7 +182,6 @@ public class CustomExtractLoader {
 					}
 				}
 			}
-			p.close();
 		}
 		catch (Exception e) {
 			RotaryCraft.logger.log(e.getMessage()+", and it caused the read to fail!");

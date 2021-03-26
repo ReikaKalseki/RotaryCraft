@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,9 +23,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
+import Reika.DragonAPI.Interfaces.Registry.CropType;
 import Reika.DragonAPI.Interfaces.Registry.CropType.CropMethods;
-import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
@@ -35,6 +36,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.RotaryCraft.API.Event.FanHarvestEvent;
 import Reika.RotaryCraft.API.Interfaces.CustomFanEntity;
@@ -77,6 +79,8 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.getIOSides(world, x, y, z, meta);
 		this.getPower(false);
 		power = (long)omega*(long)torque;
+		if (AtmosphereHandler.isNoAtmo(world, x-this.getReadDirection().offsetX, y, z-this.getReadDirection().offsetZ, blockType, false))
+			return;
 		this.makeBeam(world, x, y, z, meta);
 		sound.update();
 		if (omega > 0) {
@@ -186,7 +190,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
 					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
-					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionX) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					double speedstep = Math.max(Math.abs(Math.abs(caught.motionX) + base/(mass*Math.abs(d))), AXISSPEEDCAP);
 					double a = facing.offsetX > 0 ? 0.004 : 0;
 					caught.motionX = facing.offsetX*speedstep+a;
 				}
@@ -200,7 +204,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
 					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
-					caught.motionY = facing.offsetY*ReikaMathLibrary.extremad(Math.abs(caught.motionY) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					caught.motionY = facing.offsetY*Math.max(Math.abs(Math.abs(caught.motionY) + base/(mass*Math.abs(d))), AXISSPEEDCAP);
 				}
 				if (caught.motionZ < AXISSPEEDCAP && facing.offsetZ != 0) {
 					double d = caught.posZ-z;
@@ -212,7 +216,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 					if (multiplier > 1 || multiplier < 0)
 						multiplier = 1;
 					double base = multiplier*power2*BASESPEED*(wideAreaBlow ? 0.125 : 1);
-					double speedstep = ReikaMathLibrary.extremad(Math.abs(caught.motionZ) + base/(mass*Math.abs(d)), AXISSPEEDCAP, "absmin");
+					double speedstep = Math.max(Math.abs(Math.abs(caught.motionZ) + base/(mass*Math.abs(d))), AXISSPEEDCAP);
 					double a = facing.offsetZ > 0 ? 0.004 : 0;
 					caught.motionZ = facing.offsetZ*speedstep+a;
 				}
@@ -267,7 +271,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 						for (int j = 0; j <= 2; j++) {
 							editx = x+i*facing.offsetX+left.offsetX*k;
 							edity = y+i*facing.offsetY+j;
-							editx = z+i*facing.offsetZ+left.offsetZ*k;
+							editz = z+i*facing.offsetZ+left.offsetZ*k;
 							this.rip2(world, editx, edity, editz);
 						}
 					}
@@ -310,7 +314,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		if (id != Blocks.snow && id != Blocks.web && id != Blocks.leaves && id != Blocks.leaves2 && id != Blocks.tallgrass &&
 				id != Blocks.fire && !crop)
 			return;
-		if ((rand.nextInt(600) > 0 && id != Blocks.tallgrass) || (rand.nextInt(200) > 0 && id == Blocks.tallgrass))
+		int c = this.getHarvestingRand();
+		if (id == Blocks.tallgrass)
+			c /= 3;
+		c = Math.max(1, c);
+		if (rand.nextInt(c) > 0)
 			return;
 		if (id == Blocks.web && omega < WEBSPEED)
 			return;
@@ -331,6 +339,11 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 		this.dropBlocks(world, x, y, z, id, meta);
 		world.setBlockToAir(x, y, z);
 	}
+
+	private int getHarvestingRand() {
+		return Math.max(50, 600-25*ReikaMathLibrary.logbase2(omega));
+	}
+
 	/*
 	private void harvest(World world, int x, int y, int z, BlowableCrop b) {
 		if (b.isReadyToHarvest(world, x, y, z)) {
@@ -344,26 +357,21 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	 */
 	//Meta is block meta, not fan meta
 	private void harvest(World world, int x, int y, int z, int meta, Block id) {
-		ModCrop mod = ModCropList.getModCrop(id, meta);
-		ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
-		if (mod != null && mod.isRipe(world, x, y, z)) {
-			if (mod.destroyOnHarvest()) {
+		CropType crop = ReikaCropHelper.getCrop(id);
+		if (crop == null)
+			crop = ModCropList.getModCrop(id, meta);
+		if (crop != null && crop.isRipe(world, x, y, z)/* && (omega > HARVESTSPEED*4 || !crop.getShape().isSolid())*/) {
+			if (crop.destroyOnHarvest()) {
 				ArrayList<ItemStack> li = id.getDrops(world, x, y, z, meta, 0);
 				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
 				world.setBlockToAir(x, y, z);
 			}
 			else {
-				ArrayList<ItemStack> li = mod.getDrops(world, x, y, z, 0);
-				CropMethods.removeOneSeed(mod, li);
+				ArrayList<ItemStack> li = crop.getDrops(world, x, y, z, 0);
+				CropMethods.removeOneSeed(crop, li);
 				ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-				mod.setHarvested(world, x, y, z);
+				crop.setHarvested(world, x, y, z);
 			}
-		}
-		if (crop != null && crop.isRipe(meta)) {
-			ArrayList<ItemStack> li = crop.getDrops(world, x, y, z, 0);
-			CropMethods.removeOneSeed(crop, li);
-			ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
-			crop.setHarvested(world, x, y, z);
 		}
 		MinecraftForge.EVENT_BUS.post(new FanHarvestEvent(this, x, y, z));
 	}

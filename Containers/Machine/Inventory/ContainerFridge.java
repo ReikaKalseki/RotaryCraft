@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Containers.Machine.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.SlotFurnace;
+
 import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityRefrigerator;
 

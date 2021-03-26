@@ -1,15 +1,14 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base.TileEntity;
 
-import li.cil.oc.api.network.Visibility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +17,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Base.TileEntityBase;
@@ -25,6 +25,9 @@ import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
+import Reika.DragonAPI.Libraries.MathSci.ReikaThermoHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.BasicMachine;
 import Reika.RotaryCraft.Auxiliary.RotaryRenderList;
@@ -34,8 +37,10 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import li.cil.oc.api.network.Visibility;
 
 public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher, BasicMachine {
 
@@ -243,15 +248,15 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@ModDependent(ModList.OPENCOMPUTERS)
 	public final Visibility getOCNetworkVisibility() {
 		if (this.getMachine().isTransmissionMachine())
-			return this.getMachine().isAdvancedTransmission() ? Visibility.Network : Visibility.Neighbors;
+			return this.getMachine().isAdvancedTransmission() ? Visibility.Network : Visibility.None;
 		else if (this.getMachine().isPipe())
-			return Visibility.Neighbors;
+			return Visibility.None;
 		else
-			return this instanceof TileEntityBeltHub ? Visibility.Neighbors : Visibility.Network;
+			return this instanceof TileEntityBeltHub ? Visibility.None : Visibility.Network;
 	}
 
-	public int getItemMetadata() {
-		return 0;
+	public double heatEnergyPerDegree() {
+		return ReikaThermoHelper.STEEL_HEAT*ReikaBlockHelper.getBlockVolume(worldObj, xCoord, yCoord, zCoord)*ReikaEngLibrary.rhoiron;
 	}
 
 }

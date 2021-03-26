@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,11 +14,15 @@ import java.util.HashSet;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.RotaryCraft.API.Power.PowerAcceptor;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityTransmissionMachine;
+import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
@@ -33,7 +37,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 public class TorqueUsage {
 
 	private static double requiredTorque;
-	private static HashSet<WorldLocation> pathCache = new HashSet();
+	private static final HashSet<WorldLocation> pathCache = new HashSet();
 
 	public static int getTorque(TileEntityFlywheel te) {
 		requiredTorque = 0;
@@ -153,21 +157,11 @@ public class TorqueUsage {
 		}
 		else if (tile instanceof TileEntityPowerReceiver) { //if the tile is a power Receiver, it stores its minimum torque requirement
 			TileEntityPowerReceiver pwr = (TileEntityPowerReceiver)tile;
-			if (tile instanceof TileEntityExtractor) { //if it's an extractor, it stores the torque requirement of the most demanding WORKING stage
-				TileEntityExtractor ex = (TileEntityExtractor)tile;
-				int rtorque = ex.torque;
-				int mintorque = 0;
-				for(int i = 0; i < 4; i++) {
-					if (ex.machine.getMinTorque(i) <= rtorque) {
-						mintorque = (Math.max(mintorque, ex.machine.getMinTorque(i)));
-					}
-				}
-				requiredTorque += activeRatio*mintorque;
-			}
-			else if (tile instanceof TileEntityBeltHub) {
+			if (tile instanceof TileEntityBeltHub) {
 				TileEntityBeltHub hub = (TileEntityBeltHub)tile;
 				if (!hub.isEmitting) {
-					TileEntity di = hub.worldObj.getTileEntity(hub.getTargetX(), hub.getTargetY(), hub.getTargetZ());
+					Coordinate tgt = hub.getConnection();
+					TileEntity di = tgt != null ? tgt.getTileEntity(hub.worldObj) : null;
 					if (di instanceof TileEntityBeltHub) {
 						TileEntityBeltHub h2 = (TileEntityBeltHub)di;
 						TileEntity write = h2.getWriteTileEntity();
@@ -185,11 +179,30 @@ public class TorqueUsage {
 				manageBus((TileEntityBusController)tile, reader, activeRatio);
 			}
 			else {
-				int min = 1;
-				if (pwr.getMachine().isModConversionEngine()) {
-					min = Math.max(1, (int)Math.min(Integer.MAX_VALUE, pwr.power/256D));
+				double req = pwr.MINTORQUE;
+				double min = 0;
+				if (tile instanceof TileEntityExtractor) { //if it's an extractor, it stores the torque requirement of the most demanding WORKING stage
+					TileEntityExtractor ex = (TileEntityExtractor)tile;
+					int rtorque = ex.torque;
+					int mintorque = 0;
+					for(int i = 0; i < 4; i++) {
+						if (ex.machine.getMinTorque(i) <= rtorque) {
+							mintorque = (Math.max(mintorque, ex.machine.getMinTorque(i)));
+						}
+					}
+					req = mintorque;
 				}
-				requiredTorque += Math.max(activeRatio*pwr.MINTORQUE, min);
+				else if (pwr.getMachine().isModConversionEngine()) {
+					min = Math.max(1, Math.min(Integer.MAX_VALUE, pwr.power/256D));
+				}
+				else if (pwr.getMachine() == MachineRegistry.FRICTION) {
+					TileEntityFurnaceHeater te = (TileEntityFurnaceHeater)tile;
+					if (te.hasFurnace())
+						req *= 4;
+					else
+						req = 0.01;
+				}
+				requiredTorque += Math.max(activeRatio*req, min);
 			}
 		}
 		else if (tile instanceof PowerAcceptor) {

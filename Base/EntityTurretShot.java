@@ -1,24 +1,26 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Base;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import Reika.RotaryCraft.Auxiliary.TurretDamage;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityAimedCannon;
+
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
 
 public abstract class EntityTurretShot extends EntityFireball implements IEntityAdditionalSpawnData {
 
@@ -67,13 +69,23 @@ public abstract class EntityTurretShot extends EntityFireball implements IEntity
 			buf.writeInt(-1);
 			buf.writeInt(0);
 		}
+		this.writeData(buf);
 	}
 
-	public void readSpawnData(ByteBuf buf) {
+	public final void readSpawnData(ByteBuf buf) {
 		int x = buf.readInt();
 		int y = buf.readInt();
 		int z = buf.readInt();
 		gun = (TileEntityAimedCannon)worldObj.getTileEntity(x, y, z);
+		this.readData(buf);
+	}
+
+	protected void writeData(ByteBuf buf) {
+
+	}
+
+	protected void readData(ByteBuf buf) {
+
 	}
 
 	protected final DamageSource getDamageSource() {

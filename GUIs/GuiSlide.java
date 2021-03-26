@@ -1,24 +1,24 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs;
 
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.item.ItemStack;
 
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.PacketRegistry;
 
@@ -69,7 +69,7 @@ public class GuiSlide extends GuiScreen {
 		}
 		else
 			file = input.getText();
-		ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SLIDE.getMinValue(), file);
+		ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SLIDE.ordinal(), file);
 	}
 
 	@Override

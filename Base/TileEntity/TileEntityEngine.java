@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Base.TileEntity;
 
 import java.util.Collection;
 
-import micdoodle8.mods.galacticraft.api.world.OxygenHooks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -22,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
@@ -30,7 +28,10 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.ParallelTicker;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
@@ -39,6 +40,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaTimeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -57,16 +59,18 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
+
+@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
 public abstract class TileEntityEngine extends TileEntityInventoryIOMachine implements TemperatureTE, SimpleProvider,
-PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, IntegratedGearboxable {
+PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, IntegratedGearboxable, IPipeConnection {
 
 	/** Water capacity */
 	public static final int CAPACITY = 60*1000;
-	public final int MAXTEMP = this.getMaxTemperature();
 
 	/** Fuel capacity */
 	public static final int FUELCAP = 240*1000;
-
 	public static final int LUBECAP = 24*1000;
 
 	protected final HybridTank lubricant = new HybridTank("enginelube", LUBECAP);
@@ -130,7 +134,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	}
 
 	public final int getTempScaled(int par1) {
-		return temperature*par1/MAXTEMP;
+		return temperature*par1/this.getMaxTemperature();
 	}
 
 	public final int getFuelScaled(int par1) {
@@ -154,11 +158,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		}
 		if (this.isDrowned(world, x, y, z))
 			return false;
-		if (ModList.GALACTICRAFT.isLoaded()) {
-			if (OxygenHooks.noAtmosphericCombustion(world.provider)) {
-				return OxygenHooks.inOxygenBubble(world, x+0.5, y+0.5, z+0.5) && OxygenHooks.checkTorchHasOxygen(world, blockType, x, y, z);
-			}
-		}
+		if (AtmosphereHandler.isNoAtmo(world, x-this.getWriteDirection().offsetX, y, z-this.getWriteDirection().offsetZ, blockType, true))
+			return false;
 		return true;
 	}
 
@@ -182,26 +183,21 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		//BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+		temperature = Math.max(temperature, Tamb);
 		//ReikaChatHelper.writeInt(temperature);
-		if (temperature > Tamb && omega == 0 && torque == 0 && type == EngineType.SPORT) { //If off and hot
-			if (temperature > Tamb+300)
-				temperature -= (temperature-Tamb)/100;
-			else if (temperature > Tamb+100)
-				temperature -= (temperature-Tamb)/50;
-			else if (temperature > Tamb+40)
-				temperature -= (temperature-Tamb)/10;
-			else if (temperature > Tamb+4)
-				temperature -= (temperature-Tamb)/2;
-			else
-				temperature = Tamb;
+		if (temperature > Tamb && !isOn) {
+			this.offlineCooldown(world, x, y, z, Tamb);
 		}
 	}
 
-	@Override
-	public boolean canBeCooledWithFins() {
-		return false;
+	protected void offlineCooldown(World world, int x, int y, int z, int Tamb) {
+		temperature -= Math.max(1, (temperature-Tamb)/256);
+	}
+
+	public final boolean isOn() {
+		return isOn;
 	}
 
 	public void overheat(World world, int x, int y, int z) {
@@ -552,7 +548,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	@Override
 	public final boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		if (type == EngineType.AC) {
-			if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.shaftcore)) {
+			if (ReikaItemHelper.matchStacks(itemstack, ItemStacks.shaftcore) || ReikaItemHelper.matchStacks(itemstack, ItemStacks.tungstenshaftcore)) {
 				if (itemstack.stackTagCompound == null)
 					return true;
 				if (itemstack.stackTagCompound.getInteger("magnet") == 0)
@@ -714,6 +710,21 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	public boolean allowExternalHeating() {
 		return false;
+	}
+
+	@Override
+	public boolean allowHeatExtraction() {
+		return this.canBeCooledWithFins();
+	}
+
+	@Override
+	public boolean canBeCooledWithFins() {
+		return false;
+	}
+
+	@Override
+	public double heatEnergyPerDegree() {
+		return 2*super.heatEnergyPerDegree();
 	}
 
 	@Override
@@ -887,11 +898,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		return false;
 	}
 
-	@Override
-	public final int getItemMetadata() {
-		return type.ordinal();
-	}
-
 	public void breakBlock() {
 		if (integratedGear != 0) {
 			ItemStack is = ItemIntegratedGearbox.getIntegratedGearItem(integratedGear, null);
@@ -913,5 +919,15 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	public final int getIntegratedGear() {
 		return integratedGear;
+	}
+
+	@ModDependent(ModList.BCTRANSPORT)
+	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
+		if (type == PipeType.FLUID)
+			return this.hasATank() && this.canConnectToPipeOnSide(MachineRegistry.BEDPIPE, side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+		else if (type == PipeType.ITEM)
+			return this.hasAnInventory() ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
+		else
+			return ConnectOverride.DEFAULT;
 	}
 }

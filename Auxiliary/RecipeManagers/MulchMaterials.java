@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,15 +14,20 @@ import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import Reika.ChromatiCraft.API.TreeGetter;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.PlantMaterials;
+
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MulchMaterials {
@@ -54,6 +59,15 @@ public class MulchMaterials {
 			this.addValue(ModCropList.ALGAE.blockID, 3);
 		}
 
+		if (ModList.IC2.isLoaded()) {
+			ItemStack plantball = ReikaItemHelper.lookupItem("IC2:itemFuelPlantBall");
+			if (plantball != null)
+				this.addValue(plantball, 2);
+			ItemStack chaff = IC2Handler.IC2Stacks.BIOCHAFF.getItem();
+			if (chaff != null)
+				this.addValue(chaff, 1);
+		}
+
 		if (ModList.BOTANIA.isLoaded()) {
 			Item petal = GameRegistry.findItem(ModList.BOTANIA.modLabel, "petal");
 			Block flower = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "flower");
@@ -65,6 +79,13 @@ public class MulchMaterials {
 				this.addValue(new ItemStack(flower, 1, i), 4);
 				this.addValue(new ItemStack(tall, 1, tallm), 8);
 				this.addValue(new ItemStack(petal, 1, i), 2);
+			}
+		}
+
+		if (Loader.isModLoaded("Growthcraft|Apples")) {
+			ItemStack core = ReikaItemHelper.lookupItem("Growthcraft|Apples:grc.appleSeeds");
+			if (core != null) {
+				this.addValue(core, 1);
 			}
 		}
 

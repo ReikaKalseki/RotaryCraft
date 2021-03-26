@@ -1,19 +1,19 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
 
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -62,7 +62,7 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 		if (button.id < 24000) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[button.id+2];
 			tile.setMode(dir, !tile.isSideSpeedMode(dir));
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.getMinValue(), tile, button.id);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.ordinal(), tile, button.id);
 		}
 		this.initGui();
 	}
@@ -94,16 +94,16 @@ public class GuiPowerBus extends GuiNonPoweredMachine {
 
 	private int getColorForSide(ForgeDirection dir) {
 		switch(dir) {
-		case EAST:
-			return 0x44ffff00;
-		case NORTH:
-			return 0x440000ff;
-		case SOUTH:
-			return 0x44ff0000;
-		case WEST:
-			return 0x4400ff00;
-		default:
-			return 0x44ffffff;
+			case EAST:
+				return 0x44ffff00;
+			case NORTH:
+				return 0x440000ff;
+			case SOUTH:
+				return 0x44ff0000;
+			case WEST:
+				return 0x4400ff00;
+			default:
+				return 0x44ffffff;
 		}
 	}
 

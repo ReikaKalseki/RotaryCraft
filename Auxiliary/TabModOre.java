@@ -11,11 +11,13 @@ package Reika.RotaryCraft.Auxiliary;
 import java.util.Comparator;
 
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Instantiable.GUI.SortedCreativeTab;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

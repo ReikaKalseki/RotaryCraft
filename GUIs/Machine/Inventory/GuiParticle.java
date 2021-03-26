@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -110,7 +111,7 @@ public class GuiParticle extends GuiNonPoweredMachine {
 		if (button.id < 24000) {
 			ReikaParticleHelper p = particles.get(button.id);
 			int particle = p.ordinal();
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.PARTICLES.getMinValue(), tile, particle);
+			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.PARTICLES.ordinal(), tile, particle);
 		}
 	}
 

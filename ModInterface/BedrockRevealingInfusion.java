@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,11 +15,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+
+import Reika.DragonAPI.Libraries.ReikaNBTHelper;
+import Reika.RotaryCraft.Registry.ItemRegistry;
+
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
-import Reika.DragonAPI.Libraries.ReikaNBTHelper;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 
 
 public final class BedrockRevealingInfusion extends InfusionRecipe {
@@ -28,7 +30,7 @@ public final class BedrockRevealingInfusion extends InfusionRecipe {
 
 	public BedrockRevealingInfusion(int inst, AspectList al, ItemStack[] recipe) {
 		super("BEDREVEAL", ItemRegistry.BEDREVEAL.getEnchantedStack(), inst, al, ItemRegistry.BEDHELM.getEnchantedStack(), recipe);
-		cachedCentralInput = this.getRecipeInput();
+		cachedCentralInput = this.getRecipeInput().copy();
 	}
 
 	@Override

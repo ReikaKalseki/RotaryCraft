@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -42,6 +42,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.EnumHelper;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 
@@ -59,7 +61,7 @@ public enum MobBait {
 	GHAST(EntityGhast.class, 56, Items.glowstone_dust, Items.bow),
 	SILVERFISH(EntitySilverfish.class, 60, Blocks.stonebrick, Items.wooden_pickaxe),
 	VILLAGER(EntityVillager.class, 120, Items.emerald, Blocks.cactus),
-	IRONGOLEM(EntityIronGolem.class, 99, Blocks.wool, ReikaItemHelper.redWool.getItemDamage(), Items.lava_bucket, -1),
+	IRONGOLEM(EntityIronGolem.class, 99, Blocks.wool, ReikaItemHelper.redWool.metadata, Items.lava_bucket, -1),
 	WITCH(EntityWitch.class, 66, Items.nether_wart, Items.ender_pearl),
 	SNOWGOLEM(EntitySnowman.class, 97, Items.carrot, Blocks.torch),
 	BAT(EntityBat.class, 65, Items.melon, Blocks.noteblock),
@@ -106,6 +108,10 @@ public enum MobBait {
 
 	private MobBait(Class<? extends EntityLivingBase> cl, int id, Block a, int am, Block r, int rm) {
 		this(cl, id, Item.getItemFromBlock(a), am, Item.getItemFromBlock(r), rm);
+	}
+
+	private MobBait(Class<? extends EntityLivingBase> cl, int id, ItemStack a, ItemStack r) {
+		this(cl, id, a.getItem(), a.getItemDamage(), r.getItem(), r.getItemDamage());
 	}
 
 	private MobBait(Class<? extends EntityLivingBase> cl, int id, Item a, int am, Item r, int rm) {
@@ -238,6 +244,16 @@ public enum MobBait {
 
 	public String getCommandSenderName() {
 		return (String)EntityList.stringToClassMapping.get(entityClass);
+	}
+
+	public static void addBait(String name, Class<? extends EntityLivingBase> type, int id, Item attract, Item repel) {
+		addBait(name, type, id, new ItemStack(attract), new ItemStack(repel));
+	}
+
+	public static void addBait(String name, Class<? extends EntityLivingBase> type, int id, ItemStack attract, ItemStack repel) {
+		Class[] types = new Class[]{Class.class, int.class, ItemStack.class, ItemStack.class};
+		Object[] args = new Object[]{type, id, attract, repel};
+		MobBait c = EnumHelper.addEnum(MobBait.class, name.toUpperCase(), types, args);
 	}
 
 }

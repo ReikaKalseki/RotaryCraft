@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,31 +11,38 @@ package Reika.RotaryCraft.TileEntities.Production;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.DragonAPI.Instantiable.Interpolation;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
+import Reika.DragonAPI.Instantiable.Math.MovingAverage;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
-import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
+import Reika.RotaryCraft.Base.TileEntity.InventoriedPoweredLiquidIO;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends InventoriedPowerLiquidProducer implements MultiOperational, ConditionalOperation, PressureTE {
+public class TileEntityFractionator extends InventoriedPoweredLiquidIO implements MultiOperational, ConditionalOperation, PressureTE {
 
 	public int mixTime;
 
@@ -48,16 +55,18 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	public boolean idle = false;
 
-	private static final HashSet<KeyedItemStack> ingredients = new HashSet();
+	private static final HashMap<KeyedItemStack, Float> ingredients = new HashMap();
 	private static final Interpolation yield = new Interpolation(false);
 
+	private MovingAverage torqueInput = new MovingAverage(20);
+
 	static {
-		ingredients.add(new KeyedItemStack(Items.blaze_powder).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(new ItemStack(Items.coal, 1, 0)).setIgnoreMetadata(false).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(Items.magma_cream).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(ItemRegistry.ETHANOL.getStackOf()).setIgnoreMetadata(false).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(ItemStacks.netherrackdust).setSimpleHash(true));
-		ingredients.add(new KeyedItemStack(ItemStacks.tar).setSimpleHash(true));
+		ingredients.put(key(Items.blaze_powder), 1.5F);
+		ingredients.put(key(ItemStacks.coaldust), 1F);
+		ingredients.put(key(Items.magma_cream), 0.75F);
+		ingredients.put(key(ReikaItemHelper.pinkDye), 0.5F);
+		ingredients.put(key(ItemStacks.netherrackdust), 2F);
+		ingredients.put(key(ItemStacks.tar), 1.5F);
 
 		yield.addPoint(0, 0.01);
 		yield.addPoint(100, 0.05); //~ atm
@@ -66,6 +75,14 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		yield.addPoint(720, 1); //~4MW if minimal-speed gearing, the breakeven point
 		yield.addPoint(850, 1.5); //~6MW
 		yield.addPoint(1000, 2.5); //max
+	}
+
+	private static KeyedItemStack key(Item i) {
+		return key(new ItemStack(i));
+	}
+
+	private static KeyedItemStack key(ItemStack is) {
+		return new KeyedItemStack(is).setSimpleHash(true).setIgnoreMetadata(!is.getHasSubtypes());
 	}
 
 	/*
@@ -78,15 +95,15 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	 */
 
 	public static boolean isJetFuelIngredient(ItemStack is) {
-		return ingredients.contains(new KeyedItemStack(is).setSimpleHash(true));
+		return ingredients.containsKey(key(is));
 	}
 
 	public static Collection<KeyedItemStack> getIngredients() {
-		return Collections.unmodifiableCollection(ingredients);
+		return Collections.unmodifiableCollection(ingredients.keySet());
 	}
 
 	public void testIdle() {
-		idle = !this.getAllIngredients();
+		idle = !this.hasAllIngredients();
 	}
 
 	@Override
@@ -95,12 +112,15 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 	public int getFuelScaled(int par1) {
-		return (tank.getLevel()*par1)/CAPACITY;
+		return (output.getLevel()*par1)/this.getOutputCapacity();
 	}
 
-	public int getMixScaled(int par1) {
-		//ReikaChatHelper.writeInt(this.omega);
-		return (mixTime*par1)/this.getOperationTime();
+	public int getEthanolScaled(int par1) {
+		return (input.getLevel()*par1)/this.getInputCapacity();
+	}
+
+	public int getPressureScaled(int par1) {
+		return (pressure*par1)/MAXPRESSURE;
 	}
 
 	@Override
@@ -109,12 +129,8 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 		this.getPowerBelow();
 		power = (long)omega * (long)torque;
-		if (inv[ingredients.size()+1] != null && tank.getLevel() >= 1000) {
-			if (inv[ingredients.size()+1].getItem() == Items.bucket && inv[ingredients.size()+1].stackSize == 1) {
-				inv[ingredients.size()+1] = ItemStacks.fuelbucket.copy();
-				tank.removeLiquid(1000);
-			}
-		}
+
+		torqueInput.addValue(torque);
 		if (!world.isRemote && this.getTicksExisted()%20 == 0)
 			this.updatePressure(world, x, y, z, meta);
 		this.testIdle();
@@ -131,15 +147,22 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	public void updatePressure(World world, int x, int y, int z, int meta) {
 		int local = pressure;
-		int dp = local-(int)ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
+		double Pamb = ReikaWorldHelper.getAmbientPressureAt(world, x, y, z, false);
+		if (Pamb > 101.3) {
+			Pamb = 101.3+0.02*(Pamb-101.3);
+		}
+		int dp = local-(int)Pamb;
 		int sub = (int)(Math.signum(dp)*Math.max(1, Math.abs(dp/16)));
-		if (torque <= 0)
+
+		int avg = (int)torqueInput.getAverage();
+
+		if (avg <= 0)
 			sub *= 8;//4;
 
 		local -= sub;
 
-		if (torque > 0)
-			local += 1.8*Math.sqrt(torque);
+		if (avg > 0)
+			local += 1.8*Math.sqrt(avg);
 
 		if (local > MAXPRESSURE) {
 			this.overpressure(world, x, y, z);
@@ -171,13 +194,26 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	private void make() {
 		RotaryAchievements.JETFUEL.triggerAchievement(this.getPlacer());
-		for (int i = 0; i < ingredients.size(); i++) {
-			if (DifficultyEffects.CONSUMEFRAC.testChance() && !worldObj.isRemote)
-				ReikaInventoryHelper.decrStack(i, inv);
+		if (!worldObj.isRemote) {
+			float consume = ingredients.size()*DifficultyEffects.CONSUMEFRAC.getChance();
+			WeightedRandom<Integer> wr = new WeightedRandom();
+			for (int i = 0; i < ingredients.size(); i++) {
+				ItemStack is = inv[i];
+				KeyedItemStack ks = key(is);
+				float wt = ingredients.get(ks);
+				wr.addEntry(i, wt);
+			}
+			while (consume > 0) {
+				int slot = wr.getRandomEntry();
+				if (consume >= 1 || ReikaRandomHelper.doWithChance(consume))
+					ReikaInventoryHelper.decrStack(slot, inv);
+				wr.remove(slot);
+				consume -= 1;
+			}
 		}
-		if (DifficultyEffects.FRACTIONTEAR.testChance())
-			ReikaInventoryHelper.decrStack(ingredients.size(), inv);
-		tank.addLiquid((int)(this.getYieldRatio()*DifficultyEffects.PRODUCEFRAC.getInt()), FluidRegistry.getFluid("rc jet fuel"));
+		float amt = 1000*DifficultyEffects.CONSUMEFRAC.getChance();
+		input.removeLiquid((int)amt);
+		output.addLiquid((int)(this.getYieldRatio()*DifficultyEffects.PRODUCEFRAC.getInt()), FluidRegistry.getFluid("rc jet fuel"));
 	}
 
 	public float getYieldRatio() {
@@ -186,31 +222,31 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	private boolean process() {
 		//ReikaJavaLibrary.pConsole(tank.getLevel()+":"+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()*1000)+":"+CAPACITY);
-		if (tank.getLevel()+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()) >= CAPACITY)
+		if (output.getLevel()+(DifficultyEffects.PRODUCEFRAC.getMaxAmount()) >= CAPACITY)
 			return false;
 		if (inv[ingredients.size()] == null)
 			return false;
 		if (inv[ingredients.size()].getItem() != Items.ghast_tear) //need a ghast tear as fuel solvent
 			return false;
-		if (!this.getAllIngredients())
+		if (!this.hasAllIngredients())
 			return false;
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(allitems));
 		return true;
 	}
 
-	private boolean getAllIngredients() {
-		HashSet<KeyedItemStack> check = new HashSet(ingredients);
+	private boolean hasAllIngredients() {
+		HashSet<KeyedItemStack> check = new HashSet(ingredients.keySet());
 		for (int i = 0; i < ingredients.size(); i++) {
 			if (inv[i] == null)
 				return false;
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ingredients[i.getItem, ingredients[i].getItemDamage()));
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", i)+String.valueOf(this.haveIngredient(ingredients[i.getItem, ingredients[i].getItemDamage())));
-			KeyedItemStack ks = new KeyedItemStack(inv[i]).setSimpleHash(true);
+			KeyedItemStack ks = key(inv[i]);
 			if (!check.contains(ks))
 				return false;
 			check.remove(ks);
 		}
-		return true;
+		return input.getLevel() >= 1000*DifficultyEffects.CONSUMEFRAC.getChance();
 	}
 
 	public int getSizeInventory() {
@@ -233,6 +269,23 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 		mixTime = NBT.getInteger("mix");
 
 		pressure = NBT.getInteger("press");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBTTagCompound tag = new NBTTagCompound();
+		torqueInput.writeToNBT(tag);
+		NBT.setTag("torquevals", tag);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		if (NBT.hasKey("torquevals"))
+			torqueInput = MovingAverage.readFromNBT(NBT.getCompoundTag("torquevals"));
 	}
 
 	@Override
@@ -264,9 +317,7 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.getAllIngredients())
-			return 15;
-		return 15*tank.getLevel()/CAPACITY;
+		return (int)(this.getYieldRatio()/yield.getFinalValue()*15);
 	}
 
 	@Override
@@ -275,16 +326,17 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	}
 
 	public int getFuelLevel() {
-		return tank.getLevel();
-	}
-
-	public void setEmpty() {
-		tank.empty();
+		return output.getLevel();
 	}
 
 	@Override
 	public boolean canOutputTo(ForgeDirection to) {
 		return to == ForgeDirection.UP;
+	}
+
+	@Override
+	public int getInputCapacity() {
+		return 16000;
 	}
 
 	@Override
@@ -331,5 +383,25 @@ public class TileEntityFractionator extends InventoriedPowerLiquidProducer imple
 	@Override
 	public void overpressure(World world, int x, int y, int z) {
 
+	}
+
+	@Override
+	public Fluid getInputFluid() {
+		return RotaryCraft.ethanolFluid;
+	}
+
+	@Override
+	public boolean canReceiveFrom(ForgeDirection from) {
+		return from.offsetY == 0;
+	}
+
+	@Override
+	public boolean canIntakeFromPipe(MachineRegistry p) {
+		return this.canOutputToPipe(p);
+	}
+
+	@Override
+	public boolean canOutputToPipe(MachineRegistry p) {
+		return p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE;
 	}
 }

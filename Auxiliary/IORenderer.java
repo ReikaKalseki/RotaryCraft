@@ -1,13 +1,16 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,17 +18,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import Reika.DragonAPI.Libraries.IO.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 
@@ -124,6 +125,23 @@ public abstract class IORenderer {
 					double xdiff = ts.getReadDirection2().offsetX;
 					double zdiff = ts.getReadDirection2().offsetZ;
 					renderIn(par2+xdiff, par4, par6+zdiff, ts.iotick);
+				}
+				return;
+			}
+			if (teb instanceof TileEntityDistributionClutch) {
+				TileEntityDistributionClutch td = (TileEntityDistributionClutch)teb;
+				ForgeDirection read = td.getInputForgeDirection();
+				if (read != null) {
+					renderIn(par2+read.offsetX, par4+read.offsetY, par6+read.offsetZ, te.iotick);
+				}
+				for (int i = 0; i < 4; i++) {
+					ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i+2];
+					if (td.isOutputtingToSide(dir)) {
+						double xdiff = dir.offsetX;
+						double ydiff = dir.offsetY;
+						double zdiff = dir.offsetZ;
+						renderOut(par2+xdiff, par4+ydiff, par6+zdiff, te.iotick);
+					}
 				}
 				return;
 			}

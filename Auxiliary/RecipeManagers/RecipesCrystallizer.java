@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Auxiliary.RecipeManagers;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -19,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.FluidHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
@@ -26,8 +29,10 @@ import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.DragonAPI.ModInteract.RecipeHandlers.SmelteryRecipeHandler;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CrystallizerManager;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -49,6 +54,7 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 		RecipeInterface.crystallizer = this;
 
 		this.addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice), RecipeLevel.CORE);
+		this.addRecipe(FluidRegistry.WATER, 200, new ItemStack(Items.snowball), RecipeLevel.PROTECTED);
 		this.addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.stone), RecipeLevel.PERIPHERAL);
 
 		this.addRecipe("rc ethanol", 1000, ItemRegistry.ETHANOL.getStackOf(), RecipeLevel.PROTECTED);
@@ -79,6 +85,14 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 			return ReikaJavaLibrary.makeListFrom(ReikaFluidHelper.getFluidStackAsItem(input));
 		}
 
+		public ItemStack getOutput() {
+			return output.copy();
+		}
+
+		public FluidStack getFluid() {
+			return input.copy();
+		}
+
 	}
 
 	public void addAPIRecipe(Fluid f, int amount, ItemStack out) {
@@ -97,21 +111,20 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 			this.addRecipe(f, amount, out, rl);
 	}
 
-	public ItemStack getFreezingResult(FluidStack liquid)
-	{
+	public ItemStack getFreezingResult(FluidStack liquid) {
 		Fluid f = liquid.getFluid();
-		CrystallizerRecipe cr = recipeList.get(liquid);
+		CrystallizerRecipe cr = recipeList.getForValue(liquid);
 		if (cr == null)
 			return null;
 		int req = cr.input.amount;
 		if (req > liquid.amount)
 			return null;
-		return recipeList.get(liquid).output.copy();
+		return cr.output.copy();
 	}
 
-	public Fluid getRecipe(ItemStack result) {
-		for (FluidStack f : recipeList.keySet()) {
-			CrystallizerRecipe cr = recipeList.get(f);
+	public CrystallizerRecipe getRecipe(ItemStack result) {
+		for (CrystallizerRecipe cr : recipeList.values()) {
+			/*
 			if (cr == null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
@@ -119,36 +132,26 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 				sb.append("\nReport this to Reika!");
 				throw new IllegalStateException(sb.toString());
 			}
+			 */
 			if (ReikaItemHelper.matchStacks(result, cr.output))
-				return f.getFluid();
+				return cr;
 		}
 		return null;
 	}
 
 	public int getRecipeConsumption(ItemStack result) {
-		for (FluidStack f : recipeList.keySet()) {
-			CrystallizerRecipe cr = recipeList.get(f);
-			if (cr == null) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Looking up recipe for "+result+": "+ReikaFluidHelper.fluidStackToString(f)+", despite being in the keyset of the map, returned null on get()!");
-				sb.append("\nMap data: "+recipeList.toString());
-				sb.append("\nReport this to Reika!");
-				throw new IllegalStateException(sb.toString());
-			}
-			if (ReikaItemHelper.matchStacks(result, cr.output))
-				return cr.input.amount;
-		}
-		return 0;
+		CrystallizerRecipe cr = this.getRecipe(result);
+		return cr != null ? cr.input.amount : 0;
 	}
 
 	public boolean isValidFluid(Fluid f) {
 		return recipeList.containsKey(f);
 	}
 
-	public Collection<Fluid> getAllRecipes() {
-		HashSet<Fluid> c = new HashSet();
+	public Collection<CrystallizerRecipe> getAllRecipes() {
+		HashSet<CrystallizerRecipe> c = new HashSet();
 		for (CrystallizerRecipe cr : recipeList.values()) {
-			c.add(cr.input.getFluid());
+			c.add(cr);
 		}
 		return c;
 	}
@@ -168,11 +171,47 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 					if (ReikaItemHelper.matchStacks(cast, TinkerToolHandler.getInstance().getIngotCast())) {
 						ItemStack out = SmelteryRecipeHandler.getRecipeOutput(o);
 						FluidStack fs = SmelteryRecipeHandler.getRecipeFluid(o);
+
+						if (ModList.IC2.isLoaded() && fs.getFluid().getName().toLowerCase(Locale.ENGLISH).equals("steel.molten")) { //prevent steel -> refined iron
+							out = getNonRefinedIronSteel(out);
+						}
+
 						this.addRecipe(fs.getFluid(), fs.amount, out, RecipeLevel.MODINTERACT);
 					}
 				}
 			}
 		}
+	}
+
+	public static ItemStack getNonRefinedIronSteel(ItemStack out) {
+		ItemStack refiron = IC2Handler.IC2Stacks.REFINEDIRON.getItem();
+		ItemStack refblock = ReikaItemHelper.lookupItem("IC2:blockMetal:5");
+		if (ReikaItemHelper.matchStacks(refiron, out) || ReikaItemHelper.matchStacks(refblock, out)) {
+			RotaryCraft.logger.log("Handling steel casting to refined iron, finding alternate.");
+			String tag = null;
+			int[] ids = OreDictionary.getOreIDs(out);
+			for (int id : ids) {
+				String s = OreDictionary.getOreName(id);
+				if (s.toLowerCase(Locale.ENGLISH).contains("steel")) {
+					tag = s;
+					break;
+				}
+			}
+			RotaryCraft.logger.log("OreDict tag is '"+tag+"'.");
+			if (tag == null)
+				return out;
+			List<ItemStack> ingots = OreDictionary.getOres(tag);
+			if (ingots.size() > 1) {
+				for (ItemStack ing : ingots) {
+					if (!ReikaItemHelper.matchStacks(refiron, ing) && !ReikaItemHelper.matchStacks(refblock, ing)) {
+						out = ReikaItemHelper.getSizedItemStack(ing, out.stackSize);
+						RotaryCraft.logger.log("Converting to "+out+" ("+fullID(out)+")");
+						break;
+					}
+				}
+			}
+		}
+		return out;
 	}
 
 	@Override
@@ -181,7 +220,7 @@ public class RecipesCrystallizer extends RecipeHandler implements CrystallizerMa
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
 		String fluid = lb.getString("input_fluid");

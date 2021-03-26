@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,15 +13,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 
-import net.minecraft.item.Item;
+import com.google.common.collect.HashBiMap;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap.CollectionType;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient.IngredientIDHandler;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveFluidRegistry;
 import Reika.DragonAPI.ModInteract.DeepInteract.SensitiveItemRegistry;
@@ -32,13 +37,11 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-import com.google.common.collect.HashBiMap;
-
-public abstract class RecipeHandler {
+public abstract class RecipeHandler implements IngredientIDHandler {
 
 	private static final boolean enableRegistries = ConfigRegistry.RECIPEMOD.getState();
 
-	private final MultiMap<RecipeLevel, String> recipesByLevel = new MultiMap(new MultiMap.HashSetFactory());
+	private final MultiMap<RecipeLevel, String> recipesByLevel = new MultiMap(CollectionType.HASHSET);
 	private final HashMap<String, RecipeLevel> recipeLevels = new HashMap();
 
 	private final HashBiMap<MachineRecipe, String> recipeKeys = HashBiMap.create();
@@ -53,21 +56,23 @@ public abstract class RecipeHandler {
 		if (enableRegistries) {
 			String s = recipeKeys.get(recipe);
 			if (s == null) {
-				this.generateKey(recipe);
+				s = this.generateKey(recipe);
 			}
+			if (s == null)
+				return;
 			recipesByLevel.addValue(rl, s);
 			recipeLevels.put(s, rl);
 		}
 	}
 
-	private void generateKey(MachineRecipe recipe) {
+	private String generateKey(MachineRecipe recipe) {
 		String s = machine.name()+"$"+recipe.getClass().getSimpleName()+"#("+recipe.getUniqueID();
 		if (RotaryCraft.logger.shouldDebug())
 			ReikaJavaLibrary.pConsole("Recipe Loaded: "+recipe+"="+s);
 		if (recipeKeys.containsValue(s)) {
 			MachineRecipe pre = recipeKeys.inverse().get(s);
 			if (pre == null || pre.equals(recipe)) {
-				return; //do nothing
+				return null; //do nothing
 			}
 			else {
 				RotaryCraft.logger.logError("Found duplicate recipe key when adding recipe "+recipe.getAllInfo()+" in place of "+pre.getAllInfo());
@@ -83,12 +88,17 @@ public abstract class RecipeHandler {
 			}
 		}
 		recipeKeys.put(recipe, s);
+		return s;
+	}
+
+	public final String fullIDForItems(Collection<KeyedItemStack> c) {
+		return this.fullIDKeys(c);
 	}
 
 	protected static final String fullIDKeys(Collection<KeyedItemStack> c) {
 		StringBuilder sb = new StringBuilder();
 		for (KeyedItemStack is : c) {
-			sb.append(fullID(is.getItemStack()));
+			sb.append(CustomRecipeList.fullID(is.getItemStack()));
 			sb.append("|");
 		}
 		return sb.toString();
@@ -97,18 +107,14 @@ public abstract class RecipeHandler {
 	protected static final String fullID(Collection<ItemStack> c) {
 		StringBuilder sb = new StringBuilder();
 		for (ItemStack is : c) {
-			sb.append(fullID(is));
+			sb.append(CustomRecipeList.fullID(is));
 			sb.append("|");
 		}
 		return sb.toString();
 	}
 
 	protected static final String fullID(ItemStack is) {
-		if (is == null)
-			return "[null]";
-		else if (is.getItem() == null)
-			return "[null-item stack]";
-		return is.stackSize+"x"+Item.itemRegistry.getNameForObject(is.getItem())+"@"+is.getItemDamage()+"{"+is.stackTagCompound+"}["+ReikaItemHelper.getRegistrantMod(is)+"]";
+		return CustomRecipeList.fullID(is);
 	}
 
 	protected final Collection getRecipes(RecipeLevel rl) {
@@ -129,9 +135,10 @@ public abstract class RecipeHandler {
 				return false;
 			}
 			try {
-				if (this.removeRecipe(rec)) {
+				if (this.removeRecipe(recipe)) {
 					recipesByLevel.remove(rl, rec);
 					recipeLevels.remove(rec);
+					recipeKeys.remove(recipe);
 					return true;
 				}
 				else {
@@ -225,30 +232,34 @@ public abstract class RecipeHandler {
 
 	public final void loadCustomRecipeFiles() {
 		CustomRecipeList crl = new CustomRecipeList(RotaryCraft.instance, machine.name().toLowerCase(Locale.ENGLISH));
-		crl.addFieldLookup("rotarycraft_stack", ItemStacks.class);
 		crl.load();
 		for (LuaBlock lb : crl.getEntries()) {
 			Exception e = null;
 			boolean flag = false;
+			String n = lb.getString("type");
 			try {
-				flag = this.addCustomRecipe(lb, crl);
+				if (LuaBlock.isErrorCode(n))
+					throw new IllegalArgumentException("Custom recipes require a specified name!");
+				if (!ReikaStringParser.isValidVariableName(n))
+					throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
+				flag = this.addCustomRecipe(n, lb, crl);
 			}
 			catch (Exception ex) {
 				e = ex;
 				flag = false;
 			}
 			if (flag) {
-				RotaryCraft.logger.log("Loaded custom recipe '"+lb.getString("type")+"' for "+machine.name()+"");
+				RotaryCraft.logger.log("Loaded custom recipe '"+n+"' for "+machine.name()+"");
 			}
 			else {
-				RotaryCraft.logger.logError("Could not load custom recipe '"+lb.getString("type")+"' for "+machine.name()+"");
+				RotaryCraft.logger.logError("Could not load custom recipe '"+n+"' for "+machine.name()+"");
 				if (e != null)
 					e.printStackTrace();
 			}
 		}
 	}
 
-	protected abstract boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception;
+	protected abstract boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception;
 
 	protected final void verifyOutputItem(ItemStack is) {
 		if (is.getItem() instanceof ItemBlockPlacer || is.getItem() == ItemRegistry.ETHANOL.getItemInstance())

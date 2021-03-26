@@ -1,13 +1,15 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -20,19 +22,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import org.lwjgl.opengl.GL11;
-
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.ItemMachineRenderer;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -186,7 +188,7 @@ public class RightClickHandler extends TemplateRecipeHandler {
 		DISPLAYSET(MachineRegistry.DISPLAY, Items.written_book, "Sets Text"),
 		REPAIRMIRROR(MachineRegistry.MIRROR, ItemStacks.mirror, "Repairs Mirror"),
 		REPAIRSHAFT(MachineRegistry.SHAFT, MaterialRegistry.STEEL.getShaftItem(), ItemStacks.shaftitem, "Repairs Shaft"),
-		REPAIRGEAR(MachineRegistry.GEARBOX, MaterialRegistry.STEEL.getGearboxItem(4), ItemStacks.gearunit, "Repairs Gearbox"),
+		REPAIRGEAR(MachineRegistry.GEARBOX, GearboxTypes.STEEL.getGearboxItem(4), ItemStacks.gearunit, "Repairs Gearbox"),
 		REPAIRJET(MachineRegistry.ENGINE, EngineType.JET.getCraftedProduct(), ItemStacks.compoundturb, "Repairs Engine"),
 		PNEU1(MachineRegistry.PNEUENGINE, ItemStacks.impeller, "Upgrades To Tier 1"),
 		PNEU2(MachineRegistry.PNEUENGINE, ItemStacks.turbine, "Upgrades To Tier 2"),

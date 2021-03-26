@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
 import Reika.DragonAPI.Instantiable.MusicScore;
 import Reika.DragonAPI.Interfaces.Item.MusicDataItem;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;

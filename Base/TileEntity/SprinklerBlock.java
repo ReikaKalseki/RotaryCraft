@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,8 +15,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
 import Reika.DragonAPI.Instantiable.StepTimer;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.ModInteract.AtmosphereHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -45,7 +46,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 					int toremove = tile.getFluidLevel()/4+1;
 					int toadd = Math.min(toremove, this.getCapacity()-liquid);
 					tile.removeLiquid(toadd);
-					liquid = ReikaMathLibrary.extrema(liquid+toadd, 0, "max");
+					liquid = Math.max(liquid+toadd, 0);
 				}
 				pressure = tile.getPressure();
 			}
@@ -64,7 +65,7 @@ public abstract class SprinklerBlock extends RotaryCraftTileEntity implements Pi
 	public final void updateEntity(World world, int x, int y, int z, int meta) {
 		this.getLiq(world, x, y, z, meta);
 
-		if (this.canPerformEffects()) {
+		if (this.canPerformEffects() && !AtmosphereHandler.isNoAtmo(world, x, y+1, z, blockType, false)) {
 			this.performEffects(world, x, y, z);
 			soundTimer.update();
 			if (soundTimer.checkCap()) {

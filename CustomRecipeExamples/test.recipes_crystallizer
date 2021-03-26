@@ -1,0 +1,12 @@
+{
+	type = "test1"
+	input_fluid = "chroma"
+	input_amount = 220
+	output = "minecraft:brick*17"
+}
+{
+	type = "test2"
+	input_fluid = "chroma"
+	input_amount = 130
+	output = "minecraft:brick*22"
+}

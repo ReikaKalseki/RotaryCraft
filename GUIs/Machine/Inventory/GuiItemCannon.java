@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,6 +14,7 @@ import java.io.DataOutputStream;
 
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -100,7 +101,7 @@ public class GuiItemCannon extends GuiPowerOnlyMachine
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-			outputStream.writeInt(PacketRegistry.ITEMCANNON.getMinValue());
+			outputStream.writeInt(PacketRegistry.ITEMCANNON.ordinal());
 			outputStream.writeInt(target.dimensionID);
 			outputStream.writeInt(target.xCoord);
 			outputStream.writeInt(target.yCoord);

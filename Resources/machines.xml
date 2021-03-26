@@ -200,7 +200,7 @@
 	</firework>
 	<fractionator>
 		<desc>
-			The fractionator distills various items and refines them into jet fuel for use in some of the engines and machines. Jet fuel requires tar, netherrack dust, coal, blaze powder, ethanol, and magma cream. Additionally, ghast tears are used as a solvent, but are not consumed like the other items. Fuel lines connect only to the top of this machine.
+			The fractionator distills various items and refines them into jet fuel for use in some of the engines and machines. Jet fuel requires tar, netherrack dust, coal dust, blaze powder, dye, and magma cream. Additionally, liquid ethanol is used as a base, and ghast tears are used as a catalyst, but are not consumed like the other items. Fuel lines connect only to the top of this machine.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -232,7 +232,7 @@
 	</heater>
 	<obsidian>
 		<desc>
-			The obsidian factory will mix piped-in water and lava to produce obsidian. Be careful; if the machine is left full of only lava too long, it will start to overheat and will eventually melt.
+			The obsidian factory will mix piped-in water and lava to produce obsidian. Be careful; if the machine is left full of only lava too long, it will start to overheat and will eventually melt. Its ability to produce obsidian is temperature-dependent; too hot or cold and it will produce increasingly large amounts of stone or cobblestone instead.
 		</desc>
 		<note>
 			Required Power: %dW
@@ -453,7 +453,8 @@
 			The liquid spiller is designed to fill a depression with liquid piped into it. Each bucket worth pumped in equates to one placed liquid block. It will fill the lowest layers first.
 		</desc>
 		<note>
-			Required Power: %dW
+			Base Required Power: %dW
+			Rises with increased fluid viscosity
 			Power Input: Any side
 			
 			Requires piped liquid to operate
@@ -643,35 +644,6 @@
 			Required to craft any machines
 		</note>
 	</worktable>
-	<compressor>
-		<desc>
-			The air compressor converts shaft power into pressurized air, which can be carried out via conductive piping to BuildCraft machines. If given excessive amounts of power, it can and will explode. Violently.
-		</desc>
-		<note>
-			Maximum pressure before detonation: %d kPa
-			Orientation and Output: Like BuildCraft engines
-			Power Input: Back
-		</note>
-	</compressor>
-	<pneuengine>
-		<desc>
-			The pneumatic engine uses a turbine to convert pressurized air from PneumaticCraft pipes into shaft power. Use its GUI to choose the speed output. Higher power outputs will require more air pressure and airflow.
-		</desc>
-		<note>
-			<sub>
-				<s1>
-					Air Pipe Input: Back
-
-					Overheats at: %dC
-
-					Tiered from 0 to 5; each tier increases power output but decreases efficiency
-				</s1>
-				<s2>
-					%s
-				</s2>
-			</sub>
-		</note>
-	</pneuengine>
 	<liquidconverter>
 		<desc>
 			The pressure balancer is used to safely connect pressurized hoses, pipes and fuel lines with standard liquid conduits.
@@ -747,33 +719,6 @@
 			Range: 10+2*log_2(torque) m
 		</note>
 	</arrowgun>
-	<boiler>
-		<desc>
-			The friction boiler uses shaft power to heat water pumped into it. When boiled, the water can be drawn out the top of the boiler as steam. This machine has a warm-up period before which it will not make steam. Note that this machine can overheat and violently fail.
-		</desc>
-		<note>
-			Power Input: Bottom
-		</note>
-	</boiler>
-	<steamturbine>
-		<desc>
-			The steam turbine takes in steam from any pipe or tank behind it and generates shaft power. Use the GUI to select the power usage (and steam consumption).
-		</desc>
-		<note>
-			<sub>
-				<s1>
-					Steam Input: Back
-
-					Overheats at: %dC
-
-					Tiered from 0 to 5; each tier increases power output but decreases efficiency
-				</s1>
-				<s2>
-					%s
-				</s2>
-			</sub>
-		</note>
-	</steamturbine>
 	<beammirror>
 		<desc>
 			The beam mirror reflects the sun's rays into a horizontal beam, thus allowing you to use natural light to illuminate long tunnels without consuming power. This also doubles as an anti-undead system, as the reflected light is still capable of lighting zombies, skeletons, and similar on fire.
@@ -786,7 +731,7 @@
 	</beammirror>
 	<fertilizer>
 		<desc>
-			The fertilizer, when given apatite or bonemeal, can accelerate the growth of nearby crops, saplings, and other plants. To dissolve the fertilizer, this machine requires liquid water.
+			The fertilizer, when given bonemeal or apatite-based fertilizer, can accelerate the growth of nearby crops, saplings, and other plants. To dissolve the fertilizer, this machine requires liquid water.
 		</desc>
 		<note>
 			Power Input: Bottom
@@ -802,34 +747,6 @@
 			Power Input: Bottom
 		</note>
 	</lavamaker>
-	<generator>
-		<desc>
-			The electric generator takes in shaft power and produces IC2 electrical power at a rate of %.0f W/EU. The total power output as well as EU packet size scales with the amount of power going in.
-		</desc>
-		<note>
-			Power Input: Back
-			If "Hard EU" config is on, requires IC2 coolant or liquid nitrogen
-		</note>
-	</generator>
-	<electricmotor>
-		<desc>
-			The electric motor uses IC2 electrical power to produce shaft power. Use its GUI to choose the speed output. Higher power outputs will require more electrical power and a higher supply voltage.
-		</desc>
-		<note>
-			<sub>
-				<s1>
-					Wire Connection: Back
-
-					Overheats at: %dC, and if "Hard EU" is enabled, will explode if overloaded with EU voltage
-
-					Tiered from 0 to 5; each tier increases power output but decreases efficiency
-				</s1>
-				<s2>
-					%s
-				</s2>
-			</sub>
-		</note>
-	</electricmotor>
 	<hose>
 		<desc>
 			These actually carry the canola oil lubricant from the grinder to the gearboxes. The transmission is done automatically, and they will connect to any grinder or gearbox automatically as well.
@@ -890,16 +807,6 @@
 			Power Input: Bottom
 		</note>
 	</aggregator>
-	<fuelengine>
-		<desc>
-			The fuel-powered engine runs off of BuildCraft fuel to produce shaft power. It performs similarly to that mod's combustion engines in terms of power output. It requires both lubricant and water cooling, and it will decelerate as it overheats.
-		</desc>
-		<note>
-			Torque Produced: %d Nm
-			Rotational Speed: %d rad/s
-			Power Produced: %dW
-		</note>
-	</fuelengine>
 	<airgun>
 		<desc>
 			The air pressure gun is basically a machine-mounted and upgraded Knockback Gun. It uses the input power to build air pressure, and when a mob approaches, it will send that mob flying backwards at a high velocity.
@@ -982,34 +889,6 @@
 		<note>
 		</note>
 	</suction>
-	<dynamo>
-		<desc>
-			The rotational dynamo converts RotaryCraft power into ThermalExpansion redstone flux. Due to the limitations imposed by the internal magnetic fields, it can take a maximum of %d Nm of torque (%d Nm if upgraded) at a maximum of %d rad/s. Any excess, while not dangerous, will be wasted.
-		</desc>
-		<note>
-			Orientation and Output: Like ThermalExpansion Dynamos
-			Power Input: Back
-		</note>
-	</dynamo>
-	<magnetic>
-		<desc>
-			The magnetostatic engine functions much like the pneumatic engine. It accepts RF provided to it, and its output speed can be selected to choose the total power output. Like all other conversion engines, it requires coolant.
-		</desc>
-		<note>
-			<sub>
-				<s1>
-					Conduit Input: Back
-
-					Overheats at: %dC
-
-					Tiered from 0 to 5; each tier increases power output but decreases efficiency
-				</s1>
-				<s2>
-					%s
-				</s2>
-			</sub>
-		</note>
-	</magnetic>
 	<crystallizer>
 		<desc>
 			The fluid crystallizer freezes fluids. Note that it must therefore be colder than the fluid's freezing point.
@@ -1029,7 +908,7 @@
 	</particle>
 	<lawnsprinkler>
 		<desc>
-			The ground sprinkler is a ground-mounted variety of the overheat sprinkler, and can put out fire, hydrate farmland, and increase the growth rate of crops. Due to the higher water volume it consumes, it is more effective than its ceiling variety. Note that high water pressures can be dangerous.
+			The ground sprinkler is a ground-mounted variety of the overhead sprinkler, and can put out fire, hydrate farmland, and increase the growth rate of crops. Due to the higher water volume it consumes, it is more effective than its ceiling variety. Note that high water pressures can be dangerous.
 		</desc>
 		<note>
 		</note>
@@ -1081,7 +960,7 @@
 			Power Input: Bottom
 			Required Power: %dW
 			Required Torque: %d Nm
-			Storage Capacity: f*10^(0.5*log_2(torque))/40 mB, f = 1 for liquids and 8 for gases
+			Storage Capacity: f*10^(log_2(torque)/2)/40 mB, f = 1 for liquids and 8 for gases
 		</note>
 	</gastank>
 	<crafter>
@@ -1217,22 +1096,14 @@
 			Can run on ethanol or jet fuel; the latter burns hotter and more damagingly
 		</note>
 	</flameturret>
-	<name>
+	<bundledbus>
 		<desc>
-			
+			The bundled signal extractor is a 16-in-1 export bus, controllable with ProjectRed-style bundled cable. This is particularly useful with computer control, as it can in the space of one block dynamically export up to 16 item types into a processing machine.
 		</desc>
 		<note>
-			
+			Each kW of power activates one additional channel
 		</note>
-	</name>
-	<name>
-		<desc>
-			
-		</desc>
-		<note>
-			
-		</note>
-	</name>
+	</bundledbus>
 	<name>
 		<desc>
 			

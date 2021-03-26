@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Containers.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.RotaryCraft.TileEntities.TileEntityItemFilter;
 

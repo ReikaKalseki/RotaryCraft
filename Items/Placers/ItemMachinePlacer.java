@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,8 @@ package Reika.RotaryCraft.Items.Placers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,8 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Interfaces.TileEntity.PlaceNotification;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
@@ -33,6 +34,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.ClientProxy;
 import Reika.RotaryCraft.ItemMachineRenderer;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.TutorialTracker;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -42,6 +44,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -51,6 +54,7 @@ import Reika.RotaryCraft.Registry.PowerReceivers;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityScaleableChest;
 import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -58,6 +62,12 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 
 	public ItemMachinePlacer() {
 		super();
+	}
+
+	@Override
+	public CreativeTabs[] getCreativeTabs()
+	{
+		return new CreativeTabs[]{ RotaryCraft.tabRotary, RotaryCraft.tabPower };
 	}
 
 	@Override
@@ -110,7 +120,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			((PlaceNotification)te).onPlaced();
 		if (te instanceof EnchantableMachine) {
 			EnchantableMachine e = (EnchantableMachine)te;
-			e.applyEnchants(is);
+			e.getEnchantmentHandler().applyEnchants(is);
 		}
 		if (te instanceof EnergyToPowerBase) {
 			((EnergyToPowerBase)te).setDataFromItemStackTag(is.stackTagCompound);
@@ -129,16 +139,8 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (m == MachineRegistry.GPR) {
 			TileEntityGPR tile = (TileEntityGPR)te;
-			switch (RotaryAux.get2SidedMetadataFromPlayerLook(ep)) {
-				case 0:
-				case 2:
-					tile.xdir = true;
-					break;
-				case 1:
-				case 3:
-					tile.xdir = false;
-					break;
-			}
+			int vside = RotaryAux.get2SidedMetadataFromPlayerLook(ep);
+			tile.setDirection(vside == 0 || vside == 2);
 			world.setBlockMetadataWithNotify(x, y, z, BlockGPR.getBiomeDesign(world, x, y, z), 3);
 			return true;
 		}
@@ -190,6 +192,11 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			}
 			return true;
 		}
+
+		if (m.isPipe()) {
+			((TileEntityPiping)world.getTileEntity(x, y, z)).onPlacedAgainst(ForgeDirection.VALID_DIRECTIONS[side].getOpposite());
+		}
+
 		if (m.hasModel()) {
 			if (m.is6Sided())
 				te.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
@@ -218,6 +225,7 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 			if (m.isZFlipped()) {
 				RotaryAux.flipZMetadatas(world.getTileEntity(x, y, z));
 			}
+
 		}
 		return true;
 	}
@@ -231,18 +239,20 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 				ItemMachineRenderer ir = ClientProxy.machineItems;
 				TileEntity te = m.createTEInstanceForRender(0);
 				ItemStack item = m.getCraftedProduct();
-				if (m.hasNBTVariants()) {
-					ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
-					if (li.isEmpty())
-						li.add(new NBTTagCompound());
-					for (NBTTagCompound NBT : li) {
-						ItemStack is = m.getCraftedProduct();
-						is.stackTagCompound = NBT;
-						par3List.add(is);
+				if (m.isCreativeTabValid(par2CreativeTabs)) {
+					if (m.hasNBTVariants()) {
+						ArrayList<NBTTagCompound> li = ((NBTMachine)te).getCreativeModeVariants();
+						if (li.isEmpty())
+							li.add(new NBTTagCompound());
+						for (NBTTagCompound NBT : li) {
+							ItemStack is = m.getCraftedProduct();
+							is.stackTagCompound = NBT;
+							par3List.add(is);
+						}
 					}
-				}
-				else {
-					par3List.add(item);
+					else {
+						par3List.add(item);
+					}
 				}
 			}
 		}

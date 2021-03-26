@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -34,12 +35,14 @@ import Reika.DragonAPI.Instantiable.ModInteract.BasicAEInterface;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.MESystemReader;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import appeng.api.AEApi;
 import appeng.api.networking.IGridBlock;
 import appeng.api.networking.IGridNode;
@@ -49,7 +52,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Strippable(value={"appeng.api.networking.IActionHost"})
+@Strippable(value={"appeng.api.networking.security.IActionHost"})
 public class TileEntityItemFilter extends InventoriedPowerReceiver implements IActionHost {
 
 	private static final String LOGGER_ID = "ItemFilter";
@@ -125,7 +128,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	}
 
 	public void reloadData() {
-		data = inv[0] != null ? new MatchData(inv[0]).loadFrom(data) : null;
+		this.setData(inv[0] != null ? new MatchData(inv[0]).loadFrom(data) : null);
 	}
 
 	@Override
@@ -155,13 +158,14 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				((BasicAEInterface)aeGridBlock).setPowerCost(power >= MINPOWER ? 2 : 1);
 			}
 
-			if (network != null && !world.isRemote && inv[1] == null && !MEStacks.isEmpty() && data != null) {
+			if (!world.isRemote && network != null && data != null && inv[1] == null && !MEStacks.isEmpty()) {
 				int idx = rand.nextInt(MEStacks.size());
 				ItemStack is = MEStacks.get(idx);
 				is = ReikaItemHelper.getSizedItemStack(is, is.getMaxStackSize());
 				int ret = (int)network.removeItem(is, false, true);
 				if (ret > 0) {
 					inv[1] = ReikaItemHelper.getSizedItemStack(is, ret);
+					MEStacks.remove(idx);
 				}
 			}
 		}
@@ -221,6 +225,8 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 	public void setData(MatchData dat) {
 		data = dat;
+		MEStacks.clear();
+		updateTimer.setTick(updateTimer.getCap()+2);
 	}
 
 	@Override
@@ -358,6 +364,9 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				matchMetadata = data.matchMetadata;
 				matchMod = data.matchMod;
 				doCheckNBT = data.doCheckNBT;
+				doCheckOre = data.doCheckOre;
+				matchClass.clear();
+				matchClass.putAll(data.matchClass);
 			}
 			return this;
 		}
@@ -639,11 +648,11 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 				MatchType m = matchClass.get(s+c1.getSimpleName());
 				if (!m.check(c1 == c2))
 					return false;
-				Class[] ints1 = c1.getInterfaces();
-				Class[] ints2 = c2.getInterfaces();
-				for (int i = 0; i < ints1.length; i++) {
-					m = matchClass.get(s+"%"+ints1[i].getSimpleName());
-					if (!m.check(ints1[i] == ints2[i]))
+				HashSet<Class> ints1 = ReikaJavaLibrary.makeSetFromArray(c1.getInterfaces());
+				HashSet<Class> ints2 = ReikaJavaLibrary.makeSetFromArray(c2.getInterfaces());
+				for (Class c : ints1) {
+					m = matchClass.get(s+"%"+c.getSimpleName());
+					if (!m.check(ints2.contains(c)))
 						return false;
 				}
 				c1 = c1.getSuperclass();

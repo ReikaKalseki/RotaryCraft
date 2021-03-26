@@ -10,6 +10,7 @@
 package Reika.RotaryCraft.Containers.Machine.Inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.RotaryCraft.Base.ContainerIOMachine;
 import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
 

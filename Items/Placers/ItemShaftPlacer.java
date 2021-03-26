@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,8 @@
 package Reika.RotaryCraft.Items.Placers;
 
 import java.util.List;
+
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,21 +21,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import org.lwjgl.input.Keyboard;
-
-import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.RotaryNames;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -41,6 +39,7 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 
 	public ItemShaftPlacer() {
 		super();
+		this.setCreativeTab(RotaryCraft.tabPower);
 	}
 
 	@Override
@@ -69,30 +68,26 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 			return false;
 		if (!ep.canPlayerEdit(x, y, z, 0, is))
 			return false;
-		else
-		{
+		else {
 			if (!ep.capabilities.isCreativeMode)
 				--is.stackSize;
 			world.setBlock(x, y, z, MachineRegistry.SHAFT.getBlock(), is.getItemDamage(), 3);
-			if (is.getItemDamage() == ItemStacks.shaftcross.getItemDamage()) {
-				TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
-				if (sha != null) {
-					//sha.type = MaterialRegistry.STEEL;
-					sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
-				}
-				return true;
-			}
 			TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
 			if (sha != null) {
+				boolean cross = RotaryAux.isShaftCross(is);
+				sha.setMaterialFromItem(is);
+				if (cross) {
+					sha.setBlockMetadata(6+RotaryAux.get4SidedMetadataFromPlayerLook(ep));
+				}
+				else {
+					sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
+				}
+				sha.setPlacer(ep);
 				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "step.stone", 1F, 1.5F);
-				//sha.type = MaterialRegistry.setType(is.getItemDamage());
+				if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
+					sha.isFlipped = true;
+				}
 			}
-		}
-		TileEntityShaft sha = (TileEntityShaft)world.getTileEntity(x, y, z);
-		sha.setBlockMetadata(RotaryAux.get6SidedMetadataFromPlayerLook(ep));
-		sha.setPlacer(ep);
-		if (RotaryAux.shouldSetFlipped(world, x, y, z)) {
-			sha.isFlipped = true;
 		}
 		return true;
 	}
@@ -101,39 +96,39 @@ public class ItemShaftPlacer extends ItemBlockPlacer {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item id, CreativeTabs tab, List list) {
 		if (MachineRegistry.SHAFT.isAvailableInCreativeInventory()) {
-			for (int i = 0; i < RotaryNames.getNumberShaftTypes(); i++) {
-				ItemStack item = new ItemStack(id, 1, i);
-				list.add(item);
+			for (int i = 0; i < MaterialRegistry.matList.length; i++) {
+				list.add(MaterialRegistry.matList[i].getShaftItem());
 			}
+			list.add(RotaryAux.getShaftCrossItem());
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean verbose) {
-		int i = is.getItemDamage();
-		if (i < MaterialRegistry.matList.length) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				MaterialRegistry mat = MaterialRegistry.matList[i];
-				double torque = mat.getMaxShaftTorque();
-				double speed = mat.getMaxShaftSpeed();
-				li.add(String.format("Max Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(speed), ReikaEngLibrary.getSIPrefix(speed)));
-				li.add(String.format("Max Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(torque), ReikaEngLibrary.getSIPrefix(torque)));
-			}
-			else {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Hold ");
-				sb.append(EnumChatFormatting.GREEN.toString());
-				sb.append("Shift");
-				sb.append(EnumChatFormatting.GRAY.toString());
-				sb.append(" for load data");
-				li.add(sb.toString());
-			}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			MaterialRegistry mat = MaterialRegistry.getMaterialFromShaftItem(is);
+			double torque = mat.getLimits().maxTorque;
+			double speed = mat.getLimits().maxSpeed;
+			li.add(String.format("Max Speed: %s", RotaryAux.formatSpeed(speed)));
+			li.add(String.format("Max Torque: %s", RotaryAux.formatTorque(torque)));
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Hold ");
+			sb.append(EnumChatFormatting.GREEN.toString());
+			sb.append("Shift");
+			sb.append(EnumChatFormatting.GRAY.toString());
+			sb.append(" for load data");
+			li.add(sb.toString());
 		}
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack is) {
-		return ItemRegistry.getEntry(is).getMultiValuedName(is.getItemDamage());
+		if (RotaryAux.isShaftCross(is))
+			return StatCollector.translateToLocal("shaft.cross");
+		MaterialRegistry type = MaterialRegistry.getMaterialFromShaftItem(is);
+		return type != null ? StatCollector.translateToLocal(type.getShaftUnlocName())+" "+MachineRegistry.SHAFT.getName() : "Shaft";
 	}
 }

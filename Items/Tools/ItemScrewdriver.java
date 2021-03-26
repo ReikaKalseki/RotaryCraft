@@ -1,19 +1,16 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Items.Tools;
 
-import ic2.api.tile.IWrenchable;
+import com.carpentersblocks.api.ICarpentersHammer;
 
-import java.util.ArrayList;
-
-import mrtjp.projectred.api.IScrewdriver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneDiode;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,9 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import powercrystals.minefactoryreloaded.api.IMFRHammer;
-import santa.api.interfaces.wrench.IWrench;
-import Reika.DragonAPI.ModList;
+
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
@@ -53,16 +48,20 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityClutch;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityFlywheel;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityTNTCannon;
 import Reika.RotaryCraft.TileEntities.World.TileEntityFloodlight;
+
 import binnie.extratrees.api.IToolHammer;
 import buildcraft.api.tools.IToolWrench;
-
-import com.carpentersblocks.api.ICarpentersHammer;
+import cofh.api.tileentity.IReconfigurableFacing;
+import mrtjp.projectred.api.IScrewdriver;
+import powercrystals.minefactoryreloaded.api.IMFRHammer;
+import santa.api.interfaces.wrench.IWrench;
 @Strippable(value = {"buildcraft.api.tools.IToolWrench", "mrtjp.projectred.api.IScrewdriver", "binnie.extratrees.api.IToolHammer",
 		"powercrystals.minefactoryreloaded.api.IMFRHammer", "santa.api.interfaces.wrench.IWrench", "com.carpentersblocks.api.ICarpentersHammer",
 "com.bluepowermod.api.misc.IScrewdriver"})
@@ -104,7 +103,7 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 		TileEntity te = world.getTileEntity(x, y, z);
 		return !(te instanceof RotaryCraftTileEntity || te instanceof Screwdriverable);
 	}
-
+	/* causes issues
 	@Override
 	public boolean onItemUseFirst(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10)
 	{
@@ -122,17 +121,17 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 							ArrayList<ItemStack> li = world.getBlock(x, y, z).getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 							ReikaItemHelper.dropItems(world, x+0.5, y+0.5, z+0.5, li);
 						}
+						return true;
 					}
-					return true;
 				}
 			}
 		}
 		Block b = world.getBlock(x, y, z);
-		if (!ep.isSneaking() && b.rotateBlock(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[s])) {
+		if (!world.isRemote && !ep.isSneaking() && b.rotateBlock(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[s])) {
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float par8, float par9, float par10) {
@@ -247,6 +246,13 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 					return true;
 				}
 			}
+			if (m == MachineRegistry.DISTRIBCLUTCH) {
+				if (ep.isSneaking()) {
+					TileEntityDistributionClutch tc = (TileEntityDistributionClutch)te;
+					tc.stepMode();
+					return true;
+				}
+			}
 			if (m == MachineRegistry.FAN) {
 				if (ep.isSneaking()) {
 					TileEntityFan tf = (TileEntityFan)te;
@@ -317,10 +323,7 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 			if (m == MachineRegistry.GPR) {
 				TileEntityGPR clicked = (TileEntityGPR)te;
 				if (clicked != null) {
-					if (clicked.xdir)
-						clicked.xdir = false;
-					else
-						clicked.xdir = true;
+					clicked.flipDirection();
 					return true;
 				}
 			}
@@ -429,6 +432,8 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 						world.setBlockMetadataWithNotify(x, y, z, 0, 3);
 					}
 				}
+				if (InterfaceCache.RECONFIGURABLEFACE.instanceOf(te))
+					return ((IReconfigurableFacing)te).rotateBlock();
 			}
 		}
 		return true;

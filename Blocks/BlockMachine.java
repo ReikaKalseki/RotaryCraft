@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasicMultiTE;
 import Reika.RotaryCraft.Registry.MachineRegistry;

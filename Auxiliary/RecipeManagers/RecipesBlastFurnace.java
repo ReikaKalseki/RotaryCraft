@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -24,10 +25,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
+
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient.IngredientIDHandler;
 import Reika.DragonAPI.Instantiable.Recipe.RecipePattern;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -38,7 +42,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityBlastFurnace;
-import cpw.mods.fml.common.FMLCommonHandler;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -55,67 +59,72 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		super(MachineRegistry.BLASTFURNACE);
 		RecipeInterface.blastfurn = this;
 
-		BlastInput in1 = new BlastInput(Items.coal, 100, 1);
-		BlastInput in2 = new BlastInput(Items.gunpowder, 3.6F, 1);
-		BlastInput in3 = new BlastInput(Blocks.sand, 0.2F, 1);
-		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		FlexibleIngredient in1 = new FlexibleIngredient(new ItemStack(Items.coal), 100, 1);
+		FlexibleIngredient in2 = new FlexibleIngredient(Items.gunpowder, 3.6F, 1);
+		FlexibleIngredient in3 = new FlexibleIngredient(Blocks.sand, 0.2F, 1);
+		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, 0, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(hsla, RecipeLevel.CORE);
 
-		in1 = new BlastInput(new ItemStack(Items.coal, 1, 1), 100, 1);
-		in2 = new BlastInput(Items.gunpowder, 3.2F, 1);
-		in3 = new BlastInput(Blocks.sand, 0.2F, 1);
-		BlastRecipe hsla1b = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, false, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		in1 = new FlexibleIngredient(new ItemStack(Items.coal, 1, 1), 100, 1);
+		in2 = new FlexibleIngredient(Items.gunpowder, 3.2F, 1);
+		in3 = new FlexibleIngredient(Blocks.sand, 0.2F, 1);
+		BlastRecipe hsla1b = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, 0, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(hsla1b, RecipeLevel.CORE);
 
-		in1 = new BlastInput(ItemStacks.coke, 100, 1);
-		in2 = new BlastInput(Items.gunpowder, 1.8F, 1);
-		in3 = new BlastInput(Blocks.sand, 0.1F, 1);
-		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, true, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
+		in1 = new FlexibleIngredient(ItemStacks.coke, 100, 1);
+		in2 = new FlexibleIngredient(Items.gunpowder, 1.8F, 1);
+		in3 = new FlexibleIngredient(Blocks.sand, 0.1F, 1);
+		BlastRecipe hsla2 = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, 1, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(hsla2, RecipeLevel.CORE);
 
-		in1 = new BlastInput(ItemStacks.coke, 100, 1);
-		in2 = new BlastInput(Items.gunpowder, 1.8F*9, 1);
-		in3 = new BlastInput(Blocks.sand, 0.1F*9, 1);
-		BlastRecipe hslablock = new BlastRecipe(in1, in2, in3, Blocks.iron_block, ItemStacks.steelblock, false, TileEntityBlastFurnace.SMELT_XP*9, TileEntityBlastFurnace.SMELTTEMP);
+		in1 = new FlexibleIngredient(ItemStacks.coke, 100, 1);
+		in2 = new FlexibleIngredient(Items.gunpowder, 1.8F*9, 1);
+		in3 = new FlexibleIngredient(Blocks.sand, 0.1F*9, 1);
+		BlastRecipe hslablock = new BlastRecipe(in1, in2, in3, Blocks.iron_block, ItemStacks.steelblock, 0, TileEntityBlastFurnace.SMELT_XP*9, TileEntityBlastFurnace.SMELTTEMP);
+		hslablock.setNeedsEmpty();
 		this.addRecipe(hslablock, RecipeLevel.CORE);
 
-		in1 = new BlastInput(ItemStacks.bedrockdust, 100, 4);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe bedrock = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, 1, ItemStacks.bedingot, false, 0, TileEntityBlastFurnace.BEDROCKTEMP);
+		in1 = new FlexibleIngredient(ItemStacks.bedrockdust, 100, 4);
+		in2 = FlexibleIngredient.EMPTY;
+		in3 = FlexibleIngredient.EMPTY;
+		BlastRecipe bedrock = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, 1, ItemStacks.bedingot, 0, 0, TileEntityBlastFurnace.BEDROCKTEMP);
 		this.addRecipe(bedrock.setAlloy(), RecipeLevel.CORE);
 
-
-		in1 = new BlastInput((ItemStack)null, 0, 1);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, false, 0, TileEntityBlastFurnace.SMELTTEMP);
+		in1 = FlexibleIngredient.EMPTY;
+		in2 = FlexibleIngredient.EMPTY;
+		in3 = FlexibleIngredient.EMPTY;
+		BlastRecipe scrap = new BlastRecipe(in1, in2, in3, ItemStacks.scrap, 9, ItemStacks.steelingot, 0, 0, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(scrap, RecipeLevel.PROTECTED);
 
-
-		in1 = new BlastInput((ItemStack)null, 0, 1);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe coke = new BlastRecipe(in1, in2, in3, new ItemStack(Items.coal), ItemStacks.coke, false, 0, 400);
+		in1 = FlexibleIngredient.EMPTY;
+		in2 = FlexibleIngredient.EMPTY;
+		in3 = FlexibleIngredient.EMPTY;
+		BlastRecipe coke = new BlastRecipe(in1, in2, in3, new ItemStack(Items.coal), ItemStacks.coke, 0, 0, 400);
 		this.addRecipe(coke, RecipeLevel.CORE);
 
-		in1 = ConfigRegistry.OREALUDUST.getState() ? new BlastInput("dustAluminum", 25F, 1) : new BlastInput(ItemStacks.aluminumpowder, 25F, 1);
-		in2 = new BlastInput(Items.blaze_powder, 2.5F, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, true, 0, 700);
+		in1 = ConfigRegistry.OREALUDUST.getState() ? new FlexibleIngredient("dustAluminum", 25F, 1) : new FlexibleIngredient(ItemStacks.aluminumpowder, 25F, 1);
+		in2 = new FlexibleIngredient(Items.blaze_powder, 2.5F, 1);
+		in3 = FlexibleIngredient.EMPTY;
+		BlastRecipe sili = new BlastRecipe(in1, in2, in3, Blocks.sand, ItemStacks.silicondust, 0.8F, 0, 700);
 		this.addRecipe(sili, RecipeLevel.CORE);
 
-		in1 = new BlastInput(ItemStacks.coke, 75F, 1);
-		in2 = new BlastInput(Items.redstone, 40F, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe spring = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, ItemStacks.springingot, false, 0, 1150);
+		in1 = new FlexibleIngredient(ItemStacks.coke, 75F, 1);
+		in2 = new FlexibleIngredient(Items.redstone, 40F, 1);
+		in3 = FlexibleIngredient.EMPTY;
+		BlastRecipe spring = new BlastRecipe(in1, in2, in3, ItemStacks.steelingot, ItemStacks.springingot, 0, 0, 1000);
 		this.addRecipe(spring, RecipeLevel.CORE);
 
-		in1 = new BlastInput(ItemStacks.silicondust, 20F, 1);
-		in2 = new BlastInput((ItemStack)null, 0, 1);
-		in3 = new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe silu = new BlastRecipe(in1, in2, in3, "ingotAluminum", ItemStacks.silumin, false, 0, 900);
+		in1 = new FlexibleIngredient(ItemStacks.silicondust, 20F, 1);
+		in2 = FlexibleIngredient.EMPTY;
+		in3 = FlexibleIngredient.EMPTY;
+		BlastRecipe silu = new BlastRecipe(in1, in2, in3, "ingotAluminum", ItemStacks.silumin, 0, 0, 900);
 		this.addRecipe(silu, RecipeLevel.CORE);
+
+		in1 = new FlexibleIngredient(ItemStacks.tungstenflakes, 5F, 1);
+		in2 = FlexibleIngredient.EMPTY;
+		in3 = new FlexibleIngredient(Blocks.obsidian, 20F, 1);
+		BlastRecipe springtung = new BlastRecipe(in1, in2, in3, ItemStacks.springingot, ItemStacks.springtungsten, 0, 0, 1100);
+		this.addRecipe(springtung, RecipeLevel.CORE);
 	}
 
 	private void addRecipe(BlastRecipe br, RecipeLevel rl) {
@@ -251,6 +260,16 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			li.add(output);
 			return li;
 		}
+
+		@Override
+		public boolean requiresEmptyOutput() {
+			return false;
+		}
+
+		public boolean usesSlot(int i) {
+			List<ItemStack>[] arr = ReikaRecipeHelper.getRecipeArray(recipe);
+			return arr != null && arr[i] != null;
+		}
 	}
 
 	public static interface BlastFurnacePattern extends MachineRecipe {
@@ -264,146 +283,75 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		public boolean isAlloying();
 
 		public int getRequiredTemperature();
+
+		public boolean requiresEmptyOutput();
+
+		public boolean usesSlot(int slot);
 	}
 
-	public static final class BlastInput {
+	public static final class BlastRecipe implements BlastFurnacePattern, IngredientIDHandler {
 
-		private final HashSet<KeyedItemStack> items = new HashSet();
-		public final float chanceToUse;
-		public final int numberToUse;
+		public final FlexibleIngredient primary;
+		public final FlexibleIngredient secondary;
+		public final FlexibleIngredient tertiary;
 
-		private final ArrayList<ItemStack> display = new ArrayList();
+		private final FlexibleIngredient main;
 
-		private BlastInput(Block in, float chance, int toDecr) {
-			this(new ItemStack(in), chance, toDecr);
-		}
-
-		private BlastInput(Item in, float chance, int toDecr) {
-			this(new ItemStack(in), chance, toDecr);
-		}
-
-		private BlastInput(ItemStack in, float chance, int toDecr) {
-			this(in != null ? ReikaJavaLibrary.makeListFrom(in) : null, chance, toDecr);
-		}
-
-		private BlastInput(String ore, float chance, int toDecr) {
-			this(OreDictionary.getOres(ore), chance, toDecr);
-		}
-
-		private BlastInput(Collection<ItemStack> in, float chance, int toDecr) {
-			if (in != null) {
-				for (ItemStack is : in) {
-					items.add(new KeyedItemStack(is).setSimpleHash(true).lock());
-				}
-			}
-			chanceToUse = chance/100F;
-			numberToUse = toDecr;
-
-			if (in != null && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-				display.addAll(in);
-		}
-
-		@SideOnly(Side.CLIENT)
-		public ItemStack getItemForDisplay() {
-			if (!this.exists())
-				return null;
-			int tick = (int)((System.currentTimeMillis()/1000)%display.size());
-			return ReikaItemHelper.getSizedItemStack(display.get(tick), numberToUse);
-		}
-
-		@Override
-		public String toString() {
-			return fullIDKeys(items)+" x"+numberToUse+"@"+chanceToUse+"%";
-		}
-
-		public boolean match(ItemStack in) {
-			return !this.exists() ? in == null : this.isItemCorrect(in) && in.stackSize >= numberToUse;
-		}
-
-		private boolean isItemCorrect(ItemStack in) {
-			return in != null && items.contains(new KeyedItemStack(in).setSimpleHash(true));
-		}
-
-		public boolean exists() {
-			return !items.isEmpty();
-		}
-
-		public Collection<ItemStack> getItems() {
-			ArrayList<ItemStack> c = new ArrayList();
-			for (KeyedItemStack ks : items) {
-				c.add(ks.getItemStack());
-			}
-			return c;
-		}
-	}
-
-	public static final class BlastRecipe implements BlastFurnacePattern {
-		public final BlastInput primary;
-		public final BlastInput secondary;
-		public final BlastInput tertiary;
-
-		private final HashSet<KeyedItemStack> main = new HashSet();
-		private final ArrayList<ItemStack> mainDisplay = new ArrayList();
-
-		public final int mainRequired;
 		private boolean matchNumberExactly;
 		private final ItemStack output;
-		public final boolean hasBonus;
+		public final float bonusYield;
 		public final float xp;
 		public final int temperature;
+
 		private boolean alloy;
+		private boolean needsEmpty;
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Item main, ItemStack out, boolean bonus, float xp, int temp) {
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, Item main, ItemStack out, float bonus, float xp, int temp) {
 			this(in1, in2, in3, new ItemStack(main), out, bonus, xp, temp);
 		}
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Block main, ItemStack out, boolean bonus, float xp, int temp) {
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, Block main, ItemStack out, float bonus, float xp, int temp) {
 			this(in1, in2, in3, new ItemStack(main), out, bonus, xp, temp);
 		}
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Collection<ItemStack> main, ItemStack out, boolean bonus, float xp, int temp) {
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, Collection<ItemStack> main, ItemStack out, float bonus, float xp, int temp) {
 			this(in1, in2, in3, main, 1, out, bonus, xp, temp);
 			matchNumberExactly = false;
 		}
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, String main, ItemStack out, boolean bonus, float xp, int temp) {
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, String main, ItemStack out, float bonus, float xp, int temp) {
 			this(in1, in2, in3, main, 1, out, bonus, xp, temp);
 			matchNumberExactly = false;
 		}
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, ItemStack main, ItemStack out, boolean bonus, float xp, int temp) {
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, ItemStack main, ItemStack out, float bonus, float xp, int temp) {
 			this(in1, in2, in3, main, 1, out, bonus, xp, temp);
 			matchNumberExactly = false;
 		}
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, ItemStack main, int req, ItemStack out, boolean bonus, float xp, int temp) {
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, ItemStack main, int req, ItemStack out, float bonus, float xp, int temp) {
 			this(in1, in2, in3, ReikaJavaLibrary.makeListFrom(main), req, out, bonus, xp, temp);
 		}
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, String main, int req, ItemStack out, boolean bonus, float xp, int temp) {
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, String main, int req, ItemStack out, float bonus, float xp, int temp) {
 			this(in1, in2, in3, OreDictionary.getOres(main), req, out, bonus, xp, temp);
 		}
 
-		private BlastRecipe(BlastInput in1, BlastInput in2, BlastInput in3, Collection<ItemStack> main, int req, ItemStack out, boolean bonus, float xp, int temp) {
-			primary = in1;
-			secondary = in2;
-			tertiary = in3;
-			hasBonus = bonus;
+		private BlastRecipe(FlexibleIngredient in1, FlexibleIngredient in2, FlexibleIngredient in3, Collection<ItemStack> main, int req, ItemStack out, float bonus, float xp, int temp) {
+			primary = in1.lock();
+			secondary = in2.lock();
+			tertiary = in3.lock();
+			bonusYield = bonus;
 
-			mainRequired = req;
 			this.xp = xp;
 			output = out;
 			matchNumberExactly = true;
 			temperature = temp;
 
-			for (ItemStack is : main) {
-				this.main.add(new KeyedItemStack(is).setSimpleHash(true).lock());
-			}
 			if (main.isEmpty()) {
 				throw new IllegalArgumentException("Empty item list for main item in Blast Recipe "+this.toString());
 			}
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-				mainDisplay.addAll(main);
+			this.main = new FlexibleIngredient(main, 100, req).lock();
 		}
 
 		private BlastRecipe setAlloy() {
@@ -411,10 +359,14 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			return this;
 		}
 
+		private BlastRecipe setNeedsEmpty() {
+			needsEmpty = true;
+			return this;
+		}
+
 		@SideOnly(Side.CLIENT)
 		public ItemStack mainItemForDisplay() {
-			int tick = (int)((System.currentTimeMillis()/1000)%mainDisplay.size());
-			return mainDisplay.get(tick);
+			return main.getItemForDisplay(false);
 		}
 
 		public ItemStack outputItem() {
@@ -428,17 +380,17 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			sb.append(secondary+" + ");
 			sb.append(tertiary+" + ");
 			sb.append(matchNumberExactly ? "== " : ">= ");
-			sb.append(mainRequired+" of ");
+			sb.append(main.numberToUse+" of ");
 			sb.append(main);
 			sb.append(" >> ");
 			sb.append(output);
-			if (hasBonus)
-				sb.append("*");
+			if (bonusYield > 0)
+				sb.append("*"+bonusYield);
 			return sb.toString();
 		}
 
 		public int getNumberProduced(int main) {
-			return mainRequired > 1 ? main/mainRequired : main;
+			return this.main.numberToUse > 1 ? main/this.main.numberToUse : main;
 		}
 
 		public boolean matchInputExactly() {
@@ -447,8 +399,8 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		public ArrayList<Integer> getValidInputNumbers() {
 			ArrayList<Integer> li = new ArrayList();
-			for (int i = mainRequired; i <= 9; i += mainRequired) {
-				if (i == mainRequired || !this.matchInputExactly())
+			for (int i = main.numberToUse; i <= 9; i += main.numberToUse) {
+				if (i == main.numberToUse || !this.matchInputExactly())
 					li.add(i);
 			}
 			return li;
@@ -468,13 +420,13 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		}
 
 		public boolean isValidMainItem(ItemStack is) {
-			return main.contains(new KeyedItemStack(is).setSimpleHash(true));
+			return main.match(is);
 		}
 
 		public Collection<ItemStack> getMainItems() {
 			ArrayList<ItemStack> c = new ArrayList();
-			for (KeyedItemStack ks : main) {
-				c.add(ks.getItemStack());
+			for (ItemStack ks : main.getItems()) {
+				c.add(ks);
 			}
 			return c;
 		}
@@ -494,7 +446,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 
 		@Override
 		public String getUniqueID() {
-			return "RECIPE/"+primary+"&"+secondary+"&"+tertiary+">"+fullIDKeys(main)+"^"+fullID(output)+"?"+hasBonus;
+			return "RECIPE/"+primary.fullID(this)+"&"+secondary.fullID(this)+"&"+tertiary.fullID(this)+">"+main.fullID(this)+"^"+fullID(output)+"?"+bonusYield;
 		}
 
 		@Override
@@ -514,6 +466,19 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			li.addAll(this.getMainItems());
 			li.add(output);
 			return li;
+		}
+
+		@Override
+		public boolean requiresEmptyOutput() {
+			return needsEmpty;
+		}
+
+		public boolean usesSlot(int i) {
+			return true;
+		}
+
+		public final String fullIDForItems(Collection<KeyedItemStack> c) {
+			return RecipeHandler.fullIDKeys(c);
 		}
 	}
 
@@ -556,7 +521,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 				}
 			}
 		}
-		return r.matchNumberExactly ? num == r.mainRequired : num >= r.mainRequired;
+		return r.matchNumberExactly ? num == r.main.numberToUse : num >= r.main.numberToUse;
 	}
 
 	public boolean isProduct(ItemStack result) {
@@ -680,10 +645,10 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	}
 
 	@Override
-	public void addAPIAlloying(ItemStack in1, float c1, int decr1, ItemStack in2, float c2, int decr2, ItemStack in3, float c3, int decr3, ItemStack main, ItemStack out, int req, boolean bonus, float xp, int temp) {
-		BlastInput b1 = new BlastInput(in1, in1 != null ? c1 : 0, decr1);
-		BlastInput b2 = new BlastInput(in2, in2 != null ? c2 : 0, decr2);
-		BlastInput b3 = new BlastInput(in3, in3 != null ? c3 : 0, decr3);
+	public void addAPIAlloying(Collection<ItemStack> in1, float c1, int decr1, Collection<ItemStack> in2, float c2, int decr2, Collection<ItemStack> in3, float c3, int decr3, ItemStack main, ItemStack out, int req, float bonus, float xp, int temp) {
+		FlexibleIngredient b1 = new FlexibleIngredient(in1, in1 != null ? c1 : 0, decr1);
+		FlexibleIngredient b2 = new FlexibleIngredient(in2, in2 != null ? c2 : 0, decr2);
+		FlexibleIngredient b3 = new FlexibleIngredient(in3, in3 != null ? c3 : 0, decr3);
 		BlastRecipe br = req > 0 ? new BlastRecipe(b1, b2, b3, main, req, out, bonus, xp, temp) : new BlastRecipe(b1, b2, b3, main, out, bonus, xp, temp);
 		this.addRecipe(br, RecipeLevel.API);
 	}
@@ -706,7 +671,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
 		this.verifyOutputItem(out);
 		Collection<ItemStack> main = crl.parseItemCollection(lb.getChild("main_item").getDataValues(), true);
@@ -714,7 +679,10 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 			throw new IllegalArgumentException("You need at least one main item!");
 		int req = lb.getInt("required_main_item");
 		boolean match = lb.getBoolean("match_number_exactly");
-		boolean bonus = lb.getBoolean("has_bonus");
+		boolean bonus_basic = lb.getBoolean("has_bonus");
+		float bonus = (float)lb.getDouble("bonus_yield");
+		if (bonus <= 0 && bonus_basic)
+			bonus = 1;
 		float xp = (float)lb.getDouble("xp");
 		int temp = lb.getInt("temperature");
 		if (temp > TileEntityBlastFurnace.MAXTEMP)
@@ -726,10 +694,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		if (first == null || (second == null && third != null)) {
 			throw new IllegalArgumentException("Secondary inputs must be specified sequentially: Primary-secondary-tertiary!");
 		}
-		BlastInput primary = new BlastInput(crl.parseItemCollection(first.getChild("items").getDataValues(), true), (float)first.getDouble("consumption_chance"), first.getInt("number_to_use"));
-		BlastInput secondary = second != null ? new BlastInput(crl.parseItemCollection(second.getChild("items").getDataValues(), true), (float)second.getDouble("consumption_chance"), second.getInt("number_to_use")) : new BlastInput((ItemStack)null, 0, 1);
-		BlastInput tertiary = third != null ? new BlastInput(crl.parseItemCollection(third.getChild("items").getDataValues(), true), (float)third.getDouble("consumption_chance"), third.getInt("number_to_use")) : new BlastInput((ItemStack)null, 0, 1);
-		BlastRecipe br = new BlastRecipe(primary, secondary, tertiary, main, req, out, bonus, xp, temp);
+		BlastRecipe br = new BlastRecipe(FlexibleIngredient.parseLua(crl, first, false), FlexibleIngredient.parseLua(crl, second, false), FlexibleIngredient.parseLua(crl, third, false), main, req, out, bonus, xp, temp);
 		br.matchNumberExactly = match;
 		if (alloy)
 			br.setAlloy();

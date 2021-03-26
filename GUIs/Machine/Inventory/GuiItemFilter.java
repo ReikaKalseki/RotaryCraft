@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -34,6 +35,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 	private static final int LINES = 5;
 
 	private SettingType page = SettingType.BASIC;
+	private MatchData data;
 	private ArrayList<MatchDisplay> display;
 	private int nbtListPos = 0;
 
@@ -44,6 +46,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		ySize = 217;
 		ep = p5ep;
 		filter = te;
+		data = filter.getData();
 	}
 
 	@Override
@@ -53,21 +56,20 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		MatchData match = filter.getData();
-		if (match != null) {
+		if (data != null) {
 			display = null;
 			switch(page) {
 				case BASIC:
-					display = match.getMainDisplay();
+					display = data.getMainDisplay();
 					break;
 				case NBT:
-					display = match.getNBTDisplay();
+					display = data.getNBTDisplay();
 					break;
 				case ORE:
-					display = match.getOreDisplay();
+					display = data.getOreDisplay();
 					break;
 				case CLASS:
-					display = match.getClassDisplay();
+					display = data.getClassDisplay();
 					break;
 			}
 			if (display != null) {
@@ -137,12 +139,12 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 
 	private void sendData() {
 		//ReikaJavaLibrary.pConsole(filter.getData());
-		NBTTagCompound nbt = filter.getData().writeToNBT();
+		NBTTagCompound nbt = data.writeToNBT();
 		//ReikaJavaLibrary.pConsole(nbt);
 		nbt.setInteger("posX", tile.xCoord);
 		nbt.setInteger("posY", tile.yCoord);
 		nbt.setInteger("posZ", tile.zCoord);
-		ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.getMinValue(), nbt, PacketTarget.server);
+		ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.ordinal(), nbt, PacketTarget.server);
 	}
 
 	@Override
@@ -158,8 +160,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		int x = api.getMouseRealX();
 		int y = api.getMouseRealY();
 
-		MatchData match = filter.getData();
-		if (match != null) {
+		if (data != null) {
 			/*
 			int tx = 44;
 			int ty = 16;

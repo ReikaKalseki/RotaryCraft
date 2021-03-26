@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -32,9 +32,7 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.INode;
-import thaumcraft.api.nodes.NodeType;
+
 import Reika.ChromatiCraft.TileEntity.Networking.TileEntityCrystalPylon;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
@@ -43,13 +41,14 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
+import Reika.RotaryCraft.Auxiliary.EMPTileWatcher;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -57,10 +56,14 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PacketRegistry;
+
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.INode;
+import thaumcraft.api.nodes.NodeType;
 
 public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffect {
 
@@ -289,7 +292,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 
 	private void fire(World world, int x, int y, int z) {
 		fired = true;
-		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.EMPEFFECT.getMinValue(), this, 128);
+		ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.EMPEFFECT.ordinal(), this, 128);
 		for (int i = 0; i < blocks.size(); i++) {
 			TileEntity te = blocks.get(i).getTileEntity(world);
 			if (ModList.CHROMATICRAFT.isLoaded() && te instanceof TileEntityCrystalPylon)
@@ -356,20 +359,16 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 		te.addToContainer(Aspect.MECHANISM, (short)2000);
 		switch(te.getNodeType()) {
 			case UNSTABLE:
-				if (rand.nextInt(2) == 0) {
+				if (rand.nextInt(3) > 0)
 					te.setNodeType(NodeType.DARK);
-				}
 				else
 					te.setNodeType(NodeType.PURE);
 				break;
 			case DARK:
-				te.setNodeType(NodeType.TAINTED);
+				te.setNodeType(rand.nextBoolean() ? NodeType.TAINTED : NodeType.HUNGRY);
 				break;
 			case NORMAL:
 				te.setNodeType(NodeType.UNSTABLE);
-				break;
-			case TAINTED:
-				te.setNodeType(NodeType.HUNGRY);
 				break;
 			default:
 				break;
@@ -382,7 +381,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			return;
 		if (this.isBlacklisted(te))
 			return;
-		ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord, 1);
+		ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.ordinal(), te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord, 1);
 		if (te instanceof RotaryCraftTileEntity) {
 			RotaryCraftTileEntity rc = (RotaryCraftTileEntity)te;
 			if (!rc.isShutdown())
@@ -392,7 +391,7 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 			((EMPControl)te).onHitWithEMP(this);
 		}
 		else {
-			shutdownLocations.add(new WorldLocation(te));
+			addShutdownLocation(te);
 		}/*
 		else if (ConfigRegistry.ATTACKBLOCKS.getState())
 			this.shutdownFallback(te);*/
@@ -434,16 +433,23 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	}
 
 	public static boolean isShutdown(TileEntity te) {
-		return shutdownLocations.contains(new WorldLocation(te));
+		return !shutdownLocations.isEmpty() && shutdownLocations.contains(new WorldLocation(te));
 	}
 
 	public static boolean isShutdown(World world, int x, int y, int z) {
-		return shutdownLocations.contains(new WorldLocation(world, x, y, z));
+		return !shutdownLocations.isEmpty() && shutdownLocations.contains(new WorldLocation(world, x, y, z));
 	}
 
 	public static void resetCoordinate(World world, int x, int y, int z) {
 		if (shutdownLocations.remove(new WorldLocation(world, x, y, z)))
-			ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.getMinValue(), world.provider.dimensionId, x, y, z, 0);
+			ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.ordinal(), world.provider.dimensionId, x, y, z, 0);
+		if (shutdownLocations.isEmpty())
+			EMPTileWatcher.instance.unregisterTileWatcher();
+	}
+
+	private static void addShutdownLocation(TileEntity te) {
+		shutdownLocations.add(new WorldLocation(te));
+		EMPTileWatcher.instance.registerTileWatcher();
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {

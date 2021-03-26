@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,7 @@ package Reika.RotaryCraft.GUIs.Machine.Inventory;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+
 import Reika.DragonAPI.Base.OneSlotContainer;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -54,7 +55,7 @@ public class GuiWinder extends GuiOneSlotInv
 		super.actionPerformed(button);
 		if (button.id != 0)
 			return;
-		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.WINDER.getMinValue(), Winder, PacketTarget.server);
+		ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.WINDERTOGGLE.ordinal(), Winder, PacketTarget.server);
 		input = !input;
 		this.initGui();
 	}

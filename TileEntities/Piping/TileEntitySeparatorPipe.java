@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -16,6 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -25,7 +26,7 @@ public class TileEntitySeparatorPipe extends TileEntityPiping {
 	private int level;
 
 	@Override
-	public boolean canConnectToPipe(MachineRegistry m) {
+	public boolean canConnectToPipe(MachineRegistry m, ForgeDirection dir) {
 		return m.isStandardPipe() || m == MachineRegistry.FUELLINE || m == MachineRegistry.HOSE;
 	}
 

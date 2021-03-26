@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.GUIs.Machine;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -60,7 +61,23 @@ public class GuiBlower extends GuiPowerOnlyMachine {
 		super.actionPerformed(b);
 
 		if (b.id < 24000) {
-			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BLOWER.getMinValue()+b.id, tile, 0);
+			PacketRegistry id = null;
+			switch(b.id) {
+				case 0:
+					id = PacketRegistry.BLOWERWHITELIST;
+					break;
+				case 1:
+					id = PacketRegistry.BLOWERMETA;
+					break;
+				case 2:
+					id = PacketRegistry.BLOWERNBT;
+					break;
+				case 3:
+					id = PacketRegistry.BLOWEROREDICT;
+					break;
+			}
+			if (id != null)
+				ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, id.ordinal(), tile);
 			controls[b.id] = !controls[b.id];
 		}
 

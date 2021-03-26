@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Instantiable.ConfigurableEntitySelector;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.RotaryCraft.API.Interfaces.RadarJammer;
@@ -59,7 +60,7 @@ public class TileEntityMobRadar extends TileEntityPowerReceiver implements GuiCo
 		return isJammed;
 	}
 
-	public void getMobs(World world, int x, int y, int z) {
+	private void getMobs(World world, int x, int y, int z) {
 		isJammed = false;
 		int range = this.getRange();
 		AxisAlignedBB zone = AxisAlignedBB.getBoundingBox(x-range, 0, z-range, x+1+range, 255, z+1+range);

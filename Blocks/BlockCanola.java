@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,10 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -34,19 +32,27 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Instantiable.Event.GrassSustainCropEvent;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.LegacyCraft.LegacyOptions;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Base.BlockBasic;
 import Reika.RotaryCraft.Registry.BlockRegistry;
+
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
 public final class BlockCanola extends BlockBasic implements IPlantable, IGrowable, IWailaDataProvider {
@@ -110,15 +116,14 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	}
 
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random par5Random) {
-		int l = world.getBlockLightValue(x, y, z);
+	public void updateTick(World world, int x, int y, int z, Random r) {
 		if (!this.canSurvive(world, x, y, z)) {
 			this.die(world, x, y, z);
 		}
-		else if (l >= 9)  {
+		else if (canGrowAt(world, x, y, z))  {
 			int metadata = world.getBlockMetadata(x, y, z);
 			if (metadata < GROWN) {
-				if (par5Random.nextInt(3) == 0) {
+				if (r.nextInt(3) == 0) {
 					metadata++;
 					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
 				}
@@ -240,18 +245,6 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
 		return GROWN;
 	}
-
-	public static void addFarmBlock(Block b) {
-		addFarmBlock(new BlockKey(b));
-	}
-
-	public static void addFarmBlock(Block b, int meta) {
-		addFarmBlock(new BlockKey(b, meta));
-	}
-
-	private static void addFarmBlock(BlockKey bk) {
-		farmBlocks.add(bk);
-	}
 	/*
 	@Override
 	public boolean isReadyToHarvest(World world, int x, int y, int z) {
@@ -340,15 +333,25 @@ public final class BlockCanola extends BlockBasic implements IPlantable, IGrowab
 	}
 
 	public static boolean canGrowAt(World world, int x, int y, int z) {
-		return world.getBlockLightValue(x, y, z) >= 9 && isValidFarmBlock(world, x, y-1, z);
+		return world.getBlockLightValue(x, y, z) >= 9 && isValidFarmBlock(world, x, y-1, z) && !isBlockedUpwards(world, x, y, z);
+	}
+
+	private static boolean isBlockedUpwards(World world, int x, int y, int z) {
+		Block b = world.getBlock(x, y+1, z);
+		return !(b.isOpaqueCube() && b.renderAsNormalBlock() && b.getLightOpacity(world, x, y+1, z) > 25) && b.getMaterial().isSolid();
 	}
 
 	public static boolean isValidFarmBlock(World world, int x, int y, int z) {
 		Block id = world.getBlock(x, y, z);
 		if (id == Blocks.air)
 			return false;
-		if (id == Blocks.farmland) {
+		if (id instanceof BlockFarmland) {
 			return world.getBlockMetadata(x, y, z) > 0;
+		}
+		if (id == Blocks.grass) {
+			GrassSustainCropEvent evt = new GrassSustainCropEvent(world, x, y, z, ForgeDirection.UP, (IPlantable)BlockRegistry.CANOLA.getBlockInstance());
+			MinecraftForge.EVENT_BUS.post(evt);
+			return evt.getResult() == Result.ALLOW;
 		}
 		return id.isFertile(world, x, y, z) && id.canSustainPlant(world, x, y, z, ForgeDirection.UP, (IPlantable)BlockRegistry.CANOLA.getBlockInstance());
 		//return farmBlocks.contains(id);

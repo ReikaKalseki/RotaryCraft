@@ -1,31 +1,27 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
-import org.lwjgl.opengl.GL11;
+import Reika.DragonAPI.Base.ISBRH;
 
-import Reika.DragonAPI.Interfaces.ISBRH;
-
-public class CubicalMachineRenderer implements ISBRH {
-
-	public final int renderID;
-	private static final ForgeDirection[] dirs = ForgeDirection.values();
+public class CubicalMachineRenderer extends ISBRH {
 
 	public CubicalMachineRenderer(int ID) {
-		renderID = ID;
+		super(ID);
 	}
 
 	@Override
@@ -85,11 +81,6 @@ public class CubicalMachineRenderer implements ISBRH {
 	@Override
 	public boolean shouldRender3DInInventory(int model) {
 		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return renderID;
 	}
 
 }

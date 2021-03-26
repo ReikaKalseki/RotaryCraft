@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,7 +11,6 @@ package Reika.RotaryCraft.TileEntities.Decorative;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityFireworkRocket;
@@ -23,11 +22,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.Event.FireworkLaunchEvent;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
@@ -37,7 +38,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityFireworkMachine extends InventoriedPowerReceiver implements EnchantableMachine, DiscreteFunction, ConditionalOperation {
 
-	private HashMap<Enchantment,Integer> enchantments = new HashMap<Enchantment,Integer>();
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.infinity);
 
 	public boolean idle = false;
 
@@ -102,7 +103,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		//EntityItem ent = new EntityItem(world, x, y+1, z, star);
 		//world.spawnEntityInWorld(ent);
 
-		if (this.hasEnchantments()) {
+		if (enchantments.hasEnchantments()) {
 			for (int i = 0; i < 8; i++) {
 				world.spawnParticle("portal", -0.5+x+2*rand.nextDouble(), y+rand.nextDouble(), -0.5+z+2*rand.nextDouble(), 0, 0, 0);
 			}
@@ -115,7 +116,7 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	}
 
 	private boolean consumeChance() {
-		if (this.hasEnchantment(Enchantment.infinity))
+		if (enchantments.hasEnchantment(Enchantment.infinity))
 			return false;
 		int excess = (int)(power/MINPOWER);
 		int chance = rand.nextInt(1+excess/8);
@@ -567,14 +568,12 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	}
 
 	@Override
-	protected void readSyncTag(NBTTagCompound NBT)
-	{
+	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
 	}
 
 	@Override
-	protected void writeSyncTag(NBTTagCompound NBT)
-	{
+	protected void writeSyncTag(NBTTagCompound NBT) {
 		super.writeSyncTag(NBT);
 	}
 
@@ -582,26 +581,14 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	public void writeToNBT(NBTTagCompound NBT) {
 		super.writeToNBT(NBT);
 
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = this.getEnchantment(Enchantment.enchantmentsList[i]);
-				if (lvl > 0)
-					NBT.setInteger(Enchantment.enchantmentsList[i].getName(), lvl);
-			}
-		}
+		NBT.setTag("enchants", enchantments.writeToNBT());
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound NBT) {
 		super.readFromNBT(NBT);
 
-		enchantments = new HashMap<Enchantment,Integer>();
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				int lvl = NBT.getInteger(Enchantment.enchantmentsList[i].getName());
-				enchantments.put(Enchantment.enchantmentsList[i], lvl);
-			}
-		}
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
 	}
 
 	@Override
@@ -631,49 +618,10 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 		return 0;
 	}
 
-	@Override
-	public boolean applyEnchants(ItemStack is) {
-		boolean accepted = false;
-		if (ReikaEnchantmentHelper.hasEnchantment(Enchantment.infinity, is)) {
-			enchantments.put(Enchantment.infinity, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.infinity, is));
-			accepted = true;
-		}
-		return accepted;
-	}
-
 	public ArrayList<Enchantment> getValidEnchantments() {
 		ArrayList<Enchantment> li = new ArrayList<Enchantment>();
 		li.add(Enchantment.infinity);
 		return li;
-	}
-
-	@Override
-	public HashMap<Enchantment,Integer> getEnchantments() {
-		return enchantments;
-	}
-
-	@Override
-	public boolean hasEnchantment(Enchantment e) {
-		return this.getEnchantments().containsKey(e);
-	}
-
-	@Override
-	public boolean hasEnchantments() {
-		for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
-			if (Enchantment.enchantmentsList[i] != null) {
-				if (this.getEnchantment(Enchantment.enchantmentsList[i]) > 0)
-					return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public int getEnchantment(Enchantment e) {
-		if (!this.hasEnchantment(e))
-			return 0;
-		else
-			return this.getEnchantments().get(e);
 	}
 
 	@Override
@@ -689,5 +637,10 @@ public class TileEntityFireworkMachine extends InventoriedPowerReceiver implemen
 	@Override
 	public String getOperationalStatus() {
 		return this.areConditionsMet() ? "Operational" : "No Items";
+	}
+
+	@Override
+	public MachineEnchantmentHandler getEnchantmentHandler() {
+		return enchantments;
 	}
 }

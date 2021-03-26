@@ -1,19 +1,19 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.RotaryCraft.Renders;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
@@ -34,6 +34,11 @@ public class RenderAdvGear extends RotaryTERenderer
 	private ModelCoil coilModel = new ModelCoil();
 	private ModelHighGear highGearModel = new ModelHighGear();
 	private int itemMetadata = 0;
+
+	@Override
+	protected String getTextureSubfolder() {
+		return "Transmission/";
+	}
 
 	public void renderTileEntityAdvancedGearAt(TileEntityAdvancedGear tile, double par2, double par4, double par6, float par8)
 	{
@@ -56,18 +61,18 @@ public class RenderAdvGear extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()%4) {
-			case 0:
-				var11 = 0;
-				break;
-			case 1:
-				var11 = 180;
-				break;
-			case 2:
-				var11 = 90;
-				break;
-			case 3:
-				var11 = 270;
-				break;
+				case 0:
+					var11 = 0;
+					break;
+				case 1:
+					var11 = 180;
+					break;
+				case 2:
+					var11 = 90;
+					break;
+				case 3:
+					var11 = 270;
+					break;
 			}
 
 			GL11.glRotatef((float)var11+180, 0.0F, 1.0F, 0.0F);
@@ -77,25 +82,25 @@ public class RenderAdvGear extends RotaryTERenderer
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.itemMetadata));
 			GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
 			switch(itemMetadata) {
-			case 1:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-				var14.renderAll(tile, null);
-				break;
-			case 2:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
-				var15.renderAll(tile, null);
-				break;
-			case 3:
-				if (tile.isBedrockCoil())
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex_bed.png");
-				else
-					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
-				var16.renderAll(tile, null);
-				break;
-			case 4:
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/highgeartex.png");
-				var17.renderAll(tile, null);
-				break;
+				case 1:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Shaft/shafttex.png");
+					var14.renderAll(tile, null);
+					break;
+				case 2:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/cvttex.png");
+					var15.renderAll(tile, null);
+					break;
+				case 3:
+					if (tile.isBedrockCoil())
+						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/coiltex_bed.png");
+					else
+						this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/coiltex.png");
+					var16.renderAll(tile, null);
+					break;
+				case 4:
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/highgeartex.png");
+					var17.renderAll(tile, null);
+					break;
 			}
 			if (tile.isInWorld())
 				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -106,25 +111,25 @@ public class RenderAdvGear extends RotaryTERenderer
 
 		float var13;
 		switch (tile.getGearType()) {
-		case WORM:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/shafttex.png");
-			var14.renderAll(tile, null, tile.phi);
-			break;
-		case CVT:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/cvttex.png");
-			var15.renderAll(tile, null, tile.phi);
-			break;
-		case COIL:
-			if (tile.isBedrockCoil())
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex_bed.png");
-			else
-				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/coiltex.png");
-			var16.renderAll(tile, null, tile.phi);
-			break;
-		case HIGH:
-			this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/highgeartex.png");
-			var17.renderAll(tile, null, tile.phi);
-			break;
+			case WORM:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/Shaft/shafttex.png");
+				var14.renderAll(tile, null, tile.phi);
+				break;
+			case CVT:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/cvttex.png");
+				var15.renderAll(tile, null, tile.phi);
+				break;
+			case COIL:
+				if (tile.isBedrockCoil())
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/coiltex_bed.png");
+				else
+					this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/coiltex.png");
+				var16.renderAll(tile, null, tile.phi);
+				break;
+			case HIGH:
+				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/highgeartex.png");
+				var17.renderAll(tile, null, tile.phi);
+				break;
 		}
 
 		this.closeGL(tile);

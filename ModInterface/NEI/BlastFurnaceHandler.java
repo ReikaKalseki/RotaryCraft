@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -14,25 +14,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import org.lwjgl.opengl.GL11;
-
-import Reika.DragonAPI.Libraries.IO.ReikaGuiAPI;
+import Reika.DragonAPI.Instantiable.Recipe.FlexibleIngredient;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastCrafting;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurnacePattern;
-import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastInput;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiBlastFurnace;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -90,11 +91,11 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			}
 
 			if (recipe.tertiary.exists())
-				stacks.add(new PositionedStack(recipe.tertiary.getItemForDisplay(), 21, 5));
+				stacks.add(new PositionedStack(recipe.tertiary.getItemForDisplay(true), 21, 5));
 			if (recipe.primary.exists())
-				stacks.add(new PositionedStack(recipe.primary.getItemForDisplay(), 21, 24));
+				stacks.add(new PositionedStack(recipe.primary.getItemForDisplay(true), 21, 24));
 			if (recipe.secondary.exists())
-				stacks.add(new PositionedStack(recipe.secondary.getItemForDisplay(), 21, 43));
+				stacks.add(new PositionedStack(recipe.secondary.getItemForDisplay(true), 21, 43));
 
 			return stacks;
 		}
@@ -249,28 +250,28 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 		int dy = 0;
 		if (r instanceof BlastFurnRecipe) {
 			BlastRecipe br = ((BlastFurnRecipe)r).recipe;
-			BlastInput in1 = br.primary;
+			FlexibleIngredient in1 = br.primary;
 			if (in1.exists()) {
-				String sg = String.format("%s: x%d (%.1f%%)", in1.getItemForDisplay().getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
+				String sg = String.format("%s: x%d (%.1f%%)", in1.getItemForDisplay(true).getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
 				f.drawString(sg, 21, 72, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
-			BlastInput in2 = br.secondary;
+			FlexibleIngredient in2 = br.secondary;
 			if (in2.exists()) {
-				String sg = String.format("%s: x%d (%.1f%%)", in2.getItemForDisplay().getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
+				String sg = String.format("%s: x%d (%.1f%%)", in2.getItemForDisplay(true).getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
-			BlastInput in3 = br.tertiary;
+			FlexibleIngredient in3 = br.tertiary;
 			if (in3.exists()) {
-				String sg = String.format("%s: x%d (%.1f%%)", in3.getItemForDisplay().getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
+				String sg = String.format("%s: x%d (%.1f%%)", in3.getItemForDisplay(true).getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
 				f.drawString(sg, 21, 72+dy, 0);
 				dy += f.FONT_HEIGHT+2;
 			}
 
-			f.drawString("Bonus output: "+(br.hasBonus ? "Yes" : "No"), 21, 72+dy, 0);
+			f.drawString("Bonus output: "+(br.bonusYield > 0 ? br.bonusYield+"x" : "None"), 21, 72+dy, 0);
 		}
 		else if (r instanceof BlastFurnCrafting) {
 			BlastCrafting br = ((BlastFurnCrafting)r).recipe;

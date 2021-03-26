@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,21 +13,22 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-
-import thaumcraft.api.aspects.Aspect;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.BasicModEntry;
@@ -38,11 +39,14 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithC
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.HarvestCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
 import Reika.DragonAPI.ModInteract.ItemHandlers.OreBerryBushHandler;
@@ -55,14 +59,17 @@ import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.CentrifugeManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+
 import cpw.mods.fml.common.Loader;
+import thaumcraft.api.aspects.Aspect;
 
 public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManager {
 
 	private static final RecipesCentrifuge CentrifugeBase = new RecipesCentrifuge();
 
-	private ItemHashMap<CentrifugeRecipe> recipeList = new ItemHashMap();
+	private ItemHashMap<CentrifugeRecipe> recipeList = new ItemHashMap().enableNBT();
 
 	private ArrayList<ItemStack> outputs = new ArrayList();
 
@@ -98,12 +105,14 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		public final int maxStack;
 		private final ChancedOutputList out;
 		private final FluidOut fluid;
+		public final boolean hasNBT;
 
 		private CentrifugeRecipe(ItemStack is, ChancedOutputList li, FluidOut fs, int cycles) {
 			in = is;
 			out = li;
 			fluid = fs;
 			maxStack = cycles;
+			hasNBT = is.stackTagCompound != null;
 		}
 
 		@Override
@@ -165,6 +174,12 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl, int stack) {
+		in = in.copy();
+		in.stackTagCompound = null; //clear NBT on inputs
+		this.addDirectStackRecipe(in, out, fs, rl, stack);
+	}
+
+	private void addDirectStackRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl, int stack) {
 		if (out.size() > 9)
 			throw new IllegalArgumentException("Too many output items for "+in.getDisplayName()+" centrifuge recipe; only 9 inventory slots!");
 		out.lock();
@@ -201,8 +216,15 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	public CentrifugeRecipe getRecipeResult(ItemStack item) {
-		CentrifugeRecipe cr = item != null ? recipeList.get(item) : null;
-		return cr != null ? cr : null;
+		if (item == null)
+			return null;
+		ItemStack in = item.copy();
+		CentrifugeRecipe cr = recipeList.get(in);
+		if (cr != null && cr.hasNBT) {
+			if (!ItemStack.areItemStackTagsEqual(item, cr.in))
+				return null;
+		}
+		return cr;
 	}
 
 	private Collection<ItemStack> getRecipeOutputs(ItemStack item) {
@@ -248,6 +270,13 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		if (ModList.FORESTRY.isLoaded()) {
 			for (ItemStack in : ForestryRecipeHelper.getInstance().getSqueezerRecipes()) {
 				ImmutablePair<ChancedOutputList, FluidStack> out = ForestryRecipeHelper.getInstance().getSqueezerOutput(in);
+				FluidStack fs = out.right;
+				if (fs != null) {
+					String n = fs.getFluid().getName();
+					if (n.equals("seedoil") || n.equals("juice")) {
+						continue;
+					}
+				}
 				ChancedOutputList co = out.left != null ? out.left.copy() : null;
 				if (co != null) {
 					co.manipulateChances(new ChanceExponentiator(2.5));
@@ -256,7 +285,6 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				else {
 					co = new ChancedOutputList(false);
 				}
-				FluidStack fs = out.right;
 				if (fs != null) {
 					fs = fs.copy();
 					fs.amount *= 1.25;
@@ -347,7 +375,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 				this.addRecipe(berry, fs, 100, RecipeLevel.MODINTERACT);
 			}
 
-			ItemStack chaff = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
+			ItemStack chaff = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass.asItemStack();
 			ItemStack blueslime = ReikaItemHelper.lookupItem("TConstruct:strangeFood");
 			this.addRecipe(ModWoodList.SLIME.getSaplingID(), null, RecipeLevel.MODINTERACT, new ItemStack(Items.slime_ball), 70, blueslime, 20, chaff, 100);
 		}
@@ -359,6 +387,17 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			if (drop != null && ReikaXPFluidHelper.fluidsExist()) {
 				FluidStack fs = ReikaXPFluidHelper.getFluid(5);
 				this.addRecipe(drop, fs, 100, RecipeLevel.MODINTERACT);
+			}
+		}
+
+		if (ModList.THAUMCRAFT.isLoaded()) {
+			for (Aspect a : ReikaThaumHelper.getAllAspects()) {
+				ItemStack in = ThaumItemHelper.getPhialEssentia(a); //worth 8
+				ChancedOutputList co = new ChancedOutputList(false);
+				co.addItem(ThaumItemHelper.ItemEntry.PHIAL.getItem(), 100);
+				for (int i = 0; i < 8; i++)
+					co.addItem(ThaumItemHelper.getCrystallizedEssentia(a), 100);
+				this.addDirectStackRecipe(in, co, null, RecipeLevel.MODINTERACT, 1);
 			}
 		}
 
@@ -386,9 +425,32 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			}
 		}
 
-		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass;
+		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass.asItemStack();
 		this.addRecipe(new ItemStack(Blocks.clay), new FluidStack(FluidRegistry.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.dirt), 100, ItemStacks.silicondust, 75, ItemStacks.ironoreflakes, 0.5F, ItemStacks.goldoreflakes, 0.2F, is, 2.5F);
 
+		this.addGrassToSeeds();
+	}
+
+	private void addGrassToSeeds() {
+		ChancedOutputList c = new ChancedOutputList(false);
+		ItemHashMap<Integer> weights = new ItemHashMap();
+		float total = 0;
+		List<WeightedRandom.Item> li = (List<net.minecraft.util.WeightedRandom.Item>)ReikaObfuscationHelper.get("seedList", null);
+		for (WeightedRandom.Item wi : li) {
+			ItemStack seed = (ItemStack)ReikaObfuscationHelper.get("seed", wi);
+			if (HarvestCraftHandler.getInstance().isSeedItem(seed)) //pollutes with 113435948745609 seeds
+				continue;
+			if (weights.size() >= (weights.containsKey(ItemRegistry.CANOLA.getItemInstance(), 0) ? 9 : 8))
+				continue;
+			total += wi.itemWeight;
+			weights.put(seed, wi.itemWeight);
+		}
+		for (ItemStack is : weights.keySet()) {
+			int wt = weights.get(is);
+			c.addItem(is, ItemRegistry.CANOLA.matchItem(is) ? 10 : wt/total);
+		}
+		this.addRecipe(ReikaItemHelper.tallgrass.asItemStack(), c, null, RecipeLevel.PERIPHERAL);
+		this.addRecipe(ReikaItemHelper.fern.asItemStack(), c, null, RecipeLevel.PERIPHERAL);
 	}
 
 	@Override
@@ -434,7 +496,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	}
 
 	@Override
-	protected boolean addCustomRecipe(LuaBlock lb, CustomRecipeList crl) throws Exception {
+	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), null, false);
 		FluidOut fo = null;
 		ChancedOutputList co = new ChancedOutputList(false);
