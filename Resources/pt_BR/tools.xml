@@ -1,4 +1,13 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <tools>
 	<spring>
 		A mola é utilizada para armazenar energia mecânica. Uma vez colocada no enrolador de mola, ela pode ser utilizada em outro enrolador para fornecer uma pequena quantidade de energia, ou ela pode ser usada para energizar várias ferramentas. Note que, quando enrolar molas, elas correm o risco de quebrar, um risco que fica cada vez maior à medida que são enroladas mais e mais.
