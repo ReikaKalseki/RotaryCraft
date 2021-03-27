@@ -473,7 +473,7 @@
 		</desc>
 		<note>
 			Potência Necessária: %dW
-			Área = Temperatura/50 m
+			Área = 16+SQRT(2*Temperatura)
 			Combustíveis aceitáveis: Carvão, Pó de Blaze, Madeira, Lava, Termita
 			Entrada de Energia: Qualquer lado
 		</note>
