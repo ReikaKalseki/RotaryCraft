@@ -37,6 +37,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryConfig;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.ComplexIO;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
@@ -727,8 +728,14 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		if (tag != null) {
 			damage = tag.getInteger("damage");
 			this.setLubricant(tag.getInteger("lube"));
-			if (tag.hasKey("bearing"))
-				bearingTier = GearboxTypes.valueOf(tag.getString("bearing"));
+			if (tag.hasKey("bearing")) {
+				try {
+					bearingTier = GearboxTypes.valueOf(tag.getString("bearing"));
+				}
+				catch (Exception e) {
+					RotaryCraft.logger.logError("Invalid gearbox item with data "+tag);
+				}
+			}
 		}
 	}
 

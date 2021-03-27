@@ -162,7 +162,7 @@ public class RenderReservoir extends RotaryTERenderer
 			}
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
-			if (f == FluidRegistry.WATER) {
+			if (f == FluidRegistry.WATER && tile.worldObj != null) {
 				ico = LiquidBlockIconEvent.fire(Blocks.water, tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, 1);
 			}
 			float u = ico.getMinU();
