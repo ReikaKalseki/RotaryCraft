@@ -1,0 +1,200 @@
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
+<machines>
+	<compressor>
+		<desc>
+			O compressor de ar converte a energia do eixo para pressurizar o ar, que pode ser levado através de tubos condutores do BuildCraft. Se lhe for dada quantidades excessivas de energia, ele pode e vai explodir. Violentamente...
+		</desc>
+		<note>
+			Pressão máxima antes da detonação: %d kPa
+			
+			Orientação e saída: Como nos motores de RF padrão
+			
+			Entrada de Energia: Por trás
+		</note>
+	</compressor>
+	<pneuengine>
+		<desc>
+			O motor pneumático utiliza uma turbina para converter ar pressurizado a partir de tubos PneumaticCraft em potência de eixo. Use sua interface gráfica para escolher a velocidade de saída. Potências mais elevadas exigem mais pressão de ar e fluxo de ar.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Tubulação de entrada de ar: Por trás
+
+					Superaquece a: %d°C
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</pneuengine>
+	<boiler>
+		<desc>
+			A caldeira de fricção utiliza potência de eixo para aquecer a água bombeada para ela. A água pode ser puxada por cima da caldeira em forma de vapor. Esta máquina tem um período de aquecimento, antes disso ela não faz vapor. Note que esta máquina pode sobreaquecer-se e, violentamente, falhar.
+		</desc>
+		<note>
+			Entrada de Energia: Por baixo
+		</note>
+	</boiler>
+	<steamturbine>
+		<desc>
+			A turbina a vapor recebe vapor de qualquer tubo ou tanque por trás dela e gera potência de eixo. Use a GUI para selecionar o uso de energia (e consumo de vapor).
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Entrada de vapor: Por trás
+
+					Superaquece a: %d°C
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</steamturbine>
+	<generator>
+		<desc>
+			O gerador elétrico recebe potência de eixo e produz energia elétrica do IC2 a uma taxa de %.0f W/EU. A potência de saída total, bem como a quantidade EUs por tick aumenta de acordo com a energia entrando.
+		</desc>
+		<note>
+			Entrada de Energia: Por trás
+			Se "Hard EU" estiver ligado nas configs, requer líquido refrigerante do IC2 ou nitrogênio líquido
+		</note>
+	</generator>
+	<electricmotor>
+		<desc>
+			O motor elétrico usa a energia elétrica do IC2 para produzir potência de eixo. Use sua interface gráfica para escolher a velocidade de saída. Potências mais elevadas exigem mais energia elétrica e uma tensão de alimentação maior.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Conexão do fio: Por trás
+
+					Superaquece a: %d°C e, se "Hard EU" estiver habilitado, vai explodir se estiver sobrecarregado com muito EU
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</electricmotor>
+	<fuelengine>
+		<desc>
+			O motor a combustão usa combustível BuildCraft para produzir potência de eixo. Ele funciona de forma semelhante a motores de combustão desse mod, em termos de produção de energia. Ele requer tanto lubrificante quanto resfriamento com água. E ele desacelera com o superaquecimento.
+		</desc>
+		<note>
+			Torque Produzido: %d Nm
+			Velocidade de rotação: %d rad/s
+			Energia produzida: %dW
+		</note>
+	</fuelengine>
+	<dynamo>
+		<desc>
+			O dínamo rotacional converte a energia RotaryCraft em fluxo de redstone do Thermal Expansion. Devido às limitações impostas pelos campos magnéticos internos, ele pode ter um máximo de %d Nm de torque (%d Nm, se atualizado) e um máximo de %d rad/s. Qualquer excesso, embora não perigoso, será desperdiçado.
+		</desc>
+		<note>
+			Orientação e de saída: Como os dínamos do Thermal Expansion
+			Entrada de Energia: Por trás
+		</note>
+	</dynamo>
+	<magnetic>
+		<desc>
+			As funções do motor magnetostático são muito parecidas com as do motor pneumático. Aceita RF fornecido a ele e a sua velocidade de saída pode ser selecionada, para definir a saída de energia total. Como todos os outros motores de conversão, exige refrigeração.
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					Entrada de conduítes: Por trás
+
+					Superaquece a: %d°C
+
+					Os Tiers vão de 0 a 5; cada tier aumenta a produção de energia, mas diminui a eficiência
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</magnetic>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+</machines>

@@ -1,4 +1,13 @@
-﻿<?xml version="1.0"?>
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
 <machines>
 	<bedrockbreaker>
 		<desc>
@@ -378,7 +387,7 @@
 	</mobharvester>
 	<projector>
 		<desc>
-			O projetor pojeta (lol...) a imagem de um slide em uma parede. Note que a parede deve ser de 7 blocos de largura e 5 blocos de altura, no mínimo, e deve ser opaca, e sem obstruções.
+			O projetor exibe a imagem de um slide em uma parede. Note que a parede deve ser de 7 blocos de largura e 5 blocos de altura, no mínimo, e deve ser opaca, e sem obstruções.
 		</desc>
 		<note>
 			Potência Necessária: %dW
@@ -445,8 +454,8 @@
 		</desc>
 		<note>
 			Potência Necessária: %dW
+			Aumenta conforme viscosidade do fluido
 			Entrada de Energia: Qualquer lado
-			
 			Requer líquido canalizado para operar
 		</note>
 	</spiller>
@@ -1208,6 +1217,14 @@
 			Funciona com etanol e combustível de jato; este último queima mais quente e causa mais dano
 		</note>
 	</flameturret>
+	<bundledbus>
+		<desc>
+			O Extrator de sinal emcapado é um exportador 16 em 1, controlado com cabos emcapados com os do ProjectRed. Isto é particularmente útil com controle de computadores, visto que eles pode exportar dinamicamente, no espaço de um bloco, até 16 tipos de itens para uma máquina.
+		</desc>
+		<note>
+			Cada kW de energia ativa um canal adicional
+		</note>
+	</bundledbus>
 	<name>
 		<desc>
 			
