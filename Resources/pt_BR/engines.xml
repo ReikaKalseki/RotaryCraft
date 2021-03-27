@@ -11,12 +11,12 @@
 <engines>
 	<dc>
 		<desc>
-			O motor de corrente direta (CD) é o mais simples de fazer e operar. Tudo o que necessita para funcionar é um sinal de redstone contínuo de qualquer força. Esta facilidade tem um custo, pois estes motores são os mais fracos de todos, com saída de %d Nm de torque e %d rad/s para gerar %.3fkW de potência de eixo.
+			O motor de corrente direta (CD) é o mais simples de fazer e operar. Tudo o que necessita para funcionar é um sinal de redstone contínuo de qualquer força. Esta facilidade tem um custo, pois estes motores são os mais fracos de todos, com saída de %d $TORQUE_UNIT$ de torque e %d $SPEED_UNIT$ para gerar %.3f$POWER_UNIT$ de potência de eixo.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Velocidade: %d rad/s
-			Energia Produzida: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Velocidade: %d $SPEED_UNIT$
+			Energia Produzida: %.3f$POWER_UNIT$
 			Fonte de Alimentação: Redstone
 			Requer Consumíveis: Não
 			Riscos: Nenhum
@@ -24,12 +24,12 @@
 	</dc>
 	<wind>
 		<desc>
-			A turbina eólica usa o vento para gerar energia rotacional. Devido à baixa densidade do ar, ela não gera muito torque (apenas %d Nm), mas o seu desenho permite que o mesmo rode a uma velocidade bastante rápida de %d rad/s, produzindo um total de %.3fkW em sua eficiência máxima. Note que a eficiência deste motor só é maximizada quando é alta o suficiente e quando está num lugar externo aberto. Objetos e blocos podem obstruir as lâminas deste motor.
+			A turbina eólica usa o vento para gerar energia rotacional. Devido à baixa densidade do ar, ela não gera muito torque (apenas %d $TORQUE_UNIT$), mas o seu desenho permite que o mesmo rode a uma velocidade bastante rápida de %d $SPEED_UNIT$, produzindo um total de %.3f$POWER_UNIT$ em sua eficiência máxima. Note que a eficiência deste motor só é maximizada quando é alta o suficiente e quando está num lugar externo aberto. Objetos e blocos podem obstruir as lâminas deste motor.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Velocidade: %d rad/s
-			Energia Produzida: %.3fkW
+			Torque: %d $POWER_UNIT$
+			Velocidade: %d $POWER_UNIT$
+			Energia Produzida: %.3f$POWER_UNIT$
 			Fonte de Alimentação: Vento
 			Requer Consumíveis: Não
 			Riscos: Lâminas giratórias
@@ -38,12 +38,12 @@
 	</wind>
 	<steam>
 		<desc>
-			O motor a vapor opera continuamente se for dada uma fonte de calor abaixo dele e água canalizada para dentro. Um pouco mais forte do que os motores anteriores, ele fornece %d Nm à %d rad/s (%.3fkW).
+			O motor a vapor opera continuamente se for dada uma fonte de calor abaixo dele e água canalizada para dentro. Um pouco mais forte do que os motores anteriores, ele fornece %d $TORQUE_UNIT$ à %d $SPEED_UNIT$ (%.3f$POWER_UNIT$).
 		</desc>
 		<note>
-			Torque: %d Nm
-			Velocidade: %d rad/s
-			Energia Produzida: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Velocidade: %d $SPEED_UNIT$
+			Energia Produzida: %.3f$POWER_UNIT$
 			Fonte de Energia: Água e calor
 			Requer Consumíveis: Água
 			Riscos: Sobreaquecimento 150°C
@@ -51,12 +51,12 @@
 	</steam>
 	<gas>
 		<desc>
-			O motor a gasolina, fiel ao seu nome, funciona com... etanol. Basta carregá-lo com cristais de etanol para vê-los queimar e produzir %d Nm de torque a %d rad/s, ou seja, %.3fkW.
+			O motor a gasolina, fiel ao seu nome, funciona com... etanol. Basta carregá-lo com cristais de etanol para vê-los queimar e produzir %d $TORQUE_UNIT$ de torque a %d $SPEED_UNIT$, ou seja, %.3f$POWER_UNIT$.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Velocidade: %d rad/s
-			Potência: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Velocidade: %d $SPEED_UNIT$
+			Potência: %.3f$POWER_UNIT$
 			Fonte de alimentação: Etanol
 			Requer consumíveis: Etanol
 			Riscos: Nenhum
@@ -64,14 +64,14 @@
 	</gas>
 	<ac>
 		<desc>
-			O motor de corrente alternada (CA), como seu primo CD, exige um sinal redstone para rodar. No entanto, este precisa de um sinal alternado, melhor fornecido com um relógio de redstone. Ciclos mais rápidos se correlacionam com potência mais consistente, com 2 relógios proporcionando um fornecimento constante de %d Nm à %d rad/s (%.3fkW). Este motor exige um eixo magnetizado, que irá desmagnetizando-se gradualmente.
+			O motor de corrente alternada (CA), como seu primo CD, exige um sinal redstone para rodar. No entanto, este precisa de um sinal alternado, melhor fornecido com um relógio de redstone. Ciclos mais rápidos se correlacionam com potência mais consistente, com 2 relógios proporcionando um fornecimento constante de %d $TORQUE_UNIT$ à %d $SPEED_UNIT$ (%.3f$POWER_UNIT$). Este motor exige um eixo magnetizado, que irá desmagnetizando-se gradualmente.
 		</desc>
 		<note>
 			<sub>
 				<s1>
-					Torque: %d Nm
-					Velocidade: %d rad/s
-					Potência: %.3fkW
+					Torque: %d $TORQUE_UNIT$
+					Velocidade: %d $SPEED_UNIT$
+					Potência: %.3f$POWER_UNIT$
 					Fonte de alimentação: Relógio de Redstone e um eixo magnetizado no núcleo
 					Requer consumíveis: Não
 					Riscos: Nenhum
@@ -84,12 +84,12 @@
 	</ac>
 	<sport>
 		<desc>
-			O motor de performance, como o motor a gasolina, usa álcool, mas também requer refrigeração com água e só pode chegar a sua potência máxima quando recebe os aditivos corretos para o seu abastecimento de combustível: redstone, pólvora, ou pó de blaze. Cada um é mais eficaz do que o último. Se totalmente fornecido e mantido, estes motores produzem %d Nm de torque a %d rad/s, ou seja, %.3fkW.
+			O motor de performance, como o motor a gasolina, usa álcool, mas também requer refrigeração com água e só pode chegar a sua potência máxima quando recebe os aditivos corretos para o seu abastecimento de combustível: redstone, pólvora, ou pó de blaze. Cada um é mais eficaz do que o último. Se totalmente fornecido e mantido, estes motores produzem %d $TORQUE_UNIT$ de torque a %d $SPEED_UNIT$, ou seja, %.3f$POWER_UNIT$.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Velocidade: %d rad/s
-			Potência: %.3fkW
+			Torque: %d $TORQUE_UNIT$
+			Velocidade: %d $SPEED_UNIT$
+			Potência: %.3f$POWER_UNIT$
 			Fonte de energia: Etanol e Aditivos
 			Requer consumíveis: Etanol e Redstone / Pólvora / Pó de Blaze
 			Riscos: Superaquecimento a 240°C
@@ -97,14 +97,14 @@
 	</sport>
 	<hydro>
 		<desc>
-			A roda d'água converte a energia da água em queda em potência de eixo. Note que esta máquina só gira no sentido anti-horário e, portanto, a queda d'água deve estar em conformidade. Além disso, os blocos adjacentes podem obstruir suas pás. Finalmente, a potência deste motor dependende de quão alto a água está caindo. Uma queda de 3 bloco produz a energia mínima, mas uma queda de 64 blocos ou mais produz %d Nm à %d rad/s, o maior torque de qualquer motor, totalizando %.3fkW. Estes motores também podem ser encadeados, unindo os seus torques. Este motor deve ser lubrificado para funcionar.
+			A roda d'água converte a energia da água em queda em potência de eixo. Note que esta máquina só gira no sentido anti-horário e, portanto, a queda d'água deve estar em conformidade. Além disso, os blocos adjacentes podem obstruir suas pás. Finalmente, a potência deste motor dependende de quão alto a água está caindo. Uma queda de 3 bloco produz a energia mínima, mas uma queda de 64 blocos ou mais produz %d $TORQUE_UNIT$ à %d $SPEED_UNIT$, o maior torque de qualquer motor, totalizando %.3f$POWER_UNIT$. Estes motores também podem ser encadeados, unindo os seus torques. Este motor deve ser lubrificado para funcionar.
 		</desc>
 		<note>
 			<sub>
 				<s1>
-					Max Torque: %d Nm
-					Velocidade máxima: %d rad/s
-					Energia gerada máxima: %.3fkW
+					Max Torque: %d $TORQUE_UNIT$
+					Velocidade máxima: %d $SPEED_UNIT$
+					Energia gerada máxima: %.3f$POWER_UNIT$
 					Fonte de alimentação: Queda de Água
 					Requer consumíveis: Lubrificante
 					Riscos: Pás girando
@@ -122,12 +122,12 @@
 	</hydro>
 	<micro>
 		<desc>
-			A microturbina é singular. Quando recebe um fornecimento constante de combustível, ela fornece muito pouco de torque (%d Nm), mas o fará a uma enorme velocidade, de %d rad/s, para uma produção total de pouco mais de dois megawatts (%.3fMW).
+			A microturbina é singular. Quando recebe um fornecimento constante de combustível, ela fornece muito pouco de torque (%d $TORQUE_UNIT$), mas o fará a uma enorme velocidade, de %d $SPEED_UNIT$, para uma produção total de pouco mais de dois megawatts (%.3f$POWER_UNIT$).
 		</desc>
 		<note>
-			Torque: %d Nm
-			Velocidade: %d rad/s
-			Energia Produzida: %.3fMW
+			Torque: %d $TORQUE_UNIT$
+			Velocidade: %d $SPEED_UNIT$
+			Energia Produzida: %.3f$POWER_UNIT$
 			Fonte de alimentação: Combustível de jato
 			Requer consumíveis: Combustível de jato
 			Riscos: Nenhum
@@ -135,12 +135,12 @@
 	</micro>
 	<jet>
 		<desc>
-			O motor mais poderoso de todos, a turbina de avião é um monstro! É comparável a um motor de avião a jato commerical de verdade... E com som muito parecido. Esse motor é, quando abastecido, capaz de fornecer %d Nm de torque a %d rad/s (%.3fMW). Esteja avisado: a menos que queira descobrir o que se sente ao passar por um liquidificador, fique longe da frente de um destes durante sua operação! Nem você, nem seu motor ficarão bem.
+			O motor mais poderoso de todos, a turbina de avião é um monstro! É comparável a um motor de avião a jato commerical de verdade... E com som muito parecido. Esse motor é, quando abastecido, capaz de fornecer %d $TORQUE_UNIT$ de torque a %d $SPEED_UNIT$ (%.3f$POWER_UNIT$). Esteja avisado: a menos que queira descobrir o que se sente ao passar por um liquidificador, fique longe da frente de um destes durante sua operação! Nem você, nem seu motor ficarão bem.
 		</desc>
 		<note>
-			Torque: %d Nm
-			Velocidade: %d rad/s
-			Energia Produzida: %.3fMW
+			Torque: %d $TORQUE_UNIT$
+			Velocidade: %d $SPEED_UNIT$
+			Energia Produzida: %.3f$POWER_UNIT$
 			Fonte de alimentação: Combustível de jato
 			Requer consumíveis: Combustível de jato
 			Riscos: Ingestão; Falha violenta é possível, se danificado
@@ -152,7 +152,7 @@
 		</desc>
 		<note>
 			Torque: Escalável
-			Velocidade: %d rad/s
+			Velocidade: %d $SPEED_UNIT$
 			Energia Produzida: Escalável
 			Fonte de alimentação: Luz solar
 			Requer consumíveis: Água
