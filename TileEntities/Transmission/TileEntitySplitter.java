@@ -343,7 +343,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 							torquein2 = omegain2 = 0;
 					}
 					if (te2 instanceof ComplexIO) {
-						TileEntityPowerBus pwr = (TileEntityPowerBus)te2;
+						ComplexIO pwr = (ComplexIO)te2;
 						ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 						omegain2 = pwr.getSpeedToSide(dir);
 						torquein2 = pwr.getTorqueToSide(dir);
@@ -480,7 +480,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 				}
 
 				if (te instanceof ComplexIO) {
-					TileEntityPowerBus pwr = (TileEntityPowerBus)te;
+					ComplexIO pwr = (ComplexIO)te;
 					ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 					omega = pwr.getSpeedToSide(dir);
 					torque = pwr.getTorqueToSide(dir);
