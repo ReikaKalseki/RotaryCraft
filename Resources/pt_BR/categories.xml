@@ -9,9 +9,9 @@
 -->
 <?xml version="1.0"?>
 <categories>
-	<misc>
+	<info>
 		Algumas informações importantes sobre a operação de algumas máquinas e algumas ferramentas essenciais.
-	</misc>
+	</info>
 	<engine>
 		Talvez as mais importantes de todas as máquinas, os motores são utilizados para fornecer energia. Cada um tem o seu próprio torque e velocidade característico. Todos eles são geralmente de alta velocidade e baixo torque. Cada motor também tem suas próprias exigências, em termos de abastecimento de energia. Alguns motores têm suas próprias peculiaridades especiais, o que é importante saber.
 	</engine>
