@@ -16,7 +16,7 @@
 		<note>
 			Torque: %d $TORQUE_UNIT$
 			Velocidade: %d $SPEED_UNIT$
-			Energia Produzida: %.3f$POWER_UNIT$
+			Potência: %.3f$POWER_UNIT$
 			Fonte de Alimentação: Redstone
 			Requer Consumíveis: Não
 			Riscos: Nenhum
@@ -27,9 +27,9 @@
 			A turbina eólica usa o vento para gerar energia rotacional. Devido à baixa densidade do ar, ela não gera muito torque (apenas %d $TORQUE_UNIT$), mas o seu desenho permite que o mesmo rode a uma velocidade bastante rápida de %d $SPEED_UNIT$, produzindo um total de %.3f$POWER_UNIT$ em sua eficiência máxima. Note que a eficiência deste motor só é maximizada quando é alta o suficiente e quando está num lugar externo aberto. Objetos e blocos podem obstruir as lâminas deste motor.
 		</desc>
 		<note>
-			Torque: %d $POWER_UNIT$
-			Velocidade: %d $POWER_UNIT$
-			Energia Produzida: %.3f$POWER_UNIT$
+			Torque: %d $TORQUE_UNIT$
+			Velocidade: %d $SPEED_UNIT$
+			Potência: %.3f$POWER_UNIT$
 			Fonte de Alimentação: Vento
 			Requer Consumíveis: Não
 			Riscos: Lâminas giratórias
@@ -43,7 +43,7 @@
 		<note>
 			Torque: %d $TORQUE_UNIT$
 			Velocidade: %d $SPEED_UNIT$
-			Energia Produzida: %.3f$POWER_UNIT$
+			Potência: %.3f$POWER_UNIT$
 			Fonte de Energia: Água e calor
 			Requer Consumíveis: Água
 			Riscos: Sobreaquecimento 150°C
@@ -104,7 +104,7 @@
 				<s1>
 					Max Torque: %d $TORQUE_UNIT$
 					Velocidade máxima: %d $SPEED_UNIT$
-					Energia gerada máxima: %.3f$POWER_UNIT$
+					Potência máxima: %.3f$POWER_UNIT$
 					Fonte de alimentação: Queda de Água
 					Requer consumíveis: Lubrificante
 					Riscos: Pás girando
@@ -127,7 +127,7 @@
 		<note>
 			Torque: %d $TORQUE_UNIT$
 			Velocidade: %d $SPEED_UNIT$
-			Energia Produzida: %.3f$POWER_UNIT$
+			Potência: %.3f$POWER_UNIT$
 			Fonte de alimentação: Combustível de jato
 			Requer consumíveis: Combustível de jato
 			Riscos: Nenhum
@@ -140,7 +140,7 @@
 		<note>
 			Torque: %d $TORQUE_UNIT$
 			Velocidade: %d $SPEED_UNIT$
-			Energia Produzida: %.3f$POWER_UNIT$
+			Potência: %.3f$POWER_UNIT$
 			Fonte de alimentação: Combustível de jato
 			Requer consumíveis: Combustível de jato
 			Riscos: Ingestão; Falha violenta é possível, se danificado
@@ -153,7 +153,7 @@
 		<note>
 			Torque: Escalável
 			Velocidade: %d $SPEED_UNIT$
-			Energia Produzida: Escalável
+			Potência: Escalável
 			Fonte de alimentação: Luz solar
 			Requer consumíveis: Água
 			Riscos: Ignição de blocos inflamáveis nas proximidades
