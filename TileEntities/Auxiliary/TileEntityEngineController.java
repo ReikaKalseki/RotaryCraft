@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -78,7 +78,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	}
 
 	public boolean canProducePower() {
-		if (prevRedstone > 0 && !redstoneMode)
+		if (prevRedstone > 0 && redstoneMode)
 			return false;
 		return setting.speedFactor != 0;
 	}
@@ -135,10 +135,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	public void setSetting(int ordinal) {
 		int o = Math.max(0, Math.min(ordinal, EngineSettings.list.length-1));
 		setting = EngineSettings.list[o];
-	}
-
-	public int getSettingNumber() {
-		return setting.ordinal();
 	}
 
 	@Override

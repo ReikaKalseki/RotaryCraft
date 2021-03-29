@@ -80,10 +80,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		return 3;
 	}
 
-	public static boolean func_52005_b(ItemStack par0ItemStack) {
-		return true;
-	}
-
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);

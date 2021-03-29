@@ -191,6 +191,7 @@ public class RotaryRecipes {
 		FluidStack ethanol = FluidRegistry.getFluidStack("rc ethanol", 1000);
 		int energy = 750;
 		ThermalRecipeHelper.addCrucibleRecipe(ItemRegistry.ETHANOL.getStackOf(), ethanol, energy);
+		ThermalRecipeHelper.addCrucibleRecipe(ItemStacks.cleansludge, ethanol, energy*3/5);
 		//ThermalRecipeHelper.addInductionSmelter(ItemStacks.steelingot.copy(), bedrock, ItemStacks.bedingot.copy(), 48000);
 
 		//ItemStack transmissionCoil = GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilSilver", 1);

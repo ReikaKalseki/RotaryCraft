@@ -221,10 +221,13 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	private void hijackFurnace(World world, int x, int y, int z, int meta) {
 		TileEntity te = furnaceLocation.getTileEntity(world);
 		TileEntityFurnace tile = (TileEntityFurnace)te;
+		boolean flag = tile.furnaceBurnTime > 0;
 		int burn = Math.max(this.getBurnTimeFromTemperature(), tile.furnaceBurnTime);
-		this.setFurnaceBlock(world, burn > 0);
 		tile.currentItemBurnTime = burn;
 		tile.furnaceBurnTime = burn;
+		if (burn > 0 && !flag) {
+			BlockFurnace.updateFurnaceBlockState(true, world, furnaceLocation.xCoord, furnaceLocation.yCoord, furnaceLocation.zCoord);
+		}
 		ItemStack in = tile.getStackInSlot(0);
 		int fx = furnaceLocation.xCoord;
 		int fy = furnaceLocation.yCoord;
@@ -296,12 +299,6 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 	private float getAccelerationFactor(FrictionRecipe rec) {
 		float fac = temperature/(float)rec.requiredTemperature;
 		return Math.min(1, (fac*fac)-1);
-	}
-
-	private void setFurnaceBlock(World world, boolean isOn) {
-		Block b = furnaceLocation.getBlock(world);
-		BlockFurnace furn = (BlockFurnace)b;
-		//furn.updateFurnaceBlockState(isOn, world, fx, fy, fz);
 	}
 
 	private void getFurnaceCoordinates(World world, int x, int y, int z, int meta) {

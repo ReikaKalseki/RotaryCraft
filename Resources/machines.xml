@@ -21,7 +21,7 @@
 	</bedrockbreaker>
 	<fermenter>
 		<desc>
-			The fermenter is how you produce the ethanol for the engines that require it. To make yeast, place sugar in the top slot, and dirt on the bottom. To make sludge, put yeast on top and plant matter on the bottom. Put that in a furnace, and you will get crystals of ethanol. This machine's operational speed rises as the input speed does. This machine is temperature-sensitive, and very low or high temperatures will slow it down or even kill the yeast. To automate this machine, use redstone to choose the target production item (displayed at the top-right of the GUI). The middle GUI slot is in fact a water gauge, not an item slot.
+			The fermenter is how you produce the ethanol for the engines that require it. To make yeast, place sugar in the top slot, and dirt on the bottom. To make sludge, put yeast on top and plant matter on the bottom. This machine's operational speed rises as the input speed does. This machine is temperature-sensitive, and very low or high temperatures will slow it down or even kill the yeast. To automate this machine, use redstone to choose the target production item (displayed at the top-right of the GUI). The middle GUI slot is in fact a water gauge, not an item slot.
 		</desc>
 		<note>
 			Required Power: %dW

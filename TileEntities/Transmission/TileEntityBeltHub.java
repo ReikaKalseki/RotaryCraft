@@ -255,7 +255,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	}
 
 	public final int getDistanceToTarget() {
-		return otherEnd.getTaxicabDistanceTo(xCoord, yCoord, zCoord);
+		return otherEnd == null ? -1 : otherEnd.getTaxicabDistanceTo(xCoord, yCoord, zCoord);
 	}
 
 	public final boolean isValidDirection(ForgeDirection dir) {
