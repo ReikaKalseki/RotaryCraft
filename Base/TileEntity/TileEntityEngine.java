@@ -769,12 +769,16 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		else if (f.equals(FluidRegistry.getFluid("rc lubricant"))) {
 			return lubricant.fill(resource, doFill);
 		}
-		else if (f.equals(FluidRegistry.getFluid("air")) || f.equals(FluidRegistry.getFluid("oxygen"))) {
+		else if (isAirFluid(f)) {
 			return air.fill(resource, doFill);
 		}
 		else {
 			return fuel.fill(resource, doFill);
 		}
+	}
+
+	public static boolean isAirFluid(Fluid f) {
+		return f.equals(FluidRegistry.getFluid("air")) || f.equals(FluidRegistry.getFluid("oxygen")) || f.equals(FluidRegistry.getFluid("rc oxygen"));
 	}
 
 	@Override
@@ -789,6 +793,9 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 	@Override
 	public final boolean canFill(ForgeDirection from, Fluid fluid) {
+		if (isAirFluid(fluid)) {
+			return type.isAirBreathing() && from == this.getFuelInputDirection();
+		}
 		if (!type.canReceiveFluid(fluid))
 			return false;
 		if (fluid.equals(FluidRegistry.WATER)) {
@@ -811,9 +818,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		}
 		else if (fluid.equals(FluidRegistry.getFluid("bioethanol"))) {
 			return from == this.getFuelInputDirection();
-		}
-		else if (fluid.equals(FluidRegistry.getFluid("air")) || fluid.equals(FluidRegistry.getFluid("oxygen"))) {
-			return type.isAirBreathing() && from == this.getFuelInputDirection();
 		}
 		return false;
 	}

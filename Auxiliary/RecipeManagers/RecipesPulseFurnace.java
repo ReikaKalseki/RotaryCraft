@@ -19,9 +19,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
+import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
@@ -40,6 +43,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -58,8 +62,8 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		super(MachineRegistry.PULSEJET);
 		RecipeInterface.pulsefurn = this;
 
-		this.addSmelting(Blocks.obsidian, BlockRegistry.BLASTGLASS.getCraftedProduct(1), RecipeLevel.CORE);
-		this.addSmelting(Items.iron_ingot, ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2), RecipeLevel.CORE);
+		this.addSmelting(Blocks.obsidian, BlockRegistry.BLASTGLASS.getCraftedProduct(1), 850, RecipeLevel.CORE);
+		this.addSmelting(Items.iron_ingot, ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2), 900, RecipeLevel.CORE);
 
 		this.addRecycling();
 
@@ -69,14 +73,26 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		//addSmelting(RotaryCraft.shaftcraft, 9, new ItemStack(RotaryCraft.shaftcraft, 1, 1));	//Iron scrap
 	}
 
-	private static class PulseJetRecipe implements MachineRecipe {
+	public static class PulseJetRecipe implements MachineRecipe {
 
 		private final ItemStack input;
 		private final ItemStack output;
 
+		public final int requiredTemperature;
+
 		private PulseJetRecipe(ItemStack in, ItemStack out) {
+			this(in, out, getDefaultMeltingTemp(in));
+		}
+
+		private PulseJetRecipe(ItemStack in, ItemStack out, int temp) {
 			input = in;
 			output = out;
+
+			requiredTemperature = temp;
+		}
+
+		public ItemStack getInput() {
+			return input.copy();
 		}
 
 		public ItemStack getOutput() {
@@ -186,9 +202,18 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		this.addSmelting(in, itemstack, RecipeLevel.CORE);
 	}
 
+	private void addSmelting(ItemStack in, ItemStack itemstack, int temp, RecipeLevel rl) {
+		PulseJetRecipe rec = new PulseJetRecipe(in, itemstack, temp);
+		this.createRecipe(rec, rl);
+	}
+
 	private void addSmelting(ItemStack in, ItemStack itemstack, RecipeLevel rl) {
 		PulseJetRecipe rec = new PulseJetRecipe(in, itemstack);
-		recipes.put(in, rec);
+		this.createRecipe(rec, rl);
+	}
+
+	private void createRecipe(PulseJetRecipe rec, RecipeLevel rl) {
+		recipes.put(rec.input, rec);
 		this.onAddRecipe(rec, rl);
 	}
 
@@ -196,25 +221,35 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		this.addSmelting(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE), itemstack, rl);
 	}
 
+	private void addSmelting(Block b, ItemStack itemstack, int temp, RecipeLevel rl) {
+		this.addSmelting(new ItemStack(b, 1, OreDictionary.WILDCARD_VALUE), itemstack, temp, rl);
+	}
+
 	private void addSmelting(Item i, ItemStack itemstack, RecipeLevel rl) {
 		this.addSmelting(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE), itemstack, rl);
 	}
 
-	public void addCustomRecipe(ItemStack in, ItemStack output) {
-		this.addSmelting(in, output, RecipeLevel.CUSTOM);
+	private void addSmelting(Item i, ItemStack itemstack, int temp, RecipeLevel rl) {
+		this.addSmelting(new ItemStack(i, 1, OreDictionary.WILDCARD_VALUE), itemstack, temp, rl);
 	}
 
-	public ItemStack getSmeltingResult(ItemStack item) {
+	public void addCustomRecipe(ItemStack in, ItemStack output, int temp) {
+		if (temp < 0)
+			temp = getDefaultMeltingTemp(in);
+		this.addSmelting(in, output, temp, RecipeLevel.CUSTOM);
+	}
+
+	public PulseJetRecipe getSmeltingResult(ItemStack item) {
 		PulseJetRecipe ret = item != null ? recipes.get(item) : null;
-		return ret != null ? ret.output.copy() : null;
+		return ret;
 	}
 
-	public List<ItemStack> getSources(ItemStack result) {
-		List<ItemStack> li = new ArrayList();
+	public List<PulseJetRecipe> getSources(ItemStack result) {
+		List<PulseJetRecipe> li = new ArrayList();
 		for (ItemStack in : recipes.keySet()) {
-			ItemStack out = this.getSmeltingResult(in);
-			if (ReikaItemHelper.matchStacks(result, out))
-				li.add(in.copy());
+			PulseJetRecipe out = this.getSmeltingResult(in);
+			if (out != null && ReikaItemHelper.matchStacks(result, out.output))
+				li.add(out);
 		}
 		return li;
 	}
@@ -401,8 +436,24 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	protected boolean addCustomRecipe(String n, LuaBlock lb, CustomRecipeList crl) throws Exception {
 		ItemStack in = crl.parseItemString(lb.getString("input"), lb.getChild("input_nbt"), false);
 		ItemStack out = crl.parseItemString(lb.getString("output"), lb.getChild("output_nbt"), false);
+		int temp = getDefaultMeltingTemp(in);
+		if (lb.containsKey("required_temperature")) {
+			temp = lb.getInt("required_temperature");
+			if (temp <= 200) {
+				throw new IllegalArgumentException("Temperature is too low");
+			}
+			else if (temp >= TileEntityPulseFurnace.MAXTEMP) {
+				throw new IllegalArgumentException("Recipe is impossible - temperature exceeds maximum");
+			}
+		}
 		this.verifyOutputItem(out);
-		this.addCustomRecipe(in, out);
+		this.addCustomRecipe(in, out, temp);
 		return true;
+	}
+
+	private static int getDefaultMeltingTemp(ItemStack is) {
+		if (ItemMaterialController.instance.getMaterial(is) == ItemMaterial.OBSIDIAN)
+			return ItemMaterialController.instance.getMeltingPoint(is);
+		return MathHelper.clamp_int(ItemMaterialController.instance.getMeltingPoint(is)/2, 400, 850);
 	}
 }

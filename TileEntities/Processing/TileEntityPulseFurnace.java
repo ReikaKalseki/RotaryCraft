@@ -14,7 +14,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -22,10 +21,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
 import Reika.DragonAPI.Instantiable.HybridTank;
-import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.TemperatureEffect.TemperatureCallback;
+import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -35,6 +33,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace.PulseJetRecipe;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -49,7 +48,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public static final int CAPACITY = 3000;
 	public static final int MAXFUEL = 8000;
 	public static final int MAXTEMP = 1000; //1370C = melting steel, 800C = 90% strength loss
-	public static final int SMELTTICKS = 100;
+	public static final int SMELTTICKS_BASE = 100;
 
 	public boolean idle = false;
 
@@ -61,8 +60,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	private int soundtick = 2000;
 
-	boolean flag2 = false;
-
 	private final HybridTank fuel = new HybridTank("fuel", MAXFUEL);
 	private final HybridTank water = new HybridTank("water", CAPACITY);
 	private final HybridTank accel = new HybridTank("accel", MAXFUEL);
@@ -73,7 +70,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}
 
 	public void testIdle() {
-		idle = (!this.canSmelt() && omega > MINSPEED);
+		idle = (this.getRecipe() == null && omega > MINSPEED);
 	}
 
 	public int getSizeInventory() {
@@ -112,7 +109,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	 */
 	public int getCookProgressScaled(int par1)
 	{
-		return (pulseFurnaceCookTime * par1) / 20;
+		return Math.min(par1, (pulseFurnaceCookTime * par1) / this.getOperationTime());
 	}
 
 	public int getFuelScaled(int par1)
@@ -132,7 +129,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	public int getFireScaled(int par1)
 	{
-		return (smelttick * par1) / SMELTTICKS;
+		return Math.min(par1, (smelttick * par1) / this.getSmeltingDuration());
 	}
 
 	public int getAccelerantScaled(int a) {
@@ -146,33 +143,57 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		}
 	}
 
-	public void heatAmbient(World world, int x, int y, int z, int meta) {
+	private void heatAmbient(World world, int x, int y, int z, int meta) {
 		if (fuel.getLevel() > 0 && this.canHeatUp())
 			temperature += Math.max((MAXTEMP-temperature)/8, 4);
+
+		int dT = 2;
+		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
+
+		Tamb = 300;
+
+		if (Tamb < -40) {
+			dT = 8;
+		}
+		else if (Tamb < -5) {
+			dT = 6;
+		}
+		else if (Tamb < 5) {
+			dT = 4;
+		}
+
+		if (Tamb >= 300 && this.canHeatUp()) {
+			dT = -1;
+		}
+		else if (Tamb >= temperature) {
+			dT = 0;
+		}
+		else if (Tamb > 30) {
+			dT = 1;
+		}
 
 		if (water.getLevel() > 0) {
 			if (rand.nextInt(3) == 0) {
 				int rem = (temperature*2/MAXTEMP)*50;
+				if (Tamb >= 180)
+					rem *= 2;
+				if (Tamb >= 90)
+					rem *= 2;
 				if (rem > 0)
 					water.removeLiquid(rem);
 			}
-			temperature -= temperature/64;
+			if (Tamb >= 300)
+				temperature -= temperature/256;
+			else
+				temperature -= temperature/64;
 		}
-		if (temperature < 0)
-			temperature = 0;
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
-		if (biome == BiomeGenBase.frozenOcean || biome == BiomeGenBase.frozenRiver ||
-				biome == BiomeGenBase.iceMountains || biome == BiomeGenBase.icePlains ||
-				biome == BiomeGenBase.taiga || biome == BiomeGenBase.taigaHills)
-			temperature -= 4;
-		else if (biome == BiomeGenBase.desert || biome == BiomeGenBase.desertHills ||
-				biome == BiomeGenBase.jungle || biome == BiomeGenBase.jungleHills)
-			temperature -= 1;
-		else if (biome != BiomeGenBase.hell) //do not cool in the nether
-			temperature -= 2;
-		if (temperature < Tamb)
-			temperature = Tamb;
+
+		if (dT != 0) {
+			if (dT > 0)
+				temperature = Math.max(Tamb, temperature-dT);
+			else
+				temperature -= dT;
+		}
 	}
 
 	private boolean canHeatUp() {
@@ -184,6 +205,8 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}
 
 	public void updateTemperature(World world, int x, int y, int z, int meta) {
+		this.heatAmbient(world, x, y, z, meta);
+
 		if (temperature > 915) {
 			RotaryCraft.logger.warn("WARNING: "+this+" is reaching very high temperature!");
 			world.spawnParticle("lava", x+rand.nextFloat(), y+rand.nextFloat(), z+rand.nextFloat(), 0, 0, 0);
@@ -195,25 +218,12 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	}
 
-	public int getReqTemps(ItemStack is) {
-		if (is == null)
-			return -1;
-		if (is.getItem() == Items.iron_ingot)
-			return 900; //steelmaking
-		if (ItemMaterialController.instance.getMaterial(is) == ItemMaterial.OBSIDIAN)
-			return ItemMaterialController.instance.getMeltingPoint(is);
-		return ItemMaterialController.instance.getMeltingPoint(is)/2;
-	}
-
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.testIdle();
 		soundtick++;
-		boolean flag1 = false;
-		int reqtemp = this.getReqTemps(inv[0]);
-		if (tickcount >= 20) {
-			this.heatAmbient(world, x, y, z, meta);
+		if (tickcount >= 20 && !world.isRemote) {
 			this.updateTemperature(world, x, y, z, meta);
 			tickcount = 0;
 		}
@@ -221,53 +231,39 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			soundtick = 0;
 			SoundRegistry.PULSEJET.playSoundAtBlock(world, x, y, z, 1, 1);
 		}
-		boolean canprocess = false;
-		if (this.canSmelt()) {
-			canprocess = true;
-			if (!flag2)
-				this.getFuel(world, x, y, z, meta);
+		PulseJetRecipe recipe = this.getRecipe();
+		if (recipe != null) {
+			this.getFuel(world, x, y, z, meta);
 		}
 
 		tickcount++;
 		tickcount2++;
 
-		int tick = 1;
-		if (!fuel.isEmpty() && power > 0 && omega >= MINSPEED && accel.getLevel() > 10) {
-			tick = 4;
-			if (canprocess || temperature >= 800) {
-				accel.removeLiquid(10);
-				if (rand.nextInt(4) == 0)
-					temperature += 1;
+		if (!world.isRemote) {
+			int tick = 1;
+			if (!fuel.isEmpty() && power > 0 && omega >= MINSPEED && accel.getLevel() > 10) {
+				tick = 4;
+				if (recipe != null || temperature >= 800) {
+					accel.removeLiquid(10);
+					if (rand.nextInt(4) == 0)
+						temperature += 1;
+				}
 			}
-		}
 
-		if (temperature >= reqtemp && reqtemp != -1 && this.canSmelt()) {
-			smelttick += tick;
-			if (temperature >= 900) //2x speed if running uncooled
+			//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
+			int duration = this.getSmeltingDuration();
+
+			if (recipe != null)
 				smelttick += tick;
-			if (temperature >= 950) //4x speed if running uncooled and very hot
-				smelttick += tick*2;
-			if (temperature >= 980) //8x speed if about to fail
-				smelttick += tick*4;
-		}
-		else {
-			smelttick = 0;
-		}
-		if (smelttick < SMELTTICKS && !flag2)
-			return;
-		if (smelttick > SMELTTICKS)
-			smelttick = SMELTTICKS;
-		flag2 = true;
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
-		if (!worldObj.isRemote) {
-			flag1 = true;
-			if (this.canSmelt()) {
+			else
+				smelttick = 0;
+
+			if (recipe != null && smelttick >= duration) {
 				pulseFurnaceCookTime += tick;
 				//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", ReikaMathLibrary.extrema(2, 600-this.omega, "max")));
 				if (pulseFurnaceCookTime >= this.getOperationTime()) {
 					pulseFurnaceCookTime = 0;
-					this.smeltItem();
-					flag1 = true;
+					this.smeltItem(recipe);
 					smelttick = 0;
 					//flag2 = false;
 				}
@@ -275,52 +271,45 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			else
 				pulseFurnaceCookTime = 0;
 		}
-		if (flag1)
-			this.markDirty();
+	}
+
+	private int getSmeltingDuration() {
+		if (temperature >= 980) //8x speed if about to fail
+			return SMELTTICKS_BASE/8;
+		else if (temperature >= 950) //4x speed if running uncooled and very hot
+			return SMELTTICKS_BASE/4;
+		else if (temperature >= 900) //2x speed if running uncooled
+			return SMELTTICKS_BASE/2;
+		else
+			return SMELTTICKS_BASE;
 	}
 
 	/** Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc. */
-	private boolean canSmelt() {
+	private PulseJetRecipe getRecipe() {
 		this.getPowerBelow();
 		//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", power));
 		if (power <= 0 || omega < MINSPEED)
-			return false;
+			return null;
 		if (inv[0] == null)
-			return false;
+			return null;
 		if (fuel.isEmpty())
-			return false;
+			return null;
 
-		int mintemp = this.getReqTemps(inv[0]);
-		if (mintemp == -1 || mintemp > temperature)
-			return false;
+		PulseJetRecipe rec = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
+		if (rec == null || rec.requiredTemperature > temperature)
+			return null;
 
-		ItemStack itemstack = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
-		if (itemstack == null)
-			return false;
-		if (inv[2] == null)
-			return true;
-		if (!inv[2].isItemEqual(itemstack))
-			return false;
-		if (inv[2].stackSize < this.getInventoryStackLimit() && inv[2].stackSize < inv[2].getMaxStackSize())
-			return true;
-		return inv[2].stackSize < itemstack.getMaxStackSize();
+		if (inv[2] != null && !ReikaItemHelper.areStacksCombinable(inv[2], rec.getOutput(), this.getInventoryStackLimit()))
+			return null;
+
+		return rec;
 	}
 
 	/** Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack */
-	public void smeltItem() {
-		if (!this.canSmelt())
-			return;
-		flag2 = false;
+	private void smeltItem(PulseJetRecipe rec) {
 		this.smeltHeat();
-		ItemStack itemstack = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
-		if (inv[2] == null)
-			inv[2] = itemstack.copy();
-		else if (ReikaItemHelper.matchStacks(inv[2], itemstack))
-			inv[2].stackSize += itemstack.stackSize;
-
-		inv[0].stackSize--;
-		if (inv[0].stackSize <= 0)
-			inv[0] = null;
+		ReikaInventoryHelper.addOrSetStack(rec.getOutput(), inv, 2);
+		ReikaInventoryHelper.decrStack(0, inv);
 	}/*
 
 	private void smeltScrap() {
@@ -372,9 +361,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	@Override
 	public int getRedstoneOverride() {
-		if (!this.canSmelt())
-			return 15;
-		return 0;
+		return this.getRecipe() == null ? 15 : 0;
 	}
 
 	@Override
@@ -498,7 +485,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 
 	@Override
 	public boolean areConditionsMet() {
-		return this.canSmelt() && !fuel.isEmpty();
+		return this.getRecipe() != null && !fuel.isEmpty();
 	}
 
 	@Override

@@ -78,8 +78,6 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	}
 
 	public boolean canProducePower() {
-		if (prevRedstone > 0 && redstoneMode)
-			return false;
 		return setting.speedFactor != 0;
 	}
 
@@ -187,13 +185,22 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (te.isFlipped != flip)
 			return false;
 		FluidStack liq = tank.getFluid();
-		Fluid f = te.getEngineType().getFuelType();
-		if (f == null || liq == null || !f.equals(liq.getFluid()))
-			return false;
-		if (te.getFuelLevel()+liq.amount > te.FUELCAP)
-			return false;
-		te.addFuel(liq.amount/4+1);
-		tank.removeLiquid(liq.amount/4+1);
+		if (TileEntityEngine.isAirFluid(liq.getFluid())) {
+			FluidStack move = liq.copy();
+			move.amount = move.amount/4+1;
+			int added = te.fill(flip ? ForgeDirection.UP : ForgeDirection.DOWN, move, true);
+			tank.removeLiquid(added);
+			return added > 0;
+		}
+		else {
+			Fluid f = te.getEngineType().getFuelType();
+			if (f == null || liq == null || !f.equals(liq.getFluid()))
+				return false;
+			if (te.getFuelLevel()+liq.amount > te.FUELCAP)
+				return false;
+			te.addFuel(liq.amount/4+1);
+			tank.removeLiquid(liq.amount/4+1);
+		}
 		return true;
 	}
 
@@ -302,6 +309,10 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("fuel")))
+			return true;
+		if (fluid.equals(FluidRegistry.getFluid("rc oxygen")))
+			return true;
+		if (fluid.equals(FluidRegistry.getFluid("oxygen")))
 			return true;
 		return false;
 	}

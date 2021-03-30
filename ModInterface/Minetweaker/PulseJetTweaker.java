@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -59,7 +59,7 @@ public class PulseJetTweaker {
 		@Override
 		public void apply() {
 			for (ItemStack in : inputs) {
-				recipes.addCustomRecipe(in, output);
+				recipes.addCustomRecipe(in, output, -1);
 			}
 		}
 

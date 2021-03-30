@@ -51,7 +51,7 @@ import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartOreHandler;
-import Reika.DragonAPI.ModInteract.ItemHandlers.HexBlockHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.HexcraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MFRHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
@@ -163,7 +163,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
 			}
-			if (ModList.HEXCRAFT.isLoaded() && HexBlockHandler.getInstance().isMonolith(id)) {
+			if (ModList.HEXCRAFT.isLoaded() && HexcraftHandler.getActiveHandler().isMonolith(id)) {
 				this.dropDirectBlock(block, world, x, y, z);
 				return true;
 			}
@@ -314,7 +314,7 @@ public final class ItemBedrockPickaxe extends ItemPickaxe implements IndexedItem
 			return 90F;
 		if (ModOreList.getModOreFromOre(b, meta) == ModOreList.MIMICHITE)
 			return 64F;
-		if (ModList.HEXCRAFT.isLoaded() && HexBlockHandler.getInstance().isMonolith(b))
+		if (ModList.HEXCRAFT.isLoaded() && HexcraftHandler.getActiveHandler().isMonolith(b))
 			return 64;
 		if (b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitFacade") || b.getClass().getSimpleName().equalsIgnoreCase("BlockConduitBundle"))
 			return 24F;

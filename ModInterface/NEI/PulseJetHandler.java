@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 
@@ -23,6 +24,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace.PulseJetRecipe;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiPulseFurnace;
 
 import codechicken.nei.PositionedStack;
@@ -30,38 +32,29 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class PulseJetHandler extends TemplateRecipeHandler {
 
-	public class PulseJetRecipe extends CachedRecipe {
+	public class PulseJetRecipeNEI extends CachedRecipe {
 
+		private PulseJetRecipe reference;
 		private ItemStack input;
-		private List<ItemStack> inputs;
 
-		private PulseJetRecipe(ItemStack in) {
-			input = ReikaItemHelper.getSizedItemStack(in, 1);
+		private PulseJetRecipeNEI(PulseJetRecipe ref) {
+			input = ref.getInput();
+			reference = ref;
 		}
 
-		private PulseJetRecipe(List<ItemStack> in) {
-			inputs = in;
+		private PulseJetRecipeNEI(ItemStack in) {
+			input = ReikaItemHelper.getSizedItemStack(in, 1);
+			reference = RecipesPulseFurnace.getRecipes().getSmeltingResult(in);
 		}
 
 		@Override
 		public PositionedStack getResult() {
-			ItemStack in = this.getInput();
-			ItemStack out = RecipesPulseFurnace.getRecipes().getSmeltingResult(in);
-			return new PositionedStack(out, 120, 41);
-		}
-
-		private ItemStack getInput() {
-			return input != null ? input : this.getEntry();
+			return new PositionedStack(reference.getOutput(), 120, 41);
 		}
 
 		@Override
-		public PositionedStack getIngredient()
-		{
-			return new PositionedStack(this.getInput(), 120, 5);
-		}
-
-		public ItemStack getEntry() {
-			return inputs.get((int)(System.nanoTime()/1000000000)%inputs.size());
+		public PositionedStack getIngredient() {
+			return new PositionedStack(input, 120, 5);
 		}
 	}
 
@@ -103,7 +96,7 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 		if (outputId != null && outputId.equals("rcpulsej")) {
 			Collection<ItemStack> li = RecipesPulseFurnace.getRecipes().getAllSmeltables();
 			for (ItemStack is : li)
-				arecipes.add(new PulseJetRecipe(is));
+				arecipes.add(new PulseJetRecipeNEI(is));
 		}
 		super.loadCraftingRecipes(outputId, results);
 	}
@@ -119,22 +112,21 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		if (RecipesPulseFurnace.getRecipes().isProduct(result)) {
-			List<ItemStack> li = RecipesPulseFurnace.getRecipes().getSources(result);
-			if (li != null && !li.isEmpty())
-				arecipes.add(new PulseJetRecipe(li));
+			List<PulseJetRecipe> li = RecipesPulseFurnace.getRecipes().getSources(result);
+			for (PulseJetRecipe r : li)
+				arecipes.add(new PulseJetRecipeNEI(r));
 		}
 	}
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		if (RecipesPulseFurnace.getRecipes().isSmeltable(ingredient)) {
-			arecipes.add(new PulseJetRecipe(ingredient));
+			arecipes.add(new PulseJetRecipeNEI(ingredient));
 		}
 	}
 
 	@Override
-	public Class<? extends GuiContainer> getGuiClass()
-	{
+	public Class<? extends GuiContainer> getGuiClass() {
 		return GuiPulseFurnace.class;
 	}
 
@@ -144,6 +136,10 @@ public class PulseJetHandler extends TemplateRecipeHandler {
 		ReikaGuiAPI.instance.drawTexturedModalRect(85, 4, 247, 0, 7, 54);
 		ReikaGuiAPI.instance.drawTexturedModalRect(53, 4, 198, 0, 7, 54);
 		ReikaGuiAPI.instance.drawTexturedModalRect(15, 11, 176, 7, 11, 49);
+
+		PulseJetRecipeNEI r = (PulseJetRecipeNEI)arecipes.get(recipe);
+		String sg = String.format("Min Temperature: %dC", r.reference.requiredTemperature);
+		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, sg, 83, 61, 0);
 	}
 
 }
