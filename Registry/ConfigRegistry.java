@@ -98,7 +98,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
 	POWERCLIENT("Run power transfer code on client", false),  //caused many issues
-	TUTORIAL("Tutorial Mode", false),
+	//TUTORIAL("Tutorial Mode", false),
 	FRAMES("Allow Frames to move Machines (May cause corruption)", false),
 	CONVERTERLOSS("Power Converter Loss Percent", 0),
 	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true),

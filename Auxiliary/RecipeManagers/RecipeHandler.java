@@ -232,30 +232,37 @@ public abstract class RecipeHandler implements IngredientIDHandler {
 
 	public final void loadCustomRecipeFiles() {
 		CustomRecipeList crl = new CustomRecipeList(RotaryCraft.instance, machine.name().toLowerCase(Locale.ENGLISH));
-		crl.load();
-		for (LuaBlock lb : crl.getEntries()) {
-			Exception e = null;
-			boolean flag = false;
-			String n = lb.getString("type");
-			try {
-				if (LuaBlock.isErrorCode(n))
-					throw new IllegalArgumentException("Custom recipes require a specified name!");
-				if (!ReikaStringParser.isValidVariableName(n))
-					throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
-				flag = this.addCustomRecipe(n, lb, crl);
+		if (crl.load()) {
+			for (LuaBlock lb : crl.getEntries()) {
+				Exception e = null;
+				boolean flag = false;
+				String n = lb.getString("type");
+				try {
+					if (LuaBlock.isErrorCode(n))
+						throw new IllegalArgumentException("Custom recipes require a specified name!");
+					if (!ReikaStringParser.isValidVariableName(n))
+						throw new IllegalArgumentException("Name must be a valid field name in Java syntax! '"+n+"' is not valid!");
+					flag = this.addCustomRecipe(n, lb, crl);
+				}
+				catch (Exception ex) {
+					e = ex;
+					flag = false;
+				}
+				if (flag) {
+					RotaryCraft.logger.log("Loaded custom recipe '"+n+"' for "+machine.name()+"");
+				}
+				else {
+					RotaryCraft.logger.logError("Could not load custom recipe '"+n+"' for "+machine.name()+"");
+					if (e != null)
+						e.printStackTrace();
+				}
 			}
-			catch (Exception ex) {
-				e = ex;
-				flag = false;
-			}
-			if (flag) {
-				RotaryCraft.logger.log("Loaded custom recipe '"+n+"' for "+machine.name()+"");
-			}
-			else {
-				RotaryCraft.logger.logError("Could not load custom recipe '"+n+"' for "+machine.name()+"");
-				if (e != null)
-					e.printStackTrace();
-			}
+		}
+		else {/*
+			crl.createFolders();
+			for (Collection c : this.getRecipes(RecipeLevel.CORE))
+				crl.addToExample(createLuaBlock(c));
+			crl.createExampleFile();*/
 		}
 	}
 

@@ -150,8 +150,6 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 		int dT = 2;
 		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, x, y, z);
 
-		Tamb = 300;
-
 		if (Tamb < -40) {
 			dT = 8;
 		}

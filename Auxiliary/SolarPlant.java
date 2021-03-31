@@ -23,13 +23,11 @@ import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Data.Maps.ValueSortedMap;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.DragonAPI.ModInteract.DeepInteract.PlanetDimensionHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.SolarPlantBlock;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
-
-import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 
 
 public class SolarPlant {
@@ -188,11 +186,7 @@ public class SolarPlant {
 			return 0;
 		if (world.provider.hasNoSky)
 			return 0;
-		float sun = ReikaWorldHelper.getSunIntensity(world, true, 0);
-		if (InterfaceCache.ISOLARLEVEL.instanceOf(world.provider)) {
-			ISolarLevel isl = (ISolarLevel)world.provider;
-			sun *= isl.getSolarEnergyMultiplier();
-		}
+		double sun = ReikaWorldHelper.getSunIntensity(world, true, 0)*PlanetDimensionHandler.getSunIntensity(world);
 		if (sun > 0.21) {
 			return (int)(15*sun);
 		}
