@@ -251,8 +251,8 @@ public class TileEntitySpawnerController extends TileEntityPowerReceiver impleme
 		int y = tile.yCoord;
 		int z = tile.zCoord;
 		MobSpawnerBaseLogic lgc = tile.func_145881_a();
-		lgc.maxNearbyEntities = Integer.MAX_VALUE;
-		lgc.activatingRangeFromPlayer = Integer.MAX_VALUE;
+		lgc.maxNearbyEntities = Short.MAX_VALUE;
+		lgc.activatingRangeFromPlayer = Short.MAX_VALUE;
 
 		if (world.isRemote) {
 			double var1 = x+world.rand.nextFloat();

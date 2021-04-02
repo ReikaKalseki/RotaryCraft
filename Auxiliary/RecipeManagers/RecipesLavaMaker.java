@@ -64,7 +64,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 		this.addRecipe("cobblestone", FluidRegistry.LAVA, 500, 1000, 2820000, RecipeLevel.PROTECTED);
 
 		this.addRecipe(ItemRegistry.ETHANOL.getStackOf(), "rc ethanol", 1000, 180, 6000, RecipeLevel.CORE);
-		this.addRecipe(ItemStacks.cleansludge, "rc ethanol", 1000, 180, 36000, RecipeLevel.CORE);
+		this.addRecipe(ItemStacks.cleansludge, "rc ethanol", 1000, 180, 9000, RecipeLevel.CORE);
 	}
 
 	private static class MeltingRecipe implements MachineRecipe {

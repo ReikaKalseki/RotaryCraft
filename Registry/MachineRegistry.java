@@ -990,6 +990,9 @@ public enum MachineRegistry implements TileEnum {
 
 	public ItemStack getCraftedProduct(TileEntity te) {
 		ItemStack is = this.getCraftedMetadataProduct(this.getCraftedMetadata(te));
+		if (this == GEARBOX) {
+			is = ((TileEntityGearbox)te).getGearboxType().getGearboxItem(((TileEntityGearbox)te).getRatio());
+		}
 		if (te instanceof NBTTile) {
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
@@ -1004,6 +1007,8 @@ public enum MachineRegistry implements TileEnum {
 				return ((TileEntityAdvancedGear)te).getGearType().ordinal();
 			case FLYWHEEL:
 				return ((TileEntityFlywheel)te).getTypeOrdinal().ordinal();
+			case ENGINE:
+				return ((TileEntityEngine)te).getEngineType().ordinal();
 			default:
 				return 0;
 		}

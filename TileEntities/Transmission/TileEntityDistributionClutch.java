@@ -89,6 +89,8 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		super.updateTileEntity();
 		this.getIOSides(world, x, y, z, meta);
+		if (!RotaryAux.getPowerOnClient && world.isRemote)
+			return;
 		this.updateControl(world, x, y, z);
 		this.intakePower(world, x, y, z, meta);
 		omega = omegain;
@@ -136,13 +138,16 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			outputTorques[dir.ordinal()-2] = 0;
+			//ReikaJavaLibrary.pConsole("Resetting output on "+dir, Side.SERVER, xCoord == 514);
 			if (this.isOutputtingToSide(dir)) {
 				int amt = this.calculateOutputTorque(dir, leftover);
 				leftover -= amt;
 				outputTorques[dir.ordinal()-2] = amt;
+				//ReikaJavaLibrary.pConsole("Setting output to "+amt+" on "+dir, Side.SERVER, xCoord == 514);
 			}
 		}
 		outputTorques[write.ordinal()-2] = leftover;
+		//ReikaJavaLibrary.pConsole("Setting output to "+leftover+" on "+write, Side.SERVER, xCoord == 514);
 		for (int i = 2; i < 6; i++) {
 			ForgeDirection dir = dirs[i];
 			if (this.getAdjacentTileEntity(dir) != null) {
@@ -151,6 +156,7 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 				this.writeToPowerReceiver(dir, speed, torque);
 			}
 		}
+		//ReikaJavaLibrary.pConsole("write "+System.identityHashCode(this)+" @ "+System.nanoTime()+": "+torquein+" > "+Arrays.toString(enabledSides)+" > "+Arrays.toString(outputTorques)+" & "+this.getTorqueToSide(ForgeDirection.WEST), Side.SERVER, x == 514);
 	}
 
 	private void intakePower(World world, int x, int y, int z, int meta) {
@@ -163,6 +169,7 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 		int dz = z+read.offsetZ;
 		MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
 		TileEntity te = isCentered ? this.getAdjacentTileEntity(read) : world.getTileEntity(dx, dy, dz);
+		//ReikaJavaLibrary.pConsole(System.nanoTime(), Side.SERVER, x == 514);
 		if (this.isProvider(te)) {
 			if (m == MachineRegistry.SHAFT) {
 				TileEntityShaft devicein = (TileEntityShaft)te;
@@ -180,6 +187,8 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 				ForgeDirection dir = this.getInputForgeDirection().getOpposite();
 				omegain = pwr.getSpeedToSide(dir);
 				torquein = pwr.getTorqueToSide(dir);
+				//ReikaJavaLibrary.pConsole(System.identityHashCode(te), Side.SERVER, xCoord == 513);
+				//ReikaJavaLibrary.pConsole("read "+System.identityHashCode(te)+" @ "+System.nanoTime()+": "+((TileEntityDistributionClutch)te).torquein+" > "+Arrays.toString(((TileEntityDistributionClutch)te).enabledSides)+" > "+Arrays.toString(((TileEntityDistributionClutch)te).outputTorques)+" & "+((TileEntityDistributionClutch)te).getTorqueToSide(dir), Side.SERVER, x == 513);
 			}
 			if (te instanceof SimpleProvider) {
 				this.copyStandardPower(te);
@@ -248,11 +257,15 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 		NBT.setInteger("sides", ReikaArrayHelper.booleanToBitflags(enabledSides));
 
 		NBT.setInteger("control", control.ordinal());
+
+		//ReikaJavaLibrary.pConsole("out "+NBT+" leaves "+Arrays.toString(outputTorques), xCoord == 514);
 	}
 
 	@Override
 	protected void readSyncTag(NBTTagCompound NBT) {
 		super.readSyncTag(NBT);
+
+		//ReikaJavaLibrary.pConsole("in "+NBT+" gives "+Arrays.toString(outputTorques), xCoord == 514);
 
 		requestedTorques = NBT.getIntArray("req");
 		outputTorques = NBT.getIntArray("output");

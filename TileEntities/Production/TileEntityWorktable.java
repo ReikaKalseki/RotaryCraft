@@ -457,13 +457,15 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Craf
 		if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
 			ItemStack jet = inv[jetslot];
 			ItemStack plate = inv[plateslot];
-			NBTTagCompound tag = plate.stackTagCompound != null ? (NBTTagCompound)plate.stackTagCompound.copy() : null;
+			NBTTagCompound tag1 = plate.stackTagCompound != null ? (NBTTagCompound)plate.stackTagCompound.copy() : null;
+			NBTTagCompound tag2 = jet.stackTagCompound != null ? (NBTTagCompound)jet.stackTagCompound.copy() : null;
 			inv[jetslot] = null;
 			inv[plateslot] = null;
 			ItemStack is = bed ? ItemRegistry.BEDPACK.getEnchantedStack() : ItemRegistry.STEELPACK.getStackOf();
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
-			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag);
+			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag1);
+			ReikaNBTHelper.combineNBT(is.stackTagCompound, tag2);
 			inv[9] = is;
 			for (PackUpgrades u : PackUpgrades.values()) {
 				if (u.existsOn(jet)) {
