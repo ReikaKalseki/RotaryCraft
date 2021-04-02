@@ -12,6 +12,9 @@
 	<lube>
 		A maioria das caixas de engrenagens em linha precisam ser lubrificadas para manter sua capacidade de transmitir energia. Se operadas sem lubrificante, elas se desgastam e transmitem cada vez menos torque e, portanto, menos energia. Para mantê-las lubrificadas, basta conectar um duto de lubrificante de um tirurador à caixa de engrenagem. Coloque algumas sementes no triturador, e veja o duto transmitir o óleo (ou então use baldes para transportá-lo). A maioria das caixas de engrenagens consomem o lubrificante e, mais do mesmo a velocidades mais altas. Outras máquinas também exigem lubrificante para funcionar.
 	</lube>
+	<bearings>
+		A maioria das caixas de engrenagens que consomem lubrificante pode ser modificada para usar rolamentos diferentes do tipo com o qual foram fabricadas. Isso mudará o consumo de lubrificante e, no caso dos rolamentos de diamante e rocha matriz, pode até mesmo eliminar completamente o consumo e a necessidade, respectivamente. Caso contrário, cada nível de atualização reduz o consumo de lubrificante em %s, e cada nível de downgrade o aumenta em %s. Observe que os rolamentos de madeira são inadequados para qualquer caixa de engrenagens que não seja de madeira, e as caixas de engrenagens só podem aceitar um rolamento até dois níveis acima de seu próprio nível.
+	</bearings>
 	<canola>
 		Encontre algumas sementes de canola na grama alta, plante-as na terra e veja-as crescer. Quando surgirem pequenas flores amarelas, as plantas estão prontas para serem colhidas e vão dropar sementes. Elas compartilham os mesmos requisitos do trigo, em termos de nível de luz, abastecimento de água e assim por diante. Pés de Canola exigem muita água, por isso não se surpreenda se elas morrerem na terra seca. Sementes de canola também podem ser compactadas em uma moita densa para facilitar o armazenamento.
 	</canola>
@@ -27,9 +30,9 @@
 		RF/t para Watts: 1 RF/t = %.3f %sW
 		
 		Taxas de duplicação no extrator:
-		Minerais normais: %d por cento de chance por etapa
-		Minerais do Nether: %d por cento de chance por etapa
-		Minerais raros: %d por cento de chance por etapa
+		Minérios normais: %d por cento de chance por etapa
+		Minérios do Nether: %d por cento de chance por etapa
+		Minérios raros: %d por cento de chance por etapa
 	</modinterface>
 	<enchanting>
 		Algumas máquinas podem ser encantadas. Fazendo isso irá adicionar recursos ou funcionalidades semelhantes aos efeitos dos encantamentos. Por exemplo, o tunelador pode receber Toque Suave, Fortuna e Eficiência, com cada um fazendo o mesmo com a máquina como eles fazem para uma ferramenta. Para encantar uma máquina, clique com o botão direito nela com um livro encantado.
