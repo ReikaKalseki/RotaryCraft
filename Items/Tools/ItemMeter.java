@@ -216,26 +216,22 @@ public class ItemMeter extends ItemRotaryTool
 			if (read != null) {
 				String sname = ReikaStringParser.capFirstChar(read.name());
 				long pwr = te.getInputTorque()*te.omega;
-				double base = ReikaMathLibrary.getThousandBase(pwr);
-				String pre = ReikaEngLibrary.getSIPrefix(pwr);
-				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+				this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
 			}
 			for (int i = 0; i < 4; i++) {
 				ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i+2];
 				if (te.isOutputtingToSide(dir)) {
 					String sname = ReikaStringParser.capFirstChar(dir.name());
 					long out = te.getTorqueToSide(dir)*te.omega;
-					double base = ReikaMathLibrary.getThousandBase(out);
-					String pre = ReikaEngLibrary.getSIPrefix(out);
 
 					if (dir == read.getOpposite()) {
-						this.sendMessage(ep, String.format("Output to side %s: %.3f%sW (leftover)", sname, base, pre));
+						this.sendMessage(ep, String.format("Output to side %s: %s (leftover)", sname, RotaryAux.formatPowerIO(te.omega, out)));
 					}
 					else {
 						int req = te.getTorqueRequest(dir);
-						double base2 = ReikaMathLibrary.getThousandBase(req);
-						String pre2 = ReikaEngLibrary.getSIPrefix(req);
-						this.sendMessage(ep, String.format("Output to side %s: %.3f%sW (requested %.3f%sNm)", sname, base, pre, base2, pre2));
+						double base = ReikaMathLibrary.getThousandBase(req);
+						String pre = ReikaEngLibrary.getSIPrefix(req);
+						this.sendMessage(ep, String.format("Output to side %s: %s (requested %.3f%sNm)", sname, RotaryAux.formatPowerIO(te.omega, out), base, pre));
 					}
 				}
 			}
@@ -245,40 +241,28 @@ public class ItemMeter extends ItemRotaryTool
 			if (te.isSplitting()) {
 				String sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
 				long pwr = te.torque*te.omega;
-				double base = ReikaMathLibrary.getThousandBase(pwr);
-				String pre = ReikaEngLibrary.getSIPrefix(pwr);
-				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+				this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
 
 				sname = ReikaStringParser.capFirstChar(te.getWriteDirection().name());
 				long out = te.torqueOut1*te.omega;
-				base = ReikaMathLibrary.getThousandBase(out);
-				pre = ReikaEngLibrary.getSIPrefix(out);
-				this.sendMessage(ep, String.format("Output to side %s: %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+				this.sendMessage(ep, String.format("Output to side %s: %s", sname, RotaryAux.formatPowerIO(te.omega, out)));
 
 				sname = ReikaStringParser.capFirstChar(te.getWriteDirection2().name());
 				out = te.torqueOut2*te.omega;
-				base = ReikaMathLibrary.getThousandBase(out);
-				pre = ReikaEngLibrary.getSIPrefix(out);
-				this.sendMessage(ep, String.format("Output to side %s: %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+				this.sendMessage(ep, String.format("Output to side %s: %s", sname, RotaryAux.formatPowerIO(te.omega, out)));
 			}
 			else {
 				String sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
 				long pwr = te.getInputTorque1()*te.getInputSpeed1();
-				double base = ReikaMathLibrary.getThousandBase(pwr);
-				String pre = ReikaEngLibrary.getSIPrefix(pwr);
-				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sNm @ %d rad/s", sname, base, pre, te.omega));
+				this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
 
 				pwr = te.getInputTorque2()*te.getInputSpeed2();
 				sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
-				base = ReikaMathLibrary.getThousandBase(pwr);
-				pre = ReikaEngLibrary.getSIPrefix(pwr);
-				this.sendMessage(ep, String.format("Input side %s receiving %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+				this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
 
 				sname = ReikaStringParser.capFirstChar(te.getWriteDirection().name());
 				long out = te.torque*te.omega;
-				base = ReikaMathLibrary.getThousandBase(out);
-				pre = ReikaEngLibrary.getSIPrefix(out);
-				this.sendMessage(ep, String.format("Output to side %s: %.3f%sW @ %d rad/s", sname, base, pre, te.omega));
+				this.sendMessage(ep, String.format("Output to side %s: %s", sname, RotaryAux.formatPowerIO(te.omega, out)));
 			}
 
 			if (te.isBedrock()) {

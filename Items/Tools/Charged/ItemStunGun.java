@@ -14,16 +14,20 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 
+import Reika.ChromatiCraft.API.Interfaces.EnchantableItem;
 import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
@@ -33,10 +37,17 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class ItemStunGun extends ItemChargedTool {
+import cpw.mods.fml.common.eventhandler.Event.Result;
+
+public class ItemStunGun extends ItemChargedTool implements EnchantableItem {
 
 	public ItemStunGun(int tex) {
 		super(tex);
+	}
+
+	@Override
+	public int getItemEnchantability() {
+		return Items.iron_sword.getItemEnchantability();
 	}
 
 	@Override
@@ -73,13 +84,15 @@ public class ItemStunGun extends ItemChargedTool {
 				if (!(ent instanceof EntityPlayer) && ep.canEntityBeSeen(ent)) {
 					for (int f = 0; i < 64; i++)
 						world.spawnParticle("magicCrit", ent.posX-0.5+par5Random.nextFloat(), ent.posY-0.5+par5Random.nextFloat(), ent.posZ-0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-					ReikaEntityHelper.knockbackEntity(ep, ent, 2);
+					ReikaEntityHelper.knockbackEntity(ep, ent, 2*(1+ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.knockback, is)*0.25));
 				}
 			}
 			if (infov.size() > 0 && !(infov.size() == 1 && infov.get(0) instanceof EntityPlayer))
 				return new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1);
 		}
-		return new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-1);
+		is = is.copy();
+		is.setItemDamage(is.getItemDamage()-1);
+		return is;
 	}
 
 	@Override
@@ -96,20 +109,21 @@ public class ItemStunGun extends ItemChargedTool {
 			Block id = world.getBlock(x, y, z);
 			int meta = world.getBlockMetadata(x, y, z);
 			Material mat = ReikaWorldHelper.getMaterial(world, x, y, z);
+			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			if (id != Blocks.air && !(id instanceof BlockLiquid || id instanceof BlockFluidBase) && (id == Blocks.web || id == Blocks.red_mushroom ||
 					id == Blocks.gravel ||  id == Blocks.monster_egg  || id == Blocks.brown_mushroom ||
 					id == Blocks.waterlily || id == Blocks.flower_pot ||
 					ReikaBlockHelper.isOre(id, meta) || (ReikaWorldHelper.softBlocks(world, x, y, z) && id != Blocks.snow))) {
 				for (int k = 0; k < 64; k++)
 					world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-				ReikaWorldHelper.recursiveBreak(world, x, y, z, id, -1);
+				ReikaWorldHelper.recursiveBreak(world, x, y, z, id, -1, fortune);
 				ep.setCurrentItemOrArmor(0, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-2));
 			}
 			int leafrange = 4;
 			if (mat == Material.glass || mat == Material.ice || mat == Material.leaves || id == Blocks.sand || id == Blocks.snow || id == Blocks.ice) {
 				for (int k = 0; k < 64; k++)
 					world.spawnParticle("magicCrit", x+par5Random.nextFloat(), y+par5Random.nextFloat(), z+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat(), -0.5+par5Random.nextFloat());
-				ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z, id, -1, x, y, z, leafrange);
+				ReikaWorldHelper.recursiveBreakWithinSphere(world, x, y, z, id, -1, x, y, z, leafrange, fortune);
 				ep.setCurrentItemOrArmor(0, new ItemStack(is.getItem(), is.stackSize, is.getItemDamage()-2));
 			}
 		}
@@ -127,6 +141,11 @@ public class ItemStunGun extends ItemChargedTool {
 		Vec3 norm = ep.getLookVec();
 		SoundRegistry.KNOCKBACK.playSound(world, ep.posX+norm.xCoord, ep.posY+norm.yCoord, ep.posZ+norm.zCoord, 2, 2F);
 		return true;
+	}
+
+	@Override
+	public Result getEnchantValidity(Enchantment e, ItemStack is) {
+		return e == Enchantment.fortune || e == Enchantment.knockback ? Result.ALLOW : Result.DENY;
 	}
 
 }

@@ -30,7 +30,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 
-import Reika.ChromatiCraft.API.TreeGetter;
+import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray.BlockTypePrioritizer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
@@ -40,12 +40,12 @@ import Reika.DragonAPI.Interfaces.TileEntity.InertIInv;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
-import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
@@ -328,7 +328,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	private void checkAndMatchInventory() {
 		BlockKey sapling = null;
 		if (tree.isDyeTree()) {
-			sapling = new BlockKey(TreeGetter.getSaplingID(), tree.getDyeTreeMeta());
+			sapling = new BlockKey(ChromatiAPI.trees.getDyeSapling(), tree.getDyeTreeMeta());
 		}
 		else if (tree.getTreeType() != null) {
 			sapling = tree.getSapling();
@@ -412,9 +412,9 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		if (!this.shouldPlantSapling())
 			return null;
 		if (treeCopy.isDyeTree())
-			return new BlockKey(TreeGetter.getSaplingID(), treeCopy.getDyeTreeMeta());
+			return new BlockKey(ChromatiAPI.trees.getDyeSapling(), treeCopy.getDyeTreeMeta());
 		else if (treeCopy.isRainbowTree())
-			return new BlockKey(TreeGetter.getRainbowSaplingID());
+			return new BlockKey(ChromatiAPI.trees.getRainbowSapling());
 		else if (treeCopy.getTreeType() != null)
 			return treeCopy.getSapling();
 		else
@@ -425,7 +425,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		if (enchantments.hasEnchantment(Enchantment.infinity))
 			return true;
 		if (treeCopy.isDyeTree()) {
-			return inv[0] != null && inv[0].stackSize > 0 && Block.getBlockFromItem(inv[0].getItem()) == TreeGetter.getSaplingID();
+			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStackWithBlock(inv[0], ChromatiAPI.trees.getDyeSapling()) && inv[0].getItemDamage() == treeCopy.getDyeTreeMeta();
 		}
 		else if (treeCopy.getTreeType() != null) {
 			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getSapling());

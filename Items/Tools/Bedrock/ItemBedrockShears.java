@@ -25,7 +25,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 
-import Reika.ChromatiCraft.API.TreeGetter;
+import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.ChromatiCraft.Block.Dye.BlockDyeLeaf;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.BlockTieredResource;
@@ -135,7 +135,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
 	public static int getDroppedMeta(Block id, int meta) {
 		if (id == Blocks.leaves || id == Blocks.leaves2)
 			return meta&3;
-		if (ModList.CHROMATICRAFT.isLoaded() && id == TreeGetter.getRainbowLeafID())
+		if (ModList.CHROMATICRAFT.isLoaded() && id == ChromatiAPI.trees.getRainbowLeaf())
 			return 0;
 		if (id == Blocks.vine)
 			return 0;

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -91,7 +91,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 				Block b = world.getBlock(dx, dy, dz);
 				if (b instanceof SemiUnbreakable && ((SemiUnbreakable)b).isUnbreakable(world, dx, dy, z, world.getBlockMetadata(dx, dy, dz)))
 					continue;
-				ReikaWorldHelper.recursiveBreakWithinSphere(world, dx, dy, dz, world.getBlock(dx, dy, dz), -1, x, y, z, 4);
+				ReikaWorldHelper.recursiveBreakWithinSphere(world, dx, dy, dz, world.getBlock(dx, dy, dz), -1, x, y, z, 4, 0);
 			}
 			this.chainedExplosion(world, x, y, z);
 		}

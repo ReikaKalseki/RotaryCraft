@@ -1029,7 +1029,7 @@ public class RotaryRecipes {
 				" W ", "WWW", " W ", 'W', ItemStacks.springtungsten});
 		//GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.diamondgear, 8*DifficultyEffects.PARTCRAFT.getInt()/3), new Object[]{
 		//		" W ", "WGW", " W ", 'W', Items.diamond, 'G', ItemStacks.tungstengear});
-		RecipesBlastFurnace.getRecipes().add3x3Crafting(ItemStacks.diamondgear, 1400, 1, 0, " W ", "WGW", " W ", 'W', Items.diamond, 'G', ItemStacks.tungstengear);
+		RecipesBlastFurnace.getRecipes().add3x3Crafting(ReikaItemHelper.getSizedItemStack(ItemStacks.diamondgear, 6*DifficultyEffects.PARTCRAFT.getInt()/3), 1400, 1, 0, " W ", "WGW", " W ", 'W', Items.diamond, 'G', ItemStacks.tungstengear);
 
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.stonerod, 2), new Object[]{
 				"  B", " B ", "B  ", 'B', Blocks.stone});

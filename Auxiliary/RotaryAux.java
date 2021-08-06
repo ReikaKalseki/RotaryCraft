@@ -395,35 +395,25 @@ public class RotaryAux {
 	}
 
 	public static String formatPowerIO(TileEntityIOMachine te) {
-		String unit1 = "W";
-		String unit2 = "rad/s";
-		double p = te.power;
-		double s = te.omega;
-		if (OldTextureLoader.instance.loadOldTextures()) {
-			unit1 = "hp";
-			p /= 745.7;
-			unit2 = "rpm";
-			s *= 9.55;
-		}
-		double valp = ReikaMathLibrary.getThousandBase(p);
-		String sgp = ReikaEngLibrary.getSIPrefix(p);
-		return String.format("%.3f%s%s @ %.0f %s", valp, sgp, unit1, s, unit2);
+		return formatPowerIO(te.omega, te.power);
 	}
 
 	public static String formatPowerIO(ShaftMachine te) {
+		return formatPowerIO(te.getOmega(), te.getPower());
+	}
+
+	public static String formatPowerIO(double speed, double power) {
 		String unit1 = "W";
 		String unit2 = "rad/s";
-		double p = te.getPower();
-		double s = te.getOmega();
 		if (OldTextureLoader.instance.loadOldTextures()) {
 			unit1 = "hp";
-			p /= 745.7;
+			power /= 745.7;
 			unit2 = "rpm";
-			s *= 9.55;
+			speed *= 9.55;
 		}
-		double valp = ReikaMathLibrary.getThousandBase(p);
-		String sgp = ReikaEngLibrary.getSIPrefix(p);
-		return String.format("%.3f%s%s @ %.0f %s", valp, sgp, unit1, s, unit2);
+		double valp = ReikaMathLibrary.getThousandBase(power);
+		String sgp = ReikaEngLibrary.getSIPrefix(power);
+		return String.format("%.3f%s%s @ %.0f %s", valp, sgp, unit1, speed, unit2);
 	}
 
 	public static String formatTorqueSpeedPowerForBook(String text, double torque, double speed, double power) {

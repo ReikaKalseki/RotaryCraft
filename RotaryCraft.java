@@ -716,6 +716,11 @@ public class RotaryCraft extends DragonAPIMod {
 	}
 
 	@Override
+	public URL getBugSite() {
+		return DragonAPICore.getReikaGithubPage();
+	}
+
+	@Override
 	public String getWiki() {
 		return "http://rotarycraft.wikia.com/wiki/RotaryCraft_Wiki";
 	}

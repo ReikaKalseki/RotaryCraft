@@ -15,7 +15,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import Reika.ChromatiCraft.API.TreeGetter;
+import Reika.ChromatiCraft.API.ChromatiAPI;
+import Reika.ChromatiCraft.API.CrystalElementAccessor;
+import Reika.ChromatiCraft.API.CrystalElementAccessor.CrystalElementProxy;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -39,13 +41,14 @@ public class MulchMaterials {
 	private MulchMaterials() {
 		if (ModList.CHROMATICRAFT.isLoaded()) {
 			for (int i = 0; i < 16; i++) {
-				this.addValue(TreeGetter.getDyeSapling(i), PlantMaterials.SAPLING.getPlantValue());
-				this.addValue(TreeGetter.getHeldDyeLeaf(i), PlantMaterials.LEAVES.getPlantValue());
-				this.addValue(TreeGetter.getDyeFlower(i), PlantMaterials.FLOWER.getPlantValue());
+				CrystalElementProxy e = CrystalElementAccessor.getByIndex(i);
+				this.addValue(ChromatiAPI.trees.getDyeSapling(e), PlantMaterials.SAPLING.getPlantValue());
+				this.addValue(ChromatiAPI.trees.getDyeLeaf(e, false), PlantMaterials.LEAVES.getPlantValue());
+				this.addValue(ChromatiAPI.trees.getDyeFlower(e), PlantMaterials.FLOWER.getPlantValue());
 			}
 
-			this.addValue(TreeGetter.getRainbowLeaf(), 16);
-			this.addValue(TreeGetter.getRainbowSapling(), 8);
+			this.addValue(ChromatiAPI.trees.getRainbowLeaf(), 16);
+			this.addValue(ChromatiAPI.trees.getRainbowSapling(), 8);
 		}
 
 		if (ModList.FORESTRY.isLoaded()) {

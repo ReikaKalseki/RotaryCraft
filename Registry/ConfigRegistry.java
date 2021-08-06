@@ -93,7 +93,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	HARDGRAVELGUN("Hardmode Gravel Gun", false),
 	BORERMAINTAIN("Borer Requires Maintenance", false),
 	NOMINERS("Disable Automining Machines", false),
-	HARDEU("Hard Mode EU Compatibility", ModList.GREGTECH.isLoaded()),
+	HARDEU("Hard Mode EU Compatibility", ModList.GREGTECH.isLoaded()), //TypeHelper to Website Generator: boolean
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
@@ -119,7 +119,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false),
 	GATEBLAST("Enable Blast Furnace recipe gating", false),
 	GATEWORK("Enable Worktable recipe gating", false),
-	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4),
+	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4), //TypeHelper to Website Generator: int
 	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8),
 	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F),
 	IC2BLAZECOMPRESS("Increase Blaze Powder To Rod Cost In IC2 Compressor (Exploit Fix)", true),

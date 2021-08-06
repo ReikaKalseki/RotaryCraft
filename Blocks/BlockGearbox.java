@@ -13,12 +13,10 @@ import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -132,34 +130,6 @@ public class BlockGearbox extends BlockModelledMachine {
 				todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 			}
 			ReikaItemHelper.dropItem(world, x+0.5, y+0.5, z+0.5, todrop);
-		}
-	}
-
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack is)		//Directional code
-	{
-		int prevmeta = world.getBlockMetadata(x, y, z);
-		//ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", prevmeta));
-
-		int i = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4F) / 360F + 0.5D);
-		while (i > 3)
-			i -= 4;
-		while (i < 0)
-			i += 4;
-
-		switch (i) {
-			case 0:
-				world.setBlockMetadataWithNotify(x, y, z, prevmeta+2, 3);
-				break;
-			case 1:
-				world.setBlockMetadataWithNotify(x, y, z, prevmeta+1, 3);
-				break;
-			case 2:
-				world.setBlockMetadataWithNotify(x, y, z, prevmeta+3, 3);
-				break;
-			case 3:
-				world.setBlockMetadataWithNotify(x, y, z, prevmeta+0, 3);
-				break;
 		}
 	}
 

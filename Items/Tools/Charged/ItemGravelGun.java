@@ -57,8 +57,8 @@ public class ItemGravelGun extends ItemChargedTool {
 				world.playAuxSFX(1001, (int)ep.posX, (int)ep.posY, (int)ep.posZ, 1);
 			return is;
 		}
+		Vec3 look = ep.getLookVec();
 		for (float i = 1; i <= 128; i += 0.5) {
-			Vec3 look = ep.getLookVec();
 			DecimalPosition looks = ReikaVectorHelper.getPlayerLookCoords(ep, i);
 			AxisAlignedBB fov = looks.getAABB(0.5);
 			List<Entity> li = world.getEntitiesWithinAABB(Entity.class, fov);

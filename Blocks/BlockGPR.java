@@ -53,6 +53,7 @@ public class BlockGPR extends BlockBasicMachine {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack is) {		//Directional code{
+		super.onBlockPlacedBy(world, x, y, z, par5EntityLiving, is);
 		//if (MathHelper.abs(par5EntityLiving.rotationPitch) < 45) {
 		int i = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4F) / 360F + 0.5D);
 		while (i > 3)
