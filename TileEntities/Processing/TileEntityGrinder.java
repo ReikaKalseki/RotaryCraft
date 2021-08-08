@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Processing;
 
 import java.util.Collection;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,11 +30,14 @@ import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
@@ -45,7 +49,9 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, MultiOperational,
-ConditionalOperation, DamagingContact {
+ConditionalOperation, DamagingContact, EnchantableMachine {
+
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.looting).addFilter(Enchantment.knockback).addFilter(Enchantment.flame).addFilter(Enchantment.fortune);
 
 	public int grinderCookTime;
 
@@ -229,7 +235,7 @@ ConditionalOperation, DamagingContact {
 
 		if (is != null && isGrindableSeed(is)) {
 			float num = grindableSeeds.get(is);
-			tank.addLiquid((int)(DifficultyEffects.CANOLA.getInt()*num), FluidRegistry.getFluid("rc lubricant"));
+			tank.addLiquid((int)(DifficultyEffects.CANOLA.getInt()*this.getFortuneLubricantFactor()*num), FluidRegistry.getFluid("rc lubricant"));
 		}
 
 		ItemStack out = RecipesGrinder.getRecipes().getGrindingResult(is);
@@ -244,6 +250,10 @@ ConditionalOperation, DamagingContact {
 
 		if (is.stackSize <= 0)
 			inv[0] = null;
+	}
+
+	private float getFortuneLubricantFactor() {
+		return 1F+(float)(enchantments.getEnchantment(Enchantment.fortune)*ReikaRandomHelper.getRandomBetween(0.1, 0.2));
 	}
 
 	@Override
@@ -377,5 +387,10 @@ ConditionalOperation, DamagingContact {
 	@Override
 	public DamageSource getDamageType() {
 		return RotaryCraft.grind;
+	}
+
+	@Override
+	public MachineEnchantmentHandler getEnchantmentHandler() {
+		return enchantments;
 	}
 }

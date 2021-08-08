@@ -54,7 +54,6 @@ import Reika.DragonAPI.Auxiliary.Trackers.SuggestedModsTracker;
 import Reika.DragonAPI.Auxiliary.Trackers.VanillaIntegrityTracker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
-import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.EnhancedFluid;
 import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.SimpleCropHandler;
@@ -88,6 +87,7 @@ import Reika.RotaryCraft.Auxiliary.HandbookTracker;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.JetpackFuelOverlay;
 import Reika.RotaryCraft.Auxiliary.LockNotification;
+import Reika.RotaryCraft.Auxiliary.MachineDamage;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.PotionDeafness;
 import Reika.RotaryCraft.Auxiliary.RotaryASMHandler;
@@ -175,11 +175,11 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final Fluid poisonFluid = new Fluid("poison"); //for defoliator
 	public static final Fluid hslaFluid = new EnhancedFluid("molten hsla").setColor(0xF0B564).setTemperature(1873).setDensity(7000).setViscosity(6100); //for TiC
 
-	public static final CustomStringDamageSource jetingest = new CustomStringDamageSource("was sucked into a jet engine");
-	public static final CustomStringDamageSource hydrokinetic = new CustomStringDamageSource("was paddled to death");
-	public static final CustomStringDamageSource shock = (CustomStringDamageSource)new CustomStringDamageSource("was electrified").setDamageBypassesArmor();
-	public static final CustomStringDamageSource grind = new CustomStringDamageSource("was ground to a pulp");
-	public static final CustomStringDamageSource freezeDamage = new CustomStringDamageSource("froze");
+	public static final MachineDamage jetingest = new MachineDamage("was sucked into a jet engine");
+	public static final MachineDamage hydrokinetic = new MachineDamage("was paddled to death");
+	public static final MachineDamage shock = (MachineDamage)new MachineDamage("was electrified").setDamageBypassesArmor();
+	public static final MachineDamage grind = new MachineDamage("was ground to a pulp");
+	public static final MachineDamage freezeDamage = new MachineDamage("froze");
 
 	static final Random rand = new Random();
 

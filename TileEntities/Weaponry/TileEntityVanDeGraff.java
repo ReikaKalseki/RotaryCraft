@@ -196,6 +196,7 @@ public class TileEntityVanDeGraff extends TileEntityPowerReceiver implements Ran
 			dmg /= 2;
 
 		if (dmg > 0) {
+			RotaryCraft.shock.lastMachine = this;
 			e.attackEntityFrom(RotaryCraft.shock, dmg);
 			if (e instanceof EntityCreeper) {
 				worldObj.createExplosion(e, e.posX, e.posY, e.posZ, 3F, true);

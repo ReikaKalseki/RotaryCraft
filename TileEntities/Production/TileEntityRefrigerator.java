@@ -247,6 +247,7 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 			float hearts = f*4;
 			AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(this).expand(5, 5, 5);
 			List<EntityLivingBase> li = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+			RotaryCraft.freezeDamage.lastMachine = this;
 			for (EntityLivingBase e : li) {
 				e.attackEntityFrom(RotaryCraft.freezeDamage, hearts*2);
 			}

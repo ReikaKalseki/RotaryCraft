@@ -66,6 +66,7 @@ import Reika.DragonAPI.ModInteract.ReikaXPFluidHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.MachineDamage;
 import Reika.RotaryCraft.Auxiliary.OldTextureLoader;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.ShaftPowerBus;
@@ -783,8 +784,13 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			if (tile instanceof DamagingContact) {
 				DamagingContact dg = (DamagingContact)tile;
 				int dmg = dg.getContactDamage();
-				if (dg.canDealDamage() && dmg > 0)
-					e.attackEntityFrom(dg.getDamageType(), dmg);
+				if (dg.canDealDamage() && dmg > 0) {
+					DamageSource type = dg.getDamageType();
+					if (type instanceof MachineDamage) {
+						((MachineDamage)type).lastMachine = tile;
+					}
+					e.attackEntityFrom(type, dmg);
+				}
 			}
 			if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
 				int dmg = ((TemperatureTE)tile).getThermalDamage();

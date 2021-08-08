@@ -402,6 +402,7 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			}
 			if (!e.isDead && !(e instanceof EntityLivingBase && ((EntityLivingBase)e).getHealth() < 0))
 				SoundRegistry.INGESTION.playSoundAtBlock(world, x, y, z, 1, 1.4F);
+			RotaryCraft.jetingest.lastMachine = this;
 			e.attackEntityFrom(RotaryCraft.jetingest, 10000);
 			if (e instanceof EntityPlayer && e == this.getPlacer()) {
 				RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)e);

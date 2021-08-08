@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -77,6 +78,8 @@ import Reika.RotaryCraft.API.Power.ShaftMachine;
 import Reika.RotaryCraft.Auxiliary.EMPSparkRenderer;
 import Reika.RotaryCraft.Auxiliary.HarvesterDamage;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.MachineDamage;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
@@ -90,6 +93,7 @@ import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.Turret.TileEntityMultiCannon;
 
@@ -488,7 +492,16 @@ public class RotaryEventManager {
 			if (food != null) {
 				World world = ev.entityLiving.worldObj;
 				Random rand = RotaryCraft.rand;
-				int num = 4+rand.nextInt(4)+rand.nextInt(4)+rand.nextInt(4);
+				MachineDamage md = (MachineDamage)ev.source;
+				int n = 4;
+				if (md.lastMachine instanceof TileEntityGrinder) {
+					MachineEnchantmentHandler ench = ((TileEntityGrinder)md.lastMachine).getEnchantmentHandler();
+					n += ench.getEnchantment(Enchantment.looting);
+					if (ench.getEnchantment(Enchantment.flame) > 0) {
+						food = ReikaItemHelper.cookFood(food);
+					}
+				}
+				int num = n+rand.nextInt(n)+rand.nextInt(n)+rand.nextInt(n);
 				ItemStack is = ReikaItemHelper.getSizedItemStack(food, num);
 				ReikaItemHelper.dropItem(world, ev.entityLiving.posX, ev.entityLiving.posY, ev.entityLiving.posZ, is);
 			}

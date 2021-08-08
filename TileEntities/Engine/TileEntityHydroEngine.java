@@ -379,6 +379,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			a = 1;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(a, 1, b);
 		List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		RotaryCraft.hydrokinetic.lastMachine = this;
 		for (EntityLivingBase ent : in) {
 			ent.attackEntityFrom(RotaryCraft.hydrokinetic, 1);
 		}
