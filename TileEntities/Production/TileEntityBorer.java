@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -594,6 +595,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (id instanceof BlockTieredResource)
 			return false;
 		if (id.hasTileEntity(world.getBlockMetadata(x, y, z)))
+			return false;
+		if (id instanceof BlockDoublePlant)
 			return false;
 		return true;
 	}

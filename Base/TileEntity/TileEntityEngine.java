@@ -13,7 +13,6 @@ import java.util.Collection;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -317,8 +316,8 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	protected abstract void playSounds(World world, int x, int y, int z, float pitchMultiplier, float vol);
 
 	protected final boolean isMuffled(World world, int x, int y, int z) {
-		if (ReikaWorldHelper.getMaterial(world, x, y+1, z) == Material.cloth || this.getMachine(ForgeDirection.UP) == MachineRegistry.ECU) {
-			if (ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.cloth || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
+		if (RotaryAux.isMufflingBlock(world, x, y+1, z) || this.getMachine(ForgeDirection.UP) == MachineRegistry.ECU) {
+			if (RotaryAux.isMufflingBlock(world, x, y-1, z) || this.getMachine(ForgeDirection.DOWN) == MachineRegistry.ECU)
 				return true;
 		}
 		for (int i = 0; i < 6; i++) {
@@ -328,8 +327,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 				int dy = y+dir.offsetY;
 				int dz = z+dir.offsetZ;
 				if ((dir != write.getOpposite() && dir != write) || dir == ForgeDirection.UP) {
-					Block b = world.getBlock(dx, dy, dz);
-					if (b.getMaterial() != Material.cloth)
+					if (!RotaryAux.isMufflingBlock(world, dx, dy, dz))
 						return false;
 				}
 			}

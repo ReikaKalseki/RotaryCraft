@@ -437,7 +437,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 
 	@Override
 	public boolean canUpgradeWith(ItemStack item) {
-		return ReikaItemHelper.matchStacks(item, ItemStacks.diffuser);
+		return !wideAreaBlow && ReikaItemHelper.matchStacks(item, ItemStacks.diffuser);
 	}
 
 	@Override

@@ -385,7 +385,7 @@ public class RotaryEventManager {
 	}
 
 	@SubscribeEvent
-	public void onRemoveArmor(AddToSlotEvent evt) {
+	public void onAddArmor(AddToSlotEvent evt) {
 		int id = evt.slotID;
 		if (evt.inventory instanceof InventoryPlayer && evt.slotID == 36) { //foot armor
 			ItemStack is = evt.getItem();

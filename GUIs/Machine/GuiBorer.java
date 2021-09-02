@@ -12,7 +12,6 @@ package Reika.RotaryCraft.GUIs.Machine;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.GuiButton;
@@ -34,8 +33,6 @@ public class GuiBorer extends GuiMachine
 
 	private TileEntityBorer borer;
 
-	int x;
-	int y;
 	private boolean[][] dig = new boolean[7][5];
 	private int packetID;
 
@@ -129,8 +126,7 @@ public class GuiBorer extends GuiMachine
 				packetID = 100;
 			this.sendPacket(PacketRegistry.BORER.ordinal());
 		}
-		this.updateScreen();
-
+		this.initGui();
 	}
 
 	public void sendPacket(int a) {
@@ -139,17 +135,17 @@ public class GuiBorer extends GuiMachine
 		try {
 			//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			outputStream.writeInt(a);
-			if (a == PacketRegistry.BORERDROPS.ordinal()) {
+			if (a == PacketRegistry.BORERDROPS.ordinal()) {/*
 				if (drops)
 					outputStream.writeInt(1); //set drops to 0 (false)
 				else
-					outputStream.writeInt(0);
+					outputStream.writeInt(0);*/
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 			}
 			if (a == PacketRegistry.BORERTOGGLEALL.ordinal())
-				outputStream.writeInt(-1);
+				;//outputStream.writeInt(-1);
 			if (a > PacketRegistry.BORERTOGGLEALL.ordinal())
-				outputStream.writeInt(-1);
+				;//outputStream.writeInt(-1);
 			if (a == PacketRegistry.BORER.ordinal()) {
 				//ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(3434));
 				int rows = packetID/7;
@@ -173,17 +169,14 @@ public class GuiBorer extends GuiMachine
 		}
 
 		ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, bos);
-		this.updateScreen();
 	}
-
+	/*
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		x = Mouse.getX();
-		y = Mouse.getY();
 		this.initGui();
 	}
-
+	 */
 	@Override
 	protected void drawPowerTab(int var5, int var6) {
 		String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";

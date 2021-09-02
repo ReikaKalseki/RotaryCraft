@@ -34,6 +34,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.PlanetDimensionHandler;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
@@ -500,16 +501,18 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		if (failed) {
 			ForgeDirection dir = this.getWriteDirection();
 			ForgeDirection left = ReikaDirectionHelper.getLeftBy90(dir);
-			for (int i = -1; i <= y; i++) {
-				int dx = x+left.offsetX;
-				int dy = y+i;
-				int dz = z+left.offsetZ;
-				if (!InterfaceCache.STREAM.instanceOf(world.getBlock(dx, dy, dz)))
-					ReikaWorldHelper.dropAndDestroyBlockAt(world, dx, dy, dz, null, false, true);
+			for (int a = -1; a <= 1; a++) {
+				for (int h = -1; h <= 1; h++) {
+					if (a == 0 && h == 0)
+						continue;
+					int dx = x+left.offsetX*a;
+					int dy = y+h;
+					int dz = z+left.offsetZ*a;
+					Block b = world.getBlock(dx, dy, dz);
+					if (!b.isAir(world, dx, dy, dz) && !ReikaBlockHelper.isLiquid(b) && !InterfaceCache.STREAM.instanceOf(b))
+						ReikaWorldHelper.dropAndDestroyBlockAt(world, dx, dy, dz, null, false, true);
+				}
 			}
-			ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y+1, z, null, false, true);
-			if (!InterfaceCache.STREAM.instanceOf(world.getBlock(x, y-1, z)))
-				ReikaWorldHelper.dropAndDestroyBlockAt(world, x, y-1, z, null, false, true);
 		}
 	}
 

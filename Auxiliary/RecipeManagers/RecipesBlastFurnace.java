@@ -503,11 +503,11 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	}
 
 	private boolean matchRecipe(BlastRecipe r, ItemStack in1, ItemStack in2, ItemStack in3, ItemStack[] main) {
-		if (!r.primary.match(in1))
+		if (!r.primary.match(in1) || !r.primary.isSufficient(in1))
 			return false;
-		if (!r.secondary.match(in2))
+		if (!r.secondary.match(in2) || !r.primary.isSufficient(in2))
 			return false;
-		if (!r.tertiary.match(in3))
+		if (!r.tertiary.match(in3) || !r.primary.isSufficient(in3))
 			return false;
 		int num = 0;
 		for (int i = 0; i < main.length; i++) {

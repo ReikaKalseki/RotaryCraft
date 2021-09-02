@@ -39,7 +39,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	FANRANGE("Max Fan Range", 128),
 	AERORANGE("Max Aerosolizer Range", 128),
 	VACUUMRANGE("Max Vacuum Range", 128),
-	SONICRANGE("Max Sonic Weapon Range", 128),
+	//SONICRANGE("Max Sonic Weapon Range", 128),
 	FORCERANGE("Max Force Field Range", 128),
 	SONICBORERRANGE("Sonic Borer Range", 512),
 	SPAWNERLIMIT("Spawner Mob Limit", 128),

@@ -80,7 +80,6 @@ public class RenderMonitor extends RotaryTERenderer
 			FontRenderer var17 = this.getFontRenderer();
 			float var10 = 0.6666667F*1.2F;
 			GL11.glScalef(var10, -var10, -var10);
-			var11 = (int)(0.016666668F * var10);
 			float var112 = 0.016666668F * var10;
 			GL11.glTranslatef(0.0F, 0.5F * var10, 0.07F * var10);
 			GL11.glScalef(var112, -var112, var112);

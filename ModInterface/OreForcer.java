@@ -29,7 +29,7 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.LegacyMagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
-import Reika.DragonAPI.ModInteract.ItemHandlers.MagicaOreHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ArsMagicaHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MimicryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.QuantumOreHandler;
@@ -298,7 +298,7 @@ public final class OreForcer {
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList o = ModOreList.oreList[i];
 			if (o.isArsMagica()) {
-				ItemStack is = MagicaOreHandler.getInstance().getItem(o);
+				ItemStack is = ArsMagicaHandler.getInstance().getItem(o);
 				if (is == null)
 					throw new ModReflectionException(RotaryCraft.instance, ModList.ARSMAGICA, "Null ItemStack for Ars Magica "+o);
 				GameRegistry.addShapelessRecipe(is, ItemStacks.getModOreIngot(o));
@@ -308,7 +308,7 @@ public final class OreForcer {
 	}
 
 	private void registerMagica() {
-		MagicaOreHandler.getInstance().forceOreRegistration();
+		ArsMagicaHandler.getInstance().forceOreRegistration();
 	}
 
 	private void registerOsmium() {

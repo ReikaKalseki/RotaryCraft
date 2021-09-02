@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.Registry;
 import Reika.DragonAPI.Instantiable.Formula.MathExpression;
 import Reika.RotaryCraft.Auxiliary.DurationFormula;
 import Reika.RotaryCraft.Auxiliary.Interfaces.OverrunExpression;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityMagnetizer;
 
 public enum DurationRegistry {
 
@@ -82,11 +83,20 @@ public enum DurationRegistry {
 	public int getOperationTime(int omega, int stage) {
 		omega = Math.max(0, omega);
 		try {
-			return (int)Math.max(1, exps[stage].evaluate(omega));
+			return (int)Math.max(this.getMinOperationTime(), exps[stage].evaluate(omega));
 		}
 		catch (ArithmeticException e) {
 			e.printStackTrace();
-			return (int)Math.max(1, exps[0].getBaseValue());
+			return (int)Math.max(this.getMinOperationTime(), exps[0].getBaseValue());
+		}
+	}
+
+	private double getMinOperationTime() {
+		switch(this) {
+			case MAGNETIZER:
+				return TileEntityMagnetizer.MIN_DURATION;
+			default:
+				return 1;
 		}
 	}
 

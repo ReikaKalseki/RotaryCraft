@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -61,11 +61,6 @@ public enum ExtraConfigIDs implements IDRegistry {
 
 	public int getValue() {
 		return RotaryCraft.config.getOtherID(this.ordinal());
-	}
-
-	@Override
-	public String getConfigName() {
-		return this.getName();
 	}
 
 	public boolean isDummiedOut() {

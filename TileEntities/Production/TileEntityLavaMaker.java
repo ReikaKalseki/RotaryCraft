@@ -49,7 +49,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 		timer.update();
 		if (timer.checkCap())
 			this.updateTemperature(world, x, y, z, meta);
-		if (temperature > this.getMeltingTemperature())
+		if (temperature >= this.getMeltingTemperature())
 			energy += power;
 		else
 			energy *= 0.85;

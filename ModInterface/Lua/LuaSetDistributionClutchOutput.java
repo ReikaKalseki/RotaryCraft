@@ -17,7 +17,7 @@ public class LuaSetDistributionClutchOutput extends LuaMethod {
 		TileEntityDistributionClutch tile = (TileEntityDistributionClutch)te;
 		int side = ((Double)args[0]).intValue();
 		boolean enable = ((Boolean)args[1]).booleanValue();
-		int amt = ((Double)args[1]).intValue();
+		int amt = ((Double)args[2]).intValue();
 		ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[side];
 		tile.setSideEnabled(dir, enable);
 		if (enable)

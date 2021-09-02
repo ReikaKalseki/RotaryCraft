@@ -244,10 +244,15 @@ public class RotaryAux {
 	}
 
 	public static boolean isMuffled(World world, int x, int y, int z) {
-		if (ReikaWorldHelper.getMaterial(world, x, y+1, z) == Material.cloth && ReikaWorldHelper.getMaterial(world, x, y-1, z) == Material.cloth) {
+		if (isMufflingBlock(world, x, y+1, z) && isMufflingBlock(world, x, y-1, z)) {
 			return true;
 		}
 		return false;
+	}
+
+	public static boolean isMufflingBlock(World world, int x, int y, int z) {
+		Block b = world.getBlock(x, y, z);
+		return b.getMaterial() == Material.cloth || b == Block.getBlockFromName("Rockwool");
 	}
 
 	public static boolean isNextToIce(World world, int x, int y, int z) {
@@ -438,6 +443,43 @@ public class RotaryAux {
 		text = text.replace("$POWER_UNIT$", powerunit);
 		text = text.replace("$TORQUE_UNIT$", torqueunit);
 		String ret = String.format(text, (int)torque, (int)speed, power);
+		return ret;
+	}
+
+	public static String formatSingleValueForBook(String text, double value, int torqueSpeedPowerSelector) {
+		boolean old = OldTextureLoader.instance.loadOldTextures();
+		String unit = null;
+		switch(torqueSpeedPowerSelector) {
+			case 0:
+				if (old)
+					value *= 0.738;
+				unit = old ? "ft-lb" : "Nm";
+				break;
+			case 1:
+				if (old)
+					value *= 9.55;
+				unit = old ? "rpm" : "rad/s";
+				break;
+			case 2:
+				if (old)
+					value /= 745.7;
+				unit = old ? "hp" : "W";
+				break;
+		}
+		if (torqueSpeedPowerSelector == 2) {
+			unit = ReikaEngLibrary.getSIPrefix(value)+unit;
+			value = ReikaMathLibrary.getThousandBase(value);
+		}
+		text = text.replace("$SPEED_UNIT$", unit);
+		text = text.replace("$POWER_UNIT$", unit);
+		text = text.replace("$TORQUE_UNIT$", unit);
+		String ret = null;
+		if (torqueSpeedPowerSelector == 2) {
+			ret = String.format(text, value);
+		}
+		else {
+			ret = String.format(text, Integer.valueOf((int)value));
+		}
 		return ret;
 	}
 

@@ -100,6 +100,7 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 		if (liquidPool == null || liquidPool.isEmpty()) {
 			liquidPool = new BlockArray();
 			liquidPool.maxDepth = 240;
+			liquidPool.clampToChunkLoad = true;
 			liquidPool.recursiveAddWithBoundsMetadata(world, dx, dy, dz, id, 0, x-64, y, z-64, x+64, y+24, z+64);
 			liquidPool.sortBlocksByDistance(new Coordinate(this));
 			liquidPool.sortBlocksByHeight(true);

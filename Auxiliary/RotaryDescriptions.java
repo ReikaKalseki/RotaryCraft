@@ -334,8 +334,8 @@ public final class RotaryDescriptions {
 				desc = engines.getValueAtNode("engines:"+"solar".toLowerCase(Locale.ENGLISH)+DESC_SUFFIX);
 				aux = engines.getValueAtNode("engines:"+"solar".toLowerCase(Locale.ENGLISH)+NOTE_SUFFIX);
 
-				desc = String.format(desc, TileEntitySolar.GENOMEGA);
-				aux = String.format(aux, TileEntitySolar.GENOMEGA);
+				desc = RotaryAux.formatSingleValueForBook(desc, TileEntitySolar.GENOMEGA, 1);
+				aux = RotaryAux.formatSingleValueForBook(aux, TileEntitySolar.GENOMEGA, 1);
 			}
 
 			data.put(h, desc);

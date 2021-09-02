@@ -169,7 +169,7 @@ public class BlockShaft extends BlockModelledMachine {
 				}
 			}
 			else if (sha.getBlockMetadata() < 6) {
-				ItemStack todrop = ItemRegistry.SHAFT.getStackOfMetadata(sha.getShaftType().ordinal()); //drop shaft item
+				ItemStack todrop = sha.getShaftType().getShaftItem(); //drop shaft item
 				if (sha.isUnHarvestable()) {
 					todrop = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
 				}

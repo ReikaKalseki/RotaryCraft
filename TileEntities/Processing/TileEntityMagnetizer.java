@@ -31,6 +31,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityMagnetizer extends InventoriedPowerReceiver implements OneSlotMachine, DiscreteFunction, ConditionalOperation, MagnetizationCore {
 
+	public static final int MIN_DURATION = 2;
+
 	private final RedstoneCycleTracker redstone = new RedstoneCycleTracker(3);
 	private boolean hasLodestone = false;
 
@@ -86,7 +88,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 
 	private boolean canRunRecipe(MagnetizerRecipe r) {
 		int ms = r.minSpeed;
-		if (hasLodestoneUpgrade())
+		if (this.hasLodestoneUpgrade())
 			ms /= 2;
 		return omega >= ms && (r.allowStacking || inv[0].stackSize == 1);
 	}
@@ -96,7 +98,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 			return;
 		ItemStack is = inv[0];
 		if (r.action != null) {
-			r.action.step(hasLodestoneUpgrade() ? omega*2 : omega, inv[0]);
+			r.action.step(this.hasLodestoneUpgrade() ? omega*2 : omega, inv[0]);
 		}
 		else {
 			if (is.stackTagCompound == null) {
@@ -145,7 +147,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 	@Override
 	public int getOperationTime() {
 		int base = DurationRegistry.MAGNETIZER.getOperationTime(omega);
-		return this.hasLodestoneUpgrade() ? base/2 : base;
+		return Math.max(MIN_DURATION, this.hasLodestoneUpgrade() ? base/2 : base);
 	}
 
 	@Override
