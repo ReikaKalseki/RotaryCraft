@@ -34,7 +34,6 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
-import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -540,7 +539,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 		@Override
 		public boolean isValidItem(ItemStack is) {
-			return HardOresHandler.instance.getBaseOreType(is) != null;
+			return this.getItem(is) != null;
 		}
 
 		@Override
@@ -554,8 +553,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 
 		private ItemStack getItem(ItemStack src) {
-			OreType ore = HardOresHandler.instance.getBaseOreType(src);
-			return ore == null ? null : ReikaItemHelper.getSizedItemStack(ore.getFirstOreBlock(), HardOresHandler.BLOCK_YIELD);
+			return ReikaItemHelper.getSizedItemStack(HardOresHandler.instance.getRootOre(src), HardOresHandler.BLOCK_YIELD);
 		}
 
 		@Override
@@ -578,6 +576,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Collection<ItemStack> getPotentialOutputsForDisplay() {
+			/*
 			Collection<ItemStack> ret = new ArrayList();
 			for (ItemStack is : HardOresHandler.instance.getAllHardOres()) {
 				ItemStack from = this.getItem(is);
@@ -586,6 +585,8 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 				}
 			}
 			return ret;
+			 */
+			return HardOresHandler.instance.getOresWithHardVersions();
 		}
 
 	}
