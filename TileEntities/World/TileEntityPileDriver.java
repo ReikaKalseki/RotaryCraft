@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -101,7 +101,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 					ItemStack is = r.getItem(s);
 					Block b = Block.getBlockFromItem(is.getItem());
 					if (s != RockShapes.COBBLE) {
-						BLOCK_CONVERSION.put(b, is.getItemDamage(), new BlockKey(r.getItem(RockShapes.COBBLE)));
+						BLOCK_CONVERSION.put(b, is.getItemDamage(), BlockKey.fromItem(r.getItem(RockShapes.COBBLE)));
 					}
 					if (r == RockTypes.GRANITE || r == RockTypes.HORNFEL) {
 						HITS_PER_BLOCK.put(b, is.getItemDamage(), 3);

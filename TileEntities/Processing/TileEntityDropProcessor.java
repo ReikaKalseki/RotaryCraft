@@ -34,6 +34,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -42,6 +43,7 @@ import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaMystcraftHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.GregOreHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.HardOresHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
@@ -343,6 +345,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		MystFolderProcessing.instance.register();
 		new MystNotebookProcessing().register();
 		new GregCrateProcessing().register();
+		new HardOreProcessing().register();
 	}
 
 	public static abstract class DropProcessing {
@@ -529,6 +532,60 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		@SideOnly(Side.CLIENT)
 		public Collection<ItemStack> getPotentialOutputsForDisplay() {
 			return this.getOutputsOfInputForDisplay(null);
+		}
+
+	}
+
+	private static class HardOreProcessing extends DropProcessing {
+
+		@Override
+		public boolean isValidItem(ItemStack is) {
+			return HardOresHandler.instance.getBaseOreType(is) != null;
+		}
+
+		@Override
+		protected boolean allowsStacking() {
+			return true;
+		}
+
+		@Override
+		protected Collection<ItemStack> generateItems(World world, int x, int y, int z, int fortune, EntityPlayer ep, Random rand, ItemStack src) throws Exception {
+			return ReikaJavaLibrary.makeListFrom(this.getItem(src));
+		}
+
+		private ItemStack getItem(ItemStack src) {
+			OreType ore = HardOresHandler.instance.getBaseOreType(src);
+			return ore == null ? null : ReikaItemHelper.getSizedItemStack(ore.getFirstOreBlock(), HardOresHandler.BLOCK_YIELD);
+		}
+
+		@Override
+		protected boolean isLoadable() {
+			return HardOresHandler.instance.isLoaded();
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public ArrayList<ItemStack> getAllInputsForDisplay() {
+			return HardOresHandler.instance.getAllHardOres();
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public List<ItemStack> getOutputsOfInputForDisplay(ItemStack src) {
+			return ReikaJavaLibrary.makeListFrom(this.getItem(src));
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Collection<ItemStack> getPotentialOutputsForDisplay() {
+			Collection<ItemStack> ret = new ArrayList();
+			for (ItemStack is : HardOresHandler.instance.getAllHardOres()) {
+				ItemStack from = this.getItem(is);
+				if (from != null) {
+					ret.add(from);
+				}
+			}
+			return ret;
 		}
 
 	}
