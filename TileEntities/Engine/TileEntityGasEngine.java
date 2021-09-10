@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -43,8 +43,8 @@ public class TileEntityGasEngine extends TileEntityEngine implements Upgradeable
 	}
 
 	@Override
-	protected void consumeFuel() {
-		fuel.removeLiquid(this.getConsumedFuel());
+	protected void consumeFuel(float scale) {
+		fuel.removeLiquid(scale*this.getConsumedFuel());
 	}
 
 	@Override

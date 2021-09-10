@@ -90,6 +90,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	protected int backz;
 
 	private boolean isOn;
+	private boolean hasO2Boost;
 
 	protected long lastpower = 0;
 
@@ -140,7 +141,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		return this.getFuelLevel()*par1/FUELCAP;
 	}
 
-	protected abstract void consumeFuel();
+	protected abstract void consumeFuel(float scale);
 
 	protected int getConsumedFuel() {
 		return 10;
@@ -151,10 +152,6 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	protected abstract boolean getRequirements(World world, int x, int y, int z, int meta);
 
 	protected final boolean hasAir(World world, int x, int y, int z) {
-		if (!air.isEmpty()) {
-			air.removeLiquid(2);
-			return true;
-		}
 		if (this.isDrowned(world, x, y, z))
 			return false;
 		if (AtmosphereHandler.isNoAtmo(world, x-this.getWriteDirection().offsetX, y, z-this.getWriteDirection().offsetZ, blockType, true))
@@ -261,8 +258,14 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		}
 
 		boolean on = type.isAirBreathing() ? this.hasAir(world, x, y, z) : true;
+		hasO2Boost = false;
 
-		if (this.getRequirements(world, x, y, z, meta) && on) {
+		if (!air.isEmpty() && type.isAirBreathing()) {
+			on = true;
+			hasO2Boost = true;
+		}
+
+		if (on && this.getRequirements(world, x, y, z, meta)) {
 			isOn = true;
 			this.setPowerData(world, x, y, z, meta);
 		}
@@ -397,9 +400,12 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 
 		this.internalizeFuel();
 		if (power > 0) {
+			if (hasO2Boost)
+				air.removeLiquid(1);
 			timer.updateTicker("fuel");
-			if (type.burnsFuel() && timer.checkCap("fuel") && this.canConsumeFuel())
-				this.consumeFuel();
+			if (type.burnsFuel() && timer.checkCap("fuel") && this.canConsumeFuel()) {
+				this.consumeFuel(hasO2Boost ? 0.8F : 1);
+			}
 		}
 
 		if (power > 0) {
@@ -767,7 +773,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		else if (f.equals(FluidRegistry.getFluid("rc lubricant"))) {
 			return lubricant.fill(resource, doFill);
 		}
-		else if (isAirFluid(f)) {
+		else if (isAirFluid(f) && type.isAirBreathing()) {
 			return air.fill(resource, doFill);
 		}
 		else {

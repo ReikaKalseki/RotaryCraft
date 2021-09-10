@@ -246,15 +246,13 @@ public class TileEntitySprinkler extends SprinklerBlock {
 							ModularLogger.instance.log(LOGGER_ID, "Found leaf @ "+x+", "+y+", "+z);
 						Block b2 = world.getBlock(x, y-1, z);
 						if (b2.isAir(world, x, y-1, z)) { //space for an apple; only stop moving down if this
-							b.updateTick(world, x, y, z, rand);
-							BlockTickEvent.fire(world, x, y, z, b, UpdateFlags.FORCED.flag);
+							BlockTickEvent.fire(b, world, x, y, z, rand, UpdateFlags.getForcedUnstoppableTick());
 							if (ModularLogger.instance.isEnabled(LOGGER_ID))
 								ModularLogger.instance.log(LOGGER_ID, "Ticked apple leaf @ "+x+", "+y+", "+z);
 						}
 					}
 					else if (b.getMaterial() == Material.plants) {
-						b.updateTick(world, x, y, z, rand);
-						BlockTickEvent.fire(world, x, y, z, b, UpdateFlags.FORCED.flag);
+						BlockTickEvent.fire(b, world, x, y, z, rand, UpdateFlags.getForcedUnstoppableTick());
 						if (ModularLogger.instance.isEnabled(LOGGER_ID))
 							ModularLogger.instance.log(LOGGER_ID, "Ticked apple block @ "+x+", "+y+", "+z);
 					}
@@ -265,19 +263,16 @@ public class TileEntitySprinkler extends SprinklerBlock {
 					if (crop == null)
 						crop = ModCropList.getModCrop(b, meta);
 					if (crop != null) {
-						b.updateTick(world, x, y, z, rand);
-						BlockTickEvent.fire(world, x, y, z, b, UpdateFlags.FORCED.flag);
+						BlockTickEvent.fire(b, world, x, y, z, rand, UpdateFlags.getForcedUnstoppableTick());
 					}
 					else {
 						ReikaPlantHelper p = ReikaPlantHelper.getPlant(b);
 						if (p != null && p.grows()) {
-							b.updateTick(world, x, y, z, rand);
-							BlockTickEvent.fire(world, x, y, z, b, UpdateFlags.FORCED.flag);
+							BlockTickEvent.fire(b, world, x, y, z, rand, UpdateFlags.getForcedUnstoppableTick());
 						}
 						else if (p == null) {
 							if (b instanceof BlockSapling || ModWoodList.isModSapling(b, meta)) {
-								b.updateTick(world, x, y, z, rand);
-								BlockTickEvent.fire(world, x, y, z, b, UpdateFlags.FORCED.flag);
+								BlockTickEvent.fire(b, world, x, y, z, rand, UpdateFlags.getForcedUnstoppableTick());
 							}
 						}
 					}
@@ -456,8 +451,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 							}
 							else if (p == null) {
 								if (b instanceof BlockSapling || ModWoodList.isModSapling(b, meta)) {
-									b.updateTick(world, xCoord, dy, zCoord, rand);
-									BlockTickEvent.fire(world, xCoord, dy, zCoord, b, UpdateFlags.FORCED.flag);
+									BlockTickEvent.fire(b, world, xCoord, dy, zCoord, rand, UpdateFlags.FORCED);
 									stopMoving = true;
 								}
 							}

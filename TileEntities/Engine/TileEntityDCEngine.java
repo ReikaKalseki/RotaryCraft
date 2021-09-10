@@ -27,7 +27,7 @@ public class TileEntityDCEngine extends TileEntityEngine implements RedstoneUpgr
 	private boolean hasUpgrade;
 
 	@Override
-	protected void consumeFuel() {
+	protected void consumeFuel(float scale) {
 
 	}
 

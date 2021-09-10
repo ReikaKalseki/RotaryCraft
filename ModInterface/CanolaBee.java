@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
+import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
@@ -117,8 +118,7 @@ public class CanolaBee extends BeeSpecies {
 					if (b == BlockRegistry.CANOLA.getBlockInstance()) {
 						if (meta < 9) {
 							//world.scheduleBlockUpdate(dx, dy, dz, b, 20+rand.nextInt(20)); //was 20+rand(300)
-							b.updateTick(world, dx, dy, dz, rand);
-							BlockTickEvent.fire(world, dx, dy, dz, b, UpdateFlags.FORCED.flag);
+							BlockTickEvent.fire(b, world, dx, dy, dz, DragonAPICore.rand, UpdateFlags.FORCED);
 							flag = true;
 						}
 					}

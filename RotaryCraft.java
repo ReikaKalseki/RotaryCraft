@@ -180,6 +180,7 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final MachineDamage shock = (MachineDamage)new MachineDamage("was electrified").setDamageBypassesArmor();
 	public static final MachineDamage grind = new MachineDamage("was ground to a pulp");
 	public static final MachineDamage freezeDamage = new MachineDamage("froze");
+	public static final MachineDamage heatDamage = (MachineDamage)new MachineDamage("burned up").setFireDamage();
 
 	static final Random rand = new Random();
 

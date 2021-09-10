@@ -28,7 +28,7 @@ public class TileEntityACEngine extends TileEntityEngine implements Magnetizatio
 	private final RedstoneCycleTracker redstone = new RedstoneCycleTracker(3);
 
 	@Override
-	protected void consumeFuel() {
+	protected void consumeFuel(float scale) {
 
 	}
 

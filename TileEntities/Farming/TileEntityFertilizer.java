@@ -129,8 +129,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		if (id != Blocks.air && dd <= this.getRange() && this.canTick(world, dx, dy, dz)) {
 			int n = this.getConsecutiveUpdates()+enchantments.getEnchantment(Enchantment.fortune);
 			for (int i = 0; i < n; i++) {
-				id.updateTick(world, dx, dy, dz, rand);
-				BlockTickEvent.fire(world, dx, dy, dz, id, UpdateFlags.FORCED.flag);
+				BlockTickEvent.fire(id, world, dx, dy, dz, rand, UpdateFlags.FORCED);
 			}
 			world.markBlockForUpdate(dx, dy, dz);
 			if (this.didSomething(world, dx, dy, dz)) {

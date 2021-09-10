@@ -553,7 +553,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		}
 
 		private ItemStack getItem(ItemStack src) {
-			return ReikaItemHelper.getSizedItemStack(HardOresHandler.instance.getRootOre(src), HardOresHandler.BLOCK_YIELD);
+			return ReikaItemHelper.getSizedItemStack(HardOresHandler.instance.getRootOre(src), HardOresHandler.instance.getYield(src));
 		}
 
 		@Override

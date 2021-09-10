@@ -118,8 +118,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 	}
 
 	@Override
-	protected void consumeFuel() {
-		fuel.removeLiquid(this.getConsumedFuel());
+	protected void consumeFuel(float scale) {
+		fuel.removeLiquid(scale*this.getConsumedFuel());
 	}
 
 	@Override
@@ -250,7 +250,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x1, y, z1, x2, y+1, z2);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (EntityLivingBase e : li) {
-			e.attackEntityFrom(DamageSource.onFire, this.isAfterburning() ? 4 : 1);
+			RotaryCraft.heatDamage.lastMachine = this;
+			e.attackEntityFrom(RotaryCraft.heatDamage, this.isAfterburning() ? 4 : 1);
 		}
 	}
 

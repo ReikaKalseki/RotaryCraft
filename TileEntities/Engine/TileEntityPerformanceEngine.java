@@ -37,8 +37,8 @@ public class TileEntityPerformanceEngine extends TileEntityEngine {
 	}
 
 	@Override
-	protected void consumeFuel() {
-		fuel.removeLiquid(this.getConsumedFuel());
+	protected void consumeFuel(float scale) {
+		fuel.removeLiquid(scale*this.getConsumedFuel());
 		if (rand.nextInt(30) == 0)
 			if (additives > 0)
 				additives--;

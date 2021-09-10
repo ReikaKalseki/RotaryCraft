@@ -795,7 +795,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE) {
 				int dmg = ((TemperatureTE)tile).getThermalDamage();
 				if (dmg > 0) {
-					e.attackEntityFrom(DamageSource.lava, dmg);
+					RotaryCraft.heatDamage.lastMachine = tile;
+					e.attackEntityFrom(RotaryCraft.heatDamage, dmg);
 					e.setFire(6);
 				}
 			}

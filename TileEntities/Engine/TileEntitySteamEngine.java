@@ -36,8 +36,8 @@ public class TileEntitySteamEngine extends TileEntityEngine {
 	}
 
 	@Override
-	protected void consumeFuel() {
-		water.removeLiquid(this.getConsumedFuel());
+	protected void consumeFuel(float scale) {
+		water.removeLiquid(scale*this.getConsumedFuel());
 	}
 
 	@Override

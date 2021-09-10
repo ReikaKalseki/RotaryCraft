@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -189,12 +189,11 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				}
 				else if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
 					//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
-					id.updateTick(world, rx, i, rz, rand);
-					BlockTickEvent.fire(world, rx, i, rz, id, UpdateFlags.FORCED.flag);
+					BlockTickEvent.fire(id, world, rx, i, rz, rand, UpdateFlags.getForcedUnstoppableTick());
 					world.markBlockForUpdate(rx, i, rz);
 				}
 				else if (this.shouldTick(world, x, y, z, id)) {
-					id.updateTick(world, rx, i, rz, rand);
+					BlockTickEvent.fire(id, world, rx, i, rz, rand, UpdateFlags.getForcedUnstoppableTick());
 				}
 			}
 		}

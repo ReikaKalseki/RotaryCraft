@@ -104,7 +104,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 	}
 
 	@Override
-	protected void consumeFuel() {
+	protected void consumeFuel(float scale) {
 
 	}
 
