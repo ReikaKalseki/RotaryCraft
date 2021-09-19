@@ -244,7 +244,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable, MultiLayer
 		}
 
 		if (ep.motionY < 0 && winged && floatmode && !ep.isPlayerSleeping()) {
-			if (!ModList.CHROMATICRAFT.isLoaded() || !ChromatiAPI.rituals.isPlayerUndergoingRitual(ep)) {
+			if (!ModList.CHROMATICRAFT.isLoaded() || !ChromatiAPI.getAPI().rituals().isPlayerUndergoingRitual(ep)) {
 				boolean sneak = ep.isSneaking() != ConfigRegistry.SNEAKWINGS.getState();
 				double ang = Math.cos(Math.toRadians(ep.rotationPitch));
 				double d = ep.motionY <= -2 ? 0.0625 : ep.motionY <= -1 ? 0.125 : ep.motionY <= -0.5 ? 0.25 : 0.5; //gives curve

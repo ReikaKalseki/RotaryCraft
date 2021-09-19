@@ -135,7 +135,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
 	public static int getDroppedMeta(Block id, int meta) {
 		if (id == Blocks.leaves || id == Blocks.leaves2)
 			return meta&3;
-		if (ModList.CHROMATICRAFT.isLoaded() && id == ChromatiAPI.trees.getRainbowLeaf())
+		if (ModList.CHROMATICRAFT.isLoaded() && id == ChromatiAPI.getAPI().trees().getRainbowLeaf())
 			return 0;
 		if (id == Blocks.vine)
 			return 0;

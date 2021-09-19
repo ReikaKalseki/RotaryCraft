@@ -143,7 +143,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 				is.damageItem(1, ep);
 			return true;
 		}
-		else if (ModList.CHROMATICRAFT.isLoaded() && (id == ChromatiAPI.trees.getDyeLeaf(false) || id == ChromatiAPI.trees.getDyeLeaf(true))) {
+		else if (ModList.CHROMATICRAFT.isLoaded() && (id == ChromatiAPI.getAPI().trees().getDyeLeaf(false) || id == ChromatiAPI.getAPI().trees().getDyeLeaf(true))) {
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = this.getLeafRange();
 			for (int i = -r; i <= r; i++) {
@@ -151,7 +151,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 					for (int k = -r; k <= r; k++) {
 						Block id2 = world.getBlock(x+i, y+j, z+k);
 						int meta2 = world.getBlockMetadata(x+i, y+j, z+k);
-						if ((id2 == ChromatiAPI.trees.getDyeLeaf(false) || id2 == ChromatiAPI.trees.getDyeLeaf(true)) && (ignoreMeta || meta2 == meta)) {
+						if ((id2 == ChromatiAPI.getAPI().trees().getDyeLeaf(false) || id2 == ChromatiAPI.getAPI().trees().getDyeLeaf(true)) && (ignoreMeta || meta2 == meta)) {
 							this.dropBlockAsItem(is, ep, id2, world, x+i, y+j, z+k, meta2, fortune);
 							ReikaSoundHelper.playBreakSound(world, x+i, y+j, z+k, id2);
 							world.setBlockToAir(x+i, y+j, z+k);
@@ -163,7 +163,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 				is.damageItem(1, ep);
 			return true;
 		}
-		else if (ModList.CHROMATICRAFT.isLoaded() && id == ChromatiAPI.trees.getRainbowLeaf()) {
+		else if (ModList.CHROMATICRAFT.isLoaded() && id == ChromatiAPI.getAPI().trees().getRainbowLeaf()) {
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = this.getLeafRange();
 			ArrayList<ItemStack> items = new ArrayList();
@@ -215,7 +215,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 				is.damageItem(1, ep);
 			return true;
 		}
-		else if (ModList.CHROMATICRAFT.isLoaded() && id == ChromatiAPI.trees.getDyeFlower()) {
+		else if (ModList.CHROMATICRAFT.isLoaded() && id == ChromatiAPI.getAPI().trees().getDyeFlower()) {
 			int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 			int r = this.getPlantRange();
 			for (int i = -r; i <= r; i++) {

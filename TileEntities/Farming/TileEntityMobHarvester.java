@@ -77,7 +77,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 		double ppdiff = ReikaMathLibrary.intpow(pdiff, 6);
 		double base = ReikaMathLibrary.logbase(ppdiff, 2)+2*enchantments.getEnchantment(Enchantment.sharpness);
 		if (ModList.CHROMATICRAFT.isLoaded()) {
-			base *= ChromatiAPI.adjacency.getFactorSimple(worldObj, xCoord, yCoord, zCoord, "PINK");
+			base *= ChromatiAPI.getAPI().adjacency().getFactorSimple(worldObj, xCoord, yCoord, zCoord, "PINK");
 		}
 		return (int)base;
 	}

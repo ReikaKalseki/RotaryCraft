@@ -328,7 +328,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 	private void checkAndMatchInventory() {
 		BlockKey sapling = null;
 		if (tree.isDyeTree()) {
-			sapling = new BlockKey(ChromatiAPI.trees.getDyeSapling(), tree.getDyeTreeMeta());
+			sapling = new BlockKey(ChromatiAPI.getAPI().trees().getDyeSapling(), tree.getDyeTreeMeta());
 		}
 		else if (tree.getTreeType() != null) {
 			sapling = tree.getSapling();
@@ -412,9 +412,9 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		if (!this.shouldPlantSapling())
 			return null;
 		if (treeCopy.isDyeTree())
-			return new BlockKey(ChromatiAPI.trees.getDyeSapling(), treeCopy.getDyeTreeMeta());
+			return new BlockKey(ChromatiAPI.getAPI().trees().getDyeSapling(), treeCopy.getDyeTreeMeta());
 		else if (treeCopy.isRainbowTree())
-			return new BlockKey(ChromatiAPI.trees.getRainbowSapling());
+			return new BlockKey(ChromatiAPI.getAPI().trees().getRainbowSapling());
 		else if (treeCopy.getTreeType() != null)
 			return treeCopy.getSapling();
 		else
@@ -425,7 +425,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		if (enchantments.hasEnchantment(Enchantment.infinity))
 			return true;
 		if (treeCopy.isDyeTree()) {
-			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStackWithBlock(inv[0], ChromatiAPI.trees.getDyeSapling()) && inv[0].getItemDamage() == treeCopy.getDyeTreeMeta();
+			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStackWithBlock(inv[0], ChromatiAPI.getAPI().trees().getDyeSapling()) && inv[0].getItemDamage() == treeCopy.getDyeTreeMeta();
 		}
 		else if (treeCopy.getTreeType() != null) {
 			return inv[0] != null && inv[0].stackSize > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getSapling());

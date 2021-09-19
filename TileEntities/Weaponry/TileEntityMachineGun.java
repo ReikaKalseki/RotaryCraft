@@ -130,7 +130,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 		double vz = 0;
 		double v = this.getFirePower();
 		if (ModList.CHROMATICRAFT.isLoaded()) {
-			v *= ChromatiAPI.adjacency.getFactorSimple(worldObj, xCoord, yCoord, zCoord, "PINK");
+			v *= ChromatiAPI.getAPI().adjacency().getFactorSimple(worldObj, xCoord, yCoord, zCoord, "PINK");
 		}
 		switch(meta) {
 			case 1:
