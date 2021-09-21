@@ -70,7 +70,7 @@ public class BlastFurnaceHandler extends TemplateRecipeHandler {
 			ArrayList li = new ArrayList();
 			if (ReikaItemHelper.matchStacks(recipe.outputItem(), ItemStacks.steelblock)) {
 				li.add(new PositionedStack(ReikaItemHelper.getSizedItemStack(ItemStacks.steelingot, 2), 143, 24));
-				li.add(new PositionedStack(new ItemStack(Items.coal, 3, 1), 143, 24-18));
+				li.add(new PositionedStack(ReikaItemHelper.getSizedItemStack(ReikaItemHelper.charcoal, 3), 143, 24-18));
 				li.add(new PositionedStack(new ItemStack(Items.iron_ingot, 5, 1), 143, 24+18));
 			}
 			return li;

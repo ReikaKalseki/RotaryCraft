@@ -11,6 +11,7 @@ package Reika.RotaryCraft.GUIs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
@@ -25,6 +26,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -34,6 +36,7 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.PackModificationTracker;
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
@@ -46,6 +49,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.HandbookAuxData;
 import Reika.RotaryCraft.Auxiliary.HandbookNotifications;
 import Reika.RotaryCraft.Auxiliary.RotaryDescriptions;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.HandbookEntry;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
@@ -178,6 +182,8 @@ public class GuiHandbook extends GuiScreen
 			return HandbookNotifications.instance.getNewAlerts().size()/3;
 		if (h == HandbookRegistry.PACKMODS)
 			return PackModificationTracker.instance.getModifications(RotaryCraft.instance).size()/3;
+		if (h == HandbookRegistry.ENCHANTING)
+			return MachineRegistry.getEnchantableMachineList().getSize();
 		return h.hasSubpages() ? 1+h.getBonusSubpages() : h.getBonusSubpages();
 	}
 
@@ -449,6 +455,19 @@ public class GuiHandbook extends GuiScreen
 		int posX = (width - xSize) / 2-2;
 		int posY = (height - ySize) / 2-8;
 
+		if (this.getEntry() == HandbookRegistry.ENCHANTING && subpage > 0) {
+			MultiMap<MachineRegistry, Enchantment> map = MachineRegistry.getEnchantableMachineList();
+			ArrayList<MachineRegistry> li = new ArrayList(map.keySet());
+			Collections.sort(li);
+			double x = posX+167;
+			double y = posY+44;
+			MachineRegistry m = li.get(subpage-1);
+			TileEntity te = m.createTEInstanceForRender(0);
+			((EnchantableMachine)te).getEnchantmentHandler().setEnchantment(map.get(m).iterator().next(), 1);
+			this.doRenderMachine(x, y, HandbookRegistry.ENCHANTING, m);
+			((EnchantableMachine)te).getEnchantmentHandler().clear();
+		}
+
 		if (!this.isLimitedView()) {
 			ReikaRenderHelper.disableLighting();
 			int msx = ReikaGuiAPI.instance.getMouseRealX();
@@ -663,11 +682,15 @@ public class GuiHandbook extends GuiScreen
 		return false;
 	}
 
-	protected void doRenderMachine(double x, double y, HandbookEntry he) {
+	protected final void doRenderMachine(double x, double y, HandbookEntry he) {
 		HandbookRegistry h = (HandbookRegistry)he;
 		MachineRegistry m = h.getMachine();
 		if (m == null)
 			return;
+		this.doRenderMachine(x, y, h, m);
+	}
+
+	protected final void doRenderMachine(double x, double y, HandbookRegistry h, MachineRegistry m) {
 		MaterialRegistry[] mats = MaterialRegistry.values();
 		TileEntity te = m.createTEInstanceForRender(0);
 		int timeStep = (int)((System.nanoTime()/SECOND)%mats.length);
@@ -704,6 +727,7 @@ public class GuiHandbook extends GuiScreen
 		}
 		double sc = 48;
 		GL11.glPushMatrix();
+		GL11.glTranslated(0, 0, 32);
 		if (m.hasModel() && !m.isPipe()) {
 			double dx = x;
 			double dy = y+21;
@@ -730,7 +754,6 @@ public class GuiHandbook extends GuiScreen
 
 	private void drawMachineRender(int posX, int posY) {
 		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glTranslated(0, 0, 32);
 		HandbookEntry h = this.getEntry();
 		double x = posX+167;
 		double y = posY+44;
@@ -754,6 +777,5 @@ public class GuiHandbook extends GuiScreen
 			this.doRenderMachine(x, y, h);
 			GL11.glDisable(GL11.GL_BLEND);
 		}
-		GL11.glTranslated(0, 0, -32);
 	}
 }

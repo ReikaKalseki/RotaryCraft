@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.RotaryCraft.Auxiliary.EnchantmentRenderer;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -53,18 +54,18 @@ public class RenderGrinder extends RotaryTERenderer
 		if (tile.isInWorld()) {
 
 			switch(tile.getBlockMetadata()) {
-			case 0:
-				var11 = 180;
-				break;
-			case 1:
-				var11 = 0;
-				break;
-			case 2:
-				var11 = 270;
-				break;
-			case 3:
-				var11 = 90;
-				break;
+				case 0:
+					var11 = 180;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
 			}
 
 			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
@@ -91,8 +92,32 @@ public class RenderGrinder extends RotaryTERenderer
 	{
 		if (this.doRenderModel((RotaryCraftTileEntity)tile))
 			this.renderTileEntityGrinderAt((TileEntityGrinder)tile, par2, par4, par6, par8);
-		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
+		if (((RotaryCraftTileEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 			IORenderer.renderIO(tile, par2, par4, par6);
+			if (((TileEntityGrinder)tile).getEnchantmentHandler().hasEnchantments())
+				EnchantmentRenderer.renderGlint(tile, GrinderModel, null, par2, par4, par6);
+		}
+		else if (!tile.hasWorldObj()) {
+			int var11 = 0;
+			switch(tile.getBlockMetadata()) {
+				case 0:
+					var11 = 180;
+					break;
+				case 1:
+					var11 = 0;
+					break;
+				case 2:
+					var11 = 270;
+					break;
+				case 3:
+					var11 = 90;
+					break;
+			}
+			GL11.glRotatef((float)var11-90, 0.0F, 1.0F, 0.0F);
+			if (((TileEntityGrinder)tile).getEnchantmentHandler().hasEnchantments())
+				EnchantmentRenderer.renderGlint(tile, GrinderModel, null, par2, par4, par6);
+		}
+
 	}
 
 	@Override

@@ -1138,6 +1138,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return true;
 		if (this == COMPUTERCRAFT)
 			return true;
+		if (this == ENCHANTING)
+			return true;
 		if (this == ALERTS)
 			return !HandbookNotifications.instance.getNewAlerts().isEmpty();
 		if (this == PACKMODS)

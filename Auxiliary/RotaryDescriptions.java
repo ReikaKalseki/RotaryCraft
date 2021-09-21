@@ -13,15 +13,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Instantiable.Data.Maps.PluralMap;
 import Reika.DragonAPI.Instantiable.Event.Client.ResourceReloadEvent;
 import Reika.DragonAPI.Instantiable.IO.XMLInterface;
@@ -490,14 +494,17 @@ public final class RotaryDescriptions {
 				TileEntityExtractor.oreCopyRare
 				);
 
-		ArrayList<MachineRegistry> li = MachineRegistry.getEnchantableMachineList();
-		StringBuilder sb = new StringBuilder();
+		MultiMap<MachineRegistry, Enchantment> map = MachineRegistry.getEnchantableMachineList();
+		ArrayList<MachineRegistry> li = new ArrayList(map.keySet());
+		Collections.sort(li);
 		for (int i = 0; i < li.size(); i++) {
-			sb.append(li.get(i).getName());
-			if (i < li.size()-1)
-				sb.append(", ");
+			List<Enchantment> c = (List<Enchantment>)map.get(li.get(i));
+			String[] elems = new String[c.size()];
+			for (int k = 0; k < elems.length; k++) {
+				elems[k] = StatCollector.translateToLocal(c.get(k).getName());
+			}
+			notes.put(String.join("\n", elems), HandbookRegistry.ENCHANTING, i);
 		}
-		addData(HandbookRegistry.ENCHANTING, sb.toString());
 
 		addData(HandbookRegistry.BEARINGS, (int)(TileEntityGearbox.BEARINGREDUCTION*100)+"%", (int)(TileEntityGearbox.BEARINGINCREASE*100)+"%");
 

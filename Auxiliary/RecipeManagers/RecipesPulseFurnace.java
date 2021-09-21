@@ -19,6 +19,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -28,6 +30,7 @@ import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
+import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -45,6 +48,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityPulseFurnace;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceManager {
@@ -121,73 +125,92 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	}
 
 	private void addRecycling() {
-		this.addSmelting(Items.chainmail_helmet, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.chainmail_boots, new ItemStack(Items.iron_ingot, 2, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.chainmail_leggings, new ItemStack(Items.iron_ingot, 4, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.chainmail_chestplate, new ItemStack(Items.iron_ingot, 5, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.chainmail_helmet, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.chainmail_boots, new ItemStack(Items.iron_ingot, 2, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.chainmail_leggings, new ItemStack(Items.iron_ingot, 4, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.chainmail_chestplate, new ItemStack(Items.iron_ingot, 5, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.iron_helmet, new ItemStack(Items.iron_ingot, 5, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_chestplate, new ItemStack(Items.iron_ingot, 8, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_leggings, new ItemStack(Items.iron_ingot, 7, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_boots, new ItemStack(Items.iron_ingot, 4, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_helmet, new ItemStack(Items.iron_ingot, 5, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_chestplate, new ItemStack(Items.iron_ingot, 8, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_leggings, new ItemStack(Items.iron_ingot, 7, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_boots, new ItemStack(Items.iron_ingot, 4, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.iron_hoe, new ItemStack(Items.iron_ingot, 2, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_shovel, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_axe, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_pickaxe, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_sword, new ItemStack(Items.iron_ingot, 2, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_hoe, new ItemStack(Items.iron_ingot, 2, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_shovel, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_axe, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_pickaxe, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_sword, new ItemStack(Items.iron_ingot, 2, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.golden_helmet, new ItemStack(Items.gold_ingot, 5, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_chestplate, new ItemStack(Items.gold_ingot, 8, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_leggings, new ItemStack(Items.gold_ingot, 7, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_boots, new ItemStack(Items.gold_ingot, 4, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_helmet, new ItemStack(Items.gold_ingot, 5, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_chestplate, new ItemStack(Items.gold_ingot, 8, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_leggings, new ItemStack(Items.gold_ingot, 7, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_boots, new ItemStack(Items.gold_ingot, 4, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.golden_axe, new ItemStack(Items.gold_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_sword, new ItemStack(Items.gold_ingot, 2, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_shovel, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_pickaxe, new ItemStack(Items.gold_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_hoe, new ItemStack(Items.gold_ingot, 2, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_axe, new ItemStack(Items.gold_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_sword, new ItemStack(Items.gold_ingot, 2, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_shovel, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_pickaxe, new ItemStack(Items.gold_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_hoe, new ItemStack(Items.gold_ingot, 2, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.diamond_helmet, new ItemStack(Items.diamond, 5, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_chestplate, new ItemStack(Items.diamond, 8, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_leggings, new ItemStack(Items.diamond, 7, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_boots, new ItemStack(Items.diamond, 4, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_helmet, new ItemStack(Items.diamond, 5, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_chestplate, new ItemStack(Items.diamond, 8, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_leggings, new ItemStack(Items.diamond, 7, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_boots, new ItemStack(Items.diamond, 4, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.diamond_axe, new ItemStack(Items.diamond, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_sword, new ItemStack(Items.diamond, 2, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_shovel, new ItemStack(Items.diamond, 1, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_pickaxe, new ItemStack(Items.diamond, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_hoe, new ItemStack(Items.diamond, 2, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_axe, new ItemStack(Items.diamond, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_sword, new ItemStack(Items.diamond, 2, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_shovel, new ItemStack(Items.diamond, 1, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_pickaxe, new ItemStack(Items.diamond, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_hoe, new ItemStack(Items.diamond, 2, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.iron_horse_armor, new ItemStack(Items.iron_ingot, 7), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.diamond_horse_armor, new ItemStack(Items.diamond, 7), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.golden_horse_armor, new ItemStack(Items.gold_ingot, 7), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_horse_armor, new ItemStack(Items.iron_ingot, 7), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.diamond_horse_armor, new ItemStack(Items.diamond, 7), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.golden_horse_armor, new ItemStack(Items.gold_ingot, 7), RecipeLevel.PROTECTED);
 
-		this.addSmelting(Items.flint_and_steel, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.water_bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.lava_bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.milk_bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.minecart, new ItemStack(Items.iron_ingot, 5, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.iron_door, new ItemStack(Items.iron_ingot, 6, 0), RecipeLevel.PROTECTED);
-		this.addSmelting(Items.cauldron, new ItemStack(Items.iron_ingot, 7, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.flint_and_steel, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.water_bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.lava_bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.milk_bucket, new ItemStack(Items.iron_ingot, 3, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.minecart, new ItemStack(Items.iron_ingot, 5, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.iron_door, new ItemStack(Items.iron_ingot, 6, 0), RecipeLevel.PROTECTED);
+		this.addRecycling(Items.cauldron, new ItemStack(Items.iron_ingot, 7, 0), RecipeLevel.PROTECTED);
+		if (!Loader.isModLoaded("DragonRealmCore"))
+			this.addRecycling(Items.hopper_minecart, new ItemStack(Items.iron_ingot, 10, 0), RecipeLevel.PROTECTED);
 
-		this.addSmelting(ItemRegistry.STEELHELMET.getItemInstance(), this.getSizedSteel(5), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELBOOTS.getItemInstance(), this.getSizedSteel(4), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELCHEST.getItemInstance(), this.getSizedSteel(8), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELLEGS.getItemInstance(), this.getSizedSteel(7), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELAXE.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELPICK.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELSHOVEL.getItemInstance(), this.getSizedSteel(1), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELHOE.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELSHEARS.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELSICKLE.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
-		this.addSmelting(ItemRegistry.STEELSWORD.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELHELMET.getItemInstance(), this.getSizedSteel(5), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELBOOTS.getItemInstance(), this.getSizedSteel(4), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELCHEST.getItemInstance(), this.getSizedSteel(8), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELLEGS.getItemInstance(), this.getSizedSteel(7), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELAXE.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELPICK.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELSHOVEL.getItemInstance(), this.getSizedSteel(1), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELHOE.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELSHEARS.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELSICKLE.getItemInstance(), this.getSizedSteel(3), RecipeLevel.PROTECTED);
+		this.addRecycling(ItemRegistry.STEELSWORD.getItemInstance(), this.getSizedSteel(2), RecipeLevel.PROTECTED);
 
 		if (!ModList.RAILCRAFT.isLoaded()) { //exploit fix; he changes recipes
-			this.addSmelting(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
-			this.addSmelting(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
+			this.addRecycling(Blocks.detector_rail, new ItemStack(Items.iron_ingot, 1, 0), RecipeLevel.PERIPHERAL);	//1 ingot per block of rail
+			this.addRecycling(Blocks.golden_rail, new ItemStack(Items.gold_ingot, 1, 0), RecipeLevel.PERIPHERAL);
 		}
+	}
+
+	private void addRecycling(Block in, ItemStack out, RecipeLevel rl) {
+		this.addRecycling(new ItemStack(in), out, rl);
+	}
+
+	private void addRecycling(Item in, ItemStack out, RecipeLevel rl) {
+		this.addRecycling(new ItemStack(in), out, rl);
+	}
+
+	private void addRecycling(ItemStack in, ItemStack out, RecipeLevel rl) {
+		List<IRecipe> li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), in);
+		if (li != null && li.size() > 1) {
+			RotaryCraft.logger.log("Skipping recycling of "+this.fullID(in)+" to "+this.fullID(out)+" due to multiple production recipes");
+			return;
+		}
+		this.addSmelting(in, out, rl);
 	}
 
 	private ItemStack getSizedSteel(int size) {

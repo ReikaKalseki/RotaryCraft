@@ -9,11 +9,12 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Registry;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -34,6 +35,7 @@ import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Instantiable.Data.Immutable.ImmutableArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
+import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Interfaces.Registry.TileEnum;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -1379,8 +1381,9 @@ public enum MachineRegistry implements TileEnum {
 		if (this == ENGINE) {
 			return EngineType.engineList[offset].getTEInstanceForRender();
 		}
-		if (renderInstance != null)
+		if (renderInstance != null) {
 			return renderInstance;
+		}
 		try {
 			renderInstance = (TileEntity)te.newInstance();
 			return renderInstance;
@@ -1398,27 +1401,19 @@ public enum MachineRegistry implements TileEnum {
 		}
 	}
 
-	public static ArrayList<MachineRegistry> getEnchantableMachineList() {
-		ArrayList<MachineRegistry> li = new ArrayList<MachineRegistry>();
-		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList.get(i);
-			if (m.isEnchantable()) {
-				li.add(m);
+	public static MultiMap<MachineRegistry, Enchantment> getEnchantableMachineList() {
+		MultiMap<MachineRegistry, Enchantment> li = new MultiMap().setNullEmpty().setOrdered(new Comparator<Enchantment>() {
+			@Override
+			public int compare(Enchantment o1, Enchantment o2) {
+				return Integer.compare(o1.effectId, o2.effectId);
 			}
-		}
-		return li;
-	}
-
-	/** ret.get(i)[0] = machine; ret.get(i)[1] = enchantment arraylist */
-	public static ArrayList<Object[]> getDeepEnchantableMachineList() {
-		ArrayList<Object[]> li = new ArrayList<Object[]>();
+		});
 		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
 			MachineRegistry m = MachineRegistry.machineList.get(i);
 			if (m.isEnchantable()) {
-				Object[] o = new Object[2];
-				o[0] = m;
-				o[1] = ((EnchantableMachine)(m.createTEInstanceForRender(0))).getEnchantmentHandler().getValidEnchantments();
-				li.add(o);
+				for (Enchantment e : ((EnchantableMachine)(m.createTEInstanceForRender(0))).getEnchantmentHandler().getValidEnchantments()) {
+					li.addValue(m, e);
+				}
 			}
 		}
 		return li;

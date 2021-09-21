@@ -36,8 +36,6 @@
 	</modinterface>
 	<enchanting>
 		Some machines can be enchanted. Doing this will add features or functionality similar to the effects of the enchantments on their normal target items. For example, the Borer can receive Silk Touch, Fortune, and Efficiency, with each doing the same to the machine as they do to a tool. To enchant a machine, right-click it with an enchanted book.
-
-		The following machines can be enchanted: %s
 	</enchanting>
 	<computercraft>
 		If you have ComputerCraft or OpenComputers installed, you can use them to read and sometimes control various machines. Simply use the machine as you would any other peripheral, and call one of the listed methods. Note that not all machines have access to all methods; for example, the Reservoir has no inventory, power, or range methods, as they would be meaningless.

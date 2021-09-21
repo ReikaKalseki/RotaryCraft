@@ -65,7 +65,7 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 		BlastRecipe hsla = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, 0, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
 		this.addRecipe(hsla, RecipeLevel.CORE);
 
-		in1 = new FlexibleIngredient(new ItemStack(Items.coal, 1, 1), 100, 1);
+		in1 = new FlexibleIngredient(ReikaItemHelper.charcoal, 100, 1);
 		in2 = new FlexibleIngredient(Items.gunpowder, 3.2F, 1);
 		in3 = new FlexibleIngredient(Blocks.sand, 0.2F, 1);
 		BlastRecipe hsla1b = new BlastRecipe(in1, in2, in3, Items.iron_ingot, ItemStacks.steelingot, 0, TileEntityBlastFurnace.SMELT_XP, TileEntityBlastFurnace.SMELTTEMP);
