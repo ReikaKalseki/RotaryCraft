@@ -682,7 +682,7 @@ public class GuiHandbook extends GuiScreen
 		return false;
 	}
 
-	protected final void doRenderMachine(double x, double y, HandbookEntry he) {
+	protected void doRenderMachine(double x, double y, HandbookEntry he) {
 		HandbookRegistry h = (HandbookRegistry)he;
 		MachineRegistry m = h.getMachine();
 		if (m == null)

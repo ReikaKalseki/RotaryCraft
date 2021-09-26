@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.MathSci.ReikaPhysicsHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiPowerOnlyMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityLaunchCannon;
@@ -69,8 +68,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		}
 		thetad = theta;
 		phid = phi;
-		theta = ReikaPhysicsHelper.degToRad(theta);
-		phi = ReikaPhysicsHelper.degToRad(phi);
+		theta = Math.toRadians(theta);
+		phi = Math.toRadians(phi);
 		ep = p5ep;
 		fuse = tnt instanceof TileEntityTNTCannon ? ((TileEntityTNTCannon)tnt).selectedFuse : 0;
 	}
@@ -269,8 +268,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 		this.sendPacket();
 		if (targetMode)
 			return;
-		theta = ReikaPhysicsHelper.degToRad(thetad);
-		phi = ReikaPhysicsHelper.degToRad(phid);
+		theta = Math.toRadians(thetad);
+		phi = Math.toRadians(phid);
 	}
 
 	@Override
@@ -349,8 +348,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
 	private void drawAngles(int j, int k) {
 		int basex1 = 16+j;
 		int basey1 = 73+k;
-		int x2 = basex1+(int)(57*Math.cos(theta));
-		int y2 = basey1-(int)(57*Math.sin(theta));
+		double x2 = basex1+57*Math.cos(theta);
+		double y2 = basey1-57*Math.sin(theta);
 		int basex3 = 131+j+36;
 		int basey3 = 45+k;/*
     	if (phid >= 90 && phid <= 270) {
@@ -359,8 +358,8 @@ public class GuiCannon extends GuiPowerOnlyMachine
        	if (phid >= 180 && phid <= 360) {
     		basex3++;
     	}*/
-		int x4 = basex3+(int)(30*Math.cos(theta)*Math.cos(phi));
-		int y4 = basey3+(int)(30*Math.cos(theta)*Math.sin(phi));
+		double x4 = basex3+30*Math.cos(theta)*Math.cos(phi);
+		double y4 = basey3+30*Math.cos(theta)*Math.sin(phi);
 
 		api.drawLine(basex1, basey1, x2, y2, 0xffffffff);
 		api.drawLine(basex3, basey3, x4, y4, 0xffffffff);
@@ -380,19 +379,19 @@ public class GuiCannon extends GuiPowerOnlyMachine
 				size = 66;
 			if (i == 3)
 				size = 80;
-			int x2 = basex1+(int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*15)));
-			int y2 = basey1-(int)(size*Math.sin(ReikaPhysicsHelper.degToRad(i*15)));
+			double x2 = basex1+size*Math.cos(Math.toRadians(i*15));
+			double y2 = basey1-size*Math.sin(Math.toRadians(i*15));
 			api.drawLine(basex1, basey1, x2, y2, color);
 		}
 		for (int i = 0; i < 8; i++) {
 			int size = 30;
-			int x4 = basex3-18-88+xSize/2+(int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*45)));
-			int y4 = basey3-118+ySize/2-(int)(size*Math.sin(ReikaPhysicsHelper.degToRad(i*45)));
+			double x4 = basex3-18-88+xSize/2+size*Math.cos(Math.toRadians(i*45));
+			double y4 = basey3-118+ySize/2-size*Math.sin(Math.toRadians(i*45));
 			api.drawLine(basex3, basey3, x4, y4, color);
 		}
 		for (int i = 0; i < 3; i++) {
 			int size = 30;
-			api.drawCircle(basex3, basey3, (int)(size*Math.cos(ReikaPhysicsHelper.degToRad(i*30))), color);
+			api.drawCircle(basex3, basey3, size*Math.cos(Math.toRadians(i*30)), color);
 		}
 	}
 
