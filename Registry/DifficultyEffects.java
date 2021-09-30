@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -25,7 +25,7 @@ public enum DifficultyEffects {
 	COMPACTOR(2, 2, 1),
 	SMALLERCRAFT(2, 2, 1),
 	BONUSSTEEL(2D, 1D, 0.5D),
-	BLASTCONSUME(1F, 0.25F, 0F),
+	BLASTCONSUME(0.4F, 1F, 3F),
 	JETFAILURE(4500, 1800, 900),
 	CONSUMEFRAC(0.03125F, 0.25F, 0.75F),
 	PRODUCEFRAC(new int[]{1600,3200}, new int[]{1000,2200}, new int[]{400,800}),
@@ -35,7 +35,8 @@ public enum DifficultyEffects {
 	RAILGUNCRAFT(16, 8, 2),
 	LUBEUSAGE(0.25F, 1F, 2.5F),
 	JETINGESTFAIL(0.05F, 0.2F, 0.5F),
-	FRACTIONTEAR(0F, 0F, 0.05F);
+	FRACTIONTEAR(0F, 0F, 0.05F),
+	;
 
 	private boolean isChance = false;
 

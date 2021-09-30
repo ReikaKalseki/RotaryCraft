@@ -60,11 +60,11 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 
 	public static final long REFERENCE = 1000000000000L; // 10^-12 W/m^2 reference
 
-	public static final int fudge = 100;
+	public static final int fudge = 1;//100;
 
 	public static final int FALLOFF = 16384;
 
-	public static final long INTENSITYPERTORQUE = 262144L*65536L*256L*8L;
+	public static final long INTENSITYPERTORQUE = 1000000L*LETHALVOLUME/262144;//262144L*65536L*256L*8L;
 	public static final int HZPEROMEGA = 8192;
 
 	public static final boolean ENABLEFREQ = false;
@@ -99,8 +99,9 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 					vuln = false;
 			//ReikaChatHelper.write(this.EYEDAMAGE-this.fudge*ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getMaxVolume()));
 			if (vuln) {
+				double vol = this.getVolume();
 				for (Effects e : Effects.list) {
-					if (fudge*ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, this.getVolume()) >= e.threshold) {
+					if (fudge*ReikaPhysicsHelper.inverseSquare(ent.posX-x-0.5, ent.posY-y-0.5, ent.posZ-z-0.5, vol) >= e.threshold) {
 						e.doEffect(ent);
 					}
 				}

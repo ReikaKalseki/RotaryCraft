@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.EnumDifficulty;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -129,7 +130,7 @@ public enum GearboxTypes {
 	public ItemStack getShaftUnitItem() {
 		if (this == WOOD)
 			return new ItemStack(Items.stick);
-		if (this == TUNGSTEN)
+		if (this == TUNGSTEN && DifficultyEffects.getDifficulty() == EnumDifficulty.EASY)
 			return STEEL.getShaftUnitItem();
 		return ItemRegistry.GEARCRAFT.getStackOfMetadata(metaOffset*16);
 	}
