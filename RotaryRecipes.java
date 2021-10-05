@@ -154,6 +154,14 @@ public class RotaryRecipes {
 		if (ModList.IMMERSIVEENG.isLoaded()) {
 			DieselHandler.squeezerList.add(new SqueezerRecipe(ItemRegistry.CANOLA.getStackOf(), 15, new FluidStack(FluidRegistry.getFluid("plantoil"), 20), null)); //4x less but 6x faster
 		}
+		if (ModList.RAILCRAFT.isLoaded()) {
+			Fluid f = FluidRegistry.getFluid("fuel");
+			int base = 48000;
+			int amt = f != null ? mods.railcraft.api.fuel.FuelManager.getBoilerFuelValue(f) : base;
+			if (amt <= 0)
+				amt = base;
+			mods.railcraft.api.fuel.FuelManager.addBoilerFuel(ethanol, amt/3);
+		}
 	}
 
 	private static void addProps() {
