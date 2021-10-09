@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
@@ -320,6 +321,8 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			}
 		}
 		if (e instanceof EntityTurretShot)
+			return 0;
+		if (e instanceof EntityDragon)
 			return 0;
 		if (ModList.VOIDMONSTER.isLoaded() && e instanceof EntityVoidMonster) {
 			if (e.getDistanceSq(xCoord+0.5, yCoord+0.5, zCoord+0.5) < 16) {
