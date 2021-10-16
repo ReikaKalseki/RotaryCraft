@@ -98,6 +98,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 
+import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
 import blusunrize.immersiveengineering.api.energy.DieselHandler;
 import blusunrize.immersiveengineering.api.energy.DieselHandler.SqueezerRecipe;
 import buildcraft.energy.fuels.CoolantManager;
@@ -111,6 +112,7 @@ import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeOutput;
 import ic2.api.recipe.Recipes;
 import minechem.api.RecipeAPI;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -153,6 +155,9 @@ public class RotaryRecipes {
 		}
 		if (ModList.IMMERSIVEENG.isLoaded()) {
 			DieselHandler.squeezerList.add(new SqueezerRecipe(ItemRegistry.CANOLA.getStackOf(), 15, new FluidStack(FluidRegistry.getFluid("plantoil"), 20), null)); //4x less but 6x faster
+			int base = BlastFurnaceRecipe.getBlastFuelTime(new ItemStack(Items.coal))*8/5;
+			BlastFurnaceRecipe.addBlastFuel(ItemStacks.coke, base);
+			BlastFurnaceRecipe.addBlastFuel(ItemStacks.cokeblock, base*10);
 		}
 		if (ModList.RAILCRAFT.isLoaded()) {
 			Fluid f = FluidRegistry.getFluid("fuel");
@@ -161,6 +166,8 @@ public class RotaryRecipes {
 			if (amt <= 0)
 				amt = base;
 			mods.railcraft.api.fuel.FuelManager.addBoilerFuel(ethanol, amt/3);
+			RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.coke);
+			RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.cokeblock);
 		}
 	}
 
