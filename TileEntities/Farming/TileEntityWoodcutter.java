@@ -50,6 +50,7 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TwilightForestHandler;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.API.Interfaces.LeafBlockWithExtras;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
@@ -265,10 +266,13 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 	private void cutBlock(World world, int x, int y, int z, Coordinate c, Material mat) {
 		//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
-		this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
+		Block b = this.dropBlocks(world, c.xCoord, c.yCoord, c.zCoord);
+		if (b instanceof LeafBlockWithExtras) {
+			((LeafBlockWithExtras)b).onPreWoodcutterBreak(world, c.xCoord, c.yCoord, c.zCoord);
+		}
 		c.setBlock(world, Blocks.air);
 
-		if (mat == Material.leaves)
+		if (mat == Material.leaves || mat == Material.plants)
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat()*0.5F, 1F);
 		else
 			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat()*0.5F, 1F);
@@ -338,15 +342,20 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 		}
 	}
 
-	private void dropBlocks(World world, int x, int y, int z) {
+	private Block dropBlocks(World world, int x, int y, int z) {
 		Block drop = world.getBlock(x, y, z);
 		if (drop == Blocks.air)
-			return;
+			return drop;
 		int dropmeta = world.getBlockMetadata(x, y, z);
 		BlockKey sapling = tree.getSapling();
 		Block logID = tree.getTreeType().getLogID();
 
 		Collection<ItemStack> drops = this.getDrops(world, x, y, z, drop, dropmeta);
+		if (drop instanceof LeafBlockWithExtras) {
+			ArrayList<ItemStack> li = ((LeafBlockWithExtras)drop).getExtraDrops(world, x, y, z, enchantments.getEnchantment(Enchantment.fortune));
+			if (li != null && !li.isEmpty())
+				drops.addAll(li);
+		}
 		if (drop == logID && logID != null) {
 			if (tree.getTreeType() != ModWoodList.SLIME) {
 				if (rand.nextInt(3) == 0) {
@@ -357,7 +366,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 
 		for (ItemStack todrop : drops) {
 			if (ReikaItemHelper.matchStacks(todrop, sapling)) {
-				if (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize()) {
+				if (enchantments.hasEnchantment(Enchantment.infinity) || (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize())) {
 					this.chestCheck(todrop);
 					if (todrop.stackSize > 0)
 						ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
@@ -371,6 +380,7 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 					ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
 			}
 		}
+		return drop;
 	}
 
 	private void chestCheck(ItemStack is) {

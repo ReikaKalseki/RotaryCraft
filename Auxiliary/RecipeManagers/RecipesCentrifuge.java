@@ -16,8 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -63,6 +61,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import cpw.mods.fml.common.Loader;
+import forestry.api.recipes.ISqueezerRecipe;
 import thaumcraft.api.aspects.Aspect;
 
 public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManager {
@@ -269,15 +268,19 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 		if (ModList.FORESTRY.isLoaded()) {
 			for (ItemStack in : ForestryRecipeHelper.getInstance().getSqueezerRecipes()) {
-				ImmutablePair<ChancedOutputList, FluidStack> out = ForestryRecipeHelper.getInstance().getSqueezerOutput(in);
-				FluidStack fs = out.right;
+				ISqueezerRecipe out = ForestryRecipeHelper.getInstance().getSqueezerOutput(in);
+				FluidStack fs = out.getFluidOutput();
 				if (fs != null) {
 					String n = fs.getFluid().getName();
 					if (n.equals("seedoil") || n.equals("juice")) {
 						continue;
 					}
 				}
-				ChancedOutputList co = out.left != null ? out.left.copy() : null;
+				ChancedOutputList co = null;
+				if (out.getRemnants() != null) {
+					co = new ChancedOutputList(false);
+					co.addItem(out.getRemnants(), out.getRemnantsChance()*100);
+				}
 				if (co != null) {
 					co.manipulateChances(new ChanceExponentiator(2.5));
 					co.manipulateChances(new ChanceRounder());

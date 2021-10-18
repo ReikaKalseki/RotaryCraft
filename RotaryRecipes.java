@@ -166,8 +166,8 @@ public class RotaryRecipes {
 			if (amt <= 0)
 				amt = base;
 			mods.railcraft.api.fuel.FuelManager.addBoilerFuel(ethanol, amt/3);
-			RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.coke);
-			RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.cokeblock);
+			//RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.coke);
+			//RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.cokeblock);
 		}
 	}
 

@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Farming;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -182,18 +183,20 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				i = -999;
 			}
 			else if (rand.nextInt(8) == 0) {
-				ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
-				ModCrop modcrop = ModCropList.getModCrop(id, meta);
-				if (crop != null && !crop.isRipe(meta)) {
-					world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
-				}
-				else if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
-					//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
+				if (this.shouldTick(world, x, y, z, id)) {
 					BlockTickEvent.fire(id, world, rx, i, rz, rand, UpdateFlags.getForcedUnstoppableTick());
-					world.markBlockForUpdate(rx, i, rz);
 				}
-				else if (this.shouldTick(world, x, y, z, id)) {
-					BlockTickEvent.fire(id, world, rx, i, rz, rand, UpdateFlags.getForcedUnstoppableTick());
+				else {
+					ReikaCropHelper crop = ReikaCropHelper.getCrop(id);
+					ModCrop modcrop = ModCropList.getModCrop(id, meta);
+					if (crop != null && !crop.isRipe(meta)) {
+						world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
+					}
+					else if (modcrop != null && !modcrop.isRipe(world, rx, i, rz)) {
+						//world.setBlockMetadataWithNotify(rx, i, rz, meta+1, 3);
+						BlockTickEvent.fire(id, world, rx, i, rz, rand, UpdateFlags.getForcedUnstoppableTick());
+						world.markBlockForUpdate(rx, i, rz);
+					}
 				}
 			}
 		}
@@ -203,7 +206,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 		ReikaPlantHelper p = ReikaPlantHelper.getPlant(id);
 		if (p != null && p.grows())
 			return true;
-		return false;
+		return id instanceof IGrowable;
 	}
 
 	private int calcRange() {
