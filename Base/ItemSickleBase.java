@@ -16,6 +16,7 @@ import com.InfinityRaider.AgriCraft.api.v2.ICrop;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -61,6 +62,14 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 	public ItemSickleBase(int index) {
 		super(index);
 	}
+
+	@Override
+	public final int getItemEnchantability() {
+		ItemStack ref = this.getEnchantabilityReference();
+		return ref != null ? ref.getItem().getItemEnchantability(ref) : 0;
+	}
+
+	public abstract ItemStack getEnchantabilityReference();
 
 	@Override
 	public final boolean onLeftClickEntity(ItemStack is, EntityPlayer ep, Entity e) {
@@ -466,6 +475,11 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 	@ModDependent(ModList.CHROMATICRAFT)
 	private void setItemCollection(EntityPlayer ep) {
 		ChromaticEventManager.instance.collectItemPlayer = ep;
+	}
+
+	@Override
+	public final EnumEnchantmentType getEnchantingCategory() {
+		return EnumEnchantmentType.digger;
 	}
 
 }

@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -146,6 +147,11 @@ public class ItemStunGun extends ItemChargedTool implements EnchantableItem {
 	@Override
 	public Result getEnchantValidity(Enchantment e, ItemStack is) {
 		return e == Enchantment.fortune || e == Enchantment.knockback ? Result.ALLOW : Result.DENY;
+	}
+
+	@Override
+	public EnumEnchantmentType getEnchantingCategory() {
+		return null;
 	}
 
 }

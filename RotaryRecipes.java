@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,6 +45,7 @@ import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaReflectionHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -155,7 +157,7 @@ public class RotaryRecipes {
 		}
 		if (ModList.IMMERSIVEENG.isLoaded()) {
 			DieselHandler.squeezerList.add(new SqueezerRecipe(ItemRegistry.CANOLA.getStackOf(), 15, new FluidStack(FluidRegistry.getFluid("plantoil"), 20), null)); //4x less but 6x faster
-			int base = BlastFurnaceRecipe.getBlastFuelTime(new ItemStack(Items.coal))*8/5;
+			int base = BlastFurnaceRecipe.getBlastFuelTime(ReikaItemHelper.charcoal)*5/2;
 			BlastFurnaceRecipe.addBlastFuel(ItemStacks.coke, base);
 			BlastFurnaceRecipe.addBlastFuel(ItemStacks.cokeblock, base*10);
 		}
@@ -166,8 +168,12 @@ public class RotaryRecipes {
 			if (amt <= 0)
 				amt = base;
 			mods.railcraft.api.fuel.FuelManager.addBoilerFuel(ethanol, amt/3);
-			//RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.coke);
-			//RailcraftCraftingManager.blastFurnace.getFuels().add(ItemStacks.cokeblock);
+
+			//This would be unnecessary if you just used the oredict or something...
+			List<ItemStack> unmodifiable = RailcraftCraftingManager.blastFurnace.getFuels();
+			List<ItemStack> inner = ReikaReflectionHelper.getUnmodifiableListInner(unmodifiable);
+			inner.add(ItemStacks.coke);
+			inner.add(ItemStacks.cokeblock);
 		}
 	}
 
@@ -1248,8 +1254,10 @@ public class RotaryRecipes {
 
 		ReikaRecipeHelper.addSmelting(ItemStacks.flour, new ItemStack(Items.bread), 0.2F);
 
-		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
-				"rrr", "rrr", "rr ", 'r', Blocks.rail});
+		if (!ModList.RAILCRAFT.isLoaded()) {
+			GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
+					"rrr", "rrr", "rr ", 'r', Blocks.rail});
+		}
 		GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(ItemStacks.ironscrap, 3), new Object[]{
 				"rrr", "rrr", "rr ", 'r', Blocks.iron_bars});
 

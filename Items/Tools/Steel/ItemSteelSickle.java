@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -56,8 +56,8 @@ public class ItemSteelSickle extends ItemSickleBase {
 	}
 
 	@Override
-	public int getItemEnchantability(ItemStack is) {
-		return Items.iron_pickaxe.getItemEnchantability(is);
+	public ItemStack getEnchantabilityReference() {
+		return new ItemStack(Items.iron_pickaxe);
 	}
 
 }

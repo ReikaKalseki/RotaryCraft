@@ -13,6 +13,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -250,6 +251,11 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 			}
 		}
 		li.add("Mode: "+this.getMode(is).desc);
+	}
+
+	@Override
+	public EnumEnchantmentType getEnchantingCategory() {
+		return null;
 	}
 
 	private static enum Modes {

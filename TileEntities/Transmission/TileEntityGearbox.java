@@ -28,6 +28,7 @@ import Reika.ChromatiCraft.API.Interfaces.Repairable;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -54,6 +55,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import buildcraft.api.transport.IPipeConnection.ConnectOverride;
+import buildcraft.api.transport.IPipeTile.PipeType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import vazkii.botania.api.mana.IManaReceiver;
@@ -262,13 +265,17 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 					}
 				}
 			}
-			else if (!world.isRemote && type.consumesLubricant() && this.getBearingTier().material.ordinal() < MaterialRegistry.DIAMOND.ordinal()) {
+			else if (!world.isRemote && this.consumesLubricant()) {
 				if (tickcount >= 80) {
 					tank.removeLiquid(Math.max(1, (int)(DifficultyEffects.LUBEUSAGE.getChance()*this.getLubricantConsumptionFactor())));
 					tickcount = 0;
 				}
 			}
 		}
+	}
+
+	public boolean consumesLubricant() {
+		return type.consumesLubricant() && this.getBearingTier().material.ordinal() < MaterialRegistry.DIAMOND.ordinal();
 	}
 
 	private double getLubricantConsumptionFactor() {
@@ -781,5 +788,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			int amt = Math.max(1, Math.min(damage/8, (int)(Math.sqrt(tier)/20D)));
 			this.repair(amt);
 		}
+	}
+
+	@ModDependent(ModList.BCTRANSPORT)
+	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
+		return type == PipeType.FLUID && this.consumesLubricant() && this.canConnectToPipeOnSide(MachineRegistry.HOSE, side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;
 	}
 }
