@@ -72,6 +72,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.fortune);
 
 	public int dropProcessTime;
+	public int overflowCount;
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack is, int side) {
@@ -96,6 +97,8 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		else {
 			dropProcessTime = 0;
 		}
+
+		overflowCount = overflow.size();
 
 		if (flag1)
 			this.markDirty();

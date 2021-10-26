@@ -175,10 +175,10 @@ public class RotaryCraft extends DragonAPIMod {
 	public static final Fluid poisonFluid = new Fluid("poison"); //for defoliator
 	public static final Fluid hslaFluid = new EnhancedFluid("molten hsla").setColor(0xF0B564).setTemperature(1873).setDensity(7000).setViscosity(6100); //for TiC
 
-	public static final MachineDamage jetingest = new MachineDamage("was sucked into a jet engine");
-	public static final MachineDamage hydrokinetic = new MachineDamage("was paddled to death");
+	public static final MachineDamage jetingest = new MachineDamage("was sucked into a jet engine").setArmorBlocking(1F, 90, 1, 2, 3, 4);
+	public static final MachineDamage hydrokinetic = new MachineDamage("was paddled to death").setArmorBlocking(0.5F, 2, 4);
 	public static final MachineDamage shock = (MachineDamage)new MachineDamage("was electrified").setDamageBypassesArmor();
-	public static final MachineDamage grind = new MachineDamage("was ground to a pulp");
+	public static final MachineDamage grind = new MachineDamage("was ground to a pulp").setArmorBlocking(0.5F, 6, 1);
 	public static final MachineDamage freezeDamage = new MachineDamage("froze");
 	public static final MachineDamage heatDamage = (MachineDamage)new MachineDamage("burned up").setFireDamage();
 

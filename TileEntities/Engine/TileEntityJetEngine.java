@@ -29,7 +29,10 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -357,6 +360,11 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 				item.motionX = dumpvx*1.5D;
 				item.motionY = 0.15;
 				item.motionZ = dumpvz*1.5D;
+				ItemStack repl = this.modifyIngestedItem(item.getEntityItem());
+				if (repl == null)
+					item.setDead();
+				else
+					item.setEntityItemStack(repl);
 				if (!world.isRemote)
 					e.velocityChanged = true;
 				if (this.itemDestroysEngine(is)) {
@@ -412,6 +420,40 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 				RotaryAchievements.SUCKEDINTOJET.triggerAchievement((EntityPlayer)e);
 			}
 		}
+	}
+
+	private ItemStack modifyIngestedItem(ItemStack is) {
+		if (is.getItem() instanceof ItemArmor && is.getItem().isDamageable()) {
+			ItemArmor ia = (ItemArmor)is.getItem();
+			int max = ia.getArmorMaterial().getDurability(ia.armorType);
+			int after = is.getItemDamage()+rand.nextInt(200);
+			if (after >= max)
+				return null;
+			else
+				is.setItemDamage(after);
+		}
+		else if (is.getItem() instanceof ItemTool && is.getItem().isDamageable()) {
+			ItemTool ia = (ItemTool)is.getItem();
+			int max = ia.getMaxDamage(is);
+			int after = is.getItemDamage()+rand.nextInt(40);
+			if (after >= max)
+				return null;
+			else
+				is.setItemDamage(after);
+		}
+		if (ReikaItemHelper.matchStackWithBlock(is, Blocks.stone)) {
+			is.func_150996_a(Item.getItemFromBlock(Blocks.cobblestone));
+			FOD += 4;
+		}
+		else if (ReikaItemHelper.matchStackWithBlock(is, Blocks.cobblestone)) {
+			is.func_150996_a(Item.getItemFromBlock(Blocks.gravel));
+			FOD += 2;
+		}
+		else if (ReikaItemHelper.matchStackWithBlock(is, Blocks.gravel)) {
+			is.func_150996_a(Item.getItemFromBlock(Blocks.sand));
+			FOD += 1;
+		}
+		return is;
 	}
 
 	private void triggerJetFailing(World world, int x, int y, int z) {

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,8 +13,15 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
+import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearType;
+import Reika.Satisforestry.API.SFAPI;
 
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
@@ -314,6 +321,16 @@ public class MachineAspectMapper {
 
 		this.addAspect(MachineRegistry.SPILLWAY, Aspect.WATER, 4);
 		this.addAspect(MachineRegistry.SPILLWAY, Aspect.EXCHANGE, 2);
+
+		if (ModList.SATISFORESTRY.isLoaded()) {
+			Aspect a = (Aspect)SFAPI.genericLookups.getAspect();
+			this.addAspect(MachineRegistry.EXTRACTOR, a, 16);
+			this.addAspect(MachineRegistry.BEDROCKBREAKER, a, 16);
+			this.addAspect(MachineRegistry.FUELENHANCER, a, 4);
+			this.addAspect(MachineRegistry.RAILGUN, a, 8);
+			this.addAspect(MachineRegistry.FRACTIONATOR, a, 8);
+			this.addAspect(MachineRegistry.WORKTABLE, a, 2);
+		}
 	}
 
 	private void addAspect(MachineRegistry m, Aspect a, int amt) {
@@ -391,11 +408,77 @@ public class MachineAspectMapper {
 		al.merge(Aspect.METAL, 8);
 		al.merge(Aspect.MECHANISM, 8);
 		if (m == MachineRegistry.ENGINE) {
-			al.merge(Aspect.MOTION, 15);
-			al.merge(Aspect.ENERGY, 15);
+			EngineType e = EngineType.engineList[offset];
+			int log = ReikaMathLibrary.logbase2(e.getPower());
+			al.merge(Aspect.MOTION, log);
+			al.merge(Aspect.ENERGY, log*4-30);
+			if (ModList.SATISFORESTRY.isLoaded()) {
+				int amt = 0;
+				switch(e) {
+					case AC:
+						amt = 1;
+						break;
+					case JET:
+						amt = 24;
+						break;
+					case MICRO:
+						amt = 6;
+						break;
+					case SPORT:
+						amt = 4;
+						break;
+					default:
+						break;
+				}
+				if (amt > 0)
+					al.merge((Aspect)SFAPI.genericLookups.getAspect(), amt);
+			}
+		}
+		if (m == MachineRegistry.ADVANCEDGEARS) {
+			GearType gear = GearType.list[offset];
+			int amt = 0;
+			switch(gear) {
+				case WORM:
+					al.merge(Aspect.EXCHANGE, 6);
+					break;
+				case CVT:
+					amt = 8;
+					al.merge(Aspect.EXCHANGE, 18);
+					break;
+				case COIL:
+					al.merge(Aspect.ENERGY, 24);
+					al.merge(Aspect.GREED, 4);
+					al.merge(Aspect.TRAP, 12);
+					break;
+				case HIGH:
+					amt = 8;
+					al.merge(Aspect.EXCHANGE, 40);
+					break;
+			}
+			if (ModList.SATISFORESTRY.isLoaded()) {
+				if (amt > 0)
+					al.merge((Aspect)SFAPI.genericLookups.getAspect(), amt);
+			}
+		}
+		if (m == MachineRegistry.SHAFT) {
+			int ratio = ReikaMathLibrary.intpow2(2, is.getItemDamage()+1);
+			al.merge(Aspect.MOTION, 12);
+			if (ModList.SATISFORESTRY.isLoaded()) {
+				int amt = MaterialRegistry.matList[offset].ordinal()-MaterialRegistry.STONE.ordinal();
+				if (amt > 0)
+					al.merge((Aspect)SFAPI.genericLookups.getAspect(), amt);
+			}
 		}
 		if (m == MachineRegistry.GEARBOX) {
-			al.merge(Aspect.EXCHANGE, 8);
+			GearboxTypes gbx = GearboxTypes.getMaterialFromGearboxItem(is);
+			int ratio = ReikaMathLibrary.intpow2(2, is.getItemDamage()+1);
+			al.merge(Aspect.MOTION, 12);
+			al.merge(Aspect.EXCHANGE, 2*ratio);
+			if (ModList.SATISFORESTRY.isLoaded()) {
+				int amt = 2*(gbx.material.ordinal()-MaterialRegistry.STONE.ordinal());
+				if (amt > 0)
+					al.merge((Aspect)SFAPI.genericLookups.getAspect(), amt);
+			}
 		}
 		if (m.isTransmissionMachine()) {
 			al.merge(Aspect.MOTION, 8);
@@ -406,6 +489,11 @@ public class MachineAspectMapper {
 		if (m.isModConversionEngine() || m.isEnergyToPower()) {
 			al.merge(Aspect.EXCHANGE, 4);
 			al.merge(Aspect.ENERGY, 6);
+		}
+		if (m == MachineRegistry.MAGNETIC) {
+			Aspect a = Aspect.getAspect("strontio");
+			if (a != null)
+				al.merge(a, 4);
 		}
 		if (m.isEnchantable()) {
 			//al.merge(Aspect.MAGIC, 2);

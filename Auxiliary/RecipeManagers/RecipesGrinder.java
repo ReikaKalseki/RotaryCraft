@@ -34,6 +34,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.GregOreHandler.CounterpartOres;
+import Reika.DragonAPI.ModInteract.ItemHandlers.HexcraftHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.HexcraftHandler.BasicHexColor;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.RecipeInterface;
@@ -346,6 +348,16 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			ItemStack fla = ReikaItemHelper.lookupItem("harvestcraft:cornflakesItem");
 			if (corn != null && fla != null)
 				this.addRecipe(corn, ReikaItemHelper.getSizedItemStack(fla, 3), RecipeLevel.MODINTERACT);
+		}
+
+		if (ModList.HEXCRAFT.isLoaded()) {
+			for (BasicHexColor c : HexcraftHandler.getActiveHandler().getColors()) {
+				Block in = c.getMonolith(false);
+				Block in2 = c.getMonolith(true);
+				Item i = c.getCrystal();
+				this.addRecipe(in, new ItemStack(i, 9), RecipeLevel.MODINTERACT);
+				this.addRecipe(in2, new ItemStack(i, 12), RecipeLevel.MODINTERACT);
+			}
 		}
 
 		this.addOreDictRecipe("cropCinderpearl", new ItemStack(Items.blaze_powder, 3, 0), RecipeLevel.MODINTERACT);

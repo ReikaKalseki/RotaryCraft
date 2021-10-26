@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -46,6 +46,10 @@ public class GuiDropProcessor extends GuiMachine
 
 		int i1 = Math.min(48, drop.getProgressScaled(48));
 		this.drawTexturedModalRect(j + 99-24, k + 34, 176, 14, 1*(i1)+1, 16);
+
+		if (drop.overflowCount > 0) {
+			fontRendererObj.drawString("+"+drop.overflowCount+"...", j+135, k+40, 0);
+		}
 	}
 
 	@Override

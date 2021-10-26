@@ -483,6 +483,13 @@ public class RotaryEventManager {
 			e.captureDrops = false;
 		}
 	}
+	
+	@SubscribeEvent
+	public void armorDamageBoost(LivingHurtEvent evt) {
+		if (evt.source instanceof MachineDamage) {
+			evt.ammount = ((MachineDamage)evt.source).onDamageDealt(evt.ammount, evt.entityLiving);
+		}
+	}
 
 	@SubscribeEvent
 	public void meatGrinding(LivingDropsEvent ev) {

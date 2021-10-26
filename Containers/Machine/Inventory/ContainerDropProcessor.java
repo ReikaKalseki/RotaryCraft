@@ -21,6 +21,7 @@ public class ContainerDropProcessor extends ContainerIOMachine
 {
 	private TileEntityDropProcessor drops;
 	private int lastdropProcessTime;
+	private int lastOverflow;
 
 	public ContainerDropProcessor(EntityPlayer player, TileEntityDropProcessor te)
 	{
@@ -49,9 +50,14 @@ public class ContainerDropProcessor extends ContainerIOMachine
 			{
 				icrafting.sendProgressBarUpdate(this, 0, drops.dropProcessTime);
 			}
+			if (lastOverflow != drops.overflowCount)
+			{
+				icrafting.sendProgressBarUpdate(this, 1, drops.overflowCount);
+			}
 		}
 
 		lastdropProcessTime = drops.dropProcessTime;
+		lastOverflow = drops.overflowCount;
 	}
 
 	@Override
@@ -59,6 +65,7 @@ public class ContainerDropProcessor extends ContainerIOMachine
 	{
 		switch(par1) {
 			case 0: drops.dropProcessTime = par2; break;
+			case 1: drops.overflowCount = par2; break;
 		}
 	}
 }

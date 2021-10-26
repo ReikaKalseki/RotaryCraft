@@ -81,7 +81,10 @@ public final class MachineEnchantmentHandler {
 	public boolean applyEnchants(ItemStack is) {
 		boolean flag = false;
 		for (Entry<Enchantment, Integer> e : ReikaEnchantmentHelper.getEnchantments(is).entrySet()) {
-			flag |= this.setEnchantment(e.getKey(), e.getValue());
+			Enchantment ec = e.getKey();
+			int has = this.getEnchantment(ec);
+			if (has < e.getValue())
+				flag |= this.setEnchantment(ec, e.getValue());
 		}
 		return flag;
 	}

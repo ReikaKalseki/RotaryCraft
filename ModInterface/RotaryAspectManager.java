@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,6 +15,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.Satisforestry.API.SFAPI;
 
 import thaumcraft.api.aspects.Aspect;
 
@@ -89,6 +90,17 @@ public class RotaryAspectManager {
 		ReikaThaumHelper.addAspects(BlockRegistry.BLASTPANE.getStackOf(), Aspect.CRYSTAL, 2, Aspect.ARMOR, 4, Aspect.FIRE, 1);
 
 		MachineAspectMapper.instance.register();
+
+		if (ModList.SATISFORESTRY.isLoaded()) {
+			Aspect a = (Aspect)SFAPI.genericLookups.getAspect();
+			ReikaThaumHelper.addAspects(ItemRegistry.BEDAXE.getStackOf(), a, 16);
+			ReikaThaumHelper.addAspects(ItemRegistry.BEDPICK.getStackOf(), a, 16);
+			ReikaThaumHelper.addAspects(ItemRegistry.BEDSWORD.getStackOf(), a, 16);
+			ReikaThaumHelper.addAspects(ItemRegistry.BEDLEGS.getStackOf(), a, 16);
+			ReikaThaumHelper.addAspects(ItemRegistry.BEDHELM.getStackOf(), a, 16);
+			ReikaThaumHelper.addAspects(ItemRegistry.BEDBOOTS.getStackOf(), a, 16);
+			ReikaThaumHelper.addAspects(ItemRegistry.BEDCHEST.getStackOf(), a, 16);
+		}
 	}
 
 }
