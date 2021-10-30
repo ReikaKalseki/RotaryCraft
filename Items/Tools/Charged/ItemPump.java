@@ -13,7 +13,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -27,7 +26,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import Reika.ChromatiCraft.API.Interfaces.EnchantableItem;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
@@ -40,7 +38,7 @@ import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 
-public class ItemPump extends ItemChargedTool implements EnchantableItem {
+public class ItemPump extends ItemChargedTool {
 
 	public ItemPump(int index) {
 		super(index);
@@ -138,7 +136,7 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 
 	@Override
 	public Result getEnchantValidity(Enchantment e, ItemStack is) {
-		return e == Enchantment.aquaAffinity ? Result.ALLOW : Result.DENY;
+		return e == Enchantment.aquaAffinity ? Result.ALLOW : super.getEnchantValidity(e, is);
 	}
 
 	@Override
@@ -251,11 +249,6 @@ public class ItemPump extends ItemChargedTool implements EnchantableItem {
 			}
 		}
 		li.add("Mode: "+this.getMode(is).desc);
-	}
-
-	@Override
-	public EnumEnchantmentType getEnchantingCategory() {
-		return null;
 	}
 
 	private static enum Modes {

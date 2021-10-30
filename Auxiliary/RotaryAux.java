@@ -348,7 +348,10 @@ public class RotaryAux {
 			//unit = "bar";
 			//press /= 10130;
 			unit = "psi";
-			press *= 0.000145;
+			press *= 0.145;
+		}
+		else {
+			press *= 1000;
 		}
 		double val = ReikaMathLibrary.getThousandBase(press);
 		String sg = ReikaEngLibrary.getSIPrefix(press);

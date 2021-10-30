@@ -339,6 +339,31 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				}
 			}
 		}
+		if (m == MachineRegistry.FRACTIONATOR) {
+			if (is != null && is.stackSize == 1) {
+				TileEntityFractionator tf = (TileEntityFractionator)te;
+				if (FluidContainerRegistry.isFilledContainer(is)) {
+					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					if (f != null) {
+						if (f.getFluid().equals(FluidRegistry.getFluid("rc ethanol"))) {
+							tf.addLiquid(f.amount);
+							if (!ep.capabilities.isCreativeMode)
+								ep.setCurrentItemOrArmor(0, is.getItem().getContainerItem(is));
+							((TileEntityBase)te).syncAllData(true);
+							return true;
+						}
+					}
+				}
+				else if (is.getItem() == Items.bucket) {
+					int amt = tf.getFuelLevel();
+					if (amt >= 1000) {
+						tf.removeLiquid(1000);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
+					}
+				}
+			}
+		}
 
 		if (m == MachineRegistry.DRYING) {
 			TileEntityDryingBed tr = (TileEntityDryingBed)te;

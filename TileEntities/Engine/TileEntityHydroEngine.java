@@ -143,10 +143,14 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 		int[] pos = this.getWaterColumnPos();
 
-		for (int i = -1; i <= 1; i++) {
-			if (this.doesBlockObstructBlades(world, 2*x-pos[0], y+i, 2*z-pos[1])) {
-				omega = 0;
-				return false;
+		for (int d = -1; d <= 1; d++) {
+			for (int i = -1; i <= 1; i++) {
+				if (i == 0 && d == 0)
+					continue;
+				if (this.doesBlockObstructBlades(world, x+(pos[0]-x)*d, y+i, z+(pos[1]-z)*d)) {
+					omega = 0;
+					return false;
+				}
 			}
 		}
 
@@ -196,8 +200,8 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		FixedFlowBlock ff = (FixedFlowBlock)b;
 		double vel = this.getUsefulVelocity(world, ff.dx(), ff.dz(), meta);
 		if (vel > 0) {
-			streamData = new StreamPowerData(this, wx, wy, wz, vel);
-			streamData.calculatePower(world);
+			streamData = new StreamPowerData(this, wx, wy, wz, vel, ff.dx(), ff.dz());
+			streamData.calculatePower(world, this.getWriteDirection());
 			this.checkForOtherStreamEngines(world, x, y, z, meta);
 			return true;
 		}
@@ -396,6 +400,25 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		return this.isBackEndOfArray() || this.isFrontOfArray();
 	}
 
+	public boolean isReversed() {
+		if (streamData == null)
+			return false;
+		ForgeDirection front = this.getWriteDirection();
+		if (front == null)
+			return false;
+		switch(front) {
+			case EAST:
+				return streamData.flowZ > 0;
+			case WEST:
+				return streamData.flowZ < 0;
+			case SOUTH:
+				return streamData.flowX > 0;
+			case NORTH:
+				return streamData.flowX < 0;
+		}
+		return false;
+	}
+
 	public boolean isBackEndOfArray() {
 		MachineRegistry to = this.getMachine(write);
 		if (to == MachineRegistry.ENGINE) {
@@ -521,7 +544,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		ReikaParticleHelper.RAIN.spawnAroundBlock(world, x, y, z, 16);
 		ReikaParticleHelper.RAIN.spawnAroundBlock(world, x-(xz[0]-x), y, z-(xz[1]-z), 16);
 		if (this.isStreamPowered()) {
-
+			ReikaParticleHelper.RAIN.spawnAroundBlock(world, x+(xz[0]-x), y, z+(xz[1]-z), 16);
 		}
 		else {
 			ReikaParticleHelper.RAIN.spawnAroundBlock(world, xz[0], y, xz[1], 16);
@@ -611,6 +634,9 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		private final Coordinate waterSource;
 		private final double normalVelocity;
 
+		private final int flowX;
+		private final int flowZ;
+
 		private int localDepth;
 		private int localWidth;
 		private double powerFactor;
@@ -619,17 +645,20 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 
 		private long lastFullCheck = -1;
 
-		private StreamPowerData(TileEntityHydroEngine te, int wx, int wy, int wz, double vel) {
-			this(new Coordinate(te), new Coordinate(wx, wy, wz), vel);
+		private StreamPowerData(TileEntityHydroEngine te, int wx, int wy, int wz, double vel, int dX, int dZ) {
+			this(new Coordinate(te), new Coordinate(wx, wy, wz), vel, dX, dZ);
 		}
 
-		private StreamPowerData(Coordinate c1, Coordinate c2, double vel) {
+		private StreamPowerData(Coordinate c1, Coordinate c2, double vel, int dX, int dZ) {
 			engineSource = c1;
 			waterSource = c2;
 			normalVelocity = vel;
+
+			flowX = dX;
+			flowZ = dZ;
 		}
 
-		private void calculateGeography(World world) {
+		private void calculateGeography(World world, ForgeDirection front) {
 			localWidth = 8;
 			localDepth = 8;
 			for (int i = 0; i < 6; i++) {
@@ -652,8 +681,8 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			}
 		}
 
-		private void calculatePower(World world) {
-			this.calculateGeography(world);
+		private void calculatePower(World world, ForgeDirection front) {
+			this.calculateGeography(world, front);
 			powerFactor = Math.min(1, this.getStreamSpeedScale());
 			omega = (int)(EngineType.HYDRO.getSpeed()*powerFactor);
 			torque = (int)(EngineType.HYDRO.getTorque()*powerFactor);
@@ -678,6 +707,9 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			engineSource.writeToNBT("engine", tag);
 			waterSource.writeToNBT("water", tag);
 			tag.setLong("time", gameInstance);
+
+			tag.setInteger("flx", flowX);
+			tag.setInteger("flz", flowZ);
 			return tag;
 		}
 
@@ -687,7 +719,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 			Coordinate eng = Coordinate.readFromNBT("engine", tag);
 			Coordinate water = Coordinate.readFromNBT("water", tag);
 			double vel = tag.getDouble("velocity");
-			StreamPowerData ret = new StreamPowerData(eng, water, vel);
+			StreamPowerData ret = new StreamPowerData(eng, water, vel, tag.getInteger("flx"), tag.getInteger("flz"));
 			ret.localDepth = tag.getInteger("depth");
 			ret.localWidth = tag.getInteger("width");
 			ret.powerFactor = tag.getDouble("power");

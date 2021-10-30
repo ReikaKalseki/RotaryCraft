@@ -246,7 +246,7 @@ public class RenderSEngine extends RotaryTERenderer
 				break;
 			case HYDRO:
 				TileEntityHydroEngine eng = (TileEntityHydroEngine)tile;
-				var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), -tile.phi, 0);
+				var21.renderAll(tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), eng.isReversed() ? tile.phi : -tile.phi, 0);
 				break;
 			case MICRO:
 				var19.renderAll(tile, null, -tile.phi);

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,20 +10,25 @@
 package Reika.RotaryCraft.Base;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import Reika.ChromatiCraft.API.Interfaces.EnchantableItem;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class ItemChargedTool extends ItemRotaryTool {
+public abstract class ItemChargedTool extends ItemRotaryTool implements EnchantableItem {
 
 	public ItemChargedTool(int index) {
 		super(index);
@@ -74,6 +79,14 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
 	@Override
 	public final String getItemStackDisplayName(ItemStack is) {
 		return super.getItemStackDisplayName(is);
+	}
+
+	public Result getEnchantValidity(Enchantment e, ItemStack is) {
+		return e.getName().toLowerCase(Locale.ENGLISH).contains("soulbound") ? Result.ALLOW : Result.DEFAULT;
+	}
+
+	public final EnumEnchantmentType getEnchantingCategory() {
+		return null;
 	}
 
 }

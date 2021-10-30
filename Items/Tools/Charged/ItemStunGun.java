@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -26,7 +25,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 
-import Reika.ChromatiCraft.API.Interfaces.EnchantableItem;
 import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -40,7 +38,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 
-public class ItemStunGun extends ItemChargedTool implements EnchantableItem {
+public class ItemStunGun extends ItemChargedTool {
 
 	public ItemStunGun(int tex) {
 		super(tex);
@@ -146,12 +144,7 @@ public class ItemStunGun extends ItemChargedTool implements EnchantableItem {
 
 	@Override
 	public Result getEnchantValidity(Enchantment e, ItemStack is) {
-		return e == Enchantment.fortune || e == Enchantment.knockback ? Result.ALLOW : Result.DENY;
-	}
-
-	@Override
-	public EnumEnchantmentType getEnchantingCategory() {
-		return null;
+		return e == Enchantment.fortune || e == Enchantment.knockback ? Result.ALLOW : super.getEnchantValidity(e, is);
 	}
 
 }
