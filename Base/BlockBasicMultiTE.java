@@ -359,7 +359,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					if (amt >= 1000) {
 						tf.removeLiquid(1000);
 						if (!ep.capabilities.isCreativeMode)
-							ep.setCurrentItemOrArmor(0, ItemStacks.ethanolbucket.copy());
+							ep.setCurrentItemOrArmor(0, ItemStacks.fuelbucket.copy());
+						return true;
 					}
 				}
 			}

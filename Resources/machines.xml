@@ -1033,7 +1033,7 @@
 	</chunkloader>
 	<drops>
 		<desc>
-			The drop processor can convert blocks into their drops, to save the need to place and break them. It can also process IC2 scrap boxes into their randomized outputs.
+			The drop processor can convert blocks into their drops, to save the need to place and break them. It can also process IC2 scrap boxes, ThaumCraft loot bags, MystCraft folders, and other such items into their randomized outputs.
 		</desc>
 		<note>
 			Required Power: %dW

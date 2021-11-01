@@ -283,6 +283,8 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		if (type != this.getBearingTier()) {
 			base *= this.getBearingLubricantFactor();
 		}
+		if (this.isLiving())
+			base *= 4;
 		return base;
 	}
 

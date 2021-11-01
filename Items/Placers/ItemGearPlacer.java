@@ -123,7 +123,10 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 		if (is.stackTagCompound.hasKey("bearing")) {
 			MaterialRegistry matl = GearboxTypes.valueOf(is.stackTagCompound.getString("bearing")).material;
 			String name = StatCollector.translateToLocal("material."+matl.name().toLowerCase(Locale.ENGLISH));
-			EnumChatFormatting ec = matl.ordinal() < mat.material.ordinal() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN;
+			EnumChatFormatting ec = EnumChatFormatting.WHITE;
+			if (matl.ordinal() != mat.material.ordinal()) {
+				ec = matl.ordinal() < mat.material.ordinal() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN;
+			}
 			par3List.add("Bearing type: "+ec+name);
 		}
 	}

@@ -1032,10 +1032,16 @@ public class RotaryRecipes {
 					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.GEAR)});
 			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT4), new Object[]{
 					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT2)});
+
 			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT8), new Object[]{
 					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT4), 'g', gear.getPart(GearPart.UNIT2)});
+			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT8), new Object[]{
+					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT2), 'g', gear.getPart(GearPart.UNIT4)});
 			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT16), new Object[]{
 					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT8), 'g', gear.getPart(GearPart.UNIT2)});
+			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT16), new Object[]{
+					" gB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT2), 'g', gear.getPart(GearPart.UNIT8)});
+
 			GameRegistry.addRecipe(gear.getPart(GearPart.UNIT16), new Object[]{
 					" GB", "BG ", 'B', gear.getShaftUnitItem(), 'G', gear.getPart(GearPart.UNIT4)});
 		}
