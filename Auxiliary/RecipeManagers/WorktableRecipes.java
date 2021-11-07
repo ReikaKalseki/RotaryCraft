@@ -242,6 +242,7 @@ public class WorktableRecipes extends RecipeHandler {
 			is.stackTagCompound.removeTag("lubricant");
 			is.stackTagCompound.removeTag("lube");
 			is.stackTagCompound.removeTag("energy");
+			is.stackTagCompound.removeTag("bearing");
 			if (!is.stackTagCompound.getBoolean("living"))
 				is.stackTagCompound.removeTag("living");
 		}

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -26,7 +26,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.BlockModelledMachine;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 
@@ -74,25 +73,31 @@ public class BlockAdvGear extends BlockModelledMachine {
 			return;
 		TileEntityAdvancedGear te = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);
 		if (te != null) {
-			ItemStack is = MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(te.getBlockMetadata()/4);
-			if (te.getGearType().storesEnergy()) {
-				long e = te.getEnergy();
-				if (is.stackTagCompound == null)
-					is.stackTagCompound = new NBTTagCompound();
-				is.stackTagCompound.setLong("energy", e);
-				is.stackTagCompound.setBoolean("bedrock", te.isBedrockCoil());
-			}
-			if (te.getGearType().isLubricated()) {
-				int lube = te.getLubricant();
-				if (is.stackTagCompound == null)
-					is.stackTagCompound = new NBTTagCompound();
-				is.stackTagCompound.setInteger("lube", lube);
-			}
-			if (te.isUnHarvestable()) {
-				is = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
-			}
+			ItemStack is = this.getDrop(te);
 			ReikaItemHelper.dropItem(world, x+par5Random.nextDouble(), y+par5Random.nextDouble(), z+par5Random.nextDouble(), is);
 		}
+	}
+
+	private ItemStack getDrop(TileEntityAdvancedGear te) {
+		ItemStack is = MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(te.getBlockMetadata()/4);
+		if (te.getGearType().storesEnergy()) {
+			long e = te.getEnergy();
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setLong("energy", e);
+			is.stackTagCompound.setBoolean("bedrock", te.isBedrockCoil());
+		}
+		if (te.getGearType().isLubricated()) {
+			int lube = te.getLubricant();
+			if (is.stackTagCompound == null)
+				is.stackTagCompound = new NBTTagCompound();
+			is.stackTagCompound.setInteger("lube", lube);
+			is.stackTagCompound.setString("bearing", te.getBearingTier().name());
+		}
+		if (te.isUnHarvestable()) {
+			is = ReikaItemHelper.getSizedItemStack(ItemStacks.scrap, 2+par5Random.nextInt(12));
+		}
+		return is;
 	}
 
 	@Override
@@ -106,15 +111,8 @@ public class BlockAdvGear extends BlockModelledMachine {
 	public final ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		TileEntityAdvancedGear adv = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);
-		ItemStack is = ItemRegistry.ADVGEAR.getStackOfMetadata(adv.getBlockMetadata()/4);
-		if (adv.getGearType().storesEnergy()) {
-			if (is.stackTagCompound == null)
-				is.stackTagCompound = new NBTTagCompound();
-			is.stackTagCompound.setLong("energy", adv.getEnergy());
-			is.stackTagCompound.setBoolean("bedrock", adv.isBedrockCoil());
-		}
-		ret.add(is);
+		TileEntityAdvancedGear te = (TileEntityAdvancedGear)world.getTileEntity(x, y, z);
+		ret.add(this.getDrop(te));
 		return ret;
 	}
 }

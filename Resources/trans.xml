@@ -75,7 +75,7 @@
 		</sub>
 	</coil>
 	<higear>
-		The high-ratio gear allows you to create the effect of multiple chained gearboxes in a more compact space. Creating an enormous ratio of 256:1, it requires a large amount of lubricant to be able to turn, and must be made of bedrock to withstand the high stresses. Like a normal gearbox, it can be flipped between torque and speed by shift-right-clicking with the screwdriver.
+		The high-ratio gear allows you to create the effect of multiple chained gearboxes in a more compact space. Creating an enormous ratio of 256:1, it requires a large amount of lubricant to be able to turn, and must be made of bedrock to withstand the high stresses. Like a normal gearbox, it can be flipped between torque and speed by shift-right-clicking with the screwdriver. Better bearing tiers reduce the lubricant consumption.
 	</higear>
 	<multi>
 		The multi-clutch allows you to redirect power according to a redstone signal. Simply choose an output side for each signal strength from 0 to 15.

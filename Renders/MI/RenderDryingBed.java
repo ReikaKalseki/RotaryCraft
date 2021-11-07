@@ -114,7 +114,7 @@ public class RenderDryingBed extends RotaryTERenderer {
 					AnimatedSpritesheet a = (AnimatedSpritesheet)item;
 					if (a.useAnimatedRender(is)) {
 						col = a.getColumn(is);
-						int offset = (int)((System.currentTimeMillis()/32/a.getFrameSpeed())%a.getFrameCount(is));
+						int offset = (int)((System.currentTimeMillis()/32/a.getFrameSpeed(is))%a.getFrameCount(is));
 						row = a.getBaseRow(is)+offset;
 					}
 				}

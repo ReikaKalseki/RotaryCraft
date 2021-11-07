@@ -183,8 +183,9 @@ public enum GearboxTypes {
 			case TUNGSTEN:
 				return 24000;
 			case STONE:
-			case LIVINGROCK:
 				return 8000;
+			case LIVINGROCK:
+				return 3000;
 			case WOOD:
 			case LIVINGWOOD:
 				return 0;//3000;

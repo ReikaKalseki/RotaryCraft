@@ -29,6 +29,7 @@ import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear.GearType;
 
@@ -90,6 +91,7 @@ public class ItemAdvGearPlacer extends ItemBlockPlacer {
 			}
 			if (adv.getGearType().isLubricated()) {
 				adv.setLubricantFromNBT(is.stackTagCompound);
+				adv.setBearingTier(MaterialRegistry.valueOf(is.stackTagCompound.getString("bearing")));
 			}
 		}
 		return true;

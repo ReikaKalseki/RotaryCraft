@@ -46,8 +46,10 @@ import Reika.RotaryCraft.Items.Tools.ItemJetPack;
 import Reika.RotaryCraft.Items.Tools.ItemJetPack.PackUpgrades;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor.HelmetUpgrades;
 import Reika.RotaryCraft.Registry.EngineType;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
@@ -346,6 +348,11 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Craf
 			return true;
 		if (is.stackTagCompound.getInteger("lube") > 0)
 			return true;
+		if (ItemRegistry.GEARBOX.matchItem(is)) {
+			MaterialRegistry matl = GearboxTypes.valueOf(is.stackTagCompound.getString("bearing")).material;
+			if (matl != GearboxTypes.getMaterialFromGearboxItem(is).material)
+				return true;
+		}
 		if (is.stackTagCompound.getInteger("lvl") > 0)
 			return true;
 		if (is.stackTagCompound.hasKey("ench"))

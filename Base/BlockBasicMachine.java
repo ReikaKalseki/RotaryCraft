@@ -29,15 +29,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Interfaces.Block.SidedTextureIndex;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Variables;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
@@ -48,6 +48,8 @@ import Reika.RotaryCraft.Base.TileEntity.PoweredLiquidReceiver;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
+import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.GuiRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -150,12 +152,23 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		}
 		if (te instanceof TileEntityAdvancedGear) {
 			TileEntityAdvancedGear tile = (TileEntityAdvancedGear)te;
-			if (tile.getGearType().isLubricated() && tile.canAcceptAnotherLubricantBucket()) {
-				if (is != null && ReikaItemHelper.matchStacks(is, ItemStacks.lubebucket)) {
-					tile.addLubricant(1000);
-					if (!ep.capabilities.isCreativeMode)
-						ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-					return true;
+			if (tile.getGearType().isLubricated()) {
+				if (is != null) {
+					FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+					if (fs != null && fs.getFluid() == RotaryCraft.lubeFluid && tile.canAcceptMoreLubricant(fs.amount)) {
+						tile.addLubricant(fs.amount);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
+						return true;
+					}
+					else if (GearPart.BEARING.isItemOfType(is)) {
+						GearboxTypes material = GearboxTypes.getMaterialFromCraftingItem(is);
+						if (material.material.ordinal() > tile.getBearingTier().ordinal()) {
+							tile.setBearingTier(material.material);
+							if (!ep.capabilities.isCreativeMode)
+								is.stackSize--;
+						}
+					}
 				}
 			}
 		}
@@ -312,6 +325,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			}
 			if (adv.getGearType() == GearType.HIGH) {
 				currenttip.add(adv.torquemode ? "Torque Mode" : "Speed Mode");
+				currenttip.add("Bearing Type: "+adv.getBearingTier().getName());
 			}
 		}
 		if (te instanceof TileEntityEngine) {

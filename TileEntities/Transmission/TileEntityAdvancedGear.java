@@ -60,6 +60,7 @@ import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
 public class TileEntityAdvancedGear extends TileEntity1DTransmitter implements ISidedInventory, PowerGenerator, PartialInventory, PartialTank,
@@ -77,6 +78,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 	public boolean torquemode = true;
 	private final HybridTank lubricant = new HybridTank("advgear", 20000);
+	private MaterialRegistry bearingType = MaterialRegistry.TUNGSTEN;
 
 	private final CVTState[] cvtState = new CVTState[2];
 	private CVTMode cvtMode = CVTMode.MANUAL;
@@ -85,6 +87,15 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	private int targetTorque = 1;
 
 	private boolean enabled = true;
+
+	public MaterialRegistry getBearingTier() {
+		return bearingType != null ? bearingType : MaterialRegistry.TUNGSTEN;
+	}
+
+	public void setBearingTier(MaterialRegistry tier) {
+		bearingType = tier;
+		this.syncAllData(true);
+	}
 
 	public static long getMaxStorageCapacity(boolean bedrock) {
 		return bedrock ? 240L*ReikaMathLibrary.longpow(10, 12) : 720*ReikaMathLibrary.intpow2(10, 6);
@@ -202,8 +213,8 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		return !lubricant.isEmpty();
 	}
 
-	public boolean canAcceptAnotherLubricantBucket() {
-		return lubricant.getLevel()+1000 <= lubricant.getCapacity();
+	public boolean canAcceptMoreLubricant(int amt) {
+		return lubricant.getLevel()+amt <= lubricant.getCapacity();
 	}
 
 	//-ve ratio is torque mode for cvt
@@ -317,8 +328,9 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 						return;
 					}
 				}
-				if (omega > 0 && (worldObj.getTotalWorldTime()&4) == 4)
-					lubricant.removeLiquid((int)ReikaMathLibrary.logbase(Math.max(omega, torque), 2));
+				if (omega > 0 && this.consumeLubricantThisTick()) {
+					lubricant.removeLiquid((int)ReikaMathLibrary.logbase(Math.max(omega, torque), bearingType == MaterialRegistry.DIAMOND ? 1 : 2));
+				}
 			}
 			else {
 				omega = torque = 0;
@@ -355,6 +367,11 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 				power = 0;
 			}
 		}
+	}
+
+	private boolean consumeLubricantThisTick() {
+		boolean bed = bearingType == MaterialRegistry.BEDROCK;
+		return (this.getTicksExisted()&(bed ? 12 : 4)) == (bed ? 8 : 4);
 	}
 
 	private double getEffectiveRatio() {
@@ -799,6 +816,8 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 		NBT.setBoolean("t_enable", enabled);
 
+		NBT.setString("bearing", bearingType.name());
+
 		lubricant.writeToNBT(NBT);
 	}
 
@@ -822,6 +841,9 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 
 		if (NBT.hasKey("t_enable"))
 			enabled = NBT.getBoolean("t_enable");
+
+		if (NBT.hasKey("bearing"))
+			bearingType = MaterialRegistry.valueOf(NBT.getString("bearing"));
 
 		lubricant.readFromNBT(NBT);
 	}
