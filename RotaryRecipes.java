@@ -540,7 +540,7 @@ public class RotaryRecipes {
 		ShapedArcaneRecipe sr = new ShapedArcaneRecipe("VOIDRAIL", ItemRegistry.VOIDRAIL.getCraftedProduct(6), al, in);
 		ThaumcraftApi.getCraftingRecipes().add(sr);
 		String page = RotaryDescriptions.getParentPage()+"thaum.xml";
-		ReikaThaumHelper.addArcaneRecipeBookEntryViaXML("VOIDRAIL", desc, "rotarycraft", sr, cost, -2, 0, RotaryCraft.class, page).setParents("VOIDMETAL");
+		ReikaThaumHelper.addArcaneRecipeBookEntryViaXML(RotaryCraft.instance, "VOIDRAIL", desc, "rotarycraft", sr, cost, -2, 0, RotaryCraft.class, page).setParents("VOIDMETAL");
 		ThaumcraftApi.addWarpToItem(ItemRegistry.VOIDRAIL.getStackOf(), 1);
 		ThaumcraftApi.addWarpToResearch("VOIDRAIL", 3);
 
@@ -585,7 +585,7 @@ public class RotaryRecipes {
 		//InfusionRecipe ir = ThaumcraftApi.addInfusionCraftingRecipe("GOGGLES", out, 7, al, in, recipe);
 		InfusionRecipe ir = new BedrockRevealingInfusion(6, al, recipe);
 		ThaumcraftApi.getCraftingRecipes().add(ir);
-		ReikaThaumHelper.addInfusionRecipeBookEntryViaXML("BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page).setParents("GOGGLES");
+		ReikaThaumHelper.addInfusionRecipeBookEntryViaXML(RotaryCraft.instance, "BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page).setParents("GOGGLES");
 
 		for (ReikaOreHelper ore : ReikaOreHelper.oreList) {
 			ItemStack flake = ItemStacks.getFlake(ore);
