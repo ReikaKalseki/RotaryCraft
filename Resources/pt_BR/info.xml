@@ -45,11 +45,7 @@
 	</shafts>
 	<flywheels>
 		Estas são as velocidades de falhas para os volantes. Exceder estes valores irá resultar em falha violenta.
-		
-		Madeira: %d rad/s
-		Pedra: %d rad/s
-		Ferro: %d rad/s
-		Ouro: %d rad/s
+		%s
 	</flywheels>
 	<transfer>
 		Potência de eixo comporta-se de forma completamente diferente de tipos tradicionais de poder: elétricos, pneumáticos ou outros. Ou seja, potência de eixo é poder verdadeiro, não a energia. E, como tal, não se encaixam em máquinas ou eixos que não têm saída; ele deve ser usado logo após a sua criação. Além disso, a carga em um eixo não afeta seu consumo de energia - um eixo desconectado ainda recebe todo e qualquer poder dado a ele, mas apenas o desperdiça. Isso é diferente de um fio, onde as saídas desconectadas redirecionariam esse poder para saídas restantes.
