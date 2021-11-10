@@ -31,6 +31,7 @@
 		Żelazo: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Stal: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Złoto: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Wolfram: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Diament: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 	</material>
 	<shafts>
@@ -39,16 +40,13 @@
 		Drewno: %dNm at %d rad/s
 		Kamień: %dNm at %d rad/s
 		Stal: %dNm at %d rad/s
+		Wolfram: %dNm at %d rad/s
 		Diament: %dNm at %d rad/s
 		Skała Macierzysta: Brak Limitów
 	</shafts>
 	<flywheels>
 		Poniżej znajdują się maksymalne prędkości dla koła zamachowego, których przekroczenie skutkuję awarią.
-
-		Drewno: %d rad/s
-		Kamień: %d rad/s
-		Żelazo: %d rad/s
-		Złoto: %d rad/s
+		%s
 	</flywheels>
 	<transfer>
 		Siła zachowuje się zupełnie inaczej niż energia elektryczna, pneumatyczna, czy każda inna tradycyjna forma energii. Przykładowo, aktywny silnik produkuję pewną siłę, i bez względu na to, czy ta energia jest wykorzystywana, czy nie, to i tak nie ma to wpływu na pobór paliwa.
