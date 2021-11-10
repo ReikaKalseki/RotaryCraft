@@ -31,6 +31,7 @@
 		铁: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		钢: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		金: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		钨: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		钻石: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 	</material>
 	<shafts>
@@ -39,15 +40,13 @@
 		木: %dNm at %d rad/s
 		石: %dNm at %d rad/s
 		钢: %dNm at %d rad/s
+		钨: %dNm at %d rad/s
 		钻石: %dNm at %d rad/s
 		基岩: 无限
 	</shafts>
 	<flywheels>
 		以下为飞轮的临界速度.超出则会产生严重的后果.
-		木: %d rad/s
-		石: %d rad/s
-		铁: %d rad/s
-		金: %d rad/s
+		%s
 	</flywheels>
 	<transfer>
 		轴功率完全不同于电力,气动或其他传统能源.举例来说,轴功率是真实的力,而不仅仅是能量,在没有输出时不会在机器或轴内堆积;它需即产即用.此外,轴上的"负载"不会影响到其能量消耗-未连接输出端的轴仍会吸取给它的能量,当然只是将其浪费掉.不像线缆,遇到中断的输出端就会将能量转向其他输出端.
