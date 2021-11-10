@@ -31,6 +31,7 @@
 		Hierro: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Acero: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Oro: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
+		Tungsteno: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 		Diamante: %.0f kg/m^3; TS: %.1f %sPa; SS: %.1f %sPa
 	</material>
 	<shafts>
@@ -39,15 +40,13 @@
 		Madera: %dNm at %d rad/s
 		Piedra: %dNm at %d rad/s
 		Acero: %dNm at %d rad/s
+		Tungsteno: %dNm at %d rad/s
 		Diamante: %dNm at %d rad/s
 		Bedrock: Infinito
 	</shafts>
 	<flywheels>
 		Estas son las velocidades limite de los volantes de inercia. Excederlos provocan un fallo violento.
-		Madera: %d rad/s
-		Piedra: %d rad/s
-		Hierro: %d rad/s
-		Oro: %d rad/s
+		%s
 	</flywheels>
 	<transfer>
 		La potencia en el eje se comporta completamente diferente de la electrica, neumatica, o cualquier otro tipo de potencia. Por ejemplo, la potencia en el eje es verdadera potencia, no energia, y como tal no se "acumula" en las maquinas o ejes que no tienen salida; debe ser usada en cuanto se crea. Es mas, la "carga" de un eje no tiene efecto en su consumo de potencia - un eje desacoplado sigue usando toda la potencia que se le proporciona, pero simplemente la desaprovecha. Esto no funciona igual a un cable, donde salidas desconetadas redirigirian la potencia hacia las salidas restantes.
