@@ -58,8 +58,8 @@ public class TileEntityObsidianMaker extends InventoriedPowerReceiver implements
 	private final HybridTank water = new HybridTank("watermix", CAPACITY);
 
 	private static final int MIN_OBSIDIAN_TEMP_0 = 500;
-	private static final int MIN_OBSIDIAN_TEMP_100 = 550;
-	private static final int MAX_OBSIDIAN_TEMP_100 = 750;
+	public static final int MIN_OBSIDIAN_TEMP_100 = 550;
+	public static final int MAX_OBSIDIAN_TEMP_100 = 750;
 	private static final int MAX_OBSIDIAN_TEMP_0 = 900;
 
 	private ItemStack getProducedItem() {

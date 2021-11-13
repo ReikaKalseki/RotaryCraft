@@ -779,7 +779,7 @@ public enum MachineRegistry implements TileEnum {
 		}
 		if (this == SHAFT) {
 			TileEntityShaft sha = (TileEntityShaft)tile;
-			return sha.getShaftType() != null ? sha.getShaftType().getShaftUnlocName() : this.getName();
+			return StatCollector.translateToLocal(sha.getShaftType().getShaftUnlocName())+this.getName();
 		}
 		if (this == FLYWHEEL) {
 			TileEntityFlywheel fly = (TileEntityFlywheel)tile;

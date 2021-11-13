@@ -523,6 +523,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.DYNAMO, TileEntityDynamo.MAXTORQUE, TileEntityDynamo.MAXTORQUE_UPGRADE, TileEntityDynamo.MAXOMEGA);
 		addData(MachineRegistry.ITEMCANNON, TileEntityItemCannon.STACKPOWER);
 		addData(MachineRegistry.ADVANCEDGEARS, TileEntityAdvancedGear.WORMRATIO);
+		addData(MachineRegistry.OBSIDIAN, TileEntityObsidianMaker.MIN_OBSIDIAN_TEMP_100, TileEntityObsidianMaker.MAX_OBSIDIAN_TEMP_100);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

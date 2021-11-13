@@ -563,7 +563,6 @@ public class RotaryRecipes {
 
 		//ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
 		//ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
-		ItemStack meter = GameRegistry.findItemStack(ModList.THAUMCRAFT.modLabel, "ItemThaumometer", 1);
 		al = new AspectList();
 		al.add(Aspect.MIND, 10);
 		al.add(Aspect.SENSES, 25);
@@ -571,11 +570,11 @@ public class RotaryRecipes {
 		al.add(Aspect.ARMOR, 25);
 		al.add(Aspect.MAGIC, 25);
 		ItemStack[] recipe = {
-				meter,
+				ThaumItemHelper.ItemEntry.THAUMOMETER.getItem(),
 				new ItemStack(Items.gold_ingot),
 				ThaumItemHelper.ItemEntry.SALIS.getItem(),
 				ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),
-				meter,
+				ThaumItemHelper.ItemEntry.THAUMOMETER.getItem(),
 				new ItemStack(Items.gold_ingot),
 				ThaumItemHelper.ItemEntry.SALIS.getItem(),
 				ThaumOreHandler.getInstance().getItem(ModOreList.CINNABAR),

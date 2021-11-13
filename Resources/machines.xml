@@ -232,7 +232,7 @@
 	</heater>
 	<obsidian>
 		<desc>
-			The obsidian factory will mix piped-in water and lava to produce obsidian. Be careful; if the machine is left full of only lava too long, it will start to overheat and will eventually melt. Its ability to produce obsidian is temperature-dependent; too hot or cold and it will produce increasingly large amounts of stone or cobblestone instead.
+			The obsidian factory will mix piped-in water and lava to produce obsidian. Be careful; if the machine is left full of only lava too long, it will start to overheat and will eventually melt. Its ability to produce obsidian is temperature-dependent; too hot or cold - it is ideally kept between %dC and %dC - and it will produce increasingly large amounts of stone or cobblestone instead.
 		</desc>
 		<note>
 			Required Power: %dW
