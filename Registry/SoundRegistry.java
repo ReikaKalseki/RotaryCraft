@@ -18,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
-import Reika.DragonAPI.Interfaces.Registry.SoundEnum;
+import Reika.DragonAPI.Interfaces.Registry.CustomDistanceSound;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -27,7 +27,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public enum SoundRegistry implements SoundEnum {
+public enum SoundRegistry implements CustomDistanceSound {
 
 	ELECTRIC("#elecengine"),
 	WIND("#windengine"),
@@ -223,6 +223,17 @@ public enum SoundRegistry implements SoundEnum {
 	@Override
 	public boolean preload() {
 		return this == JETSTART;
+	}
+
+	@Override
+	public float getAudibleDistance() {
+		switch(this) {
+			case JET:
+			case JETSTART:
+				return 40;
+			default:
+				return -1;
+		}
 	}
 
 	static {
