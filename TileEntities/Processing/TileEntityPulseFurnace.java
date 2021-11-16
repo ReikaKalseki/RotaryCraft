@@ -28,9 +28,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesPulseFurnace.PulseJetRecipe;
@@ -41,7 +40,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation, TemperatureCallback {
+public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, ProcessingMachine, TemperatureCallback {
 
 	public int pulseFurnaceCookTime;
 
@@ -523,5 +522,10 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	public void onApplyTemperature(World world, int x, int y, int z, int temperature) {
 		if (world.getBlock(x, y, z) == Blocks.fire)
 			RotaryAchievements.PULSEFIRE.triggerAchievement(this.getPlacer());
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 }

@@ -116,7 +116,7 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 
 		if (is.stackTagCompound.hasKey("lube") && mat.needsLubricant()) {
 			int amt = is.stackTagCompound.getInteger("lube");
-			String s = is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/mat.getMaxLubricant()) : "Lubricant: "+amt+" mB";
+			String s = mat == GearboxTypes.LIVINGROCK || is.stackTagCompound.getBoolean("living") ? String.format("Mana: %d%%", amt*100/mat.getMaxLubricant()) : "Lubricant: "+amt+" mB";
 			par3List.add(s);
 		}
 

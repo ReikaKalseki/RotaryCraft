@@ -35,11 +35,11 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping.Flow;
@@ -49,7 +49,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, MultiOperational,
-ConditionalOperation, DamagingContact, EnchantableMachine {
+ProcessingMachine, DamagingContact, EnchantableMachine {
 
 	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.looting).addFilter(Enchantment.knockback).addFilter(Enchantment.flame).addFilter(Enchantment.fortune);
 
@@ -392,5 +392,10 @@ ConditionalOperation, DamagingContact, EnchantableMachine {
 	@Override
 	public MachineEnchantmentHandler getEnchantmentHandler() {
 		return enchantments;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 }

@@ -23,13 +23,12 @@ import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer, DiscreteFunction, ConditionalOperation {
+public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer, ProcessingMachine {
 
 	public static final int HEIGHT = 2;
 	public static final int WIDTH = 9;
@@ -307,6 +306,11 @@ public class TileEntityBigFurnace extends InventoriedPowerLiquidReceiver impleme
 	@Override
 	public int getMaxTemperature() {
 		return MAXTEMP;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 
 }

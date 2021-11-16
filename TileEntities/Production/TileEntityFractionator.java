@@ -33,16 +33,16 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPoweredLiquidIO;
 import Reika.RotaryCraft.Registry.DifficultyEffects;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
-public class TileEntityFractionator extends InventoriedPoweredLiquidIO implements MultiOperational, ConditionalOperation, PressureTE {
+public class TileEntityFractionator extends InventoriedPoweredLiquidIO implements MultiOperational, ProcessingMachine, PressureTE {
 
 	public int mixTime;
 
@@ -403,5 +403,10 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 	@Override
 	public boolean canOutputToPipe(MachineRegistry p) {
 		return p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 }

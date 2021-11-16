@@ -37,6 +37,7 @@ import Reika.RotaryCraft.API.Interfaces.RefrigeratorAttachment;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidProducer;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -46,7 +47,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements MultiOperational, BreakAction {
+public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer implements MultiOperational, ProcessingMachine, BreakAction {
 
 	public int time;
 	private StepTimer timer = new StepTimer(20);
@@ -266,6 +267,21 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 			fx.setColor(0xBFB2FF).setScale(3+rand.nextFloat()*2).setRapidExpand().setAlphaFading().setLife(30+rand.nextInt(31)).setColliding();
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
+	}
+
+	@Override
+	public boolean areConditionsMet() {
+		return inv[0] != null && ReikaItemHelper.matchStackWithBlock(inv[0], Blocks.ice);
+	}
+
+	@Override
+	public String getOperationalStatus() {
+		return this.areConditionsMet() ? "Operational" : "No Ice";
 	}
 
 }

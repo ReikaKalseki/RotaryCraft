@@ -417,6 +417,22 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 			return ReikaPlantHelper.getPlant(b) != ReikaPlantHelper.NETHERWART;
 		}
 
+		@Override
+		protected boolean matchesBlock(Block src, int srcmeta, Block b, int meta, boolean ignoreMeta) {
+			return super.matchesBlock(src, srcmeta, b, meta, ignoreMeta || !this.needsMeta(ReikaPlantHelper.getPlant(b)));
+		}
+
+		private boolean needsMeta(ReikaPlantHelper p) {
+			switch(p) {
+				case CACTUS:
+				case LILYPAD:
+				case VINES:
+					return false;
+				default:
+					return true;
+			}
+		}
+
 	}
 
 	private static class SugarcaneEffect extends MineSimilarEffect {

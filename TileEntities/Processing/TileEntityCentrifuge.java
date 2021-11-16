@@ -27,9 +27,9 @@ import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithC
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCentrifuge.CentrifugeRecipe;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -40,7 +40,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCentrifuge extends InventoriedPowerReceiver implements MultiOperational, ConditionalOperation, IFluidHandler, PipeConnector {
+public class TileEntityCentrifuge extends InventoriedPowerReceiver implements MultiOperational, ProcessingMachine, IFluidHandler, PipeConnector {
 
 	private int progressTime;
 	public static final int CAPACITY = 10000;
@@ -256,6 +256,11 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 	@SideOnly(Side.CLIENT)
 	public void syncProgress(int time) {
 		progressTime = time;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 
 }

@@ -48,9 +48,9 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.MystCraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -61,7 +61,7 @@ import ic2.api.recipe.Recipes;
 import thaumcraft.api.internal.WeightedRandomLoot;
 
 
-public class TileEntityDropProcessor extends InventoriedPowerReceiver implements ConditionalOperation, MultiOperational, EnchantableMachine {
+public class TileEntityDropProcessor extends InventoriedPowerReceiver implements ProcessingMachine, MultiOperational, EnchantableMachine {
 
 	private static final ArrayList<DropProcessing> dropHandlers = new ArrayList();
 	private static final NoProcessing INVALID = new NoProcessing();
@@ -89,7 +89,10 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 		this.getIOSidesDefault(world, x, y, z, meta);
 		this.getPower(false);
 		boolean flag1 = false;
-		if (power >= MINPOWER && torque >= MINTORQUE) {
+		if (!overflow.isEmpty() && inv[1] == null) {
+			inv[1] = overflow.remove(0);
+		}
+		else if (power >= MINPOWER && torque >= MINTORQUE) {
 			int n = this.getNumberConsecutiveOperations();
 			for (int i = 0; i < n; i++)
 				flag1 |= this.doOperation(world, x, y, z, n > 1);
@@ -122,12 +125,6 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 					}
 				}
 				else {
-					if (inv[1] == null) {
-						inv[1] = overflow.remove(0);
-					}
-					else {
-
-					}
 					dropProcessTime = 0;
 					return false;
 				}
@@ -337,6 +334,11 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	@Override
 	public MachineEnchantmentHandler getEnchantmentHandler() {
 		return enchantments;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 
 	static {

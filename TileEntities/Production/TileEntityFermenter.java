@@ -23,8 +23,8 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.MulchMaterials;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -33,7 +33,7 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ConditionalOperation
+public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ProcessingMachine
 {
 
 	/** The number of ticks that the current item has been cooking for */
@@ -427,5 +427,10 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	@Override
 	public int getMaxTemperature() {
 		return MAXTEMP;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 }

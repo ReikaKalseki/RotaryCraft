@@ -15,10 +15,12 @@ import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.RotaryCraft.API.RecipeInterface;
 import Reika.RotaryCraft.API.RecipeInterface.FrictionHeaterManager;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
@@ -125,7 +127,9 @@ public class RecipesFrictionHeater extends RecipeHandler implements FrictionHeat
 
 	@Override
 	public void addPostLoadRecipes() {
-
+		if (ModList.IMMERSIVEENG.isLoaded() && ModList.THERMALEXPANSION.isLoaded()) {
+			this.addRecipe(ReikaItemHelper.lookupItem("ImmersiveEngineering:material:13"), ReikaItemHelper.lookupItem("ThermalExpansion:Rockwool:12"), 600, 400, RecipeLevel.MODINTERACT);
+		}
 	}
 
 	@Override

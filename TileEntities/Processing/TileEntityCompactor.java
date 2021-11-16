@@ -25,10 +25,10 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.FrictionHeatable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PressureTE;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCompactor;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
@@ -38,7 +38,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE, PressureTE, FrictionHeatable,
-MultiOperational, ConditionalOperation {
+MultiOperational, ProcessingMachine {
 
 	/** The number of ticks that the current item has been cooking for */
 	public int compactorCookTime;
@@ -564,5 +564,10 @@ MultiOperational, ConditionalOperation {
 	@Override
 	public boolean allowHeatExtraction() {
 		return false;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 }

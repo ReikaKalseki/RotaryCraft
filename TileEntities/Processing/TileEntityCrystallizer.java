@@ -25,8 +25,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RotaryAux;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.TemperatureTE;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesCrystallizer;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerLiquidReceiver;
@@ -36,7 +36,7 @@ import Reika.RotaryCraft.Registry.SoundRegistry;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ConditionalOperation {
+public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ProcessingMachine {
 
 	private StepTimer timer = new StepTimer(400);
 	private StepTimer tempTimer = new StepTimer(20);
@@ -289,6 +289,11 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	@Override
 	public int getMaxTemperature() {
 		return 1000;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 
 }

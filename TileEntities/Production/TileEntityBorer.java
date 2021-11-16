@@ -35,6 +35,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
 import Reika.DragonAPI.Interfaces.Block.SemiUnbreakable;
@@ -72,7 +73,10 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 
-public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController, DiscreteFunction {
+import buildcraft.api.tiles.IHasWork;
+
+@Strippable("buildcraft.api.tiles.IHasWork")
+public class TileEntityBorer extends TileEntityBeamMachine implements EnchantableMachine, GuiController, DiscreteFunction, IHasWork {
 
 	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.fortune).addFilter(Enchantment.efficiency).addFilter(Enchantment.silkTouch).addFilter(Enchantment.sharpness);
 
@@ -97,6 +101,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	private boolean jammed = false;
 
+	private boolean nodig = false;
 	private boolean isMiningAir = false;
 
 	private boolean hitProtection = false;
@@ -219,7 +224,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return;
 		}
 
-		boolean nodig = true;
+		nodig = true;
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (cutShape[i][j]) {
@@ -745,5 +750,10 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	@Override
 	public MachineEnchantmentHandler getEnchantmentHandler() {
 		return enchantments;
+	}
+
+	@Override
+	public boolean hasWork() {
+		return !nodig && !isMiningAir;
 	}
 }

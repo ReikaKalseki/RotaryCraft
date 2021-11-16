@@ -54,18 +54,17 @@ import Reika.RotaryCraft.API.Interfaces.LeafBlockWithExtras;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
-import Reika.RotaryCraft.Auxiliary.Interfaces.ConditionalOperation;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
-import Reika.RotaryCraft.Auxiliary.Interfaces.DiscreteFunction;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
+import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, DiscreteFunction,
-ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
+public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, ProcessingMachine, DamagingContact,
+Cleanable, MultiOperational {
 
 	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.infinity).addFilter(Enchantment.fortune).addFilter(Enchantment.efficiency);
 
@@ -671,5 +670,10 @@ ConditionalOperation, DamagingContact, Cleanable, MultiOperational {
 			return false;
 		}
 
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 }

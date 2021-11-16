@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
@@ -43,10 +44,12 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 
+import buildcraft.api.tiles.IHasWork;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation, HiddenInventorySlot {
+@Strippable("buildcraft.api.tiles.IHasWork")
+public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implements ConditionalOperation, HiddenInventorySlot, IHasWork {
 
 	public static final int oreCopy = 50; //50% chance of doubling -> 1.5^4 = 5.1
 	public static final int oreCopyNether = 80; //80% chance of doubling -> 1.8^4 = 10.5
@@ -522,5 +525,10 @@ public class TileEntityExtractor extends InventoriedPowerLiquidReceiver implemen
 	@Override
 	public int[] getHiddenSlots() {
 		return new int[]{9};
+	}
+
+	@Override
+	public boolean hasWork() {
+		return this.areConditionsMet();
 	}
 }
