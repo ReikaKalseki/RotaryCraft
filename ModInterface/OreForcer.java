@@ -21,6 +21,9 @@ import Reika.DragonAPI.Base.ModHandlerBase;
 import Reika.DragonAPI.Exception.ModReflectionException;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ArsMagicaHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler.GemTypes;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.FactorizationHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ForestryHandler;
@@ -29,7 +32,6 @@ import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.LegacyMagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MagicCropHandler.EssenceType;
-import Reika.DragonAPI.ModInteract.ItemHandlers.ArsMagicaHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekanismHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MimicryHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.QuantumOreHandler;
@@ -138,6 +140,9 @@ public final class OreForcer {
 			case MIMICRY:
 				this.intercraftMimichite();
 				break;
+			case BOP:
+				this.intercraftAmethyst();
+				break;
 			case FACTORIZATION:
 				this.intercraftDarkIron();
 				break;
@@ -222,6 +227,14 @@ public final class OreForcer {
 			ItemStack ore = new ItemStack(MimicryHandler.getInstance().itemID, 1, 0);
 			GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.MIMICHITE));
 			RotaryCraft.logger.log("RotaryCraft mimichite items can now be crafted into Mimicry mimichite!");
+		}
+	}
+
+	private void intercraftAmethyst() {
+		if (BoPBlockHandler.getInstance().gemItem != null) {
+			ItemStack ore = GemTypes.Amethyst.getItem();
+			GameRegistry.addShapelessRecipe(ore, ItemStacks.getModOreIngot(ModOreList.AMETHYST));
+			RotaryCraft.logger.log("RotaryCraft amethyst items can now be crafted into BoP amethyst!");
 		}
 	}
 

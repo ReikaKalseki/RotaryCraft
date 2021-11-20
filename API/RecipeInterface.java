@@ -29,6 +29,8 @@ public class RecipeInterface {
 	public static FrictionHeaterManager friction;
 	public static BlastFurnaceManager blastfurn;
 	public static MagnetizerManager magnetizer;
+	public static WorktableManager worktable;
+
 
 	public static interface CompactorManager extends RecipeManager {
 
@@ -110,6 +112,12 @@ public class RecipeInterface {
 			public void step(int omega, ItemStack is);
 
 		}
+
+	}
+
+	public static interface WorktableManager extends RecipeManager {
+
+		public void addAPIRecipe(IRecipe ir);
 
 	}
 

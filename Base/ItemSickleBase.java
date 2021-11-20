@@ -423,6 +423,8 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		private boolean needsMeta(ReikaPlantHelper p) {
+			if (p == null)
+				return true;
 			switch(p) {
 				case CACTUS:
 				case LILYPAD:

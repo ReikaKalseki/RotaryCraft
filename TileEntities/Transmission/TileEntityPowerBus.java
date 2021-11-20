@@ -123,7 +123,12 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	public boolean canOutputToSide(ForgeDirection dir) {
-		return !this.isReceivingFromSide(dir) && this.hasValidItem(dir);
+		return !this.isReceivingFromSide(dir) && this.hasValidItem(dir) && !this.isDisabledClutch(dir);
+	}
+
+	private boolean isDisabledClutch(ForgeDirection dir) {
+		TileEntity te = this.getAdjacentTileEntity(dir);
+		return te instanceof TileEntityClutch && !((TileEntityClutch)te).isOutputEnabled();
 	}
 
 	public boolean isReceivingFromSide(ForgeDirection dir) {

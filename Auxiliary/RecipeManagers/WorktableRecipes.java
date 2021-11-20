@@ -35,6 +35,8 @@ import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.RotaryCraft.API.RecipeInterface;
+import Reika.RotaryCraft.API.RecipeInterface.WorktableManager;
 import Reika.RotaryCraft.Auxiliary.RecyclingRecipe;
 import Reika.RotaryCraft.Base.ItemBlockPlacer;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -42,7 +44,7 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class WorktableRecipes extends RecipeHandler {
+public class WorktableRecipes extends RecipeHandler implements WorktableManager {
 
 	private static final WorktableRecipes instance = new WorktableRecipes();
 
@@ -73,6 +75,7 @@ public class WorktableRecipes extends RecipeHandler {
 
 	private WorktableRecipes() {
 		super(MachineRegistry.WORKTABLE);
+		RecipeInterface.worktable = this;
 		//Collections.sort(recipes, sorter);
 	}
 
