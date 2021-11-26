@@ -586,6 +586,22 @@ public class RotaryRecipes {
 		ThaumcraftApi.getCraftingRecipes().add(ir);
 		ReikaThaumHelper.addInfusionRecipeBookEntryViaXML(RotaryCraft.instance, "BEDREVEAL", desc, "rotarycraft", ir, cost, 0, 0, RotaryCraft.class, page).setParents("GOGGLES");
 
+		al = new AspectList();
+		al.add(Aspect.ORDER, 5);
+		al.add(Aspect.ENTROPY, 1);
+		desc = "One multitool inside another";
+		in = new Object[]{
+				"gsh", "sSs", "hsg",
+				'S', ItemRegistry.SCREWDRIVER.getStackOf(),
+				'h', ItemStacks.steelingot,
+				'g', Blocks.glass,
+				's', ThaumOreHandler.getInstance().getShard(ThaumOreHandler.getInstance().metaVisShard),
+
+		};
+		sr = new ShapedArcaneRecipe("SCREWFOCUS", ItemRegistry.SCREWFOCUS.getStackOf(), al, in);
+		ThaumcraftApi.getCraftingRecipes().add(sr);
+		ReikaThaumHelper.addArcaneRecipeBookEntryViaXML(RotaryCraft.instance, "SCREWFOCUS", desc, "rotarycraft", sr, cost, 2, 0, RotaryCraft.class, page).setParents("VOIDMETAL");
+
 		for (ReikaOreHelper ore : ReikaOreHelper.oreList) {
 			ItemStack flake = ItemStacks.getFlake(ore);
 			ItemStack out = ItemStacks.getSmeltedProduct(ore);
@@ -1174,7 +1190,7 @@ public class RotaryRecipes {
 		ItemRegistry.UPGRADE.addMetaRecipe(2, "SCS", "ERE", "SCS", 'C', ItemStacks.redgoldingot, 'R', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'E', GearboxTypes.TUNGSTEN.getPart(GearPart.SHAFTCORE));
 		ItemRegistry.UPGRADE.addMetaRecipe(3, "SES", "ERE", "ScS", 'c', ItemStacks.pcb, 'R', ItemStacks.tungsteningot, 'S', ItemStacks.steelingot, 'E', ItemStacks.redgoldingot);
 		ItemRegistry.UPGRADE.addMetaBlastRecipe(1000, 4, 4, "cEc", "ERE", "SES", 'c', MachineRegistry.COOLINGFIN.getCraftedProduct(), 'R', ItemStacks.bedingot, 'S', ItemStacks.steelingot, 'E', ItemStacks.tungsteningot);
-		ItemRegistry.UPGRADE.addMetaBlastRecipe(1800, 8, 5, "SES", "ERE", "SES", 'R', ItemStacks.bedrockgear, 'S', ItemStacks.steelingot, 'E', ItemStacks.springingot);
+		ItemRegistry.UPGRADE.addMetaBlastRecipe(1800, 8, 5, "SES", "ERE", "SES", 'R', ItemStacks.bedrockgear, 'S', ItemStacks.steelingot, 'E', ItemStacks.springtungsten);
 
 		ItemRegistry.UPGRADE.addMetaRecipe(6, "SEI", "ERE", "SEI", 'R', ItemStacks.compoundturb, 'S', ItemStacks.highcombustor, 'I', ItemStacks.igniter, 'E', ItemStacks.bedrockdust);
 

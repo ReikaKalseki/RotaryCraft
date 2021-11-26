@@ -109,6 +109,7 @@ import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelShovel;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSickle;
 import Reika.RotaryCraft.Items.Tools.Steel.ItemSteelSword;
 import Reika.RotaryCraft.ModInterface.ItemCustomModOre;
+import Reika.RotaryCraft.ModInterface.ItemScrewdriverFocus;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -208,6 +209,7 @@ public enum ItemRegistry implements ItemEnum {
 	MATCHFILTER(50,	1, false,		"item.matchfilter",			ItemMatchFilter.class),
 	BEDDRILL(134, 1, false,			"item.beddrill",			ItemBedrockDrillHead.class,	ModList.IMMERSIVEENG),
 	BEDCHISEL(45, 1, false,			"item.bedchisel",			ItemBedrockChisel.class, ModList.CHISEL),
+	SCREWFOCUS(0, 0, false,			"item.screwfocus",			ItemScrewdriverFocus.class, ModList.THAUMCRAFT),
 	;
 
 	private final int index;

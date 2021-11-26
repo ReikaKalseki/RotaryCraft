@@ -260,7 +260,7 @@ public class ClientProxy extends CommonProxy {
 		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
 			//ReikaJavaLibrary.pConsole("Registering Item Spritesheet for "+ItemRegistry.itemList[i].name()+" at ID "+(ItemRegistry.itemList[i].getItemInstance()+256)+" with sheet "+ItemRegistry.itemList[i].getTextureSheet());
 			ItemRegistry ir = ItemRegistry.itemList[i];
-			if (!ir.isPlacer()) {
+			if (!ir.isPlacer() && ir != ItemRegistry.SCREWFOCUS) {
 				if (RotaryCraft.instance.isLocked()) {
 					MinecraftForgeClient.registerItemRenderer(ir.getItemInstance(), null);
 				}
