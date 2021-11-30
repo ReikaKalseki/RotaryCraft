@@ -42,7 +42,6 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -179,9 +178,9 @@ public final class OreForcer {
 	}
 
 	private void intercraftPRGems() {
-		ItemStack ruby = this.getPRGem("gemRuby");
-		ItemStack sapphire = this.getPRGem("gemSapphire");
-		ItemStack peridot = this.getPRGem("gemPeridot");
+		ItemStack ruby = this.getPRGem(-1);
+		ItemStack sapphire = this.getPRGem(38);
+		ItemStack peridot = this.getPRGem(-1);
 		if (ruby != null)
 			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.RUBY), ruby);
 		if (sapphire != null)
@@ -191,15 +190,8 @@ public final class OreForcer {
 		RotaryCraft.logger.log("RotaryCraft gems can now be crafted into Project Red gems!");
 	}
 
-	private ItemStack getPRGem(String oredict) {
-		ArrayList<ItemStack> gems = OreDictionary.getOres(oredict);
-		for (int i = 0; i < gems.size(); i++) {
-			ItemStack is = gems.get(i);
-			if (!ItemRegistry.MODINGOTS.matchItem(is)) {
-				return is;
-			}
-		}
-		return null;
+	private ItemStack getPRGem(int meta) {
+		return meta < 0 ? null : ReikaItemHelper.lookupItem("ProjRed|Core:projectred.core.part:"+meta);
 	}
 
 	private void registerQuantum() {

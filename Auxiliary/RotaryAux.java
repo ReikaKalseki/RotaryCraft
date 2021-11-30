@@ -23,13 +23,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.MekToolHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RedstoneArsenalHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerToolHandler;
 import Reika.RotaryCraft.GuiHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -543,5 +547,17 @@ public class RotaryAux {
 
 	public static boolean isShaftCross(ItemStack is) {
 		return ItemRegistry.SHAFT.matchItem(is) && is.stackTagCompound != null && is.stackTagCompound.getBoolean("cross");
+	}
+
+	public static boolean isHoldingScrewdriver(EntityPlayer ep) {
+		ItemStack is = ep.getCurrentEquippedItem();
+		if (ModList.THAUMCRAFT.isLoaded() && isScrewFocusWand(is))
+			return true;
+		return ItemRegistry.SCREWDRIVER.matchItem(is);
+	}
+
+	@ModDependent(ModList.THAUMCRAFT)
+	private static boolean isScrewFocusWand(ItemStack is) {
+		return is != null && is.getItem() == ThaumItemHelper.ItemEntry.WAND.getItem().getItem() && ReikaThaumHelper.getWandFocus(is) == ItemRegistry.SCREWFOCUS.getItemInstance();
 	}
 }

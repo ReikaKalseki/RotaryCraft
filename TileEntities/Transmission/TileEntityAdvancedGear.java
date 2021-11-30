@@ -83,7 +83,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	private final CVTState[] cvtState = new CVTState[2];
 	private CVTMode cvtMode = CVTMode.MANUAL;
 	private CVTController controller;
-	private ItemStack[] belts = new ItemStack[31];
+	private ItemStack[] belts = new ItemStack[32];
 	private int targetTorque = 1;
 
 	private boolean enabled = true;
@@ -564,35 +564,20 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	public int getMaxRatio() {
-		if (belts[0] == null)
-			return 1;
-		if (belts[0].getItem() != ItemStacks.belt.getItem() || belts[0].getItemDamage() != ItemStacks.belt.getItemDamage())
-			return 1;
-		for (int i = 1; i <= 2; i++) {
-			if (belts[i] == null)
-				return 2;
-			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
-				return 2;
+		int beltCount = 0;
+		for (int i = 0; i < 31; i++) {
+			if (belts[i] == null || !ReikaItemHelper.matchStacks(belts[i], ItemStacks.belt)) {
+				break;
+			}
+			else
+				beltCount++;
 		}
-		for (int i = 3; i <= 6; i++) {
-			if (belts[i] == null)
-				return 4;
-			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
-				return 4;
-		}
-		for (int i = 7; i <= 14; i++) {
-			if (belts[i] == null)
-				return 8;
-			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
-				return 8;
-		}
-		for (int i = 15; i <= 30; i++) {
-			if (belts[i] == null)
-				return 16;
-			if (belts[i].getItem() != ItemStacks.belt.getItem() || belts[i].getItemDamage() != ItemStacks.belt.getItemDamage())
-				return 16;
-		}
-		return 32;
+		int f = beltCount+1;
+		return ReikaMathLibrary.isPowerOfTwo(f) ? f : ReikaMathLibrary.ceil2exp(f)/2;
+	}
+
+	private boolean hasRequiredBelt() {
+		return belts[31] != null && ReikaItemHelper.matchStacks(belts[31], ItemStacks.belt);
 	}
 
 	@Override
@@ -707,7 +692,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 						ratio = this.updateAutoRatio();
 					}
 					int ratio = this.getCVTRatio();
-					if (this.hasLubricant()) {
+					if (this.hasLubricant() && this.hasRequiredBelt()) {
 						boolean speed = true;
 						if (ratio > 0) {
 							if (omegain <= RotaryConfig.omegalimit/ratio)

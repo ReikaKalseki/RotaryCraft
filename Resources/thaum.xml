@@ -19,4 +19,14 @@
 			Heavy weaponry is only useful insofar as the entity you wish to kill is vulnerable to the damage you inflict. And, much to your horror, that evil black distortion is all but immune to mundane sorts of harm. However, the creeping insanity it has inflicted on you has come with a hidden blessing; you have now realized how to create an unholy alloy of evil and metal, and can probably turn that on the monster. As the saying goes, 'fight fire with fire', only here the fire is crystallized insanity and rage, the other fire is a warping of reality itself, and the analogy is...breaking down almost as rapidly as your mind has done in the presence of that thing.
 		</page0>
 	</voidrail>
+	<screwfocus>
+		<page0>
+			Glass balls imbued with magic energy can be granted a whole array of functions, but only recently has it occurred to you that these functions need not be traditional "magic spells". No matter how advanced you become, and how arcane the magic forces you employ, much of your time is, as always, spent doing fiddly configuration or relocation of machinery. That is annoying enough, but it gets worse: each class of device demands its own unique tool, meaning you need to constantly swap out whatever you are holding, slowing you considerably (not to mention needing a giant bag full of nothing but wrenches, hammers, screwdrivers, and similar implements).
+		</page0>
+		<page1>
+			Somewhat fortuitously, you have found that a particular one of these, despite being ostensibly designed specifically for gear-based machinery, is able to function in place of most of the others - emphasis on "most", because some particularly high-tech devices have proven stubbornly dependent on their own bronze-based tool (worse, they actively resist tidy dismantling, irreparably damaging the machine a third of the time).
+			
+			At any rate, you might be able to empower a focus with this more general tool, and in so doing cause your wand to be the ultimate in construct manipulation technology.
+		</page1>
+	</screwfocus>
 </researches>

@@ -106,6 +106,7 @@ import blusunrize.immersiveengineering.api.energy.DieselHandler.SqueezerRecipe;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
 import buildcraft.silicon.ItemRedstoneChipset;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.fuels.GeneratorFuel;
 import ic2.api.recipe.IRecipeInput;
@@ -600,7 +601,14 @@ public class RotaryRecipes {
 		};
 		sr = new ShapedArcaneRecipe("SCREWFOCUS", ItemRegistry.SCREWFOCUS.getStackOf(), al, in);
 		ThaumcraftApi.getCraftingRecipes().add(sr);
-		ReikaThaumHelper.addArcaneRecipeBookEntryViaXML(RotaryCraft.instance, "SCREWFOCUS", desc, "rotarycraft", sr, cost, 2, 0, RotaryCraft.class, page).setParents("VOIDMETAL");
+		ArrayList<String> li = new ArrayList();
+		if (Loader.isModLoaded("thaumicenergistics")) {
+			li.add("thaumicenergistics.TEFOCUSWRENCH");
+		}
+		else {
+			li.add("FOCUSFIRE");
+		}
+		ReikaThaumHelper.addArcaneRecipeBookEntryViaXML(RotaryCraft.instance, "SCREWFOCUS", desc, "rotarycraft", sr, cost, 2, 0, RotaryCraft.class, page).setParents(li.toArray(new String[li.size()]));
 
 		for (ReikaOreHelper ore : ReikaOreHelper.oreList) {
 			ItemStack flake = ItemStacks.getFlake(ore);

@@ -150,6 +150,8 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 		if (ir != null && ir.overridesRightClick(is)) {
 			return false;
 		}
+		if (RotaryAux.isHoldingScrewdriver(ep))
+			return false;
 		if (te instanceof TileEntityAdvancedGear) {
 			TileEntityAdvancedGear tile = (TileEntityAdvancedGear)te;
 			if (tile.getGearType().isLubricated()) {

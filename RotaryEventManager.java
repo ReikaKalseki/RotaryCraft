@@ -81,6 +81,7 @@ import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.MachineDamage;
 import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
 import Reika.RotaryCraft.Auxiliary.ReservoirComboRecipe;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
 import Reika.RotaryCraft.Items.Tools.Bedrock.ItemBedrockArmor;
 import Reika.RotaryCraft.Items.Tools.Charged.ItemSpringBoots;
@@ -219,7 +220,7 @@ public class RotaryEventManager {
 	@SideOnly(Side.CLIENT)
 	@ModDependent(ModList.ENDERIO)
 	public void openConduitGUIWithScrewdriver(PlayerInteractEventClient evt) {
-		if (evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && ItemRegistry.SCREWDRIVER.matchItem(evt.entityPlayer.getCurrentEquippedItem())) {
+		if (evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && RotaryAux.isHoldingScrewdriver(evt.entityPlayer)) {
 			Block b = evt.world.getBlock(evt.x, evt.y, evt.z);
 			if (b.getClass().getName().equals("crazypants.enderio.conduit.BlockConduitBundle")) {
 				try {
@@ -233,7 +234,7 @@ public class RotaryEventManager {
 	}
 
 	public void openConduitGUIWithScrewdriver(PlayerInteractEvent evt) {
-		if (!evt.entityPlayer.worldObj.isRemote && evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && ItemRegistry.SCREWDRIVER.matchItem(evt.entityPlayer.getCurrentEquippedItem())) {
+		if (!evt.entityPlayer.worldObj.isRemote && evt.entityPlayer.isSneaking() && evt.action == Action.LEFT_CLICK_BLOCK && RotaryAux.isHoldingScrewdriver(evt.entityPlayer)) {
 			Block b = evt.world.getBlock(evt.x, evt.y, evt.z);
 			if (b.getClass().getName().equals("crazypants.enderio.conduit.BlockConduitBundle")) {
 				try {
@@ -483,7 +484,7 @@ public class RotaryEventManager {
 			e.captureDrops = false;
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void armorDamageBoost(LivingHurtEvent evt) {
 		if (evt.source instanceof MachineDamage) {

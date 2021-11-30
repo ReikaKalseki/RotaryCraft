@@ -10,8 +10,11 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.ClassReparenter.Reparent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,8 +45,36 @@ public class ItemScrewdriverFocus extends ItemFocusBasic {
 	public ItemStack onFocusRightClick(ItemStack wand, World world, EntityPlayer player, MovingObjectPosition mov) {
 		if (mov == null)
 			return null;
-		ItemRegistry.SCREWDRIVER.getItemInstance().onItemUse(ItemRegistry.SCREWDRIVER.getStackOf(), player, world, mov.blockX, mov.blockY, mov.blockZ, mov.sideHit, (float)mov.hitVec.xCoord, (float)mov.hitVec.yCoord, (float)mov.hitVec.zCoord);
+		ItemStack is = ItemRegistry.SCREWDRIVER.getStackOf();
+		boolean flag = false;
+		int x = mov.blockX;
+		int y = mov.blockY;
+		int z = mov.blockZ;
+		float a = (float)mov.hitVec.xCoord;
+		float b = (float)mov.hitVec.yCoord;
+		float c = (float)mov.hitVec.zCoord;
+		if (ItemRegistry.SCREWDRIVER.getItemInstance().onItemUse(is, player, world, x, y, z, mov.sideHit, a, b, c))
+			flag = MachineRegistry.getMachine(world, x, y, z) != null;
+		if (this.fakeScrewclick(world, x, y, z, player, mov, a, b, c, is))
+			flag = true;
+		if (AppEngHandler.getInstance().tryRightClick(is, x, y, z, mov.sideHit, player, world, 0))
+			flag = true;
+		if (flag) {
+			ReikaSoundHelper.playSoundFromServer(world, x+0.5, y+0.5, z+0.5, "thaumcraft:wand", 0.4F, 0.7F+world.rand.nextFloat()*0.6F, true);
+			ReikaSoundHelper.playSoundFromServer(world, x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.5F, 0.75F, true);
+		}
 		return null;
+	}
+
+	private boolean fakeScrewclick(World world, int x, int y, int z, EntityPlayer player, MovingObjectPosition mov, float a, float b, float c, ItemStack is) {
+		ItemStack hold = player.getCurrentEquippedItem();
+		if (hold != null)
+			hold = hold.copy();
+		player.setCurrentItemOrArmor(0, is);
+		boolean ret = world.getBlock(x, y, z).onBlockActivated(world, x, y, z, player, mov.sideHit, a, b, c);
+		//MinecraftForge.EVENT_BUS.post(new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, x, y, z, mov.sideHit, world));
+		player.setCurrentItemOrArmor(0, hold);
+		return ret;
 	}
 
 	@Override

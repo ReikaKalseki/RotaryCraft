@@ -225,6 +225,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (is != null && ItemRegistry.isRegistered(is) && ItemRegistry.getEntry(is).overridesRightClick(is)) {
 			return false;
 		}
+		if (RotaryAux.isHoldingScrewdriver(ep))
+			return false;
 		if (is != null && is.getItem() == Items.enchanted_book && m.isEnchantable()) {
 			if (((EnchantableMachine)te).getEnchantmentHandler().applyEnchants(is)) {
 				if (!ep.capabilities.isCreativeMode)

@@ -261,8 +261,8 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 				}
 			}
 			if (m == MachineRegistry.FLOODLIGHT) {
+				TileEntityFloodlight clicked = (TileEntityFloodlight)te;
 				if (ep.isSneaking()) {
-					TileEntityFloodlight clicked = (TileEntityFloodlight)te;
 					if (clicked != null && clicked.getBlockMetadata() >= 4) {
 						if (clicked.beammode)
 							clicked.beammode = false;
@@ -271,6 +271,12 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 						clicked.lightsOut(world, x, y, z);
 						return true;
 					}
+					else {
+						clicked.beammode = false;
+					}
+				}
+				else if (clicked != null) {
+					clicked.beammode = false;
 				}
 			}
 			if (m.isCannon()) {
