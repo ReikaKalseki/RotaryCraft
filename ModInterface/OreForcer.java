@@ -152,6 +152,7 @@ public final class OreForcer {
 				break;
 			case PROJRED:
 				this.intercraftPRGems();
+				this.intercraftNikolite();
 				break;
 			case GALACTICRAFT:
 				this.intercraftSilicon();
@@ -178,9 +179,9 @@ public final class OreForcer {
 	}
 
 	private void intercraftPRGems() {
-		ItemStack ruby = this.getPRGem(-1);
+		ItemStack ruby = this.getPRGem(37);
 		ItemStack sapphire = this.getPRGem(38);
-		ItemStack peridot = this.getPRGem(-1);
+		ItemStack peridot = this.getPRGem(39);
 		if (ruby != null)
 			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.RUBY), ruby);
 		if (sapphire != null)
@@ -188,6 +189,13 @@ public final class OreForcer {
 		if (peridot != null)
 			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.PERIDOT), peridot);
 		RotaryCraft.logger.log("RotaryCraft gems can now be crafted into Project Red gems!");
+	}
+
+	private void intercraftNikolite() {
+		ItemStack is = this.getPRGem(56);
+		if (is != null)
+			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.NIKOLITE), is);
+		RotaryCraft.logger.log("RotaryCraft nikolite can now be crafted into Project Red electrotine!");
 	}
 
 	private ItemStack getPRGem(int meta) {

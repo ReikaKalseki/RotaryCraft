@@ -22,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.Instantiable.Recipe.CraftingInputMatrix;
+import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Interfaces.CraftingContainer;
 import Reika.DragonAPI.Interfaces.TileEntity.CraftingTile;
 import Reika.DragonAPI.Interfaces.TileEntity.TriggerableAction;
@@ -105,19 +106,19 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Craf
 			for (int i = 0; i < HelmetUpgrades.list.length; i++) {
 				HelmetUpgrades g = HelmetUpgrades.list[i];
 				if (g.isAvailable && !g.existsOn(inv[armorslot])) {
-					ItemStack[] rec = g.getUpgradeItems();
+					ItemMatch[] rec = g.getUpgradeItems();
 					boolean flag = false;
 					int itemslot = -1;
 					if (rec.length == 1) { //shapeless
-						itemslot = ReikaInventoryHelper.locateInInventory(rec[0], inv, false);
+						itemslot = ReikaInventoryHelper.locateInInventory(rec[0], inv);
 						flag = itemslot != -1;
 					}
 					else if (armorslot == 4) {
 						boolean flag2 = true;
 						for (int k = 0; k < rec.length; k++) {
-							ItemStack is = rec[k];
+							ItemMatch is = rec[k];
 							ItemStack in = inv[k >= 4 ? k+1 : k];
-							if (!ReikaItemHelper.matchStacks(in, is)) {
+							if (!is.match(in)) {
 								flag2 = false;
 								break;
 							}

@@ -78,13 +78,13 @@ public class ItemMatchFilter extends ItemRotaryTool implements SpriteRenderCallb
 
 	@Override
 	public boolean match(ItemStack is) {
-		//TODO
+		//TODO Incomplete item
 		return false;
 	}
 
 	@Override
 	public ItemFilter getFilter(ItemStack is) {
-		//TODO
+		//TODO Incomplete item
 		return null;
 	}
 

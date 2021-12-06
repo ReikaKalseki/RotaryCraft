@@ -400,6 +400,7 @@ public class TileEntityHydroEngine extends TileEntityEngine {
 		return this.isBackEndOfArray() || this.isFrontOfArray();
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public boolean isReversed() {
 		if (streamData == null)
 			return false;

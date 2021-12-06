@@ -30,13 +30,13 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.ChromatiCraft.Items.Tools.ItemFloatstoneBoots;
 import Reika.ChromatiCraft.Registry.ChromaItems;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -46,6 +46,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.ItemRotaryArmor;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.Satisforestry.Registry.SFBlocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -61,7 +62,10 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 	public static enum HelmetUpgrades {
 		NIGHTVISION(),
 		VISOR(),
-		APIARIST(ModList.FORESTRY);
+		APIARIST(ModList.FORESTRY),
+		SLUG1(ModList.SATISFORESTRY),
+		SLUG2(ModList.SATISFORESTRY),
+		SLUG3(ModList.SATISFORESTRY);
 
 		public static final HelmetUpgrades[] list = values();
 
@@ -91,18 +95,40 @@ public class ItemBedrockArmor extends ItemRotaryArmor implements IArmorApiarist 
 			if (is.stackTagCompound == null)
 				is.stackTagCompound = new NBTTagCompound();
 			is.stackTagCompound.setBoolean(this.getNBT(), set);
+			if (set) {
+				if (this == SLUG1)
+					is.stackTagCompound.setInteger("slugUpgrade", 1);
+				if (this == SLUG2)
+					is.stackTagCompound.setInteger("slugUpgrade", 2);
+				if (this == SLUG3)
+					is.stackTagCompound.setInteger("slugUpgrade", 3);
+			}
+			else {
+				is.stackTagCompound.removeTag("slugUpgrade");
+			}
 		}
 
-		public ItemStack[] getUpgradeItems() {
+		public ItemMatch[] getUpgradeItems() {
 			switch(this) {
 				case NIGHTVISION:
-					return new ItemStack[]{ItemRegistry.NVG.getStackOf()};
+					return new ItemMatch[]{new ItemMatch(ItemRegistry.NVG.getStackOf())};
 				case VISOR:
-					return new ItemStack[]{new ItemStack(Blocks.stained_glass, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.diamond), new ItemStack(Blocks.stained_glass, 1, OreDictionary.WILDCARD_VALUE)};
+					return new ItemMatch[]{new ItemMatch(Blocks.stained_glass), new ItemMatch(Items.diamond), new ItemMatch(Blocks.stained_glass)};
 				case APIARIST:
-					return ReikaArrayHelper.getArrayOf(ForestryHandler.CraftingMaterials.WOVENSILK.getItem(), 8);
+					return ReikaArrayHelper.getArrayOf(new ItemMatch(ForestryHandler.CraftingMaterials.WOVENSILK.getItem()), 8);
+				case SLUG1:
+					return new ItemMatch[] {this.getPowerSlug(0)};
+				case SLUG2:
+					return new ItemMatch[] {this.getPowerSlug(1)};
+				case SLUG3:
+					return new ItemMatch[] {this.getPowerSlug(2)};
 			}
 			return null;
+		}
+
+		@ModDependent(ModList.SATISFORESTRY)
+		private ItemMatch getPowerSlug(int meta) {
+			return new ItemMatch(SFBlocks.SLUG.getStackOfMetadata(meta));
 		}
 	}
 
