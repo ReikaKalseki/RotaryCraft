@@ -43,6 +43,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.PumpablePipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RenderableDuct;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
 public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection, BreakAction, PumpablePipe {
 
@@ -374,6 +375,11 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 					PipeConnector pc = (PipeConnector)te;
 					Flow flow = pc.getFlowForSide(dir.getOpposite());
 					if (flow.canOutput) {
+						if (pc instanceof TileEntityPump) {
+							int max = ((TileEntityPump)pc).getMaxBackPressure();
+							if (max <= this.getFluidLevel())
+								continue;
+						}
 						FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
 						if (fs != null) {
 							int level = this.getFluidLevel();

@@ -18,7 +18,10 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.MathHelper;
@@ -205,12 +208,16 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 	}
 
 	private void addRecycling(ItemStack in, ItemStack out, RecipeLevel rl) {
+		if (in.getItem() instanceof ItemSword || in.getItem() instanceof ItemTool || in.getItem() instanceof ItemArmor) {
+			in = in.copy();
+			in.setItemDamage(OreDictionary.WILDCARD_VALUE);
+		}
 		List<IRecipe> li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), in);
 		if (li != null && li.size() > 1) {
 			RotaryCraft.logger.log("Skipping recycling of "+this.fullID(in)+" to "+this.fullID(out)+" due to multiple production recipes");
 			return;
 		}
-		this.addSmelting(in, out, rl);
+		PulseJetRecipe rec = this.addSmelting(in, out, rl);
 	}
 
 	private ItemStack getSizedSteel(int size) {
@@ -230,9 +237,10 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 		this.createRecipe(rec, rl);
 	}
 
-	private void addSmelting(ItemStack in, ItemStack itemstack, RecipeLevel rl) {
+	private PulseJetRecipe addSmelting(ItemStack in, ItemStack itemstack, RecipeLevel rl) {
 		PulseJetRecipe rec = new PulseJetRecipe(in, itemstack);
 		this.createRecipe(rec, rl);
+		return rec;
 	}
 
 	private void createRecipe(PulseJetRecipe rec, RecipeLevel rl) {
@@ -333,7 +341,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			ItemStack out = OreDictionary.getOres("ingotBronze").get(0);
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
-					this.addSmelting(items[i].getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+					this.addRecycling(items[i].getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
 				}
 			}
 		}
@@ -373,7 +381,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
 					ItemStack outb = outarr[i];
-					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(outb, n[i]), RecipeLevel.MODINTERACT);
+					this.addRecycling(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(outb, n[i]), RecipeLevel.MODINTERACT);
 				}
 			}
 		}
@@ -401,7 +409,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			ItemStack out = ReikaItemHelper.lookupItem(ModList.ENDERIO, "itemAlloy", 6);
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
-					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+					this.addRecycling(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
 				}
 			}
 		}
@@ -429,7 +437,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 			ItemStack out = ThaumItemHelper.ItemEntry.THAUMIUM.getItem();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null) {
-					this.addSmelting(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
+					this.addRecycling(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
 				}
 				else {
 					RotaryCraft.logger.logError("Could not find thaumium tool #"+i);
@@ -443,7 +451,7 @@ public class RecipesPulseFurnace extends RecipeHandler implements PulseFurnaceMa
 				for (Tools t : Tools.values()) {
 					Item i = m.getItem(t);
 					if (i != null) {
-						this.addSmelting(i, ReikaItemHelper.getSizedItemStack(out, t.getNumberIngots(m)), RecipeLevel.MODINTERACT);
+						this.addRecycling(i, ReikaItemHelper.getSizedItemStack(out, t.getNumberIngots(m)), RecipeLevel.MODINTERACT);
 					}
 				}
 			}

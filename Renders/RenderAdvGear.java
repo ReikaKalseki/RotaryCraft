@@ -12,11 +12,14 @@ package Reika.RotaryCraft.Renders;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
+import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
+import Reika.RotaryCraft.Auxiliary.RotaryAux;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
@@ -118,6 +121,52 @@ public class RenderAdvGear extends RotaryTERenderer
 			case CVT:
 				this.bindTextureByName("/Reika/RotaryCraft/Textures/TileEntityTex/Transmission/cvttex.png");
 				var15.renderAll(tile, null, tile.phi);
+				if (tile.isInWorld()) {
+					GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+					GL11.glDisable(GL11.GL_LIGHTING);
+					ReikaRenderHelper.disableEntityLighting();
+					FontRenderer fr = this.getFontRenderer();
+					float var10 = 0.6666667F*0.8F;
+					GL11.glScalef(var10, -var10, -var10);
+					float var112 = 0.016666668F * var10;
+					GL11.glTranslatef(0.0F, 0.61875F * var10, 0.20625F * var10);
+					GL11.glRotated(-20, 1, 0, 0);
+					GL11.glTranslatef(-0.175F, -0.545F, -0.19F); //was 0.1X
+					GL11.glScalef(var112, -var112, var112);
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					GL11.glDepthMask(false);
+					GL11.glTranslatef(5, -48, 37);
+					GL11.glScalef(2, 2, 2);
+					String var15b;
+
+					if (tile.getTicksExisted()/80%2 == 0) {
+						var15b = RotaryAux.formatPower(tile.power);
+						fr.drawString(var15b, -18, 70, 0xffffff);
+
+						var15b = RotaryAux.formatTorque(tile.torque);
+						fr.drawString(var15b, -18, 82, 0xffffff);
+
+						var15b = RotaryAux.formatSpeed(tile.omega);
+						fr.drawString(var15b, -18, 94, 0xffffff);
+					}
+					else {
+						GL11.glScalef(2, 2, 2);
+						GL11.glTranslatef(0.075F, 0.25F, 0.1F);
+						int ratio = tile.getCVTRatio();
+						if (ratio > 0) {
+							var15b = "1:"+ratio;
+						}
+						else {
+							var15b = -ratio+":1";
+						}
+						while(var15b.length() < 5) {
+							var15b = " "+var15b;
+						}
+						fr.drawString(var15b, -10, 39, 0xffffff);
+					}
+
+					GL11.glPopAttrib();
+				}
 				break;
 			case COIL:
 				if (tile.isBedrockCoil())

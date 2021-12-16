@@ -8,9 +8,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.ASM.ClassReparenter.Reparent;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.ModInteract.DeepInteract.ItemCustomFocus;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
@@ -20,13 +20,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.wands.ItemFocusBasic;
+import thaumcraft.api.wands.FocusUpgradeType;
 
-@Reparent(value = {"thaumcraft.api.wands.ItemFocusBasic", "net.minecraft.item.Item"})
-public class ItemScrewdriverFocus extends ItemFocusBasic {
+public class ItemScrewdriverFocus extends ItemCustomFocus {
 
-	public ItemScrewdriverFocus(int idx) {
-		this.setCreativeTab(RotaryCraft.tabRotaryTools);
+	public ItemScrewdriverFocus() {
+		super(RotaryCraft.tabRotaryTools);
 	}
 
 	@Override
@@ -79,7 +78,7 @@ public class ItemScrewdriverFocus extends ItemFocusBasic {
 
 	@Override
 	public EnumRarity getRarity(ItemStack focusstack) {
-		return EnumRarity.uncommon;
+		return EnumRarity.common;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -112,6 +111,21 @@ public class ItemScrewdriverFocus extends ItemFocusBasic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getFocusDepthLayerIcon(ItemStack focusstack) {
+		return null;
+	}
+
+	@Override
+	public int getActivationCooldown(ItemStack focusstack) {
+		return 100;
+	}
+
+	@Override
+	protected String getID() {
+		return "screwdriver";
+	}
+
+	@Override
+	public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack focusstack, int rank) {
 		return null;
 	}
 

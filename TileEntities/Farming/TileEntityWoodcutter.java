@@ -92,6 +92,8 @@ Cleanable, MultiOperational {
 	private int jam = 0;
 	private int jamColor = -1;
 
+	private long lastSoundTick = -1;
+
 	public int getJamColor() {
 		return jamColor;
 	}
@@ -157,7 +159,18 @@ Cleanable, MultiOperational {
 
 			tree.sortBlocksByHeight(false);
 			tree.reverseBlockOrder();
-			tree.sortBlocksByDistance(new Coordinate(this));
+			Coordinate center = new Coordinate(this);/*
+			if (type != null) {
+				int mx = (tree.getMaxX()+tree.getMinX())/2;
+				int mz = (tree.getMaxZ()+tree.getMinZ())/2;
+				Block at2 = world.getBlock(mx, y, mz);
+				int meta2 = world.getBlockMetadata(mx, y, mz);
+				if (type.getLogID() == at2 && type.getLeafMetadatas().contains(meta2)) {
+					center = new Coordinate(mx, y, mz);
+					//ReikaJavaLibrary.pConsole(new Coordinate(this)+" > "+center);
+				}
+			}*/
+			tree.sortBlocksByDistance(center);
 			tree.sort(leafPriority);
 			treeCopy = (TreeReader)tree.copy();
 		}
@@ -271,10 +284,13 @@ Cleanable, MultiOperational {
 		}
 		c.setBlock(world, Blocks.air);
 
-		if (mat == Material.leaves || mat == Material.plants)
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat()*0.5F, 1F);
-		else
-			world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat()*0.5F, 1F);
+		if (lastSoundTick != this.getTicksExisted()) {
+			if (mat == Material.leaves || mat == Material.plants)
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.grass", 0.5F+rand.nextFloat()*0.5F, 1F);
+			else
+				world.playSoundEffect(x+0.5, y+0.5, z+0.5, "dig.wood", 0.5F+rand.nextFloat()*0.5F, 1F);
+			lastSoundTick = this.getTicksExisted();
+		}
 		if (tree.getTreeType() == ModWoodList.SLIME && c.getBlock(world) == tree.getTreeType().getLogID()) {
 			jam++;
 			jamColor = 0xff000000 | ReikaColorAPI.mixColors(ModWoodList.SLIME.logColor, 0xffffff, (float)jam/MAX_JAM);

@@ -75,6 +75,7 @@ public class RenderMonitor extends RotaryTERenderer
 
 		var14.renderAll(tile, null, -tile.phi);
 		if (tile.isInWorld()) {
+			GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 			GL11.glDisable(GL11.GL_LIGHTING);
 			ReikaRenderHelper.disableEntityLighting();
 			FontRenderer var17 = this.getFontRenderer();
@@ -106,9 +107,7 @@ public class RenderMonitor extends RotaryTERenderer
 
 			}
 
-			GL11.glDepthMask(true);
-			ReikaRenderHelper.enableEntityLighting();
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glPopAttrib();
 		}
 
 		if (tile.isInWorld())

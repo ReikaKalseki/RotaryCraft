@@ -201,6 +201,9 @@ public class GuiCVT extends GuiNonPoweredMachine
 				fontRendererObj.drawString("Belt Ratio:", xSize/2-32+dx, 31+dy, 4210752);
 
 				api.drawItemStack(itemRender, fontRendererObj, new ItemStack(Items.redstone), xSize/2+94, 7);
+
+				int y = tile.hasRedstoneSignal() ? 34 : 57;
+				api.drawRectFrame(130, y, 14, 14, 0xff0000);
 				break;
 			case MANUAL:
 				if (!input.isFocused()) {

@@ -272,6 +272,9 @@ public enum ItemRegistry implements ItemEnum {
 		if (this == SPAWNER) {
 			return new Class[0];
 		}
+		if (this == SCREWFOCUS) {
+			return new Class[0];
+		}
 		return new Class[]{int.class}; // Sprite index
 	}
 
@@ -326,6 +329,9 @@ public enum ItemRegistry implements ItemEnum {
 			return new Object[0];
 		}
 		if (this == SPAWNER) {
+			return new Object[0];
+		}
+		if (this == SCREWFOCUS) {
 			return new Object[0];
 		}
 		return new Object[]{this.getTextureIndex()};

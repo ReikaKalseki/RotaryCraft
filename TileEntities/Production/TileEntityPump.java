@@ -308,4 +308,8 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	public int getOperationTime() {
 		return DurationRegistry.PUMP.getOperationTime(omega);
 	}
+
+	public int getMaxBackPressure() {
+		return 1000*(1+ReikaMathLibrary.logbase2(torque/MINTORQUE));
+	}
 }

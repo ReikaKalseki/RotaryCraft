@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -33,6 +34,7 @@ import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -427,6 +429,22 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			}
 		}
 		torque *= this.getDamagedPowerFactor();
+		int tempEff = temperature+Math.max(0, world.getSavedLightValue(EnumSkyBlock.Block, x, y, z)-10);
+		if (torque*(long)omega >= 131072L) {
+			tempEff += ReikaMathLibrary.logbase2(torque*(long)omega/131072L);
+		}
+		if (tempEff <= (type.material == MaterialRegistry.WOOD ? -15 : -20)) {
+			if (type.needsLubricant()) {
+				double c = -(tempEff+20)/40D;
+				omega /= Math.pow(1.4, c);
+			}
+			else if (type.material == MaterialRegistry.WOOD) {
+				double c = Math.min(1, ((-tempEff)-15)*0.025);
+				if (c > 0 && ReikaRandomHelper.doWithChance(c)) {
+					damage++;
+				}
+			}
+		}
 		if (torque <= 0)
 			omega = 0;
 

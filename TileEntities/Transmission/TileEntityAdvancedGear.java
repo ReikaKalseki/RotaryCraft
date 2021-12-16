@@ -385,7 +385,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		return this.getCVTRatio();
 	}
 
-	private int getCVTRatio() {
+	public int getCVTRatio() {
 		switch(cvtMode) {
 			case AUTO:
 			case MANUAL:

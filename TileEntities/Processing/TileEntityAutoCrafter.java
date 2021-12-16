@@ -165,7 +165,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 					}
 					break;
 				case SUSTAIN:
-					te.tickTimer = 20;
+					te.tickTimer = 8; //TODO revisit this
 					if (te.tick >= te.tickTimer) {
 						te.tick = 0;
 						te.craftMissingItems();
