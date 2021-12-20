@@ -356,7 +356,8 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 				TileEntityAutoCrafter clicked = (TileEntityAutoCrafter)te;
 				if (ep.isSneaking()) {
 					clicked.incrementMode();
-					ReikaChatHelper.sendChatToPlayer(ep, "Mode is now "+clicked.getMode().label);
+					if (!world.isRemote)
+						ReikaChatHelper.sendChatToPlayer(ep, "Mode is now "+clicked.getMode().label);
 				}
 				return true;
 			}

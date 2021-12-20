@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import Reika.ChromatiCraft.API.Interfaces.CrystalTank;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
@@ -94,6 +95,16 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 		Block ab = world.getBlock(x, y+1, z);
 		if (ReikaFluidHelper.lookupFluidForBlock(ab) == FluidRegistry.WATER)
 			world.setBlock(x, y+1, z, Blocks.air);
+
+		Object te = this.getAdjacentTileEntity(ForgeDirection.DOWN);
+		if (te instanceof CrystalTank) {
+			te = ((CrystalTank)te).getController();
+			if (te != null) {
+				int add = ((CrystalTank)te).addFluid(tank.getActualFluid(), Math.max(1, tank.getLevel()/32));
+				if (add > 0)
+					tank.removeLiquid(add);
+			}
+		}
 	}
 
 	private void formAndDrainPool(World world, int x, int y, int z, int dx, int dy, int dz, Block id) {

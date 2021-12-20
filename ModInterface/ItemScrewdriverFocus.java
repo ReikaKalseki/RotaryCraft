@@ -6,6 +6,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
@@ -41,6 +45,16 @@ public class ItemScrewdriverFocus extends ItemCustomFocus {
 	}
 
 	@Override
+	public boolean onLeftClick(World world, int x, int y, int z, EntityPlayer ep, ItemStack wand, ForgeDirection side) {
+		ep.setCurrentItemOrArmor(0, ItemRegistry.SCREWDRIVER.getStackOf());
+		if (!MinecraftForge.EVENT_BUS.post(new PlayerInteractEvent(ep, Action.LEFT_CLICK_BLOCK, x, y, z, side.ordinal(), world)))
+			world.getBlock(x, y, z).onBlockClicked(world, x, y, z, ep);
+		ep.setCurrentItemOrArmor(0, wand);
+		this.playSound(world, x, y, z);
+		return true;
+	}
+
+	@Override
 	public ItemStack onFocusRightClick(ItemStack wand, World world, EntityPlayer player, MovingObjectPosition mov) {
 		if (mov == null)
 			return null;
@@ -59,10 +73,14 @@ public class ItemScrewdriverFocus extends ItemCustomFocus {
 		if (AppEngHandler.getInstance().tryRightClick(is, x, y, z, mov.sideHit, player, world, 0))
 			flag = true;
 		if (flag) {
-			ReikaSoundHelper.playSoundFromServer(world, x+0.5, y+0.5, z+0.5, "thaumcraft:wand", 0.4F, 0.7F+world.rand.nextFloat()*0.6F, true);
-			ReikaSoundHelper.playSoundFromServer(world, x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.5F, 0.75F, true);
+			this.playSound(world, x, y, z);
 		}
 		return null;
+	}
+
+	private void playSound(World world, int x, int y, int z) {
+		ReikaSoundHelper.playSoundFromServer(world, x+0.5, y+0.5, z+0.5, "thaumcraft:wand", 0.4F, 0.7F+world.rand.nextFloat()*0.6F, true);
+		ReikaSoundHelper.playSoundFromServer(world, x+0.5, y+0.5, z+0.5, "mob.blaze.hit", 0.5F, 0.75F, true);
 	}
 
 	private boolean fakeScrewclick(World world, int x, int y, int z, EntityPlayer player, MovingObjectPosition mov, float a, float b, float c, ItemStack is) {
