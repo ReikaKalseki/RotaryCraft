@@ -149,7 +149,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	private void consumeItem() {
-		tank.removeLiquid(Math.max(1, 5-enchantments.getEnchantmentAt(Enchantment.aquaAffinity, this)/2));
+		tank.removeLiquid(Math.max(1, 5-enchantments.getEnchantment(Enchantment.aquaAffinity)/2));
 		if (rand.nextInt(4+enchantments.getEnchantment(Enchantment.unbreaking)) == 0) {
 			int in = inv[firstValidSlot].stackSize;
 			ReikaInventoryHelper.decrStack(firstValidSlot, inv);

@@ -548,7 +548,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				}
 				return true;
 			}
-			int fortune = enchantments.getEnchantmentAt(Enchantment.fortune, this);
+			int fortune = enchantments.getEnchantment(Enchantment.fortune);
 			Collection<ItemStack> items = id.getDrops(world, xread, yread, zread, meta, fortune);
 			MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(xread, yread, zread, world, id, meta, fortune, 1, (ArrayList<ItemStack>)items, this.getPlacer(), false));
 			if (id instanceof BlockTieredResource) {

@@ -300,7 +300,7 @@ Cleanable, MultiOperational {
 	private Collection<ItemStack> getDrops(World world, int x, int y, int z, Block b, int meta) {
 		float f = this.getYield(b, meta);
 		if (ReikaRandomHelper.doWithChance(f)) {
-			int fortune = enchantments.getEnchantmentAt(Enchantment.fortune, this);
+			int fortune = enchantments.getEnchantment(Enchantment.fortune);
 			ArrayList<ItemStack> ret = b.getDrops(world, x, y, z, meta, fortune);
 			MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(x, y, z, world, b, meta, fortune, 1, ret, this.getPlacer(), false));
 			if (tree.getTreeType() == ModWoodList.SLIME) {
@@ -367,7 +367,7 @@ Cleanable, MultiOperational {
 
 		Collection<ItemStack> drops = this.getDrops(world, x, y, z, drop, dropmeta);
 		if (drop instanceof LeafBlockWithExtras) {
-			ArrayList<ItemStack> li = ((LeafBlockWithExtras)drop).getExtraDrops(world, x, y, z, enchantments.getEnchantmentAt(Enchantment.fortune, this));
+			ArrayList<ItemStack> li = ((LeafBlockWithExtras)drop).getExtraDrops(world, x, y, z, enchantments.getEnchantment(Enchantment.fortune));
 			if (li != null && !li.isEmpty())
 				drops.addAll(li);
 		}
