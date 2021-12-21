@@ -12,7 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 
 public final class MachineEnchantmentHandler {
 
@@ -35,6 +38,19 @@ public final class MachineEnchantmentHandler {
 	public int getEnchantment(Enchantment e) {
 		Integer get = data.get(e);
 		return get != null ? get.intValue() : 0;
+	}
+
+	public int getEnchantmentAt(Enchantment e, RotaryCraftTileEntity te) {
+		int base = this.getEnchantment(e);
+		if (base > 0 && ModList.CHROMATICRAFT.isLoaded()) {
+			base += this.getAdjacencyBonus(e, te);
+		}
+		return base;
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	private int getAdjacencyBonus(Enchantment e, RotaryCraftTileEntity te) {
+		return 0;
 	}
 
 	public boolean hasEnchantments() {
