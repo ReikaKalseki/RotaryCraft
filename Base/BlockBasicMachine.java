@@ -315,7 +315,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 
 				if (gbx.getBearingTier() != gbx.getGearboxType()) {
 					double f = gbx.getBearingLubricantFactor();
-					s = String.format("Lubricant Rate: %s%.2fx", (f > 1 ? EnumChatFormatting.RED : EnumChatFormatting.GREEN).toString(), f);
+					if (f < 0)
+						s = "Does not require lubricant";
+					else if (f == 0)
+						s = "Does not consume lubricant";
+					else
+						s = String.format("Lubricant Rate: %s%.2fx", (f > 1 ? EnumChatFormatting.RED : EnumChatFormatting.GREEN).toString(), f);
 					currenttip.add(s);
 				}
 			}

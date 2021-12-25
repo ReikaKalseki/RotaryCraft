@@ -34,6 +34,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Exception.InstallationException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
+import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -69,7 +70,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 	private final ArrayList<ItemStack> overflow = new ArrayList();
 
-	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.fortune);
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.fortune).addFilter(Enchantment.efficiency);
 
 	public int dropProcessTime;
 	public int overflowCount;
@@ -289,7 +290,9 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 
 	@Override
 	public int getOperationTime() {
-		return DurationRegistry.DROPS.getOperationTime(omega);
+		int base = DurationRegistry.DROPS.getOperationTime(omega);
+		float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(enchantments.getEnchantment(Enchantment.efficiency));
+		return (int)(base/ench);
 	}
 
 	@Override

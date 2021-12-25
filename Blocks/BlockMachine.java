@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,8 +29,11 @@ public class BlockMachine extends BlockBasicMultiTE {
 			return;
 		icons[MachineRegistry.ECU.getBlockMetadata()][0][0][0] = ico.registerIcon("RotaryCraft:steel");
 		icons[MachineRegistry.ECU.getBlockMetadata()][0][1][0] = ico.registerIcon("RotaryCraft:ecu_top");
-		for (int i = 2; i < 6; i++)
+		for (int i = 2; i < 6; i++) {
 			icons[MachineRegistry.ECU.getBlockMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:ecu_side");
+			for (int k = 0; k < 16; k++)
+				icons[MachineRegistry.ECU.getBlockMetadata()][0][i][1+k] = ico.registerIcon("RotaryCraft:ecu_color/"+k);
+		}
 
 		for (int i = 0; i < 6; i++)
 			icons[MachineRegistry.MUSICBOX.getBlockMetadata()][0][i][0] = ico.registerIcon("RotaryCraft:musicbox");

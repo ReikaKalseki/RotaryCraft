@@ -228,7 +228,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		return BlockRegistry.DECO.getBlockInstance().getIcon(0, 0);
 	}
 
-	public boolean hasIconOverride() {
+	public boolean hasIconOverride(int side) {
 		return false;
 	}
 

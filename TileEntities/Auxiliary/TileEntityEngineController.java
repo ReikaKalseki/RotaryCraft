@@ -19,9 +19,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Registry.ReikaDyeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
@@ -31,7 +35,11 @@ import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.EngineType.EngineClass;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
-public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler {
+import mrtjp.projectred.api.IBundledTile;
+import mrtjp.projectred.api.ProjectRedAPI;
+
+@Strippable(value={"mrtjp.projectred.api.IBundledTile"})
+public class TileEntityEngineController extends RotaryCraftTileEntity implements PipeConnector, IFluidHandler, IBundledTile {
 
 	public static final int FUELCAP = 3000;
 
@@ -42,6 +50,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	private int prevRedstone;
 
 	private EngineSettings setting = EngineSettings.FULL;
+
+	private ReikaDyeHelper signalColor;
 
 	private enum EngineSettings {
 		SHUTDOWN(0, 0),
@@ -71,6 +81,11 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 				return 0;
 			return fuelFactor/speedFactor;
 		}
+	}
+
+	@Override
+	public int getTextureStateForSide(int side) {
+		return side > 1 && signalColor != null ? signalColor.ordinal()+1 : 0;
 	}
 
 	public boolean consumeFuel() {
@@ -121,6 +136,13 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		}
 	}
 
+	public void setColor(ReikaDyeHelper dye) {
+		signalColor = dye;
+		this.syncAllData(true);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		ReikaWorldHelper.causeAdjacentUpdates(worldObj, xCoord, yCoord, zCoord);
+	}
+
 	public void increment() {
 		int l = EngineSettings.list.length;
 		int o = setting.ordinal();
@@ -147,7 +169,11 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		//ReikaJavaLibrary.pConsole(prevRedstone+":"+this.canProducePower(), Side.SERVER);
 
 		if (redstoneMode) {
-			setting = power == 15 ? EngineSettings.SHUTDOWN : EngineSettings.list[4-power/3];
+			boolean signal = power == 15;
+			if (ModList.PROJRED.isLoaded() && signalColor != null) {
+				signal |= this.getBundledInput(world, x, y, z)[signalColor.ordinal()] > 127;
+			}
+			setting = signal ? EngineSettings.SHUTDOWN : EngineSettings.list[4-power/3];
 		}
 		//ReikaJavaLibrary.pConsole(tank);
 		if (tank.isEmpty())
@@ -224,6 +250,11 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		NBT.setInteger("lvl", setting.ordinal());
 
 		NBT.setBoolean("redstone", redstoneMode);
+
+		if (signalColor != null)
+			NBT.setInteger("color", signalColor.ordinal());
+		else
+			NBT.setInteger("color", -1);
 	}
 
 	@Override
@@ -236,6 +267,10 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		setting = EngineSettings.list[NBT.getInteger("lvl")];
 
 		redstoneMode = NBT.getBoolean("redstone");
+
+		int color = NBT.getInteger("color");
+		if (color >= 0)
+			signalColor = ReikaDyeHelper.dyes[color];
 	}
 
 	@Override
@@ -330,5 +365,32 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	@Override
 	public Flow getFlowForSide(ForgeDirection side) {
 		return Flow.DUAL;
+	}
+
+	@Override
+	public byte[] getBundledSignal(int dir) {
+		return null;
+	}
+
+	@Override
+	public boolean canConnectBundled(int side) {
+		return signalColor != null;
+	}
+
+	private int[] getBundledInput(World world, int x, int y, int z) {
+		int[] ret = new int[16];
+		for (int i = 0; i < 6; i++) {
+			byte[] data = ProjectRedAPI.transmissionAPI.getBundledInput(world, x, y, z, i);
+			if (data != null) {
+				for (int k = 0; k < 16; k++)
+					ret[k] = Math.max(ret[k], data[k] & 255);
+			}
+		}
+		return ret;
+	}
+
+	private int getBundledInput(World world, int x, int y, int z, ForgeDirection dir, ReikaDyeHelper color) {
+		byte[] data = ProjectRedAPI.transmissionAPI.getBundledInput(world, x, y, z, dir.ordinal());
+		return data != null ? data[color.ordinal()] & 255 : 0;
 	}
 }

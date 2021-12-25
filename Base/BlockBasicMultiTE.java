@@ -97,6 +97,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityPlayerDetector;
 import Reika.RotaryCraft.TileEntities.TileEntitySmokeDetector;
+import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityMirror;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen;
 import Reika.RotaryCraft.TileEntities.Decorative.TileEntityDisplay;
@@ -138,7 +139,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implements FluidBlockSurrogate {
 
 	/** Icons by metadata 0-15 and side 0-6. Nonmetadata blocks can just set the first index to 0 at all times. */
-	public IIcon[][][][] icons = new IIcon[16][16][6][8];
+	public IIcon[][][][] icons = new IIcon[16][16][6][17];
 
 	public BlockBasicMultiTE(Material mat) {
 		super(mat);
@@ -157,7 +158,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			return null;
 		int meta = te.getBlockMetadata();
 		MachineRegistry m = te.getMachine();
-		if (te.hasIconOverride())
+		if (te.hasIconOverride(s))
 			return te.getIconForSide(ForgeDirection.VALID_DIRECTIONS[s]);
 		int machine = m.getBlockMetadata();
 		//ReikaJavaLibrary.pConsole(s+": "+icons[machine][meta][s][te.getTextureStateForSide(s)].getIconName());
@@ -282,6 +283,16 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				}
 				((TileEntityBase)te).syncAllData(true);
 				return true;
+			}
+		}
+		if (m == MachineRegistry.ECU) {
+			if (is != null) {
+				ReikaDyeHelper dye = ReikaDyeHelper.getColorFromItem(is);
+				if (dye != null) {
+					TileEntityEngineController tile = (TileEntityEngineController)te;
+					tile.setColor(dye);
+					return true;
+				}
 			}
 		}
 		if (m == MachineRegistry.BUSCONTROLLER) {

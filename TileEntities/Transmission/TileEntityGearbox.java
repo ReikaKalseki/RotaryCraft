@@ -291,6 +291,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public double getBearingLubricantFactor() {
+		if (!this.getBearingTier().needsLubricant())
+			return -1;
+		if (!this.getBearingTier().consumesLubricant())
+			return 0;
 		int offset = this.getBearingTierOffset();
 		//double pow = Math.pow(0.667, offset);
 		//base *= pow;
