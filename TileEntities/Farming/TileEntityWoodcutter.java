@@ -70,12 +70,6 @@ Cleanable, MultiOperational {
 
 	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.infinity).addFilter(Enchantment.fortune).addFilter(Enchantment.efficiency);
 
-	public int editx;
-	public int edity;
-	public int editz;
-	public double dropx;
-	public double dropz;
-
 	/** For the 3x3 area of effect */
 	public boolean varyx;
 	public boolean varyz;
@@ -140,15 +134,22 @@ Cleanable, MultiOperational {
 
 		if (tree.isEmpty() && this.hasWood()) {
 			tree.reset();
-			TreeType type = ReikaTreeHelper.getTree(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
-			if (type == null)
-				type = ModWoodList.getModWood(world.getBlock(editx, edity, editz), world.getBlockMetadata(editx, edity, editz));
+			int editx = x-read.offsetX;
+			int editz = z-read.offsetZ;
+			TreeType type = this.lookupTree(world, editx, y, editz);
+			if (type == null) {
+				TreeType type2 = this.lookupTree(world, editx-read.offsetX, y, editz-read.offsetZ);
+				if (type2 != null) {
+					if (this.lookupTree(world, editx, y+1, editz) == type2)
+						type = type2;
+				}
+			}
 
 			if (type != null) {
 				tree.setTree(type);
 				for (int i = -1; i <= 1; i++) {
 					for (int j = -1; j <= 1; j++) {
-						tree.addTree(world, editx+i, edity, editz+j);
+						tree.addTree(world, editx+i, y, editz+j);
 					}
 				}
 			}
@@ -180,15 +181,16 @@ Cleanable, MultiOperational {
 		Block b = world.getBlock(x, y+1, z);
 		if (b != Blocks.air) {
 			if (b.getMaterial() == Material.wood || b.getMaterial() == Material.leaves) {
-				ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, this.getDrops(world, x, y+1, z, b, world.getBlockMetadata(x, y, z)));
+				ReikaItemHelper.dropItems(world, x+0.5, y-0.25, z+0.5, this.getDrops(world, x, y+1, z, b, world.getBlockMetadata(x, y, z)));
 				world.setBlockToAir(x, y+1, z);
 			}
 		}
 
 		//RotaryCraft.logger.debug(tree);
 
-		if (tree.isEmpty())
+		if (tree.isEmpty()) {
 			return;
+		}
 
 		if (tickcount < this.getOperationTime())
 			return;
@@ -208,6 +210,13 @@ Cleanable, MultiOperational {
 		}
 	}
 
+	private TreeType lookupTree(World world, int x, int y, int z) {
+		TreeType type = ReikaTreeHelper.getTree(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+		if (type == null)
+			type = ModWoodList.getModWood(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+		return type;
+	}
+
 	private void cutCoord(World world, int x, int y, int z, Coordinate c) {
 		Block drop = c.getBlock(world);
 		int dropmeta = c.getBlockMetadata(world);
@@ -218,7 +227,7 @@ Cleanable, MultiOperational {
 				//ReikaItemHelper.dropItems(world, dropx, y-0.25, dropz, dropBlocks.getDrops(world, c.xCoord, c.yCoord, c.zCoord, dropmeta, 0));
 				this.cutBlock(world, x, y, z, c, mat);
 
-				if (c.yCoord == edity && drop == tree.getTreeType().getLogID()) {
+				if (c.yCoord == y && drop == tree.getTreeType().getLogID()) {
 					Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 					Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 					if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
@@ -252,7 +261,7 @@ Cleanable, MultiOperational {
 				}
 				else {
 					this.cutBlock(world, x, y, z, c, mat);
-					if (c.yCoord == edity) {
+					if (c.yCoord == y) {
 						Block idbelow = world.getBlock(c.xCoord, c.yCoord-1, c.zCoord);
 						Block root = TwilightForestHandler.BlockEntry.ROOT.getBlock();
 						if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
@@ -393,7 +402,7 @@ Cleanable, MultiOperational {
 				if (enchantments.hasEnchantment(Enchantment.infinity) || (inv[0] != null && inv[0].stackSize >= inv[0].getMaxStackSize())) {
 					this.chestCheck(todrop);
 					if (todrop.stackSize > 0)
-						ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
+						ReikaItemHelper.dropItem(world, x+0.5, yCoord-0.25, z+0.5, todrop);
 				}
 				else
 					ReikaInventoryHelper.addOrSetStack(todrop, inv, 0);
@@ -401,7 +410,7 @@ Cleanable, MultiOperational {
 			else {
 				this.chestCheck(todrop);
 				if (todrop.stackSize > 0)
-					ReikaItemHelper.dropItem(world, dropx, yCoord-0.25, dropz, todrop);
+					ReikaItemHelper.dropItem(world, x+0.5, yCoord-0.25, z+0.5, todrop);
 			}
 		}
 		return drop;
@@ -472,11 +481,6 @@ Cleanable, MultiOperational {
 		switch(metadata) {
 			case 0:
 				read = ForgeDirection.EAST;
-				editx = x-1;
-				edity = y;
-				editz = z;
-				dropx = x+1+0.125;
-				dropz = z+0.5;
 				stepx = 1;
 				stepz = 0;
 				varyx = false;
@@ -484,11 +488,6 @@ Cleanable, MultiOperational {
 				break;
 			case 1:
 				read = ForgeDirection.WEST;
-				editx = x+1;
-				edity = y;
-				editz = z;
-				dropx = x-0.125;
-				dropz = z+0.5;
 				stepx = -1;
 				stepz = 0;
 				varyx = false;
@@ -496,11 +495,6 @@ Cleanable, MultiOperational {
 				break;
 			case 2:
 				read = ForgeDirection.SOUTH;
-				editx = x;
-				edity = y;
-				editz = z-1;
-				dropx = x+0.5;
-				dropz = z+1+0.125;
 				stepx = 0;
 				stepz = 1;
 				varyx = true;
@@ -508,18 +502,12 @@ Cleanable, MultiOperational {
 				break;
 			case 3:
 				read = ForgeDirection.NORTH;
-				editx = x;
-				edity = y;
-				editz = z+1;
-				dropx = x+0.5;
-				dropz = z-0.125;
 				stepx = 0;
 				stepz = -1;
 				varyx = true;
 				varyz = false;
 				break;
 		}
-		dropx = x+0.5; dropz = z+0.5;
 	}
 
 	@Override
@@ -551,10 +539,14 @@ Cleanable, MultiOperational {
 	}
 
 	private boolean hasWood() {
+		if (read == null)
+			return false;
+		int editx = xCoord-read.offsetX;
+		int editz = zCoord-read.offsetZ;
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				Block id = worldObj.getBlock(editx+i, edity, editz+j);
-				int meta = worldObj.getBlockMetadata(editx+i, edity, editz+j);
+				Block id = worldObj.getBlock(editx+i, yCoord, editz+j);
+				int meta = worldObj.getBlockMetadata(editx+i, yCoord, editz+j);
 				if (id == Blocks.log || id == Blocks.log2)
 					return true;
 				ModWoodList wood = ModWoodList.getModWood(id, meta);

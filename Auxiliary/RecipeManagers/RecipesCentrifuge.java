@@ -461,9 +461,9 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		return recipeList.removeValue((CentrifugeRecipe)recipe);
 	}
 
-	private static class ChanceRounder implements ChanceManipulator {
+	public static class ChanceRounder implements ChanceManipulator {
 
-		private ChanceRounder() {
+		public ChanceRounder() {
 
 		}
 

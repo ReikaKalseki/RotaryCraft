@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +35,6 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Auxiliary.Trackers.ItemMaterialController;
-import Reika.DragonAPI.Auxiliary.Trackers.ReflectiveFailureTracker;
 import Reika.DragonAPI.Instantiable.ItemMaterial;
 import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
@@ -54,6 +52,7 @@ import Reika.DragonAPI.ModInteract.DeepInteract.MoleculeHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.TinkerMaterialHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.IC2Handler.IC2Stacks;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumItemHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.ThaumOreHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
@@ -269,19 +268,10 @@ public class RotaryRecipes {
 
 		ItemStack cool = null;
 		if (ModList.IC2.isLoaded()) {
-			try {
-				Class c = ModList.IC2.getItemClass();
-				Field icf = c.getField("reactorCoolantSix"); //coolant cell
-				cool = (ItemStack)icf.get(null);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.IC2, e);
-			}
-
 			if (ConfigRegistry.IC2BLAZECOMPRESS.getState()) {
 				changeIC2BlazePowderCompression();
 			}
+			cool = IC2Stacks.COOLANT6.getItem();
 		}
 		MachineRegistry.ELECTRICMOTOR.addCrafting("cGS", "BCB", "SGS", 'c', ConfigRegistry.HARDCONVERTERS.getState() && cool != null ? cool : ItemStacks.steelingot, 'G', ItemStacks.goldcoil, 'S', ItemStacks.steelingot, 'B', ItemStacks.basepanel, 'C', ItemStacks.diamondshaftcore);
 

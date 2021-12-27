@@ -168,10 +168,10 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		prevRedstone = power;
 		//ReikaJavaLibrary.pConsole(prevRedstone+":"+this.canProducePower(), Side.SERVER);
 
-		if (redstoneMode) {
+		if (redstoneMode && !world.isRemote) {
 			boolean signal = power == 15;
 			if (ModList.PROJRED.isLoaded() && signalColor != null) {
-				signal |= this.getBundledInput(world, x, y, z)[signalColor.ordinal()] > 127;
+				signal |= this.getBundledInput(world, x, y, z)[15-signalColor.ordinal()] > 127;
 			}
 			setting = signal ? EngineSettings.SHUTDOWN : EngineSettings.list[4-power/3];
 		}
