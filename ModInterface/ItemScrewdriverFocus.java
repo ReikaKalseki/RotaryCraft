@@ -13,12 +13,13 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.ModInteract.DeepInteract.ItemCustomFocus;
+import Reika.DragonAPI.ModInteract.DeepInteract.ReikaThaumHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Registry.ItemRegistry;
-import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -66,16 +67,22 @@ public class ItemScrewdriverFocus extends ItemCustomFocus {
 		float a = (float)mov.hitVec.xCoord;
 		float b = (float)mov.hitVec.yCoord;
 		float c = (float)mov.hitVec.zCoord;
+		boolean nativeTile = world.getTileEntity(x, y, z) instanceof TileEntityBase;
 		if (ItemRegistry.SCREWDRIVER.getItemInstance().onItemUse(is, player, world, x, y, z, mov.sideHit, a, b, c))
-			flag = MachineRegistry.getMachine(world, x, y, z) != null;
-		if (this.fakeScrewclick(world, x, y, z, player, mov, a, b, c, is))
+			flag = nativeTile;
+		if ((nativeTile || this.canMultiTool(wand)) && this.fakeScrewclick(world, x, y, z, player, mov, a, b, c, is))
 			flag = true;
-		if (AppEngHandler.getInstance().tryRightClick(is, x, y, z, mov.sideHit, player, world, 0))
+		if (this.canMultiTool(wand) && AppEngHandler.getInstance().tryRightClick(is, x, y, z, mov.sideHit, player, world, 0))
 			flag = true;
 		if (flag) {
 			this.playSound(world, x, y, z);
 		}
 		return null;
+	}
+
+	private boolean canMultiTool(ItemStack wand) {
+		ItemStack focus = ReikaThaumHelper.getWandFocusStack(wand);
+		return focus != null && this.getUpgradeLevel(focus, FocusUpgradeType.enlarge) > 0;
 	}
 
 	private void playSound(World world, int x, int y, int z) {
@@ -144,7 +151,7 @@ public class ItemScrewdriverFocus extends ItemCustomFocus {
 
 	@Override
 	public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack focusstack, int rank) {
-		return null;
+		return new FocusUpgradeType[] {FocusUpgradeType.enlarge};
 	}
 
 }

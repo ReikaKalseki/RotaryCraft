@@ -23,8 +23,8 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
@@ -148,13 +148,15 @@ public class RecipesBlastFurnace extends RecipeHandler implements BlastFurnaceMa
 	}
 
 	public void add3x3AlloyingRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
-		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
+		//ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
+		ShapedOreRecipe r = new ShapedOreRecipe(out, in);
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp).setAlloying();
 		this.addCrafting(c, RecipeLevel.CORE);
 	}
 
 	public void add3x3Crafting(ItemStack out, int temperature, int speed, float xp, Object... in) {
-		ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
+		//ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
+		ShapedOreRecipe r = new ShapedOreRecipe(out, in);
 		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp);
 		this.addCrafting(c, RecipeLevel.CORE);
 	}

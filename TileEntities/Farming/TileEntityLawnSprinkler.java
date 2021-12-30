@@ -28,6 +28,7 @@ import Reika.DragonAPI.Instantiable.RayTracer;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
+import Reika.DragonAPI.Interfaces.Block.Reedlike;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -206,7 +207,7 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 		ReikaPlantHelper p = ReikaPlantHelper.getPlant(id);
 		if (p != null && p.grows())
 			return true;
-		return id instanceof IGrowable;
+		return id instanceof IGrowable || id instanceof Reedlike;
 	}
 
 	private int calcRange() {

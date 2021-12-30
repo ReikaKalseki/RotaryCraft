@@ -83,7 +83,9 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		this.addRecipe(Blocks.soul_sand, ItemStacks.tar, RecipeLevel.CORE);
 
 		this.addRecipe(Items.wheat, ReikaItemHelper.getSizedItemStack(ItemStacks.flour, 3), RecipeLevel.PERIPHERAL);
-		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), RecipeLevel.CORE);
+
+		this.addRecipe(ItemStacks.bedingot.copy(), ReikaItemHelper.getSizedItemStack(ItemStacks.bedrockdust, 4), RecipeLevel.PROTECTED);
+		this.addRecipe(ItemStacks.aluminumingot.copy(), ItemStacks.aluminumpowder.copy(), RecipeLevel.PROTECTED);
 
 		this.addRecipe(Items.reeds, new ItemStack(Items.sugar, 3), RecipeLevel.PROTECTED);//, ReikaItemHelper.getSizedItemStack(ItemStacks.mulch, PlantMaterials.SUGARCANE.getPlantValue()));
 		this.addRecipe(Items.bone, new ItemStack(Items.dye, 9, 15), RecipeLevel.PROTECTED);

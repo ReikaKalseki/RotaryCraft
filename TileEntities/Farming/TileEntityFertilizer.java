@@ -29,6 +29,7 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
 import Reika.DragonAPI.Instantiable.IO.PacketTarget;
+import Reika.DragonAPI.Interfaces.Block.Reedlike;
 import Reika.DragonAPI.Interfaces.Registry.ModCrop;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
@@ -175,6 +176,8 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 		if (fert)
 			return true;
 		if (id instanceof BlowableCrop)
+			return true;
+		if (id instanceof Reedlike)
 			return true;
 		return false;
 	}

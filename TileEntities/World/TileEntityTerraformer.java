@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ClassDependent;
 import Reika.DragonAPI.Instantiable.ItemReq;
 import Reika.DragonAPI.Instantiable.Data.ObjectWeb;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.ColumnArray;
@@ -149,17 +150,22 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			int dz = z+dir.offsetZ;
 			TileEntity te = world.getTileEntity(dx, dy, dz);
 			if (InterfaceCache.AREAPROVIDER.instanceOf(te)) {
-				IAreaProvider iap = (IAreaProvider)te;
-				for (int mx = iap.xMin(); mx <= iap.xMax(); mx++) {
-					for (int mz = iap.zMin(); mz <= iap.zMax(); mz++) {
-						this.addCoordinate(mx, mz, false);
-					}
-				}
-				iap.removeFromWorld();
+				this.readIAP(te);
 				coords.sort(positionComparator);
 				return;
 			}
 		}
+	}
+
+	@ClassDependent("buildcraft.api.core.IAreaProvider")
+	private void readIAP(TileEntity te) {
+		IAreaProvider iap = (IAreaProvider)te;
+		for (int mx = iap.xMin(); mx <= iap.xMax(); mx++) {
+			for (int mz = iap.zMin(); mz <= iap.zMax(); mz++) {
+				this.addCoordinate(mx, mz, false);
+			}
+		}
+		iap.removeFromWorld();
 	}
 
 	public int[] getUniqueID() {

@@ -33,6 +33,7 @@ import Reika.DragonAPI.Auxiliary.ModularLogger;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent;
 import Reika.DragonAPI.Instantiable.Event.BlockTickEvent.UpdateFlags;
+import Reika.DragonAPI.Interfaces.Block.Reedlike;
 import Reika.DragonAPI.Interfaces.Registry.CropType;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
@@ -271,7 +272,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 							BlockTickEvent.fire(b, world, x, y, z, rand, UpdateFlags.getForcedUnstoppableTick());
 						}
 						else if (p == null) {
-							if (b instanceof BlockSapling || ModWoodList.isModSapling(b, meta)) {
+							if (b instanceof BlockSapling || ModWoodList.isModSapling(b, meta) || b instanceof Reedlike) {
 								BlockTickEvent.fire(b, world, x, y, z, rand, UpdateFlags.getForcedUnstoppableTick());
 							}
 						}

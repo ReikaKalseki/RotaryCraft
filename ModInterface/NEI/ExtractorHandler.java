@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -23,12 +23,14 @@ import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader;
 import Reika.RotaryCraft.Auxiliary.CustomExtractLoader.CustomExtractEntry;
+import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.ExtractorModOres.ExtractorStage;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesExtractor;
@@ -251,6 +253,10 @@ public class ExtractorHandler extends TemplateRecipeHandler {
 		}
 		else if (ItemRegistry.CUSTOMEXTRACT.matchItem(result)) {
 			arecipes.add(new ExtractorRecipe(ItemCustomModOre.getExtractType(result)));
+		}
+		else if (ReikaItemHelper.matchStacks(result, ItemStacks.aluminumpowder)) {
+			arecipes.add(new ExtractorRecipe(ReikaOreHelper.REDSTONE));
+			arecipes.add(new ExtractorRecipe(ReikaOreHelper.LAPIS));
 		}
 	}
 
