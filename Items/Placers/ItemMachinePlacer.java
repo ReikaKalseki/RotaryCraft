@@ -47,6 +47,7 @@ import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityPiping;
 import Reika.RotaryCraft.Blocks.BlockGPR;
 import Reika.RotaryCraft.Blocks.BlockModEngine;
+import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.PowerReceivers;
@@ -284,6 +285,24 @@ public class ItemMachinePlacer extends ItemBlockPlacer {
 		}
 		if (m.hasNBTVariants() && is.stackTagCompound != null) {
 			li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
+		}
+		if (m == MachineRegistry.FUELENGINE) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				int t = TileEntityFuelEngine.GEN_TORQUE;
+				int o = TileEntityFuelEngine.GEN_OMEGA;
+				li.add(String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(t*o), ReikaEngLibrary.getSIPrefix(t*o)));
+				li.add(String.format("Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(t), ReikaEngLibrary.getSIPrefix(t)));
+				li.add(String.format("Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(o), ReikaEngLibrary.getSIPrefix(o)));
+			}
+			else {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Hold ");
+				sb.append(EnumChatFormatting.GREEN.toString());
+				sb.append("Shift");
+				sb.append(EnumChatFormatting.GRAY.toString());
+				sb.append(" for power data");
+				li.add(sb.toString());
+			}
 		}
 		if (m.isPowerReceiver()) {
 			PowerReceivers p = m.getPowerReceiverEntry();

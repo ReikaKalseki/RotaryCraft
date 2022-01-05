@@ -21,6 +21,7 @@ import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -32,6 +33,7 @@ import Reika.DragonAPI.Instantiable.IO.XMLInterface;
 import Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaEngLibrary;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.World.ReikaBlockHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaEUHelper;
 import Reika.DragonAPI.ModInteract.Power.ReikaRFHelper;
 import Reika.RotaryCraft.RotaryCraft;
@@ -508,7 +510,7 @@ public final class RotaryDescriptions {
 
 		addData(HandbookRegistry.BEARINGS, (int)(TileEntityGearbox.BEARINGREDUCTION*100)+"%", (int)(TileEntityGearbox.BEARINGINCREASE*100)+"%");
 
-		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER*10, TileEntityBorer.OBSIDIANTORQUE);
+		addData(MachineRegistry.BORER, TileEntityBorer.DIGPOWER*10, TileEntityBorer.calculateTorqueForHardness(ReikaBlockHelper.getHardestBlock().blockHardness, 0), TileEntityBorer.calculateTorqueForHardness(Blocks.diamond_ore.blockHardness, 0));
 		addData(MachineRegistry.PILEDRIVER, TileEntityPileDriver.BASEPOWER);
 		addData(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinSpeed(2));
 		addData(MachineRegistry.RESERVOIR, TileEntityReservoir.CAPACITY/FluidContainerRegistry.BUCKET_VOLUME);

@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities;
 
 import java.util.List;
 
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -34,6 +35,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper.ClassEntitySelector;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -45,6 +47,7 @@ import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.Satisforestry.API.LizardDoggo;
 
 public class TileEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction, IFluidHandler {
 
@@ -55,6 +58,8 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 	private boolean isFull = false;
 
 	public static final int FALLOFF = Math.min(524288, ReikaMathLibrary.ceil2exp(Math.max(1024, ConfigRegistry.VACPOWER.getValue())));
+
+	private static final IEntitySelector selector = ReikaEntityHelper.combineEntitySelectors(false, ReikaEntityHelper.itemOrXPSelector, new ClassEntitySelector(LizardDoggo.class, false));
 
 	public int getExperience() {
 		return experience;
@@ -142,10 +147,17 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 		AxisAlignedBB box = this.getBox(world, x, y, z);
 
 		///Do not merge these, they have slightly different code!
-		List<Entity> inbox = world.selectEntitiesWithinAABB(Entity.class, box, ReikaEntityHelper.itemOrXPSelector);
+		List<Entity> inbox = world.selectEntitiesWithinAABB(Entity.class, box, selector);
 		double v = Math.max(1, power/1048576D);
 		for (Entity ent : inbox) {
-			if (ent.ticksExisted > 5) {
+			if (ent instanceof LizardDoggo) {
+				LizardDoggo l = (LizardDoggo)ent;
+				ItemStack is = l.takeItem();
+				if (is != null) {
+					ReikaItemHelper.dropItem(ent, is);
+				}
+			}
+			else if (ent.ticksExisted > 5) {
 				//Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.posX, ent.posY, ent.posZ, x+0.5, y+0.5, z+0.5);
 				//if (ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {
 				if (true || ReikaWorldHelper.canBlockSee(world, x, y, z, ent.posX, ent.posY, ent.posZ, this.getRange()+2)) {

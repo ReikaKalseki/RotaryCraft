@@ -186,8 +186,12 @@ public abstract class BlockModelledMultiTE extends BlockBasicMultiTE {
 		if (m.isSolidBottom()) {
 			return te.isFlipped ? dir == ForgeDirection.UP : dir == ForgeDirection.DOWN;
 		}
-		if (m == MachineRegistry.COMPACTOR)
-			return dir != ((TileEntityCompactor)te).getReadDirection().getOpposite();
+		if (m == MachineRegistry.COMPACTOR) {
+			TileEntityCompactor tc = (TileEntityCompactor)te;
+			if (tc == null || tc.getReadDirection() == null)
+				return false;
+			return dir != tc.getReadDirection().getOpposite();
+		}
 		return false;
 	}
 

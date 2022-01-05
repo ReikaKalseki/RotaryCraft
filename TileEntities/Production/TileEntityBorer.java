@@ -15,8 +15,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -31,7 +29,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.fluids.BlockFluidBase;
 
 import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.ChromatiCraft.API.CrystalElementAccessor;
@@ -91,7 +88,6 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 
 	/** Power required to break a block, per 0.1F hardness */
 	public static final int DIGPOWER = (int)(64*ConfigRegistry.getBorerPowerMult());
-	public static final int OBSIDIANTORQUE = 512;
 
 	private static final int genRange = ConfigRegistry.BORERGEN.getValue();
 
@@ -199,6 +195,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		power = (long)omega*(long)torque;
 		if (power <= 0) {
 			this.setJammed(false);
+			this.reset();
 			return;
 		}
 
@@ -258,8 +255,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		if (soundtick > 0)
 			soundtick--;
 
-		if (tickcount >= this.getOperationTime() || (isMiningAir && tickcount%5 == 0)) {
-			this.skipMiningPipes(world, x, y, z, meta, 0, 16);
+		if (!world.isRemote && tickcount >= this.getOperationTime() || (isMiningAir && tickcount%5 == 0)) {
+			this.skipMiningPipes(world, x, y, z, meta, 0, 128);
 			this.calcReqPowerSafe(world, x, y, z, meta);
 			if (power >= reqpow && reqpow != -1) {
 				this.setJammed(false);
@@ -365,12 +362,9 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 		Block b = world.getBlock(x, y, z);
 		if (b == Blocks.air)
 			return true;
-		Material mat = ReikaWorldHelper.getMaterial(world, x, y, z);
-		if (mat == Material.water || mat == Material.lava)
-			return true;
 		if (b.isAir(world, x, y, z))
 			return true;
-		if (b instanceof BlockLiquid || b instanceof BlockFluidBase)
+		if (ReikaBlockHelper.isLiquid(b))
 			return true;
 		if (b instanceof IgnoredByBorer)
 			return ((IgnoredByBorer)b).ignoreHardness(world, world.provider.dimensionId, x, y, z, world.getBlockMetadata(x, y, z));
@@ -447,13 +441,23 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 			else {
 				reqpow += (int)(DIGPOWER*10*hard);
-				mintorque += ReikaMathLibrary.ceil2exp((int)(10*hard));
+				int sharp = enchantments.getEnchantment(Enchantment.sharpness);
+				mintorque += calculateTorqueForHardness(hard, sharp);
 			}
 
 			if (DragonOptions.DEBUGMODE.getState()) {
 				RotaryCraft.logger.log(this+" mined block "+id+":"+meta+" at "+xread+", "+yread+", "+zread+"; pow="+reqpow+", torq="+mintorque);
 			}
 		}
+	}
+
+	public static int calculateTorqueForHardness(float hard, int sharp) {
+		float c = 10-0.5F*sharp;
+		int add = ReikaMathLibrary.ceilPseudo2Exp((int)(c*hard));
+		if (sharp > 0) {
+			add = Math.min(add, ReikaMathLibrary.intpow2(2, 10-sharp/3)); //clamp to 1024, halve for each three levels
+		}
+		return add;
 	}
 
 	public int getRequiredTorque() {
@@ -600,7 +604,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			return false;
 		if (id.isAir(world, x, y, z))
 			return false;
-		if (id instanceof BlockLiquid || id instanceof BlockFluidBase)
+		if (ReikaBlockHelper.isLiquid(id))
 			return false;
 		if (id instanceof BlockTieredResource)
 			return false;

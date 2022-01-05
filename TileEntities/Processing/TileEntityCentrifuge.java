@@ -11,6 +11,7 @@ package Reika.RotaryCraft.TileEntities.Processing;
 
 import java.util.Collection;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,10 +24,14 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.TemporaryInventory;
+import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
+import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
@@ -40,11 +45,30 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCentrifuge extends InventoriedPowerReceiver implements MultiOperational, ProcessingMachine, IFluidHandler, PipeConnector {
+public class TileEntityCentrifuge extends InventoriedPowerReceiver implements MultiOperational, ProcessingMachine, IFluidHandler, PipeConnector, EnchantableMachine {
 
 	private int progressTime;
 	public static final int CAPACITY = 10000;
 	private final HybridTank tank = new HybridTank("centrifuge", CAPACITY);
+
+	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.fortune).addFilter(Enchantment.field_151370_z);
+
+	private final ChanceManipulator fortuneManipulator = new ChanceManipulator() {
+
+		@Override
+		public float getChance(float original) {
+			float val = original;
+			int fortune = enchantments.getEnchantment(Enchantment.fortune);
+			if (fortune > 0 && val < 1) {
+				double f = 1+fortune/3D;
+				//val = (float)Math.pow(1+val, f);
+				val = (float)Math.pow(val, 1D/f);
+				val = RecipesCentrifuge.getRecipes().rounder.getChance(val);
+			}
+			return val;
+		}
+
+	};
 
 	public int getProgressScaled(int l) {
 		return l * progressTime / this.getOperationTime();
@@ -94,14 +118,21 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 				for (int i = 0; i < out.maxStack && inv[0] != null; i++) {
 					if (this.canMakeAllOf(items)) {
 						FluidStack fs = out.getFluid();
+						double enchantBonus = 1+0.1*enchantments.getEnchantment(Enchantment.field_151370_z);
+						if (fs != null) {
+							fs = fs.copy();
+							fs.amount *= enchantBonus;
+						}
 						if (fs == null || tank.canTakeIn(fs)) {
-							Collection<ItemStack> c = out.rollItems();
+							Collection<ItemStack> c = out.rollItems(fortuneManipulator);
 							for (ItemStack is : c) {
 								ReikaInventoryHelper.addToIInv(is, this, true, 1, this.getSizeInventory());
 							}
-							fs = out.rollFluid();
+							fs = out.rollFluid(fortuneManipulator);
 							if (fs != null) {
-								tank.addLiquid(fs.amount, fs.getFluid());
+								int amt = fs.amount;
+								amt *= enchantBonus;
+								tank.addLiquid(amt, fs.getFluid());
 							}
 							ReikaInventoryHelper.decrStack(0, inv);
 						}
@@ -198,6 +229,25 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 		super.writeSyncTag(NBT);
 		NBT.setInteger("CookTime", progressTime);
 		tank.writeToNBT(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBT.setTag("enchants", enchantments.writeToNBT());
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
+	}
+
+	@Override
+	public MachineEnchantmentHandler getEnchantmentHandler() {
+		return enchantments;
 	}
 
 	@Override

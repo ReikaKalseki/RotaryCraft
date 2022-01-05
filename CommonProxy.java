@@ -36,7 +36,7 @@ public class CommonProxy
 	public static int cubeRender;
 	public static int connectedRender;
 
-	protected SoundLoader sounds = new SoundLoader(SoundRegistry.class);
+	protected static final SoundLoader sounds = new SoundLoader(SoundRegistry.class);
 
 	/**
 	 * Client side only register stuff...

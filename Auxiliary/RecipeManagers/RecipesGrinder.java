@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Exception.MisuseException;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
 import Reika.DragonAPI.Instantiable.IO.LuaBlock;
@@ -160,7 +161,15 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 		private GrinderRecipe(ItemStack in, ItemStack out1) {
 			input = in;
+			if (in == null)
+				throw new MisuseException("You cannot grind null!");
+			if (in.getItem() == null)
+				throw new MisuseException("You cannot grind null-item!");
 			output = out1;
+			if (out1 == null)
+				throw new MisuseException("You cannot grind to null!");
+			if (out1.getItem() == null)
+				throw new MisuseException("You cannot grind to null-item!");
 		}
 
 		public ItemStack getOutput() {
@@ -280,7 +289,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 	}
 
 	public ItemStack getGrindingResult(ItemStack item) {
-		GrinderRecipe ret = item != null ? recipes.get(item) : null;
+		GrinderRecipe ret = item != null && item.getItem() != null ? recipes.get(item) : null;
 		return ret != null ? ret.output.copy() : null;
 	}
 
@@ -345,7 +354,8 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			this.addRecipe(Blocks.end_stone, endDust, RecipeLevel.MODINTERACT);
 		}
 
-		this.addOreDictRecipe("dustEnderPearl", endDust, RecipeLevel.MODINTERACT);
+		if (ReikaItemHelper.oreItemExists("dustEnderPearl"))
+			this.addRecipe(Items.ender_pearl, OreDictionary.getOres("dustEnderPearl").get(0), RecipeLevel.MODINTERACT);
 
 		if (ModList.HARVESTCRAFT.isLoaded()) {
 			ItemStack corn = ReikaItemHelper.lookupItem("harvestcraft:cornItem");

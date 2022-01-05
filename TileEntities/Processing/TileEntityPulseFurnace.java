@@ -240,7 +240,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 			int tick = 1;
 			if (!fuel.isEmpty() && power > 0 && omega >= MINSPEED && accel.getLevel() > 10) {
 				tick = 4;
-				if (recipe != null || temperature >= 800) {
+				if (recipe != null || temperature >= 875) {
 					accel.removeLiquid(10);
 					if (rand.nextInt(4) == 0)
 						temperature += 1;

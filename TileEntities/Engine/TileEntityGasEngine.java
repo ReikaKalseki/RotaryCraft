@@ -18,6 +18,7 @@ import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.Interfaces.UpgradeableMachine;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
@@ -29,6 +30,7 @@ public class TileEntityGasEngine extends TileEntityEngine implements Upgradeable
 		NBTTagCompound NBT = new NBTTagCompound();
 		type = EngineType.SPORT;
 		this.writeToNBT(NBT);
+		ReikaInventoryHelper.clearInventory(this);
 		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 		worldObj.setBlock(xCoord, yCoord, zCoord, this.getTileEntityBlockID(), type.ordinal(), 3);
 		TileEntityEngine te = (TileEntityEngine)worldObj.getTileEntity(xCoord, yCoord, zCoord);
@@ -39,7 +41,7 @@ public class TileEntityGasEngine extends TileEntityEngine implements Upgradeable
 	}
 
 	public boolean canUpgradeWith(ItemStack item) {
-		return item.getItem() == ItemRegistry.UPGRADE.getItemInstance() && item.getItemDamage() == 0;
+		return item.getItem() == ItemRegistry.UPGRADE.getItemInstance() && item.getItemDamage() == Upgrades.PERFORMANCE.ordinal();
 	}
 
 	@Override

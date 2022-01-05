@@ -72,6 +72,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	private ArrayList<ItemStack> outputs = new ArrayList();
 
+	public final ChanceRounder rounder = new ChanceRounder();
+
 	public static final RecipesCentrifuge getRecipes() {
 		return CentrifugeBase;
 	}
@@ -136,7 +138,11 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		}
 
 		public FluidStack rollFluid() {
-			return fluid != null ? ReikaRandomHelper.doWithChance(fluid.chance) ? fluid.fluid.copy() : null : null;
+			return this.rollFluid(null);
+		}
+
+		public FluidStack rollFluid(ChanceManipulator c) {
+			return fluid != null ? ReikaRandomHelper.doWithChance(c != null ? c.getChance(fluid.chance) : fluid.chance) ? fluid.fluid.copy() : null : null;
 		}
 
 		public Collection<ItemWithChance> getItems() {
@@ -144,9 +150,15 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		}
 
 		public Collection<ItemStack> rollItems() {
+			return this.rollItems(null);
+		}
+
+		public Collection<ItemStack> rollItems(ChanceManipulator c) {
 			ArrayList<ItemStack> li = new ArrayList();
 			for (ItemWithChance is : this.getItems()) {
-				double ch = is.getNormalizedChance();
+				float ch = is.getNormalizedChance();
+				if (c != null)
+					ch = c.getChance(ch);
 				while (ch >= 1) {
 					li.add(is.getItem());
 					ch -= 1.0D;
@@ -282,8 +294,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 					co.addItem(out.getRemnants(), out.getRemnantsChance()*100);
 				}
 				if (co != null) {
-					co.manipulateChances(new ChanceExponentiator(2.5));
-					co.manipulateChances(new ChanceRounder());
+					co.manipulateChances(new ChanceExponentiator(1.25));
+					co.manipulateChances(rounder);
 				}
 				else {
 					co = new ChancedOutputList(false);
@@ -297,8 +309,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 			for (ItemStack in : ForestryRecipeHelper.getInstance().getCentrifugeRecipes()) {
 				ChancedOutputList out = ForestryRecipeHelper.getInstance().getCentrifugeOutput(in);
-				out.manipulateChances(new ChanceExponentiator(3));
-				out.manipulateChances(new ChanceRounder());
+				out.manipulateChances(new ChanceExponentiator(1.5));
+				out.manipulateChances(rounder);
 				this.addRecipe(in, out, null, RecipeLevel.MODINTERACT);
 			}
 
@@ -463,7 +475,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	public static class ChanceRounder implements ChanceManipulator {
 
-		public ChanceRounder() {
+		private ChanceRounder() {
 
 		}
 

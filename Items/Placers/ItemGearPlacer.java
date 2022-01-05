@@ -12,6 +12,8 @@ package Reika.RotaryCraft.Items.Placers;
 import java.util.List;
 import java.util.Locale;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -128,6 +130,22 @@ public class ItemGearPlacer extends ItemBlockPlacer {
 				ec = matl.ordinal() < mat.material.ordinal() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN;
 			}
 			par3List.add("Bearing type: "+ec+name);
+		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			double torque = mat.material.getLimits().maxTorque;
+			double speed = mat.material.getLimits().maxSpeed;
+			par3List.add(String.format("Max Speed: %s", RotaryAux.formatSpeed(speed)));
+			par3List.add(String.format("Max Torque: %s", RotaryAux.formatTorque(torque)));
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Hold ");
+			sb.append(EnumChatFormatting.GREEN.toString());
+			sb.append("Shift");
+			sb.append(EnumChatFormatting.GRAY.toString());
+			sb.append(" for load data");
+			par3List.add(sb.toString());
 		}
 	}
 
