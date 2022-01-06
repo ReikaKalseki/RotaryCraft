@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,11 +10,13 @@
 package Reika.RotaryCraft.Blocks;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -22,12 +24,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import Reika.ChromatiCraft.API.Interfaces.CustomExcavationStarBehavior;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.ReikaDirectionHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.BlockBasic;
 
-public class BlockMiningPipe extends BlockBasic {
+public class BlockMiningPipe extends BlockBasic implements CustomExcavationStarBehavior {
 
 	public BlockMiningPipe() {
 		super(Material.iron);
@@ -120,12 +124,12 @@ public class BlockMiningPipe extends BlockBasic {
 
 	public static ForgeDirection getDirectionFromMeta(int meta) {
 		switch (meta) {
-		case 0:
-			return ForgeDirection.EAST;
-		case 2:
-			return ForgeDirection.SOUTH;
-		default:
-			return ForgeDirection.UNKNOWN;
+			case 0:
+				return ForgeDirection.EAST;
+			case 2:
+				return ForgeDirection.SOUTH;
+			default:
+				return ForgeDirection.UNKNOWN;
 		}
 	}
 
@@ -143,27 +147,27 @@ public class BlockMiningPipe extends BlockBasic {
 		int meta = par1IBlockAccess.getBlockMetadata(x, y, z);
 
 		switch (meta) {
-		case 0:
-			maxx = 1;
-			minx = 0;
-			break;
-		case 1:
-			maxy = 1;
-			miny = 0;
-			break;
-		case 2:
-			maxz = 1;
-			minz = 0;
-			break;
-		case 3:
-		case 4:
-			maxz = 1;
-			maxx = 1;
-			minz = 0;
-			minx = 0;
-			miny = 0;
-			maxy = 1;
-			break;
+			case 0:
+				maxx = 1;
+				minx = 0;
+				break;
+			case 1:
+				maxy = 1;
+				miny = 0;
+				break;
+			case 2:
+				maxz = 1;
+				minz = 0;
+				break;
+			case 3:
+			case 4:
+				maxz = 1;
+				maxx = 1;
+				minz = 0;
+				minx = 0;
+				miny = 0;
+				maxy = 1;
+				break;
 		}
 
 		this.setBlockBounds(minx, miny, minz, maxx, maxy, maxz);
@@ -183,5 +187,19 @@ public class BlockMiningPipe extends BlockBasic {
 				icons[j][i] = par1IconRegister.registerIcon("RotaryCraft:minepipe");
 		for (int i = 0; i < 6; i++)
 			icons[4][i] = par1IconRegister.registerIcon("RotaryCraft:minepipe2");
+	}
+
+	@Override
+	public int getRange(World world, int x, int y, int z, EntityPlayer ep) {
+		return 48;
+	}
+
+	@Override
+	public Collection<BlockKey> getSpreadBlocks(World world, int x, int y, int z) {
+		Collection<BlockKey> ret = new ArrayList();
+		for (int i = 0; i < 16; i++) {
+			ret.add(new BlockKey(this, i));
+		}
+		return ret;
 	}
 }

@@ -46,7 +46,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAlleleFlowers;
-import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerProvider;
 
@@ -86,7 +85,7 @@ public class CanolaBee extends BeeSpecies {
 		}
 	}
 
-	private final class FlowerProviderCanola extends BasicFlowerProvider implements IFlowerAcceptableRule {
+	private final class FlowerProviderCanola extends BasicFlowerProvider {
 
 		private FlowerProviderCanola() {
 			super(BlockRegistry.CANOLA.getBlockInstance(), "canola");
@@ -142,6 +141,8 @@ public class CanolaBee extends BeeSpecies {
 		 */
 		@Override
 		public boolean isAcceptableFlower(String flowerType, World world, int x, int y, int z) {
+			if (super.isAcceptableFlower(flowerType, world, x, y, z))
+				return true;
 			if (!ModList.AGRICRAFT.isLoaded())
 				return false;
 			Block b = world.getBlock(x, y, z);

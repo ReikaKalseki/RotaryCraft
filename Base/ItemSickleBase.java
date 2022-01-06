@@ -18,6 +18,7 @@ import com.InfinityRaider.AgriCraft.api.v2.ICrop;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockReed;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
@@ -34,6 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
 import Reika.ChromatiCraft.ChromaticEventManager;
@@ -46,6 +48,7 @@ import Reika.DragonAPI.Base.BlockTieredResource;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Maps.BlockMap;
 import Reika.DragonAPI.Interfaces.Block.Reedlike;
+import Reika.DragonAPI.Interfaces.Block.ShearablePlant;
 import Reika.DragonAPI.Interfaces.Registry.CropType;
 import Reika.DragonAPI.Interfaces.Registry.CropType.CropMethods;
 import Reika.DragonAPI.Interfaces.Registry.TreeType;
@@ -59,6 +62,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaCropHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaTreeHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.BoPBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
@@ -129,6 +133,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 
 	@Override
 	public boolean onItemUseFirst(ItemStack is, EntityPlayer ep, World world, int x, int y, int z, int s, float a, float b, float c) {
+		ItemSickleBase sc = (ItemSickleBase)is.getItem();
 		if (ModList.AGRICRAFT.isLoaded() && !world.isRemote) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof ICrop) {
@@ -150,11 +155,56 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 						}
 					}
 				}
-				ItemSickleBase sc = (ItemSickleBase)is.getItem();
 				int mined = crops.onBreakAt(world, x, y, z, te.getBlockType(), te.getBlockMetadata(), ep, is, sc, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is), false);
 				if (sc.isBreakable())
 					is.damageItem(crops.doesDamagePerBlock(is, mined), ep);
+				return false;
 			}
+		}
+		if (!world.isRemote && this.tryApplyPlantShear(world, x, y, z, s, ep)) {
+			if (sc.isBreakable())
+				is.damageItem(1, ep);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean tryApplyPlantShear(World world, int x, int y, int z, int side, EntityPlayer ep) {
+		if (!ReikaWorldHelper.softBlocks(world, x, y, z) && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.water && ReikaWorldHelper.getMaterial(world, x, y, z) != Material.lava) {
+			if (side == 0)
+				--y;
+			if (side == 1)
+				++y;
+			if (side == 2)
+				--z;
+			if (side == 3)
+				++z;
+			if (side == 4)
+				--x;
+			if (side == 5)
+				++x;
+		}
+		Block b = world.getBlock(x, y, z);
+		if (b instanceof ShearablePlant) {
+			if (ep.isSneaking()) {
+				int r = this.getPlantRange();
+				for (int i = -r; i <= r; i++) {
+					for (int j = -r; j <= r; j++) {
+						for (int k = -r; k <= r; k++) {
+							int dx = x+i;
+							int dy = y+j;
+							int dz = z+k;
+							if (world.getBlock(dx, dy, dz) == b)
+								((ShearablePlant)b).shearAll(world, dx, dy, dz, ep);
+						}
+					}
+				}
+			}
+			else {
+				((ShearablePlant)b).shearSide(world, x, y, z, ForgeDirection.VALID_DIRECTIONS[side].getOpposite(), ep);
+			}
+			ReikaSoundHelper.playBreakSound(world, x, y, z, b);
+			return true;
 		}
 		return false;
 	}
@@ -166,7 +216,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		if (id instanceof BlockTieredResource)
 			return false;
 		int meta = world.getBlockMetadata(x, y, z);
-		ScytheEffect eff = this.getEffect(world, x, y, z, id, meta);
+		ScytheEffect eff = this.getEffect(world, x, y, z, id, meta, ForgeDirection.UNKNOWN);
 		if (world.isRemote)
 			return eff != null;
 		if (eff != null) {
@@ -180,12 +230,12 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		return false;
 	}
 
-	private ScytheEffect getEffect(World world, int x, int y, int z, Block id, int meta) {
+	private ScytheEffect getEffect(World world, int x, int y, int z, Block id, int meta, ForgeDirection side) {
 		ScytheEffect get = effects.get(id, meta);
 		if (get != null)
 			return get;
 		for (ScytheEffect e : allEffects) {
-			if (e.isValidStartingBlock(world, x, y, z, id, meta)) {
+			if (e.isValidStartingBlock(world, x, y, z, id, meta, side)) {
 				effects.put(id, meta, e);
 				return e;
 			}
@@ -272,7 +322,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 
 		protected abstract int getRange(ItemStack is, ItemSickleBase item);
 
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return block.match(b, meta);
 		}
 
@@ -374,7 +424,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return b instanceof IPlantable;
 		}
 
@@ -402,7 +452,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			ReikaPlantHelper plant = ReikaPlantHelper.getPlant(b);
 			return plant != null && plant != ReikaPlantHelper.CROP && plant != ReikaPlantHelper.SUGARCANE;
 		}
@@ -444,7 +494,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return (b instanceof BlockReed || b instanceof Reedlike) && world.getBlock(x, y-1, z) == b;
 		}
 
@@ -477,7 +527,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return this.getTree(b, meta) != null;
 		}
 
@@ -518,7 +568,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			CropType c = this.getCrop(b, meta);
 			return c != null && c.isRipe(world, x, y, z);
 		}
@@ -572,7 +622,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return b == ChromatiAPI.getAPI().trees().getDyeLeaf(true) || b == ChromatiAPI.getAPI().trees().getDyeLeaf(false);
 		}
 
@@ -610,7 +660,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return b == ChromatiAPI.getAPI().trees().getRainbowLeaf();
 		}
 
@@ -638,7 +688,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return b == ChromatiAPI.getAPI().trees().getDecoFlower();
 		}
 
@@ -661,7 +711,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return this.matchesBlock(b, meta, b, meta, false);
 		}
 
@@ -692,7 +742,7 @@ public abstract class ItemSickleBase extends ItemRotaryTool implements Enchantab
 		}
 
 		@Override
-		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta) {
+		protected boolean isValidStartingBlock(World world, int x, int y, int z, Block b, int meta, ForgeDirection side) {
 			return this.matchBlock(b);
 		}
 

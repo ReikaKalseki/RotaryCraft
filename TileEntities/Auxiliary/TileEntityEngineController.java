@@ -163,6 +163,8 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (redstoneTick > 0)
 			redstoneTick--;
 		int power = redstoneTick == 0 ? world.getBlockPowerInput(x, y, z) : prevRedstone;
+		if (redstoneTick == 0 && power == 0 && world.isBlockIndirectlyGettingPowered(x, y, z))
+			power = 15;
 		if (prevRedstone != power)
 			redstoneTick = 60;
 		prevRedstone = power;

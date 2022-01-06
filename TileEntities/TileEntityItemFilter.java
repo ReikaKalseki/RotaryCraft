@@ -231,7 +231,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 	@Override
 	public int getRedstoneOverride() {
-		return 0;
+		return MEStacks.isEmpty() ? 15 : 0;
 	}
 
 	@Override
