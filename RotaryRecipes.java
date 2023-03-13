@@ -704,8 +704,10 @@ public class RotaryRecipes {
 
 		MachineRegistry.ECU.addCrafting("IPI", "IGI", "IRI", 'I', ItemStacks.steelingot, 'G', Items.gold_ingot, 'P', ItemStacks.pcb, 'R', Items.redstone);
 
-		if (ReikaItemHelper.oreItemsExist("ingotCopper", "ingotElectrum"))
+		if (ReikaItemHelper.oreItemExists("ingotElectrum"))
 			MachineRegistry.ECU.addOreRecipe("IPI", "IGI", "IRI", 'I', ItemStacks.steelingot, 'G', "ingotElectrum", 'P', ItemStacks.pcb, 'R', Items.redstone);
+		else if (ReikaItemHelper.oreItemExists("ingotCopper"))
+			MachineRegistry.ECU.addOreRecipe("IPI", "IGI", "IRI", 'I', ItemStacks.steelingot, 'G', "ingotCopper", 'P', ItemStacks.pcb, 'R', Items.redstone);
 
 		MachineRegistry.WOODCUTTER.addCrafting("IS ", "PGS", "PPI", 'I', ItemStacks.steelingot, 'S', ItemStacks.saw, 'P', ItemStacks.basepanel, 'G', ItemStacks.gearunit);
 

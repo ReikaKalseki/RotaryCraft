@@ -10,9 +10,9 @@
 package Reika.RotaryCraft.TileEntities.Decorative;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -311,19 +311,15 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	public void save() {
 		if (worldObj.isRemote)
 			return;
-		try {
-			File save = DimensionManager.getCurrentSaveRootDirectory();
-			String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
-			File dir = new File(save.getPath()+"/RotaryCraft/");
-			if (!dir.exists())
-				dir.mkdir();
-			File f = new File(save.getPath()+"/RotaryCraft/"+name);
-			if (f.exists())
-				f.delete();
-			f.createNewFile();
-			PrintWriter p = new PrintWriter(f);
-			f.createNewFile();
-
+		File save = DimensionManager.getCurrentSaveRootDirectory();
+		String name = "musicbox@"+String.format("%d,%d,%d", xCoord, yCoord, zCoord)+".rcmusic";
+		File dir = new File(save.getPath()+"/RotaryCraft/");
+		if (!dir.exists())
+			dir.mkdir();
+		File f = new File(save.getPath()+"/RotaryCraft/"+name);
+		if (f.exists())
+			f.delete();
+		try (BufferedWriter p = ReikaFileReader.getPrintWriterForNewFile(f)) {
 			int length = this.getMusicLength();
 			for (int i = 0; i < length; i++) {
 				for (int k = 0; k < 16; k++) {
@@ -338,8 +334,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 				}
 				p.append("\n");
 			}
-
-			p.close();
 		}
 		catch (Exception e) {
 			ReikaChatHelper.write(e.getCause()+" caused the save to fail!");

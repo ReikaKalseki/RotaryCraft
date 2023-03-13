@@ -11,7 +11,6 @@ package Reika.RotaryCraft.Auxiliary;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.IO.ReikaFileReader.SimpleLineWriter;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -190,9 +190,7 @@ public class CustomExtractLoader {
 	}
 
 	private boolean createOreFile(File f) {
-		try {
-			f.createNewFile();
-			PrintWriter p = new PrintWriter(f);
+		try (SimpleLineWriter p = ReikaFileReader.getPrintWriterForNewFile(f)) {
 			this.writeCommentLine(p, "-------------------------------");
 			this.writeCommentLine(p, " RotaryCraft Custom Extract Loader ");
 			this.writeCommentLine(p, "-------------------------------");
@@ -246,7 +244,6 @@ public class CustomExtractLoader {
 			this.writeCommentLine(p, "\tworld. You may also create duplication exploits. No support will be provided in this case.");
 			this.writeCommentLine(p, "====================================================================================");
 			p.append("\n");
-			p.close();
 			return true;
 		}
 		catch (Exception e) {
@@ -256,8 +253,8 @@ public class CustomExtractLoader {
 		}
 	}
 
-	private static void writeCommentLine(PrintWriter p, String line) {
-		p.append("// "+line+"\n");
+	private static void writeCommentLine(SimpleLineWriter p, String line) {
+		p.println("// "+line+"\n");
 	}
 
 	private CustomExtractEntry parseString(String s) throws Exception {

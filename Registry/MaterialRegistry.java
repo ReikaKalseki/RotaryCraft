@@ -34,13 +34,13 @@ public enum MaterialRegistry {
 	STEEL(	1, ReikaEngLibrary.Esteel, 		ReikaEngLibrary.Gsteel, 	ReikaEngLibrary.Tsteel, 	ReikaEngLibrary.Ssteel, 	ReikaEngLibrary.rhoiron),
 	TUNGSTEN(1, ReikaEngLibrary.Etungsten, 	ReikaEngLibrary.Gtungsten, 	ReikaEngLibrary.Ttungsten, 	ReikaEngLibrary.Stungsten, 	RotaryAux.tungstenDensity),
 	DIAMOND(2, ReikaEngLibrary.Ediamond, 	ReikaEngLibrary.Gdiamond, 	ReikaEngLibrary.Tdiamond, 	ReikaEngLibrary.Sdiamond, 	ReikaEngLibrary.rhodiamond),
-	BEDROCK(3, Double.POSITIVE_INFINITY, 	Double.POSITIVE_INFINITY, 	Double.POSITIVE_INFINITY, 	Double.POSITIVE_INFINITY, 	ReikaEngLibrary.rhorock);
+	BEDROCK(3, Double.POSITIVE_INFINITY, 	Double.POSITIVE_INFINITY, 	Double.POSITIVE_INFINITY, 	Double.POSITIVE_INFINITY, 	ReikaEngLibrary.rhoiron);
 
-	private double Emod;
-	private double Smod;
-	private double tensile;
-	private double shear;
-	private double rho;
+	public final double Emod;
+	public final double Smod;
+	public final double tensile;
+	public final double shear;
+	public final double rho;
 
 	public final int harvestLevel;
 
@@ -55,26 +55,6 @@ public enum MaterialRegistry {
 		shear = S;
 		rho = den;
 		harvestLevel = h;
-	}
-
-	public double getElasticModulus() {
-		return Emod;
-	}
-
-	public double getShearModulus() {
-		return Smod;
-	}
-
-	public double getTensileStrength() {
-		return tensile;
-	}
-
-	public double getShearStrength() {
-		return shear;
-	}
-
-	public double getDensity() {
-		return rho;
 	}
 
 	public boolean isInfiniteStrength() {
@@ -199,7 +179,7 @@ public enum MaterialRegistry {
 		if (this.isInfiniteStrength())
 			return Double.POSITIVE_INFINITY;
 		double r = 0.0625;
-		double tau = this.getShearStrength();
+		double tau = shear;
 		return 0.5*Math.PI*r*r*r*tau/16D;
 	}
 
@@ -207,9 +187,9 @@ public enum MaterialRegistry {
 		if (this.isInfiniteStrength())
 			return Double.POSITIVE_INFINITY;
 		double f = 1D/this.getSpeedForceExponent();
-		double rho = this.getDensity();
+		double rho = this.rho;
 		double r = 0.0625;
-		double sigma = this.getTensileStrength();
+		double sigma = tensile;
 		double base = Math.sqrt(2*sigma/(rho*r*r));
 		return Math.pow(base, f);
 	}

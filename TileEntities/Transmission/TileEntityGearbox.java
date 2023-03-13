@@ -505,10 +505,10 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 	}
 
 	public void testFailure() {
-		if (ReikaEngLibrary.mat_rotfailure(type.material.getDensity(), 0.0625, type.getOmegaForRotFailure(omega, omegain), type.material.getTensileStrength())) {
+		if (ReikaEngLibrary.mat_rotfailure(type.material.rho, 0.0625, type.getOmegaForRotFailure(omega, omegain), type.material.tensile)) {
 			this.fail(worldObj, xCoord, yCoord, zCoord);
 		}
-		else if (ReikaEngLibrary.mat_twistfailure(Math.max(torque, torquein), 0.0625, type.material.getShearStrength()/16D)) {
+		else if (ReikaEngLibrary.mat_twistfailure(Math.max(torque, torquein), 0.0625, type.material.shear/16D)) {
 			this.fail(worldObj, xCoord, yCoord, zCoord);
 		}
 	}

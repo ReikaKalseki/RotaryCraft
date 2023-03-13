@@ -140,8 +140,8 @@ Cleanable, MultiOperational {
 			if (type == null) {
 				TreeType type2 = this.lookupTree(world, editx-read.offsetX, y, editz-read.offsetZ);
 				if (type2 != null) {
-					if (this.lookupTree(world, editx, y+1, editz) == type2)
-						type = type2;
+					//if (this.lookupTree(world, editx, y+1, editz) == type2)
+					type = type2;
 				}
 			}
 
