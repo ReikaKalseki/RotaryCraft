@@ -30,6 +30,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -54,7 +55,6 @@ import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
 import Reika.DragonAPI.Instantiable.Event.EnderLookAggroEvent;
 import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FarmlandTrampleEvent;
-import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
 import Reika.DragonAPI.Instantiable.Event.MTReloadEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
@@ -62,6 +62,8 @@ import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.RemoveFromSlotEvent;
 import Reika.DragonAPI.Instantiable.Event.TileEntityMoveEvent;
+import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent;
+import Reika.DragonAPI.Instantiable.Event.TileUpdateEvent.TileUpdateWatcher;
 import Reika.DragonAPI.Instantiable.Event.Client.EntityRenderingLoopEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.PlayerInteractEventClient;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
@@ -108,14 +110,16 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class RotaryEventManager {
+public class RotaryEventManager implements TileUpdateWatcher {
 
 	public static final RotaryEventManager instance = new RotaryEventManager();
 
 	private static Method conduitGui;
 
-	private RotaryEventManager() {
+	public boolean checkEMP = false;
 
+	private RotaryEventManager() {
+		TileUpdateEvent.addWatcher(this);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -286,10 +290,13 @@ public class RotaryEventManager {
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void stopHijackedFurnaces(FurnaceUpdateEvent.Pre evt) {
-		if (TileEntityFurnaceHeater.isHijacked(evt.furnace))
-			evt.setCanceled(true);
+	@Override
+	public boolean interceptTileUpdate(TileEntity te) {
+		if (te instanceof TileEntityFurnace && TileEntityFurnaceHeater.isHijacked((TileEntityFurnace)te))
+			return true;
+		if (checkEMP && TileEntityEMP.isShutdown(te))
+			return true;
+		return false;
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -657,5 +664,10 @@ public class RotaryEventManager {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public int watcherSortIndex() {
+		return 20000;
 	}
 }
