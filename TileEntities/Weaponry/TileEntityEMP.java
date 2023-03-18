@@ -47,8 +47,8 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.RotaryCraft.RotaryCraft;
-import Reika.RotaryCraft.RotaryEventManager;
 import Reika.RotaryCraft.API.Interfaces.EMPControl;
+import Reika.RotaryCraft.Auxiliary.EMPTileWatcher;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.Interfaces.RangedEffect;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
@@ -443,12 +443,13 @@ public class TileEntityEMP extends TileEntityPowerReceiver implements RangedEffe
 	public static void resetCoordinate(World world, int x, int y, int z) {
 		if (shutdownLocations.remove(new WorldLocation(world, x, y, z)))
 			ReikaPacketHelper.sendDataPacketToEntireServer(RotaryCraft.packetChannel, PacketRegistry.SPARKLOC.ordinal(), world.provider.dimensionId, x, y, z, 0);
-		RotaryEventManager.instance.checkEMP = !shutdownLocations.isEmpty();
+		if (shutdownLocations.isEmpty())
+			EMPTileWatcher.instance.unregisterTileWatcher();
 	}
 
 	private static void addShutdownLocation(TileEntity te) {
 		shutdownLocations.add(new WorldLocation(te));
-		RotaryEventManager.instance.checkEMP = true;
+		EMPTileWatcher.instance.registerTileWatcher();
 	}
 
 	private void dropMachine(World world, int x, int y, int z) {
