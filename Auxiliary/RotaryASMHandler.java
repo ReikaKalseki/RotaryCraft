@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -18,8 +18,13 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.classloading.FMLForgePlugin;
@@ -132,7 +137,7 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 		private static final HashMap<String, ClassPatch> classes = new HashMap();
 
 		private static enum ClassPatch {
-
+			FURNACEINTERCEPT("net.minecraft.tileentity.TileEntityFurnace", "apg"),
 			;
 
 			private final String obfName;
@@ -153,11 +158,27 @@ public class RotaryASMHandler implements IFMLLoadingPlugin {
 				ClassNode cn = new ClassNode();
 				ClassReader classReader = new ClassReader(data);
 				classReader.accept(cn, 0);
+				int flags = ClassWriter.COMPUTE_MAXS;
 				switch(this) {
+					case FURNACEINTERCEPT: //TileEntityFurnaceHeater.isHijacked(te)
+						InsnList pre = new InsnList();
+						LabelNode L1 = new LabelNode();
+						LabelNode L2 = new LabelNode();
+						pre.add(new VarInsnNode(Opcodes.ALOAD, 0));
+						pre.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "Reika/RotaryCraft/TileEntities/Auxiliary/TileEntityFurnaceHeater", "isHijacked", "(Lnet/minecraft/tileentity/TileEntityFurnace;)Z", false));
+						pre.add(new JumpInsnNode(Opcodes.IFEQ, L1));
+						pre.add(L2);
+						pre.add(new InsnNode(Opcodes.RETURN));
+						pre.add(L1);
 
+						MethodNode m = ReikaASMHelper.getMethodByName(cn, "func_145845_h", "updateEntity", "()V");
+						m.instructions.insert(pre);
+
+						flags |= ClassWriter.COMPUTE_FRAMES;
+						break;
 				}
 
-				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS/* | ClassWriter.COMPUTE_FRAMES*/);
+				ClassWriter writer = new ClassWriter(flags);
 				cn.accept(writer);
 				return writer.toByteArray();
 			}

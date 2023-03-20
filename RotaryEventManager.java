@@ -54,7 +54,6 @@ import Reika.DragonAPI.Instantiable.Event.BlockConsumedByFireEvent;
 import Reika.DragonAPI.Instantiable.Event.EnderLookAggroEvent;
 import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FarmlandTrampleEvent;
-import Reika.DragonAPI.Instantiable.Event.FurnaceUpdateEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
 import Reika.DragonAPI.Instantiable.Event.MTReloadEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
@@ -90,7 +89,6 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
-import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityFurnaceHeater;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
 import Reika.RotaryCraft.TileEntities.Piping.TileEntityHose;
@@ -284,12 +282,6 @@ public class RotaryEventManager {
 				evt.crafting.stackTagCompound.removeTag(ReservoirComboRecipe.NBT_TAG);
 			}
 		}
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void stopHijackedFurnaces(FurnaceUpdateEvent.Pre evt) {
-		if (TileEntityFurnaceHeater.isHijacked(evt.furnace))
-			evt.setCanceled(true);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
