@@ -43,7 +43,7 @@ public class ContainerCVT extends ContainerIOMachine
 				k++;
 			}
 		}
-		this.addSlotToContainer(new Slot(CVT, 31, x+203, y+94));
+		this.addSlotToContainer(new Slot(CVT, 31, 184, 7));
 		int dx = 31;
 		int dy = 77;
 		for (int i = 0; i < 3; i++)

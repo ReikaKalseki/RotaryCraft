@@ -356,6 +356,8 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 		if (ReikaItemHelper.oreItemExists("dustEnderPearl"))
 			this.addRecipe(Items.ender_pearl, OreDictionary.getOres("dustEnderPearl").get(0), RecipeLevel.MODINTERACT);
+		else if (ReikaItemHelper.oreItemExists("dustEnder"))
+			this.addRecipe(Items.ender_pearl, OreDictionary.getOres("dustEnder").get(0), RecipeLevel.MODINTERACT);
 
 		if (ModList.HARVESTCRAFT.isLoaded()) {
 			ItemStack corn = ReikaItemHelper.lookupItem("harvestcraft:cornItem");
