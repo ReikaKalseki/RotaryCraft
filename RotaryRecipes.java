@@ -100,6 +100,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter.FuelConversion;
 import Reika.Satisforestry.API.SFAPI;
 
 import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
@@ -478,7 +479,8 @@ public class RotaryRecipes {
 		if (ModList.SATISFORESTRY.isLoaded()) {
 			Fluid turbo = SFAPI.genericLookups.getTurbofuel();
 			if (turbo != null) {
-				TileEntityFuelConverter.addRecipe("fuel", turbo.getName(), 4, 1, 0.0048F, new ItemMatch(SFAPI.genericLookups.getCompactedCoal())); //1.2 per bucket
+				FuelConversion f = TileEntityFuelConverter.addRecipe("fuel", turbo.getName(), 4, 1, 0.0048F, new ItemMatch(SFAPI.genericLookups.getCompactedCoal())); //1.2 per bucket
+				f.setUsability(te -> SFAPI.altRecipeHandler.getRecipeByID(SFAPI.altRecipeHandler.getTurbofuelID()).playerHas(te.worldObj, te.getPlacerID()));
 			}
 		}
 	}
