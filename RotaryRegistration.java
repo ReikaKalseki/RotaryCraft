@@ -161,6 +161,7 @@ public class RotaryRegistration {
 		FluidRegistry.registerFluid(RotaryCraft.nitrogenFluid);
 		FluidRegistry.registerFluid(RotaryCraft.poisonFluid);
 		FluidRegistry.registerFluid(RotaryCraft.hslaFluid);
+		//FluidRegistry.registerFluid(RotaryCraft.turbofuelFluid);
 
 		ReikaFluidHelper.registerNameSwap("lubricant", "rc lubricant");
 		ReikaFluidHelper.registerNameSwap("jet fuel", "rc jet fuel");

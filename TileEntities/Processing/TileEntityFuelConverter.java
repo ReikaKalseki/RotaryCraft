@@ -16,7 +16,6 @@ import java.util.HashMap;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -39,10 +38,17 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	public static final int CAPACITY = 5*FluidContainerRegistry.BUCKET_VOLUME;
 
-	public static enum Conversions {
-		BCFUEL("fuel", "rc jet fuel", 1, 4, DifficultyEffects.CONSUMEFRAC.getChance()/100D, new ItemMatch(Items.blaze_powder), new ItemMatch(ItemStacks.netherrackdust), new ItemMatch(ItemStacks.tar), new ItemMatch(Items.magma_cream), new ItemMatch(ReikaItemHelper.pinkDye)),
-		KEROSENE("kerosene", "rc jet fuel", 1, 4, DifficultyEffects.CONSUMEFRAC.getChance()/100D, new ItemMatch(Items.blaze_powder), new ItemMatch(ItemStacks.netherrackdust), new ItemMatch(ItemStacks.tar), new ItemMatch(Items.magma_cream), new ItemMatch(ReikaItemHelper.pinkDye)),
-		;
+	private static final HashMap<String, FuelConversion> conversionMap = new HashMap();
+	private static final HashMap<String, FuelConversion> conversionOutputMap = new HashMap();
+
+	public static void addRecipe(String in, String out, int speed, int fluidRatio, double itemConsumeChance, ItemMatch... items) {
+		new FuelConversion(in, out, speed, fluidRatio, itemConsumeChance, items);
+	}
+
+	public static final class FuelConversion {
+
+		public static final FuelConversion BCFUEL = new FuelConversion("fuel", "rc jet fuel", 1, 4, DifficultyEffects.CONSUMEFRAC.getChance()/100D, new ItemMatch(Items.blaze_powder), new ItemMatch(ItemStacks.netherrackdust), new ItemMatch(ItemStacks.tar), new ItemMatch(Items.magma_cream), new ItemMatch(ReikaItemHelper.pinkDye));
+		public static final FuelConversion KEROSENE = new FuelConversion("kerosene", "rc jet fuel", 1, 4, DifficultyEffects.CONSUMEFRAC.getChance()/100D, new ItemMatch(Items.blaze_powder), new ItemMatch(ItemStacks.netherrackdust), new ItemMatch(ItemStacks.tar), new ItemMatch(Items.magma_cream), new ItemMatch(ReikaItemHelper.pinkDye));
 
 		public final Fluid input;
 		public final Fluid output;
@@ -54,12 +60,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 		private final ItemMatch[] ingredients;
 
-		private static final HashMap<String, Conversions> conversionMap = new HashMap();
-		private static final HashMap<String, Conversions> conversionOutputMap = new HashMap();
-
-		public static Conversions[] list = values();
-
-		private Conversions(String in, String out, int sp, int r, double f, ItemMatch... items) {
+		private FuelConversion(String in, String out, int sp, int r, double f, ItemMatch... items) {
 			input = FluidRegistry.getFluid(in);
 			output = FluidRegistry.getFluid(out);
 
@@ -69,6 +70,23 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 			itemConsumptionChance = f;
 
 			ingredients = items;
+
+			this.register();
+		}
+
+		private void register() {
+			if (input != null && output != null) {
+				String n = input.getName();
+				if (conversionMap.containsKey(n))
+					throw new IllegalArgumentException("Fluid input "+n+" already mapped to a recipe "+conversionMap.get(n));
+				conversionMap.put(n, this);
+				conversionOutputMap.put(output.getName(), this);
+			}
+		}
+
+		@Override
+		public String toString() {
+			return input+">"+output+" x "+itemConsumptionChance+" @ "+fluidRatio+":1 %"+itemConsumptionChance;
 		}
 
 		public boolean isValid() {
@@ -83,44 +101,27 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 			return false;
 		}
 
-		static {
-			for (int i = 0; i < list.length; i++) {
-				Conversions c = list[i];
-				if (c.input != null && c.output != null) {
-					conversionMap.put(c.input.getName(), c);
-					conversionOutputMap.put(c.output.getName(), c);
-				}
-			}
-		}
-
-		public static void addRecipe(String name, String in, String out, int speed, int fluidRatio, double itemConsumeChance, ItemMatch... items) {
-			Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, ItemMatch[].class}, new Object[]{in, out, speed, fluidRatio, itemConsumeChance, items});
-			conversionMap.put(in, c);
-			conversionOutputMap.put(out, c);
-			list = values();
-		}
-
-		public static Collection<Conversions> getByInput(ItemStack is) {
-			Collection<Conversions> li = new ArrayList();
-			for (Conversions c : conversionMap.values()) {
+		public static Collection<FuelConversion> getByInput(ItemStack is) {
+			Collection<FuelConversion> li = new ArrayList();
+			for (FuelConversion c : conversionMap.values()) {
 				if (c.isValidItem(is))
 					li.add(c);
 			}
 			return li;
 		}
 
-		public static Collection<Conversions> getByInput(Fluid f) {
-			Collection<Conversions> li = new ArrayList();
-			for (Conversions c : conversionMap.values()) {
+		public static Collection<FuelConversion> getByInput(Fluid f) {
+			Collection<FuelConversion> li = new ArrayList();
+			for (FuelConversion c : conversionMap.values()) {
 				if (c.input == f)
 					li.add(c);
 			}
 			return li;
 		}
 
-		public static Collection<Conversions> getByOutput(Fluid f) {
-			Collection<Conversions> li = new ArrayList();
-			for (Conversions c : conversionMap.values()) {
+		public static Collection<FuelConversion> getByOutput(Fluid f) {
+			Collection<FuelConversion> li = new ArrayList();
+			for (FuelConversion c : conversionMap.values()) {
 				if (c.output == f)
 					li.add(c);
 			}
@@ -182,7 +183,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		if (world.isRemote)
 			return;
 
-		Conversions c = this.getConversion();
+		FuelConversion c = this.getConversion();
 		if (c != null && this.getInputLevel() >= c.fluidRatio*c.speedFactor && this.hasItems(c) && output.canTakeIn(c.speedFactor)) {
 			input.removeLiquid(c.fluidRatio*c.speedFactor);
 			output.addLiquid(c.speedFactor, c.output);
@@ -190,11 +191,11 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		}
 	}
 
-	private Conversions getConversion() {
-		return !input.isEmpty() ? Conversions.conversionMap.get(input.getActualFluid().getName()) : null;
+	private FuelConversion getConversion() {
+		return !input.isEmpty() ? conversionMap.get(input.getActualFluid().getName()) : null;
 	}
 
-	private boolean hasItems(Conversions c) {
+	private boolean hasItems(FuelConversion c) {
 		for (int i = 0; i < c.ingredients.length; i++) {
 			if (!ReikaInventoryHelper.checkForItemStack(c.ingredients[i], inv)) {
 				return false;
@@ -203,7 +204,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		return true;
 	}
 
-	private void consumeItems(Conversions c) {
+	private void consumeItems(FuelConversion c) {
 		for (int i = 0; i < c.ingredients.length; i++) {
 			if (ReikaRandomHelper.doWithChance(c.itemConsumptionChance))
 				ReikaInventoryHelper.decrStack(ReikaInventoryHelper.locateInInventory(c.ingredients[i], inv), inv);
@@ -220,9 +221,8 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 		return this.getConversionByItem(is) != null;
 	}
 
-	public static Conversions getConversionByItem(ItemStack is) {
-		for (int i = 0; i < Conversions.list.length; i++) {
-			Conversions c = Conversions.list[i];
+	public static FuelConversion getConversionByItem(ItemStack is) {
+		for (FuelConversion c : conversionMap.values()) {
 			if (c.isValidItem(is)) {
 				return c;
 			}
@@ -258,7 +258,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 
 	@Override
 	public boolean isValidFluid(Fluid f) {
-		return Conversions.conversionMap.get(f.getName()) != null;
+		return conversionMap.get(f.getName()) != null;
 	}
 
 	@Override

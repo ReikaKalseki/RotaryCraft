@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,7 +29,7 @@ import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiBasicStorage;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
-import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter.Conversions;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter.FuelConversion;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -38,9 +38,9 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 
 	public class ConverterRecipe extends CachedRecipe {
 
-		private final Conversions recipe;
+		private final FuelConversion recipe;
 
-		private ConverterRecipe(Conversions c) {
+		private ConverterRecipe(FuelConversion c) {
 			recipe = c;
 		}
 
@@ -101,8 +101,8 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 	public void loadCraftingRecipes(ItemStack is) {
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
 		if (fs != null) {
-			Collection<Conversions> li = TileEntityFuelConverter.Conversions.getByOutput(fs.getFluid());
-			for (Conversions c : li) {
+			Collection<FuelConversion> li = TileEntityFuelConverter.FuelConversion.getByOutput(fs.getFluid());
+			for (FuelConversion c : li) {
 				arecipes.add(new ConverterRecipe(c));
 			}
 		}
@@ -110,14 +110,14 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack is) {
-		Collection<Conversions> li = TileEntityFuelConverter.Conversions.getByInput(is);
-		for (Conversions c : li) {
+		Collection<FuelConversion> li = TileEntityFuelConverter.FuelConversion.getByInput(is);
+		for (FuelConversion c : li) {
 			arecipes.add(new ConverterRecipe(c));
 		}
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
 		if (fs != null) {
-			li = TileEntityFuelConverter.Conversions.getByInput(fs.getFluid());
-			for (Conversions c : li) {
+			li = TileEntityFuelConverter.FuelConversion.getByInput(fs.getFluid());
+			for (FuelConversion c : li) {
 				arecipes.add(new ConverterRecipe(c));
 			}
 		}

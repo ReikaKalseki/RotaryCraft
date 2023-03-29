@@ -40,6 +40,7 @@ import Reika.DragonAPI.Instantiable.PreferentialItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWayList;
 import Reika.DragonAPI.Instantiable.Formula.MathExpression;
 import Reika.DragonAPI.Instantiable.IO.CustomRecipeList;
+import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.ReikaRecipeHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -98,6 +99,8 @@ import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityFuelConverter;
+import Reika.Satisforestry.API.SFAPI;
 
 import blusunrize.immersiveengineering.api.crafting.BlastFurnaceRecipe;
 import blusunrize.immersiveengineering.api.energy.DieselHandler;
@@ -471,6 +474,13 @@ public class RotaryRecipes {
 
 		if (ModList.PROJRED.isLoaded() && ModList.APPENG.isLoaded())
 			MachineRegistry.BUNDLEDBUS.addCrafting("BrB", "CpF", "BrB", 'C', ItemStacks.pcb, 'B', ItemStacks.basepanel, 'r', ReikaItemHelper.lookupItem("ProjRed|Transmission:projectred.transmission.wire:17"), 'p', AppEngHandler.getInstance().getGoldProcessor(), 'F', AppEngHandler.getInstance().getFluixCrystal());
+
+		if (ModList.SATISFORESTRY.isLoaded()) {
+			Fluid turbo = SFAPI.genericLookups.getTurbofuel();
+			if (turbo != null) {
+				TileEntityFuelConverter.addRecipe("fuel", turbo.getName(), 4, 1, 0.0048F, new ItemMatch(SFAPI.genericLookups.getCompactedCoal())); //1.2 per bucket
+			}
+		}
 	}
 
 	private static void changeIC2BlazePowderCompression() {
