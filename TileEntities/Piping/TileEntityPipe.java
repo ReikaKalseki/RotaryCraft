@@ -165,6 +165,8 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
 			return false;
 		if (f.equals(FluidRegistry.getFluid("rc lifbe fuel preheat")))
 			return false;
+		if (f.equals(FluidRegistry.getFluid("turbofuel")))
+			return false;
 		return true;
 	}
 

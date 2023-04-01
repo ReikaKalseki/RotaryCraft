@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.StepTimer;
@@ -28,6 +29,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.AtmosphereHandler;
+import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
@@ -42,6 +44,7 @@ import Reika.RotaryCraft.Registry.EngineType.EngineClass;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController;
+import Reika.Satisforestry.API.SFAPI;
 
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
@@ -109,11 +112,14 @@ TemperatureTE {
 	}
 
 	private int getFuelDuration(World world, int x, int y, int z) {
+		int val = 36;
 		if (this.hasECU()) {
 			TileEntityEngineController te = this.getECU();
-			return 36*te.getFuelMultiplier(EngineClass.PISTON);
+			val *= te.getFuelMultiplier(EngineClass.PISTON);
 		}
-		return 36;
+		if (this.isUsingTurbofuel())
+			val *= 5/2;
+		return val;
 	}
 
 	@Override
@@ -158,6 +164,10 @@ TemperatureTE {
 
 	private int getConsumedFuel() {
 		return 4; //was 2
+	}
+
+	public boolean isUsingTurbofuel() {
+		return ModList.SATISFORESTRY.isLoaded() && tank.getActualFluid() == SFAPI.genericLookups.getTurbofuel();
 	}
 
 	private int getGenOmega() {
@@ -242,14 +252,18 @@ TemperatureTE {
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		Fluid f = resource.getFluid();
 		if (this.canFill(from, f)) {
-			if (f.equals(FluidRegistry.getFluid("rc lubricant")))
+			if (f == RotaryCraft.lubeFluid)
 				return lubetank.fill(resource, doFill);
-			else if (f.equals(FluidRegistry.getFluid("fuel")))
-				return tank.fill(resource, doFill);
 			else if (f.equals(FluidRegistry.WATER))
 				return watertank.fill(resource, doFill);
+			else if (this.isValidFuel(f))
+				return tank.fill(resource, doFill);
 		}
 		return 0;
+	}
+
+	public static boolean isValidFuel(Fluid f) {
+		return f.equals(FluidRegistry.getFluid("fuel")) || (ModList.SATISFORESTRY.isLoaded() && f == SFAPI.genericLookups.getTurbofuel());
 	}
 
 	@Override
@@ -266,9 +280,9 @@ TemperatureTE {
 	public boolean canFill(ForgeDirection from, Fluid f) {
 		switch(from) {
 			case UP:
-				return isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
+				return isFlipped && this.isValidFuel(f);
 			case DOWN:
-				return !isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
+				return !isFlipped && this.isValidFuel(f);
 			case EAST:
 			case NORTH:
 			case SOUTH:
@@ -340,8 +354,9 @@ TemperatureTE {
 		return lubetank.getLevel();
 	}
 
-	public void addFuel(int amt) {
-		tank.addLiquid(amt, FluidRegistry.getFluid("fuel"));
+	public void addFuel(int amt, Fluid f) {
+		if (this.isValidFuel(f))
+			tank.addLiquid(amt, f);
 	}
 
 	public void removeFuel(int amt) {

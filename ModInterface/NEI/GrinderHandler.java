@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -28,7 +28,6 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesGrinder;
 import Reika.RotaryCraft.GUIs.Machine.Inventory.GuiGrinder;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 
 import codechicken.nei.PositionedStack;
@@ -127,7 +126,7 @@ public class GrinderHandler extends TemplateRecipeHandler {
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		this.drawExtras(recipe);
 		CachedRecipe c = arecipes.get(recipe);
-		if (c.getIngredient() != null && c.getIngredient().item.getItem() == ItemRegistry.CANOLA.getItemInstance()) {
+		if (c.getIngredient() != null && TileEntityGrinder.isGrindableSeed(c.getIngredient().item)) {
 			ReikaGuiAPI.instance.drawTexturedModalRect(19, 10, 176, 71, 8, 55);
 		}
 	}

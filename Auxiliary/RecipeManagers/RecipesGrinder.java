@@ -376,6 +376,10 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 			}
 		}
 
+		if (ModList.GEOSTRATA.isLoaded()) {
+			this.addOreDictRecipe("seedCreepvine", ItemStacks.compost, RecipeLevel.MODINTERACT);
+		}
+
 		this.addOreDictRecipe("cropCinderpearl", new ItemStack(Items.blaze_powder, 3, 0), RecipeLevel.MODINTERACT);
 		this.addOreDictRecipe("cropShimmerleaf", ReikaItemHelper.getSizedItemStack(ExtractorModOres.getSmeltedIngot(ModOreList.CINNABAR), 3), RecipeLevel.MODINTERACT);
 	}

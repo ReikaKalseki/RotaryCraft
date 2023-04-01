@@ -116,6 +116,7 @@ import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
+import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
 
@@ -534,6 +535,7 @@ public class RotaryCraft extends DragonAPIMod {
 
 		CustomExtractLoader.instance.loadFile();
 		ExtractorModOres.addCustomSmelting();
+		TileEntityGrinder.loadSeeds();
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ReikaJavaLibrary.initClass(BlockColorMapper.class);

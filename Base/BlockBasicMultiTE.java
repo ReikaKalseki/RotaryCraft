@@ -606,16 +606,14 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			TileEntityFuelConverter tf = (TileEntityFuelConverter)te;
 			if (is != null) {
 				FluidStack liq = FluidContainerRegistry.getFluidForFilledItem(is);
-				if (liq != null && liq.getFluid().equals(FluidRegistry.getFluid("fuel"))) {
-					boolean bucket = FluidContainerRegistry.isBucket(is);
-					tf.fill(ForgeDirection.UP, liq, true);
-					if (!ep.capabilities.isCreativeMode) {
-						if (bucket)
-							ep.setCurrentItemOrArmor(0, new ItemStack(Items.bucket));
-						else
-							ep.setCurrentItemOrArmor(0, null);
+				if (liq != null) {
+					int amt = tf.fill(ForgeDirection.UP, liq, false);
+					if (amt >= liq.amount || ep.capabilities.isCreativeMode) {
+						tf.fill(ForgeDirection.UP, liq, true);
+						if (!ep.capabilities.isCreativeMode)
+							ep.setCurrentItemOrArmor(0, FluidContainerRegistry.drainFluidContainer(is));
+						((TileEntityBase)te).syncAllData(true);
 					}
-					((TileEntityBase)te).syncAllData(true);
 					return true;
 				}
 			}

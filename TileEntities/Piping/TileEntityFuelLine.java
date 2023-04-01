@@ -43,6 +43,8 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 			return true;
 		if (f.equals(FluidRegistry.getFluid("rc lifbe fuel preheat")))
 			return true;
+		if (f.equals(FluidRegistry.getFluid("turbofuel")))
+			return true;
 		return false;
 	}
 

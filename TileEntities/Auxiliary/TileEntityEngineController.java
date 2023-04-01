@@ -200,11 +200,13 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 		if (te.isFlipped != flip)
 			return false;
 		FluidStack liq = tank.getFluid();
-		int toadd = Math.min(liq.amount/4+1, te.CAPACITY-te.getFuelLevel());
-		if (toadd > 0) {
-			te.addFuel(toadd);
-			tank.removeLiquid(toadd);
-			return true;
+		if (te.isValidFuel(liq.getFluid())) {
+			int toadd = Math.min(liq.amount/4+1, te.CAPACITY-te.getFuelLevel());
+			if (toadd > 0) {
+				te.addFuel(toadd, liq.getFluid());
+				tank.removeLiquid(toadd);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -345,7 +347,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("rc ethanol")))
 			return true;
-		if (fluid.equals(FluidRegistry.getFluid("fuel")))
+		if (TileEntityFuelEngine.isValidFuel(fluid))
 			return true;
 		if (fluid.equals(FluidRegistry.getFluid("rc oxygen")))
 			return true;

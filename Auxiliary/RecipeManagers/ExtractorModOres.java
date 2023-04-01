@@ -36,7 +36,8 @@ public class ExtractorModOres {
 			OreDictionary.registerOre(ModOreList.oreList[i].getProductOreDictName(), ItemRegistry.MODINGOTS.getStackOfMetadata(i));
 		}
 
-		OreDictionary.registerOre("ingotHeeEndium", ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.ENDIUM.ordinal()));
+		if (ModOreList.ENDIUM.existsInGame())
+			OreDictionary.registerOre("ingotHeeEndium", ItemRegistry.MODINGOTS.getStackOfMetadata(ModOreList.ENDIUM.ordinal()));
 
 		List<CustomExtractEntry> li = CustomExtractLoader.instance.getEntries();
 		for (int i = 0; i < li.size(); i++) {

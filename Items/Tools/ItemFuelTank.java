@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -239,10 +239,10 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 					return true;
 				}
 			}
-			else if (f.equals(FluidRegistry.getFluid("fuel"))) {
+			else if (te.isValidFuel(f)) {
 				int amt = Math.min(this.getCurrentFillLevel(is), te.CAPACITY-te.getFuelLevel());
 				if (amt > 0) {
-					te.addFuel(amt);
+					te.addFuel(amt, f);
 					ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
 					this.removeFuel(is, amt);
 					return true;

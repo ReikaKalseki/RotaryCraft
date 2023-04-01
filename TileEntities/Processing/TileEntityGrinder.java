@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.Instantiable.HybridTank;
 import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
@@ -65,11 +66,13 @@ ProcessingMachine, DamagingContact, EnchantableMachine {
 	private static final ItemHashMap<Float> grindableSeeds = new ItemHashMap();
 	private static final OneWaySet<KeyedItemStack> lockedSeeds = new OneWaySet();
 
-	static {
+	public static void loadSeeds() {
 		//addGrindableSeed(ItemRegistry.CANOLA.getStackOf(), 1F);
 		grindableSeeds.put(ItemStacks.canolaSeeds, 1F);
 		lockedSeeds.add(new KeyedItemStack(ItemRegistry.CANOLA.getItemInstance()).lock());
 		//addGrindableSeed(ItemRegistry.CANOLA.getStackOfMetadata(2), 0.65F);
+		for (ItemStack is : OreDictionary.getOres("seedCreepvine"))
+			grindableSeeds.put(is, 2.5F);
 	}
 
 	public static void addGrindableSeed(ItemStack seed, float factor) {

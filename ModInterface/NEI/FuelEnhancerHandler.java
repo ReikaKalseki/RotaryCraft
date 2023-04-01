@@ -9,12 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.ModInterface.NEI;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.base.Strings;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
@@ -85,7 +89,7 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 		GL11.glColor4f(1, 1, 1, 1);
 		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		ReikaGuiAPI.instance.drawTexturedModalRectWithDepth(0, 0, 5, 11, 166, 70, ReikaGuiAPI.NEI_DEPTH);
+		ReikaGuiAPI.instance.drawTexturedModalRectWithDepth(0, 0, 5, 11, 166, 60, ReikaGuiAPI.NEI_DEPTH);
 	}
 
 	@Override
@@ -101,7 +105,7 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 	public void loadCraftingRecipes(ItemStack is) {
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
 		if (fs != null) {
-			Collection<FuelConversion> li = TileEntityFuelConverter.FuelConversion.getByOutput(fs.getFluid());
+			Collection<FuelConversion> li = TileEntityFuelConverter.getByOutput(fs.getFluid());
 			for (FuelConversion c : li) {
 				arecipes.add(new ConverterRecipe(c));
 			}
@@ -110,17 +114,41 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack is) {
-		Collection<FuelConversion> li = TileEntityFuelConverter.FuelConversion.getByInput(is);
+		Collection<FuelConversion> li = TileEntityFuelConverter.getByInput(is);
 		for (FuelConversion c : li) {
 			arecipes.add(new ConverterRecipe(c));
 		}
 		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
 		if (fs != null) {
-			li = TileEntityFuelConverter.FuelConversion.getByInput(fs.getFluid());
+			li = TileEntityFuelConverter.getByInput(fs.getFluid());
 			for (FuelConversion c : li) {
 				arecipes.add(new ConverterRecipe(c));
 			}
 		}
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(32, -12, 105, 10), "fuelenhance"));
+		//transferRects.add(new RecipeTransferRect(new Rectangle(23, 23, 46, 18), "fuelenhance"));
+	}
+
+	@Override
+	public void loadCraftingRecipes(String outputId, Object... results) {
+		if (outputId != null && outputId.equals("fuelenhance")) {
+			Collection<FuelConversion> li = TileEntityFuelConverter.getAllRecipes();
+			for (FuelConversion f : li)
+				arecipes.add(new ConverterRecipe(f));
+		}
+		super.loadCraftingRecipes(outputId, results);
+	}
+
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients) {
+		if (inputId != null && inputId.equals("fuelenhance")) {
+			this.loadCraftingRecipes(inputId, ingredients);
+		}
+		super.loadUsageRecipes(inputId, ingredients);
 	}
 
 	@Override
@@ -145,12 +173,12 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 		ReikaTextureHelper.bindTerrainTexture();
 		Tessellator v5 = Tessellator.instance;
 		v5.startDrawingQuads();
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
 			int x = 3;
-			int y = 7+i*16;
+			int y = 7+i*17;
 			v5.addVertexWithUV(x, y, 0, u, v);
-			v5.addVertexWithUV(x, y+16, 0, u, dv);
-			v5.addVertexWithUV(x+16, y+16, 0, du, dv);
+			v5.addVertexWithUV(x, y+17, 0, u, dv);
+			v5.addVertexWithUV(x+16, y+17, 0, du, dv);
 			v5.addVertexWithUV(x+16, y, 0, du, v);
 		}
 		v5.draw();
@@ -161,15 +189,41 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 		du = ico.getMaxU();
 		dv = ico.getMaxV();
 		v5.startDrawingQuads();
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
 			int x = 147;
-			int y = 7+i*16;
+			int y = 7+i*17;
 			v5.addVertexWithUV(x, y, 0, u, v);
-			v5.addVertexWithUV(x, y+16, 0, u, dv);
-			v5.addVertexWithUV(x+16, y+16, 0, du, dv);
+			v5.addVertexWithUV(x, y+17, 0, u, dv);
+			v5.addVertexWithUV(x+16, y+17, 0, du, dv);
 			v5.addVertexWithUV(x+16, y, 0, du, v);
 		}
 		v5.draw();
+
+		ReikaTextureHelper.bindFinalTexture(RotaryCraft.class, "/Reika/RotaryCraft/Textures/GUI/buttons.png");
+		ReikaGuiAPI.instance.drawTexturedModalRectWithDepth(3, 43, 94, 239, 160, 16, 0);
+
+		GuiContainer gui = (GuiContainer)Minecraft.getMinecraft().currentScreen;
+		int i = gui.guiLeft+5;
+		int k = gui.guiTop+22+(recipe%2)*65;
+		int mx = ReikaGuiAPI.instance.getMouseRealX()-i;
+		int my = ReikaGuiAPI.instance.getMouseRealY()-k;
+		if (mx > 0 && mx < 176 && my > 0 && my < 54) {
+			ArrayList<String> li = new ArrayList();
+			if (mx >= 3 && mx <= 19 && my <= 34)
+				li.add(in.getLocalizedName(new FluidStack(in, r.recipe.fluidRatio))+" x"+(r.recipe.fluidRatio*r.recipe.speedFactor));
+			else if (mx >= 147 && mx <= 147+16 && my <= 34)
+				li.add(out.getLocalizedName(new FluidStack(out, 1))+" x"+(r.recipe.speedFactor));
+			else if (mx >= 21 && mx <= 145 && my >= 36) {
+				li.add(String.format("%.3f%% Item Consumption Chance", r.recipe.itemConsumptionChance*100));
+				String s = r.recipe.getCondition();
+				if (!Strings.isNullOrEmpty(s)) {
+					for (String s2 : s.split("\n"))
+						li.add(s2);
+				}
+			}
+			if (!li.isEmpty())
+				ReikaGuiAPI.instance.drawMultilineTooltip(li, 99, 23, 18, true);
+		}
 	}
 
 }
