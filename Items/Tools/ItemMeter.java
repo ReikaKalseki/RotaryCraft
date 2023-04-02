@@ -154,8 +154,12 @@ public class ItemMeter extends ItemRotaryTool
 			world.markBlockForUpdate(x, y, z);
 			long power = te.power;
 			this.sendMessage(ep, String.format("%s producing %s", name, RotaryAux.formatPowerIO(te)));
-			if (te.getEngineType().isAirBreathing() && te.isDrowned(world, x, y, z))
-				this.sendLocalizedMessage(ep, "drowning");
+			if (te.getEngineType().isAirBreathing()) {
+				if (te.isDrowned(world, x, y, z))
+					this.sendLocalizedMessage(ep, "drowning");
+				else if (!te.hasAir())
+					this.sendLocalizedMessage(ep, "noair");
+			}
 			if (te.getEngineType() == EngineType.JET) {
 				if (((TileEntityJetEngine)te).getChokedFraction(world, x, y, z, te.getBlockMetadata()) < 1)
 					this.sendLocalizedMessage(ep, "choke");

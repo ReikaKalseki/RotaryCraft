@@ -159,6 +159,10 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 		return true;
 	}
 
+	public boolean hasAir() {
+		return !air.isEmpty() || this.hasAir(worldObj, xCoord, yCoord, zCoord);
+	}
+
 	public final boolean isDrowned(World world, int x, int y, int z) {
 		boolean flag = false;
 		for (int i = 0; i < 6; i++) {

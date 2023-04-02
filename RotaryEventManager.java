@@ -56,6 +56,7 @@ import Reika.DragonAPI.Instantiable.Event.EntityPushOutOfBlocksEvent;
 import Reika.DragonAPI.Instantiable.Event.FarmlandTrampleEvent;
 import Reika.DragonAPI.Instantiable.Event.LivingFarDespawnEvent;
 import Reika.DragonAPI.Instantiable.Event.MTReloadEvent;
+import Reika.DragonAPI.Instantiable.Event.NEIRecipeCheckEvent;
 import Reika.DragonAPI.Instantiable.Event.PlayerPlaceBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SetBlockEvent;
 import Reika.DragonAPI.Instantiable.Event.SlotEvent.AddToSlotEvent;
@@ -88,6 +89,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
+import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.Registry.SoundRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityHydroEngine;
 import Reika.RotaryCraft.TileEntities.Farming.TileEntitySpawnerController;
@@ -114,6 +116,16 @@ public class RotaryEventManager {
 
 	private RotaryEventManager() {
 
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	@ModDependent(ModList.NEI)
+	public void interceptNEI(NEIRecipeCheckEvent evt) {
+		if (ItemRegistry.SHAFT.matchItem(evt.getItem())) {
+			codechicken.nei.recipe.GuiCraftingRecipe.openRecipeGui("item", MaterialRegistry.WOOD.getShaftItem());
+			evt.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

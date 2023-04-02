@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import Reika.DragonAPI.Instantiable.Data.DynamicAverage;
-import Reika.DragonAPI.Instantiable.Event.Client.LiquidBlockIconEvent;
+import Reika.DragonAPI.Instantiable.Event.Client.BlockIconEvent;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
@@ -163,7 +163,7 @@ public class RenderReservoir extends RotaryTERenderer
 			ReikaLiquidRenderer.bindFluidTexture(f);
 			IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
 			if (f == FluidRegistry.WATER && tile.worldObj != null) {
-				ico = LiquidBlockIconEvent.fire(Blocks.water, tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, 1);
+				ico = BlockIconEvent.fire(Blocks.water, tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord, 1);
 			}
 			float u = ico.getMinU();
 			float v = ico.getMinV();

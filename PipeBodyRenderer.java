@@ -26,7 +26,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import Reika.DragonAPI.Base.ISBRH;
 import Reika.DragonAPI.Exception.WTFException;
-import Reika.DragonAPI.Instantiable.Event.Client.LiquidBlockIconEvent;
+import Reika.DragonAPI.Instantiable.Event.Client.BlockIconEvent;
 import Reika.DragonAPI.Instantiable.Event.Client.WaterColorEvent;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
@@ -234,7 +234,7 @@ public class PipeBodyRenderer extends ISBRH {
 		if (f == FluidRegistry.WATER) {
 			//v5.setColorOpaque_I(world.getBiomeGenForCoords(x, z).getWaterColorMultiplier());
 			//v5.setColorOpaque_I(WaterColorEvent.fire(world, x, y, z));
-			ico = LiquidBlockIconEvent.fire(Blocks.water, world, x, y, z, 1);
+			ico = BlockIconEvent.fire(Blocks.water, world, x, y, z, 1);
 		}
 		float u = ico.getMinU();
 		float v = ico.getMinV();

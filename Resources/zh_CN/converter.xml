@@ -1,0 +1,200 @@
+<!--
+  @author Reika Kalseki
+  
+  Copyright 2018
+  
+  All rights reserved.
+  Distribution of the software in any form is only allowed with
+  explicit, prior permission from the owner.
+-->
+<?xml version="1.0"?>
+<machines>
+	<compressor>
+		<desc>
+			空气压缩机将轴功率转换为压缩空气，可通过压缩空气管道排除。更高的功率意味着更高的气压，但如果功率过大，它可能会发生剧烈的爆炸。
+		</desc>
+		<note>
+			超压气压: %d kPa
+			
+			输出方向: 与RF引擎类似
+			
+			动力输入：后侧
+		</note>
+	</compressor>
+	<pneuengine>
+		<desc>
+			气动引擎使用涡轮将来自气动工艺管道的压缩空气转换为轴功率。使用其 GUI 选择输出速率。更高的功率输出将需要高的气压和气流。
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					气流输入：后侧
+
+					过热温度: %dC
+
+					从 Tier 0 到 Tier 5; 每级都增加了输出但是降低了燃料利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</pneuengine>
+	<boiler>
+		<desc>
+			摩擦加热锅炉使用轴功率加热泵入其中的水。煮沸时，水可以作为蒸汽从锅炉顶部输出。该机器机有一段预热期，因此开始时它不会产生蒸汽。请注意，这台机器可能会因为过热而发生严重故障。
+		</desc>
+		<note>
+			动力输入：底部
+		</note>
+	</boiler>
+	<steamturbine>
+		<desc>
+			蒸汽轮机从其后方的任何管道或罐中吸入蒸汽并产生轴功率。使用 GUI 选择输出功率（和蒸汽消耗量）。
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					蒸汽输入 ： 后侧
+
+					过热温度: %dC
+
+					从 Tier 0 到 Tier 5; 每级都增加了输出但是降低了利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</steamturbine>
+	<generator>
+		<desc>
+			发电机接收轴功率并以 %.0f W/EU 的比率产生 IC2 的电。总功率输出以及电压大小随输入的功率量而变化。
+		</desc>
+		<note>
+			动力输入：后侧
+			如果 "Hard EU" 开启的话，需要冷却液或者液氮降温
+		</note>
+	</generator>
+	<electricmotor>
+		<desc>
+			电动机使用 IC2 电力产生轴功率。在其 GUI 中选择输出转速。更高的输出功率将需要更多的电力和更高的电压。
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					电力输入：后侧
+
+					过热温度: %dC, 如果 "Hard EU" 开启的话, 会因为超压而爆炸
+
+					从 Tier 0 到 Tier 5; 每级都增加了输出但是降低了电量利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</electricmotor>
+	<fuelengine>
+		<desc>
+			燃油引擎使用 BuildCraft 的燃料来产生轴功率。就功率输出而言，它的性能与该模组的内燃机相似。它需要润滑油和水冷却，并且会在过热时减速。
+		</desc>
+		<note>
+			输出扭矩: %d Nm
+			输出转速: %d rad/s
+			输出功率: %dW
+		</note>
+	</fuelengine>
+	<dynamo>
+		<desc>
+			旋转能源炉将 RotaryCraft 的轴功率转化为热力膨胀红石通量。由于内部磁场施加的限制，它可以在最大 %d 弧度/秒的情况下承受最大 %d Nm 的扭矩（如果升级则为 %d Nm）。任何多余的能量都会被浪费掉。
+		</desc>
+		<note>
+			方向与输出：与热力膨胀的能源炉类似
+			动力输入：后侧
+		</note>
+	</dynamo>
+	<magnetic>
+		<desc>
+			静磁引擎的功能与气动引擎非常相似。它接受提供给它的RF能量，你可以调整它的输出速度来调整输出总功率。与所有其它转换发动机一样，它需要冷却液。
+		</desc>
+		<note>
+			<sub>
+				<s1>
+					能量输入：后侧
+
+					过热温度: %dC
+
+					从 Tier 0 到 Tier 5; 每级都增加了输出但是降低了能源利用率
+				</s1>
+				<s2>
+					%s
+				</s2>
+			</sub>
+		</note>
+	</magnetic>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+	<name>
+		<desc>
+			
+		</desc>
+		<note>
+			
+		</note>
+	</name>
+</machines>
