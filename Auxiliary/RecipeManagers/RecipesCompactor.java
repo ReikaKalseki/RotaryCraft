@@ -56,15 +56,21 @@ public class RecipesCompactor extends RecipeHandler implements CompactorManager
 
 		this.addRecipe(new ItemStack(Items.blaze_powder), new ItemStack(Blocks.glowstone, 1, 0), 2000, 600, RecipeLevel.PERIPHERAL);
 
-		this.addRecipe(new ItemStack(Blocks.ice), new ItemStack(Blocks.packed_ice), 24000, -80, RecipeLevel.PERIPHERAL);
+		int press = 24000;
+		int temp = -80;
+		this.addRecipe(new ItemStack(Blocks.ice), new ItemStack(Blocks.packed_ice, 2, 0), press, temp, RecipeLevel.PERIPHERAL);
+		if (ModList.GEOSTRATA.isLoaded()) {
+			this.addRecipe(new ItemStack(Blocks.packed_ice), new ItemStack(Blocks.packed_ice, 2, 1), press*6/5, temp, RecipeLevel.PERIPHERAL);
+			this.addRecipe(new ItemStack(Blocks.packed_ice, 1, 1), new ItemStack(Blocks.packed_ice, 2, 2), press*3/2, temp, RecipeLevel.PERIPHERAL);
+		}
 	}
 
 	private static class CompactingRecipe implements MachineRecipe {
 
 		private final ItemStack in;
 		private final ItemStack out;
-		private final int temperature;
-		private final int pressure;
+		public final int temperature;
+		public final int pressure;
 
 		private CompactingRecipe(ItemStack is, ItemStack is2, int t, int p) {
 			in = is;

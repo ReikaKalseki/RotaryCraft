@@ -186,7 +186,7 @@ public class SolarPlant {
 			return 0;
 		if (world.provider.hasNoSky)
 			return 0;
-		double sun = ReikaWorldHelper.getSunIntensity(world, true, 0)*PlanetDimensionHandler.getSunIntensity(world);
+		double sun = (ReikaWorldHelper.getSunIntensity(world, true, 0)*0.8F+0.2F)*PlanetDimensionHandler.getSunIntensity(world);
 		if (sun > 0.21) {
 			return (int)(15*sun);
 		}

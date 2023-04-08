@@ -183,9 +183,9 @@ public class TileEntityTerraformer extends InventoriedPowerLiquidReceiver implem
 			return false;
 		//ReikaJavaLibrary.pConsole("Setting biome @ "+x+", "+z+" to "+target.biomeName);
 		if (this.modifyBlocks())
-			ReikaWorldHelper.setBiomeAndBlocksForXZ(world, x, z, target);
+			ReikaWorldHelper.setBiomeAndBlocksForXZ(world, x, z, target, true);
 		else
-			ReikaWorldHelper.setBiomeForXZ(world, x, z, target);
+			ReikaWorldHelper.setBiomeForXZ(world, x, z, target, true);
 		return true;
 	}
 

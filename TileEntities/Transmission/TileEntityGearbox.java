@@ -680,16 +680,15 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 			temperature++;
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.material.getDamageNoise(), 0.67F, 1);
 		}
-		else {
-			temperature = Tamb;
-		}
 		if (temperature > 90 && rand.nextBoolean() && type.takesTemperatureDamage()) {
 			damage++;
 			ReikaSoundHelper.playSoundAtBlock(world, x, y, z, type.material.getDamageNoise(), 1, 1);
 		}
-		if (omega == 0 && temperature > Tamb) {
-			temperature--;
-		}
+		if (temperature > Tamb)
+			temperature = Math.max(Tamb, temperature-(omega == 0 ? 2 : 1));
+		else if (temperature < Tamb)
+			temperature = Math.min(Tamb, temperature+3);
+
 		if (temperature > 120) {
 			this.overheat(world, x, y, z);
 		}
@@ -732,7 +731,7 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 
 	@Override
 	public boolean allowExternalHeating() {
-		return false;
+		return true;
 	}
 
 	public void setTemperature(int temp) {
