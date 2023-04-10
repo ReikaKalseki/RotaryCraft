@@ -311,11 +311,11 @@ IMFRHammer, IWrench, ICarpentersHammer, com.bluepowermod.api.misc.IScrewdriver
 					return true;
 				}
 			}
-			if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
+			if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN || m == MachineRegistry.SPLITBELT) {
 				TileEntityBeltHub clicked = (TileEntityBeltHub)te;
 				if (ep.isSneaking()) {
 					if (clicked != null) {
-						clicked.isEmitting = !clicked.isEmitting;
+						clicked.isReceivingEnd = !clicked.isReceivingEnd;
 					}
 				}
 				else {

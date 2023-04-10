@@ -38,7 +38,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaPlantHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.ReactorCraft.Entities.EntityRadiation;
-import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
+import Reika.RotaryCraft.Auxiliary.Interfaces.Wettable;
 import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -141,8 +141,8 @@ public class TileEntityLawnSprinkler extends SprinklerBlock {
 				MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(id, meta);
 				if (m != null) {
 					TileEntity te = world.getTileEntity(rx, i, rz);
-					if (te instanceof Cleanable) {
-						((Cleanable)te).clean();
+					if (te instanceof Wettable) {
+						((Wettable)te).wet();
 					}
 				}
 				else if (id != Blocks.air && id.isOpaqueCube())

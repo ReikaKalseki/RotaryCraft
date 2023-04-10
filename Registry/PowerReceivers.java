@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -108,7 +108,9 @@ public enum PowerReceivers {
 	FILLER(1024),
 	GATLING(1, 1024, 65536),
 	FLAMETURRET(1, 512, 32768),
-	BUNDLEDBUS(1024);
+	BUNDLEDBUS(1024),
+	SPLITBELT(),
+	;
 
 	private final int minT;
 	private final int minS;

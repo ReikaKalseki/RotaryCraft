@@ -93,6 +93,9 @@
 		The chain drive is a more advanced version of the belt hub. It can take twice as much torque, at up to 65536 rad/s before it fails. It is also impervious to rain.
 	</chain>
 	<distribclutch>
-			The distribution clutch can take input power and distribute a specified quantity of the torque to either perpendicular direction, with the remainder being sent to the opposite side. This, combined with independently toggleable sides allows for the creation of a highly dynamic power distribution system, where selected amounts of power can be "tapped off" to a given output without starving machines "downstream" of the junction. It can be controlled in one of four modes: with GUI, redstone, bundled redstone, or computers.
+		The distribution clutch can take input power and distribute a specified quantity of the torque to either perpendicular direction, with the remainder being sent to the opposite side. This, combined with independently toggleable sides allows for the creation of a highly dynamic power distribution system, where selected amounts of power can be "tapped off" to a given output without starving machines "downstream" of the junction. It can be controlled in one of four modes: with GUI, redstone, bundled redstone, or computers.
 	</distribclutch>
+	<splitbelt>
+		The take-off belt is a special variant of the belt block, and will divert %d Nm of its input via the attached belt, propagating the remainder, if any, to its axial output. On the receiving side, the hub will merge any power input into its axial input with that of its belt input, and send the combined result to its output. Like with normal belts, being wet will reduce traction, in this case reducing the takeoff amount to %d Nm, and on the receiving side will also result in slip and thus speed losses.
+	</splitbelt>
 </trans>

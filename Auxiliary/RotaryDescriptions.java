@@ -78,6 +78,7 @@ import Reika.RotaryCraft.TileEntities.Surveying.TileEntityMobRadar;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityAdvancedGear;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityBeltHub;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitBelt;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityContainment;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityEMP;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityForceField;
@@ -526,6 +527,7 @@ public final class RotaryDescriptions {
 		addData(MachineRegistry.ITEMCANNON, TileEntityItemCannon.STACKPOWER);
 		addData(MachineRegistry.ADVANCEDGEARS, TileEntityAdvancedGear.WORMRATIO);
 		addData(MachineRegistry.OBSIDIAN, TileEntityObsidianMaker.MIN_OBSIDIAN_TEMP_100, TileEntityObsidianMaker.MAX_OBSIDIAN_TEMP_100);
+		addData(MachineRegistry.SPLITBELT, TileEntitySplitBelt.TAKEOFF_TORQUE, TileEntitySplitBelt.TAKEOFF_TORQUE_WET);
 
 		addNotes(MachineRegistry.BEDROCKBREAKER, PowerReceivers.BEDROCKBREAKER.getMinPower(), PowerReceivers.BEDROCKBREAKER.getMinTorque());
 		addNotes(MachineRegistry.FERMENTER, PowerReceivers.FERMENTER.getMinPower(), PowerReceivers.FERMENTER.getMinSpeed());

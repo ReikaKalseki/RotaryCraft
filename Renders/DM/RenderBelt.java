@@ -125,7 +125,7 @@ public class RenderBelt extends RotaryTERenderer
 		boolean vertical = meta == 4 || meta == 5 || meta == 10 || meta == 11;
 		ForgeDirection dir = tile.getBeltDirection();
 		int dist = tile.getDistanceToTarget();
-		boolean emit = tile.isEmitting;
+		boolean emit = tile.isReceivingEnd;
 		GL11.glTranslated(par2, par4, par6);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_LIGHTING);

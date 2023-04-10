@@ -185,6 +185,7 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityMultiClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPortalShaft;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityPowerBus;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitBelt;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntitySplitter;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityAirGun;
 import Reika.RotaryCraft.TileEntities.Weaponry.TileEntityBlockCannon;
@@ -364,7 +365,9 @@ public enum MachineRegistry implements TileEnum {
 	SPILLWAY(			"machine.spillway",			BlockDMMachine.class,		TileEntitySpillway.class,			18, "RenderSpillway"),
 	FLAMETURRET(		"machine.flameturret",		BlockMMachine.class,		TileEntityFlameTurret.class,		22, "RenderFlameTurret"),
 	BUNDLEDBUS(			"machine.bundledbus",		BlockDMachine.class,		TileEntityBundledBus.class,			5, ModList.APPENG, ModList.PROJRED),
-	DISTRIBCLUTCH(		"machine.distribclutch",	BlockTrans.class,			TileEntityDistributionClutch.class,	5,	"RenderDistribClutch");
+	DISTRIBCLUTCH(		"machine.distribclutch",	BlockTrans.class,			TileEntityDistributionClutch.class,	5,	"RenderDistribClutch"),
+	SPLITBELT(			"machine.splitbelt",		BlockDMMachine.class,		TileEntitySplitBelt.class,			19, "RenderBelt"),
+	;
 
 	private final String name;
 	private final Class te;
@@ -899,6 +902,7 @@ public enum MachineRegistry implements TileEnum {
 			case CHAIN:
 			case CLUTCH:
 			case BUNDLEDBUS:
+			case SPLITBELT:
 				return true;
 			default:
 				return false;
@@ -1673,7 +1677,7 @@ public enum MachineRegistry implements TileEnum {
 	}
 
 	public boolean isCreativeTabValid(CreativeTabs tab) {
-		if (this == BELT || this == CHAIN || this == POWERBUS || this == BUSCONTROLLER || TileEntityTransmissionMachine.class.isAssignableFrom(te))
+		if (this == BELT || this == CHAIN || this == SPLITBELT || this == POWERBUS || this == BUSCONTROLLER || TileEntityTransmissionMachine.class.isAssignableFrom(te))
 			return tab == RotaryCraft.tabPower;
 		return tab == RotaryCraft.tabRotary;
 	}

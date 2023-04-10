@@ -125,7 +125,7 @@ public class ItemMulti extends ItemBasic {
 	}
 
 	private boolean isProperBelt(MachineRegistry m, ItemStack is) {
-		if (m == MachineRegistry.BELT && ReikaItemHelper.matchStacks(is, ItemStacks.belt))
+		if ((m == MachineRegistry.BELT || m == MachineRegistry.SPLITBELT) && ReikaItemHelper.matchStacks(is, ItemStacks.belt))
 			return true;
 		if (m == MachineRegistry.CHAIN && ReikaItemHelper.matchStacks(is, ItemStacks.chain))
 			return true;

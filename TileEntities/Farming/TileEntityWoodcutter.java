@@ -55,7 +55,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.LeafBlockWithExtras;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
-import Reika.RotaryCraft.Auxiliary.Interfaces.Cleanable;
+import Reika.RotaryCraft.Auxiliary.Interfaces.Wettable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
@@ -66,7 +66,7 @@ import Reika.RotaryCraft.Registry.DurationRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine, InertIInv, ProcessingMachine, DamagingContact,
-Cleanable, MultiOperational {
+Wettable, MultiOperational {
 
 	private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantment.infinity).addFilter(Enchantment.fortune).addFilter(Enchantment.efficiency);
 
@@ -94,7 +94,7 @@ Cleanable, MultiOperational {
 		return jamColor;
 	}
 
-	public void clean() {
+	public void wet() {
 		jam--;
 		if (jam <= 0) {
 			jam = 0;

@@ -159,7 +159,7 @@ public class TorqueUsage {
 			TileEntityPowerReceiver pwr = (TileEntityPowerReceiver)tile;
 			if (tile instanceof TileEntityBeltHub) {
 				TileEntityBeltHub hub = (TileEntityBeltHub)tile;
-				if (!hub.isEmitting) {
+				if (!hub.isReceivingEnd) {
 					Coordinate tgt = hub.getConnection();
 					TileEntity di = tgt != null ? tgt.getTileEntity(hub.worldObj) : null;
 					if (di instanceof TileEntityBeltHub) {

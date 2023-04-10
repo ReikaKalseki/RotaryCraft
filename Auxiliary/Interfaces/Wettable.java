@@ -10,8 +10,8 @@
 package Reika.RotaryCraft.Auxiliary.Interfaces;
 
 
-public interface Cleanable {
+public interface Wettable {
 
-	public void clean();
+	public void wet();
 
 }

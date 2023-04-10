@@ -23,6 +23,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -46,6 +47,7 @@ import Reika.DragonAPI.ModRegistry.ModCropList;
 import Reika.DragonAPI.ModRegistry.ModWoodList;
 import Reika.ReactorCraft.Entities.EntityRadiation;
 import Reika.RotaryCraft.RotaryCraft;
+import Reika.RotaryCraft.Auxiliary.Interfaces.Wettable;
 import Reika.RotaryCraft.Base.TileEntity.SprinklerBlock;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
@@ -221,6 +223,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 	}
 
 	private static enum Effects {
+		WETTILE(0),
 		FIREEXTINGUISH(20),
 		CROPTICK(80),
 		HYDRATEFARMLAND(15),
@@ -236,11 +239,20 @@ public class TileEntitySprinkler extends SprinklerBlock {
 
 		/** Factor < 1 -> higher rate */
 		private boolean doChance(Random rand, float factor) {
-			return rand.nextInt(Math.max(1, (int)(randomChance*factor))) == 0;
+			return randomChance <= 0 || rand.nextInt(Math.max(1, (int)(randomChance*factor))) == 0;
 		}
 
 		private void doEffect(World world, int x, int y, int z, Block b) {
 			switch(this) {
+				case WETTILE:
+					MachineRegistry m = MachineRegistry.getMachineFromIDandMetadata(b, world.getBlockMetadata(x, y, z));
+					if (m != null) {
+						TileEntity te = world.getTileEntity(x, y, z);
+						if (te instanceof Wettable) {
+							((Wettable)te).wet();
+						}
+					}
+					break;
 				case APPLETICK:
 					if (b.getMaterial() == Material.leaves) {
 						if (ModularLogger.instance.isEnabled(LOGGER_ID))
