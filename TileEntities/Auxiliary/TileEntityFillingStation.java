@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -75,7 +76,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 		int maxadd = this.getFluidToAdd()*128;
 		ItemStack filled = FluidContainerRegistry.fillFluidContainer(new FluidStack(tank.getActualFluid(), maxadd), inv[FILLING_SLOT]);
 		if (filled != null) {
-			FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(filled);
+			FluidStack fs = ReikaFluidHelper.getFluidForItem(filled);
 			if (fs != null && fs.amount > 0) {
 				int added = fs.amount;
 				tank.removeLiquid(added);
@@ -87,7 +88,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 	public boolean canMakeFuel() {
 		if (inv[FUEL_SLOT] == null)
 			return false;
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[FUEL_SLOT]);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(inv[FUEL_SLOT]);
 		if (fs == null) {
 			boolean item = inv[FUEL_SLOT].getItem() == ItemRegistry.ETHANOL.getItemInstance();
 			boolean space = tank.canTakeIn(FUEL_PER_CRYSTAL) && (tank.isEmpty() || tank.getActualFluid().equals(FluidRegistry.getFluid("rc ethanol")));
@@ -106,7 +107,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 			ReikaInventoryHelper.decrStack(1, inv);
 			return;
 		}
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[FUEL_SLOT]);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(inv[FUEL_SLOT]);
 		tank.addLiquid(fs.amount, fs.getFluid());
 		inv[FUEL_SLOT] = FluidContainerRegistry.drainFluidContainer(inv[FUEL_SLOT]);
 	}

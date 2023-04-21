@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaSpawnerHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
@@ -40,7 +41,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	public boolean isItemValidForSlot(int slot, ItemStack is) {
 		if (ReikaItemHelper.isBlock(is))
 			return true;
-		return ItemRegistry.SPAWNER.matchItem(is) || FluidContainerRegistry.getFluidForFilledItem(is) != null;
+		return ItemRegistry.SPAWNER.matchItem(is) || ReikaFluidHelper.getFluidForItem(is) != null;
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 					}
 				}
 				else {
-					FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(inv[i]);
+					FluidStack fs = ReikaFluidHelper.getFluidForItem(inv[i]);
 					if (fs != null) {
 						Fluid f = fs.getFluid();
 						if (f.canBePlacedInWorld()) {

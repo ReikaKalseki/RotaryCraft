@@ -1,6 +1,7 @@
 package Reika.RotaryCraft.TileEntities.Transmission;
 
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
 import Reika.RotaryCraft.Auxiliary.PowerSourceList;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PowerSourceTracker;
@@ -8,8 +9,8 @@ import Reika.RotaryCraft.Registry.MachineRegistry;
 
 public class TileEntitySplitBelt extends TileEntityBeltHub {
 
-	public static final int TAKEOFF_TORQUE = 128;
-	public static final int TAKEOFF_TORQUE_WET = 32;
+	public static final int TAKEOFF_TORQUE = 128/2;
+	public static final int TAKEOFF_TORQUE_WET = 32/2;
 
 	@Override
 	public boolean isSplitting() {
@@ -67,7 +68,7 @@ public class TileEntitySplitBelt extends TileEntityBeltHub {
 	}
 
 	@Override
-	public int[] getBeltColor() {
-		return new int[]{48, 96, 64};
+	public int getBeltColor() {
+		return ReikaColorAPI.RGBtoHex(48, 96, 64);
 	}
 }

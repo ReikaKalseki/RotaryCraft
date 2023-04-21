@@ -53,6 +53,7 @@ import Reika.DragonAPI.Interfaces.Block.FluidBlockSurrogate;
 import Reika.DragonAPI.Interfaces.TileEntity.AdjacentUpdateWatcher;
 import Reika.DragonAPI.Libraries.ReikaEnchantmentHelper;
 import Reika.DragonAPI.Libraries.ReikaEntityHelper;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
@@ -298,7 +299,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.BUSCONTROLLER) {
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {
-					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					FluidStack f = ReikaFluidHelper.getFluidForItem(is);
 					if (f != null && f.getFluid().equals(FluidRegistry.getFluid("rc lubricant"))) {
 						TileEntityBusController tb = (TileEntityBusController)te;
 						tb.fill(ForgeDirection.DOWN, f, true);
@@ -324,7 +325,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.FUELENGINE) {
 			if (is != null) {
 				if (FluidContainerRegistry.isFilledContainer(is)) {
-					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					FluidStack f = ReikaFluidHelper.getFluidForItem(is);
 					if (f != null) {
 						TileEntityFuelEngine tf = (TileEntityFuelEngine)te;
 						if (f.getFluid().equals(FluidRegistry.getFluid("fuel"))) {
@@ -356,7 +357,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			if (is != null && is.stackSize == 1) {
 				TileEntityFractionator tf = (TileEntityFractionator)te;
 				if (FluidContainerRegistry.isFilledContainer(is)) {
-					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					FluidStack f = ReikaFluidHelper.getFluidForItem(is);
 					if (f != null) {
 						if (f.getFluid().equals(FluidRegistry.getFluid("rc ethanol"))) {
 							tf.addLiquid(f.amount);
@@ -385,7 +386,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 				return false;
 			if (is != null && FluidContainerRegistry.isFilledContainer(is)) {
 				boolean bucket = FluidContainerRegistry.isBucket(is);
-				FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+				FluidStack f = ReikaFluidHelper.getFluidForItem(is);
 				if (f != null) {
 					Fluid fluid = f.getFluid();
 					int size = is.stackSize;
@@ -433,7 +434,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					}
 				}
 				else if (FluidContainerRegistry.isFilledContainer(is)) {
-					FluidStack f = FluidContainerRegistry.getFluidForFilledItem(is);
+					FluidStack f = ReikaFluidHelper.getFluidForItem(is);
 					if (f != null) {
 						Fluid fluid = f.getFluid();
 						int size = is.stackSize;
@@ -468,7 +469,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 					FluidStack stack = tr.getContents();
 					ItemStack ret = FluidContainerRegistry.fillFluidContainer(stack, is);
 					if (ret != null) {
-						int amt = FluidContainerRegistry.getFluidForFilledItem(ret).amount*size;
+						int amt = ReikaFluidHelper.getFluidForItem(ret).amount*size;
 						if (tr.getLevel() >= amt) {
 							tr.removeLiquid(amt);
 							if (!ep.capabilities.isCreativeMode)
@@ -605,7 +606,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (m == MachineRegistry.FUELENHANCER) {
 			TileEntityFuelConverter tf = (TileEntityFuelConverter)te;
 			if (is != null) {
-				FluidStack liq = FluidContainerRegistry.getFluidForFilledItem(is);
+				FluidStack liq = ReikaFluidHelper.getFluidForItem(is);
 				if (liq != null) {
 					int amt = tf.fill(ForgeDirection.UP, liq, false);
 					if (amt >= liq.amount || ep.capabilities.isCreativeMode) {

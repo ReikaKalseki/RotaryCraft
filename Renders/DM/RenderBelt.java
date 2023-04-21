@@ -194,8 +194,7 @@ public class RenderBelt extends RotaryTERenderer
 		GL11.glTranslated(dx, dy, dz);
 
 		v5.startDrawingQuads();
-		int[] color = tile.getBeltColor();
-		v5.setColorOpaque(color[0], color[1], color[2]);
+		v5.setColorOpaque_I(tile.getBeltColor());
 
 		v5.addVertex(0.125, 0.375, 0.375);
 		v5.addVertex(0.125, 0.625, 0.375);
@@ -248,8 +247,7 @@ public class RenderBelt extends RotaryTERenderer
 		GL11.glDisable(GL11.GL_LIGHTING);
 		Tessellator v5 = Tessellator.instance;
 		v5.startDrawingQuads();
-		int[] color = tile.getBeltColor();
-		v5.setColorOpaque(color[0], color[1], color[2]);
+		v5.setColorOpaque_I(tile.getBeltColor());
 
 		IIcon ico = Blocks.grass.getIcon(1, 0);
 		float u = ico.getMinU();

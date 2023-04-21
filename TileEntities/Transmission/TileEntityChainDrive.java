@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -12,6 +12,7 @@ package Reika.RotaryCraft.TileEntities.Transmission;
 import net.minecraft.item.ItemStack;
 
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
@@ -46,8 +47,8 @@ public class TileEntityChainDrive extends TileEntityBeltHub {
 	}
 
 	@Override
-	public int[] getBeltColor() {
-		return new int[]{80, 80, 80};
+	public int getBeltColor() {
+		return ReikaColorAPI.GStoHex(80);
 	}
 
 	@Override

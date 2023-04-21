@@ -24,9 +24,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
@@ -103,7 +103,7 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack is) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(is);
 		if (fs != null) {
 			Collection<FuelConversion> li = TileEntityFuelConverter.getByOutput(fs.getFluid());
 			for (FuelConversion c : li) {
@@ -118,7 +118,7 @@ public class FuelEnhancerHandler extends TemplateRecipeHandler {
 		for (FuelConversion c : li) {
 			arecipes.add(new ConverterRecipe(c));
 		}
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(is);
 		if (fs != null) {
 			li = TileEntityFuelConverter.getByInput(fs.getFluid());
 			for (FuelConversion c : li) {

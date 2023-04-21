@@ -23,11 +23,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import Reika.DragonAPI.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
 import Reika.DragonAPI.Instantiable.ModInteract.PositionedStackWithTooltip;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
@@ -152,7 +152,7 @@ public class CentrifugeHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(result);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(result);
 		if (fs != null) {
 			ArrayList<ItemStack> li = RecipesCentrifuge.getRecipes().getSources(fs.getFluid());
 			for (ItemStack is : li)

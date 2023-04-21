@@ -20,9 +20,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaGuiAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
@@ -120,7 +120,7 @@ public class DryingBedHandler extends TemplateRecipeHandler {
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(ingredient);
+		FluidStack fs = ReikaFluidHelper.getFluidForItem(ingredient);
 		if (fs != null) {
 			ItemStack is = RecipesDryingBed.getRecipes().getDryingResult(fs);
 			if (is != null) {

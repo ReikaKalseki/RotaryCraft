@@ -23,6 +23,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Interfaces.TileEntity.Connectable;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.RotaryCraft.API.Power.PowerGenerator;
 import Reika.RotaryCraft.API.Power.ShaftMerger;
@@ -410,8 +411,8 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		return zCoord+write.offsetZ;
 	}
 
-	public int[] getBeltColor() {
-		return new int[]{192, 120, 70};
+	public int getBeltColor() {
+		return ReikaColorAPI.RGBtoHex(192, 120, 70);
 	}
 
 	public ItemStack getBeltItem() {

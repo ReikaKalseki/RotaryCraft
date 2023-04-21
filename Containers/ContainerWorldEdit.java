@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.RotaryCraft.Auxiliary.WorldEditHelper;
 
@@ -55,7 +56,7 @@ public class ContainerWorldEdit extends Container
 					par1EntityPlayer.dropPlayerItemWithRandomChoice(var3, true);
 			}
 			if (FluidContainerRegistry.isFilledContainer(var3)) {
-				Fluid liq = FluidContainerRegistry.getFluidForFilledItem(var3).getFluid();
+				Fluid liq = ReikaFluidHelper.getFluidForItem(var3).getFluid();
 				if (liq.canBePlacedInWorld())
 					WorldEditHelper.addCommand(par1EntityPlayer, liq.getBlock(), 0);
 				return;

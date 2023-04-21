@@ -29,12 +29,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
 import Reika.DragonAPI.Interfaces.Block.SidedTextureIndex;
+import Reika.DragonAPI.Libraries.ReikaFluidHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.DartItemHandler;
 import Reika.RotaryCraft.RotaryCraft;
@@ -156,7 +156,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine implemen
 			TileEntityAdvancedGear tile = (TileEntityAdvancedGear)te;
 			if (tile.getGearType().isLubricated()) {
 				if (is != null) {
-					FluidStack fs = FluidContainerRegistry.getFluidForFilledItem(is);
+					FluidStack fs = ReikaFluidHelper.getFluidForItem(is);
 					if (fs != null && fs.getFluid() == RotaryCraft.lubeFluid && tile.canAcceptMoreLubricant(fs.amount)) {
 						tile.addLubricant(fs.amount);
 						if (!ep.capabilities.isCreativeMode)

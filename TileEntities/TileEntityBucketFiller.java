@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -93,7 +93,7 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 		for (int i = 0; i < inv.length; i++) {
 			ItemStack slot = inv[i];
 			if (slot != null) {
-				FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(slot);
+				FluidStack fluid = ReikaFluidHelper.getFluidForItem(slot);
 				if (fluid != null) {
 					if (this.canAccept(fluid.getFluid())) {
 						if (tank.getCapacity() >= fluid.amount+tank.getLevel()) {
@@ -117,7 +117,7 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 			if (slot != null && FluidContainerRegistry.isEmptyContainer(slot)) {
 				ItemStack is = FluidContainerRegistry.fillFluidContainer(tank.getFluid(), slot);
 				if (is != null) {
-					tank.removeLiquid(FluidContainerRegistry.getFluidForFilledItem(is).amount);
+					tank.removeLiquid(ReikaFluidHelper.getFluidForItem(is).amount);
 					ReikaInventoryHelper.decrStack(i, inv);
 					if (!ReikaInventoryHelper.addToIInv(is, this))
 						ReikaItemHelper.dropItem(worldObj, xCoord+0.5, yCoord+1, zCoord+0.5, is);
