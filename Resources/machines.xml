@@ -218,6 +218,8 @@
 			Required Power: %dW
 			Field-of-View = 1+2*log_2(power-%d) m
 			Power Input: Any side
+			
+			Viewed cross-section can be moved with [] keys
 		</note>
 	</gpr>	
 	<heater>

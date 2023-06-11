@@ -110,7 +110,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 
 		TileEntity source = this.getAdjacentTileEntity(from);
 
-		if (source instanceof IInventory) {
+		if (ReikaInventoryHelper.isAutomatableInventory(source)) {
 			TileEntity target = this.getAdjacentTileEntity(dir);
 			if (target instanceof WorldRift)
 				target = this.getRelayedTarget(target, dir);
@@ -145,7 +145,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 
 				InventoryType src = this.getTypeForInventory(source);
 
-				if (target instanceof IInventory) {
+				if (ReikaInventoryHelper.isAutomatableInventory(target)) {
 					InventoryType tgt = this.getTypeForInventory(target);
 					if (this.tryPatternInsertion((IInventory)source, target)) {
 
