@@ -36,6 +36,7 @@ import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Libraries.ReikaNBTHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaArrayHelper;
+import Reika.RotaryCraft.API.Interfaces.RCPipe;
 import Reika.RotaryCraft.Auxiliary.Interfaces.CachedConnection;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeConnector;
 import Reika.RotaryCraft.Auxiliary.Interfaces.PipeRenderConnector;
@@ -45,7 +46,7 @@ import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.TileEntities.Production.TileEntityPump;
 
-public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection, BreakAction, PumpablePipe {
+public abstract class TileEntityPiping extends RotaryCraftTileEntity implements RenderableDuct, CachedConnection, BreakAction, PumpablePipe, RCPipe {
 
 	private static final HashSet<Class> nonInteractableClasses = new HashSet();
 	private static final HashSet<Class> interactableClasses = new HashSet();
@@ -323,12 +324,24 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		}
 	}
 
-	public final void removeLiquid(int toremove) {
-		this.setLevel(this.getFluidLevel()-toremove);
+	public final int removeLiquid(int max) {
+		int has = this.getFluidLevel();
+		int rem = Math.min(max, has);
+		this.setLevel(has-rem);
+		return rem;
 	}
 
 	public final void addFluid(int toadd) {
 		this.setLevel(this.getFluidLevel()+toadd);
+	}
+
+	public final boolean addFluid(Fluid f, int toadd) {
+		Fluid has = this.getFluidType();
+		if (has != null && has != f)
+			return false;
+		this.setFluid(f);
+		this.addFluid(toadd);
+		return true;
 	}
 
 	private final void intakeFluid(World world, int x, int y, int z) {
