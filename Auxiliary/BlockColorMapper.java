@@ -10,10 +10,11 @@
 package Reika.RotaryCraft.Auxiliary;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.base.Charsets;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -569,7 +570,7 @@ this.addBlockColor(Blocks.packedIce, ReikaColorAPI.RGBtoHex(165, 195, 247)); //m
 	public void loadFromConfig() {
 		File f = this.getFullSavePath();
 		if (f.exists()) {
-			ArrayList<String> li = ReikaFileReader.getFileAsLines(f, false);
+			List<String> li = ReikaFileReader.getFileAsLines(f, false, Charsets.UTF_8);
 			for (String s : li) {
 				this.parseLine(s);
 			}

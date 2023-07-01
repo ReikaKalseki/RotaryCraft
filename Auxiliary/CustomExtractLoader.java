@@ -9,7 +9,6 @@
  ******************************************************************************/
 package Reika.RotaryCraft.Auxiliary;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.IO.ReikaFileReader;
-import Reika.DragonAPI.IO.ReikaFileReader.SimpleLineWriter;
 import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Interfaces.Registry.OreType.OreRarity;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -160,101 +158,86 @@ public class CustomExtractLoader {
 		if (!f.exists())
 			if (!this.createOreFile(f))
 				return;
-		try(BufferedReader p = ReikaFileReader.getReader(f, Charsets.UTF_8)) {
-			String line = "";
-			while (line != null) {
-				line = p.readLine();
-				if (line != null && !line.isEmpty() && !line.startsWith("//")) {
-					try {
-						CustomExtractEntry entry = this.parseString(line);
-						if (entry != null) {
-							data.add(entry);
-							ExtractorBonus.addCustomOreDelegate(entry);
-							RotaryCraft.logger.log("Added extract entry "+entry);
-						}
-						else {
-							RotaryCraft.logger.logError("Malformed custom extract entry: "+line);
-						}
+		for (String line : ReikaFileReader.getFileAsLines(f, true, Charsets.UTF_8)) {
+			if (line != null && !line.isEmpty() && !line.startsWith("//")) {
+				try {
+					CustomExtractEntry entry = this.parseString(line);
+					if (entry != null) {
+						data.add(entry);
+						ExtractorBonus.addCustomOreDelegate(entry);
+						RotaryCraft.logger.log("Added extract entry "+entry);
 					}
-					catch (Exception e) {
-						RotaryCraft.logger.logError("Malformed custom extract entry ["+e.getLocalizedMessage()+"]: '"+line+"'");
-						e.printStackTrace();
+					else {
+						RotaryCraft.logger.logError("Malformed custom extract entry: "+line);
 					}
 				}
+				catch (Exception e) {
+					RotaryCraft.logger.logError("Malformed custom extract entry ["+e.getLocalizedMessage()+"]: '"+line+"'");
+					e.printStackTrace();
+				}
 			}
-		}
-		catch (Exception e) {
-			RotaryCraft.logger.log(e.getMessage()+", and it caused the read to fail!");
-			e.printStackTrace();
 		}
 	}
 
 	private boolean createOreFile(File f) {
-		try (SimpleLineWriter p = ReikaFileReader.getPrintWriterForNewFile(f)) {
-			this.writeCommentLine(p, "-------------------------------");
-			this.writeCommentLine(p, " RotaryCraft Custom Extract Loader ");
-			this.writeCommentLine(p, "-------------------------------");
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Use this file to add custom ores and extracts to the extractor.");
-			this.writeCommentLine(p, "Specify one per line, and format them as 'Name, Rarity, Product Type, Product Ore Name, Number, Color 1, Color 2, Native Ore, OreDictionary Name(s)'");
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Ore rarity is the rarity of the ore blocks in the world, and affects the multiplication rates.");
-			this.writeCommentLine(p, "Valid Rarity Values:");
-			for (OreRarity o : OreRarity.values()) {
-				this.writeCommentLine(p, "\t"+o.name()+" - "+o.desc+", like "+o.examples+"");
-			}
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Valid Product Types:");
-			for (ProductType o : ProductType.values()) {
-				this.writeCommentLine(p, "\t"+o.displayName+" - "+o.desc);
-			}
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Native ore is the native ore type of the output if you wish for the custom ore to produce the same smelted products as a native ore.");
-			this.writeCommentLine(p, "Use 'null' for none to have the custom ore produce a unique smelted product.");
-			this.writeCommentLine(p, "Valid Native Ores:");
-			for (ReikaOreHelper o : ReikaOreHelper.values()) {
-				this.writeCommentLine(p, "\t"+o.name()+" - "+o.getName());
-			}
-			for (ModOreList o : ModOreList.values()) {
-				if (!o.isNetherOres())
-					this.writeCommentLine(p, "\t"+o.name()+" - "+o.displayName+" "+o.getTypeName());
-			}
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Capitalization for the ore dictionary names matters, but is ignored for rarities, types, and native ores.");
-			this.writeCommentLine(p, "Ensure your OreDict names are correct; not all mods follow the 'oreName' and 'productName' convention.");
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Colors must be hex codes; try to avoid conflicts with existing ores, including those natively handled by RC.");
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "'Number' is the number of items normally obtained from the ore block, such as 1 for coal and 4 for redstone,");
-			this.writeCommentLine(p, "and controls the number of items produced when smelting the flake. Use direct harvesting/smelting, not other processing.");
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Sample Lines:");
-			this.writeCommentLine(p, "\tSample Ore 1, SCARCE, INGOT, ingotSample, 1, 0xffffff, 0x73cc12, null, oreSample");
-			this.writeCommentLine(p, "\tSample Ore 2, Common, dust, dustMetal, 4, 0x77003b, 0xb1a700, null, oreNotSample, oreSecondName, oreHasLotsOfVariants");
-			this.writeCommentLine(p, "\tSample Ore 3, EVerYwHEre, gEm, ImproperIngot, 3, 0x1487a6, 0x27c61a, null, PoorlyNamedOre");
-			this.writeCommentLine(p, "\tSample Ore 4, rare, Ingot, ingotEndCopper, 1, 0x16723d, 0xcb6faa, COPPER, oreEndCopper");
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Entries missing names, rarities, types, products, or colors, or having less than one Ore Dictionary name, are incorrect.");
-			this.writeCommentLine(p, "Incorrectly formatted lines will be ignored and will log an error in the console.");
-			this.writeCommentLine(p, "Lines beginning with '//' are comments and will be ignored, as will empty lines. Spaces are stripped.");
-			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "NOTE WELL: It is your responsibility to choose the ore blocks appropriately.");
-			this.writeCommentLine(p, "\tWhile you can theoretically make anything processable in the Extractor,");
-			this.writeCommentLine(p, "\tnull or missing blocks, and non-blocks are likely to crash and corrupt the");
-			this.writeCommentLine(p, "\tworld. You may also create duplication exploits. No support will be provided in this case.");
-			this.writeCommentLine(p, "====================================================================================");
-			p.append("\n");
-			return true;
+		ArrayList<String> p = new ArrayList();
+		this.writeCommentLine(p, "-------------------------------");
+		this.writeCommentLine(p, " RotaryCraft Custom Extract Loader ");
+		this.writeCommentLine(p, "-------------------------------");
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Use this file to add custom ores and extracts to the extractor.");
+		this.writeCommentLine(p, "Specify one per line, and format them as 'Name, Rarity, Product Type, Product Ore Name, Number, Color 1, Color 2, Native Ore, OreDictionary Name(s)'");
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Ore rarity is the rarity of the ore blocks in the world, and affects the multiplication rates.");
+		this.writeCommentLine(p, "Valid Rarity Values:");
+		for (OreRarity o : OreRarity.values()) {
+			this.writeCommentLine(p, "\t"+o.name()+" - "+o.desc+", like "+o.examples+"");
 		}
-		catch (Exception e) {
-			RotaryCraft.logger.logError("Could not generate CustomExtract Config.");
-			e.printStackTrace();
-			return false;
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Valid Product Types:");
+		for (ProductType o : ProductType.values()) {
+			this.writeCommentLine(p, "\t"+o.displayName+" - "+o.desc);
 		}
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Native ore is the native ore type of the output if you wish for the custom ore to produce the same smelted products as a native ore.");
+		this.writeCommentLine(p, "Use 'null' for none to have the custom ore produce a unique smelted product.");
+		this.writeCommentLine(p, "Valid Native Ores:");
+		for (ReikaOreHelper o : ReikaOreHelper.values()) {
+			this.writeCommentLine(p, "\t"+o.name()+" - "+o.getName());
+		}
+		for (ModOreList o : ModOreList.values()) {
+			if (!o.isNetherOres())
+				this.writeCommentLine(p, "\t"+o.name()+" - "+o.displayName+" "+o.getTypeName());
+		}
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Capitalization for the ore dictionary names matters, but is ignored for rarities, types, and native ores.");
+		this.writeCommentLine(p, "Ensure your OreDict names are correct; not all mods follow the 'oreName' and 'productName' convention.");
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Colors must be hex codes; try to avoid conflicts with existing ores, including those natively handled by RC.");
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "'Number' is the number of items normally obtained from the ore block, such as 1 for coal and 4 for redstone,");
+		this.writeCommentLine(p, "and controls the number of items produced when smelting the flake. Use direct harvesting/smelting, not other processing.");
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Sample Lines:");
+		this.writeCommentLine(p, "\tSample Ore 1, SCARCE, INGOT, ingotSample, 1, 0xffffff, 0x73cc12, null, oreSample");
+		this.writeCommentLine(p, "\tSample Ore 2, Common, dust, dustMetal, 4, 0x77003b, 0xb1a700, null, oreNotSample, oreSecondName, oreHasLotsOfVariants");
+		this.writeCommentLine(p, "\tSample Ore 3, EVerYwHEre, gEm, ImproperIngot, 3, 0x1487a6, 0x27c61a, null, PoorlyNamedOre");
+		this.writeCommentLine(p, "\tSample Ore 4, rare, Ingot, ingotEndCopper, 1, 0x16723d, 0xcb6faa, COPPER, oreEndCopper");
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "Entries missing names, rarities, types, products, or colors, or having less than one Ore Dictionary name, are incorrect.");
+		this.writeCommentLine(p, "Incorrectly formatted lines will be ignored and will log an error in the console.");
+		this.writeCommentLine(p, "Lines beginning with '//' are comments and will be ignored, as will empty lines. Spaces are stripped.");
+		this.writeCommentLine(p, "");
+		this.writeCommentLine(p, "NOTE WELL: It is your responsibility to choose the ore blocks appropriately.");
+		this.writeCommentLine(p, "\tWhile you can theoretically make anything processable in the Extractor,");
+		this.writeCommentLine(p, "\tnull or missing blocks, and non-blocks are likely to crash and corrupt the");
+		this.writeCommentLine(p, "\tworld. You may also create duplication exploits. No support will be provided in this case.");
+		this.writeCommentLine(p, "====================================================================================");
+		return ReikaFileReader.writeLinesToFile(f, p, true, Charsets.UTF_8);
 	}
 
-	private static void writeCommentLine(SimpleLineWriter p, String line) {
-		p.println("// "+line+"\n");
+	private static void writeCommentLine(ArrayList<String> li, String line) {
+		li.add("// "+line);
 	}
 
 	private CustomExtractEntry parseString(String s) throws Exception {

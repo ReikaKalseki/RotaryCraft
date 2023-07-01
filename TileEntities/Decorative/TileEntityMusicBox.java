@@ -9,16 +9,16 @@
  ******************************************************************************/
 package Reika.RotaryCraft.TileEntities.Decorative;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import org.apache.commons.codec.Charsets;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -319,26 +319,23 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 		File f = new File(save.getPath()+"/RotaryCraft/"+name);
 		if (f.exists())
 			f.delete();
-		try (BufferedWriter p = ReikaFileReader.getPrintWriterForNewFile(f)) {
-			int length = this.getMusicLength();
-			for (int i = 0; i < length; i++) {
-				for (int k = 0; k < 16; k++) {
-					if (musicQueue[k].size() > i) {
-						Note n = musicQueue[k].get(i);
-						String s = n.toSerialString();
-						p.append(s+";");
-					}
-					else {
-						p.append("-;");
-					}
+		ArrayList<String> li = new ArrayList();
+		int length = this.getMusicLength();
+		for (int i = 0; i < length; i++) {
+			StringBuilder sb = new StringBuilder();
+			for (int k = 0; k < 16; k++) {
+				if (musicQueue[k].size() > i) {
+					Note n = musicQueue[k].get(i);
+					String s = n.toSerialString();
+					sb.append(s+";");
 				}
-				p.append("\n");
+				else {
+					sb.append("-;");
+				}
 			}
+			li.add(sb.toString());
 		}
-		catch (Exception e) {
-			ReikaChatHelper.write(e.getCause()+" caused the save to fail!");
-			e.printStackTrace();
-		}
+		ReikaFileReader.writeLinesToFile(f, li, true, Charsets.UTF_8);
 	}
 
 	public boolean hasSavedFile() {
@@ -364,9 +361,8 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 	private void readFile(String path, boolean internal) {
 		this.clearMusic();
 		int linecount = -1;
-		try(BufferedReader p = internal ? new BufferedReader(new InputStreamReader(RotaryCraft.class.getResourceAsStream(path))) : ReikaFileReader.getReader(path, Charset.defaultCharset())) {
-			String line = p.readLine();
-			while (line != null) {
+		try(InputStream in = internal ? RotaryCraft.class.getResourceAsStream(path) : new FileInputStream(path)) {
+			for (String line : ReikaFileReader.getFileAsLines(in, true, Charsets.UTF_8)) {
 				linecount++;
 				String[] pieces = line.split(";");
 				for (int i = 0; i < 16; i++) {
@@ -376,7 +372,6 @@ public class TileEntityMusicBox extends TileEntityPowerReceiver implements GuiCo
 						//ReikaJavaLibrary.pConsole(n);
 					}
 				}
-				line = p.readLine();
 			}
 		}
 		catch (Exception e) {

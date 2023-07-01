@@ -535,26 +535,6 @@ public class RotaryRecipes {
 	@ModDependent(ModList.THAUMCRAFT)
 	private static void addThaumcraft() {
 		ReikaThaumHelper.addBookCategory(new ResourceLocation("rotarycraft", "textures/blocks/worktable_top.png"), "rotarycraft");
-
-		MathExpression cost = new MathExpression() {
-
-			@Override
-			public double evaluate(double arg) throws ArithmeticException {
-				return arg;
-			}
-
-			@Override
-			public double getBaseValue() {
-				return 0;
-			}
-
-			@Override
-			public String toString() {
-				return "<self>";
-			}
-
-		};
-
 		//ItemStack in = ItemRegistry.BEDHELM.getEnchantedStack();
 		//ItemStack out = ItemRegistry.BEDREVEAL.getEnchantedStack();
 		AspectList al = new AspectList();
@@ -572,11 +552,11 @@ public class RotaryRecipes {
 		ShapedArcaneRecipe sr = new ShapedArcaneRecipe("VOIDRAIL", ItemRegistry.VOIDRAIL.getCraftedProduct(6), al, in);
 		ThaumcraftApi.getCraftingRecipes().add(sr);
 		String page = RotaryDescriptions.getParentPage()+"thaum.xml";
-		ReikaThaumHelper.addArcaneRecipeBookEntryViaXML(RotaryCraft.instance, "VOIDRAIL", desc, "rotarycraft", sr, cost, -2, 0, RotaryCraft.class, page).setParents("VOIDMETAL");
+		ReikaThaumHelper.addArcaneRecipeBookEntryViaXML(RotaryCraft.instance, "VOIDRAIL", desc, "rotarycraft", sr, MathExpression.self, -2, 0, RotaryCraft.class, page).setParents("VOIDMETAL");
 		ThaumcraftApi.addWarpToItem(ItemRegistry.VOIDRAIL.getStackOf(), 1);
 		ThaumcraftApi.addWarpToResearch("VOIDRAIL", 3);
 
-		cost = new MathExpression() {
+		MathExpression cost = new MathExpression() {
 			@Override
 			public double evaluate(double arg) throws ArithmeticException {
 				return arg/5D;
