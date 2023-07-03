@@ -813,6 +813,11 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		}
 	}
 
+	@Override
+	public String getDescription() {
+		return "Repair gearbox damage";
+	}
+
 	@ModDependent(ModList.BCTRANSPORT)
 	public final ConnectOverride overridePipeConnection(PipeType type, ForgeDirection side) {
 		return type == PipeType.FLUID && this.consumesLubricant() && this.canConnectToPipeOnSide(MachineRegistry.HOSE, side) ? ConnectOverride.CONNECT : ConnectOverride.DISCONNECT;

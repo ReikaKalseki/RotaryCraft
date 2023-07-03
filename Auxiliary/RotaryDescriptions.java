@@ -40,6 +40,7 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesFrictionHeater;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesMagnetizer;
 import Reika.RotaryCraft.Base.TileEntity.EnergyToPowerBase;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade;
 import Reika.RotaryCraft.ModInterface.TileEntityFuelEngine;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityAirCompressor;
 import Reika.RotaryCraft.ModInterface.Conversion.TileEntityDynamo;
@@ -289,8 +290,8 @@ public final class RotaryDescriptions {
 				int k = 0;
 				for (String s : sub) {
 					String val = tools.getValueAtNode(s);
+					val = String.format(val, miscData.get(h));
 					if (k == 0) {
-						val = String.format(val, miscData.get(h));
 						addEntry(h, val);
 					}
 					else {
@@ -300,6 +301,9 @@ public final class RotaryDescriptions {
 					lengths.put(h, k);
 				}
 				continue;
+			}
+			else {
+				desc = String.format(desc, miscData.get(h));
 			}
 
 			addEntry(h, desc);
@@ -636,6 +640,8 @@ public final class RotaryDescriptions {
 		addSubNotes(MachineRegistry.ADVANCEDGEARS, 3, TileEntityAdvancedGear.getOutputCap(false), TileEntityAdvancedGear.getOutputCap(false), TileEntityAdvancedGear.getOutputCap(true), TileEntityAdvancedGear.getOutputCap(true), TileEntityAdvancedGear.getOutputFunction());
 
 		addData(HandbookRegistry.TUNGSTEN, RecipesFrictionHeater.getRecipes().getRecipeByInput(ItemStacks.tungstenflakes).requiredTemperature);
+
+		addData(HandbookRegistry.UPGRADES, ItemEngineUpgrade.Upgrades.getDescriptionList());
 	}
 
 	public static String getParentPage() {

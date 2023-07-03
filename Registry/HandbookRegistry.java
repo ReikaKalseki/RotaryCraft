@@ -38,6 +38,7 @@ import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipesBlastFurnace.BlastFurna
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityEngine;
 import Reika.RotaryCraft.GUIs.GuiHandbook;
+import Reika.RotaryCraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 import Reika.RotaryCraft.Registry.GearboxTypes.GearPart;
 
 public enum HandbookRegistry implements HandbookEntry {
@@ -289,6 +290,7 @@ public enum HandbookRegistry implements HandbookEntry {
 	JUMPBOOTS("Spring Boots"),
 	TANKS(ItemRegistry.FUEL),
 	DISK(ItemRegistry.DISK),
+	UPGRADES(ItemRegistry.UPGRADE),
 
 	//---------------------RESOURCE--------------------//
 	RESOURCEDESC("Resource Items", "Resource Items"),
@@ -754,6 +756,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return RotaryNames.getAdvGearName(offset);
 		if (this.getParent() == TRANSDESC)
 			return machine.getName();
+		if (this == UPGRADES)
+			return "Upgrades";
 		if (this.getParent() == TOOLDESC && item != null)
 			return item.getBasicName();
 		return title;
@@ -855,6 +859,12 @@ public enum HandbookRegistry implements HandbookEntry {
 			for (int i = 0; i < 4; i++) {
 				li.add(MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(i));
 			}
+			return li;
+		}
+		if (this == UPGRADES) {
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			for (int i = 0; i < ItemRegistry.UPGRADE.getNumberMetadatas(); i++)
+				li.add(ItemRegistry.UPGRADE.getStackOfMetadata(i));
 			return li;
 		}
 		if (crafted != null)
@@ -1057,6 +1067,8 @@ public enum HandbookRegistry implements HandbookEntry {
 			return ItemStacks.bedrockdust;
 		if (this == FLAKES)
 			return ItemStacks.goldoreflakes;
+		if (this == UPGRADES)
+			return ItemRegistry.UPGRADE.getStackOfMetadata(Upgrades.MAGNETOSTATIC4.ordinal());
 		if (this == BEDTOOLS)
 			return ItemRegistry.BEDPICK.getEnchantedStack();
 		if (this == BEDARMOR)

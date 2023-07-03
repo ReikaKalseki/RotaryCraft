@@ -320,7 +320,7 @@ public class RotaryRecipes {
 
 			SmelteryRecipeHandler.addMelting(ItemStacks.ironscrap, new ItemStack(Blocks.iron_block), 600, base, "iron.molten");
 
-			ArrayList<OreType> ores = ReikaJavaLibrary.makeListFrom(ModOreList.COPPER, ModOreList.TIN, ModOreList.ALUMINUM, ModOreList.SILVER, ModOreList.NICKEL, ModOreList.LEAD, ModOreList.PLATINUM, ModOreList.COBALT, ModOreList.ARDITE);
+			ArrayList<OreType> ores = ReikaJavaLibrary.makeListFrom(ModOreList.COPPER, ModOreList.TIN, ModOreList.ALUMINUM, ModOreList.NETHERIRON, ModOreList.NETHERGOLD, ModOreList.NETHERSILVER, ModOreList.SILVER, ModOreList.NICKEL, ModOreList.LEAD, ModOreList.PLATINUM, ModOreList.COBALT, ModOreList.ARDITE);
 			ores.addAll(0, ReikaJavaLibrary.makeListFromArray(ReikaOreHelper.oreList));
 
 			for (OreType ore : ores) {

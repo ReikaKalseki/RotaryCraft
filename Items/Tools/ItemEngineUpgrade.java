@@ -11,6 +11,7 @@ package Reika.RotaryCraft.Items.Tools;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,8 +19,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
+import Reika.DragonAPI.Exception.UnreachableCodeException;
+import Reika.RotaryCraft.RotaryNames;
 import Reika.RotaryCraft.Base.ItemRotaryTool;
+import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ItemRegistry;
+import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -45,7 +50,7 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
-		for (int i = 0; i < Upgrades.values().length; i++) {
+		for (int i = 0; i < Upgrades.list.length; i++) {
 			ItemStack is = new ItemStack(par1, 1, i);
 			if (i == 2) {
 				ItemStack is2 = is.copy();
@@ -58,7 +63,9 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack is, EntityPlayer ep, List li, boolean vb) {
+		li.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(Upgrades.list[is.getItemDamage()].getDescription(), 170));
 		if (is.getItemDamage() == 2) {
 			if (is.stackTagCompound != null) {
 				int magnet = is.stackTagCompound.getInteger("magnet");
@@ -66,11 +73,13 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 					li.add(String.format("Magnetized to %d microTeslas", magnet));
 				}
 				if (magnet < 720) {
-					li.add("Must be magnetized to 720 microTeslas to be used");
+					li.add("Must be magnetized to 720");
+					li.add("microTeslas to be used");
 				}
 			}
 			else {
-				li.add("Must be magnetized to 720 microTeslas to be used");
+				li.add("Must be magnetized to 720");
+				li.add("microTeslas to be used");
 			}
 		}
 	}
@@ -108,6 +117,44 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 
 		public ItemStack getStack() {
 			return ItemRegistry.UPGRADE.getStackOfMetadata(this.ordinal());
+		}
+
+		public String getDescription() {
+			switch(this) {
+				case PERFORMANCE:
+					return "Upgrades "+RotaryNames.getEngineName(EngineType.GAS.ordinal())+"s to "+RotaryNames.getEngineName(EngineType.SPORT.ordinal())+"s";
+				case AFTERBURNER:
+					return "Adds afterburner capability to the "+RotaryNames.getEngineName(EngineType.JET.ordinal());
+				case FLUX:
+					return "Improves energy efficiency/capacity on shaft-to-electromagnetic converter engines";
+				case LODESTONE:
+					return "Increases "+MachineRegistry.MAGNETIZER.getName()+" effectivity";
+				case REDSTONE:
+					return "Adds integrated redstone clock";
+				case MAGNETOSTATIC1:
+				case MAGNETOSTATIC2:
+				case MAGNETOSTATIC3:
+				case MAGNETOSTATIC4:
+				case MAGNETOSTATIC5:
+					return "Converter engine upgrade, tier "+this.name().charAt(this.name().length()-1);
+				case EFFICIENCY:
+					return "Improves energy efficiency on converter engines.";
+			}
+			throw new UnreachableCodeException(this);
+		}
+
+		public static String getDescriptionList() {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < list.length; i++) {
+				if (i >= MAGNETOSTATIC1.ordinal() && i <= MAGNETOSTATIC5.ordinal())
+					continue;
+				sb.append(list[i].getName().replace("Upgrade", "").trim());
+				sb.append(" - ");
+				sb.append(list[i].getDescription());
+				if (i < list.length-1)
+					sb.append("\n");
+			}
+			return sb.toString();
 		}
 	}
 

@@ -86,4 +86,14 @@
 	<disk>
 		The music disc allows you to copy music between music boxes. Right-click a programmed music box with an empty disk to create a written copy; right-clicking a music box with a written disk will overwrite the music box with the disk contents.
 	</disk>
+	<upgrades>
+		<sub>
+			<s0>
+				Various machines can be upgraded in place, either to another machine/engine entirely or with simple functionality improvements. These are applied with a simple right-click on the machine, and are usually kept when broken, and dropped again if not.
+			</s0>
+			<s1>
+				%s
+			</s1>
+		</sub>
+	</upgrades>
 </tools>

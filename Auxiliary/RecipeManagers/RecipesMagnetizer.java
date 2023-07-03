@@ -125,7 +125,8 @@ public class RecipesMagnetizer extends RecipeHandler implements MagnetizerManage
 		StringBuilder sb = new StringBuilder();
 		sb.append("Required Speeds:\n\n");
 		for (MagnetizerRecipe mr : recipes.values()) {
-			sb.append(mr.item.getDisplayName()+" @ "+Math.max(PowerReceivers.MAGNETIZER.getMinSpeed(), mr.minSpeed)+" rad/s\n");
+			sb.append(mr.item.getDisplayName()+" @ "+Math.max(PowerReceivers.MAGNETIZER.getMinSpeed(), mr.minSpeed)+" rad/s;\n");
+			sb.append(mr.timeFactor+"x time cost, "+mr.speedPeruT+"rad/s per uT\n\n");
 		}
 		return sb.toString();
 	}

@@ -121,6 +121,8 @@
 			Required Speed: %d rad/s
 			Power Input: Bottom
 			Max Temperature: %dC
+			
+			Can accept liquid oxygen accelerant
 		</note>
 	</pulsejet>
 	<pump>

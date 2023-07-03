@@ -35,9 +35,10 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 	private static final int LINES = 5;
 
 	private SettingType page = SettingType.BASIC;
-	private MatchData data;
 	private ArrayList<MatchDisplay> display;
 	private int nbtListPos = 0;
+
+	private MatchData lastData;
 
 	public GuiItemFilter(EntityPlayer p5ep, TileEntityItemFilter te)
 	{
@@ -46,7 +47,6 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		ySize = 217;
 		ep = p5ep;
 		filter = te;
-		data = filter.getData();
 	}
 
 	@Override
@@ -56,6 +56,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
+		MatchData data = filter.getData();
 		if (data != null) {
 			display = null;
 			switch(page) {
@@ -139,7 +140,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 
 	private void sendData() {
 		//ReikaJavaLibrary.pConsole(filter.getData());
-		NBTTagCompound nbt = data.writeToNBT();
+		NBTTagCompound nbt = filter.getData().writeToNBT();
 		//ReikaJavaLibrary.pConsole(nbt);
 		nbt.setInteger("posX", tile.xCoord);
 		nbt.setInteger("posY", tile.yCoord);
@@ -157,10 +158,15 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 		int dx = this.inventoryLabelLeft() ? 176 : xSize-50;
 		fontRendererObj.drawString("Blacklist", dx, (ySize - 96) + 3, 4210752);
 
+		MatchData data = filter.getData();
+		if (data != lastData)
+			this.initGui();
+		lastData = data;
+
 		int x = api.getMouseRealX();
 		int y = api.getMouseRealY();
 
-		if (data != null) {
+		if (filter.getData() != null) {
 			/*
 			int tx = 44;
 			int ty = 16;

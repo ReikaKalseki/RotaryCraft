@@ -434,10 +434,10 @@ public class RotaryCraft extends DragonAPIMod {
 
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.YEAST.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.ETHANOL.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.CANOLA.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.EXTRACTS.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MODEXTRACTS.getItemInstance(), true);
-		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.CUSTOMEXTRACT.getItemInstance(), true);
+		//SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.CANOLA.getItemInstance(), true);
+		//SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.EXTRACTS.getItemInstance(), true);
+		//SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.MODEXTRACTS.getItemInstance(), true);
+		//SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.CUSTOMEXTRACT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.ENGINE.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.SHAFT.getItemInstance(), true);
 		SensitiveItemRegistry.instance.registerItem(this, ItemRegistry.FLYWHEEL.getItemInstance(), true);
