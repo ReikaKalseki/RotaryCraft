@@ -359,6 +359,8 @@ public class GuiHandbook extends GuiScreen
 			return PageType.SMELTING;
 		if (h == HandbookRegistry.SILVERINGOT)
 			return PageType.SMELTING;
+		if (h == HandbookRegistry.SALT)
+			return PageType.PLAIN;
 		if (h == HandbookRegistry.BUCKETS) {
 			if ((System.nanoTime()/SECOND)%2 == 0)
 				return PageType.FRACTIONATOR;
@@ -631,6 +633,12 @@ public class GuiHandbook extends GuiScreen
 		boolean disable = h.isConfigDisabled();
 		String s = h.getTitle()+(disable ? " (Disabled)" : "");
 		fontRendererObj.drawString(s, posX+xo+6, posY+yo+6, disable ? 0xff0000 : 0x000000);
+		if (h == HandbookRegistry.ENCHANTING && subpage > 0) {
+			MultiMap<MachineRegistry, Enchantment> map = MachineRegistry.getEnchantableMachineList();
+			ArrayList<MachineRegistry> li = new ArrayList(map.keySet());
+			Collections.sort(li);
+			fontRendererObj.drawString(li.get(subpage-1).getName(), posX+xo+6, posY+yo+18, disable ? 0xff0000 : 0x000000);
+		}
 		int c = disable ? 0x777777 : 0xffffff;
 		int px = posX+descX;
 		if (this.isOnTOC()) {

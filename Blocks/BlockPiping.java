@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -128,7 +128,7 @@ public class BlockPiping extends BlockBasicMultiTE {
 		double d = 0.125;
 		double[] dd = new double[6];
 		for (int i = 0; i < 6; i++)
-			dd[i] = te.isConnectedDirectly(ForgeDirection.VALID_DIRECTIONS[i]) ? 0 : d;
+			dd[i] = te == null || te.isConnectedDirectly(ForgeDirection.VALID_DIRECTIONS[i]) ? 0 : d;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x+dd[4], y+dd[1], z+dd[2], x+1-dd[5], y+1-dd[0], z+1-dd[3]);
 		this.setBounds(box, x, y, z);
 		return box;

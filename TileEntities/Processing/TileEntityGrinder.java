@@ -31,6 +31,7 @@ import Reika.DragonAPI.Instantiable.Data.KeyedItemStack;
 import Reika.DragonAPI.Instantiable.Data.Collections.OneWayCollections.OneWaySet;
 import Reika.DragonAPI.Instantiable.Data.Maps.ItemHashMap;
 import Reika.DragonAPI.Libraries.ReikaFluidHelper;
+import Reika.DragonAPI.Libraries.ReikaNBTHelper.NBTTypes;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.RotaryCraft;
@@ -151,6 +152,20 @@ ProcessingMachine, DamagingContact, EnchantableMachine {
 		NBT.setShort("CookTime", (short)grinderCookTime);
 
 		tank.writeToNBT(NBT);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound NBT) {
+		super.writeToNBT(NBT);
+
+		NBT.setTag("enchants", enchantments.writeToNBT());
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound NBT) {
+		super.readFromNBT(NBT);
+
+		enchantments.readFromNBT(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
 	}
 
 	public int getCookProgressScaled(int par1) {

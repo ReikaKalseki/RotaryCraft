@@ -24,7 +24,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.Instantiable.Data.Maps.MultiMap;
 import Reika.DragonAPI.Instantiable.Recipe.ItemMatch;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -203,7 +202,7 @@ public class TileEntityFuelConverter extends InventoriedPoweredLiquidIO {
 				if (this.getInputLevel() >= fc.fluidRatio*spd && (fc.condition == null || fc.condition.isUsable(this)) && output.canTakeIn(spd) && this.hasItems(fc)) {
 					input.removeLiquid(fc.fluidRatio*spd);
 					output.addLiquid(spd, fc.output);
-					ReikaJavaLibrary.pConsole(omega+"/"+MINSPEED+">"+boost+">"+spd);
+					//ReikaJavaLibrary.pConsole(omega+"/"+MINSPEED+">"+boost+">"+spd);
 					this.consumeItems(fc);
 					break;
 				}

@@ -68,7 +68,7 @@ public class ExtractorModOres {
 			ItemStack out = ItemCustomModOre.getSmeltedItem(i);
 			out.stackSize = e.numberSmelted;
 			if (nat instanceof ReikaOreHelper) {
-				out = ((ReikaOreHelper)nat).getDrop();
+				out = ((ReikaOreHelper)nat).getResource();
 				out.stackSize = ((ReikaOreHelper)nat).blockDrops;
 			}
 			else if (nat instanceof ModOreList) {

@@ -84,20 +84,20 @@ public class GuiItemFilter extends GuiPowerOnlyMachine
 					buttonList.add(new ImagedGuiButton(i, j+30, k+18+i2*16, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
 				}
 			}
-		}
-		buttonList.add(new GuiButton(-1, j+30, k+100, 20, 20, "<"));
-		buttonList.add(new GuiButton(-2, j+50, k+100, 20, 20, ">"));
-		if (page == SettingType.NBT) {
-			if (!display.isEmpty()) {
-				for (int i = 0; i < 3; i++) {
-					int u = i == 0 ? 0 : 9;
-					int v = i == 1 ? 54 : 63;
-					buttonList.add(new ImagedGuiButton(-5-i, j+30+i*10, k+18+0, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
+			buttonList.add(new GuiButton(-1, j+30, k+100, 20, 20, "<"));
+			buttonList.add(new GuiButton(-2, j+50, k+100, 20, 20, ">"));
+			if (page == SettingType.NBT) {
+				if (!display.isEmpty()) {
+					for (int i = 0; i < 3; i++) {
+						int u = i == 0 ? 0 : 9;
+						int v = i == 1 ? 54 : 63;
+						buttonList.add(new ImagedGuiButton(-5-i, j+30+i*10, k+18+0, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
+					}
 				}
-			}
-			if (display != null && display.size() > LINES) {
-				buttonList.add(new GuiButton(-3, j+70, k+100, 20, 20, "+"));
-				buttonList.add(new GuiButton(-4, j+90, k+100, 20, 20, "-"));
+				if (display != null && display.size() > LINES) {
+					buttonList.add(new GuiButton(-3, j+70, k+100, 20, 20, "+"));
+					buttonList.add(new GuiButton(-4, j+90, k+100, 20, 20, "-"));
+				}
 			}
 		}
 	}

@@ -60,7 +60,7 @@
 	</heatray>
 	<borer>
 		<desc>
-			The boring machine is rather interesting. It will dig tunnels in the direction it is facing for as long as you like. With the GUI, you can control the tunnel shape, and control the item drops. Harder materials require more power and torque to dig - %dW per hardness points of the blocks in front of it, and up to %d Nm of torque per block to cut through the harder materials (though typical requirement is closer to %d Nm per block). The borer will ensure that the tunnel roof does not collapse by replacing sand and gravel. Rumor has it that certain underground mazes found in a mythical forest are easily conquered with this machine, though the hard stone makes for a high torque requirement.
+			The boring machine is rather interesting. It will dig tunnels in the direction it is facing to infinity. With the GUI, you can control the tunnel shape and item drops. Harder materials require more power and torque to dig - %dW per hardness point of the block, and around %d Nm per block (though up to %d Nm for the hardest materials). The borer will ensure that the tunnel roof does not collapse by replacing sand and gravel. Rumor has it that certain underground mazes found in a mythical forest are easily conquered with this machine, though the hard stone makes for a high torque requirement.
 		</desc>
 		<note>
 			Required Power: Varies
@@ -280,7 +280,7 @@
 		</desc>
 		<note>
 			Required Power: %dW
-			Range = 8+(Power*4)/%d m
+			Range = 8+Power/%d m
 			Power Input: Any side
 		</note>
 	</vacuum>

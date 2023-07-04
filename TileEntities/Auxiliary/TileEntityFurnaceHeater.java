@@ -114,7 +114,7 @@ public class TileEntityFurnaceHeater extends TileEntityPowerReceiver implements 
 
 	@Override
 	public int getThermalDamage() {
-		return temperature*5/1200;
+		return power > 0 ? temperature*5/1200 : 0;
 	}
 
 	@Override
