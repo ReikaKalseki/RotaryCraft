@@ -576,7 +576,7 @@ public class TileEntityShaft extends TileEntity1DTransmitter {
 
 		omega = omegain / ratio;
 		torque = torquein * ratio;
-		power = omega*torque;
+		power = (long)omega*(long)torque;
 
 		this.basicPowerReceiver();
 

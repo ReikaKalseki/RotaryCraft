@@ -1283,7 +1283,18 @@ public class RotaryRecipes {
 		WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(ItemStacks.waterplate, 81));
 
 		//GameRegistry.addRecipe(new ItemStack(Items.diamond, 5), "ggg", "g g", "ggg", 'g', ItemStacks.diamondgear);
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.diamond), ItemStacks.diamondshaft);
+		switch(DifficultyEffects.getDifficulty()) {
+			case EASY:
+				GameRegistry.addShapelessRecipe(new ItemStack(Items.diamond), ItemStacks.diamondshaft, ItemStacks.diamondshaft);
+				break;
+			case MEDIUM:
+			default:
+				GameRegistry.addShapelessRecipe(new ItemStack(Items.diamond), ItemStacks.diamondshaft);
+				break;
+			case HARD:
+				GameRegistry.addShapelessRecipe(new ItemStack(Items.diamond, 3, 0), ItemStacks.diamondshaft, ItemStacks.diamondshaft);
+				break;
+		}
 
 		for (GearboxTypes gear : GearboxTypes.typeList) {
 			//for (int k = 2; k < 16; k *= 2) {

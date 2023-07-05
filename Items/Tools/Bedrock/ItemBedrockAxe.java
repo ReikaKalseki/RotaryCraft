@@ -267,10 +267,7 @@ public class ItemBedrockAxe extends ItemAxe implements IndexedItemSprites {
 		int fortune = ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is);
 		ProgressiveBreaker b = ProgressiveRecursiveBreaker.instance.addCoordinateWithReturn(world, x, y, z, 64);
 		//b.addBlock(new BlockKey(id, meta));
-		for (int i = 0; i < 16; i++) {
-			b.addBlock(new BlockKey(id, i));
-			b.addBlock(new BlockKey(ForestryHandler.BlockEntry.LEAF.getBlock(), i));
-		}
+		b.setBlocks(false, new BlockKey(id), new BlockKey(ForestryHandler.BlockEntry.LEAF.getBlock()));
 		b.player = ep;
 		b.fortune = fortune;
 		if (ModList.CHROMATICRAFT.isLoaded() && this.hasAutoCollect(is))

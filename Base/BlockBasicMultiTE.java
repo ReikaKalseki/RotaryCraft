@@ -1172,6 +1172,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			if (!tfc.isEmpty())
 				currenttip.add(String.format("Capacity: %s", RotaryAux.formatLiquidAmountWithSI(tfc.getCapacity())));
 		}
+		ReikaJavaLibrary.removeDuplicates(currenttip);
 		return currenttip;
 	}
 
