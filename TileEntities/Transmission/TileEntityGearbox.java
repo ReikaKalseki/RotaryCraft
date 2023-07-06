@@ -25,7 +25,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import Reika.ChromatiCraft.API.Interfaces.Repairable;
 import Reika.ChromatiCraft.API.Interfaces.WorldRift;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
@@ -64,7 +63,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import vazkii.botania.api.mana.IManaReceiver;
 
 @Strippable(value={"vazkii.botania.api.mana.IManaReceiver", "Reika.ChromatiCraft.API.Interfaces.Repairable"})
-public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTMachine, IManaReceiver, Repairable {
+public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTMachine, IManaReceiver {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
@@ -803,19 +802,13 @@ public class TileEntityGearbox extends TileEntity1DTransmitter implements PipeCo
 		return this.getGearboxType() == GearboxTypes.LIVINGROCK && !this.isFull();
 	}
 
-	@Override
-	public void repair(World world, int x, int y, int z, int tier) {
+	public void repairCC(int tier) {
 		//damage = 60;
 		int mod = Math.max(1, 64/ReikaMathLibrary.intpow2(2, tier));
-		if (!world.isRemote && this.getTicksExisted()%mod == 0) {
+		if (this.getTicksExisted()%mod == 0) {
 			int amt = Math.max(1, Math.min(damage/8, (int)(Math.sqrt(tier)/20D)));
 			this.repair(amt);
 		}
-	}
-
-	@Override
-	public String getDescription() {
-		return "Repair gearbox damage";
 	}
 
 	@ModDependent(ModList.BCTRANSPORT)

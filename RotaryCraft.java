@@ -11,6 +11,8 @@ package Reika.RotaryCraft;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -22,6 +24,7 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.stats.Achievement;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -34,6 +37,8 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import Reika.ChromatiCraft.API.AcceleratorBlacklist;
 import Reika.ChromatiCraft.API.AcceleratorBlacklist.BlacklistReason;
+import Reika.ChromatiCraft.API.ChromatiAPI;
+import Reika.ChromatiCraft.API.Interfaces.CustomHealing.CustomTileHealing;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
@@ -112,6 +117,7 @@ import Reika.RotaryCraft.Registry.BlockRegistry;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.ExtraConfigIDs;
+import Reika.RotaryCraft.Registry.GearboxTypes;
 import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.RotaryAchievements;
@@ -119,6 +125,7 @@ import Reika.RotaryCraft.TileEntities.Processing.TileEntityExtractor;
 import Reika.RotaryCraft.TileEntities.Processing.TileEntityGrinder;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityFluidCompressor;
 import Reika.RotaryCraft.TileEntities.Storage.TileEntityReservoir;
+import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 import appeng.api.config.PowerUnits;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -646,6 +653,33 @@ public class RotaryCraft extends DragonAPIMod {
 
 			if (ModList.THAUMCRAFT.isLoaded()) {
 				RotaryAspectManager.addThaumAspects();
+			}
+
+			if (ModList.CHROMATICRAFT.isLoaded()) {
+				ChromatiAPI.getAPI().adjacency().addCustomHealing(TileEntityGearbox.class, new CustomTileHealing() {
+					@Override
+					public boolean runOnClient() {
+						return false;
+					}
+
+					@Override
+					public String getDescription() {
+						return "Repair gearbox damage";
+					}
+
+					@Override
+					public Collection<ItemStack> getItems() {
+						ArrayList<ItemStack> li = new ArrayList();
+						for (GearboxTypes gear : GearboxTypes.typeList)
+							li.add(gear.getGearboxItem(16));
+						return li;
+					}
+
+					@Override
+					public void tick(TileEntity te, int tier) {
+						((TileEntityGearbox)te).repairCC(tier);
+					}
+				});
 			}
 
 			RotaryRecipes.addPostLoadRecipes();

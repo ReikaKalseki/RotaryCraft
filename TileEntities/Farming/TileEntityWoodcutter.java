@@ -31,7 +31,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 
 import Reika.ChromatiCraft.API.ChromatiAPI;
-import Reika.ChromatiCraft.API.CrystalElementAccessor;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray.BlockTypePrioritizer;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.TreeReader;
@@ -55,11 +54,11 @@ import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.API.Interfaces.LeafBlockWithExtras;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.MachineEnchantmentHandler;
-import Reika.RotaryCraft.Auxiliary.Interfaces.Wettable;
 import Reika.RotaryCraft.Auxiliary.Interfaces.DamagingContact;
 import Reika.RotaryCraft.Auxiliary.Interfaces.EnchantableMachine;
 import Reika.RotaryCraft.Auxiliary.Interfaces.MultiOperational;
 import Reika.RotaryCraft.Auxiliary.Interfaces.ProcessingMachine;
+import Reika.RotaryCraft.Auxiliary.Interfaces.Wettable;
 import Reika.RotaryCraft.Base.TileEntity.InventoriedPowerReceiver;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
 import Reika.RotaryCraft.Registry.DurationRegistry;
@@ -313,7 +312,7 @@ Wettable, MultiOperational {
 		if (ReikaRandomHelper.doWithChance(f)) {
 			int fortune = enchantments.getEnchantment(Enchantment.fortune);
 			if (ModList.CHROMATICRAFT.isLoaded()) {
-				fortune += ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, CrystalElementAccessor.getByEnum("PURPLE"))/2;
+				//fortune += ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, CrystalElementAccessor.getByEnum("PURPLE"))/2;
 			}
 			ArrayList<ItemStack> ret = b.getDrops(world, x, y, z, meta, fortune);
 			MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(x, y, z, world, b, meta, fortune, 1, ret, this.getPlacer(), false));
@@ -383,7 +382,7 @@ Wettable, MultiOperational {
 		if (drop instanceof LeafBlockWithExtras) {
 			int fortune = enchantments.getEnchantment(Enchantment.fortune);
 			if (ModList.CHROMATICRAFT.isLoaded()) {
-				fortune += ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, CrystalElementAccessor.getByEnum("PURPLE"))/2;
+				//fortune += ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, CrystalElementAccessor.getByEnum("PURPLE"))/2;
 			}
 			ArrayList<ItemStack> li = ((LeafBlockWithExtras)drop).getExtraDrops(world, x, y, z, fortune);
 			if (li != null && !li.isEmpty())

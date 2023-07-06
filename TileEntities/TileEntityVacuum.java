@@ -32,7 +32,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.TileEntity.BreakAction;
 import Reika.DragonAPI.Interfaces.TileEntity.XPProducer;
@@ -276,8 +275,9 @@ public class TileEntityVacuum extends InventoriedPowerReceiver implements Ranged
 
 	public int getRange() {
 		int r = Math.min(8+(int)(power/FALLOFF), this.getMaxRange());
-		if (ModList.CHROMATICRAFT.isLoaded())
-			r *= ChromatiAPI.getAPI().adjacency().getFactorSimple(worldObj, xCoord, yCoord, zCoord, "LIME");
+		if (ModList.CHROMATICRAFT.isLoaded()) {
+			//r *= ChromatiAPI.getAPI().adjacency().getFactorSimple(worldObj, xCoord, yCoord, zCoord, "LIME");
+		}
 		return r;
 	}
 

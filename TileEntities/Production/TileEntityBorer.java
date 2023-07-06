@@ -30,8 +30,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 
-import Reika.ChromatiCraft.API.ChromatiAPI;
-import Reika.ChromatiCraft.API.CrystalElementAccessor;
 import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
@@ -556,7 +554,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 			}
 			int fortune = enchantments.getEnchantment(Enchantment.fortune);
 			if (ModList.CHROMATICRAFT.isLoaded()) {
-				fortune += ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, CrystalElementAccessor.getByEnum("PURPLE"))/2;
+				//fortune += ChromatiAPI.getAPI().adjacency().getAdjacentUpgradeTier(worldObj, xCoord, yCoord, zCoord, CrystalElementAccessor.getByEnum("PURPLE"))/2;
 			}
 			Collection<ItemStack> items = id.getDrops(world, xread, yread, zread, meta, fortune);
 			MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(xread, yread, zread, world, id, meta, fortune, 1, (ArrayList<ItemStack>)items, this.getPlacer(), false));
