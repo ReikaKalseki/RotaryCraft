@@ -1405,24 +1405,6 @@ public enum MachineRegistry implements TileEnum {
 		}
 	}
 
-	public static MultiMap<MachineRegistry, Enchantment> getEnchantableMachineList() {
-		MultiMap<MachineRegistry, Enchantment> li = new MultiMap().setNullEmpty().setOrdered(new Comparator<Enchantment>() {
-			@Override
-			public int compare(Enchantment o1, Enchantment o2) {
-				return Integer.compare(o1.effectId, o2.effectId);
-			}
-		});
-		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
-			MachineRegistry m = MachineRegistry.machineList.get(i);
-			if (m.isEnchantable()) {
-				for (Enchantment e : ((EnchantableMachine)(m.createTEInstanceForRender(0))).getEnchantmentHandler().getValidEnchantments()) {
-					li.addValue(m, e);
-				}
-			}
-		}
-		return li;
-	}
-
 	public boolean isIncomplete() {
 		return !hasRender && this.hasModel();
 	}
@@ -1620,17 +1602,6 @@ public enum MachineRegistry implements TileEnum {
 		return null;
 	}
 
-	static {
-		for (int i = 0; i < machineList.length; i++) {
-			MachineRegistry m = machineList.get(i);
-			Block id = m.getBlock();
-			int meta = m.meta;
-			if (machineMappings.containsKey(id, meta))
-				throw new RegistrationException(RotaryCraft.instance, "ID/Meta conflict @ "+id+"/"+meta+": "+m+" & "+machineMappings.get(id, meta));
-			machineMappings.put(id, meta, m);
-		}
-	}
-
 	public boolean canDoMultiPerTick() {
 		return this == EXTRACTOR || MultiOperational.class.isAssignableFrom(this.getTEClass());
 	}
@@ -1680,5 +1651,34 @@ public enum MachineRegistry implements TileEnum {
 		if (this == BELT || this == CHAIN || this == SPLITBELT || this == POWERBUS || this == BUSCONTROLLER || TileEntityTransmissionMachine.class.isAssignableFrom(te))
 			return tab == RotaryCraft.tabPower;
 		return tab == RotaryCraft.tabRotary;
+	}
+
+	public static MultiMap<MachineRegistry, Enchantment> getEnchantableMachineList() {
+		MultiMap<MachineRegistry, Enchantment> li = new MultiMap().setNullEmpty().setOrdered(new Comparator<Enchantment>() {
+			@Override
+			public int compare(Enchantment o1, Enchantment o2) {
+				return Integer.compare(o1.effectId, o2.effectId);
+			}
+		});
+		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
+			MachineRegistry m = MachineRegistry.machineList.get(i);
+			if (m.isEnchantable()) {
+				for (Enchantment e : ((EnchantableMachine)(m.createTEInstanceForRender(0))).getEnchantmentHandler().getValidEnchantments()) {
+					li.addValue(m, e);
+				}
+			}
+		}
+		return li;
+	}
+
+	static {
+		for (int i = 0; i < machineList.length; i++) {
+			MachineRegistry m = machineList.get(i);
+			Block id = m.getBlock();
+			int meta = m.meta;
+			if (machineMappings.containsKey(id, meta))
+				throw new RegistrationException(RotaryCraft.instance, "ID/Meta conflict @ "+id+"/"+meta+": "+m+" & "+machineMappings.get(id, meta));
+			machineMappings.put(id, meta, m);
+		}
 	}
 }

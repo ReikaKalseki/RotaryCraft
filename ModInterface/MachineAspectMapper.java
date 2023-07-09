@@ -322,6 +322,18 @@ public class MachineAspectMapper {
 		this.addAspect(MachineRegistry.SPILLWAY, Aspect.WATER, 4);
 		this.addAspect(MachineRegistry.SPILLWAY, Aspect.EXCHANGE, 2);
 
+		this.addAspect(MachineRegistry.HOSE, Aspect.WATER, 2);
+		this.addAspect(MachineRegistry.HOSE, Aspect.TREE, 1);
+		this.addAspect(MachineRegistry.PIPE, Aspect.WATER, 2);
+		this.addAspect(MachineRegistry.PIPE, Aspect.METAL, 1);
+		this.addAspect(MachineRegistry.BEDPIPE, Aspect.WATER, 2);
+		this.addAspect(MachineRegistry.BEDPIPE, Aspect.METAL, 1);
+		this.addAspect(MachineRegistry.BEDPIPE, Aspect.ARMOR, 1);
+		this.addAspect(MachineRegistry.FUELLINE, Aspect.ENERGY, 2);
+		this.addAspect(MachineRegistry.FUELLINE, Aspect.WATER, 1);
+		this.addAspect(MachineRegistry.VALVE, Aspect.EXCHANGE, 1);
+		this.addAspect(MachineRegistry.VALVE, Aspect.WATER, 1);
+
 		if (ModList.SATISFORESTRY.isLoaded()) {
 			Aspect a = (Aspect)SFAPI.genericLookups.getAspect();
 			this.addAspect(MachineRegistry.EXTRACTOR, a, 16);

@@ -279,8 +279,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void initClasses() {
 		super.initClasses();
-		ReikaJavaLibrary.initClass(HandbookRegistry.class);
-		ReikaJavaLibrary.initClass(SoundRegistry.class);
+		ReikaJavaLibrary.initClass(HandbookRegistry.class, true);
+		ReikaJavaLibrary.initClass(SoundRegistry.class, true);
 		SettingInterferenceTracker.instance.registerSettingHandler(SettingInterferenceTracker.muteInterference);
 	}
 

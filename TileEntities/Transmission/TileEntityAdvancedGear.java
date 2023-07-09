@@ -194,6 +194,10 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 		public boolean hasInventory() {
 			return this == CVT;
 		}
+
+		public ItemStack getItem() {
+			return MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(this.ordinal());
+		}
 	}
 
 	public GearType getGearType() {

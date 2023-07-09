@@ -236,7 +236,7 @@ public class RecipesLavaMaker extends RecipeHandler implements RockMelterManager
 	private void addLavaRock() {
 		for (int i = 0; i < 4; i++) {
 			ItemStack is = new ItemStack(GeoBlocks.LAVAROCK.getBlockInstance(), 1, i);
-			this.addRecipe(is, new FluidStack(FluidRegistry.LAVA, 1000), 900-200*i, ReikaThermoHelper.ROCK_MELT_ENERGY/(i+1), RecipeLevel.MODINTERACT);
+			this.addRecipe(is, new FluidStack(FluidRegistry.LAVA, 1000), 300+200*i, ReikaThermoHelper.ROCK_MELT_ENERGY/(i+1), RecipeLevel.MODINTERACT);
 		}
 	}
 

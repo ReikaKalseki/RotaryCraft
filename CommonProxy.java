@@ -61,13 +61,13 @@ public class CommonProxy
 	}
 
 	public void initClasses() {
-		ReikaJavaLibrary.initClass(DifficultyEffects.class);
-		ReikaJavaLibrary.initClass(ExtractorBonus.class);
-		ReikaJavaLibrary.initClass(MobBait.class);
-		ReikaJavaLibrary.initClass(PlantMaterials.class);
-		ReikaJavaLibrary.initClass(EngineType.class);
-		ReikaJavaLibrary.initClass(PacketRegistry.class);
-		ReikaJavaLibrary.initClass(PowerReceivers.class);
+		ReikaJavaLibrary.initClass(DifficultyEffects.class, true);
+		ReikaJavaLibrary.initClass(ExtractorBonus.class, true);
+		ReikaJavaLibrary.initClass(MobBait.class, true);
+		ReikaJavaLibrary.initClass(PlantMaterials.class, true);
+		ReikaJavaLibrary.initClass(EngineType.class, true);
+		ReikaJavaLibrary.initClass(PacketRegistry.class, true);
+		ReikaJavaLibrary.initClass(PowerReceivers.class, true);
 		LuaMethod.registerMethods("Reika.RotaryCraft.ModInterface.Lua");
 	}
 

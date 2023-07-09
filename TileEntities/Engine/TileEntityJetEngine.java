@@ -620,6 +620,13 @@ public class TileEntityJetEngine extends TileEntityEngine implements NBTMachine,
 			FOD--;
 	}
 
+	public void repairJetCC(int tier) {
+		if (FOD > 0 && rand.nextInt(20-tier*2) == 0)
+			FOD--;
+		if (FOD == 0 && tier > 3)
+			this.repairJet();
+	}
+
 	private void jetEngineDetonation(World world, int x, int y, int z, int meta) {
 		AxisAlignedBB zone = this.getFlameZone(world, x, y, z, meta);
 		List<EntityLivingBase> in = world.getEntitiesWithinAABB(EntityLivingBase.class, zone);

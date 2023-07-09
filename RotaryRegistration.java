@@ -53,12 +53,12 @@ public class RotaryRegistration {
 			else {
 				GameRegistry.registerTileEntityWithAlternatives(MachineRegistry.machineList.get(i).getTEClass(), label, aux);
 			}
-			ReikaJavaLibrary.initClass(MachineRegistry.machineList.get(i).getTEClass());
+			ReikaJavaLibrary.initClass(MachineRegistry.machineList.get(i).getTEClass(), true);
 		}
 		for (int i = 0; i < EngineType.engineList.length; i++) {
 			String label = "RC"+EngineType.engineList[i].name().toLowerCase(Locale.ENGLISH).replaceAll("\\s","");
 			GameRegistry.registerTileEntity(EngineType.engineList[i].engineClass, label);
-			ReikaJavaLibrary.initClass(EngineType.engineList[i].engineClass);
+			ReikaJavaLibrary.initClass(EngineType.engineList[i].engineClass, true);
 		}
 		GameRegistry.registerTileEntity(TileEntityDecoTank.class, "RCDecoTank");
 		GameRegistry.registerTileEntity(TileEntityBedrockSlice.class, "RCBedrockSlice");
