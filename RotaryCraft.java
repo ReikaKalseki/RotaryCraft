@@ -648,8 +648,11 @@ public class RotaryCraft extends DragonAPIMod {
 				RotaryAspectManager.addThaumAspects();
 			}
 
-			if (ModList.CHROMATICRAFT.isLoaded())
+			if (ModList.CHROMATICRAFT.isLoaded()) {
 				ChromaRC.addHealingCoreEffects();
+				ChromaRC.addAuraPouchItems();
+				ChromaRC.addAcceleratorGroupedBlacklistItems();
+			}
 
 			RotaryRecipes.addPostLoadRecipes();
 		}

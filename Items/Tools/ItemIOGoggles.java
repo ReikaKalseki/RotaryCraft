@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -20,40 +20,22 @@ import Reika.RotaryCraft.Base.ItemRotaryArmor;
 
 public class ItemIOGoggles extends ItemRotaryArmor {
 
+	public static final String NBT_KEY = "iooverlay";
+
 	public ItemIOGoggles(int tex, int render) {
 		super(RotaryCraft.IOGM, render, 0, tex);
 		this.setNoRepair();
 	}
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {/*
-		int x = (int)ep.posX;
-		int y = (int)ep.posY;
-		int z = (int)ep.posZ;
-		for (int i = -6; i <= 6; i++) {
-			for (int j = -6; j <= 6; j++) {
-				for (int k = -6; k <= 6; k++) {
-					TileEntity te = world.getTileEntity(x+i, y+j, z+k);
-					if (te instanceof TileEntityIOMachine) {
-						TileEntityIOMachine io = (TileEntityIOMachine)te;
-						io.iotick = 512;
-					}
-					else if (te instanceof ShaftMachine) {
-						ShaftMachine sm = (ShaftMachine)te;
-						sm.setIORenderAlpha(512);
-					}
-				}
-			}
-		}*/
+	public void onArmorTick(World world, EntityPlayer ep, ItemStack is) {
+		ep.getEntityData().setLong(NBT_KEY, world.getTotalWorldTime());
 	}
 
 	@Override
-	public void onUpdate(ItemStack is, World par2World, Entity par3Entity, int par4, boolean par5) {}
-	/*
-	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity e, int slot, String nulll) {
-		return "/Reika/RotaryCraft/Textures/Misc/IOGoggles.png";
-	}*/
+	public void onUpdate(ItemStack is, World par2World, Entity par3Entity, int par4, boolean par5) {
+
+	}
 
 	@Override
 	public boolean providesProtection() {

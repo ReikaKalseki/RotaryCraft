@@ -17,13 +17,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import Reika.ChromatiCraft.API.Interfaces.ProjectileFiringTool;
 import Reika.DragonAPI.Instantiable.Data.Immutable.DecimalPosition;
 import Reika.DragonAPI.Libraries.ReikaInventoryHelper;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaVectorHelper;
 import Reika.RotaryCraft.Base.ItemChargedTool;
 
-public class ItemFireballLauncher extends ItemChargedTool {
+public class ItemFireballLauncher extends ItemChargedTool implements ProjectileFiringTool {
 
 	/** Sprite index */
 	private int texture;
@@ -35,17 +37,27 @@ public class ItemFireballLauncher extends ItemChargedTool {
 		defaulttex = texture;
 	}
 
-	public void fire(ItemStack is, World world, EntityPlayer ep, float charge) {
+	public void fire(ItemStack is, World world, EntityPlayer ep, boolean randomVec) {
+		this.fire(is, world, ep, 0, randomVec);
+	}
+
+	public void fire(ItemStack is, World world, EntityPlayer ep, int charge, boolean randomVec) {
 		DecimalPosition look = ReikaVectorHelper.getPlayerLookCoords(ep, 2);
 		EntityLargeFireball ef = new EntityLargeFireball(world, ep, look.xCoord, look.yCoord+1, look.zCoord);
 		Vec3 lookv = ep.getLookVec();
+		if (randomVec) {
+			lookv.xCoord = ReikaRandomHelper.getRandomPlusMinus(0, 1D);
+			lookv.yCoord = ReikaRandomHelper.getRandomPlusMinus(0, 1D);
+			lookv.zCoord = ReikaRandomHelper.getRandomPlusMinus(0, 1D);
+			lookv = lookv.normalize();
+		}
 		ef.motionX = lookv.xCoord/5;
 		ef.motionY = lookv.yCoord/5;
 		ef.motionZ = lookv.zCoord/5;
 		ef.accelerationX = ef.motionX;
 		ef.accelerationY = ef.motionY;
 		ef.accelerationZ = ef.motionZ;
-		ef.field_92057_e = (int)(charge);
+		ef.field_92057_e = (charge);
 		ef.posY = ep.posY+1;
 		if (!world.isRemote) {
 			world.playSoundAtEntity(ep, "mob.ghast.fireball", 1, 1);
@@ -63,7 +75,7 @@ public class ItemFireballLauncher extends ItemChargedTool {
 	public void onPlayerStoppedUsing(ItemStack is, World world, EntityPlayer ep, int ticksLeft) {
 		texture = defaulttex;
 		float power = (is.getMaxItemUseDuration()-ticksLeft)/20F;
-		float charge = 0;
+		int charge = 0;
 		if (ep.capabilities.isCreativeMode) {
 			power *= 2;
 			if (ep.isSneaking())
@@ -97,7 +109,7 @@ public class ItemFireballLauncher extends ItemChargedTool {
 			charge = 8;
 		}
 		//ReikaChatHelper.write(power+"  ->  "+charge);
-		this.fire(is, world, ep, charge);
+		this.fire(is, world, ep, charge, false);
 	}
 
 	@Override
@@ -179,5 +191,10 @@ public class ItemFireballLauncher extends ItemChargedTool {
 		else {
 			texture = defaulttex+8;
 		}
+	}
+
+	@Override
+	public int getAutofireRate() {
+		return 50;
 	}
 }

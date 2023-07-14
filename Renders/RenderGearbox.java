@@ -16,8 +16,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -27,18 +27,17 @@ import net.minecraftforge.fluids.FluidRegistry;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaColorAPI;
 import Reika.DragonAPI.Libraries.Rendering.ReikaLiquidRenderer;
 import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.Auxiliary.IORenderer;
 import Reika.RotaryCraft.Base.RotaryTERenderer;
 import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
+import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox16;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox4;
 import Reika.RotaryCraft.Models.Animated.ModelGearbox8;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class RenderGearbox extends RotaryTERenderer
@@ -173,8 +172,8 @@ public class RenderGearbox extends RotaryTERenderer
 	}
 
 	private void renderMode(TileEntityGearbox tile, double par2, double par4, double par6) {
-		ItemStack is = Minecraft.getMinecraft().thePlayer.getCurrentArmor(3);
-		boolean flag = ReikaItemHelper.matchStacks(is, ItemRegistry.IOGOGGLES.getStackOf());
+		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
+		boolean flag = ep.getEntityData().hasKey(ItemIOGoggles.NBT_KEY) && ep.getEntityData().getLong(ItemIOGoggles.NBT_KEY) >= ep.worldObj.getTotalWorldTime()-10;
 		if (flag) {
 			int var11 = 0;
 			switch(tile.getBlockMetadata()&3) {

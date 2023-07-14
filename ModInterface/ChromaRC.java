@@ -10,9 +10,19 @@ import net.minecraft.tileentity.TileEntity;
 import Reika.ChromatiCraft.API.AdjacencyUpgradeAPI.BlacklistReason;
 import Reika.ChromatiCraft.API.ChromatiAPI;
 import Reika.ChromatiCraft.API.Interfaces.CustomHealing.CustomTileHealing;
+import Reika.ChromatiCraft.Base.TileEntity.TileEntityAdjacencyUpgrade;
+import Reika.ChromatiCraft.Base.TileEntity.TileEntityAdjacencyUpgrade.AdjacencyEffectDescription;
+import Reika.ChromatiCraft.Items.Tools.ItemAuraPouch;
+import Reika.ChromatiCraft.Registry.CrystalElement;
+import Reika.ChromatiCraft.TileEntity.AOE.Effect.TileEntityAccelerator;
+import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
+import Reika.DragonAPI.Instantiable.GUI.GuiItemDisplay.GuiStackListDisplay;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.RotaryCraft.Registry.EngineType;
 import Reika.RotaryCraft.Registry.Flywheels;
 import Reika.RotaryCraft.Registry.GearboxTypes;
+import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 import Reika.RotaryCraft.Registry.MaterialRegistry;
 import Reika.RotaryCraft.TileEntities.Engine.TileEntityJetEngine;
@@ -21,7 +31,16 @@ import Reika.RotaryCraft.TileEntities.Transmission.TileEntityGearbox;
 
 public class ChromaRC {
 
+	@ModDependent(ModList.CHROMATICRAFT)
+	public static void addAuraPouchItems() {
+		ItemAuraPouch.setSpecialEffect(ItemAuraPouch.WORKS_IN_POUCH_EFFECT_DESC, ItemRegistry.NVG.getItemInstance());
+		ItemAuraPouch.setSpecialEffect(ItemAuraPouch.WORKS_IN_POUCH_EFFECT_DESC, ItemRegistry.IOGOGGLES.getItemInstance());
+		ItemAuraPouch.registerProjectileFiringEffect(ItemRegistry.FIREBALL.getItemInstance());
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
 	public static void addHealingCoreEffects() {
+		final String desc = "Repair gearbox damage";
 		ChromatiAPI.getAPI().adjacency().addCustomHealing(TileEntityGearbox.class, new CustomTileHealing() {
 			@Override
 			public boolean runOnClient() {
@@ -30,15 +49,12 @@ public class ChromaRC {
 
 			@Override
 			public String getDescription() {
-				return "Repair gearbox damage";
+				return desc;
 			}
 
 			@Override
 			public Collection<ItemStack> getItems() {
-				ArrayList<ItemStack> li = new ArrayList();
-				for (GearboxTypes gear : GearboxTypes.typeList)
-					li.add(gear.getGearboxItem(16));
-				return li;
+				return new ArrayList();
 			}
 
 			@Override
@@ -46,6 +62,13 @@ public class ChromaRC {
 				((TileEntityGearbox)te).repairCC(tier);
 			}
 		});
+		AdjacencyEffectDescription eff = TileEntityAdjacencyUpgrade.registerEffectDescription(CrystalElement.MAGENTA, desc);
+		for (GearboxTypes gear : GearboxTypes.typeList) {
+			GuiStackListDisplay li = new GuiStackListDisplay();
+			for (int r = 2; r <= 16; r *= 2)
+				li.addItems(gear.getGearboxItem(r));
+			eff.addDisplays(li);
+		}
 		ChromatiAPI.getAPI().adjacency().addCustomHealing(TileEntityJetEngine.class, new CustomTileHealing() {
 			@Override
 			public boolean runOnClient() {
@@ -69,6 +92,7 @@ public class ChromaRC {
 		});
 	}
 
+	@ModDependent(ModList.CHROMATICRAFT)
 	public static void blacklistTileAccelerator(MachineRegistry m) {
 		switch(m) {
 			case ADVANCEDGEARS:
@@ -77,24 +101,44 @@ public class ChromaRC {
 				break;
 			case FLYWHEEL:
 				for (Flywheels mat : Flywheels.list)
-					ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), mat.getFlywheelItem(), BlacklistReason.EXPLOIT);
+					ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), null, BlacklistReason.EXPLOIT);
 				break;
 			case GEARBOX:
 				for (GearboxTypes mat : GearboxTypes.typeList) {
 					for (int r = 2; r <= 16; r *= 2)
-						ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), mat.getGearboxItem(r), BlacklistReason.EXPLOIT);
+						ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), null, BlacklistReason.EXPLOIT);
 				}
 				break;
 			case SHAFT:
 				for (MaterialRegistry mat : MaterialRegistry.matList)
-					ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), mat.getShaftItem(), BlacklistReason.EXPLOIT);
+					ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), null, BlacklistReason.EXPLOIT);
 				break;
-			case ENGINE:
+			case ENGINE: //handled externally
 				break;
 			default:
 				ChromatiAPI.getAPI().adjacency().addAcceleratorBlacklist(m.getTEClass(), m.getName(), m.getCraftedProduct(), BlacklistReason.EXPLOIT);
 				break;
 		}
+	}
+
+	@ModDependent(ModList.CHROMATICRAFT)
+	public static void addAcceleratorGroupedBlacklistItems() {
+		for (GearboxTypes gear : GearboxTypes.typeList) {
+			ItemStack[] items = new ItemStack[4];
+			for (int i = 0; i < 4; i++)
+				items[i] = gear.getGearboxItem(ReikaMathLibrary.intpow2(2, i+1));
+			TileEntityAccelerator.addBlacklistItems(items);
+		}
+
+		ItemStack[] items = new ItemStack[MaterialRegistry.matList.length];
+		for (int i = 0; i < items.length; i++)
+			items[i] = MaterialRegistry.matList[i].getShaftItem();
+		TileEntityAccelerator.addBlacklistItems(items);
+
+		items = new ItemStack[Flywheels.list.length];
+		for (int i = 0; i < items.length; i++)
+			items[i] = Flywheels.list[i].getFlywheelItem();
+		TileEntityAccelerator.addBlacklistItems(items);
 	}
 
 }

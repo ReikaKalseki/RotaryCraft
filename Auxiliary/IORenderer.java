@@ -14,17 +14,16 @@ import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import Reika.RotaryCraft.Base.TileEntity.TileEntityIOMachine;
+import Reika.RotaryCraft.Items.Tools.ItemIOGoggles;
 import Reika.RotaryCraft.Registry.ConfigRegistry;
-import Reika.RotaryCraft.Registry.ItemRegistry;
 import Reika.RotaryCraft.TileEntities.TileEntityWinder;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityDistributionClutch;
 import Reika.RotaryCraft.TileEntities.Transmission.TileEntityShaft;
@@ -57,8 +56,8 @@ public abstract class IORenderer {
 		par2 = p2;
 		par4 = p4;
 		par6 = p6;
-		ItemStack is = Minecraft.getMinecraft().thePlayer.getCurrentArmor(3);
-		boolean flag = ReikaItemHelper.matchStacks(is, ItemRegistry.IOGOGGLES.getStackOf());
+		EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
+		boolean flag = ep.getEntityData().hasKey(ItemIOGoggles.NBT_KEY) && ep.getEntityData().getLong(ItemIOGoggles.NBT_KEY) >= ep.worldObj.getTotalWorldTime()-10;
 		if (teb instanceof TileEntityIOMachine) {
 			TileEntityIOMachine te = (TileEntityIOMachine)teb;
 			if (flag)
