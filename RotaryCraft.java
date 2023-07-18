@@ -268,7 +268,7 @@ public class RotaryCraft extends DragonAPIMod {
 		proxy.registerSounds();
 		ModLockController.instance.registerMod(this);
 
-		logger = new ModLogger(instance, ConfigRegistry.ALARM.getState());
+		logger = new ModLogger(instance, /*ConfigRegistry.ALARM.getState()*/false);
 		if (DragonOptions.FILELOG.getState())
 			logger.setOutput("**_Loading_Log.log");
 

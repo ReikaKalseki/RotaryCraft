@@ -29,7 +29,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 
 	ENGINEVOLUME("Engine Volume", 1F),
 	GPRORES("GPR Renders Ores", true),
-	INSTACUT("Instant Woodcutter", true),
+	INSTACUT("Instant Woodcutter", true), //Whether the woodcutter cuts blocks instantly as opposed to making them fall to the ground
 	CRAFTABLEBEDROCK("Allow Craftable Bedrock", true),
 	LOCKMACHINES("Owner-Only Machine Use", false),
 	MACHINEVOLUME("Machine Volume Multiplier", 1.0F),
@@ -55,26 +55,26 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	BEDPICKSPAWNERS("Allow Bedrock Pickaxe to Harvest Spawners", true),
 	SPAWNERLEAK("Spawn Mobs When Harvesting Spawners By Hand", true),
 	BLOCKDAMAGE("Direct Block Damage from Machine Failures", true),
-	DIFFICULTY("Difficulty Control", 2),
-	ALARM("Machine Warning Alarms", false),
-	BIOMEBLOCKS("Terraformer Block Editing", true),
+	DIFFICULTY("Difficulty Control", 2), //1-3 for easy/medium/hard; controls some recipe/fuel costs, failure chances, and other numerical tweaks. Progression is <b>not</b> changed.
+	//ALARM("Machine Warning Alarms", false), //Whether to
+	BIOMEBLOCKS("Terraformer Block Editing", true), //Whether the terraformer can not only change the biome but set blocks, eg spawning trees
 	DYNAMICHANDBOOK("Reload Handbook Data on Open", false),
-	TABLEMACHINES("Crafting Table can Make Machines", false),
+	TABLEMACHINES("Crafting Table can Make Machines", false), //If false, the worktable will be required to craft machines
 	EMPLOAD("EMP Charging Speed", 4),
-	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false),
+	ROTATEHOSE("Rotate Hose/Pipe/Fuel Line Recipes", false), //Recipe conflict avoidance
 	RAILGUNDAMAGE("Railgun Block Damage", true),
 	GRAVELPLAYER("Allow Gravel Gun PvP", true),
-	CHESTGEN("Chest Generation Tier", 4),
+	CHESTGEN("Chest Generation Tier", 4), //How advanced/expensive items generating in worldgen chests can be. Higher is more
 	//HOSTILECRASH("Crash on hostile interference from other mods", true),
 	PROJECTORLINES("Render projector lines", true),
 	COLORBLIND("Color Blind Mode", false),
 	TURRETPLAYERS("Turrets can target players", true),
-	HSLADICT("Allow RC steel to be used in other mods", false),
+	HSLADICT("Allow RC steel to be used in other mods", false), //ie registers HSLA as ingotSteel
 	PREENCHANT("Lock enchants on bedrock tools", true),
 	//EXPLODEPACK("Explode jetpack if player is in lava", true),
-	SPRINKLER("Sprinkler Particle Density", 4),
+	SPRINKLER("Sprinkler Particle Density", 4), //0-4, with lower being fewer particles
 	HANDBOOK("Spawn with RC Handbook", true),
-	CONSERVEPACK("Conservative Jetpack Firing", true),
+	CONSERVEPACK("Conservative Jetpack Firing", true), //Whether to make the jetpack be a bit less likely to fire from things like jumping, helping reduce fuel usage at the cost of making it a bit less immediate
 	ALLOWBAN("Allow Build Blocking of Some Machines", false),
 	LOGBLOCKS("Log Block Placement and Removal", false),
 	//PACKETDELAY("Sync Packet Interval in Ticks", 1),
@@ -84,46 +84,46 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	JETFUELPACK("Jetpack Requires Jet Fuel", false),
 	ALLOWTNTCANNON("Allow TNT Cannon", true),
 	ALLOWEMP("Allow EMP", true),
-	EXTRAIRON("Iron Ore Density", 1F),
+	EXTRAIRON("Iron Ore Density", 1F), //If set to >1, this will spawn extra iron ore in the world, to help with the fact RC uses a lot of it. Does nothing at <= 1
 	TEGLASS("Allow Blast Glass to be Used as TE Hardened Glass", false),
-	CLEARCHAT("Tools Clear Chat", true),
+	CLEARCHAT("Tools Clear Chat", true), //Whether using a chat-writing tool will clear your chat buffer to make it easier to read their output
 	KICKFLYING("Jetpack bypasses allow-flight property", true),
-	BLOWERSPILL("Item Pump Spills Items If Dumping To Air", true),
+	BLOWERSPILL("Item Pump Spills Items If Dumping To Air", true), //Whether a PIP without a target inventory will spray the items everywhere
 	EXTRACTORMAINTAIN("Extractor Drill Wears Down", false),
-	HARDGRAVELGUN("Hardmode Gravel Gun", false),
-	BORERMAINTAIN("Borer Requires Maintenance", false),
+	HARDGRAVELGUN("Hardmode Gravel Gun", false), //Adjusts charge-damage curves to require more charge per unit damage and cap the damage at a lower value
+	BORERMAINTAIN("Borer Requires Maintenance", false), //Makes the borer's operation require a drill item it slowly consumes
 	NOMINERS("Disable Automining Machines", false),
-	HARDEU("Hard Mode EU Compatibility", ModList.GREGTECH.isLoaded()), //TypeHelper to Website Generator: boolean
+	HARDEU("Hard Mode EU Compatibility", ModList.GREGTECH.isLoaded()), //TypeHelper to Website Generator: boolean; Whether to make EU compat more difficult, suitable for GT packs
 	PIPEHARDNESS("Pipe Block Hardness", 0F),
 	FRICTIONXP("Spawn XP from Friction Heater", true),
 	SPILLERRANGE("Liquid Spiller Range, Use Zero to Disable", 16),
-	POWERCLIENT("Run power transfer code on client", false),  //caused many issues
+	POWERCLIENT("Run power transfer code on client", false),  //Whether to also run power sync code on the client, to help with sync at the cost of additional load on the client tick
 	//TUTORIAL("Tutorial Mode", false),
 	FRAMES("Allow Frames to move Machines (May cause corruption)", false),
-	CONVERTERLOSS("Power Converter Loss Percent", 0),
-	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true),
-	BORERGEN("Borer Chunk Gen Radius", 0),
+	CONVERTERLOSS("Power Converter Loss Percent", 0), //Efficiency of the RC-to-other-mod converters. 0% loss = 100% efficiency
+	FAKEBEDROCK("Allow special bedrock tool abilities in automation", true), //Whether things like the bedrock axe and its tree cutting will apply when used by fake players, eg auto activators
+	BORERGEN("Borer Chunk Gen Radius", 0), //How big of an AoE of chunks will the borer generate around the mining head
 	ALLOWLIGHTBRIDGE("Enable Light Bridge", true),
 	ALLOWITEMCANNON("Enable Item Cannon", true),
 	ALLOWCHUNKLOADER("Enable Chunk Loader", true),
 	CHUNKLOADERSIZE("Chunk Loader Max Radius in Chunks", 8),
 	RECIPEMOD("Allow Nonstandard Recipe Modifications", false),
 	STRONGRECIPEMOD("Strong Recipe Editing", false),
-	CORERECIPEMOD("Core Recipe Editing", "X"),
-	CRAFTERPROFILE("AutoCrafter Lag Profiling And Compensation", true),
-	HSLAHARVEST("Increased Harvest Level for HSLA", false),
-	LATEDYNAMO("Rotational Dynamo Recipe Difficulty", 0),
+	//CORERECIPEMOD("Core Recipe Editing", "X"),
+	CRAFTERPROFILE("AutoCrafter Lag Profiling And Compensation", true), //Make the autocrafter tick less often to reduce lag
+	HSLAHARVEST("Increased Harvest Level for HSLA tools", false),
+	LATEDYNAMO("Rotational Dynamo Recipe Difficulty", 0), //0-5 to choose a gating item; see above
 	BORERPOW("Borer Power Requirement Factor", 1F),
-	BEEYEAST("Use Forestry Bees To Produce Yeast", 0),
+	BEEYEAST("Use Forestry Bees To Produce Yeast", 0), //0 = disabled, 1 = slippery bee also produces yeast (alternate source); 2 = the bee is the only source of yeast
 	HARDCONVERTERS("Harder Converter Unit Recipes", false),
 	OREALUDUST("Allow other mods' aluminum dust to make Silicon", false),
-	GATEBLAST("Enable Blast Furnace recipe gating", false),
-	GATEWORK("Enable Worktable recipe gating", false),
+	GATEBLAST("Enable Blast Furnace recipe gating", false), //Whether to enable the recipe gate functionality for the blast furnace
+	GATEWORK("Enable Worktable recipe gating", false), //Whether to enable the recipe gate functionality for the worktable
 	VACPOWER("Item Vacuum Power Per Meter", (int)PowerReceivers.VACUUM.getMinPower()/4), //TypeHelper to Website Generator: int
-	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8),
+	HYDROSTREAMFALLMAX("Streams Waterfall Min Height for Max Hydrokinetic Yield", 8), //How tall a Streams waterfall must be to count as max yield for a hydrokinetic
 	TINKERFLAKES("TiC Smeltery Flake Yield Amount In Ingots", 1.5F),
-	IC2BLAZECOMPRESS("Increase Blaze Powder To Rod Cost In IC2 Compressor (Exploit Fix)", true),
-	FREEWATER("Free Water Production Factor", 1F),
+	IC2BLAZECOMPRESS("Increase Blaze Powder To Rod Cost In IC2 Compressor (Exploit Fix)", true), //Normally the ic2 compressor requires 5 powder per rod, but as the grinder makes six powder per rod this is a feedback exploit. This option increases the ic2 cost to 8.
+	FREEWATER("Free Water Production Factor", 1F), //How much if any free water can be produced by things like the pump power surplus, spillway "scraping" (ie back to a waterfall) and rain in reservoirs
 	SNEAKWINGS("Jetpack wings enable with sneak vs disable", false);
 
 	private String label;
@@ -254,11 +254,11 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 
 	public static int getRecipeModifyPower() {
 		if (RECIPEMOD.getState()) {
-			if (STRONGRECIPEMOD.getState()) {
+			if (STRONGRECIPEMOD.getState()) {/*
 				String s = CORERECIPEMOD.getString();
 				if (isValidRecipeModString(s)) {
 					return 3;
-				}
+				}*/
 				return 2;
 			}
 			return 1;
@@ -274,7 +274,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	public String getCustomConfigFile() {
 		switch (this) {
 			case STRONGRECIPEMOD:
-			case CORERECIPEMOD:
+				//case CORERECIPEMOD:
 				return "*_RecipeModding";
 			default:
 				return null;
@@ -290,7 +290,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 	public boolean saveIfUnspecified() {
 		switch (this) {
 			case STRONGRECIPEMOD:
-			case CORERECIPEMOD:
+				//case CORERECIPEMOD:
 				return false;
 			default:
 				return true;
@@ -338,7 +338,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
 			case ALLOWCHUNKLOADER:
 			case RECIPEMOD:
 			case STRONGRECIPEMOD:
-			case CORERECIPEMOD:
+				//case CORERECIPEMOD:
 			case LATEDYNAMO:
 			case BORERPOW:
 			case BEEYEAST:
