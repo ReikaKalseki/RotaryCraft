@@ -92,7 +92,7 @@ public class TileEntityDryingBed extends InventoriedRCFluidReceiver {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.DRYING;
 	}
 

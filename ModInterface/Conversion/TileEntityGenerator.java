@@ -64,7 +64,7 @@ public class TileEntityGenerator extends PoweredLiquidReceiver implements IEnerg
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.GENERATOR;
 	}
 

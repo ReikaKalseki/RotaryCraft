@@ -692,7 +692,7 @@ public class TileEntitySplitter extends TileEntityTransmissionMachine implements
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SPLITTER;
 	}
 

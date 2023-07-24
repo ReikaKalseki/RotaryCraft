@@ -70,7 +70,7 @@ public class TileEntityFertilizer extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FERTILIZER;
 	}
 

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -47,7 +47,7 @@ public class GuiBasicStorage extends GuiMachine {
 		this.drawTexturedModalRect(var5, var6, 0, 0, xSize, inventoryRows * 18 + 17);
 		this.drawTexturedModalRect(var5, var6 + inventoryRows * 18 + 17, 0, 126, xSize, 96);
 
-		if (PowerReceivers.getEnumFromMachineIndex(tile.getMachineIndex()).isMinPowerOnly())
+		if (PowerReceivers.getEnumFromMachineIndex(tile.getIndex()).isMinPowerOnly())
 			this.drawPowerOnly(var5, var6);
 		else
 			this.drawPowerTab(var5, var6);

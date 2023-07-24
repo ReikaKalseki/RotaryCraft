@@ -57,7 +57,7 @@ public class TileEntityFlooder extends TileEntityAreaFiller implements IFluidHan
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SPILLER;
 	}
 

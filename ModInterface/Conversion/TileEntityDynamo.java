@@ -56,7 +56,7 @@ public class TileEntityDynamo extends TileEntityPowerReceiver implements IEnergy
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.DYNAMO;
 	}
 

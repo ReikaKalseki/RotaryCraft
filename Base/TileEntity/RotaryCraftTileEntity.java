@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
-import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Base.TileEntityRegistryBase;
 import Reika.DragonAPI.Instantiable.StepTimer;
 import Reika.DragonAPI.Interfaces.TextureFetcher;
 import Reika.DragonAPI.Interfaces.TileEntity.RenderFetcher;
@@ -42,7 +42,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import li.cil.oc.api.network.Visibility;
 
-public abstract class RotaryCraftTileEntity extends TileEntityBase implements RenderFetcher, BasicMachine {
+public abstract class RotaryCraftTileEntity extends TileEntityRegistryBase<MachineRegistry> implements RenderFetcher, BasicMachine {
 
 	protected RotaryModelBase rmb;
 	protected int tickcount = 0;
@@ -65,7 +65,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public final boolean allowTickAcceleration() {
-		return this.getMachine().allowsAcceleration();
+		return this.getTile().allowsAcceleration();
 	}
 
 	public int getTick() {
@@ -75,7 +75,8 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@Override
 	protected abstract void animateWithTick(World world, int x, int y, int z);
 
-	public abstract MachineRegistry getMachine();
+	@Override
+	public abstract MachineRegistry getTile();
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -85,35 +86,26 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@SideOnly(Side.CLIENT)
 	public final RotaryTERenderer getTileRenderer() {
-		if (this.getMachine().hasRender())
-			return RotaryRenderList.getRenderForMachine(this.getMachine());
+		if (this.getTile().hasRender())
+			return RotaryRenderList.getRenderForMachine(this.getTile());
 		else
 			return null;
 	}
 
-	public final int getMachineIndex() {
-		return this.getMachine().ordinal();
-	}
-
 	public final String getMultiValuedName() {
-		if (this.getMachine().isMultiNamed())
-			return this.getMachine().getMultiName(this);
-		return this.getMachine().getName();
+		if (this.getTile().isMultiNamed())
+			return this.getTile().getMultiName(this);
+		return this.getTile().getName();
 	}
 
 	//public abstract int getMachineIndex();
-
-	@Override
-	public final Block getTileEntityBlockID() {
-		return this.getMachine().getBlock();
-	}
 
 	public final MachineRegistry getMachine(ForgeDirection dir) {
 		int x = xCoord+dir.offsetX;
 		int y = yCoord+dir.offsetY;
 		int z = zCoord+dir.offsetZ;
 		TileEntity te = this.getAdjacentTileEntity(dir);
-		return te instanceof RotaryCraftTileEntity ? ((RotaryCraftTileEntity)te).getMachine() : null;
+		return te instanceof RotaryCraftTileEntity ? ((RotaryCraftTileEntity)te).getTile() : null;
 		//return MachineRegistry.getMachine(worldObj, x, y, z);
 	}
 
@@ -123,15 +115,14 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	}
 
 	@Override
-	public final boolean shouldRenderInPass(int pass)
-	{
+	public final boolean shouldRenderInPass(int pass) {
 		if (!this.isInWorld())
 			return true;
 		if (pass == 0)
 			return true;
-		if (this.getMachine().hasModel() && this instanceof TileEntityIOMachine)
+		if (this.getTile().hasModel() && this instanceof TileEntityIOMachine)
 			return true;
-		if (pass == 1 && (this.hasModelTransparency() || this.getMachine().renderInPass1()))
+		if (pass == 1 && (this.hasModelTransparency() || this.getTile().renderInPass1()))
 			return true;
 		return false;
 	}
@@ -171,7 +162,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	public boolean isSelfBlock() {
 		if (worldObj.getBlock(xCoord, yCoord, zCoord) != this.getTileEntityBlockID())
 			return false;
-		int meta = this.getMachine().getBlockMetadata();
+		int meta = this.getTile().getBlockMetadata();
 		return meta == worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
@@ -186,7 +177,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 
 	@Override
 	public final String getTEName() {
-		MachineRegistry m = this.getMachine();
+		MachineRegistry m = this.getTile();
 		if (m.isMultiNamed())
 			return m.getMultiName(this);
 		return m.getName();
@@ -236,7 +227,7 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 		Block id = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		Block id2 = this.getTileEntityBlockID();
-		int meta2 = this.getMachine().getBlockMetadata();
+		int meta2 = this.getTile().getBlockMetadata();
 		return id2 == id && meta2 == meta;
 	}
 
@@ -247,9 +238,9 @@ public abstract class RotaryCraftTileEntity extends TileEntityBase implements Re
 	@Override
 	@ModDependent(ModList.OPENCOMPUTERS)
 	public final Visibility getOCNetworkVisibility() {
-		if (this.getMachine().isTransmissionMachine())
-			return this.getMachine().isAdvancedTransmission() ? Visibility.Network : Visibility.None;
-		else if (this.getMachine().isPipe())
+		if (this.getTile().isTransmissionMachine())
+			return this.getTile().isAdvancedTransmission() ? Visibility.Network : Visibility.None;
+		else if (this.getTile().isPipe())
 			return Visibility.None;
 		else
 			return this instanceof TileEntityBeltHub ? Visibility.None : Visibility.Network;

@@ -49,7 +49,7 @@ public class TileEntityFuelLine extends TileEntityPiping implements PumpablePipe
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FUELLINE;
 	}
 

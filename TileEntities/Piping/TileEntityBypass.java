@@ -33,7 +33,7 @@ public class TileEntityBypass extends TileEntityPiping {
 
 	@Override
 	public void onPlacedAgainst(ForgeDirection dir) {
-		if (MachineRegistry.getMachine(worldObj, xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ) == this.getMachine())
+		if (MachineRegistry.getMachine(worldObj, xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ) == this.getTile())
 			tryForcedConnection[dir.ordinal()] = true;
 	}
 
@@ -58,7 +58,7 @@ public class TileEntityBypass extends TileEntityPiping {
 
 	@Override
 	public boolean canConnectToPipe(MachineRegistry m, ForgeDirection side) {
-		return m.isStandardPipe() || m == MachineRegistry.FUELLINE || m == MachineRegistry.HOSE || (m == this.getMachine() && forcedConnection[side.ordinal()]);
+		return m.isStandardPipe() || m == MachineRegistry.FUELLINE || m == MachineRegistry.HOSE || (m == this.getTile() && forcedConnection[side.ordinal()]);
 	}
 
 	public void forceConnect(ForgeDirection dir) {
@@ -81,7 +81,7 @@ public class TileEntityBypass extends TileEntityPiping {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BYPASS;
 	}
 

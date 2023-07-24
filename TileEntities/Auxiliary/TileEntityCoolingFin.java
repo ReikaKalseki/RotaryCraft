@@ -107,7 +107,7 @@ public class TileEntityCoolingFin extends RotaryCraftTileEntity implements Tempe
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.COOLINGFIN;
 	}
 

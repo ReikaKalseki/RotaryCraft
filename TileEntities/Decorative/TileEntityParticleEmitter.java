@@ -68,7 +68,7 @@ public class TileEntityParticleEmitter extends TileEntitySpringPowered implement
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PARTICLE;
 	}
 

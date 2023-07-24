@@ -91,7 +91,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PIPE;
 	}
 
@@ -216,7 +216,7 @@ public class TileEntityPipe extends TileEntityPiping implements TemperatureTE {
 	@Override
 	public void overheat(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
-		MachineRegistry m = this.getMachine();
+		MachineRegistry m = this.getTile();
 		blocks.recursiveAddWithMetadata(world, x, y, z, m.getBlock(), m.getBlockMetadata());
 
 		for (int i = 0; i < blocks.getSize(); i++) {

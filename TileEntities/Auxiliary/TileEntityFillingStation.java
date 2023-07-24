@@ -201,7 +201,7 @@ public class TileEntityFillingStation extends InventoriedPowerLiquidInOut implem
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FILLINGSTATION;
 	}
 

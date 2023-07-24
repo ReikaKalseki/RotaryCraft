@@ -51,7 +51,7 @@ public class TileEntityMagnetizer extends InventoriedPowerReceiver implements On
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.MAGNETIZER;
 	}
 

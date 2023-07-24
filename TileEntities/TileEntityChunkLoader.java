@@ -122,7 +122,7 @@ public class TileEntityChunkLoader extends TileEntityPowerReceiver implements Ch
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CHUNKLOADER;
 	}
 

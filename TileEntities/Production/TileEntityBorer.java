@@ -34,7 +34,7 @@ import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.Base.BlockTieredResource;
-import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
+import Reika.DragonAPI.Base.BlockTileEnum;
 import Reika.DragonAPI.Interfaces.Block.SemiUnbreakable;
 import Reika.DragonAPI.Interfaces.TileEntity.GuiController;
 import Reika.DragonAPI.Interfaces.TileEntity.PartialInventory;
@@ -564,8 +564,8 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 				boolean harvest = ep != null && bt.isPlayerSufficientTier(world, xread, yread, zread, ep);
 				items = harvest ? bt.getHarvestResources(world, xread, yread, zread, fortune, ep) : bt.getNoHarvestResources(world, xread, yread, zread, fortune, ep);
 			}
-			else if (id instanceof MachineRegistryBlock) {
-				items = ReikaJavaLibrary.makeListFrom(((MachineRegistryBlock)id).getMachine(world, xread, yread, zread).getCraftedProduct());
+			else if (id instanceof BlockTileEnum) {
+				items = ReikaJavaLibrary.makeListFrom(((BlockTileEnum)id).getMapping(world, xread, yread, zread).getCraftedProduct());
 			}
 			if (items != null) {
 				for (ItemStack is : items) {
@@ -738,7 +738,7 @@ public class TileEntityBorer extends TileEntityBeamMachine implements Enchantabl
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BORER;
 	}
 

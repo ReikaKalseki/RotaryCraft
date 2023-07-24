@@ -225,7 +225,7 @@ public class TileEntityPump extends TileEntityPowerReceiver implements PipeConne
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PUMP;
 	}
 

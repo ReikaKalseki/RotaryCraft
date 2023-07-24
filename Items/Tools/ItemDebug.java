@@ -57,7 +57,7 @@ public class ItemDebug extends ItemRotaryTool {
 			ReikaChatHelper.writeBlockAtCoords(world, x, y, z);
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof RotaryCraftTileEntity)
-				ReikaChatHelper.write("Tile Entity Direction Data: "+(((RotaryCraftTileEntity)te).getBlockMetadata()+1)+" of "+((RotaryCraftTileEntity)te).getMachine().getNumberDirections());
+				ReikaChatHelper.write("Tile Entity Direction Data: "+(((RotaryCraftTileEntity)te).getBlockMetadata()+1)+" of "+((RotaryCraftTileEntity)te).getTile().getNumberDirections());
 			else if (te instanceof TileEntityBase)
 				ReikaChatHelper.write("Tile Entity Direction Data: "+(((TileEntityBase)te).getBlockMetadata()));
 			ReikaChatHelper.write("Additional Data (Meaning differs per machine):");

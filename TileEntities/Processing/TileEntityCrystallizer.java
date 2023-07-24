@@ -177,7 +177,7 @@ public class TileEntityCrystallizer extends InventoriedPowerLiquidReceiver imple
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CRYSTALLIZER;
 	}
 

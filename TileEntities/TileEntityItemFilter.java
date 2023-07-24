@@ -77,7 +77,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 
 	public TileEntityItemFilter() {
 		if (ModList.APPENG.isLoaded()) {
-			aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
+			aeGridBlock = new BasicAEInterface(this, this.getTile().getCraftedProduct());
 			aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 
 			//for (int i = 0; i < lock.length; i++) {
@@ -132,7 +132,7 @@ public class TileEntityItemFilter extends InventoriedPowerReceiver implements IA
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.ITEMFILTER;
 	}
 

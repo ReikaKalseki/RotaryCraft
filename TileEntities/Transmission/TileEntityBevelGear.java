@@ -325,7 +325,7 @@ public class TileEntityBevelGear extends TileEntity1DTransmitter implements GuiC
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BEVELGEARS;
 	}
 

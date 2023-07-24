@@ -52,7 +52,7 @@ public class TileEntityElectricMotor extends EnergyToPowerBase implements PowerG
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.ELECTRICMOTOR;
 	}
 

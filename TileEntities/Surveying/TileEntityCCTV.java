@@ -166,7 +166,7 @@ public class TileEntityCCTV extends RemoteControlMachine {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CCTV;
 	}
 

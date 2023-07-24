@@ -100,7 +100,7 @@ public class TileEntitySuctionPipe extends TileEntityPiping {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SUCTION;
 	}
 

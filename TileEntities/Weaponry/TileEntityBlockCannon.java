@@ -55,7 +55,7 @@ public class TileEntityBlockCannon extends TileEntityLaunchCannon {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BLOCKCANNON;
 	}
 

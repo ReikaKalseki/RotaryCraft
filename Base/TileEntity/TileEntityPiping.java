@@ -481,7 +481,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			int dy = x+dir.offsetY;
 			int dz = x+dir.offsetZ;
 			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == this.getMachine()) {
+			if (m == this.getTile()) {
 				TileEntityPiping te = (TileEntityPiping)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = false;
 				world.func_147479_m(dx, dy, dz);
@@ -496,7 +496,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			int dy = x+dir.offsetY;
 			int dz = x+dir.offsetZ;
 			MachineRegistry m = MachineRegistry.getMachine(world, dx, dy, dz);
-			if (m == this.getMachine()) {
+			if (m == this.getTile()) {
 				TileEntityPiping te = (TileEntityPiping)world.getTileEntity(dx, dy, dz);
 				te.connections[dir.getOpposite().ordinal()] = true;
 				world.func_147479_m(dx, dy, dz);
@@ -508,7 +508,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		int x = xCoord+dir.offsetX;
 		int y = yCoord+dir.offsetY;
 		int z = zCoord+dir.offsetZ;
-		MachineRegistry m = this.getMachine();
+		MachineRegistry m = this.getTile();
 		MachineRegistry m2 = MachineRegistry.getMachine(worldObj, x, y, z);
 		if (m != null && !m.isPipe() && m == m2)
 			return true;
@@ -520,7 +520,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 			return this.hasReciprocalConnectivity((TileEntityPiping)tile, dir);
 		else if (tile instanceof PipeConnector) {
 			PipeConnector pc = (PipeConnector)tile;
-			return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir.getOpposite());
+			return pc.canConnectToPipe(this.getTile()) && pc.canConnectToPipeOnSide(this.getTile(), dir.getOpposite());
 		}
 		else if (this.interactsWithMachines() && this.isInteractableTile(tile, dir))
 			return true;
@@ -584,7 +584,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 		World world = worldObj;
 		Block b = world.getBlock(dx, dy, dz);
 		int meta = world.getBlockMetadata(dx, dy, dz);
-		return b != this.getMachine().getBlock() || meta != this.getMachine().getBlockMetadata();
+		return b != this.getTile().getBlock() || meta != this.getTile().getBlockMetadata();
 	}
 
 	@Override
@@ -612,7 +612,7 @@ public abstract class TileEntityPiping extends RotaryCraftTileEntity implements 
 	}
 
 	public final boolean hasReciprocalConnectivity(TileEntityPiping te, ForgeDirection dir) {
-		return te != null && this.canConnectToPipe(te.getMachine(), dir) && te.canConnectToPipe(this.getMachine(), dir.getOpposite());
+		return te != null && this.canConnectToPipe(te.getTile(), dir) && te.canConnectToPipe(this.getTile(), dir.getOpposite());
 	}
 
 	@Override

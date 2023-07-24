@@ -53,7 +53,7 @@ public class TileEntitySteam extends EnergyToPowerBase implements PowerGenerator
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.STEAMTURBINE;
 	}
 

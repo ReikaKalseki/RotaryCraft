@@ -189,7 +189,7 @@ public class TileEntityRefrigerator extends InventoriedPowerLiquidProducer imple
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.REFRIGERATOR;
 	}
 

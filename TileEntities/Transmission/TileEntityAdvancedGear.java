@@ -943,7 +943,7 @@ PipeConnector, IFluidHandler, ToggleTile, CVTControllable {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.ADVANCEDGEARS;
 	}
 

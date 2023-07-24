@@ -139,7 +139,7 @@ public class TileEntityLavaMaker extends InventoriedPowerLiquidProducer implemen
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.LAVAMAKER;
 	}
 

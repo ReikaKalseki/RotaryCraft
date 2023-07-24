@@ -236,7 +236,7 @@ public class TileEntityComposter extends InventoriedRCTileEntity implements Temp
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.COMPOSTER;
 	}
 

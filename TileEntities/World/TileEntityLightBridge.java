@@ -160,7 +160,7 @@ public class TileEntityLightBridge extends TileEntityBeamMachine implements Rang
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.LIGHTBRIDGE;
 	}
 

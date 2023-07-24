@@ -47,7 +47,7 @@ public class TileEntityLineBuilder extends InventoriedPowerReceiver implements R
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.LINEBUILDER;
 	}
 

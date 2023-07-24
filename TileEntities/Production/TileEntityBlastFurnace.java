@@ -458,7 +458,7 @@ public class TileEntityBlastFurnace extends InventoriedRCTileEntity implements T
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BLASTFURNACE;
 	}
 

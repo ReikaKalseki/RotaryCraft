@@ -33,7 +33,7 @@ public class TileEntityContainment extends TileEntityProtectionDome {
 	public static final int FALLOFF = 8192;
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CONTAINMENT;
 	}
 

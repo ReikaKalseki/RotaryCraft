@@ -367,7 +367,7 @@ public class TileEntityBedrockBreaker extends InventoriedPowerReceiver implement
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BEDROCKBREAKER;
 	}
 

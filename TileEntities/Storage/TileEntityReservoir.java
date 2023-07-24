@@ -146,7 +146,7 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 				if (i != 0 || k != 0) {
 					int dx = xCoord+i;
 					int dz = zCoord+k;
-					if (MachineRegistry.getMachine(worldObj, dx, yCoord, dz) == this.getMachine()) {
+					if (MachineRegistry.getMachine(worldObj, dx, yCoord, dz) == this.getTile()) {
 						((TileEntityReservoir)worldObj.getTileEntity(dx, yCoord, dz)).updateSides(worldObj, dx, yCoord, dz);
 					}
 				}
@@ -338,7 +338,7 @@ AdjacentUpdateWatcher, PlaceNotification, OpenTopTank {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.RESERVOIR;
 	}
 

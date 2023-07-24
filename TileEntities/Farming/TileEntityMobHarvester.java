@@ -122,7 +122,7 @@ public class TileEntityMobHarvester extends TileEntityPowerReceiver implements E
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.MOBHARVESTER;
 	}
 

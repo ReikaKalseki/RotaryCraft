@@ -299,7 +299,7 @@ public class TileEntityFractionator extends InventoriedPoweredLiquidIO implement
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FRACTIONATOR;
 	}
 

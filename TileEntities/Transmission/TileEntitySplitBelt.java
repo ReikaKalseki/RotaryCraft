@@ -39,7 +39,7 @@ public class TileEntitySplitBelt extends TileEntityBeltHub {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SPLITBELT;
 	}
 

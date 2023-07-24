@@ -79,7 +79,7 @@ public class TileEntityPneumaticEngine extends EnergyToPowerBase implements IPne
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PNEUENGINE;
 	}
 

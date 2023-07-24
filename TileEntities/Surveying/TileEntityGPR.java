@@ -214,7 +214,7 @@ public class TileEntityGPR extends TileEntityPowerReceiver implements GuiControl
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.GPR;
 	}
 

@@ -246,7 +246,7 @@ public class TileEntityLandmine extends TileEntitySpringPowered {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.LANDMINE;
 	}
 

@@ -194,7 +194,7 @@ public class TileEntitySprinkler extends SprinklerBlock {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SPRINKLER;
 	}
 

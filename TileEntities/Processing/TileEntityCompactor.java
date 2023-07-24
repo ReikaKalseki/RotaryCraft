@@ -439,7 +439,7 @@ MultiOperational, ProcessingMachine {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.COMPACTOR;
 	}
 

@@ -244,7 +244,7 @@ public class TileEntityWeatherController extends InventoriedPowerReceiver implem
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.WEATHERCONTROLLER;
 	}
 

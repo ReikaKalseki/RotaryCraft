@@ -198,7 +198,7 @@ public class TileEntityIgniter extends InventoriedPowerReceiver implements Tempe
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.IGNITER;
 	}
 

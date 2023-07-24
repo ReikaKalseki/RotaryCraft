@@ -159,7 +159,7 @@ public class TileEntityRailGun extends TileEntityInventoriedCannon {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.RAILGUN;
 	}
 

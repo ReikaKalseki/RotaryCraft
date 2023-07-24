@@ -163,7 +163,7 @@ public class TileEntityWetter extends InventoriedPowerLiquidReceiver implements 
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.WETTER;
 	}
 

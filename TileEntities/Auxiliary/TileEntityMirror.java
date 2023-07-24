@@ -80,7 +80,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.MIRROR;
 	}
 
@@ -252,7 +252,7 @@ public class TileEntityMirror extends RotaryCraftTileEntity implements SolarPlan
 	public void breakMirror(World world, int x, int y, int z) {
 		broken = true;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getMachine().getBlock(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
+			ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/TileEntityTex/", world, x, y, z, this.getTile().getBlock(), Minecraft.getMinecraft().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0,0,1,1}), RotaryCraft.class);
 		}
 		ReikaSoundHelper.playBreakSound(world, x, y, z, Blocks.glass);
 	}

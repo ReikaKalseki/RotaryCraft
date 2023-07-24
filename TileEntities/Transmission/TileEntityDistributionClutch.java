@@ -76,7 +76,7 @@ public class TileEntityDistributionClutch extends TileEntityTransmissionMachine 
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.DISTRIBCLUTCH;
 	}
 

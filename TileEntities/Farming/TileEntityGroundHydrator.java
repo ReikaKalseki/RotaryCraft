@@ -70,7 +70,7 @@ public class TileEntityGroundHydrator extends RotaryCraftTileEntity implements P
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.HYDRATOR;
 	}
 

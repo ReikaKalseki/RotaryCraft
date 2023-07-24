@@ -27,7 +27,7 @@ public class TileEntityPipePump extends TileEntityPowerReceiver implements PipeR
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PIPEPUMP;
 	}
 

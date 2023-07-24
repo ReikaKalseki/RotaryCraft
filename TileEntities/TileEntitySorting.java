@@ -202,7 +202,7 @@ public class TileEntitySorting extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SORTING;
 	}
 

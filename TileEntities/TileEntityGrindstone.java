@@ -164,7 +164,7 @@ public class TileEntityGrindstone extends InventoriedPowerLiquidReceiver impleme
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.GRINDSTONE;
 	}
 

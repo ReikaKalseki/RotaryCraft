@@ -135,7 +135,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 		numchanges = powerchanges.size();
 		lastpower = pw;
 		if (numchanges > 10 && !worldObj.isRemote) {
-			this.getTileEntityBlockID().dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getMachineIndex(), 0);
+			this.getTileEntityBlockID().dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, this.getIndex(), 0);
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 			worldObj.createExplosion(null, xCoord+0.5, yCoord+0.5, zCoord+0.5, 4F, ConfigRegistry.BLOCKDAMAGE.getState());
 		}
@@ -340,7 +340,7 @@ public class TileEntityScaleableChest extends InventoriedPowerReceiver implement
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SCALECHEST;
 	}
 

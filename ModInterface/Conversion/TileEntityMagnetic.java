@@ -65,7 +65,7 @@ public class TileEntityMagnetic extends EnergyToPowerBase implements IEnergyHand
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.MAGNETIC;
 	}
 

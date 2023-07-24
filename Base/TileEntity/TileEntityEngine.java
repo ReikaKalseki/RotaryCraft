@@ -597,7 +597,7 @@ PipeConnector, PowerGenerator, IFluidHandler, PartialInventory, PartialTank, Int
 	}
 
 	@Override
-	public final MachineRegistry getMachine() {
+	public final MachineRegistry getTile() {
 		return MachineRegistry.ENGINE;
 	}
 

@@ -243,7 +243,7 @@ public class TileEntityDropProcessor extends InventoriedPowerReceiver implements
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.DROPS;
 	}
 

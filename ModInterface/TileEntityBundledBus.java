@@ -62,7 +62,7 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 
 	public TileEntityBundledBus() {
 		if (ModList.APPENG.isLoaded()) {
-			aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
+			aeGridBlock = new BasicAEInterface(this, this.getTile().getCraftedProduct());
 			aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 		}
 	}
@@ -281,7 +281,7 @@ public class TileEntityBundledBus extends TileEntityPowerReceiver implements IBu
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BUNDLEDBUS;
 	}
 

@@ -50,7 +50,7 @@ public class TileEntityPowerBus extends TileEntityInventoryIOMachine implements 
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.POWERBUS;
 	}
 

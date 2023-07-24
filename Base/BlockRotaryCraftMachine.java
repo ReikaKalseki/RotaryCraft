@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -22,15 +22,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.ASM.APIStripper.Strippable;
 import Reika.DragonAPI.ASM.DependentMethodStripper.ModDependent;
-import Reika.DragonAPI.Base.BlockTEBase;
-import Reika.DragonAPI.Interfaces.Block.MachineRegistryBlock;
-import Reika.DragonAPI.Interfaces.Registry.TileEnum;
+import Reika.DragonAPI.Base.BlockTileEnum;
+import Reika.RotaryCraft.Base.TileEntity.RotaryCraftTileEntity;
 import Reika.RotaryCraft.Registry.MachineRegistry;
 
 import mcp.mobius.waila.api.IWailaDataProvider;
 
 @Strippable(value = {"mcp.mobius.waila.api.IWailaDataProvider"})
-public abstract class BlockRotaryCraftMachine extends BlockTEBase implements MachineRegistryBlock, IWailaDataProvider {
+public abstract class BlockRotaryCraftMachine extends BlockTileEnum<RotaryCraftTileEntity, MachineRegistry> implements IWailaDataProvider {
 
 	protected Random par5Random = new Random();
 
@@ -41,6 +40,16 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements Mac
 		this.setLightLevel(0F);
 		if (mat == Material.iron)
 			this.setStepSound(soundTypeMetal);
+	}
+
+	@Override
+	public MachineRegistry getMapping(int meta) {
+		return MachineRegistry.getMachineFromIDandMetadata(this, meta);
+	}
+
+	@Override
+	public MachineRegistry getMapping(IBlockAccess world, int x, int y, int z) {
+		return MachineRegistry.getMachine(world, x, y, z);
 	}
 
 	@Override
@@ -69,10 +78,6 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements Mac
 	@ModDependent(ModList.WAILA)
 	public final NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
 		return tag;
-	}
-
-	public final TileEnum getMachine(IBlockAccess world, int x, int y, int z) {
-		return MachineRegistry.getMachine(world, x, y, z);
 	}
 
 }

@@ -100,7 +100,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 
 	public TileEntityAutoCrafter() {
 		if (ModList.APPENG.isLoaded()) {
-			aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
+			aeGridBlock = new BasicAEInterface(this, this.getTile().getCraftedProduct());
 			aeGridNode = FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 
 			//for (int i = 0; i < lock.length; i++) {
@@ -685,7 +685,7 @@ public class TileEntityAutoCrafter extends InventoriedPowerReceiver implements I
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CRAFTER;
 	}
 

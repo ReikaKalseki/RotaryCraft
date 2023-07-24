@@ -130,7 +130,7 @@ public class TileEntityClutch extends TileEntity1DTransmitter {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CLUTCH;
 	}
 

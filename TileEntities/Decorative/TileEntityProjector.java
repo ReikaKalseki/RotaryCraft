@@ -231,7 +231,7 @@ public class TileEntityProjector extends InventoriedPowerReceiver implements Ran
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PROJECTOR;
 	}
 

@@ -395,7 +395,7 @@ public class TileEntityWorktable extends InventoriedRCTileEntity implements Craf
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.WORKTABLE;
 	}
 

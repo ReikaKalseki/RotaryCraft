@@ -108,7 +108,7 @@ public class TileEntityMultiClutch extends TileEntity1DTransmitter implements Gu
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.MULTICLUTCH;
 	}
 

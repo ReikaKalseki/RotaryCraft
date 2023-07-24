@@ -276,7 +276,7 @@ public class TileEntityBaitBox extends InventoriedPowerReceiver implements Range
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BAITBOX;
 	}
 

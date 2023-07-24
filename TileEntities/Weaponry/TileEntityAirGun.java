@@ -154,7 +154,7 @@ public class TileEntityAirGun extends TileEntityPowerReceiver implements RangedE
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.AIRGUN;
 	}
 

@@ -411,7 +411,7 @@ public class TileEntityFan extends TileEntityBeamMachine implements RangedEffect
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FAN;
 	}
 

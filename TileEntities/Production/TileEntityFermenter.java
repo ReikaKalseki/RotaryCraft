@@ -306,7 +306,7 @@ public class TileEntityFermenter extends InventoriedPowerLiquidReceiver implemen
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FERMENTER;
 	}
 

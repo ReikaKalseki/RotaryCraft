@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -36,9 +36,9 @@ public enum BlastGate {
 	MANYULLYN("ingotManyullyn"),
 	GOLDGEAR(GameRegistry.findItem(ModList.BUILDCRAFT.modLabel, "goldGearItem")),
 	TERRASTEEL("ingotTerrasteel"),
-	MANASTEEL("ingotManasteel"),
-	VOIDMETAL("ingotVoid"),
-	THAUMIUM("ingotThaumium"),
+	//MANASTEEL("ingotManasteel"),
+	//VOIDMETAL("ingotVoid"),
+	//THAUMIUM("ingotThaumium"),
 	OSMIUM("ingotOsmium"),
 	SIGNALUM("ingotSignalum"),
 	ENDERIUM("ingotEnderium"),

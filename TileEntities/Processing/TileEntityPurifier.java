@@ -137,7 +137,7 @@ public class TileEntityPurifier extends InventoriedPowerReceiver implements Temp
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PURIFIER;
 	}
 

@@ -92,7 +92,7 @@ public class TileEntityFluidCompressor extends TileEntityPowerReceiver implement
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.GASTANK;
 	}
 

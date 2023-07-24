@@ -92,7 +92,7 @@ public class TileEntityBlockFiller extends TileEntityAreaFiller implements ISide
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FILLER;
 	}
 

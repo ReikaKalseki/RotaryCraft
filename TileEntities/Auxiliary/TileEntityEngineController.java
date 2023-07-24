@@ -278,7 +278,7 @@ public class TileEntityEngineController extends RotaryCraftTileEntity implements
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.ECU;
 	}
 

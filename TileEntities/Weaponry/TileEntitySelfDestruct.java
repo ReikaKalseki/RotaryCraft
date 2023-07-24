@@ -28,7 +28,7 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SELFDESTRUCT;
 	}
 
@@ -78,7 +78,7 @@ public class TileEntitySelfDestruct extends TileEntityPowerReceiver {
 		e.posY = world.getTopSolidOrLiquidBlock((int)rx, (int)rz)+1;
 		e.addPotionEffect(new PotionEffect(Potion.resistance.id, 10, 10));
 		world.spawnEntityInWorld(e);*/
-			MachineRegistry m = this.getMachine();
+			MachineRegistry m = this.getTile();
 			MachineRegistry m2 = MachineRegistry.getMachine(world, x, y, z);
 			if (m != m2 && tickcount <= count) {
 				world.setBlock(x, y, z, m.getBlock(), m.getBlockMetadata(), 3);

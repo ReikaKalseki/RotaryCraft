@@ -158,7 +158,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 		if (te == null)
 			return null;
 		int meta = te.getBlockMetadata();
-		MachineRegistry m = te.getMachine();
+		MachineRegistry m = te.getTile();
 		if (te.hasIconOverride(s))
 			return te.getIconForSide(ForgeDirection.VALID_DIRECTIONS[s]);
 		int machine = m.getBlockMetadata();
@@ -793,8 +793,8 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 	}
 
 	@Override
-	public final TileEntity createTileEntity(World world, int meta) {
-		return MachineRegistry.createTEFromIDAndMetadata(this, meta);
+	public final RotaryCraftTileEntity createTileEntity(World world, int meta) {
+		return (RotaryCraftTileEntity)MachineRegistry.createTEFromIDAndMetadata(this, meta);
 	}
 
 	@Override
@@ -1142,7 +1142,7 @@ public abstract class BlockBasicMultiTE extends BlockRotaryCraftMachine implemen
 			TileEntitySolar sol = (TileEntitySolar)te;
 			currenttip.add("Consuming "+RotaryAux.formatLiquidAmount(sol.getCurrentConsumption())+"/t of fluid.");
 		}
-		if (te.getMachine().isEnchantable()) {
+		if (te.getTile().isEnchantable()) {
 			if (((EnchantableMachine)te).getEnchantmentHandler().hasEnchantments()) {
 				currenttip.add("Enchantments: ");
 				ArrayList<Enchantment> li = ((EnchantableMachine)te).getEnchantmentHandler().getValidEnchantments();

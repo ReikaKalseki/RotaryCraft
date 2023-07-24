@@ -312,7 +312,7 @@ public class TileEntityHeatRay extends TileEntityBeamMachine implements RangedEf
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.HEATRAY;
 	}
 

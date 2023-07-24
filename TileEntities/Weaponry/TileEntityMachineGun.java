@@ -189,7 +189,7 @@ public class TileEntityMachineGun extends InventoriedPowerReceiver implements Ra
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.ARROWGUN;
 	}
 

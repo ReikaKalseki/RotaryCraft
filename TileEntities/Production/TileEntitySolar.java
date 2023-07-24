@@ -99,7 +99,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SOLARTOWER;
 	}
 
@@ -131,7 +131,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 				}
 			}
 		}
-		if (world.getBlock(x, y-1, z) == Blocks.air || MachineRegistry.getMachine(world, x, y-1, z) != this.getMachine()) {
+		if (world.getBlock(x, y-1, z) == Blocks.air || MachineRegistry.getMachine(world, x, y-1, z) != this.getTile()) {
 			//ReikaJavaLibrary.pConsole("TOWER: "+this.getTowerHeight()+";  SIZE: "+this.getArraySize());
 			Coordinate c = plant.getPrimaryTower();
 			if (c != null && c.to2D().equals(new Coordinate(x, 0, z)))
@@ -143,7 +143,7 @@ public class TileEntitySolar extends TileEntityIOMachine implements MultiBlockMa
 			write = null;
 		}
 		if (world.getBlock(x, y+1, z) != Blocks.air && !(world.getTileEntity(x, y+1, z) instanceof SodiumSolarUpgrades)) {
-			if (MachineRegistry.getMachine(world, x, y+1, z) == this.getMachine())
+			if (MachineRegistry.getMachine(world, x, y+1, z) == this.getTile())
 				temperature = ((TileEntitySolar)world.getTileEntity(x, y+1, z)).temperature;
 			return;
 		}

@@ -81,7 +81,7 @@ public class TileEntityBlower extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BLOWER;
 	}
 

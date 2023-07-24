@@ -61,7 +61,7 @@ public class TileEntityBucketFiller extends InventoriedPowerReceiver implements 
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BUCKETFILLER;
 	}
 

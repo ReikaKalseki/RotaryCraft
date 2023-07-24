@@ -209,7 +209,7 @@ public class TileEntitySonicBorer extends TileEntityPowerReceiver implements Pre
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SONICBORER;
 	}
 

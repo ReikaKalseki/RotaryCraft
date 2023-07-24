@@ -123,7 +123,7 @@ public class TileEntityFlameTurret extends TileEntityFluidCannon {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FLAMETURRET;
 	}
 

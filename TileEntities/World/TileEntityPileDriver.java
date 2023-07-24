@@ -529,7 +529,7 @@ public class TileEntityPileDriver extends TileEntityPowerReceiver {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PILEDRIVER;
 	}
 

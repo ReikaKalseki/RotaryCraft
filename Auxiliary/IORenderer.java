@@ -161,17 +161,17 @@ public abstract class IORenderer {
 				return;
 			}
 			if (te.isOmniSided) {
-				if (te.getMachine().getMaxY(te) == 1)
+				if (te.getTile().getMaxY(te) == 1)
 					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY()+1, par6+te.getPointingOffsetZ(), te.iotick);
-				if (te.getMachine().getMinY(te) == 0)
+				if (te.getTile().getMinY(te) == 0)
 					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY()-1, par6+te.getPointingOffsetZ(), te.iotick);
-				if (te.getMachine().getMaxX(te) == 1)
+				if (te.getTile().getMaxX(te) == 1)
 					renderIn(par2+te.getPointingOffsetX()+1, par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ(), te.iotick);
-				if (te.getMachine().getMinX(te) == 0)
+				if (te.getTile().getMinX(te) == 0)
 					renderIn(par2+te.getPointingOffsetX()-1, par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ(), te.iotick);
-				if (te.getMachine().getMaxZ(te) == 1)
+				if (te.getTile().getMaxZ(te) == 1)
 					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ()+1, te.iotick);
-				if (te.getMachine().getMinZ(te) == 0)
+				if (te.getTile().getMinZ(te) == 0)
 					renderIn(par2+te.getPointingOffsetX(), par4+te.getPointingOffsetY(), par6+te.getPointingOffsetZ()-1, te.iotick);
 				return;
 			}

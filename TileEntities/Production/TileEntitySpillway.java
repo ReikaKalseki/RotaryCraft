@@ -54,7 +54,7 @@ public class TileEntitySpillway extends RotaryCraftTileEntity implements PipeCon
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SPILLWAY;
 	}
 

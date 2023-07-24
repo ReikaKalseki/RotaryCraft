@@ -230,7 +230,8 @@ public class SolarPlant {
 		for (SolarTower s : towers.values()) {
 			for (int y = s.bottomBlock; y <= s.topBlock; y++) {
 				SolarPlantBlock b = (SolarPlantBlock)s.location.offset(0, y, 0).getTileEntity(world);
-				b.setPlant(null);
+				if (b != null)
+					b.setPlant(null);
 			}
 		}
 		towers.clear();

@@ -119,7 +119,7 @@ public class TileEntityAggregator extends PoweredLiquidProducer implements Basic
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.AGGREGATOR;
 	}
 

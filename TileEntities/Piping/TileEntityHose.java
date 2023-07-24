@@ -41,7 +41,7 @@ public class TileEntityHose extends TileEntityPiping implements PumpablePipe {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.HOSE;
 	}
 

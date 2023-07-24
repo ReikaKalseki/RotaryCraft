@@ -181,7 +181,7 @@ public class TileEntityFloodlight extends TileEntityBeamMachine implements Range
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.FLOODLIGHT;
 	}
 

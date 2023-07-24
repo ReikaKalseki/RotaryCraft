@@ -42,7 +42,7 @@ public class TileEntityChainDrive extends TileEntityBeltHub {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CHAIN;
 	}
 

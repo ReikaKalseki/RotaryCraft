@@ -277,7 +277,7 @@ public class TileEntityPortalShaft extends TileEntity1DTransmitter implements Ch
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PORTALSHAFT;
 	}
 

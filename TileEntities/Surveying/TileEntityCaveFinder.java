@@ -232,7 +232,7 @@ public class TileEntityCaveFinder extends TileEntityPowerReceiver implements Ran
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CAVESCANNER;
 	}
 

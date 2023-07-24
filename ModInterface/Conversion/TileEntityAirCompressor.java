@@ -106,7 +106,7 @@ public class TileEntityAirCompressor extends TileEntityPowerReceiver implements 
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.COMPRESSOR;
 	}
 

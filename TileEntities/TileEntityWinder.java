@@ -181,7 +181,7 @@ public class TileEntityWinder extends InventoriedPowerReceiver implements OneSlo
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.WINDER;
 	}
 

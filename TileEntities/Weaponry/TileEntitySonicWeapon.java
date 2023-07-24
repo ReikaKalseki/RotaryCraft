@@ -223,7 +223,7 @@ public class TileEntitySonicWeapon extends TileEntityPowerReceiver implements Gu
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.SONICWEAPON;
 	}
 

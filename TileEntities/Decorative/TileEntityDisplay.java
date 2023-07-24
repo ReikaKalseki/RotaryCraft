@@ -63,7 +63,7 @@ public class TileEntityDisplay extends TileEntitySpringPowered implements InertI
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.DISPLAY;
 	}
 

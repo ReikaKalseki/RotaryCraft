@@ -47,7 +47,7 @@ public class BlockGPR extends BlockBasicMachine {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int meta) {
+	public RotaryCraftTileEntity createTileEntity(World world, int meta) {
 		return new TileEntityGPR();
 	}
 

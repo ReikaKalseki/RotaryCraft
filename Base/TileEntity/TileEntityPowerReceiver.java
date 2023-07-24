@@ -47,7 +47,7 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 
 	public TileEntityPowerReceiver() {
 		//ReikaJavaLibrary.pConsole(this.getClass()+" goes to "+this.getMachineIndex());
-		machine = PowerReceivers.getEnumFromMachineIndex(this.getMachineIndex());
+		machine = PowerReceivers.getEnumFromMachineIndex(this.getIndex());
 		if (machine == null) {
 			MINPOWER = 0;
 			MINSPEED = 0;
@@ -482,36 +482,36 @@ public abstract class TileEntityPowerReceiver extends TileEntityIOMachine {
 		int y = yCoord;
 		int z = zCoord;
 		long[][] powers = new long[2][6];
-		if (this.getMachine().getMinY(this) == 0) {
+		if (this.getTile().getMinY(this) == 0) {
 			this.getPowerBelow();
 			powers[0][0] = omega;
 			powers[1][0] = torque;
 		}
-		if (this.getMachine().getMaxY(this) == 1) {
+		if (this.getTile().getMaxY(this) == 1) {
 			this.getPowerAbove();
 			powers[0][1] = omega;
 			powers[1][1] = torque;
 		}
 		read = ForgeDirection.EAST;
-		if (this.getMachine().getMaxX(this) == 1) {
+		if (this.getTile().getMaxX(this) == 1) {
 			this.getPower(false);
 			powers[0][2] = omega;
 			powers[1][2] = torque;
 		}
 		read = ForgeDirection.WEST;
-		if (this.getMachine().getMinX(this) == 0) {
+		if (this.getTile().getMinX(this) == 0) {
 			this.getPower(false);
 			powers[0][3] = omega;
 			powers[1][3] = torque;
 		}
 		read = ForgeDirection.SOUTH;
-		if (this.getMachine().getMaxZ(this) == 1) {
+		if (this.getTile().getMaxZ(this) == 1) {
 			this.getPower(false);
 			powers[0][4] = omega;
 			powers[1][4] = torque;
 		}
 		read = ForgeDirection.NORTH;
-		if (this.getMachine().getMinZ(this) == 0) {
+		if (this.getTile().getMinZ(this) == 0) {
 			this.getPower(false);
 			powers[0][5] = omega;
 			powers[1][5] = torque;

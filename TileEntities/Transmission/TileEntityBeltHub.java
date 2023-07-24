@@ -125,7 +125,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		if (otherEnd == null)
 			return;
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, otherEnd.xCoord, otherEnd.yCoord, otherEnd.zCoord);
-		if (m == this.getMachine()) {
+		if (m == this.getTile()) {
 			TileEntityBeltHub te = (TileEntityBeltHub)otherEnd.getTileEntity(worldObj);
 			te.reset();
 		}
@@ -185,7 +185,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 		if (otherEnd == null)
 			return false;
 		MachineRegistry m = MachineRegistry.getMachine(worldObj, otherEnd.xCoord, otherEnd.yCoord, otherEnd.zCoord);
-		return m == this.getMachine() && this.canConnect(worldObj, otherEnd.xCoord, otherEnd.yCoord, otherEnd.zCoord);
+		return m == this.getTile() && this.canConnect(worldObj, otherEnd.xCoord, otherEnd.yCoord, otherEnd.zCoord);
 	}
 
 	public final boolean tryConnect(World world, int x, int y, int z) {
@@ -320,7 +320,7 @@ public class TileEntityBeltHub extends TileEntityPowerReceiver implements PowerG
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BELT;
 	}
 

@@ -182,7 +182,7 @@ public class TileEntityAAGun extends TileEntityInventoriedCannon implements ISid
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.ANTIAIR;
 	}
 

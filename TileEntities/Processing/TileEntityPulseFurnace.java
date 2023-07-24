@@ -340,7 +340,7 @@ public class TileEntityPulseFurnace extends InventoriedPowerReceiver implements 
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.PULSEJET;
 	}
 

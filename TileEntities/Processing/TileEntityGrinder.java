@@ -291,7 +291,7 @@ ProcessingMachine, DamagingContact, EnchantableMachine {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.GRINDER;
 	}
 

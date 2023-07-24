@@ -192,10 +192,10 @@ public class TorqueUsage {
 					}
 					req = mintorque;
 				}
-				else if (pwr.getMachine().isModConversionEngine()) {
+				else if (pwr.getTile().isModConversionEngine()) {
 					min = Math.max(1, Math.min(Integer.MAX_VALUE, pwr.power/256D));
 				}
-				else if (pwr.getMachine() == MachineRegistry.FRICTION) {
+				else if (pwr.getTile() == MachineRegistry.FRICTION) {
 					TileEntityFurnaceHeater te = (TileEntityFurnaceHeater)tile;
 					if (te.hasFurnace())
 						req *= 4;

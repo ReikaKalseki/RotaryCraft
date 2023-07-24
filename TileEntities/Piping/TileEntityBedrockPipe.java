@@ -28,7 +28,7 @@ public class TileEntityBedrockPipe extends TileEntityPipe {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BEDPIPE;
 	}
 

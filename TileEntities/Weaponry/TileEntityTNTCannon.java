@@ -240,7 +240,7 @@ public class TileEntityTNTCannon extends TileEntityLaunchCannon {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.TNTCANNON;
 	}
 

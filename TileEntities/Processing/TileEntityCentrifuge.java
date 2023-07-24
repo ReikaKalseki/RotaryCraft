@@ -80,7 +80,7 @@ public class TileEntityCentrifuge extends InventoriedPowerReceiver implements Mu
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.CENTRIFUGE;
 	}
 

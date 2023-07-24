@@ -119,7 +119,7 @@ public class TileEntityDistillery extends PoweredLiquidIO {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.DISTILLER;
 	}
 

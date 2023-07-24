@@ -39,7 +39,7 @@ public class TileEntityBusController extends PoweredLiquidReceiver implements Tr
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.BUSCONTROLLER;
 	}
 

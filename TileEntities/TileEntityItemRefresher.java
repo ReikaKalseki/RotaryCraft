@@ -57,7 +57,7 @@ public class TileEntityItemRefresher extends TileEntityPowerReceiver implements 
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.REFRESHER;
 	}
 

@@ -14,16 +14,13 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import Reika.DragonAPI.Base.CoreContainer;
 import Reika.DragonAPI.Instantiable.GUI.ImagedGuiButton;
 import Reika.DragonAPI.Libraries.IO.ReikaPacketHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.DragonAPI.Libraries.Rendering.ReikaRenderHelper;
 import Reika.RotaryCraft.RotaryCraft;
 import Reika.RotaryCraft.Base.GuiNonPoweredMachine;
@@ -153,7 +150,7 @@ public class GuiBevel extends GuiNonPoweredMachine
 			}
 		}
 
-		RenderBlocks rb = new RenderBlocks();
+		//RenderBlocks rb = new RenderBlocks();
 		for (int i = 0; i < 6; i++) {
 			ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i];
 			int dx = bevel.xCoord+dir.offsetX;
@@ -162,10 +159,13 @@ public class GuiBevel extends GuiNonPoweredMachine
 			Block bk = bevel.worldObj.getBlock(dx, dy, dz);
 			if (!bk.isAir(bevel.worldObj, dx, dy, dz)) {
 				int meta = bevel.worldObj.getBlockMetadata(dx, dy, dz);
-				ReikaTextureHelper.bindTerrainTexture();
-				TileEntity te = bk.createTileEntity(bevel.worldObj, meta);
 				GL11.glPushMatrix();
 				GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+				GL11.glDepthMask(true);
+				GL11.glEnable(GL11.GL_DEPTH_TEST);
+				/*
+				ReikaTextureHelper.bindTerrainTexture();
+				TileEntity te = bevel.worldObj.getTileEntity(dx, dy, dz);//bk.createTileEntity(bevel.worldObj, meta);
 				GL11.glTranslated(20, 53+i*22, 200);
 				GL11.glScaled(-8, 8, -8);
 				GL11.glRotatef(te == null ? -22.5F : 22.5F, 1, 0, 0);
@@ -179,7 +179,10 @@ public class GuiBevel extends GuiNonPoweredMachine
 					GL11.glFrontFace(GL11.GL_CW);
 					GL11.glEnable(GL11.GL_DEPTH_TEST);
 					TileEntityRendererDispatcher.instance.renderTileEntityAt(te, 0, 0, 0, ReikaRenderHelper.getPartialTickTime());
-				}
+				}*/
+				ItemStack drop = ReikaRenderHelper.getBlockItem(bk, meta, bevel.worldObj.getTileEntity(dx, dy, dz));
+				if (drop != null)
+					api.drawItemStack(itemRender, fontRendererObj, drop, 15, 45+i*22);
 				GL11.glPopAttrib();
 				GL11.glPopMatrix();
 			}

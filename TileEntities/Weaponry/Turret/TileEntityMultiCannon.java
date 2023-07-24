@@ -172,7 +172,7 @@ public class TileEntityMultiCannon extends TileEntityInventoriedCannon {
 	}
 
 	@Override
-	public MachineRegistry getMachine() {
+	public MachineRegistry getTile() {
 		return MachineRegistry.GATLING;
 	}
 
