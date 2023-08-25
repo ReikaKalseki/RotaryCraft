@@ -194,7 +194,7 @@ public final class OreForcer {
 	private void intercraftNikolite() {
 		ItemStack is = this.getPRGem(56);
 		if (is != null)
-			GameRegistry.addShapelessRecipe(ItemStacks.getModOreIngot(ModOreList.NIKOLITE), is);
+			GameRegistry.addShapelessRecipe(is, ItemStacks.getModOreIngot(ModOreList.NIKOLITE));
 		RotaryCraft.logger.log("RotaryCraft nikolite can now be crafted into Project Red electrotine!");
 	}
 
