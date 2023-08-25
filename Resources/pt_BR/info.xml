@@ -10,11 +10,12 @@
 <?xml version="1.0"?>
 <info>
 	<terms>
-		"W" ou "kW" ou "MW" são Watts, Kilowatts e Megawatts: uma unidade de energia (energia por unidade de tempo).
-		1W = 1 Joule por segundo.
+		"W" ou "kW" ou "MW" são Watts, Kilowatts e Megawatts: uma unidade de energia (energia por unidade de tempo). 1W = 1 Joule por segundo.
+		
 		"Nm" é Newton-metros, uma unidade de torque (força vezes distância).
-		"rad/s" é Radianos por segundo = Uma unidade de velocidade angular (rotação).
-		1 rad/s = 9,55 rpm (rotações por minuto).
+		
+		"rad/s" é Radianos por segundo = Uma unidade de velocidade angular (rotação). 1 rad/s = 9,55 rpm (rotações por minuto).
+		
 		"Radianos" é uma unidade de ângulo, igual a 180/pi (57,3) graus; existem 6,28 radianos em um círculo completo.
 	</terms>
 	<physics>

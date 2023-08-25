@@ -9,15 +9,18 @@
 -->
 <?xml version="1.0"?>
 <categories>
-	<misc>
+	<info>
 		Algumas informações importantes sobre a operação de algumas máquinas e algumas ferramentas essenciais.
-	</misc>
+	</info>
 	<engine>
 		Talvez as mais importantes de todas as máquinas, os motores são utilizados para fornecer energia. Cada um tem o seu próprio torque e velocidade característico. Todos eles são geralmente de alta velocidade e baixo torque. Cada motor também tem suas próprias exigências, em termos de abastecimento de energia. Alguns motores têm suas próprias peculiaridades especiais, o que é importante saber.
 	</engine>
 	<trans>
 		As possibilidades seriam muito limitadas se a energia produzida pelos motores tivesse que ser consumida diretamente na fonte. Felizmente, é simples e fácil transportar esse poder com eixos, quase sem perdas, a qualquer distância que você queira. Uma coisa importante a notar é que eles são direcionais - transmitem energia em apenas uma direção. Máquinas mostram um bloco verde no(s) seu(s) lado(s) de entrada e um vermelho no seu(s) lado(s) de saída.
 	</trans>
+	<converter>
+		Esses motores convertem entre a potência do eixo e outra fonte de energia, como a de outro mod.
+	</converter>
 	<procmachine>
 		Estas máquinas são usadas para processar materiais, como também para criação de novos materiais, aumentar o rendimento, ou para a conversão de itens entre mods.
 	</procmachine>
@@ -42,8 +45,11 @@
 	<accmachine>
 		Não muito úteis por si só, estas máquinas são projetadas para trabalhar com outras para melhorar suas funcionalidades.
 	</accmachine>
+	<pipemachine>
+		Essas "máquinas" não são realmente máquinas, são simplesmente tubos para transportar fluidos de uma máquina (ou armazenamento) para outra.
+	</pipemachine>
 	<tool>
-		Estas são as ferramentas alimentadas por bobinas carregadas. A sua bobina se esgota ligeiramente com cada utilização. Para recarregá-las, basta "craftá-los" com uma nova bobina, e você obterá uma nova bobina, que pode ser usada novamente.
+		Estas são as ferramentas alimentadas por bobinas carregadas. A sua bobina se esgota ligeiramente com cada utilização. Para recarregá-las, basta fabricá-los com uma nova bobina, e você obterá uma nova bobina, que pode ser usada novamente.
 	</tool>
 	<resource>
 		Estes são os itens do tipo "recurso". São usados para vários fins.
